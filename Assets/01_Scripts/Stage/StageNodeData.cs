@@ -9,7 +9,7 @@ public enum NodeTpye
 }
 
 [Serializable]
-public class StageNode
+public class StageNodeData
 {
     public int row;
     public int col;

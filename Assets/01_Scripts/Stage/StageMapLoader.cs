@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,13 +9,11 @@ public class StageMapLoader : MonoBehaviour
     [SerializeField] StageMapData currentStage;
     [SerializeField] Transform nodesBG;
     [SerializeField] GameObject nodePrefap;
-    [SerializeField] GameObject linePrefab;
 
     int currentStageRow;
     int currentStageCol;
 
     UI_Node[,] stageNodes;
-    List<GameObject> lines = new List<GameObject>();
 
     public void Start()
     {
@@ -29,8 +28,8 @@ public class StageMapLoader : MonoBehaviour
 
         stageNodes = new UI_Node[currentStage.Row, currentStage.Col];
 
+        List<UI_Node> availableNodes = new();
 
-        
         for (int row = 1; row <= currentStageRow; row++)
         {
             for (int col = 1; col <= currentStageCol; col++)
@@ -38,11 +37,12 @@ public class StageMapLoader : MonoBehaviour
                 GameObject nodeGO = Instantiate(nodePrefap, nodesBG);
                 UI_Node uiNode = nodeGO.GetComponent<UI_Node>();
 
-                StageNode data = new StageNode();                
+                StageNodeData data = new StageNodeData();                
 
                 data.row = row;
                 data.col = col;
 
+                //1번열 - 시작 포인트, 마지막열 - 보스 포인트, 나머지 랜덤
                 if (col == 1)
                 {
                     data.type = NodeTpye.Start;
@@ -53,7 +53,8 @@ public class StageMapLoader : MonoBehaviour
                 }
                 else
                 {
-                    data.type = StageNode.GetRandomType();
+                    data.type = NodeTpye.NormalBattle; // 임시, 나중에 덮어씌움
+                    availableNodes.Add(uiNode);
                 }
                 
                 uiNode.SetUp(data);                
@@ -67,7 +68,8 @@ public class StageMapLoader : MonoBehaviour
             ClearNode();
         }
 
-        ConnectNodes();
+        ApplyFixedRandomTypes(availableNodes);
+
     }
 
     //불필요한 노드 비활성화
@@ -107,47 +109,47 @@ public class StageMapLoader : MonoBehaviour
         }
     }
 
-    private void ConnectNodes()
+    private void ApplyFixedRandomTypes(List<UI_Node> candidates)
     {
-        for (int col = 0; col < currentStageCol - 1; col++)
+        // Clear된 노드는 제외
+        List<UI_Node> validNodes = new();
+        foreach (var node in candidates)
         {
-            for (int row = 0; row < currentStageRow; row++)
-            {
-                UI_Node current = stageNodes[row, col];
-                if (current.IsClear) continue;
+            if (!node.IsClear)
+                validNodes.Add(node);
+        }
 
-                for (int nextRow = 0; nextRow < currentStageRow; nextRow++)
-                {
-                    UI_Node next = stageNodes[nextRow, col + 1];
-                    if (next.IsClear) continue;
+        // 총 12개가 되어야 함
+        if (validNodes.Count < 12)
+        {
+            Debug.LogError("타입을 지정할 수 있는 노드가 부족합니다!");
+            return;
+        }
 
-                    if (Mathf.Abs(nextRow - row) <= 1)
-                    {
-                        DrawLine(current.transform, next.transform);
-                    }
-                }
-            }
+        List<NodeTpye> nodeTypes = new();
+
+        nodeTypes.AddRange(Enumerable.Repeat(NodeTpye.NormalBattle, 6));
+        nodeTypes.AddRange(Enumerable.Repeat(NodeTpye.EliteBattle, 1));
+        nodeTypes.AddRange(Enumerable.Repeat(NodeTpye.RandomEvent, 3));
+        nodeTypes.AddRange(Enumerable.Repeat(NodeTpye.Camp, 2));
+
+        // 셔플
+        for (int i = 0; i < nodeTypes.Count; i++)
+        {
+            NodeTpye temp = nodeTypes[i];
+            int randIndex = Random.Range(i, nodeTypes.Count);
+            nodeTypes[i] = nodeTypes[randIndex];
+            nodeTypes[randIndex] = temp;
+        }
+
+        // 타입 배정
+        for (int i = 0; i < nodeTypes.Count; i++)
+        {
+            validNodes[i].NodeData.type = nodeTypes[i];
         }
     }
 
-    private void DrawLine(Transform from, Transform to)
-    {
-        GameObject line = Instantiate(linePrefab, nodesBG);
-        lines.Add(line);
-
-        RectTransform rt = line.GetComponent<RectTransform>();
-        Vector3 start = from.position;
-        Vector3 end = to.position;
-
-        Vector3 dir = end - start;
-        float length = dir.magnitude;
-
-        rt.sizeDelta = new Vector2(length, 5f); // 5f: 선의 두께
-        rt.position = start + dir * 0.5f;
-        rt.rotation = Quaternion.FromToRotation(Vector3.right, dir.normalized);
-    }
-
-    public UI_Node GetNode(int row, int col)
+    private UI_Node GetNode(int row, int col)
     {
         return stageNodes[row - 1, col - 1];
     }

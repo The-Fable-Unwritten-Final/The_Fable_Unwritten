@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class UI_Node : MonoBehaviour
 {
-    [SerializeField] Image iconImage;
-
     private bool isClear = false;
     public bool IsClear => isClear;
-    public StageNode NodeData;
+    public StageNodeData NodeData;
     
 
-    public void SetUp(StageNode data)
+    public void SetUp(StageNodeData data)
     {
         gameObject.SetActive(true);
         isClear = false;
@@ -26,6 +23,8 @@ public class UI_Node : MonoBehaviour
         isClear = true;
         gameObject.GetComponent<Button>().enabled = false;
         gameObject.GetComponent<Image>().enabled = false;
+        NodeData.row = 0;
+        NodeData.col = 0;
     }
 
     private void OnClickNode()
