@@ -11,7 +11,7 @@ public class EnemyData : ScriptableObject
     public string EnemyName; //캐릭터이름
     public Sprite Icon; //Icon
     public int EnemyHealth; //체력
-    public int EnemyTK; //공격력
+    public int EnemyATK; //공격력
 
     [Header("statValue")]
     public int[] HealthValue; //체력변화
