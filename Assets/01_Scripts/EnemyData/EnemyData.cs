@@ -6,16 +6,14 @@ using UnityEngine;
 public class EnemyData : ScriptableObject
 {
     [SerializeField]
-    public string iDNum; //고유번호
-    public string IDNum { get { return iDNum; } } //이름
-
+    public string iDNum;
+    public string IDNum { get { return iDNum; } } //고유번호
     [SerializeField]
-    private string EnemyName;
-    public string enemyName { get { return enemyName; } } //이름
+    private string enemyName;
+    public string EnemyName { get { return enemyName; } } //이름
     [SerializeField]
-
-    private int hp;
-    public int Hp { get { return hp; } } //체력
+    private int hP;
+    public int HP { get { return hP; } } //체력
     [SerializeField]
     private float healthValue;
     public float HealthValue { get { return healthValue; } } //체력변화
