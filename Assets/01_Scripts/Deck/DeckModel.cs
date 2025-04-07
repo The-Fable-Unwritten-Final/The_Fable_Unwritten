@@ -51,6 +51,9 @@ public class DeckModel
         }
     }
 
+    /// <summary>
+    /// 카드를 4장 이상으로 가지고 있을 경우 3장으로 맞추기
+    /// </summary>
     public void DiscardHandToThree()
     {
         while (hand.Count > startSize)

@@ -16,4 +16,10 @@ public class CardModel : ScriptableObject
     /// <param name="currentMana">현재 마나</param>
     /// <returns>사용 가능한지 아닌지 bool 값으로 반환</returns>
     public bool IsUsable(int currentMana) => currentMana >= manaCost;
+
+    public void Play(IStatusReceiver caster, IStatusReceiver target)
+    {
+        foreach (var effect in effects)
+            effect.Apply(caster, target);
+    }
 }

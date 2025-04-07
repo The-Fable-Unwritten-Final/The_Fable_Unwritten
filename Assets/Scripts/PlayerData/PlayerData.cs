@@ -15,6 +15,4 @@ public class PlayerData : ScriptableObject
     [Header("Stat Value")]
     public int[] HealthValue; //체력변화
     public int[] ATKValue; //공격력 변화
-
-
 }
