@@ -136,6 +136,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Card Test
       objectReference: {fileID: 0}
+    - target: {fileID: 3832594219704156259, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_EffectColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687542136128868812, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6853969371875176275, guid: 45073b34f4e19b543af3c912c1fc5e50,
         type: 3}
       propertyPath: m_Pivot.x
@@ -545,6 +555,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Card Test
       objectReference: {fileID: 0}
+    - target: {fileID: 3832594219704156259, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_EffectColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687542136128868812, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_Size.x
+      value: -135
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687542136128868812, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 190
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687542136128868812, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6853969371875176275, guid: 45073b34f4e19b543af3c912c1fc5e50,
         type: 3}
       propertyPath: m_Pivot.x
@@ -669,6 +699,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Card Test
       objectReference: {fileID: 0}
+    - target: {fileID: 3832594219704156259, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_EffectColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687542136128868812, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6853969371875176275, guid: 45073b34f4e19b543af3c912c1fc5e50,
         type: 3}
       propertyPath: m_Pivot.x
@@ -772,11 +812,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2673795626237749687, guid: 45073b34f4e19b543af3c912c1fc5e50,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 848962786}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45073b34f4e19b543af3c912c1fc5e50, type: 3}
 --- !u!224 &848962784 stripped
 RectTransform:
@@ -784,27 +820,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 848962783}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &848962785 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2673795626237749687, guid: 45073b34f4e19b543af3c912c1fc5e50,
-    type: 3}
-  m_PrefabInstance: {fileID: 848962783}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &848962786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 848962785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 1, y: -1}
-  m_UseGraphicAlpha: 1
 --- !u!1001 &936693879
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -817,6 +832,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Card Test
+      objectReference: {fileID: 0}
+    - target: {fileID: 3832594219704156259, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_EffectColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687542136128868812, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6853969371875176275, guid: 45073b34f4e19b543af3c912c1fc5e50,
         type: 3}
@@ -921,11 +946,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2673795626237749687, guid: 45073b34f4e19b543af3c912c1fc5e50,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 936693882}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45073b34f4e19b543af3c912c1fc5e50, type: 3}
 --- !u!224 &936693880 stripped
 RectTransform:
@@ -933,27 +954,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 936693879}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &936693881 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2673795626237749687, guid: 45073b34f4e19b543af3c912c1fc5e50,
-    type: 3}
-  m_PrefabInstance: {fileID: 936693879}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &936693882
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 936693881}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 1, y: -1}
-  m_UseGraphicAlpha: 1
 --- !u!1001 &1679502056
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1106,6 +1106,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Card Test
       objectReference: {fileID: 0}
+    - target: {fileID: 3832594219704156259, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_EffectColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687542136128868812, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6853969371875176275, guid: 45073b34f4e19b543af3c912c1fc5e50,
         type: 3}
       propertyPath: m_Pivot.x
@@ -1209,11 +1219,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2673795626237749687, guid: 45073b34f4e19b543af3c912c1fc5e50,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1703289378}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45073b34f4e19b543af3c912c1fc5e50, type: 3}
 --- !u!224 &1703289376 stripped
 RectTransform:
@@ -1221,27 +1227,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1703289375}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1703289377 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2673795626237749687, guid: 45073b34f4e19b543af3c912c1fc5e50,
-    type: 3}
-  m_PrefabInstance: {fileID: 1703289375}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1703289378
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1703289377}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 1, y: -1}
-  m_UseGraphicAlpha: 1
 --- !u!1001 &1845447831
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1254,6 +1239,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Card Test
+      objectReference: {fileID: 0}
+    - target: {fileID: 3832594219704156259, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_EffectColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687542136128868812, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6853969371875176275, guid: 45073b34f4e19b543af3c912c1fc5e50,
         type: 3}
@@ -1379,6 +1374,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Card Test
       objectReference: {fileID: 0}
+    - target: {fileID: 3832594219704156259, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_EffectColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687542136128868812, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6853969371875176275, guid: 45073b34f4e19b543af3c912c1fc5e50,
         type: 3}
       propertyPath: m_Pivot.x
@@ -1482,11 +1487,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2673795626237749687, guid: 45073b34f4e19b543af3c912c1fc5e50,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1861269442}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45073b34f4e19b543af3c912c1fc5e50, type: 3}
 --- !u!224 &1861269440 stripped
 RectTransform:
@@ -1494,27 +1495,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1861269439}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1861269441 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2673795626237749687, guid: 45073b34f4e19b543af3c912c1fc5e50,
-    type: 3}
-  m_PrefabInstance: {fileID: 1861269439}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1861269442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1861269441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 1, y: -1}
-  m_UseGraphicAlpha: 1
 --- !u!1 &1939298568
 GameObject:
   m_ObjectHideFlags: 0
@@ -1595,6 +1575,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Card Test
+      objectReference: {fileID: 0}
+    - target: {fileID: 3832594219704156259, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_EffectColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687542136128868812, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6853969371875176275, guid: 45073b34f4e19b543af3c912c1fc5e50,
         type: 3}
@@ -1922,6 +1912,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Card Test
+      objectReference: {fileID: 0}
+    - target: {fileID: 3832594219704156259, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_EffectColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687542136128868812, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6853969371875176275, guid: 45073b34f4e19b543af3c912c1fc5e50,
         type: 3}
