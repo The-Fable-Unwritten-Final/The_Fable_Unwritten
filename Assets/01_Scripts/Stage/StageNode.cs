@@ -11,10 +11,9 @@ public enum NodeTpye
 [Serializable]
 public class StageNode
 {
-    public int col;
     public int row;
+    public int col;
     public NodeTpye type;
-    public List<StageNode> connectedNodes = new List<StageNode>();
 
     public static NodeTpye GetRandomType()
     {
