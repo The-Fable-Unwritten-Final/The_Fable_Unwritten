@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 5022629969448219469}
   - component: {fileID: 4969787613984143030}
   - component: {fileID: 2772554136603321237}
+  - component: {fileID: 8625202598215284314}
+  - component: {fileID: 3966004626516115102}
   m_Layer: 7
   m_Name: Character Slot Test
   m_TagString: Untagged
@@ -75,3 +77,36 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!65 &8625202598215284314
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277843439705113669}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 130, y: 220, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3966004626516115102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277843439705113669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a546d20eae04f694c93bcf58d1515845, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

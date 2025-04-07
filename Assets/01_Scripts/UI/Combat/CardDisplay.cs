@@ -1,18 +1,111 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using UnityEngine.UI.Extensions;
 
+// 핸드에 소지하고 있는 카드들 전체를 관리하는 스크립트.
 public class CardDisplay : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] RectTransform canvasRect;
+    [SerializeField] List<CardInHand> cardsInHand = new List<CardInHand>(); // 핸드에 소지하고 있는 카드들.
+
+    [Header("Drag with Arrow")]
+    [SerializeField] private GraphicRaycaster uiRaycaster; // Canvas에 있는 GraphicRaycaster
+    [SerializeField] private EventSystem eventSystem;
+    public RectTransform arrowImage; // 드래그 중에 보일 화살표 이미지.
+    public UILineRenderer lineRenderer;
+    public bool isOnDrag = false; // 드래그 중인지 여부
+    public CardInHand currentCard; // 현재 드래그 중인 카드
+
+
+    private void Awake()
     {
-        
+        RectTransform rt = lineRenderer.GetComponent<RectTransform>();
+        rt.anchoredPosition = Vector2.zero;
+        rt.localPosition = Vector3.zero;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        if(isOnDrag)
+        {
+            UpdateLineRenderer();
+            UpdateArrowHead();
+        }
+    }
+
+    void UpdateLineRenderer()
+    {
+        if (cardsInHand.Count == 0 || currentCard == null) return;
+
+        RectTransform cardRect = currentCard.GetComponent<RectTransform>();
+        Vector2 localMousePos;
+
+        // 마우스 위치를 UI 캔버스의 로컬 좌표로 변환.
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, Input.mousePosition, null, out localMousePos);// 추후 카메라 분리시 null에 UI용 카메라 넣어주기
+
+        // lineRenderer를 곡선의 형태로 표시.
+        lineRenderer.Points[0] = cardRect.anchoredPosition; // 카드의 현재 위치
+        lineRenderer.Points[1] = new Vector2(localMousePos.x * 0.33f, localMousePos.y * 0.85f);
+        lineRenderer.Points[2] = new Vector3(localMousePos.x * 0.66f, localMousePos.y * 0.95f);
+        lineRenderer.Points[3] = localMousePos;
+
+        lineRenderer.SetAllDirty();// 라인 렌더러 업데이트.
+    }
+    void UpdateArrowHead()
+    {
+        if(lineRenderer.Points.Length < 2) return;
+
+        // 화살표의 위치와 각도를 업데이트
+        Vector2 p1 = CalculateBezierPoint(0.98f, lineRenderer.Points[0], lineRenderer.Points[1], lineRenderer.Points[2], lineRenderer.Points[3]);// 마지막 포인트에 근접한 점을 구하기 위해 t를 0.98f로 설정.
+        Vector2 p2 = lineRenderer.Points[lineRenderer.Points.Length - 1];// 마지막 포인트
+
+        Vector2 direction = (p2 - p1).normalized;
+
+        // 화살표의 위치 설정
+        arrowImage.anchoredPosition = p2;
+
+        // 화살표의 각도 설정
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;// UI에서 사용하기 위해 방향 벡터를 회전 각도로 변환.
+        arrowImage.localRotation = Quaternion.Euler(0, 0, angle);
+    }
+
+    public GameObject OnMousepoint(PointerEventData eventData)
+    {
+        List<RaycastResult> results = new List<RaycastResult>();
+
+        // 현재 마우스 위치에서 UI 레이캐스트 수행
+        uiRaycaster.Raycast(eventData, results);
+
+        foreach (RaycastResult result in results)
+        {
+            // 예시: 특정 레이어 이름을 가지고 있다면 사용
+            if (result.gameObject.TryGetComponent<CharacterAndMonsterCard>(out CharacterAndMonsterCard card))
+            {
+                Debug.Log(card.name);
+                return card.gameObject;
+            }
+        }
+        // 만약 해당 위치에 캐릭터 또는 몬스터가 없는 경우
+        return null;
+    }
+
+    // 3차 베지어 곡선 수식. (Unity 포럼에서 찾음.)
+    Vector2 CalculateBezierPoint(float t, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3)
+    {
+        float u = 1 - t;
+        float tt = t * t;
+        float uu = u * u;
+        float uuu = uu * u;
+        float ttt = tt * t;
+
+        Vector2 point = uuu * p0;
+        point += 3 * uu * t * p1;
+        point += 3 * u * tt * p2;
+        point += ttt * p3;
+
+        return point;
     }
 }

@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 8870030574972698175}
   - component: {fileID: 4095049924294925217}
   - component: {fileID: 1575861016820545980}
+  - component: {fileID: 4393934977665354281}
+  - component: {fileID: 991195205105074391}
   m_Layer: 8
   m_Name: Monster Slot Test
   m_TagString: Untagged
@@ -75,3 +77,36 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!65 &4393934977665354281
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8573096159716659081}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 130, y: 220, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &991195205105074391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8573096159716659081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a546d20eae04f694c93bcf58d1515845, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
