@@ -15,6 +15,14 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     RectTransform rect; // RectTransform 컴포넌트
     Vector3 originalPos; // 원래 위치
     Vector3 targetPos; // 목표 위치
+    [SerializeField] CardState cardState;
+
+    enum CardState// 추후 턴 상태와 연계해서 카드의 상태관리. (카드의 상태에 따른 상호작용 가능 여부 설정.)
+    {
+        None,// 아무런 상호 작용이 불가능한 상태.
+        CanMouseOver,// 마우스 오버를 통해 정보 확인 까지만 가능한 상태.
+        CanDrag,// 드래그를 통한 사용까지 가능한 상태.
+    }
 
     private void Awake()
     {
