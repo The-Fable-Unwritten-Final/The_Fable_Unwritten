@@ -24,7 +24,7 @@ public interface IStatusReceiver
     /// <summary>
     /// 최종 수치를 계산 (예: 버프에 따라 공격력 증가)
     /// </summary>
-    int ModifyStat(BuffStatType statType, int baseValue);
+    int ModifyStat(BuffStatType statType, float baseValue);
 
     /// <summary>
     /// 대상에게 피해

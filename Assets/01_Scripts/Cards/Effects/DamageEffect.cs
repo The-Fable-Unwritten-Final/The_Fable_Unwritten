@@ -12,7 +12,7 @@ public class DamageEffect : CardEffectBase
     /// <summary>
     /// 기본 데미지
     /// </summary>
-    public int baseDamage;
+    public float baseDamage;
 
     /// <summary>
     /// 데미지 처리

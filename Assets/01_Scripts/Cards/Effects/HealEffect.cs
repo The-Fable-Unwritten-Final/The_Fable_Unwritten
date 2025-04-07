@@ -12,7 +12,7 @@ public class HealEffect : CardEffectBase
     /// <summary>
     /// 기본 힐량
     /// </summary>
-    public int baseHeal;
+    public float baseHeal;
 
     /// <summary>
     /// 실제로 힐이 진행될 코드
