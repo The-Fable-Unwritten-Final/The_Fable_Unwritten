@@ -2,23 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewCharacterData", menuName = "Character/CharacterData")]
+
+[CreateAssetMenu(fileName = "X", menuName = "Enemy/X")]
 
 
-public class PlayerData : ScriptableObject
+public class X : ScriptableObject
 {
-    [Header("Basic Stat")]
     public string IDNum; //고유번호
-    public string CharacterName; //캐릭터이름
+    public string EnemyName; //캐릭터이름
     public Sprite Icon; //Icon
-    public float Health; //체력
-    public float ATK; //공격력
-    public float DEF; //방어력
+    public float EnemyHealth; //체력
+    public float EnemyATK; //공격력
+    public float EnemyDEF; //방어력
 
-
-    [Header("Stat Value")]
+    [Header("statValue")]
     public float[] HealthValue; //체력변화
     public float[] ATKValue; //공격력 변화
+    public float[] DEFValue; //방어력 변화
 
     public enum StencType
     {
@@ -26,6 +26,7 @@ public class PlayerData : ScriptableObject
         Middle, //중단
         Low //하단
     }
+
     [System.Serializable]
     public class StancValue
     {
@@ -38,6 +39,4 @@ public class PlayerData : ScriptableObject
 
     public List<StancValue> allStances; //임시 작성
     public StancValue currentStance;
-
-
 }
