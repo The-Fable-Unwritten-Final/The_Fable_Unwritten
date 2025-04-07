@@ -1,0 +1,95 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+public class DeckModel
+{
+    private List<CardModel> unusedDeck = new();           //사용 안한 카드
+    private List<CardModel> usedDeck = new();            //사용한 카드
+    private List<CardModel> hand = new();                //들고 있는 카드
+
+    public IReadOnlyList<CardModel> Hand => hand;
+    public const int maxSize = 5;
+    public const int startSize = 3;
+
+    //덱 상태 초기화
+    public void Initialize(List<CardModel> cards)
+    {
+        unusedDeck = new List<CardModel>(cards);
+        Shuffle(unusedDeck);
+        usedDeck.Clear();
+        hand.Clear();
+    }
+
+    /// <summary>
+    /// 카드 드로우 시 행동
+    /// </summary>
+    /// <param name="count">얼마나 드로우 할지 결정</param>
+    public void Draw(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            if (hand.Count >= maxSize) break;   //5장 모두 들고 있을 때 드로우 시도 시 처리 안함
+
+            if (unusedDeck.Count == 0)          //모든 카드 사용 시
+                ReshuffleDiscardIntoDraw();
+
+            var card = unusedDeck[0];           //미사용 덱의 가장 앞의 카드를
+            unusedDeck.RemoveAt(0);
+            hand.Add(card);                     //핸드에 넣기
+        }
+    }
+
+    /// <summary>
+    /// 특정 카드 버리기
+    /// </summary>
+    /// <param name="card">버릴 카드</param>
+    public void Discard(CardModel card)
+    {
+        if (hand.Remove(card))                  //핸드에 특정 카드 버리고
+        {
+            usedDeck.Add(card);                 //사용한 카드 쪽에 버린 카드 넣기
+        }
+    }
+
+    public void DiscardHandToThree()
+    {
+        while (hand.Count > startSize)
+        {
+            var cardToDiscard = hand[hand.Count - 1];
+            hand.RemoveAt(hand.Count - 1);
+            usedDeck.Add(cardToDiscard);
+        }
+    }
+
+    /// <summary>
+    /// 핸드 모두 버리기
+    /// </summary>
+    public void DiscardHand()
+    {
+        usedDeck.AddRange(hand);                //들고 있는 카드 전부 사용 덱으로
+        hand.Clear();                           //핸드를 비움
+    }
+
+    /// <summary>
+    /// 카드를 전부 사용했을 때 사용한 덱을 미사용 덱으로 이동 후 셔플하기
+    /// </summary>
+    private void ReshuffleDiscardIntoDraw()
+    {
+        unusedDeck.AddRange(usedDeck);
+        usedDeck.Clear();
+        Shuffle(unusedDeck);
+    }
+
+    /// <summary>
+    /// 덱 셔플
+    /// </summary>
+    /// <param name="list">셔플할 리스트</param>
+    private void Shuffle(List<CardModel> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            (list[i], list[j]) = (list[j], list[i]);
+        }
+    }
+}
