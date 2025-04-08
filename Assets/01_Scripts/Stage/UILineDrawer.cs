@@ -14,13 +14,13 @@ public static class UILineDrawer
         Vector2 direction = end - start;
         float distance = direction.magnitude;
 
-        // 2. 선 위치 = 두 점의 중간
+        // 선 위치 - 두 점의 중간
         rt.anchoredPosition = start + direction / 2f;
 
-        // 3. 선 길이 조절
+        // 선 길이 조절
         rt.sizeDelta = new Vector2(distance, rt.sizeDelta.y);
 
-        // 4. 선 각도 회전
+        // 선 각도 회전
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         rt.localRotation = Quaternion.Euler(0, 0, angle);
 
