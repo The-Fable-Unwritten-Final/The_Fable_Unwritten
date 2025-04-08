@@ -39,11 +39,17 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public void OnPointerEnter(PointerEventData eventData)
     {
         if(cardState == CardState.None) return; // 상태가 None인 경우 상호작용 불가능
+
+        cardDisplay.currentCard = this;// 현재 카드 설정.
+        transform.SetAsLastSibling();// 카드가 가장 위에 오도록 설정
+
         rect.DOAnchorPos(targetPos, 0.4f).SetEase(Ease.OutSine);
     }
     public void OnPointerExit(PointerEventData eventData)
     {
         if(cardState == CardState.OnDrag) return; // 카드 상태가 OnDrag인 경우에는 원래 위치로 돌아가지 않음.
+        cardDisplay.currentCard = null;// 현재 카드 설정 해제.
+        transform.SetSiblingIndex(cardDisplay.GetCardIndex(this));// List의 순서에 맞게 원래 위치로 돌아가기.
         rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine);
     }
     public void OnBeginDrag(PointerEventData eventData)
@@ -51,7 +57,10 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         if (cardState == CardState.None) return; // 상태가 None인 경우 상호작용 불가능
 
         cardDisplay.isOnDrag = true; // 드래그 시작 시 카드 드래그 상태를 true로 설정
+
         cardDisplay.currentCard = this; // 현재 드래그 중인 카드 설정
+        transform.SetAsLastSibling();// 카드가 가장 위에 오도록 설정
+
         cardDisplay.lineRenderer.gameObject.SetActive(true); // 드래그 중일 때 라인 렌더러 활성화
         cardDisplay.arrowImage.gameObject.SetActive(true); // 드래그 중일 때 화살표 이미지 활성화
         cardState = CardState.OnDrag; // 카드 상태를 OnDrag로 변경
@@ -116,7 +125,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     {
         // 카드 이동 애니메이션을 위한 상호작용 제한 코루틴
         SetCardState(CardInHand.CardState.None);// 카드가 움직이는 도중에는 상호작용 제한.
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.2f);
         SetCardState(CardInHand.CardState.CanDrag);// 추후 전투 조건에 맞는 상황 세팅으로 변경.
     }
 

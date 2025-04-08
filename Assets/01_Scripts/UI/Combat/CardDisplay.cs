@@ -10,6 +10,7 @@ using DG.Tweening;
 public class CardDisplay : MonoBehaviour
 {
     [SerializeField] RectTransform canvasRect;
+    // cardsInHand를 SerializeField로 할 경우 에디터 상에서만 경고가 발생하나, 이후 카드 시스템이 완성될때는 cardsInHand를 실제 카드 데이터를 가져와서 하기 때문에 SerializeField를 지울 예정.
     [SerializeField] List<CardInHand> cardsInHand = new List<CardInHand>(); // 핸드에 소지하고 있는 카드들.
     [SerializeField] GameObject cardPrefab; // 카드 프리팹
 
@@ -152,6 +153,7 @@ public class CardDisplay : MonoBehaviour
     public void UseCard(/*carddata*/)
     {
         if(currentCard == null) return;// 현재 카드가 없으면 사용 불가.
+        // 만약 카드 사용을 못하게 된다면, SetSiblingIndex을 통해 해당 카드의 순서를 원래대로 돌려주기
         cardsInHand.Remove(currentCard);// 카드 사용.
         Destroy(currentCard.gameObject);// 카드 삭제.
         CardArrange();
@@ -192,5 +194,16 @@ public class CardDisplay : MonoBehaviour
         point += ttt * p3;
 
         return point;
+    }
+
+    // 반환 메서드
+    public int GetCardIndex(CardInHand card)
+    {
+        int index = cardsInHand.IndexOf(card);
+        if(index != -1)
+        {
+            return index; // 카드가 리스트에 있을 경우 인덱스 반환
+        }
+        return 0; // 카드가 리스트에 없을 경우 0 반환
     }
 }
