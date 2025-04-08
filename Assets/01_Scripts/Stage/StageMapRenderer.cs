@@ -4,20 +4,26 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 스테이지 노드와 연결선을 UI에 표시해주는 클래스
+/// </summary>
 public class StageMapRenderer : MonoBehaviour
 {
     [Header("Prefabs & UI")]
-    public GameObject nodePrefab;
-    public GameObject linePrefab;
-    public RectTransform nodesContainer;
-
+    [SerializeField] GameObject nodePrefab;        // 노드 UI 프리팹
+    [SerializeField] GameObject linePrefab;        // 라인 UI 프리팹
+    [SerializeField] RectTransform nodesContainer; // 노드 부모 오브젝트
+    [SerializeField] RectTransform linesContainer; // 라인 부모 오브젝트
 
     [Header("Node Icons")]
-    public Sprite startIcon, normalIcon, eliteIcon, randomIcon, campIcon, bossIcon;
+    [SerializeField] Sprite startIcon, normalIcon, eliteIcon, randomIcon, campIcon, bossIcon; // 노드아이콘 설정
 
     public Dictionary<GraphNode, RectTransform> nodeUIMap = new();
     private readonly List<LineInfo> lineInfos = new();
 
+    /// <summary>
+    /// 스테이지 노드 및 연결선을 UI에 표시
+    /// </summary>
     public void Render(StageData stage, System.Action<GraphNode> onClick)
     {
         nodeUIMap.Clear();
@@ -46,21 +52,15 @@ public class StageMapRenderer : MonoBehaviour
                 var fromRT = nodeUIMap[node];
                 var toRT = nodeUIMap[next];
 
-                GameObject line = UILineDrawer.DrawLine(fromRT, toRT, nodesContainer, linePrefab);
+                GameObject line = UILineDrawer.DrawLine(fromRT, toRT, linesContainer, linePrefab);
                 lineInfos.Add(new LineInfo { from = node, to = next, lineObj = line });
             }
         }
     }
 
-    public void HighlightLinesFrom(GraphNode current)
-    {
-        foreach (var line in lineInfos)
-        {
-            bool active = line.from == current && current.nextNodes.Contains(line.to);
-            line.lineObj.SetActive(active);
-        }
-    }
-
+    /// <summary>
+    /// 현재 노드 기준으로 갈 수 있는 노드 버튼만 활성화하고 라인 강조
+    /// </summary>
     public void UpdateInteractables(GraphNode current, List<GraphNode> visited)
     {
         foreach (var node in nodeUIMap.Keys)
@@ -88,10 +88,12 @@ public class StageMapRenderer : MonoBehaviour
             }
         }
 
-        // 🔥 여기서 visited 같이 넘겨줌!
         HighlightLinesFrom(current, visited);
     }
 
+    /// <summary>
+    /// 지나온 라인과 진행 못한 라인 표시해주는 함수
+    /// </summary>
     public void HighlightLinesFrom(GraphNode current, List<GraphNode> visited)
     {
         foreach (var line in lineInfos)
@@ -104,23 +106,23 @@ public class StageMapRenderer : MonoBehaviour
             bool isCurrentPath = line.from == current && current.nextNodes.Contains(line.to);
 
             if (isVisitedFrom && isVisitedTo)
-            {
-                // 지나온 길
-                img.color = new Color(1f, 1f, 1f, 1f);
+            {             
+                img.color = new Color(1f, 1f, 1f, 1f); // 지나온 길
             }
             else if (isCurrentPath)
-            {
-                // 현재 노드에서 갈 수 있는 경로
-                img.color = new Color(1f, 1f, 1f, 1f);
+            {                
+                img.color = new Color(1f, 1f, 1f, 1f); // 현재 노드에서 갈 수 있는 경로
             }
             else
-            {
-                // 아직 도달하지 못한 경로
-                img.color = new Color(1f, 1f, 1f, 0.2f);
+            {     
+                img.color = new Color(1f, 1f, 1f, 0.2f); // 아직 도달하지 못한 경로
             }
         }
     }
 
+    /// <summary>
+    /// 기존 맵의 노드 및 라인들 제거 하는 매서드
+    /// </summary>
     public void ClearMap()
     {
         foreach (var ui in nodeUIMap.Values)
@@ -132,6 +134,9 @@ public class StageMapRenderer : MonoBehaviour
         lineInfos.Clear();
     }
 
+    /// <summary>
+    /// 맵 중심이 화명 중앙에 오도록 정렬하는 매서드
+    /// </summary>
     public void CenterMap()
     {
         if (nodeUIMap.Count == 0) return;
@@ -150,6 +155,9 @@ public class StageMapRenderer : MonoBehaviour
         nodesContainer.anchoredPosition = -center;
     }
 
+    /// <summary>
+    /// 노드 타입에 따라 아이콘 변환
+    /// </summary>
     private Sprite GetIcon(NodeType type) => type switch
     {
         NodeType.Start => startIcon,

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public static class UILineDrawer
 {
+    /// <summary>
+    /// 시작 노드, 도착 노드 위치 확인 후 연결해 주는 선 생성
+    /// </summary>
     public static GameObject DrawLine(RectTransform from, RectTransform to, Transform parent, GameObject linePrefab)
     {
         GameObject lineObj = GameObject.Instantiate(linePrefab, parent);
@@ -27,6 +30,9 @@ public static class UILineDrawer
         return lineObj;
     }
 
+    /// <summary>
+    /// 월드 좌표를 지정된 부모 RectTransform 기준의 로컬 좌표로 전환
+    /// </summary>
     private static Vector2 WorldToLocal(Vector3 worldPos, RectTransform parent)
     {
         Vector2 localPoint;

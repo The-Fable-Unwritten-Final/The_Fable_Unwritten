@@ -7,23 +7,30 @@ using UnityEngine.UI;
 public class StageManager : MonoBehaviour
 {
     [Header("Stage Settings")]
-    public int stageIndex = 1;
-    public Vector2 spacing = new(300, 200);
+    private int stageIndex = 1;
+    [SerializeField] Vector2 spacing = new(300, 200); // 노드 간격
 
     [Header("References")]
-    public StageMapRenderer mapRenderer;
+    public StageMapRenderer mapRenderer;              // StageMapRederer 연결
 
-    private StageData stageData;
-    private readonly List<GraphNode> visitedNodes = new();
+    private StageData stageData;                           // 현재 스테이지 데이터
+    private readonly List<GraphNode> visitedNodes = new(); // 방문한 노드 목록
 
+    /// <summary>
+    /// 시작 시 현재 스테이지 로드
+    /// </summary>
     void Start() => LoadStage(stageIndex);
 
+    /// <summary>
+    /// 노드 클릭 시 호출
+    /// </summary>
     void OnNodeClicked(GraphNode clicked)
     {
         visitedNodes.Add(clicked);
 
         if (IsLastColumnNode(clicked))
         {
+            // 마지막 열이면 다음 스테이지
             stageIndex++;
             LoadStage(stageIndex);
         }
@@ -33,19 +40,22 @@ public class StageManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 스테이지를 새로 불러오고 맵 초기화
+    /// </summary>
     private void LoadStage(int index)
     {
         mapRenderer.ClearMap();
         visitedNodes.Clear();
 
-        // 스테이지 데이터 생성
+        // 초기 스테이지 생성
         stageData = StageGraphGenerator.Generate(index, spacing);
 
-        // 🔧 spacing.x를 열 수에 맞게 자동 조정
+        // 열 수에 맞게 간격 조정
         float targetWidth = 1400f;
         spacing.x = targetWidth / (stageData.columnCount - 1);
 
-        // 다시 생성 (spacing 조정 후)
+        // 조정 후 재생성
         stageData = StageGraphGenerator.Generate(index, spacing);
 
         mapRenderer.Render(stageData, OnNodeClicked);
@@ -55,6 +65,9 @@ public class StageManager : MonoBehaviour
         ActivateStartNode();
     }
 
+    /// <summary>
+    /// 모든 노드 비활성화
+    /// </summary>
     private void DisableAllNodeButtons()
     {
         foreach (var column in stageData.columns)
@@ -72,6 +85,9 @@ public class StageManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 시작 노드를 활성화
+    /// </summary>
     private void ActivateStartNode()
     {
         var startNode = stageData.columns[0].First();
@@ -86,6 +102,9 @@ public class StageManager : MonoBehaviour
         mapRenderer.UpdateInteractables(startNode, visitedNodes);
     }
 
+    /// <summary>
+    /// 클릭된 노드가 마지막 열에 있는지 확인
+    /// </summary>
     private bool IsLastColumnNode(GraphNode clicked)
         => stageData.columns[^1].Contains(clicked);
 }
