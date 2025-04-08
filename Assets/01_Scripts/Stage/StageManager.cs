@@ -6,19 +6,17 @@ using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
+    [Header("Stage Settings")]
     public int stageIndex = 1;
-    public Vector2 spacing = new Vector2(300, 200);
+    public Vector2 spacing = new(300, 200);
 
+    [Header("References")]
     public StageMapRenderer mapRenderer;
 
     private StageData stageData;
+    private readonly List<GraphNode> visitedNodes = new();
 
-    private List<GraphNode> visitedNodes = new List<GraphNode>();
-
-    void Start()
-    {
-        LoadStage(stageIndex);
-    }
+    void Start() => LoadStage(stageIndex);
 
     void OnNodeClicked(GraphNode clicked)
     {
@@ -38,26 +36,44 @@ public class StageManager : MonoBehaviour
     private void LoadStage(int index)
     {
         mapRenderer.ClearMap();
-        visitedNodes.Clear(); // 이전 방문 기록 초기화
+        visitedNodes.Clear();
 
+        // 스테이지 데이터 생성
         stageData = StageGraphGenerator.Generate(index, spacing);
+
+        // 🔧 spacing.x를 열 수에 맞게 자동 조정
+        float targetWidth = 1400f;
+        spacing.x = targetWidth / (stageData.columnCount - 1);
+
+        // 다시 생성 (spacing 조정 후)
+        stageData = StageGraphGenerator.Generate(index, spacing);
+
         mapRenderer.Render(stageData, OnNodeClicked);
         mapRenderer.CenterMap();
 
-        // 모든 노드 보이기 + 버튼 비활성화
+        DisableAllNodeButtons();
+        ActivateStartNode();
+    }
+
+    private void DisableAllNodeButtons()
+    {
         foreach (var column in stageData.columns)
+        {
             foreach (var node in column)
             {
                 var ui = mapRenderer.nodeUIMap[node];
-                ui.gameObject.SetActive(true);
-
                 var btn = ui.GetComponent<Button>();
-                btn.interactable = false;
-                btn.enabled = false;
-                btn.image.color = new Color(1, 1, 1, 0.4f); // 흐리게
-            }
 
-        // Start 노드만 버튼 활성화
+                ui.gameObject.SetActive(true);
+                btn.enabled = false;
+                btn.interactable = false;
+                btn.image.color = new Color(1, 1, 1, 0.4f);
+            }
+        }
+    }
+
+    private void ActivateStartNode()
+    {
         var startNode = stageData.columns[0].First();
         visitedNodes.Add(startNode);
 
@@ -67,14 +83,9 @@ public class StageManager : MonoBehaviour
         startBtn.interactable = true;
         startBtn.image.color = Color.white;
 
-        // 다음 노드 표시 처리
         mapRenderer.UpdateInteractables(startNode, visitedNodes);
     }
 
-    bool IsLastColumnNode(GraphNode clicked)
-    {
-        return stageData.columns[stageData.columns.Count - 1].Contains(clicked);
-    }
-
-
+    private bool IsLastColumnNode(GraphNode clicked)
+        => stageData.columns[^1].Contains(clicked);
 }

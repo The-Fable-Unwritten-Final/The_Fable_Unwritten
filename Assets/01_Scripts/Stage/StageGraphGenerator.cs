@@ -40,35 +40,68 @@ public static class StageGraphGenerator
         }
         else
         {
-            var nodeCounts = new[] { 6, 1, 3, 2 };
-            var nodeTypes = new[] {
-                NodeType.NormalBattle, NodeType.EliteBattle,
-                NodeType.RandomEvent, NodeType.Camp
-            };
-
+            // ✅ 1. 노드 종류별 개수 지정
             var pool = new List<NodeType>();
-            for (int i = 0; i < nodeCounts.Length; i++)
-                pool.AddRange(Enumerable.Repeat(nodeTypes[i], nodeCounts[i]));
-            pool = pool.OrderBy(_ => Random.value).ToList();
+            pool.AddRange(Enumerable.Repeat(NodeType.NormalBattle, 6));
+            pool.AddRange(Enumerable.Repeat(NodeType.EliteBattle, 1));
+            pool.AddRange(Enumerable.Repeat(NodeType.RandomEvent, 3));
+            pool.AddRange(Enumerable.Repeat(NodeType.Camp, 2));
+            pool = pool.OrderBy(_ => Random.value).ToList(); // 섞기
 
+            // 2. 열당 노드 수 분배 (열 1~5)
+            int[] counts = new int[5]; // 열 1~5
+            for (int i = 0; i < 5; i++) counts[i] = 1; // 최소 1개씩
+
+            int remaining = 12 - 5; // 남은 7개 분배
+            List<int> indices = Enumerable.Range(0, 5).ToList();
+
+            while (remaining > 0 && indices.Count > 0)
+            {
+                int i = indices[Random.Range(0, indices.Count)];
+
+                if (counts[i] < 3)
+                {
+                    counts[i]++;
+                    remaining--;
+                }
+
+                if (counts[i] == 3)
+                {
+                    indices.Remove(i); // 더 이상 추가 불가한 열 제거
+                }
+            }
+
+            // ✅ 3. 열마다 노드 배치
             for (int col = 1; col <= 5; col++)
             {
-                int count = Random.Range(2, 4);
                 var column = new List<GraphNode>();
-                for (int i = 0; i < count && pool.Count > 0; i++)
+                int count = counts[col - 1];
+
+                // 👇 열 내 전체 높이 계산 (노드 간 간격 유지)
+                float totalHeight = (count - 1) * spacing.y;
+
+                for (int i = 0; i < count; i++)
                 {
+                    if (pool.Count == 0) break;
+
+                    // 👇 위에서 아래로 노드를 고르게 분산
+                    float y = totalHeight / 2f - i * spacing.y;
+
                     column.Add(new GraphNode
                     {
                         id = id++,
                         type = pool[0],
                         columnIndex = col,
-                        position = new Vector2(col * spacing.x, (i - count / 2f) * -spacing.y)
+                        position = new Vector2(col * spacing.x, y)
                     });
+
                     pool.RemoveAt(0);
                 }
+
                 stage.columns.Add(column);
             }
 
+            // ✅ 4. 마지막 Boss 열
             stage.columns.Add(new List<GraphNode> {
                 new GraphNode { id = id++, type = NodeType.Boss, columnIndex = 6, position = new Vector2(6 * spacing.x, 0) }
             });
@@ -95,13 +128,47 @@ public static class StageGraphGenerator
             }
             else
             {
-                var toSorted = toCol.OrderBy(n => n.position.y).ToList();
-                for (int j = 0; j < fromCol.Count; j++)
+                int toCount = toCol.Count;
+                int fromCount = fromCol.Count;
+                int toIndex = 0;
+
+                for (int j = 0; j < fromCount; j++)
                 {
                     var from = fromCol[j];
-                    int count = Random.Range(1, 3);
-                    for (int k = 0; k < count && k < toSorted.Count; k++)
-                        from.nextNodes.Add(toSorted[k]);
+
+                    // 기본 연결
+                    if (toIndex < toCount)
+                    {
+                        from.nextNodes.Add(toCol[toIndex]);
+                    }
+
+                    if (toIndex + 1 < toCount && Random.value < 0.5f)
+                    {
+                        from.nextNodes.Add(toCol[toIndex + 1]);
+                    }
+
+                    toIndex = Mathf.Min(toIndex + 1, toCount - 1);
+                }
+
+                // ✅ [추가1] 마지막 노드는 다음 열의 마지막 노드와 연결
+                var lastFrom = fromCol[^1];
+                var lastTo = toCol[^1];
+                if (!lastFrom.nextNodes.Contains(lastTo))
+                {
+                    lastFrom.nextNodes.Add(lastTo);
+                }
+
+                // ✅ [추가2] 연결되지 않은 노드도 마지막 노드에서 연결
+                var connectedToNodes = new HashSet<GraphNode>(
+                    fromCol.SelectMany(f => f.nextNodes)
+                );
+
+                foreach (var to in toCol)
+                {
+                    if (!connectedToNodes.Contains(to) && !lastFrom.nextNodes.Contains(to))
+                    {
+                        lastFrom.nextNodes.Add(to);
+                    }
                 }
             }
         }

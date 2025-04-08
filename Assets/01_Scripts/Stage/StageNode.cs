@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StageNodeUI : MonoBehaviour
+public class StageNode : MonoBehaviour
 {
     public Image iconImage;
 

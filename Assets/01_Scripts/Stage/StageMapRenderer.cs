@@ -1,32 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class StageMapRenderer : MonoBehaviour
 {
+    [Header("Prefabs & UI")]
     public GameObject nodePrefab;
     public GameObject linePrefab;
-    public RectTransform mapParent;
+    public RectTransform nodesContainer;
 
+
+    [Header("Node Icons")]
     public Sprite startIcon, normalIcon, eliteIcon, randomIcon, campIcon, bossIcon;
 
     public Dictionary<GraphNode, RectTransform> nodeUIMap = new();
+    private readonly List<LineInfo> lineInfos = new();
 
     public void Render(StageData stage, System.Action<GraphNode> onClick)
     {
         nodeUIMap.Clear();
+        lineInfos.Clear();
 
         foreach (var column in stage.columns)
         {
             foreach (var node in column)
             {
-                var go = Instantiate(nodePrefab, mapParent);
+                var go = Instantiate(nodePrefab, nodesContainer);
                 var rt = go.GetComponent<RectTransform>();
                 rt.anchoredPosition = node.position;
                 nodeUIMap[node] = rt;
 
-                var ui = go.GetComponent<StageNodeUI>();
+                var ui = go.GetComponent<StageNode>();
                 ui.Setup(node.type, GetIcon(node.type));
 
                 go.GetComponent<Button>().onClick.AddListener(() => onClick(node));
@@ -39,65 +45,93 @@ public class StageMapRenderer : MonoBehaviour
             {
                 var fromRT = nodeUIMap[node];
                 var toRT = nodeUIMap[next];
-                UILineDrawer.DrawLine(fromRT, toRT, mapParent, linePrefab);
+
+                GameObject line = UILineDrawer.DrawLine(fromRT, toRT, nodesContainer, linePrefab);
+                lineInfos.Add(new LineInfo { from = node, to = next, lineObj = line });
             }
         }
     }
 
-    public void ShowColumn(int columnIndex, StageData stage)
+    public void HighlightLinesFrom(GraphNode current)
     {
-        foreach (var column in stage.columns)
+        foreach (var line in lineInfos)
         {
-            foreach (var node in column)
+            bool active = line.from == current && current.nextNodes.Contains(line.to);
+            line.lineObj.SetActive(active);
+        }
+    }
+
+    public void UpdateInteractables(GraphNode current, List<GraphNode> visited)
+    {
+        foreach (var node in nodeUIMap.Keys)
+        {
+            var rt = nodeUIMap[node];
+            var btn = rt.GetComponent<Button>();
+
+            if (visited.Contains(node))
             {
-                bool active = node.columnIndex == columnIndex;
-                if (nodeUIMap.ContainsKey(node))
-                    nodeUIMap[node].gameObject.SetActive(active);
+                btn.interactable = false;
+                btn.enabled = false;
+                btn.image.color = Color.white;
+            }
+            else if (current.nextNodes.Contains(node))
+            {
+                btn.enabled = true;
+                btn.interactable = true;
+                btn.image.color = Color.white;
+            }
+            else
+            {
+                btn.enabled = false;
+                btn.interactable = false;
+                btn.image.color = new Color(1, 1, 1, 0.4f);
+            }
+        }
+
+        // 🔥 여기서 visited 같이 넘겨줌!
+        HighlightLinesFrom(current, visited);
+    }
+
+    public void HighlightLinesFrom(GraphNode current, List<GraphNode> visited)
+    {
+        foreach (var line in lineInfos)
+        {
+            var img = line.lineObj.GetComponent<Image>();
+
+            bool isVisitedFrom = visited.Contains(line.from);
+            bool isVisitedTo = visited.Contains(line.to);
+
+            bool isCurrentPath = line.from == current && current.nextNodes.Contains(line.to);
+
+            if (isVisitedFrom && isVisitedTo)
+            {
+                // 지나온 길
+                img.color = new Color(1f, 1f, 1f, 1f);
+            }
+            else if (isCurrentPath)
+            {
+                // 현재 노드에서 갈 수 있는 경로
+                img.color = new Color(1f, 1f, 1f, 1f);
+            }
+            else
+            {
+                // 아직 도달하지 못한 경로
+                img.color = new Color(1f, 1f, 1f, 0.2f);
             }
         }
     }
 
-    private Sprite GetIcon(NodeType type) => type switch
+    public void ClearMap()
     {
-        NodeType.Start => startIcon,
-        NodeType.NormalBattle => normalIcon,
-        NodeType.EliteBattle => eliteIcon,
-        NodeType.RandomEvent => randomIcon,
-        NodeType.Camp => campIcon,
-        NodeType.Boss => bossIcon,
-        _ => null
-    };
-    public void SetInteractableNodes(GraphNode current, StageData stage)
-    {
-        // 전체 노드 비활성화
-        foreach (var col in stage.columns)
-        {
-            foreach (var node in col)
-            {
-                if (nodeUIMap.TryGetValue(node, out RectTransform rt))
-                {
-                    var button = rt.GetComponent<Button>();
-                    button.interactable = false;
+        foreach (var ui in nodeUIMap.Values)
+            Destroy(ui.gameObject);
+        nodeUIMap.Clear();
 
-                    // (선택) 흐리게 보이게 하고 싶으면:
-                    button.image.color = new Color(1, 1, 1, 0.4f);
-                }
-            }
-        }
-
-        // 다음 열 노드만 다시 활성화
-        foreach (var next in current.nextNodes)
-        {
-            if (nodeUIMap.TryGetValue(next, out RectTransform rt))
-            {
-                var button = rt.GetComponent<Button>();
-                button.interactable = true;
-
-                // (선택) 밝게 복원
-                button.image.color = Color.white;
-            }
-        }
+        foreach (var line in lineInfos)
+            Destroy(line.lineObj);
+        lineInfos.Clear();
     }
+
     public void CenterMap()
     {
         if (nodeUIMap.Count == 0) return;
@@ -113,74 +147,17 @@ public class StageMapRenderer : MonoBehaviour
         }
 
         Vector2 center = (min + max) / 2f;
-
-        // 여기서 this.mapParent 사용!
-        mapParent.anchoredPosition = -center;
+        nodesContainer.anchoredPosition = -center;
     }
 
-    public void ShowNextOnly(GraphNode current)
+    private Sprite GetIcon(NodeType type) => type switch
     {
-        foreach (var node in nodeUIMap.Keys)
-        {
-            var rt = nodeUIMap[node];
-            var button = rt.GetComponent<Button>();
-
-            if (node == current)
-            {
-                // 현재 클릭한 노드는 비활성화
-                button.interactable = false;
-            }
-            else if (current.nextNodes.Contains(node))
-            {
-                // 다음 연결 노드만 활성화
-                rt.gameObject.SetActive(true);
-                button.interactable = true;
-                button.image.color = Color.white;
-            }
-            else
-            {
-                // 나머지 전부 비활성화
-                button.interactable = false;
-            }
-        }
-    }
-
-    public void UpdateInteractables(GraphNode current, List<GraphNode> visited)
-    {
-        foreach (var node in nodeUIMap.Keys)
-        {
-            var rt = nodeUIMap[node];
-            var btn = rt.GetComponent<Button>();
-
-            if (visited.Contains(node))
-            {
-                // ✅ 지나온 경로는 버튼 꺼버리기
-                btn.interactable = false;
-                btn.enabled = false;
-                btn.image.color = Color.white; // 흐림 제거
-            }
-            else if (current.nextNodes.Contains(node))
-            {
-                // ✅ 다음 선택 가능한 노드만 켜기
-                btn.enabled = true;
-                btn.interactable = true;
-                btn.image.color = Color.white;
-            }
-            else
-            {
-                // ✅ 나머지 노드는 클릭 불가
-                btn.enabled = false;
-                btn.interactable = false;
-                btn.image.color = new Color(1, 1, 1, 0.4f); // 흐리게
-            }
-        }
-    }
-    public void ClearMap()
-    {
-        foreach (var ui in nodeUIMap.Values)
-        {
-            Destroy(ui.gameObject);
-        }
-        nodeUIMap.Clear();
-    }
+        NodeType.Start => startIcon,
+        NodeType.NormalBattle => normalIcon,
+        NodeType.EliteBattle => eliteIcon,
+        NodeType.RandomEvent => randomIcon,
+        NodeType.Camp => campIcon,
+        NodeType.Boss => bossIcon,
+        _ => null
+    };
 }
