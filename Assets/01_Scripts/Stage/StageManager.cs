@@ -2,24 +2,60 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
-    [Header("Stage Settings")]
-    private int stageIndex = 1;
+    [Header("Stage Settings")]  
     [SerializeField] Vector2 spacing = new(300, 200); // 노드 간격
 
     [Header("References")]
     public StageMapRenderer mapRenderer;              // StageMapRederer 연결
 
+    private int stageIndex = 1;
     private StageData stageData;                           // 현재 스테이지 데이터
     private readonly List<GraphNode> visitedNodes = new(); // 방문한 노드 목록
 
     /// <summary>
     /// 시작 시 현재 스테이지 로드
     /// </summary>
-    void Start() => LoadStage(stageIndex);
+    void Start()
+    {
+        if (GameManager.Instance.savedStageData != null && !GameManager.Instance.retryFromStart)
+        {
+            if (GameManager.Instance.stageCleared)
+            {
+                // 클리어한 노드가 보스나 마지막열 일 경우 다음 스테이지 로드
+                if (GameManager.Instance.savedStageData != null &&
+                    GameManager.Instance.savedStageData.columns[^1].Contains(
+                        GameManager.Instance.savedVisitedNodes.Last()))
+                {
+                    GameManager.Instance.stageIndex++;
+                    GameManager.Instance.stageCleared = false;
+                    LoadStage(GameManager.Instance.stageIndex);
+                    return;
+                }
+
+                // 아니면 현재 스테이지 유지
+                stageData = GameManager.Instance.savedStageData;
+                visitedNodes.Clear();
+                visitedNodes.AddRange(GameManager.Instance.savedVisitedNodes);
+                stageIndex = GameManager.Instance.stageIndex;
+                GameManager.Instance.stageCleared = false;
+
+                mapRenderer.Render(stageData, OnNodeClicked);
+                mapRenderer.CenterMap();
+                mapRenderer.UpdateInteractables(visitedNodes.Last(), visitedNodes);
+                return;
+            }
+        }
+        else
+        {
+            // 처음부터 시작
+            LoadStage(GameManager.Instance.stageIndex);
+        }
+    }
 
     /// <summary>
     /// 노드 클릭 시 호출
@@ -27,6 +63,25 @@ public class StageManager : MonoBehaviour
     void OnNodeClicked(GraphNode clicked)
     {
         visitedNodes.Add(clicked);
+
+        GameManager.Instance.SaveStageState(stageData, visitedNodes, stageIndex);
+
+        switch (clicked.type)
+        {
+            case NodeType.NormalBattle:
+            case NodeType.EliteBattle:
+            case NodeType.Boss:
+                SceneManager.LoadScene("InGameScene");
+                return;
+
+            case NodeType.Camp:
+                SceneManager.LoadScene("CampScene");
+                return;
+
+            case NodeType.RandomEvent:
+                SceneManager.LoadScene("RandomEventScene");
+                return;
+        }
 
         if (IsLastColumnNode(clicked))
         {
