@@ -10,16 +10,14 @@ using DG.Tweening;
 public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     //public CardData card; // 카드 정보
-    public GameObject cardPrefab; // 카드 프리팹
-
     // @@@@ 추후 덱 초기화 시점 및 카드 드로우마다 cardDisplay 추가 및 list에 추가 하기.
     public CardDisplay cardDisplay; // 핸드내의 모든 카드들을 관리하는 중앙 스크립트. (UI LineRenderer가 이곳에 존재.) 
     RectTransform rect; // RectTransform 컴포넌트
-    Vector3 originalPos; // 원래 위치
+    public Vector2 originalPos; // 원래 위치
     Vector3 targetPos; // 목표 위치
     [SerializeField] CardState cardState;
 
-    enum CardState// 추후 턴 상태와 연계해서 카드의 상태관리. (카드의 상태에 따른 상호작용 가능 여부 설정.)
+    public enum CardState// 추후 턴 상태와 연계해서 카드의 상태관리. (카드의 상태에 따른 상호작용 가능 여부 설정.)
     {
         None,// 아무런 상호 작용이 불가능한 상태.
         CanMouseOver,// 마우스 오버를 통해 정보 확인 까지만 가능한 상태.
@@ -33,18 +31,25 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         rect = GetComponent<RectTransform>();
         SetOriginalPos();// 덱 세팅기능이 추가되면 그쪽으로 이동.
     }
-    public void OnPointerEnter(PointerEventData eventData)
+    private void OnDestroy()
     {
-        rect.DOAnchorPos(targetPos, 0.5f).SetEase(Ease.OutSine);
+        StopAllCoroutines(); // 카드가 파괴될 때 모든 코루틴 정지
     }
 
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if(cardState == CardState.None) return; // 상태가 None인 경우 상호작용 불가능
+        rect.DOAnchorPos(targetPos, 0.4f).SetEase(Ease.OutSine);
+    }
     public void OnPointerExit(PointerEventData eventData)
     {
         if(cardState == CardState.OnDrag) return; // 카드 상태가 OnDrag인 경우에는 원래 위치로 돌아가지 않음.
-        rect.DOAnchorPos(originalPos, 0.5f).SetEase(Ease.OutSine);
+        rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine);
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (cardState == CardState.None) return; // 상태가 None인 경우 상호작용 불가능
+
         cardDisplay.isOnDrag = true; // 드래그 시작 시 카드 드래그 상태를 true로 설정
         cardDisplay.currentCard = this; // 현재 드래그 중인 카드 설정
         cardDisplay.lineRenderer.gameObject.SetActive(true); // 드래그 중일 때 라인 렌더러 활성화
@@ -55,6 +60,8 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public void OnDrag(PointerEventData eventData)
     {
         //this.transform.position = eventData.position;
+        if(this.rect.anchoredPosition == originalPos)
+            rect.DOAnchorPos(targetPos, 0.4f).SetEase(Ease.OutSine);// 드래그 할때 카드가 위로 안올라올 경우의 후처리.
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -68,11 +75,12 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         {
             cardState = CardState.OnUse; // 카드 상태를 OnUse로 변경
             //카드 사용 로직...
-            rect.DOAnchorPos(originalPos, 0.5f).SetEase(Ease.OutSine);// @@ 임시로 원래 위치로 돌아가기.
+            cardDisplay.UseCard();// 카드사용 메서드
+            rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine);// @@ 임시로 원래 위치로 돌아가기.
         }
 
         cardDisplay.currentCard = null; // 드래그 종료 시 현재 카드 설정 해제
-        rect.DOAnchorPos(originalPos, 0.5f).SetEase(Ease.OutSine); // 사용 실패시 원래 위치로 돌아가기.
+        rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine); // 사용 실패시 원래 위치로 돌아가기.
     }
 
     public void SetOriginalPos()// 덱 최초 세팅 시점, 카드 추가 혹은 감소시 위치 초기화.
@@ -86,6 +94,30 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         Vector2 localUpDir = new Vector2(-Mathf.Sin(angle), Mathf.Cos(angle));// 로컬 좌표계에서의 각도 변환을 위해 라디안을 통해 삼각함수 사용. (tranform.up 등의 방식은 월드 좌표계 기준의 단위 벡터이기 때문에 로컬 기준의 값을 계산해야 함.)
 
         targetPos = rect.anchoredPosition + localUpDir * distance;
+    }
+    public void SetTargetPos(Vector2 tPos ,float tAngle)// 핸드의 카드에 변동사항이 생겨 움직이는 도중, 핸드의 카드에 접근시 정상적인 동작을 위해 필요한 메서드.
+    {
+        float distance = 100f;// 100 만큼 위로 올라감.
+        float angle = tAngle * Mathf.Deg2Rad;
+        Vector2 localUpDir = new Vector2(-Mathf.Sin(angle), Mathf.Cos(angle));
+
+        targetPos = tPos + localUpDir * distance;
+    }
+
+    public void SetCardState(CardState state)
+    {
+        cardState = state; // 카드 상태 설정
+    }
+    public void OnCardMoveCouroutine()
+    {
+        StartCoroutine(OnCardMove());// 카드 이동 애니메이션을 위한 코루틴 시작.
+    }
+    IEnumerator OnCardMove()
+    {
+        // 카드 이동 애니메이션을 위한 상호작용 제한 코루틴
+        SetCardState(CardInHand.CardState.None);// 카드가 움직이는 도중에는 상호작용 제한.
+        yield return new WaitForSeconds(0.3f);
+        SetCardState(CardInHand.CardState.CanDrag);// 추후 전투 조건에 맞는 상황 세팅으로 변경.
     }
 
     // update 에서 매번 조건을 확인해 카드의 상태 변경 메서드 추가하기

@@ -2589,15 +2589,15 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 687549814}
-  - {fileID: 2084138552}
-  - {fileID: 1845447832}
-  - {fileID: 106516141}
-  - {fileID: 7661931135261668294}
-  - {fileID: 1703289376}
-  - {fileID: 936693880}
-  - {fileID: 1861269440}
   - {fileID: 848962784}
+  - {fileID: 1861269440}
+  - {fileID: 936693880}
+  - {fileID: 1703289376}
+  - {fileID: 7661931135261668294}
+  - {fileID: 106516141}
+  - {fileID: 1845447832}
+  - {fileID: 2084138552}
+  - {fileID: 687549814}
   m_Father: {fileID: 4756174893505369322}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2619,15 +2619,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvasRect: {fileID: 4756174893505369322}
   cardsInHand:
-  - {fileID: 687549815}
-  - {fileID: 2084138553}
-  - {fileID: 1845447833}
-  - {fileID: 2064091889}
-  - {fileID: 7661931135261668295}
-  - {fileID: 1846337902}
-  - {fileID: 936693881}
-  - {fileID: 1861269441}
   - {fileID: 1940981668}
+  - {fileID: 1861269441}
+  - {fileID: 936693881}
+  - {fileID: 1846337902}
+  - {fileID: 7661931135261668295}
+  - {fileID: 2064091889}
+  - {fileID: 1845447833}
+  - {fileID: 2084138553}
+  - {fileID: 687549815}
+  cardPrefab: {fileID: 2673795626237749687, guid: 45073b34f4e19b543af3c912c1fc5e50,
+    type: 3}
+  cardMidPosY: 470
+  yOffset: 5
   uiRaycaster: {fileID: 7764837898309980686}
   eventSystem: {fileID: 1939298570}
   arrowImage: {fileID: 1774413557}

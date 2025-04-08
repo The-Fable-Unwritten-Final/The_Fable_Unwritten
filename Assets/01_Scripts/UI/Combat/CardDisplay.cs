@@ -4,12 +4,18 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
+using DG.Tweening;
 
 // 핸드에 소지하고 있는 카드들 전체를 관리하는 스크립트.
 public class CardDisplay : MonoBehaviour
 {
     [SerializeField] RectTransform canvasRect;
     [SerializeField] List<CardInHand> cardsInHand = new List<CardInHand>(); // 핸드에 소지하고 있는 카드들.
+    [SerializeField] GameObject cardPrefab; // 카드 프리팹
+
+    [Header("CardsInHand")]
+    [SerializeField] float cardMidPosY = 470f; // 중간에 위치할 카드의 Recttransform Y 좌표.
+    [SerializeField] float yOffset = 5f; // 카드의 Y 좌표 오프셋. (카드가 겹치지 않도록 하기 위함.)
 
     [Header("Drag with Arrow")]
     [SerializeField] private GraphicRaycaster uiRaycaster; // Canvas에 있는 GraphicRaycaster
@@ -19,12 +25,12 @@ public class CardDisplay : MonoBehaviour
     public bool isOnDrag = false; // 드래그 중인지 여부
     public CardInHand currentCard; // 현재 드래그 중인 카드
 
-
     private void Awake()
     {
-        RectTransform rt = lineRenderer.GetComponent<RectTransform>();
-        rt.anchoredPosition = Vector2.zero;
-        rt.localPosition = Vector3.zero;
+        for(int i = 0; i < cardsInHand.Count; i++)
+        {
+            cardsInHand[i].SetCardState(CardInHand.CardState.CanDrag);// 임시로 카드 상태 설정.
+        }
     }
 
     private void Update()
@@ -34,9 +40,13 @@ public class CardDisplay : MonoBehaviour
             UpdateLineRenderer();
             UpdateArrowHead();
         }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            AddCard();// 테스트용 카드 추가. (카드 드로우 기능이 구현되면 이곳에서 카드 드로우 기능으로 변경.)
+        }
     }
 
-    void UpdateLineRenderer()
+    void UpdateLineRenderer()// 화살표 선
     {
         if (cardsInHand.Count == 0 || currentCard == null) return;
 
@@ -54,7 +64,7 @@ public class CardDisplay : MonoBehaviour
 
         lineRenderer.SetAllDirty();// 라인 렌더러 업데이트.
     }
-    void UpdateArrowHead()
+    void UpdateArrowHead()// 화살표 머리
     {
         if(lineRenderer.Points.Length < 2) return;
 
@@ -70,6 +80,81 @@ public class CardDisplay : MonoBehaviour
         // 화살표의 각도 설정
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;// UI에서 사용하기 위해 방향 벡터를 회전 각도로 변환.
         arrowImage.localRotation = Quaternion.Euler(0, 0, angle);
+    }
+    void CardArrange()// 카드 정렬 (수량에 따른 각도, 거리)
+    {
+        if(cardsInHand.Count == 0) return;
+
+        int oddeven = cardsInHand.Count / 2;
+
+        if(oddeven !=0)// 핸드의 카드 개수가 홀수인 경우
+        {
+            for(int i = 0; i < cardsInHand.Count; i++)
+            {
+                int cash = i;// 카드의 인덱스를 캐싱해서 OnComplete에서 사용
+                // 각도 설정
+                float angle = 0f;
+                angle = (oddeven * 2.5f) + (i * - 2.5f);
+                cardsInHand[i].GetComponent<RectTransform>().DORotate(new Vector3(0, 0, angle), 0.5f).SetEase(Ease.OutSine);
+
+                // 카드의 좌표 설정
+                Vector2 targetPos = new Vector2(0, 0);
+                int distance = Mathf.Abs(i - oddeven);
+                targetPos.x =(oddeven * -100) + (i * 100);
+                targetPos.y = (- yOffset * distance * (distance + 1) / 2f) - cardMidPosY;
+                cardsInHand[i].GetComponent<RectTransform>()
+                    .DOAnchorPos(targetPos, 0.5f)
+                    .OnStart(() =>
+                    {
+                        cardsInHand[cash].originalPos = targetPos;
+                        cardsInHand[cash].SetTargetPos(targetPos, angle);// 카드의 원래 위치 설정.
+                    })
+                    .SetEase(Ease.OutSine);
+
+                cardsInHand[cash].OnCardMoveCouroutine();// 카드 이동중에는 상호작용 불가능 설정.
+            }
+        }
+        else
+        {
+            for(int i = 0; i < cardsInHand.Count; i++)
+            {
+                int cash = i;// 카드의 인덱스를 캐싱해서 OnComplete에서 사용
+                // 각도 설정
+                float angle = 0f;
+                angle = (oddeven * 2.5f - 1.25f) + (i * - 2.5f);
+                cardsInHand[i].GetComponent<RectTransform>().DORotate(new Vector3(0, 0, angle), 0.5f).SetEase(Ease.OutSine);
+
+                // 카드의 좌표 설정
+                Vector2 targetPos = new Vector2(0, 0);
+                int distance = Mathf.Abs(i - oddeven);
+                targetPos.x = (oddeven * -100) + (i * 100);
+                targetPos.y = (- yOffset * distance * (distance + 1) / 2f) - cardMidPosY;
+                cardsInHand[i].GetComponent<RectTransform>()
+                    .DOAnchorPos(targetPos, 0.1f)
+                    .OnStart(() => 
+                    {
+                        cardsInHand[cash].originalPos = targetPos;
+                        cardsInHand[cash].SetTargetPos(targetPos, angle);// 카드의 원래 위치 설정.
+                    })
+                    .SetEase(Ease.OutSine);
+
+                cardsInHand[cash].OnCardMoveCouroutine();// 카드 이동중에는 상호작용 불가능 설정.
+            }
+        }
+    }
+    public void AddCard()
+    {
+        GameObject card = Instantiate(cardPrefab,this.transform);
+        cardsInHand.Add(card.GetComponent<CardInHand>());// 카드 추가.
+        card.GetComponent<CardInHand>().cardDisplay = this;// 카드의 카드디스플레이 설정.
+        CardArrange();
+    }
+    public void UseCard(/*carddata*/)
+    {
+        if(currentCard == null) return;// 현재 카드가 없으면 사용 불가.
+        cardsInHand.Remove(currentCard);// 카드 사용.
+        Destroy(currentCard.gameObject);// 카드 삭제.
+        CardArrange();
     }
 
     public GameObject OnMousepoint(PointerEventData eventData)
