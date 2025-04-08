@@ -46,9 +46,7 @@ public class DeckModel
     public void Discard(CardModel card)
     {
         if (hand.Remove(card))                  //핸드에 특정 카드 버리고
-        {
             usedDeck.Add(card);                 //사용한 카드 쪽에 버린 카드 넣기
-        }
     }
 
     /// <summary>
@@ -93,6 +91,42 @@ public class DeckModel
         {
             int j = Random.Range(0, i + 1);
             (list[i], list[j]) = (list[j], list[i]);
+        }
+    }
+
+    /// <summary>
+    /// 사용 카드 수를 반환
+    /// </summary>
+    /// <returns>사용된 카드 수</returns>
+    public int UsedCount() => usedDeck.Count;
+
+    /// <summary>
+    /// 사용 카드 덱의 복사본 반환
+    /// </summary>
+    /// <returns>사용 카드 덱</returns>
+    public List<CardModel> GetUsedCards()
+    {
+        return new List<CardModel>(usedDeck); // 복사본 반환
+    }
+
+    /// <summary>
+    /// 사용 덱에서 제거
+    /// </summary>
+    /// <param name="card">제거할 카드</param>
+    public void RemoveFromUsed(CardModel card)
+    {
+        usedDeck.Remove(card);
+    }
+
+    /// <summary>
+    /// 손패에 특정 카드를 추가
+    /// </summary>
+    /// <param name="card">손패에 추가할 카드</param>
+    public void AddToHand(CardModel card)
+    {
+        if (hand.Count < maxSize)
+        {
+            hand.Add(card);
         }
     }
 }
