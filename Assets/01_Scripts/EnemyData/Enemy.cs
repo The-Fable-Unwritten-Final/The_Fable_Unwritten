@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     public void WatchEnemyInfo()
     {
         Debug.Log("이름 :: " + enemyData.EnemyName);
-        Debug.Log("체력 :: " + enemyData.HP);
+        Debug.Log("체력 :: " + enemyData.MaxHP);
         Debug.Log("공격력 :: " + enemyData.ATK);
     }
 

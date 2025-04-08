@@ -11,13 +11,13 @@ public class PlayerData : ScriptableObject
     public string IDNum; //고유번호
     public string CharacterName; //캐릭터이름
     public Sprite Icon; //Icon
-    public float Health; //체력
+    public float MaxHP; //체력
     public float ATK; //공격력
     public float DEF; //방어력
 
 
     [Header("Stat Value")]
-    public float[] HealthValue; //체력변화
+    public float[] HPValue; //체력변화
     public float[] ATKValue; //공격력 변화
 
     public enum StencType
