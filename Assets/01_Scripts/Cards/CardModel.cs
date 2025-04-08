@@ -4,10 +4,12 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Card/CardModel")]
 public class CardModel : ScriptableObject
 {
+    public int index;
     public string cardName;                 //카드 이름
+    public string cardText;                 // 카드 설명 필드 추가 (CSV의 text 대응)
     public int manaCost;                    //카드 코스트
     public CharacterClass characterClass;   //누구의 카드인지
-    public List<CardEffectBase> effects;    //어떤 효과를 가졌는지
+    public List<CardEffectBase> effects = new();    //어떤 효과를 가졌는지
 
 
     /// <summary>

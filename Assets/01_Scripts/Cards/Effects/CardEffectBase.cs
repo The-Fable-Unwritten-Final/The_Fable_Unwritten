@@ -8,7 +8,7 @@ using UnityEngine;
 public enum CardEffectType { Damage, Heal, Buff, Debuff, Conditional, Chain }
 public enum CharacterClass { Sophia, Kayla, Leon }
 public enum SkillType { Fire, Ice, Electric, Nature, Buff, Debuff, Holy, Heal, Slash, Strike, Pierce, Defense }
-public enum BuffStatType { None, Attack, Defense, ManaRegen }
+public enum BuffStatType { None, Attack, Defense, ManaRegen, block, blind, stun }
 
 /// <summary>
 /// 전투에서 효과를 받는 대상 (플레이어 / 적) 공통 인터페이스
@@ -22,6 +22,8 @@ public interface IStatusReceiver
     void TakeDamage(float amount);                     // 데미지 적용
     void Heal(float amount);                           // 힐 적용
     bool IsAlive();                                  // 생존 여부 체크
+    bool IsIgnited { get; }
+    string CurrentStance { get; }
 
 }
 
@@ -37,6 +39,14 @@ public abstract class CardEffectBase : ScriptableObject
     /// <param name="target">타겟</param>
     public abstract void Apply(IStatusReceiver caster, IStatusReceiver target);       //타겟(적, 플레이어)에게 어떤 효과를 주는 지
 
+    /// <summary>
+    /// 효과 결과를 다른 친구에게 넘겨 줄 필요가 있을 경우 사용하는 메서드
+    /// </summary>
+    /// <param name="caster">시전자</param>
+    /// <param name="target">타겟</param>
+    /// <returns>적용값</returns>
+    public virtual float ApplyAndReturn(IStatusReceiver caster, IStatusReceiver target) => 0f;
+
     // 광역 지정용 오버로드 (필요한 경우만 override)
     public virtual void ApplyAOE(IStatusReceiver caster, List<IStatusReceiver> targets) { }
 
@@ -44,5 +54,7 @@ public abstract class CardEffectBase : ScriptableObject
     /// 카드 효과 설명 반환
     /// </summary>
     /// <returns></returns>
-    public virtual string GetDescription() => name;
+    public abstract string GetDescription();
+
+    public virtual void InitializeFromCSV(string param) { }
 }

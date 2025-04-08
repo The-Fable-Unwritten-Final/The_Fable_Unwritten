@@ -26,5 +26,20 @@ public class ApplyStatusEffect : CardEffectBase
             duration = duration
         });
     }
+
+    /// <summary>
+    /// 시전자가 광역으로 버프/디버프 줌
+    /// </summary>
+    /// <param name="caster">시전자</param>
+    /// <param name="targets">타겟</param>
+    public override void ApplyAOE(IStatusReceiver caster, List<IStatusReceiver> targets)
+    {
+        foreach (var target in targets)
+        {
+            if (target.IsAlive())
+                Apply(caster, target);
+        }
+    }
+
     public override string GetDescription() => $"{statType} 스탯에 {value}만큼 {duration}턴 동안 적용";
 }

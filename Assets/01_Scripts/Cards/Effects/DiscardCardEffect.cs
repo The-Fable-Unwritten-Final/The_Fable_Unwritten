@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// 카드를 버리는 효과 적용 시
 /// </summary>
-[CreateAssetMenu(menuName = "Card/Effect/Discard")]
+[CreateAssetMenu(menuName = "CardEffect/Discard")]
 public class DiscardCardEffect : CardEffectBase
 {
     public int discardCount = 1;

@@ -1,0 +1,23 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+
+[CreateAssetMenu(menuName = "CardEffect/Block")]
+public class BlockEffect : CardEffectBase
+{
+    public override void Apply(IStatusReceiver caster, IStatusReceiver target)
+    {
+        // target에게 block 상태 적용
+        target.ApplyStatusEffect(new StatusEffect
+        {
+            statType = BuffStatType.block,
+            value = 1,
+            duration = 1 // 1턴 동안 block
+        });
+
+        // 실제 block 상태는 target 측에서 처리하도록 확장 가능
+    }
+
+    public override string GetDescription() => "이 턴 동안 적의 스킬로부터 보호됩니다.";
+}
