@@ -30,23 +30,24 @@ public class EnemyData : ScriptableObject
     private float dEFValue;
     public float DEFValue { get { return dEFValue; } } // 방어력 변화
 
-    [System.Serializable]
-    public enum StencType
-    {
-        High, //상단
-        Middle, //중단
-        Low //하단
-    }
+
 
     [System.Serializable]
     public class StancValue
     {
+        public enum StencType
+        {
+            High, //상단
+            Middle, //중단
+            Low //하단
+        }
+
         public float defenseBonus; //방어력 보너스
         public float attackBonus; //공격력 보너스
 
     }
 
-    public StencType currentStance;
+    public StancValue.StencType currentStance;
 
 
 }
