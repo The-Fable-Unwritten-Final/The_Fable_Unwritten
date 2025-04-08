@@ -52,14 +52,27 @@ public class DeckModel
     /// <summary>
     /// 카드를 4장 이상으로 가지고 있을 경우 3장으로 맞추기
     /// </summary>
-    public void DiscardHandToThree()
+    public void DiscardHandToThree(List<CardModel> cardsToDiscard)
     {
-        while (hand.Count > startSize)
+        int limit = startSize;
+        int discardCountNeeded = hand.Count - limit;
+
+        if (discardCountNeeded <= 0) return;
+
+        int discarded = 0;
+        foreach (var card in cardsToDiscard)
         {
-            var cardToDiscard = hand[hand.Count - 1];
-            hand.RemoveAt(hand.Count - 1);
-            usedDeck.Add(cardToDiscard);
+            if (hand.Contains(card))
+            {
+                hand.Remove(card);
+                usedDeck.Add(card);
+                discarded++;
+
+                if (discarded >= discardCountNeeded)
+                    break;
+            }
         }
+        Debug.Log($"[Discard] 선택 카드 {discarded}장 버림, 현재 손패 {hand.Count}장");
     }
 
     /// <summary>

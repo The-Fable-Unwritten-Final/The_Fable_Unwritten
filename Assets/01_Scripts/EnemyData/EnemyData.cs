@@ -44,10 +44,7 @@ public class EnemyData : ScriptableObject
 
         public float defenseBonus; //방어력 보너스
         public float attackBonus; //공격력 보너스
-
     }
 
     public StancValue.StencType currentStance;
-
-
 }
