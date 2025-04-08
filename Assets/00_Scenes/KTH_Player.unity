@@ -132,7 +132,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 152749003}
-  - component: {fileID: 152749002}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -140,25 +139,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &152749002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 152749001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c24168cf657d9594ca3c3e45461a0a1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allStances: []
-  currentStance:
-    defenseBonus: 0
-    attackBonus: 0
-    floatValue: []
-    stencType: 0
-    stanceIcon: {fileID: 0}
 --- !u!4 &152749003
 Transform:
   m_ObjectHideFlags: 0

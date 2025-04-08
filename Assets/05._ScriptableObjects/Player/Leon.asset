@@ -10,12 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 724ccac381890cb469ca355e81afdc26, type: 3}
-  m_Name: Character
+  m_Name: Leon
   m_EditorClassIdentifier: 
-  IDNum: 
-  CharacterName: 
+  IDNum: 2
+  CharacterName: Leon
   Icon: {fileID: 0}
-  Health: 0
-  ATK: 0
-  ATKValue: 00000000
-  HealthValue: 
+  Health: 30
+  ATK: 1
+  DEF: 1
+  HealthValue: []
+  ATKValue: []
+  allStances: []
+  currentStance:
+    defenseBonus: 0
+    attackBonus: 0
+    floatValue: []
+    stencType: 2
+    stanceIcon: {fileID: 0}
