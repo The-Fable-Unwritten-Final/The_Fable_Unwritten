@@ -5,7 +5,7 @@ using UnityEngine;
 public static class UILineDrawer
 {
     /// <summary>
-    /// 시작 노드, 도착 노드 위치 확인 후 연결해 주는 선 생성
+    /// 두 노드 위치 확인 후 연결해 주는 선 생성
     /// </summary>
     public static GameObject DrawLine(RectTransform from, RectTransform to, Transform parent, GameObject linePrefab)
     {

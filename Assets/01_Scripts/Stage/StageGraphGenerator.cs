@@ -18,106 +18,124 @@ public static class StageGraphGenerator
 
         stage.columnCount = (stageIndex == 1 || stageIndex == 5) ? 4 : 7;
 
-        // 1열: Start 노드 고정으로 추가
+        // 시작 노드 (0열 고정)
         stage.columns.Add(new List<GraphNode> {
             new GraphNode { id = id++, type = NodeType.Start, columnIndex = 0, position = Vector2.zero }
         });
 
-        
         if (stageIndex == 1)
         {
-            // 1 스테이지 : 1~3열 일반 전투
-            for (int i = 1; i < 4; i++)
-            {
-                stage.columns.Add(new List<GraphNode> {
-                    new GraphNode { id = id++, type = NodeType.NormalBattle, columnIndex = i, position = new Vector2(i * spacing.x, 0) }
-                });
-            }
+            GenerateTutorialStage(stage, spacing, ref id);
         }
         else if (stageIndex == 5)
         {
-            // 5 스테이지 : 엘리트, 이벤트, 보스 전투
-            stage.columns.Add(new List<GraphNode> {
-                new GraphNode { id = id++, type = NodeType.EliteBattle, columnIndex = 1, position = new Vector2(1 * spacing.x, 0) }
-            });
-            stage.columns.Add(new List<GraphNode> {
-                new GraphNode { id = id++, type = NodeType.RandomEvent, columnIndex = 2, position = new Vector2(2 * spacing.x, 0) }
-            });
-            stage.columns.Add(new List<GraphNode> {
-                new GraphNode { id = id++, type = NodeType.Boss, columnIndex = 3, position = new Vector2(3 * spacing.x, 0) }
-            });
+            GenerateBossStage(stage, spacing, ref id);
         }
         else
         {
-            // 중간 스테이지 : 각 타입별 고정된 노드 12개 구성
-            var pool = new List<NodeType>();
-            pool.AddRange(Enumerable.Repeat(NodeType.NormalBattle, 6));
-            pool.AddRange(Enumerable.Repeat(NodeType.EliteBattle, 1));
-            pool.AddRange(Enumerable.Repeat(NodeType.RandomEvent, 3));
-            pool.AddRange(Enumerable.Repeat(NodeType.Camp, 2));
-            
-            pool = pool.OrderBy(_ => Random.value).ToList(); //랜덤하게 셋팅 하기위해 섞기
-
-
-            int[] counts = new int[5]; // 열 1~5
-            for (int i = 0; i < 5; i++) counts[i] = 1; // 최소 1개씩(빈칸 없는경우 없도록)
-
-            int remaining = 12 - 5; // 남은 7개 분배
-            List<int> indices = Enumerable.Range(0, 5).ToList();
-
-            while (remaining > 0 && indices.Count > 0)
-            {
-                int i = indices[Random.Range(0, indices.Count)];
-
-                if (counts[i] < 3)
-                {
-                    counts[i]++;
-                    remaining--;
-                }
-
-                if (counts[i] == 3)
-                {
-                    indices.Remove(i); // 더 이상 추가 불가한 열 제거
-                }
-            }
-
-            // 생성된 열에 노드 배치
-            for (int col = 1; col <= 5; col++)
-            {
-                var column = new List<GraphNode>();
-                int count = counts[col - 1];
-
-                // 열 내 전체 높이 계산 (노드 간 간격 유지)
-                float totalHeight = (count - 1) * spacing.y;
-
-                for (int i = 0; i < count; i++)
-                {
-                    if (pool.Count == 0) break;
-
-                    float y = totalHeight / 2f - i * spacing.y;
-
-                    column.Add(new GraphNode
-                    {
-                        id = id++,
-                        type = pool[0],
-                        columnIndex = col,
-                        position = new Vector2(col * spacing.x, y)
-                    });
-
-                    pool.RemoveAt(0);
-                }
-
-                stage.columns.Add(column);
-            }
-
-            // 마지막 열에 보스 노드
-            stage.columns.Add(new List<GraphNode> {
-                new GraphNode { id = id++, type = NodeType.Boss, columnIndex = 6, position = new Vector2(6 * spacing.x, 0) }
-            });
+            GenerateStandardStage(stage, spacing, ref id);
         }
 
         LinkNodes(stage);
         return stage;
+    }
+
+    /// <summary>
+    /// 튜토리얼 스테이지 구성 (1열~3열 일반 전투)
+    /// </summary>
+    private static void GenerateTutorialStage(StageData stage, Vector2 spacing, ref int id)
+    {
+        for (int i = 1; i < 4; i++)
+        {
+            stage.columns.Add(new List<GraphNode> {
+                new GraphNode
+                {
+                    id = id++,
+                    type = NodeType.NormalBattle,
+                    columnIndex = i,
+                    position = new Vector2(i * spacing.x, 0)
+                }
+            });
+        }
+    }
+
+    /// <summary>
+    /// 보스 스테이지 구성 (시작, 엘리트, 이벤트, 보스)
+    /// </summary>
+    private static void GenerateBossStage(StageData stage, Vector2 spacing, ref int id)
+    {
+        stage.columns.Add(new List<GraphNode> {
+            new GraphNode { id = id++, type = NodeType.EliteBattle, columnIndex = 1, position = new Vector2(1 * spacing.x, 0) }
+        });
+        stage.columns.Add(new List<GraphNode> {
+            new GraphNode { id = id++, type = NodeType.RandomEvent, columnIndex = 2, position = new Vector2(2 * spacing.x, 0) }
+        });
+        stage.columns.Add(new List<GraphNode> {
+            new GraphNode { id = id++, type = NodeType.Boss, columnIndex = 3, position = new Vector2(3 * spacing.x, 0) }
+        });
+    }
+
+    /// <summary>
+    /// 일반 스테이지 구성 (2~4 스테이지): 노드 타입별 총 12개, 열당 1~3개 분배
+    /// </summary>
+    private static void GenerateStandardStage(StageData stage, Vector2 spacing, ref int id)
+    {
+        var pool = new List<NodeType>();
+        pool.AddRange(Enumerable.Repeat(NodeType.NormalBattle, 6));
+        pool.AddRange(Enumerable.Repeat(NodeType.EliteBattle, 1));
+        pool.AddRange(Enumerable.Repeat(NodeType.RandomEvent, 3));
+        pool.AddRange(Enumerable.Repeat(NodeType.Camp, 2));
+        pool = pool.OrderBy(_ => Random.value).ToList();
+
+        int[] counts = new int[5]; // 열 1~5
+        for (int i = 0; i < 5; i++) counts[i] = 1;
+
+        int remaining = 12 - 5;
+        List<int> indices = Enumerable.Range(0, 5).ToList();
+
+        while (remaining > 0 && indices.Count > 0)
+        {
+            int i = indices[Random.Range(0, indices.Count)];
+            if (counts[i] < 3)
+            {
+                counts[i]++;
+                remaining--;
+            }
+            if (counts[i] == 3)
+            {
+                indices.Remove(i);
+            }
+        }
+
+        for (int col = 1; col <= 5; col++)
+        {
+            var column = new List<GraphNode>();
+            int count = counts[col - 1];
+            float totalHeight = (count - 1) * spacing.y;
+
+            for (int i = 0; i < count; i++)
+            {
+                if (pool.Count == 0) break;
+                float y = totalHeight / 2f - i * spacing.y;
+
+                column.Add(new GraphNode
+                {
+                    id = id++,
+                    type = pool[0],
+                    columnIndex = col,
+                    position = new Vector2(col * spacing.x, y)
+                });
+
+                pool.RemoveAt(0);
+            }
+
+            stage.columns.Add(column);
+        }
+
+        // 마지막 보스 열 추가
+        stage.columns.Add(new List<GraphNode> {
+            new GraphNode { id = id++, type = NodeType.Boss, columnIndex = 6, position = new Vector2(6 * spacing.x, 0) }
+        });
     }
 
     /// <summary>
@@ -129,7 +147,6 @@ public static class StageGraphGenerator
         {
             var fromCol = stage.columns[i];
             var toCol = stage.columns[i + 1];
-
             bool fullyConnect = (i == 0 || i == stage.columns.Count - 2);
 
             if (fullyConnect)

@@ -5,65 +5,81 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// 스테이지 흐름을 제어하는 메인 매니저 클래스
+/// </summary>
 public class StageManager : MonoBehaviour
 {
     [Header("Stage Settings")]  
-    [SerializeField] Vector2 spacing = new(300, 200); // 노드 간격
+    [SerializeField] Vector2 spacing = new(300, 200);      // 노드 간격
 
     [Header("References")]
-    public StageMapRenderer mapRenderer;              // StageMapRederer 연결
+    public StageMapRenderer mapRenderer;                   // StageMapRederer 연결
 
     private int stageIndex = 1;
     private StageData stageData;                           // 현재 스테이지 데이터
     private readonly List<GraphNode> visitedNodes = new(); // 방문한 노드 목록
 
     /// <summary>
-    /// 시작 시 현재 스테이지 로드
+    /// 시작 시 스테이지 복원 또는 새로 시작
     /// </summary>
-    void Start()
+    private void Start()
     {
-        if (GameManager.Instance.savedStageData != null && !GameManager.Instance.retryFromStart)
-        {
-            if (GameManager.Instance.stageCleared)
-            {
-                // 클리어한 노드가 보스나 마지막열 일 경우 다음 스테이지 로드
-                if (GameManager.Instance.savedStageData != null &&
-                    GameManager.Instance.savedStageData.columns[^1].Contains(
-                        GameManager.Instance.savedVisitedNodes.Last()))
-                {
-                    GameManager.Instance.stageIndex++;
-                    GameManager.Instance.stageCleared = false;
-                    LoadStage(GameManager.Instance.stageIndex);
-                    return;
-                }
+        stageIndex = GameManager.Instance.stageIndex;
 
-                // 아니면 현재 스테이지 유지
-                stageData = GameManager.Instance.savedStageData;
-                visitedNodes.Clear();
-                visitedNodes.AddRange(GameManager.Instance.savedVisitedNodes);
-                stageIndex = GameManager.Instance.stageIndex;
-                GameManager.Instance.stageCleared = false;
-
-                mapRenderer.Render(stageData, OnNodeClicked);
-                mapRenderer.CenterMap();
-                mapRenderer.UpdateInteractables(visitedNodes.Last(), visitedNodes);
-                return;
-            }
-        }
-        else
+        if (!TryRestoreStage())
         {
-            // 처음부터 시작
-            LoadStage(GameManager.Instance.stageIndex);
+            LoadStage(stageIndex);
         }
     }
 
     /// <summary>
-    /// 노드 클릭 시 호출
+    /// 저장된 상태가 있다면 복원 시도
     /// </summary>
-    void OnNodeClicked(GraphNode clicked)
+    /// <returns>복원 성공 여부</returns>
+    private bool TryRestoreStage()
+    {
+        var gm = GameManager.Instance;
+
+        if (gm.savedStageData != null && !gm.retryFromStart)
+        {
+            if (gm.stageCleared)
+            {
+                var lastVisited = gm.savedVisitedNodes.Last();
+                bool wasLastColumnNode = gm.savedStageData.columns[^1].Contains(lastVisited);
+
+                if (wasLastColumnNode)
+                {
+                    gm.stageIndex++;
+                    gm.stageCleared = false;
+                    stageIndex = gm.stageIndex;
+                    LoadStage(stageIndex);
+                    return true;
+                }
+            }
+
+            // 복원 처리
+            stageData = gm.savedStageData;
+            visitedNodes.Clear();
+            visitedNodes.AddRange(gm.savedVisitedNodes);
+            stageIndex = gm.stageIndex;
+            gm.stageCleared = false;
+
+            mapRenderer.Render(stageData, OnNodeClicked);
+            mapRenderer.CenterMap();
+            mapRenderer.UpdateInteractables(visitedNodes.Last(), visitedNodes);
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 노드 클릭 시 스테이지 호출 및 저장
+    /// </summary>
+    private void OnNodeClicked(GraphNode clicked)
     {
         visitedNodes.Add(clicked);
-
         GameManager.Instance.SaveStageState(stageData, visitedNodes, stageIndex);
 
         switch (clicked.type)
@@ -85,8 +101,8 @@ public class StageManager : MonoBehaviour
 
         if (IsLastColumnNode(clicked))
         {
-            // 마지막 열이면 다음 스테이지
             stageIndex++;
+            GameManager.Instance.stageIndex = stageIndex;
             LoadStage(stageIndex);
         }
         else
@@ -103,21 +119,31 @@ public class StageManager : MonoBehaviour
         mapRenderer.ClearMap();
         visitedNodes.Clear();
 
-        // 초기 스테이지 생성
-        stageData = StageGraphGenerator.Generate(index, spacing);
-
-        // 열 수에 맞게 간격 조정
-        float targetWidth = 1400f;
-        spacing.x = targetWidth / (stageData.columnCount - 1);
-
-        // 조정 후 재생성
-        stageData = StageGraphGenerator.Generate(index, spacing);
-
+        stageData = RebuildStage(index);
         mapRenderer.Render(stageData, OnNodeClicked);
         mapRenderer.CenterMap();
 
         DisableAllNodeButtons();
         ActivateStartNode();
+    }
+
+    /// <summary>
+    /// 스테이지 생성 및 spacing 보정
+    /// </summary>
+    private StageData RebuildStage(int index)
+    {
+        var stage = StageGraphGenerator.Generate(index, spacing);
+        AdjustSpacing(stage.columnCount);
+        return StageGraphGenerator.Generate(index, spacing);
+    }
+
+    /// <summary>
+    /// 열 개수에 따라 spacing 조절
+    /// </summary>
+    private void AdjustSpacing(int columnCount)
+    {
+        float targetWidth = 1400f;
+        spacing.x = targetWidth / Mathf.Max(1, columnCount - 1);
     }
 
     /// <summary>

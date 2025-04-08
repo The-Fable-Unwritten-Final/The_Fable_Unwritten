@@ -59,7 +59,7 @@ public class StageMapRenderer : MonoBehaviour
     }
 
     /// <summary>
-    /// 현재 노드 기준으로 갈 수 있는 노드 버튼만 활성화하고 라인 강조
+    /// 현재 노드 기준으로 갈 수 있는 노드만 활성화하고 라인 강조
     /// </summary>
     public void UpdateInteractables(GraphNode current, List<GraphNode> visited)
     {
@@ -88,13 +88,13 @@ public class StageMapRenderer : MonoBehaviour
             }
         }
 
-        HighlightLinesFrom(current, visited);
+        HighlightLines(current, visited);
     }
 
     /// <summary>
     /// 지나온 라인과 진행 못한 라인 표시해주는 함수
     /// </summary>
-    public void HighlightLinesFrom(GraphNode current, List<GraphNode> visited)
+    private void HighlightLines(GraphNode current, List<GraphNode> visited)
     {
         foreach (var line in lineInfos)
         {
@@ -102,21 +102,11 @@ public class StageMapRenderer : MonoBehaviour
 
             bool isVisitedFrom = visited.Contains(line.from);
             bool isVisitedTo = visited.Contains(line.to);
-
             bool isCurrentPath = line.from == current && current.nextNodes.Contains(line.to);
 
-            if (isVisitedFrom && isVisitedTo)
-            {             
-                img.color = new Color(1f, 1f, 1f, 1f); // 지나온 길
-            }
-            else if (isCurrentPath)
-            {                
-                img.color = new Color(1f, 1f, 1f, 1f); // 현재 노드에서 갈 수 있는 경로
-            }
-            else
-            {     
-                img.color = new Color(1f, 1f, 1f, 0.2f); // 아직 도달하지 못한 경로
-            }
+            img.color = (isVisitedFrom && isVisitedTo) || isCurrentPath
+                ? new Color(1f, 1f, 1f, 1f)
+                : new Color(1f, 1f, 1f, 0.2f);
         }
     }
 
