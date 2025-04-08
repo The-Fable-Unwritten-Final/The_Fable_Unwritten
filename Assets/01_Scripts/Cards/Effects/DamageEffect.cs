@@ -12,7 +12,7 @@ public class DamageEffect : CardEffectBase
     /// <summary>
     /// 기본 데미지
     /// </summary>
-    public float baseDamage;
+    public float amount;
 
     /// <summary>
     /// 데미지 처리
@@ -22,9 +22,9 @@ public class DamageEffect : CardEffectBase
     public override void Apply(IStatusReceiver caster, IStatusReceiver target)
     {
         ///최종 데미지 계산
-        int finalDamage = caster.ModifyStat(BuffStatType.Attack, baseDamage);
+        float finalDamage = caster.ModifyStat(BuffStatType.Attack, amount);
         target.TakeDamage(finalDamage);
     }
 
-    public override string GetDescription() => $"적에게 {baseDamage}의 피해를 줍니다.";
+    public override string GetDescription() => $"적에게 {amount}의 피해를 줍니다.";
 }

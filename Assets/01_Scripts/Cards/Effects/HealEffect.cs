@@ -9,10 +9,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "CardEffect/Heal")]
 public class HealEffect : CardEffectBase
 {
-    /// <summary>
-    /// 기본 힐량
-    /// </summary>
-    public float baseHeal;
+
+    public float amount;    //힐량
 
     /// <summary>
     /// 실제로 힐이 진행될 코드
@@ -22,9 +20,9 @@ public class HealEffect : CardEffectBase
     public override void Apply(IStatusReceiver caster, IStatusReceiver target)
     {
         //스탯 변경 적용 후
-        int finalHeal = caster.ModifyStat(BuffStatType.ManaRegen, baseHeal);
+        float finalHeal = caster.ModifyStat(BuffStatType.ManaRegen, amount);
         caster.Heal(finalHeal); //힐 적용
     }
 
-    public override string GetDescription() => $"대상을 {baseHeal}만큼 회복합니다.";
+    public override string GetDescription() => $"대상을 {amount}만큼 회복합니다.";
 }

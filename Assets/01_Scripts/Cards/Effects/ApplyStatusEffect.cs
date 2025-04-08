@@ -9,7 +9,7 @@ using UnityEngine;
 public class ApplyStatusEffect : CardEffectBase
 {
     public BuffStatType statType;
-    public int value;
+    public float value;
     public int duration;
 
     /// <summary>
