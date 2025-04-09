@@ -41,6 +41,7 @@ public class GameManager : MonoSingleton<GameManager>
     /// </summary>
     public void ClearStageState()
     {
+        //새로하기 기능 있으면 재시작 시테이지(minimumStageIndex)도 초기화 시켜줘야함
         savedStageData = null;
         savedVisitedNodes.Clear();
     }

@@ -32,9 +32,7 @@ public static class LineDrawer
         return lineObj;
     }
 
-    /// <summary>
-    /// 월드 좌표를  RectTransform 기준의 로컬 좌표로 전환
-    /// </summary>
+    // 월드 좌표를  RectTransform 기준의 로컬 좌표로 전환
     private static Vector2 WorldToLocal(Vector3 worldPos, RectTransform parent)
     {
         Vector2 localPoint;
