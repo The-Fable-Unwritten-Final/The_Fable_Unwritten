@@ -12,6 +12,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     [Header("Controller")]
     public CombatUIController combatUIController; // 전투 UI 컨트롤러
+    public TurnController turnController; // 턴 컨트롤러
 
     protected override void Awake()
     {
@@ -52,5 +53,13 @@ public class GameManager : MonoSingleton<GameManager>
     public void UnregisterCombatUI()
     {
         combatUIController = null;
+    }
+    public void RegisterTurnController(TurnController cont)
+    {
+        turnController = cont;
+    }
+    public void UnregisterTurnController()
+    {
+        turnController = null;
     }
 }
