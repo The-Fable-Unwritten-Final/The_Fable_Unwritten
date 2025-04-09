@@ -14,14 +14,14 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     public void WatchEnemyInfo()
     {
         Debug.Log("이름 :: " + enemyData.EnemyName);
-        Debug.Log("체력 :: " + enemyData.HP);
+        Debug.Log("체력 :: " + enemyData.MaxHP);
         Debug.Log("공격력 :: " + enemyData.ATK);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        currentHP = enemyData.HP;
+        currentHP = enemyData.MaxHP;
     }
 
     // Update is called once per frame
@@ -63,7 +63,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     public void Heal(float amount)
     {
         currentHP += amount;
-        currentHP = Mathf.Min(currentHP, enemyData.HP);
+        currentHP = Mathf.Min(currentHP, enemyData.MaxHP);
         Debug.Log($"{enemyData.EnemyName}가 {amount}의 회복을 받음. 현재 체력: {currentHP}");
     }
 
