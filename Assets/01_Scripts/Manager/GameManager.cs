@@ -12,6 +12,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     [Header("Controller")]
     public CombatUIController combatUIController; // 전투 UI 컨트롤러
+    public TurnController turnController; // 턴 컨트롤러
 
     protected override void Awake()
     {
@@ -40,6 +41,7 @@ public class GameManager : MonoSingleton<GameManager>
     /// </summary>
     public void ClearStageState()
     {
+        //새로하기 기능 있으면 재시작 시테이지(minimumStageIndex)도 초기화 시켜줘야함
         savedStageData = null;
         savedVisitedNodes.Clear();
     }
@@ -51,5 +53,13 @@ public class GameManager : MonoSingleton<GameManager>
     public void UnregisterCombatUI()
     {
         combatUIController = null;
+    }
+    public void RegisterTurnController(TurnController cont)
+    {
+        turnController = cont;
+    }
+    public void UnregisterTurnController()
+    {
+        turnController = null;
     }
 }

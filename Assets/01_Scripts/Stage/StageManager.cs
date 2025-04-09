@@ -11,6 +11,7 @@ public class StageManager : MonoBehaviour
 {
     [Header("Stage Settings")]  
     [SerializeField] Vector2 spacing = new(300, 200);      // 노드 간격
+    [SerializeField] int mapTargetWidth;                   // 지도 가로 크기
 
     [Header("References")]
     public StageMapRenderer mapRenderer;                   // StageMapRederer 연결
@@ -20,12 +21,10 @@ public class StageManager : MonoBehaviour
     private StageData stageData;                           // 현재 스테이지 데이터
     private readonly List<GraphNode> visitedNodes = new(); // 방문한 노드 목록
 
-    /// <summary>
-    /// 시작 시 스테이지 복원 또는 새로 시작
-    /// </summary>
+
     private void Start()
     {
-        
+        // 시작 시 스테이지 복원 또는 새로 시작
         stageIndex = GameManager.Instance.stageIndex;
 
         if (!TryRestoreStage())
@@ -34,10 +33,7 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 저장된 상태가 있다면 복원 시도
-    /// </summary>
-    /// <returns>복원 성공 여부</returns>
+    // 저장된 상태가 있다면 복원 시도
     private bool TryRestoreStage()
     {
         var gm = GameManager.Instance;
@@ -47,8 +43,9 @@ public class StageManager : MonoBehaviour
             if (gm.stageCleared)
             {
                 var lastVisited = gm.savedVisitedNodes.Last();
-                bool wasLastColumnNode = gm.savedStageData.columns[^1].Contains(lastVisited);
+                bool wasLastColumnNode = gm.savedStageData.columns[^1].Contains(lastVisited); // 보스 노드 방문 여부
 
+                // 보스 노드 클리어면 다음 스테이지
                 if (wasLastColumnNode)
                 {
                     gm.stageIndex++;
@@ -59,9 +56,9 @@ public class StageManager : MonoBehaviour
                 }
             }
 
-            // 복원 처리
-            stageData = gm.savedStageData;
-            visitedNodes.Clear();
+            // 스테이지 데이터 복구 (야영지, 이벤트, 인게임에서 돌아 왔을 경우)
+            stageData = gm.savedStageData;  // 게임 매니저에서 데이터 불러오기
+            visitedNodes.Clear();           
             visitedNodes.AddRange(gm.savedVisitedNodes);
             stageIndex = gm.stageIndex;
             gm.stageCleared = false;
@@ -75,48 +72,52 @@ public class StageManager : MonoBehaviour
         return false;
     }
 
-    /// <summary>
-    /// 노드 클릭 시 스테이지 호출 및 저장
-    /// </summary>
+    // 노드 클릭 시 스테이지 호출 및 저장
     private void OnNodeClicked(GraphNode clicked)
     {
         visitedNodes.Add(clicked);
         GameManager.Instance.SaveStageState(stageData, visitedNodes, stageIndex);
 
+        // 노드 타입별 씬 전환
         switch (clicked.type)
         {
             case NodeType.NormalBattle:
             case NodeType.EliteBattle:
             case NodeType.Boss:
-                SceneManager.LoadScene("InGameScene");
+                SceneManager.LoadScene(SceneNameData.InGameScene);
                 return;
 
             case NodeType.Camp:
-                SceneManager.LoadScene("CampScene");
+                SceneManager.LoadScene(SceneNameData.CampScene);
                 return;
 
             case NodeType.RandomEvent:
-                SceneManager.LoadScene("RandomEventScene");
+                SceneManager.LoadScene(SceneNameData.RandomEventScene);
                 return;
         }
-
+   
         if (IsLastColumnNode(clicked))
         {
+            // 마지막 열(보스노드)의 경우 스테이지 증가
             stageIndex++;
             GameManager.Instance.stageIndex = stageIndex;
-            LoadStage(stageIndex);
         }
         else
         {
+            // 중간 노드의 경우 다음 스테이지 연결
             mapRenderer.UpdateInteractables(clicked, visitedNodes);
         }
     }
 
-    /// <summary>
-    /// 스테이지를 새로 불러오고 맵 초기화
-    /// </summary>
+    // 클릭된 노드가 마지막 열에 있는지 확인
+    private bool IsLastColumnNode(GraphNode clicked)
+        => stageData.columns[^1].Contains(clicked);
+
+
+    // 스테이지를 불러오고 맵 초기화
     private void LoadStage(int index)
     {
+        // 맵 정보 초기화
         mapRenderer.ClearMap();
         visitedNodes.Clear();
 
@@ -128,9 +129,7 @@ public class StageManager : MonoBehaviour
         ActivateStartNode();
     }
 
-    /// <summary>
-    /// 스테이지 생성 및 spacing 보정
-    /// </summary>
+    // 스테이지 생성 및 spacing 보정
     private StageData RebuildStage(int index)
     {
         var stage = StageGraphGenerator.Generate(index, spacing);
@@ -138,18 +137,14 @@ public class StageManager : MonoBehaviour
         return StageGraphGenerator.Generate(index, spacing);
     }
 
-    /// <summary>
-    /// 열 개수에 따라 spacing 조절
-    /// </summary>
+
+    // 열 개수에 따라 spacing 조절
     private void AdjustSpacing(int columnCount)
     {
-        float targetWidth = 1400f;
-        spacing.x = targetWidth / Mathf.Max(1, columnCount - 1);
+        spacing.x = mapTargetWidth / Mathf.Max(1, columnCount - 1);
     }
 
-    /// <summary>
-    /// 모든 노드 비활성화
-    /// </summary>
+    // 모든 노드 비활성화
     private void DisableAllNodeButtons()
     {
         foreach (var column in stageData.columns)
@@ -167,9 +162,7 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 시작 노드를 활성화
-    /// </summary>
+    // 시작 지점 노드 활성화
     private void ActivateStartNode()
     {
         var startNode = stageData.columns[0].First();
@@ -183,10 +176,4 @@ public class StageManager : MonoBehaviour
 
         mapRenderer.UpdateInteractables(startNode, visitedNodes);
     }
-
-    /// <summary>
-    /// 클릭된 노드가 마지막 열에 있는지 확인
-    /// </summary>
-    private bool IsLastColumnNode(GraphNode clicked)
-        => stageData.columns[^1].Contains(clicked);
 }

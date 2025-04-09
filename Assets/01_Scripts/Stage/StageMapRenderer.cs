@@ -95,9 +95,7 @@ public class StageMapRenderer : MonoBehaviour
         HighlightLines(current, visited);
     }
 
-    /// <summary>
-    /// 지나온 라인과 진행 못한 라인 표시해주는 함수
-    /// </summary>
+    // 지나온 라인과 진행 못한 라인 표시해주는 함수
     private void HighlightLines(GraphNode current, List<GraphNode> visited)
     {
         foreach (var line in lineInfos)
@@ -150,9 +148,7 @@ public class StageMapRenderer : MonoBehaviour
         nodesContainer.anchoredPosition = -center; // 노드 부모 위치 이동 
     }
 
-    /// <summary>
-    /// 노드 타입에 따라 아이콘 변환
-    /// </summary>
+    // 노드 타입에 따라 아이콘 변환
     private Sprite GetIcon(NodeType type)
     {
         switch (type)

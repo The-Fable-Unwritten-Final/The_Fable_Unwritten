@@ -24,7 +24,7 @@ public class CombatUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// 카드의 코스트와 설명(효과 수치) 업데이트.
+    /// 카드의 코스트, 설명(효과 수치), 카드의 MouseOver,Drag 가능 상태 업데이트.
     /// 전투중 카드를 사용하거나, 코스트 또는 능력치에 변동이 생길 행동시 호출.
     /// </summary>
     public Action CardStatusUpdate;
@@ -34,7 +34,6 @@ public class CombatUIController : MonoBehaviour
         GameManager.Instance.UnregisterCombatUI();// 씬 나갈 때 UI 컨트롤러 해제
     }
     
-
     public void DrawCard(CardModel card)
     {
         cardDisplay.AddCard(card); // 드로우 한 카드 UI 업데이트.
@@ -42,9 +41,11 @@ public class CombatUIController : MonoBehaviour
     public void UsedCard(CardModel card)
     {
         // deckmodel 에서 사용된 카드, 실제 덱에서도 제거해주기.
+        // 카드쪽 관련 스크립트 여기에..
     }
     public void ThrowCard(CardModel card)
     {
         // 덱에서 버린 카드, 실제 덱에서도 제거해주기.
+        // 카드쪽 관련 스크립트 여기에..
     }
 }

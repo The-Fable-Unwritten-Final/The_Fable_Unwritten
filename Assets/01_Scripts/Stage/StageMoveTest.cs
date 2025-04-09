@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class StageMoveTest : MonoBehaviour
 {
-    // Start is called before the first frame update
      public void OnClear()
     {
         GameManager.Instance.retryFromStart = false;
@@ -20,7 +19,6 @@ public class StageMoveTest : MonoBehaviour
         SceneManager.LoadScene("StageScene");
     }
 
-    // Update is called once per frame
     public void OnFail()
     {
         GameManager.Instance.retryFromStart = true;
