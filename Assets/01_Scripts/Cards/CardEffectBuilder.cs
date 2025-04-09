@@ -16,6 +16,7 @@ public static class CardEffectBuilder
             {
                 var dmg = Load<DamageEffect>("DamageEffect");
                 dmg.amount = data.damage;
+                
                 effects.Add(dmg);
             }
             else

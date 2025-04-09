@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 
 /// <summary>
@@ -9,10 +10,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "CardEffect/DamageEffect")]
 public class DamageEffect : CardEffectBase
 {
-    /// <summary>
-    /// 기본 데미지
-    /// </summary>
-    public float amount;
+    public float amount;    //기본 데미지
 
     /// <summary>
     /// 데미지 처리
@@ -21,7 +19,8 @@ public class DamageEffect : CardEffectBase
     /// <param name="target">타겟</param>
     public override void Apply(IStatusReceiver caster, IStatusReceiver target)
     {
-        ApplyAndReturn(caster, target); // 기본 Apply는 AndReturn 재사용
+        if (!target.IsAlive()) return;
+        ApplyAndReturn(caster, target);
     }
 
 
@@ -33,6 +32,8 @@ public class DamageEffect : CardEffectBase
     /// <returns>공격 데미지</returns>
     public override float ApplyAndReturn(IStatusReceiver caster, IStatusReceiver target)
     {
+        if (!target.IsAlive()) return 0;
+
         float finalDamage = caster.ModifyStat(BuffStatType.Attack, amount);
         target.TakeDamage(finalDamage);
 
@@ -40,10 +41,27 @@ public class DamageEffect : CardEffectBase
         return finalDamage;
     }
 
-    public override void InitializeFromCSV(string param)
+
+    /// <summary>
+    /// 광역뎀에 사용
+    /// </summary>
+    /// <param name="caster">시전자</param>
+    /// <param name="targets">타겟 리스트</param>
+    public override void ApplyAOE(IStatusReceiver caster, List<IStatusReceiver> targets)
     {
-        float.TryParse(param, out amount);
+        foreach (var target in targets)
+        {
+            if (target.IsAlive())
+            {
+                float finalDamage = caster.ModifyStat(BuffStatType.Attack, amount);
+                target.TakeDamage(finalDamage);
+                Debug.Log($"[AOE 피해] {target.CharacterClass}에게 {finalDamage} 피해");
+            }
+        }
     }
 
-    public override string GetDescription() => $"적에게 {amount}의 피해를 줍니다.";
+    public override string GetDescription()
+    {
+        return $"적에게 {amount}의 피해를 줍니다.";
+    }
 }

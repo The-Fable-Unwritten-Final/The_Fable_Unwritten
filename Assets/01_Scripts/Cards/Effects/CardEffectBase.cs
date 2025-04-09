@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 /// <summary>
@@ -74,6 +75,8 @@ public abstract class CardEffectBase : ScriptableObject
     /// </summary>
     /// <returns></returns>
     public abstract string GetDescription();
+
+    public virtual bool isAOE() => false;
 
     public virtual void InitializeFromCSV(string param) { }
 }
