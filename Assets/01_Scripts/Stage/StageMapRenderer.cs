@@ -1,6 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,7 +23,7 @@ public class StageMapRenderer : MonoBehaviour
     /// <summary>
     /// 스테이지 노드 및 연결선을 UI에 표시
     /// </summary>
-    public void Render(StageData stage, System.Action<GraphNode> onClick)
+    public void Render(StageData stage, Action<GraphNode> onClick)
     {
         nodeUIMap.Clear();
         lineInfos.Clear();
@@ -33,18 +32,19 @@ public class StageMapRenderer : MonoBehaviour
         {
             foreach (var node in column)
             {
-                var go = Instantiate(nodePrefab, nodesContainer);
-                var rt = go.GetComponent<RectTransform>();
-                rt.anchoredPosition = node.position;
-                nodeUIMap[node] = rt;
+                var go = Instantiate(nodePrefab, nodesContainer);  // 해당 노드 UI 생성
+                var rt = go.GetComponent<RectTransform>();        
+                rt.anchoredPosition = node.position;               // 해당 노드 위치 설정
+                nodeUIMap[node] = rt;                              // 해당 노드의 UI 위치 저장 (라인 이어주기 위해)
 
                 var ui = go.GetComponent<StageNode>();
-                ui.Setup(node.type, GetIcon(node.type));
+                ui.Setup(node.type, GetIcon(node.type));           // 해당 노드 이미지 설정
 
-                go.GetComponent<Button>().onClick.AddListener(() => onClick(node));
+                go.GetComponent<Button>().onClick.AddListener(() => onClick(node)); // 해당 노드 버튼 이벤트 연결
             }
         }
 
+        //모든 노드에 대해 연결 된 노드들 정보 확인 후 라인 그려주기
         foreach (var node in nodeUIMap.Keys)
         {
             foreach (var next in node.nextNodes)
@@ -52,39 +52,43 @@ public class StageMapRenderer : MonoBehaviour
                 var fromRT = nodeUIMap[node];
                 var toRT = nodeUIMap[next];
 
-                GameObject line = UILineDrawer.DrawLine(fromRT, toRT, linesContainer, linePrefab);
+                GameObject line = LineDrawer.DrawLine(fromRT, toRT, linesContainer, linePrefab);
                 lineInfos.Add(new LineInfo { from = node, to = next, lineObj = line });
             }
         }
     }
 
     /// <summary>
-    /// 현재 노드 기준으로 갈 수 있는 노드만 활성화하고 라인 강조
+    /// 게임 진행 중 노드 상태 관리 매서드
     /// </summary>
     public void UpdateInteractables(GraphNode current, List<GraphNode> visited)
     {
+        // 
         foreach (var node in nodeUIMap.Keys)
         {
             var rt = nodeUIMap[node];
             var btn = rt.GetComponent<Button>();
 
+            // 지나온 노드 버튼 비활성화, 색상 초기화
             if (visited.Contains(node))
             {
                 btn.interactable = false;
                 btn.enabled = false;
                 btn.image.color = Color.white;
             }
+            // 진행가능 노드 버튼 활성화, 색상 초기화
             else if (current.nextNodes.Contains(node))
             {
                 btn.enabled = true;
                 btn.interactable = true;
                 btn.image.color = Color.white;
             }
+            // 그 외 노드 버튼 비활성화, 색상 흐리게
             else
             {
                 btn.enabled = false;
                 btn.interactable = false;
-                btn.image.color = new Color(1, 1, 1, 0.4f);
+                btn.image.color = new Color(1, 1, 1, 0.6f);
             }
         }
 
@@ -100,9 +104,9 @@ public class StageMapRenderer : MonoBehaviour
         {
             var img = line.lineObj.GetComponent<Image>();
 
-            bool isVisitedFrom = visited.Contains(line.from);
-            bool isVisitedTo = visited.Contains(line.to);
-            bool isCurrentPath = line.from == current && current.nextNodes.Contains(line.to);
+            bool isVisitedFrom = visited.Contains(line.from);  // 시작 노드 방문 여부
+            bool isVisitedTo = visited.Contains(line.to);      // 도착 노드 방문 여부
+            bool isCurrentPath = line.from == current && current.nextNodes.Contains(line.to); //현재 노드에서 진행 할 수 있는 노드 확인 여부
 
             img.color = (isVisitedFrom && isVisitedTo) || isCurrentPath
                 ? new Color(1f, 1f, 1f, 1f)
@@ -134,28 +138,38 @@ public class StageMapRenderer : MonoBehaviour
         Vector2 min = Vector2.positiveInfinity;
         Vector2 max = Vector2.negativeInfinity;
 
+        // 노드들의 최소값, 최대값 확인
         foreach (var rt in nodeUIMap.Values)
         {
             Vector2 pos = rt.anchoredPosition;
-            min = Vector2.Min(min, pos);
-            max = Vector2.Max(max, pos);
+            min = Vector2.Min(min, pos); // 가장 왼쪽 위
+            max = Vector2.Max(max, pos); // 가장 오르쪽 아래
         }
 
         Vector2 center = (min + max) / 2f;
-        nodesContainer.anchoredPosition = -center;
+        nodesContainer.anchoredPosition = -center; // 노드 부모 위치 이동 
     }
 
     /// <summary>
     /// 노드 타입에 따라 아이콘 변환
     /// </summary>
-    private Sprite GetIcon(NodeType type) => type switch
+    private Sprite GetIcon(NodeType type)
     {
-        NodeType.Start => startIcon,
-        NodeType.NormalBattle => normalIcon,
-        NodeType.EliteBattle => eliteIcon,
-        NodeType.RandomEvent => randomIcon,
-        NodeType.Camp => campIcon,
-        NodeType.Boss => bossIcon,
-        _ => null
-    };
+        switch (type)
+        {
+            case NodeType.Start:
+                return startIcon;
+            case NodeType.NormalBattle:
+                return normalIcon;
+            case NodeType.EliteBattle: 
+                return eliteIcon;
+            case NodeType.RandomEvent:
+                return randomIcon;
+            case NodeType.Camp:
+                return campIcon;
+            case NodeType.Boss:
+                return bossIcon;
+            default: return null;
+        }     
+    }
 }

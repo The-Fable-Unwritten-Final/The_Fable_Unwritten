@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -17,6 +16,7 @@ public class StageManager : MonoBehaviour
     public StageMapRenderer mapRenderer;                   // StageMapRederer 연결
 
     private int stageIndex = 1;
+
     private StageData stageData;                           // 현재 스테이지 데이터
     private readonly List<GraphNode> visitedNodes = new(); // 방문한 노드 목록
 
@@ -25,6 +25,7 @@ public class StageManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        
         stageIndex = GameManager.Instance.stageIndex;
 
         if (!TryRestoreStage())
