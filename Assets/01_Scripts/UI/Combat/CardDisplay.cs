@@ -32,6 +32,8 @@ public class CardDisplay : MonoBehaviour
         {
             cardsInHand[i].SetCardState(CardInHand.CardState.CanDrag);// 임시로 카드 상태 설정.
         }
+        GameManager.Instance.turnController.OnStartPlayerTurn += SetAllCardCanMouseOver;// 플레이어 턴 시작 시 카드 상태를 CanMouseOver로 변경
+        GameManager.Instance.combatUIController.CardStatusUpdate += SetCardCanDrag;// 사용 가능한 카드들 확인
     }
 
     private void Update()
@@ -156,6 +158,9 @@ public class CardDisplay : MonoBehaviour
     {
         if(currentCard == null) return;// 현재 카드가 없으면 사용 불가.
         // 만약 카드 사용을 못하게 된다면(코스트 부족 등..), SetSiblingIndex을 통해 해당 카드의 순서를 원래대로 돌려주기
+        // 카드 사용 가능 조건 체크
+        //
+        //
         GameManager.Instance.combatUIController.UsedCard(currentCard.cardData);// 일단은 무조건 카드를 사용할 수 있는 경우 가정.
         cardsInHand.Remove(currentCard);// 카드 사용.
         Destroy(currentCard.gameObject);// 카드 삭제.
@@ -169,7 +174,20 @@ public class CardDisplay : MonoBehaviour
         Destroy(currentCard.gameObject);// 카드 삭제.
         CardArrange();
     }
-
+    public void SetAllCardCanMouseOver()
+    {
+        // 플레이어 턴 시작 때 CanMouseOver 실행
+        for (int i = 0; i < cardsInHand.Count; i++)
+        {
+            cardsInHand[i].SetCardState(CardInHand.CardState.CanMouseOver);// 카드 상태를 CanMouseOver로 변경
+        }
+    }
+    public void SetCardCanDrag()
+    {
+        // 만약 플레이어의 턴이 아닌경우 return;
+        // 코스트가 충분한 경우 카드의 상태를 CanDrag로 변경
+        // for문으로 모든 카드 체킹
+    }
     public void OnMousepoint(PointerEventData eventData)
     {
         List<RaycastResult> results = new List<RaycastResult>();
