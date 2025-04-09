@@ -1,30 +1,15 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public enum NodeTpye
+public class StageNode : MonoBehaviour
 {
-    Start, NormalBattle, EliteBattle, RandomEvent, Camp, Boss
-}
-
-[Serializable]
-public class StageNode
-{
-    public int row;
-    public int col;
-    public NodeTpye type;
-
-    public static NodeTpye GetRandomType()
+    public Image iconImage;
+    
+    /// <summary>
+    /// 타입 확인 후 노드 이미지 설정
+    /// </summary>
+    public void Setup(NodeType type, Sprite icon)
     {
-        NodeTpye[] types = new NodeTpye[]
-        {
-            NodeTpye.NormalBattle,
-            NodeTpye.EliteBattle,
-            NodeTpye.RandomEvent,
-            NodeTpye.Camp
-        };
-
-        return types[UnityEngine.Random.Range(0, types.Length)];
+        iconImage.sprite = icon;
     }
 }

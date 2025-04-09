@@ -11,7 +11,7 @@ public class DeckModel
     public const int maxSize = 5;
     public const int startSize = 3;
 
-    //덱 상태 초기화
+    //덱 삽입하기
     public void Initialize(List<CardModel> cards)
     {
         unusedDeck = new List<CardModel>(cards);
@@ -19,6 +19,7 @@ public class DeckModel
         usedDeck.Clear();
         hand.Clear();
     }
+
 
     /// <summary>
     /// 카드 드로우 시 행동
@@ -46,19 +47,33 @@ public class DeckModel
     public void Discard(CardModel card)
     {
         if (hand.Remove(card))                  //핸드에 특정 카드 버리고
-        {
             usedDeck.Add(card);                 //사용한 카드 쪽에 버린 카드 넣기
-        }
     }
 
-    public void DiscardHandToThree()
+    /// <summary>
+    /// 카드를 4장 이상으로 가지고 있을 경우 3장으로 맞추기
+    /// </summary>
+    public void DiscardHandToThree(List<CardModel> cardsToDiscard)
     {
-        while (hand.Count > startSize)
+        int limit = startSize;
+        int discardCountNeeded = hand.Count - limit;
+
+        if (discardCountNeeded <= 0) return;
+
+        int discarded = 0;
+        foreach (var card in cardsToDiscard)
         {
-            var cardToDiscard = hand[hand.Count - 1];
-            hand.RemoveAt(hand.Count - 1);
-            usedDeck.Add(cardToDiscard);
+            if (hand.Contains(card))
+            {
+                hand.Remove(card);
+                usedDeck.Add(card);
+                discarded++;
+
+                if (discarded >= discardCountNeeded)
+                    break;
+            }
         }
+        Debug.Log($"[Discard] 선택 카드 {discarded}장 버림, 현재 손패 {hand.Count}장");
     }
 
     /// <summary>
@@ -73,7 +88,7 @@ public class DeckModel
     /// <summary>
     /// 카드를 전부 사용했을 때 사용한 덱을 미사용 덱으로 이동 후 셔플하기
     /// </summary>
-    private void ReshuffleDiscardIntoDraw()
+    public void ReshuffleDiscardIntoDraw()
     {
         unusedDeck.AddRange(usedDeck);
         usedDeck.Clear();
@@ -90,6 +105,42 @@ public class DeckModel
         {
             int j = Random.Range(0, i + 1);
             (list[i], list[j]) = (list[j], list[i]);
+        }
+    }
+
+    /// <summary>
+    /// 사용 카드 수를 반환
+    /// </summary>
+    /// <returns>사용된 카드 수</returns>
+    public int UsedCount() => usedDeck.Count;
+
+    /// <summary>
+    /// 사용 카드 덱의 복사본 반환
+    /// </summary>
+    /// <returns>사용 카드 덱</returns>
+    public List<CardModel> GetUsedCards()
+    {
+        return new List<CardModel>(usedDeck); // 복사본 반환
+    }
+
+    /// <summary>
+    /// 사용 덱에서 제거
+    /// </summary>
+    /// <param name="card">제거할 카드</param>
+    public void RemoveFromUsed(CardModel card)
+    {
+        usedDeck.Remove(card);
+    }
+
+    /// <summary>
+    /// 손패에 특정 카드를 추가
+    /// </summary>
+    /// <param name="card">손패에 추가할 카드</param>
+    public void AddToHand(CardModel card)
+    {
+        if (hand.Count < maxSize)
+        {
+            hand.Add(card);
         }
     }
 }
