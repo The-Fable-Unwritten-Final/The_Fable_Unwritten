@@ -13,7 +13,10 @@ public static class CardModelFactory
         card.characterClass = (CharacterClass)data.classIndex;
         card.effects = effects;
         card.type = (CardType)data.type;
-        
+        card.targetCount = data.targetNum;
+        card.targetType = (TargetType)data.targetType;
+        card.characterStance = data.characterStance;
+        card.note = data.description;
         card.illustration = data.illustration;
         card.cardImage = data.cardImage;
 

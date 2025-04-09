@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 /// <summary>
@@ -9,6 +10,25 @@ public enum CardEffectType { Damage, Heal, Buff, Debuff, Conditional, Chain }
 public enum CharacterClass { Sophia, Kayla, Leon, Enemy }
 public enum SkillType { Fire, Ice, Electric, Nature, Buff, Debuff, Holy, Heal, Slash, Strike, Pierce, Defense }
 public enum BuffStatType { None, Attack, Defense, ManaRegen, block, blind, stun }
+
+
+public enum TargetType { None = 0, Ally = 1, Enemy = 2 }
+
+public enum CardType
+{
+    Fire = 0,
+    Ice = 1,
+    Electric = 2,
+    Nature = 3,
+    Buff = 4,
+    Debuff = 5,
+    Holy = 6,
+    Heal = 7,
+    Slash = 8,
+    Strike = 9,
+    Pierce = 10,
+    Defense = 11
+}
 
 /// <summary>
 /// 전투에서 효과를 받는 대상 (플레이어 / 적) 공통 인터페이스
@@ -55,6 +75,8 @@ public abstract class CardEffectBase : ScriptableObject
     /// </summary>
     /// <returns></returns>
     public abstract string GetDescription();
+
+    public virtual bool isAOE() => false;
 
     public virtual void InitializeFromCSV(string param) { }
 }
