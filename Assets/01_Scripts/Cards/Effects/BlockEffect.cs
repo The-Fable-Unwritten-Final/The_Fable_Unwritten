@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(menuName = "CardEffect/Block")]
+[CreateAssetMenu(menuName = "CardEffect/BlockEffect")]
 public class BlockEffect : CardEffectBase
 {
+    public CharacterClass blockTargetClass;
     public override void Apply(IStatusReceiver caster, IStatusReceiver target)
     {
+        Debug.Log($"[{caster.CharacterClass}]가 {blockTargetClass}를 대상으로 한 스킬을 막습니다.");
         // target에게 block 상태 적용
         target.ApplyStatusEffect(new StatusEffect
         {

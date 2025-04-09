@@ -6,7 +6,7 @@ using UnityEngine;
 /// 공통 enum(효과 타입, 캐릭터, 스킬 타입, 버프) 
 /// </summary>
 public enum CardEffectType { Damage, Heal, Buff, Debuff, Conditional, Chain }
-public enum CharacterClass { Sophia, Kayla, Leon }
+public enum CharacterClass { Sophia, Kayla, Leon, Enemy }
 public enum SkillType { Fire, Ice, Electric, Nature, Buff, Debuff, Holy, Heal, Slash, Strike, Pierce, Defense }
 public enum BuffStatType { None, Attack, Defense, ManaRegen, block, blind, stun }
 

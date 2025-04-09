@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// 드로우 관련 효과가 주어질 경우
 /// </summary>
-[CreateAssetMenu(menuName = "Cards/Effects/Draw")]
+[CreateAssetMenu(menuName = "Cards/Effects/DrawCardEffect")]
 public class DrawCardEffect : CardEffectBase
 {
     public int amount;       //드로우 횟수

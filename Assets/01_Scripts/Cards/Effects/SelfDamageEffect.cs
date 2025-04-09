@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// 자해 데미지 처리
 /// </summary>
-[CreateAssetMenu(menuName = "CardEffect/SelfDamage")]
+[CreateAssetMenu(menuName = "Cards/Effects/SelfDamageEffect")]
 public class SelfDamageEffect : CardEffectBase
 {
     public float amount;    //자해량

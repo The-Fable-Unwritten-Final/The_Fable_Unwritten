@@ -11,7 +11,7 @@ public class DeckModel
     public const int maxSize = 5;
     public const int startSize = 3;
 
-    //덱 상태 초기화
+    //덱 삽입하기
     public void Initialize(List<CardModel> cards)
     {
         unusedDeck = new List<CardModel>(cards);
@@ -19,6 +19,7 @@ public class DeckModel
         usedDeck.Clear();
         hand.Clear();
     }
+
 
     /// <summary>
     /// 카드 드로우 시 행동
@@ -87,7 +88,7 @@ public class DeckModel
     /// <summary>
     /// 카드를 전부 사용했을 때 사용한 덱을 미사용 덱으로 이동 후 셔플하기
     /// </summary>
-    private void ReshuffleDiscardIntoDraw()
+    public void ReshuffleDiscardIntoDraw()
     {
         unusedDeck.AddRange(usedDeck);
         usedDeck.Clear();

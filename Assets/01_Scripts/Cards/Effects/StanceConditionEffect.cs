@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "Cards/Effects/StanceConditionEffect")]
+
 public class StanceConditionEffect : CardEffectBase
 {
     public string requiredStance;

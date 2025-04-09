@@ -17,9 +17,9 @@ public class BattleFlowController : MonoBehaviour
     private Dictionary<CharacterClass, IStatusReceiver> characterMap = new();   //캐릭터클래스에 대한 정보
     private Dictionary<IStatusReceiver, CardModel> enemyPlannedSkill = new();   //적의 스킬 예측 정보
 
-    private bool isBattleEnded = true;
-    public TurnState currentTurn;
-    private int turn = 1;
+    private bool isBattleEnded = true;      //배틀 끝났는지 확인용
+    public TurnState currentTurn;       //누구 턴인지 확인용
+    private int turn = 1;               //지금 몇턴인지 확인용
 
     /// <summary>
     /// 캐릭터 및 적 초기화(배틀 처음 진입시 시작할 것.)
@@ -51,7 +51,7 @@ public class BattleFlowController : MonoBehaviour
         {
             if(player.IsAlive())            //모두 덱 초기화 후 3장 뽑기
             {
-                player.Deck.Initialize(player.Deck.GetUsedCards());         
+                player.Deck.ReshuffleDiscardIntoDraw();
                 player.Deck.Draw(DeckModel.startSize);
             }
         }
@@ -92,11 +92,15 @@ public class BattleFlowController : MonoBehaviour
         card.Play(caster, target);          //카드 사용(효과 적용)
         caster.Deck.Discard(card);          //사용 카드를 사용한 카드 덱으로 보내기
 
-        Debug.Log($"{caster.CharacterClass} 가 {card.name} 사용 → {target.CharacterClass}");
+        Debug.Log($"{caster.CharacterClass} 가 {card.cardName} 사용 → {target.CharacterClass}");
+
+        // 덱 상태 출력
+        if (caster is PlayerController pc)
+            pc.PrintDeckState();
     }
 
     /// <summary>
-    /// 플레이어 턴 종료시 카드 3장으로 맞춤 처리 (미완)
+    /// 플레이어 턴 종료시 메서드. 카드 3장으로 맞춤 처리 (미완)
     /// </summary>
     public void EndPlayerTurn()
     {
@@ -118,11 +122,13 @@ public class BattleFlowController : MonoBehaviour
                 }
             }
         }
-
         currentTurn = TurnState.EnemyTurn;          //적 턴으로 이행
         ExecuteEnemyTurn();
     }
-
+    
+    /// <summary>
+    /// 적 턴 진행
+    /// </summary>
     public void ExecuteEnemyTurn()
     {
         //적 행동 설정;
@@ -184,6 +190,49 @@ public class BattleFlowController : MonoBehaviour
         {
             Debug.Log("▶ 플레이어 전투 포기 → 타이틀로 이동");
             // todo : 타이틀 화면으로
+        }
+    }
+
+    /// <summary>
+    /// 현재 플레이어 턴인지 확인
+    /// </summary>
+    public bool IsPlayerTurn() => currentTurn == TurnState.PlayerTurn && !isBattleEnded;
+
+
+    /// <summary>
+    /// 특정 캐릭터의 핸드 카드 가져오기
+    /// </summary>
+    public List<CardModel> GetHand(CharacterClass character)
+    {
+        if (decksByCharacter.TryGetValue(character, out var deck))
+            return new List<CardModel>(deck.Hand);
+
+        return new List<CardModel>();
+    }
+
+    /// <summary>
+    /// 턴 종료 요청 (UI 버튼에서 연결)
+    /// </summary>
+    public void RequestEndTurn()
+    {
+        if (!IsPlayerTurn()) return;
+        EndPlayerTurn();
+    }
+
+    /// <summary>
+    /// 카드 사용 시도 요청 (UI에서 호출)
+    /// </summary>
+    public void TryUseCard(CardModel card, CharacterClass caster, IStatusReceiver target)
+    {
+        if (!IsPlayerTurn()) return;
+
+        if (characterMap.TryGetValue(caster, out var casterController))
+        {
+            UseCard(card, casterController, target);
+        }
+        else
+        {
+            Debug.LogWarning($"[BattleFlow] 캐릭터 {caster} 의 정보를 찾을 수 없습니다.");
         }
     }
 }

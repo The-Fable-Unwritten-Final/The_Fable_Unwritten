@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "Cards/Effects/IgniteConditionEffect")]
+
 public class IgniteConditionEffect : CardEffectBase
 {
     public CardEffectBase bonusEffect;

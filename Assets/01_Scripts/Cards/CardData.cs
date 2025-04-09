@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardData : MonoBehaviour
+public class CardData
 {
     public int index;
     public int cost;
@@ -13,15 +13,18 @@ public class CardData : MonoBehaviour
     public int classIndex;
     public string cardImage;
     public float damage;
+    public int discount;        
     public int draw;
     public int redraw;
     public float atkBuff;
     public float defBuff;
     public float selfDamage;
-    public bool block;
-    public bool blind;
-    public bool stun;
-    public string target;
+    public int block;
+    public int blind;
+    public int stun;
+    public int targetNum;        
+    public int targetType;
     public string characterStance;
-    public bool characterIgnite;
+    public string description;
 }
+

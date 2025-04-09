@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// 데미지 코드
 /// </summary>
-[CreateAssetMenu(menuName = "CardEffect/Damage")]
+[CreateAssetMenu(menuName = "CardEffect/DamageEffect")]
 public class DamageEffect : CardEffectBase
 {
     /// <summary>

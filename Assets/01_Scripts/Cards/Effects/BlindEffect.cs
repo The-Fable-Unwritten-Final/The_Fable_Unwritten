@@ -1,8 +1,9 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CardEffect/Blind")]
+[CreateAssetMenu(menuName = "CardEffect/BlindEffect")]
 public class BlindEffect : CardEffectBase
 {
+    public PlayerData.StencType blockedStance;
     public override void Apply(IStatusReceiver caster, IStatusReceiver target)
     {
         // 상태 이상으로 처리

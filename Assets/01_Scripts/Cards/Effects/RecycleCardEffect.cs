@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(menuName = "CardEffect/Recycle")]
+[CreateAssetMenu(menuName = "Cards/Effects/RecycleCardEffect")]
 public class RecycleCardEffect : CardEffectBase
 {
 

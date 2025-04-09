@@ -9,9 +9,10 @@ public static class CardEffectBuilder
     {
         var effects = new List<CardEffectBase>();
 
+        // Damage or Heal
         if (data.damage != 0)
         {
-            if(data.damage>0)
+            if (data.damage > 0)
             {
                 var dmg = Load<DamageEffect>("DamageEffect");
                 dmg.amount = data.damage;
@@ -20,14 +21,23 @@ public static class CardEffectBuilder
             else
             {
                 var heal = Load<HealEffect>("HealEffect");
-                heal.amount = data.damage * -1;
+                heal.amount = -data.damage;
                 effects.Add(heal);
             }
         }
 
+        // Discount (코스트 감소)
+        if (data.discount != 0)
+        {
+            var discount = Load<ReduceNextCardCostEffect>("ReduceNextCardCostEffect"); // 이 스크립트가 필요해
+            discount.amount = data.discount;
+            effects.Add(discount);
+        }
+
+        // Draw or Discard
         if (data.draw != 0)
         {
-            if(data.draw > 0)
+            if (data.draw > 0)
             {
                 var draw = Load<DrawCardEffect>("DrawCardEffect");
                 draw.amount = data.draw;
@@ -36,10 +46,12 @@ public static class CardEffectBuilder
             else
             {
                 var discard = Load<DiscardCardEffect>("DiscardCardEffect");
-                discard.discardCount = data.draw*-1;
+                discard.discardCount = -data.draw;
+                effects.Add(discard);
             }
         }
 
+        // Recycle (used → hand)
         if (data.redraw > 0)
         {
             var recycle = Load<RecycleCardEffect>("RecycleCardEffect");
@@ -47,6 +59,7 @@ public static class CardEffectBuilder
             effects.Add(recycle);
         }
 
+        // Buff / Debuff
         if (data.atkBuff != 0)
         {
             var buff = Load<ApplyStatusEffect>("ApplyBuff");
@@ -65,6 +78,7 @@ public static class CardEffectBuilder
             effects.Add(buff);
         }
 
+        // Self Damage
         if (data.selfDamage > 0)
         {
             var self = Load<SelfDamageEffect>("SelfDamageEffect");
@@ -72,17 +86,36 @@ public static class CardEffectBuilder
             effects.Add(self);
         }
 
-        if (data.block)
-            effects.Add(Load<BlockEffect>("BlockEffect"));
+        // Block, Blind, Stun (정수형)
+        if (data.block > 0)
+        {
+            var block = Load<BlockEffect>("BlockEffect");
+            block.blockTargetClass = (CharacterClass)data.block;// 예: 0 = Leon
+            effects.Add(block);
+        }
 
-        if (data.blind)
-            effects.Add(Load<BlindEffect>("BlindEffect"));
+        if (data.blind > 0)
+        {
+            var blind = Load<BlindEffect>("BlindEffect");
+            if (System.Enum.IsDefined(typeof(PlayerData.StencType), data.blind))
+            {
+                blind.blockedStance = (PlayerData.StencType)data.blind; // enum 캐스팅
+            }
+            else
+            {
+                Debug.LogWarning($"Blind 값 {data.blind}는 StencType에 유효하지 않습니다.");
+            }
 
-        if (data.stun)
-            effects.Add(Load<StunEffect>("StunEffect"));
+            effects.Add(blind);
+            effects.Add(blind);
+        }
 
-        if (data.characterIgnite)
-            effects.Add(Load<IgniteConditionEffect>("IgniteConditionEffect"));
+        if (data.stun > 0)
+        {
+            var stun = Load<StunEffect>("StunEffect");
+            stun.duration = data.stun;
+            effects.Add(stun);
+        }
 
         if (!string.IsNullOrEmpty(data.characterStance))
         {
@@ -97,6 +130,11 @@ public static class CardEffectBuilder
     static T Load<T>(string name) where T : CardEffectBase
     {
         var asset = Resources.Load<T>($"{path}/{name}");
+        if (asset == null)
+        {
+            Debug.LogWarning($"[CardEffectBuilder] {typeof(T).Name}({name}) 리소스를 찾을 수 없습니다.");
+            return null;
+        }
         return Object.Instantiate(asset);
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(menuName = "CardEffect/ConditionalEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/ConditionalEffect")]
 public class ConditionalEffect : CardEffectBase
 {
     public CardEffectBase conditionalEffect;

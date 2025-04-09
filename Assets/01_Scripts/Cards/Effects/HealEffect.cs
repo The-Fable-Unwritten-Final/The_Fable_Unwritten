@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// 힐 코드
 /// </summary>
-[CreateAssetMenu(menuName = "CardEffect/Heal")]
+[CreateAssetMenu(menuName = "Cards/Effects/HealEffect")]
 public class HealEffect : CardEffectBase
 {
 
