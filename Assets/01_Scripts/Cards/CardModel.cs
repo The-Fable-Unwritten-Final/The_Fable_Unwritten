@@ -1,23 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TargetType { None = 0, Ally = 1, Enemy = 2 }
-
-public enum CardType
-{
-    Fire = 0,
-    Ice = 1,
-    Electric = 2,
-    Nature = 3,
-    Buff = 4,
-    Debuff = 5,
-    Holy = 6,
-    Heal = 7,
-    Slash = 8,
-    Strike = 9,
-    Pierce = 10,
-    Defense = 11
-}
 
 [CreateAssetMenu(menuName = "Card/CardModel")]
 public class CardModel : ScriptableObject
@@ -52,5 +35,31 @@ public class CardModel : ScriptableObject
     {
         foreach (var effect in effects)
             effect.Apply(caster, target);
+    }
+
+
+    /// <summary>
+    /// 지정한 타겟이 카드의 타겟과 일치하는지 확인하는 함수
+    /// </summary>
+    /// <param name="caster">시전자</param>
+    /// <param name="target">타겟</param>
+    /// <returns>시전이 가능한지 결과 반환</returns>
+    public bool IsTargetValid(IStatusReceiver caster, IStatusReceiver target)
+    {
+        if (targetType == TargetType.None)
+            return true;
+
+        bool casterIsEnemy = caster.CharacterClass == CharacterClass.Enemy;
+        bool targetIsEnemy = target.CharacterClass == CharacterClass.Enemy;
+
+        bool isSameTeam = casterIsEnemy == targetIsEnemy;
+
+        if (targetType == TargetType.Ally)
+            return isSameTeam;
+
+        if (targetType == TargetType.Enemy)
+            return !isSameTeam;
+
+        return false;
     }
 }
