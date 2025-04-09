@@ -40,9 +40,7 @@ public static class StageGraphGenerator
         return stage;
     }
 
-    /// <summary>
-    /// 튜토리얼 스테이지 구성 (1열~3열 일반 전투)
-    /// </summary>
+    // 튜토리얼 스테이지 구성 (1열~3열 일반 전투)
     private static void GenerateTutorialStage(StageData stage, Vector2 spacing, ref int id)
     {
         for (int i = 1; i < 4; i++)
@@ -59,9 +57,7 @@ public static class StageGraphGenerator
         }
     }
 
-    /// <summary>
-    /// 보스 스테이지 구성 (시작, 엘리트, 이벤트, 보스)
-    /// </summary>
+    // 보스 스테이지 구성 (시작, 엘리트, 이벤트, 보스)
     private static void GenerateBossStage(StageData stage, Vector2 spacing)
     {
         stage.columns.Add(new List<GraphNode> {
@@ -75,9 +71,7 @@ public static class StageGraphGenerator
         });
     }
 
-    /// <summary>
-    /// 일반 스테이지 구성 (2~4 스테이지): 노드 타입별 총 12개, 열당 1~3개 분배
-    /// </summary>
+    // 일반 스테이지 구성 (2~4 스테이지): 노드 타입별 총 12개, 열당 1~3개 분배
     private static void GenerateStandardStage(StageData stage, Vector2 spacing, ref int id)
     {
         // 일반 스테이지에 들어갈 노드들 무작위 배치를 위한 셔플 작업
@@ -144,9 +138,7 @@ public static class StageGraphGenerator
         });
     }
 
-    /// <summary>
-    /// 생성된 노드들 간의 연결 관계 시켜주는 함수
-    /// </summary>
+    // 생성된 노드들 간의 연결 관계 시켜주는 함수
     private static void LinkNodes(StageData stage)
     {
         for (int i = 0; i < stage.columns.Count - 1; i++)

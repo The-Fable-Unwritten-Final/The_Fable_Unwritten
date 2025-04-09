@@ -324,6 +324,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7a84a1b78703b047b0328bd00db9691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stageIndex: 0
+  minimumStageIndex: 0
+  retryFromStart: 0
+  stageCleared: 0
 --- !u!1 &1420502825
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,6 +516,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spacing: {x: 300, y: 200}
+  mapTargetWidth: 1400
   mapRenderer: {fileID: 1421031694}
 --- !u!1 &1544313872
 GameObject:
