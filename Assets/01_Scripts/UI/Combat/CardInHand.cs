@@ -10,8 +10,7 @@ using DG.Tweening;
 public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public CardModel cardData; // 카드 정보
-    // @@@@ 추후 덱 초기화 시점 및 카드 드로우마다 cardDisplay 추가 및 list에 추가 하기.
-    public CardDisplay cardDisplay; // 핸드내의 모든 카드들을 관리하는 중앙 스크립트. (UI LineRenderer가 이곳에 존재.) 
+    public CardDisplay cardDisplay; // 핸드내의 모든 카드들을 관리하는 중앙 스크립트. ( + UI LineRenderer가 이곳에 존재.) 
     RectTransform rect; // RectTransform 컴포넌트
     public Vector2 originalPos; // 원래 위치
     Vector3 targetPos; // 목표 위치
@@ -120,8 +119,5 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         yield return new WaitForSeconds(0.2f);
         SetCardState(CardInHand.CardState.CanDrag);// 추후 전투 조건에 맞는 상황 세팅으로 변경.
     }
-
-    // update 에서 매번 조건을 확인해 카드의 상태 변경 메서드 추가하기
-    // method1
 }
 
