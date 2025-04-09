@@ -8,6 +8,10 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public DeckModel deckModel;
     public CharacterClass characterClass;
 
+    public void OnClickHighStance() => ChangeStance(PlayerData.StancType.High);
+    public void OnClickMidStance() => ChangeStance(PlayerData.StancType.Middle);
+    public void OnClickLowStance() => ChangeStance(PlayerData.StancType.Low);
+
     public DeckModel Deck => deckModel;
     public bool IsIgnited => false;  // 점화 여부 - 추후 확장
     public string CurrentStance => playerData.currentStance.stencType.ToString();
@@ -27,19 +31,19 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     public void TakeDamage(float amount)
     {
-        playerData.Health -= amount;
-        Debug.Log($"{playerData.CharacterName} 피해: {amount}, 현재 체력: {playerData.Health}");
+        playerData.MaxHP -= amount;
+        Debug.Log($"{playerData.CharacterName} 피해: {amount}, 현재 체력: {playerData.MaxHP}");
     }
 
     public void Heal(float amount)
     {
-        playerData.Health += amount;
-        Debug.Log($"{playerData.CharacterName} 회복: {amount}, 현재 체력: {playerData.Health}");
+        playerData.MaxHP += amount;
+        Debug.Log($"{playerData.CharacterName} 회복: {amount}, 현재 체력: {playerData.MaxHP}");
     }
 
     public bool IsAlive()
     {
-        return playerData.Health > 0;
+        return playerData.MaxHP > 0;
     }
 
     public void Initialize(PlayerData data, CharacterClass charClass)
@@ -52,5 +56,22 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public void PrintDeckState()
     {
         Debug.Log($"[{playerData.CharacterName}] Hand: {Deck.Hand.Count}, Used: {Deck.UsedCount()}");
+    }
+
+    public void ChangeStance(PlayerData.StancType newStance) //StancUI 함수
+    {
+
+        PlayerData.StancValue stance = playerData.allStances.Find(s => s.stencType == newStance);
+        if (stance != null)
+        {
+            playerData.currentStance = stance;
+            float finalAtk = playerData.ATK + stance.attackBonus; //스텐스 공격력 계산
+            float finalDef = playerData.DEF + stance.defenseBonus;
+
+
+
+        }
+
+
     }
 }

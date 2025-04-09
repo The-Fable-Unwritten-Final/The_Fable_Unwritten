@@ -97,9 +97,9 @@ public static class CardEffectBuilder
         if (data.blind > 0)
         {
             var blind = Load<BlindEffect>("BlindEffect");
-            if (System.Enum.IsDefined(typeof(PlayerData.StencType), data.blind))
+            if (System.Enum.IsDefined(typeof(PlayerData.StancType), data.blind))
             {
-                blind.blockedStance = (PlayerData.StencType)data.blind; // enum 캐스팅
+                blind.blockedStance = (PlayerData.StancType)data.blind; // enum 캐스팅
             }
             else
             {

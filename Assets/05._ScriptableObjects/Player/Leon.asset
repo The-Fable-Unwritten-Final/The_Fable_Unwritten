@@ -15,15 +15,18 @@ MonoBehaviour:
   IDNum: 2
   CharacterName: Leon
   Icon: {fileID: 21300000, guid: f78835e8a63e34c4aba256ace2727fd9, type: 3}
-  Health: 30
+  MaxHP: 0
   ATK: 1
   DEF: 1
-  HealthValue: []
+  HPValue: []
   ATKValue: []
-  allStances: []
+  allStances:
+  - defenseBonus: 2
+    attackBonus: 2
+    stencType: 1
+    stanceIcon: {fileID: 0}
   currentStance:
-    defenseBonus: 0
-    attackBonus: 0
-    floatValue: []
+    defenseBonus: 2
+    attackBonus: 2
     stencType: 2
     stanceIcon: {fileID: 0}

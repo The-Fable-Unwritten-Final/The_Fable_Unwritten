@@ -20,7 +20,7 @@ public class PlayerData : ScriptableObject
     public float[] HPValue; //체력변화
     public float[] ATKValue; //공격력 변화
 
-    public enum StencType
+    public enum StancType
     {
         High, //상단
         Middle, //중단
@@ -31,8 +31,7 @@ public class PlayerData : ScriptableObject
     {
         public float defenseBonus; //방어력 보너스
         public float attackBonus; //공격력 보너스
-        public List<float> floatValue; //임시 작성
-        public StencType stencType; //StencType 표시
+        public StancType stencType; //StencType 표시
         public Sprite stanceIcon; //자세 움직임 Sprite
     }
 
