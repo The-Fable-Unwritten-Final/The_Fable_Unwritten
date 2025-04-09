@@ -9,7 +9,7 @@ using DG.Tweening;
 // 핸드에 소지하고 있는 개별 카드의 스크립트.
 public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    //public CardData card; // 카드 정보
+    public CardModel cardData; // 카드 정보
     // @@@@ 추후 덱 초기화 시점 및 카드 드로우마다 cardDisplay 추가 및 list에 추가 하기.
     public CardDisplay cardDisplay; // 핸드내의 모든 카드들을 관리하는 중앙 스크립트. (UI LineRenderer가 이곳에 존재.) 
     RectTransform rect; // RectTransform 컴포넌트
@@ -80,16 +80,8 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         cardDisplay.lineRenderer.gameObject.SetActive(false); // 드래그 종료 시 라인 렌더러 비활성화
         cardDisplay.arrowImage.gameObject.SetActive(false); // 드래그 종료 시 화살표 이미지 비활성화
         // 드래그 위치 종료의 정보을 통해 사용 성공시 상태 OnUse로 변경
-        if(cardDisplay.OnMousepoint(eventData) != null)// 캐릭터 or 몬스터 카드에 드롭을 한 경우 << 일단은 카드 오브젝트의 캐릭터 or 몬스터 판정만 가능. (null이 아니면 캐릭터 or 몬스터)
-        {
-            cardState = CardState.OnUse; // 카드 상태를 OnUse로 변경
-            //카드 사용 로직...
-            cardDisplay.UseCard();// 카드사용 메서드
-            rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine);// @@ 임시로 원래 위치로 돌아가기.
-        }
-
-        cardDisplay.currentCard = null; // 드래그 종료 시 현재 카드 설정 해제
-        rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine); // 사용 실패시 원래 위치로 돌아가기.
+        cardDisplay.OnMousepoint(eventData); // 드래그 종료 시의 해당 위치를 확인해 상호작용 여부 확인
+        rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine); // 원래 위치로 돌아가기.
     }
 
     public void SetOriginalPos()// 덱 최초 세팅 시점, 카드 추가 혹은 감소시 위치 초기화.
