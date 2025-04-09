@@ -328,6 +328,7 @@ MonoBehaviour:
   minimumStageIndex: 0
   retryFromStart: 0
   stageCleared: 0
+  combatUIController: {fileID: 0}
 --- !u!1 &814758283
 GameObject:
   m_ObjectHideFlags: 0
@@ -572,8 +573,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodePrefab: {fileID: 5334812594238698168, guid: 183d45b9008132243b6685d95f58a920,
     type: 3}
-  linePrefab: {fileID: 2508127751886912357, guid: f2ffb682cd62e1046a552e1123e59d96,
+  lineBasicPrefab: {fileID: 2508127751886912357, guid: f2ffb682cd62e1046a552e1123e59d96,
     type: 3}
+  lineBasicSprite: {fileID: 21300000, guid: 98e2d99ce29ee504f886e7ce7d0cd89c, type: 3}
+  lineCompleteSprite: {fileID: 21300000, guid: 8fe9a5f538cec334fb52ba1ac64e0426, type: 3}
   nodesContainer: {fileID: 458465399}
   linesContainer: {fileID: 1910465127}
   startIcon: {fileID: 21300000, guid: d869a719a506d6d41987502324355214, type: 3}

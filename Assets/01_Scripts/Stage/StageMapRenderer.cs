@@ -10,7 +10,9 @@ public class StageMapRenderer : MonoBehaviour
 {
     [Header("Prefabs & UI")]
     [SerializeField] GameObject nodePrefab;        // 노드 UI 프리팹
-    [SerializeField] GameObject linePrefab;        // 라인 UI 프리팹
+    [SerializeField] GameObject lineBasicPrefab;        // 라인 UI 프리팹
+    [SerializeField] private Sprite lineBasicSprite;    // 기본 라인 Sprite
+    [SerializeField] private Sprite lineCompleteSprite; // 지나온 라인 Sprite
     [SerializeField] RectTransform nodesContainer; // 노드 부모 오브젝트
     [SerializeField] RectTransform linesContainer; // 라인 부모 오브젝트
 
@@ -52,7 +54,7 @@ public class StageMapRenderer : MonoBehaviour
                 var fromRT = nodeUIMap[node];
                 var toRT = nodeUIMap[next];
 
-                GameObject line = LineDrawer.DrawLine(fromRT, toRT, linesContainer, linePrefab);
+                GameObject line = LineDrawer.DrawLine(fromRT, toRT, linesContainer, lineBasicPrefab);
                 lineInfos.Add(new LineInfo { from = node, to = next, lineObj = line });
             }
         }
@@ -68,6 +70,7 @@ public class StageMapRenderer : MonoBehaviour
         {
             var rt = nodeUIMap[node];
             var btn = rt.GetComponent<Button>();
+            var stageNode = rt.GetComponent<StageNode>();
 
             // 지나온 노드 버튼 비활성화, 색상 초기화
             if (visited.Contains(node))
@@ -75,6 +78,7 @@ public class StageMapRenderer : MonoBehaviour
                 btn.interactable = false;
                 btn.enabled = false;
                 btn.image.color = Color.white;
+                stageNode.StopPulse();
             }
             // 진행가능 노드 버튼 활성화, 색상 초기화
             else if (current.nextNodes.Contains(node))
@@ -82,6 +86,7 @@ public class StageMapRenderer : MonoBehaviour
                 btn.enabled = true;
                 btn.interactable = true;
                 btn.image.color = Color.white;
+                stageNode.PlayPulse();
             }
             // 그 외 노드 버튼 비활성화, 색상 흐리게
             else
@@ -89,6 +94,7 @@ public class StageMapRenderer : MonoBehaviour
                 btn.enabled = false;
                 btn.interactable = false;
                 btn.image.color = new Color(1, 1, 1, 0.6f);
+                stageNode.StopPulse();
             }
         }
 
@@ -98,17 +104,16 @@ public class StageMapRenderer : MonoBehaviour
     // 지나온 라인과 진행 못한 라인 표시해주는 함수
     private void HighlightLines(GraphNode current, List<GraphNode> visited)
     {
-        foreach (var line in lineInfos)
+        foreach (var info in lineInfos)
         {
-            var img = line.lineObj.GetComponent<Image>();
+            var img = info.lineObj.GetComponent<Image>();
 
-            bool isVisitedFrom = visited.Contains(line.from);  // 시작 노드 방문 여부
-            bool isVisitedTo = visited.Contains(line.to);      // 도착 노드 방문 여부
-            bool isCurrentPath = line.from == current && current.nextNodes.Contains(line.to); //현재 노드에서 진행 할 수 있는 노드 확인 여부
+            bool isVisitedFrom = visited.Contains(info.from);
+            bool isVisitedTo = visited.Contains(info.to);
+            bool isCompletePath = isVisitedFrom && isVisitedTo;
 
-            img.color = (isVisitedFrom && isVisitedTo) || isCurrentPath
-                ? new Color(1f, 1f, 1f, 1f)
-                : new Color(1f, 1f, 1f, 0.2f);
+            img.sprite = isCompletePath ? lineCompleteSprite : lineBasicSprite;
+            img.color = Color.white;
         }
     }
 
