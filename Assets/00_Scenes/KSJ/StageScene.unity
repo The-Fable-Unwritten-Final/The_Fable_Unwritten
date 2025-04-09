@@ -329,6 +329,7 @@ MonoBehaviour:
   retryFromStart: 0
   stageCleared: 0
   combatUIController: {fileID: 0}
+  turnController: {fileID: 0}
 --- !u!1 &814758283
 GameObject:
   m_ObjectHideFlags: 0
@@ -584,7 +585,11 @@ MonoBehaviour:
   eliteIcon: {fileID: 21300000, guid: 1bd8b65ffa6359b45add75ea7851455c, type: 3}
   randomIcon: {fileID: 21300000, guid: 19078b72bca4cf7408dd235882d669ae, type: 3}
   campIcon: {fileID: 21300000, guid: 9826e511e10e59b498e2ad787bd278f1, type: 3}
-  bossIcon: {fileID: 21300000, guid: ad1a327dbee133245b98bb266430b83b, type: 3}
+  bossStageIcons:
+  - {fileID: 21300000, guid: 91d826548645923438efb86be707121a, type: 3}
+  - {fileID: 21300000, guid: 30870cf73e4d8674ea2baca95c7268a3, type: 3}
+  - {fileID: 21300000, guid: ad1a327dbee133245b98bb266430b83b, type: 3}
+  - {fileID: 21300000, guid: ad1a327dbee133245b98bb266430b83b, type: 3}
 --- !u!114 &1421031695
 MonoBehaviour:
   m_ObjectHideFlags: 0

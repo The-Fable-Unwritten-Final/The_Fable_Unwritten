@@ -17,7 +17,8 @@ public class StageMapRenderer : MonoBehaviour
     [SerializeField] RectTransform linesContainer; // 라인 부모 오브젝트
 
     [Header("Node Icons")]
-    [SerializeField] Sprite startIcon, normalIcon, eliteIcon, randomIcon, campIcon, bossIcon; // 노드아이콘 설정
+    [SerializeField] Sprite startIcon, normalIcon, eliteIcon, randomIcon, campIcon; // 노드아이콘 설정
+    [SerializeField] private Sprite[] bossStageIcons; // Stage2 = 0, Stage3 = 1, Stage4 = 2, Stage5 = 3
 
     public Dictionary<GraphNode, RectTransform> nodeUIMap = new();
     private readonly List<LineInfo> lineInfos = new();
@@ -169,8 +170,17 @@ public class StageMapRenderer : MonoBehaviour
             case NodeType.Camp:
                 return campIcon;
             case NodeType.Boss:
-                return bossIcon;
+                return GetBossIcon(GameManager.Instance.stageIndex);
             default: return null;
         }     
+    }
+
+    private Sprite GetBossIcon(int stageIndex)
+    {
+        if (stageIndex < 2) return null;
+
+        int bossIndex = stageIndex - 2; // Stage 2 → 0, Stage 5 → 3
+        
+        return bossStageIcons[bossIndex];
     }
 }
