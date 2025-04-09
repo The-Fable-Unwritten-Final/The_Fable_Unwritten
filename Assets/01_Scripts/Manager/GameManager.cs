@@ -10,6 +10,9 @@ public class GameManager : MonoSingleton<GameManager>
     public bool retryFromStart = false; // 스테이지 실패여서 재시작여부
     public bool stageCleared = false;   // 전투 승리 여부
 
+    [Header("Controller")]
+    public CombatUIController combatUIController; // 전투 UI 컨트롤러
+
     protected override void Awake()
     {
         base.Awake();
@@ -39,5 +42,14 @@ public class GameManager : MonoSingleton<GameManager>
     {
         savedStageData = null;
         savedVisitedNodes.Clear();
+    }
+
+    public void RegisterCombatUI(CombatUIController cont)
+    {
+        combatUIController = cont;
+    }
+    public void UnregisterCombatUI()
+    {
+        combatUIController = null;
     }
 }

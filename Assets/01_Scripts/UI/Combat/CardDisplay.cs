@@ -41,10 +41,6 @@ public class CardDisplay : MonoBehaviour
             UpdateLineRenderer();
             UpdateArrowHead();
         }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            AddCard();// 테스트용 카드 추가. (카드 드로우 기능이 구현되면 이곳에서 카드 드로우 기능으로 변경.)
-        }
     }
 
     void UpdateLineRenderer()// 화살표 선
@@ -143,23 +139,38 @@ public class CardDisplay : MonoBehaviour
             }
         }
     }
-    public void AddCard()
+    /// <summary>
+    /// AddCard의 플로우 :
+    /// 빈카드 이미지 생성 >> 카드 데이터 넣어주기 >> 해당 카드를 핸드에 배치
+    /// </summary>
+    /// <param name="data"></param>
+    public void AddCard(CardModel data)
     {
         GameObject card = Instantiate(cardPrefab,this.transform);
         cardsInHand.Add(card.GetComponent<CardInHand>());// 카드 추가.
         card.GetComponent<CardInHand>().cardDisplay = this;// 카드의 카드디스플레이 설정.
+        card.GetComponent<CardInHand>().cardData = data;// 카드의 카드데이터 설정.
         CardArrange();
     }
     public void UseCard(/*carddata*/)
     {
         if(currentCard == null) return;// 현재 카드가 없으면 사용 불가.
-        // 만약 카드 사용을 못하게 된다면, SetSiblingIndex을 통해 해당 카드의 순서를 원래대로 돌려주기
+        // 만약 카드 사용을 못하게 된다면(코스트 부족 등..), SetSiblingIndex을 통해 해당 카드의 순서를 원래대로 돌려주기
+        GameManager.Instance.combatUIController.UsedCard(currentCard.cardData);// 일단은 무조건 카드를 사용할 수 있는 경우 가정.
         cardsInHand.Remove(currentCard);// 카드 사용.
         Destroy(currentCard.gameObject);// 카드 삭제.
         CardArrange();
     }
+    public void ThrowAwayCard()// 카드 버리기
+    {
+        if (currentCard == null) return;
+        GameManager.Instance.combatUIController.ThrowCard(currentCard.cardData);// 카드 버리기.
+        cardsInHand.Remove(currentCard);// 카드 리스트에서 제거.
+        Destroy(currentCard.gameObject);// 카드 삭제.
+        CardArrange();
+    }
 
-    public GameObject OnMousepoint(PointerEventData eventData)
+    public void OnMousepoint(PointerEventData eventData)
     {
         List<RaycastResult> results = new List<RaycastResult>();
 
@@ -168,15 +179,27 @@ public class CardDisplay : MonoBehaviour
 
         foreach (RaycastResult result in results)
         {
+            int layer = result.gameObject.layer;
             // 예시: 특정 레이어 이름을 가지고 있다면 사용
-            if (result.gameObject.TryGetComponent<CharacterAndMonsterCard>(out CharacterAndMonsterCard card))
+            if (layer == 7 || layer == 8)// 캐릭터 또는 몬스터 레이어 (사용 성공)
             {
-                Debug.Log(card.name);
-                return card.gameObject;
+                currentCard.SetCardState(CardInHand.CardState.OnUse);// 카드 상태를 OnUse로 변경
+                UseCard();// 카드 사용 메서드 호출
+                currentCard = null; // 드래그 종료 시 현재 카드 설정 해제
+                return; // 종료
+            }
+            else if(layer == 9)// 카드 버리기
+            {
+                ThrowAwayCard();// 카드 버리기 메서드 호출
+                currentCard = null; // 드래그 종료 시 현재 카드 설정 해제
+                return; // 종료
             }
         }
-        // 만약 해당 위치에 캐릭터 또는 몬스터가 없는 경우
-        return null;
+
+        // 만약 해당 위치에 캐릭터 또는 몬스터가 없는 경우 원상 복귀
+        currentCard.SetCardState(CardInHand.CardState.CanDrag);// 카드 상태를 CanDrag로 변경
+        currentCard.transform.SetSiblingIndex(cardsInHand.IndexOf(currentCard));// 카드의 순서를 원래대로 돌려주기
+        currentCard = null; // 드래그 종료 시 현재 카드 설정 해제
     }
 
     // 3차 베지어 곡선 수식. (Unity 포럼에서 찾음.)
