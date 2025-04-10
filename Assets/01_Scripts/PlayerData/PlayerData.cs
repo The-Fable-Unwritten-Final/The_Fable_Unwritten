@@ -8,7 +8,7 @@ using UnityEngine;
 public class PlayerData : ScriptableObject
 {
     [Header("Basic Stat")]
-    public string IDNum; //고유번호
+    public int IDNum; //고유번호
     public string CharacterName; //캐릭터이름
     public Sprite Icon; //Icon
     public float MaxHP; //체력
