@@ -33,7 +33,7 @@ public enum CardType
 /// </summary>
 public interface IStatusReceiver
 {
-    CharacterClass CharacterClass { get; }          //자신의 캐릭터 이름을 가져옴
+    CharacterClass CharacterClass { get; set; }          //자신의 캐릭터 이름을 가져옴
     DeckModel Deck { get; }                         //캐릭터의 덱을 가져옴
     void ApplyStatusEffect(StatusEffect effect);     // 버프, 디버프 적용
     float ModifyStat(BuffStatType statType, float baseValue); // 버프 기반 수치 계산

@@ -16,9 +16,15 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public DeckModel Deck => deckModel;     //덱 변환 함수
     public bool IsIgnited => false;  // 점화 여부 - 추후 확장
     public string CurrentStance => playerData.currentStance.stencType.ToString();       //현재의 자세를 가져옴
-    public CharacterClass CharacterClass => characterClass;                     //현재 캐릭터의 클래스를 가져옴.
+    public CharacterClass CharacterClass{get;set;}
+        //현재 캐릭터의 클래스를 가져옴.
 
     private List<StatusEffect> activeEffects = new List<StatusEffect>();        //현재 가지고 있는 상태이상 및 버프
+
+    private void Start()
+    {
+        Setup(playerData);
+    }
 
     /// <summary>
     /// 상태이상 혹은 버프를 적용하여 리스트에 추가
@@ -147,6 +153,19 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             hasBlock = false;
         }
     }
+
+    public void Setup(PlayerData data)
+    {
+        playerData = data;
+        characterClass = data.CharacterClass;
+
+        deckModel = new DeckModel();
+        if (data.currentDeck == null || data.currentDeck.Count == 0)
+            data.ResetDeckToDefault(); // fallback
+
+        deckModel.Initialize(data.currentDeck);
+    }
+
 
     public void ChangeStance(PlayerData.StancType newStance) //StancUI 함수
     {

@@ -195,7 +195,7 @@ public class CardDisplay : MonoBehaviour
         // 코스트가 충분한 경우 카드의 상태를 CanDrag로 변경
         for(int i = 0; i < cardsInHand.Count; i++)
         {
-            if (cardsInHand[i].cardData.IsUsable(100))// @@@ 임시로 현재 마나를 100으로 설정, 추후 현재 보유 마나 가져오기.
+            if (cardsInHand[i].cardData.IsUsable(GameManager.Instance.turnController.battleFlow.currentMana))// @@@ 임시로 현재 마나를 100으로 설정, 추후 현재 보유 마나 가져오기.
             {
                 cardsInHand[i].SetCardState(CardInHand.CardState.CanDrag);// 카드 상태를 CanDrag로 변경
             }

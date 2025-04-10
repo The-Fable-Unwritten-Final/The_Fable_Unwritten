@@ -17,6 +17,7 @@ public class TurnController : MonoBehaviour
     }
     public TurnState turnState = TurnState.GameStart; // 현재 턴 상태
     [SerializeField] CardDisplay cardDisplay; // 카드 디스플레이
+    public BattleFlowController battleFlow;   //배틀 컨트롤러를 넣기
 
     // 턴의 각 상태 진입시 호출되는 이벤트
     /// <summary>
@@ -46,6 +47,14 @@ public class TurnController : MonoBehaviour
     }
     private void Start()
     {
+        // BattleFlowController 메서드 연결
+
+        OnStartPlayerTurn += battleFlow.ExecutePlayerTurn;
+        OnPlayerTurn += () => { }; // 현재 아무 행동 없음
+        OnEndPlayerTurn += battleFlow.EndPlayerTurn;
+        OnEnemyTurn += battleFlow.ExecuteEnemyTurn;
+        //OnGameEnd += () => battleFlow.ForceEndBattle(true); // 기본 처리, 필요시 수정
+
         StartCoroutine(AtStartGame()); // 게임 시작 후 1초 후에 플레이어 턴으로
     }
     private void OnEnable()
@@ -106,6 +115,7 @@ public class TurnController : MonoBehaviour
     IEnumerator AtStartGame()
     {
         yield return new WaitForSeconds(0.3f);
+        battleFlow.StartBattle();
         SetTurnState(TurnState.StartPlayerTurn); // 게임 시작 후 플레이어 턴으로
     }
     IEnumerator AtStartPlayerTurn()
