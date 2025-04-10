@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4095049924294925217}
   - component: {fileID: 1575861016820545980}
   - component: {fileID: 4393934977665354281}
-  - component: {fileID: 991195205105074391}
+  - component: {fileID: 4943873057944629422}
   m_Layer: 8
   m_Name: Monster Slot Test
   m_TagString: Untagged
@@ -98,7 +98,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 130, y: 220, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &991195205105074391
+--- !u!114 &4943873057944629422
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,6 +107,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8573096159716659081}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a546d20eae04f694c93bcf58d1515845, type: 3}
+  m_Script: {fileID: 11500000, guid: d8bde9d4ef728ec4199589461de2244e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyData: {fileID: 11400000, guid: 9d05135586daad64fb62e0544a0156e7, type: 2}

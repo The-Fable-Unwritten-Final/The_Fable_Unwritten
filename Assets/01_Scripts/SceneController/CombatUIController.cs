@@ -43,7 +43,7 @@ public class CombatUIController : MonoBehaviour
     {
         cardDisplay.AddCard(card); // 드로우 한 카드 UI 업데이트.
     }
-    public void UsedCard(CardModel card)
+    public void UsedCard(CardModel card, IStatusReceiver target)
     {
         // deckmodel 에서 "사용된 카드", 실제 덱에서도 제거해주기.
         // 카드쪽 관련 스크립트 여기에..
