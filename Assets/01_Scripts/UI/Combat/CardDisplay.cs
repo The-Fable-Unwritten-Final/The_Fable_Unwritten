@@ -36,7 +36,6 @@ public class CardDisplay : MonoBehaviour
     private void Start()
     {
         GameManager.Instance.turnController.OnStartPlayerTurn += SetAllCardCanMouseOver;// 플레이어 턴 시작 시 카드 상태를 CanMouseOver로 변경
-        GameManager.Instance.combatUIController.CardStatusUpdate += SetCardCanDrag;// 사용 가능한 카드들 확인 (OnPlayerTurn 과 OnEnemyTurn 액션에 CardStatusUpdate를 다시 구독해서 턴 변경시 실행.)
     }
     private void Update()
     {
@@ -197,10 +196,12 @@ public class CardDisplay : MonoBehaviour
         {
             if (cardsInHand[i].cardData.IsUsable(GameManager.Instance.turnController.battleFlow.currentMana))// @@@ 임시로 현재 마나를 100으로 설정, 추후 현재 보유 마나 가져오기.
             {
+                Debug.Log("CanDrag");
                 cardsInHand[i].SetCardState(CardInHand.CardState.CanDrag);// 카드 상태를 CanDrag로 변경
             }
             else
             {
+                Debug.Log("CanMouseOver");
                 cardsInHand[i].SetCardState(CardInHand.CardState.CanMouseOver);// 카드 상태를 CanMouseOver로 변경
             }
         }

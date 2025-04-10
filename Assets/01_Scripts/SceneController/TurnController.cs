@@ -52,9 +52,8 @@ public class TurnController : MonoBehaviour
     private void Start()
     {
         // BattleFlowController 메서드 연결
-        
+      
         OnStartPlayerTurn += battleFlow.ExecutePlayerTurn;
-        OnPlayerTurn += () => { }; // 현재 아무 행동 없음
         OnEndPlayerTurn += battleFlow.EndPlayerTurn;
         OnEnemyTurn += battleFlow.ExecuteEnemyTurn;
         //OnGameEnd += () => battleFlow.ForceEndBattle(true); // 기본 처리, 필요시 수정
