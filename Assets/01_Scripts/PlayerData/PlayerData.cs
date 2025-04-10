@@ -14,6 +14,8 @@ public class PlayerData : ScriptableObject
     public float MaxHP; //체력
     public float ATK; //공격력
     public float DEF; //방어력
+    public CharacterClass CharacterClass => (CharacterClass)IDNum;
+
 
 
     [Header("Stat Value")]
@@ -38,5 +40,11 @@ public class PlayerData : ScriptableObject
     public List<StancValue> allStances; //임시 작성
     public StancValue currentStance;
 
+    public List<CardModel> defaultDeck; // 처음 시작할 때 사용할 고정 덱
+    public List<CardModel> currentDeck; // 게임 중 변화 가능한 덱
 
+    public void ResetDeckToDefault()
+    {
+        currentDeck = new List<CardModel>(defaultDeck);
+    }
 }

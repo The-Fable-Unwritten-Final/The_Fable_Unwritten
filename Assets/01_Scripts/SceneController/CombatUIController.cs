@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class CombatUIController : MonoBehaviour
 {
     [SerializeField] CardDisplay cardDisplay; // 카드 디스플레이
+    [SerializeField] BattleFlowController battleFlow;
 
     private void Awake()
     {
@@ -14,6 +15,7 @@ public class CombatUIController : MonoBehaviour
     }
     private void Start()
     {
+        
         GameManager.Instance.turnController.OnPlayerTurn += CardStatusUpdate;// 카드 상태 업데이트(CanDrag 체킹을 위함)
         GameManager.Instance.turnController.OnEnemyTurn += CardStatusUpdate;// 카드 상태 업데이트(CanDrag 체킹을 위함)
     }
@@ -45,12 +47,26 @@ public class CombatUIController : MonoBehaviour
     }
     public void UsedCard(CardModel card, IStatusReceiver target)
     {
-        // deckmodel 에서 "사용된 카드", 실제 덱에서도 제거해주기.
-        // 카드쪽 관련 스크립트 여기에..
+        var caster = battleFlow.GetCharacter(card.characterClass);
+        if (caster == null || target == null) return;
+
+        if (battleFlow.CanUseCard(card, caster, target, battleFlow.currentMana))
+        {
+            battleFlow.TryUseCard(card, caster.CharacterClass, target);
+            CardStatusUpdate?.Invoke(); // 상태 갱신
+        }
+        else
+        {
+            Debug.LogWarning($"[CombatUI] {card.cardName} 사용 조건 불충족 (UsedCard 호출)");
+        }
     }
     public void ThrowCard(CardModel card)
     {
-        // 덱에서 "버린 카드", 실제 덱에서도 제거해주기.
-        // 카드쪽 관련 스크립트 여기에..
+        var caster = battleFlow.GetCharacter(card.characterClass);
+        if (caster == null) return;
+
+        // 핸드에서 제거하고 사용 덱에 추가
+        caster.Deck.Discard(card);
+        CardStatusUpdate?.Invoke(); // 상태 갱신
     }
 }

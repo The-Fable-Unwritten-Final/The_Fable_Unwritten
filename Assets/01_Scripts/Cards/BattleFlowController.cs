@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -7,19 +8,30 @@ public enum TurnState { PlayerTurn, EnemyTurn } //적 턴인지 아군 턴인지
 
 public class BattleFlowController : MonoBehaviour
 {
-    public List<IStatusReceiver> playerParty;   //플레이어 파티
-    public List<IStatusReceiver> enemyParty;    //적 파티
+    [SerializeField] private List<PlayerController> playerObjects;
+    [SerializeField] private List<Enemy> enemyObjects;
+
+    public List<IStatusReceiver> playerParty { get; private set; } = new();
+    public List<IStatusReceiver> enemyParty { get; private set; } = new();
 
     public int startMana = 3; //시작 마나
     public int currentMana;   //현재 마나
 
-    private Dictionary<CharacterClass, DeckModel> decksByCharacter = new();     //캐릭터 마다의 사용, 미사용, 핸드 덱
-    private Dictionary<CharacterClass, IStatusReceiver> characterMap = new();   //캐릭터클래스에 대한 정보
-    private Dictionary<IStatusReceiver, CardModel> enemyPlannedSkill = new();   //적의 스킬 예측 정보
+    public Dictionary<CharacterClass, DeckModel> decksByCharacter = new();     //캐릭터 마다의 사용, 미사용, 핸드 덱
+    public Dictionary<CharacterClass, IStatusReceiver> characterMap = new();   //캐릭터클래스에 대한 정보
+    public  Dictionary<IStatusReceiver, CardModel> enemyPlannedSkill = new();   //적의 스킬 예측 정보
 
     private bool isBattleEnded = true;      //배틀 끝났는지 확인용
     public TurnState currentTurn;       //누구 턴인지 확인용
     private int turn = 1;               //지금 몇턴인지 확인용
+
+    //임시 inspector 확인용
+    private void Awake()
+    {
+        playerParty = new List<IStatusReceiver>(playerObjects);
+        enemyParty = new List<IStatusReceiver>(enemyObjects);
+        Initialize();
+    }
 
     /// <summary>
     /// 캐릭터 및 적 초기화(배틀 처음 진입시 시작할 것.)
@@ -86,7 +98,10 @@ public class BattleFlowController : MonoBehaviour
     public void UseCard(CardModel card, IStatusReceiver caster, IStatusReceiver target)
     {
         if (!card.IsUsable(currentMana) || !caster.IsAlive() || !target.IsAlive())      //사용 가능하지 않거나 적 또는 사용자가 죽어 있다면 생략하기
+        {
             return;
+        }
+
         //사용 가능할 시
         currentMana -= card.manaCost;         //마나 사용
         card.Play(caster, target);          //카드 사용(효과 적용)
@@ -114,7 +129,7 @@ public class BattleFlowController : MonoBehaviour
                 {
                     Debug.LogWarning($"{player.CharacterClass} 카드가 3장을 초과합니다. 버릴 카드 선택이 필요합니다.");
 
-                    // todo: 외부에서 선택한 카드 전달 필요
+                    // todo: 외부에서 선택한 카드 전달 필요 Todisacrd
                     // 여기선 임시로 가장 뒤의 카드부터 자동으로 버린다고 가정
                     List<CardModel> toDiscard = new(hand);
                     toDiscard.Reverse();
@@ -234,6 +249,15 @@ public class BattleFlowController : MonoBehaviour
         {
             Debug.LogWarning($"[BattleFlow] 캐릭터 {caster} 의 정보를 찾을 수 없습니다.");
         }
+    }
+
+    /// <summary>
+    /// 특정 캐릭터 클래스에 해당하는 IStatusReceiver 반환
+    /// </summary>
+    public IStatusReceiver GetCharacter(CharacterClass character)
+    {
+        characterMap.TryGetValue(character, out var characterObj);
+        return characterObj;
     }
 
     public bool CanUseCard(CardModel card, IStatusReceiver caster, IStatusReceiver target, int currentMana)

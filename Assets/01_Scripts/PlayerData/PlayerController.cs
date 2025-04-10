@@ -16,9 +16,15 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public DeckModel Deck => deckModel;     //덱 변환 함수
     public bool IsIgnited => false;  // 점화 여부 - 추후 확장
     public string CurrentStance => playerData.currentStance.stencType.ToString();       //현재의 자세를 가져옴
-    public CharacterClass CharacterClass => characterClass;                     //현재 캐릭터의 클래스를 가져옴.
+    public CharacterClass CharacterClass{get;set;}
+        //현재 캐릭터의 클래스를 가져옴.
 
     private List<StatusEffect> activeEffects = new List<StatusEffect>();        //현재 가지고 있는 상태이상 및 버프
+
+    private void Start()
+    {
+        Setup(playerData);
+    }
 
     /// <summary>
     /// 상태이상 혹은 버프를 적용하여 리스트에 추가
@@ -148,6 +154,19 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         }
     }
 
+    public void Setup(PlayerData data)
+    {
+        playerData = data;
+        characterClass = data.CharacterClass;
+
+        deckModel = new DeckModel();
+        if (data.currentDeck == null || data.currentDeck.Count == 0)
+            data.ResetDeckToDefault(); // fallback
+
+        deckModel.Initialize(data.currentDeck);
+    }
+
+
     public void ChangeStance(PlayerData.StancType newStance) //StancUI 함수
     {
 
@@ -161,7 +180,29 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
 
         }
+    }
+    public void ReceiveAttack(PlayerData.StancType enemyAttackStance, float damage)
+    {
+        var playerStance = playerData.currentStance.stencType;
 
-
+        if (playerStance == enemyAttackStance)
+        {
+            // 같은 위치 공격 -> 1.5배 피해
+            float finalDamage = damage * 1.5f;
+            TakeDamage(finalDamage);
+            Debug.Log($"[타격] 같은 자세 공격! 피해 {finalDamage} 적용");
+        }
+        else if ((playerStance == PlayerData.StancType.High && enemyAttackStance == PlayerData.StancType.Low) ||
+                 (playerStance == PlayerData.StancType.Low && enemyAttackStance == PlayerData.StancType.High))
+        {
+            // 반대 위치 -> 회피
+            Debug.Log("[회피] 반대 자세 공격을 회피함!");
+        }
+        else
+        {
+            // 기본 피해
+            TakeDamage(damage);
+            Debug.Log($"[피해] 일반 공격 피해 {damage} 적용");
+        }
     }
 }
