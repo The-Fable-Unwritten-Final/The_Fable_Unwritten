@@ -53,7 +53,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (cardState == CardState.None) return; // 상태가 None인 경우 상호작용 불가능
+        if (cardState != CardState.CanDrag) return; // 카드 상태가 CanDrag가 아닌 경우 드래그 불가능
 
         cardDisplay.isOnDrag = true; // 드래그 시작 시 카드 드래그 상태를 true로 설정
 
@@ -74,6 +74,8 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (cardState != CardState.OnDrag) return; // 카드 상태가 OnDrag가 아닌 경우 해당 메서드 실행하지 않음
+
         cardDisplay.isOnDrag = false;
         cardState = CardState.None; // 카드 상태를 None으로 초기화
         cardDisplay.lineRenderer.gameObject.SetActive(false); // 드래그 종료 시 라인 렌더러 비활성화
@@ -112,12 +114,20 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     {
         StartCoroutine(OnCardMove());// 카드 이동 애니메이션을 위한 코루틴 시작.
     }
-    IEnumerator OnCardMove()
+    IEnumerator OnCardMove()// 카드 위치 재설정
     {
         // 카드 이동 애니메이션을 위한 상호작용 제한 코루틴
         SetCardState(CardInHand.CardState.None);// 카드가 움직이는 도중에는 상호작용 제한.
         yield return new WaitForSeconds(0.2f);
-        SetCardState(CardInHand.CardState.CanDrag);// 추후 전투 조건에 맞는 상황 세팅으로 변경.
+
+        if (cardData.IsUsable(GameManager.Instance.turnController.battleFlow.currentMana))
+        {
+            SetCardState(CardInHand.CardState.CanDrag);
+        }
+        else
+        {
+            SetCardState(CardInHand.CardState.CanMouseOver);
+        }
     }
 }
 
