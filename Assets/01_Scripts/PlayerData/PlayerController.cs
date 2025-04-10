@@ -21,6 +21,11 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     private List<StatusEffect> activeEffects = new List<StatusEffect>();        //현재 가지고 있는 상태이상 및 버프
 
+    private void Start()
+    {
+        Setup(playerData);
+    }
+
     /// <summary>
     /// 상태이상 혹은 버프를 적용하여 리스트에 추가
     /// </summary>
@@ -148,6 +153,19 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             hasBlock = false;
         }
     }
+
+    public void Setup(PlayerData data)
+    {
+        playerData = data;
+        characterClass = data.CharacterClass;
+
+        deckModel = new DeckModel();
+        if (data.currentDeck == null || data.currentDeck.Count == 0)
+            data.ResetDeckToDefault(); // fallback
+
+        deckModel.Initialize(data.currentDeck);
+    }
+
 
     public void ChangeStance(PlayerData.StancType newStance) //StancUI 함수
     {

@@ -35,6 +35,8 @@ public class CardModel : ScriptableObject
     {
         foreach (var effect in effects)
             effect.Apply(caster, target);
+
+        GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
     }
 
     /// <summary>

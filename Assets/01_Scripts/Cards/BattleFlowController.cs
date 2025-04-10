@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -7,19 +8,30 @@ public enum TurnState { PlayerTurn, EnemyTurn } //적 턴인지 아군 턴인지
 
 public class BattleFlowController : MonoBehaviour
 {
-    public List<IStatusReceiver> playerParty;   //플레이어 파티
-    public List<IStatusReceiver> enemyParty;    //적 파티
+    [SerializeField] private List<PlayerController> playerObjects;
+    [SerializeField] private List<Enemy> enemyObjects;
+
+    public List<IStatusReceiver> playerParty { get; private set; } = new();
+    public List<IStatusReceiver> enemyParty { get; private set; } = new();
 
     public int startMana = 3; //시작 마나
     public int currentMana;   //현재 마나
 
-    private Dictionary<CharacterClass, DeckModel> decksByCharacter = new();     //캐릭터 마다의 사용, 미사용, 핸드 덱
-    private Dictionary<CharacterClass, IStatusReceiver> characterMap = new();   //캐릭터클래스에 대한 정보
-    private Dictionary<IStatusReceiver, CardModel> enemyPlannedSkill = new();   //적의 스킬 예측 정보
+    public Dictionary<CharacterClass, DeckModel> decksByCharacter = new();     //캐릭터 마다의 사용, 미사용, 핸드 덱
+    public Dictionary<CharacterClass, IStatusReceiver> characterMap = new();   //캐릭터클래스에 대한 정보
+    public  Dictionary<IStatusReceiver, CardModel> enemyPlannedSkill = new();   //적의 스킬 예측 정보
 
     private bool isBattleEnded = true;      //배틀 끝났는지 확인용
     public TurnState currentTurn;       //누구 턴인지 확인용
     private int turn = 1;               //지금 몇턴인지 확인용
+
+    //임시 inspector 확인용
+    private void Awake()
+    {
+        playerParty = new List<IStatusReceiver>(playerObjects);
+        enemyParty = new List<IStatusReceiver>(enemyObjects);
+        Initialize();
+    }
 
     /// <summary>
     /// 캐릭터 및 적 초기화(배틀 처음 진입시 시작할 것.)
