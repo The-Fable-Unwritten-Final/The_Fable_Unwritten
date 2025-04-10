@@ -161,7 +161,29 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
 
         }
+    }
+    public void ReceiveAttack(PlayerData.StancType enemyAttackStance, float damage)
+    {
+        var playerStance = playerData.currentStance.stencType;
 
-
+        if (playerStance == enemyAttackStance)
+        {
+            // 같은 위치 공격 -> 1.5배 피해
+            float finalDamage = damage * 1.5f;
+            TakeDamage(finalDamage);
+            Debug.Log($"[타격] 같은 자세 공격! 피해 {finalDamage} 적용");
+        }
+        else if ((playerStance == PlayerData.StancType.High && enemyAttackStance == PlayerData.StancType.Low) ||
+                 (playerStance == PlayerData.StancType.Low && enemyAttackStance == PlayerData.StancType.High))
+        {
+            // 반대 위치 -> 회피
+            Debug.Log("[회피] 반대 자세 공격을 회피함!");
+        }
+        else
+        {
+            // 기본 피해
+            TakeDamage(damage);
+            Debug.Log($"[피해] 일반 공격 피해 {damage} 적용");
+        }
     }
 }
