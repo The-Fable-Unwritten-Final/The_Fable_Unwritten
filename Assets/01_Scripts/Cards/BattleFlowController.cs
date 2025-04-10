@@ -114,7 +114,7 @@ public class BattleFlowController : MonoBehaviour
                 {
                     Debug.LogWarning($"{player.CharacterClass} 카드가 3장을 초과합니다. 버릴 카드 선택이 필요합니다.");
 
-                    // todo: 외부에서 선택한 카드 전달 필요
+                    // todo: 외부에서 선택한 카드 전달 필요 Todisacrd
                     // 여기선 임시로 가장 뒤의 카드부터 자동으로 버린다고 가정
                     List<CardModel> toDiscard = new(hand);
                     toDiscard.Reverse();
@@ -234,6 +234,15 @@ public class BattleFlowController : MonoBehaviour
         {
             Debug.LogWarning($"[BattleFlow] 캐릭터 {caster} 의 정보를 찾을 수 없습니다.");
         }
+    }
+
+    /// <summary>
+    /// 특정 캐릭터 클래스에 해당하는 IStatusReceiver 반환
+    /// </summary>
+    public IStatusReceiver GetCharacter(CharacterClass character)
+    {
+        characterMap.TryGetValue(character, out var characterObj);
+        return characterObj;
     }
 
     public bool CanUseCard(CardModel card, IStatusReceiver caster, IStatusReceiver target, int currentMana)
