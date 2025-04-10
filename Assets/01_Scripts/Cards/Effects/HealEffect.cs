@@ -20,9 +20,27 @@ public class HealEffect : CardEffectBase
     public override void Apply(IStatusReceiver caster, IStatusReceiver target)
     {
         //스탯 변경 적용 후
-        float finalHeal = caster.ModifyStat(BuffStatType.ManaRegen, amount);
+        float finalHeal = caster.ModifyStat(BuffStatType.Attack, amount);
         caster.Heal(finalHeal); //힐 적용
     }
+
+    /// <summary>
+    /// 광역힐에 사용
+    /// </summary>
+    /// <param name="caster">시전자</param>
+    /// <param name="targets">타겟 리스트</param>
+    public override void ApplyAOE(IStatusReceiver caster, List<IStatusReceiver> targets)
+    {
+        foreach (var target in targets)
+        {
+            if (target.IsAlive())
+            {
+                float finalHeal = caster.ModifyStat(BuffStatType.Attack, amount);
+                caster.Heal(finalHeal);
+            }
+        }
+    }
+
 
     public override string GetDescription() => $"대상을 {amount}만큼 회복합니다.";
 }

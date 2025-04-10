@@ -4,21 +4,26 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IStatusReceiver
 {
-    public PlayerData playerData;
-    public DeckModel deckModel;
-    public CharacterClass characterClass;
+    public PlayerData playerData;       //플레이어의 데이타
+    public DeckModel deckModel;         //플레이어가 들고 있는 덱
+    public CharacterClass characterClass;   //플레이어가 누구인지(추후 playerdata에 따라 삭제 가능)
+    public bool hasBlock = false;           //방어막 획득 여부
 
     public void OnClickHighStance() => ChangeStance(PlayerData.StancType.High);
     public void OnClickMidStance() => ChangeStance(PlayerData.StancType.Middle);
     public void OnClickLowStance() => ChangeStance(PlayerData.StancType.Low);
 
-    public DeckModel Deck => deckModel;
+    public DeckModel Deck => deckModel;     //덱 변환 함수
     public bool IsIgnited => false;  // 점화 여부 - 추후 확장
-    public string CurrentStance => playerData.currentStance.stencType.ToString();
-    public CharacterClass CharacterClass => characterClass;
+    public string CurrentStance => playerData.currentStance.stencType.ToString();       //현재의 자세를 가져옴
+    public CharacterClass CharacterClass => characterClass;                     //현재 캐릭터의 클래스를 가져옴.
 
-    private List<StatusEffect> activeEffects = new List<StatusEffect>();
+    private List<StatusEffect> activeEffects = new List<StatusEffect>();        //현재 가지고 있는 상태이상 및 버프
 
+    /// <summary>
+    /// 상태이상 혹은 버프를 적용하여 리스트에 추가
+    /// </summary>
+    /// <param name="effect">적용할 효과</param>
     public void ApplyStatusEffect(StatusEffect effect)
     {
         Debug.Log($"[버프 적용] {playerData.CharacterName} 에게 {effect.statType} +{effect.value} ({effect.duration}턴)");
@@ -30,6 +35,12 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         });
     }
 
+    /// <summary>
+    /// 해당 스탯에 현재 적용 중인 버프를 계산하여 반환
+    /// </summary>
+    /// <param name="statType">수정할 스탯 타입</param>
+    /// <param name="baseValue">기본값</param>
+    /// <returns>버프 적용 후 최종 값</returns>
     public float ModifyStat(BuffStatType statType, float baseValue)
     {
         float modifiedValue = baseValue;
@@ -47,17 +58,31 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         Debug.Log($"{playerData.CharacterName} 피해: {amount}, 현재 체력: {playerData.MaxHP}");
     }
 
+    /// <summary>
+    /// 체력 회복
+    /// </summary>
+    /// <param name="amount">회복량</param>
     public void Heal(float amount)
     {
         playerData.MaxHP += amount;
         Debug.Log($"{playerData.CharacterName} 회복: {amount}, 현재 체력: {playerData.MaxHP}");
     }
 
+
+    /// <summary>
+    /// 생존 여부 확인
+    /// </summary>
+    /// <returns>체력이 0 초과인지 여부</returns>
     public bool IsAlive()
     {
         return playerData.MaxHP > 0;
     }
 
+    /// <summary>
+    /// 플레이어 초기화 (데이터 및 클래스 설정)
+    /// </summary>
+    /// <param name="data">플레이어 데이터</param>
+    /// <param name="charClass">캐릭터 클래스</param>
     public void Initialize(PlayerData data, CharacterClass charClass)
     {
         playerData = data;
@@ -65,11 +90,18 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         deckModel = new DeckModel(); // 덱은 여기서 직접 생성하거나 외부에서 주입
     }
 
+    /// <summary>
+    /// 현재 덱 상태 출력 (디버그용)
+    /// </summary>
     public void PrintDeckState()
     {
         Debug.Log($"[{playerData.CharacterName}] Hand: {Deck.Hand.Count}, Used: {Deck.UsedCount()}");
     }
 
+
+    /// <summary>
+    /// 매 턴마다 상태효과 지속시간 감소 및 종료 처리
+    /// </summary>
     public void TickStatusEffects()
     {
         for (int i = activeEffects.Count - 1; i >= 0; i--)
@@ -83,12 +115,39 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         }
     }
 
+    /// <summary>
+    /// 특정 타입의 버프/디버프가 있는지 확인
+    /// </summary>
+    /// <param name="type">스탯 타입</param>
+    /// <returns>존재 여부</returns>
     public bool HasEffect(BuffStatType type)
     {
         return activeEffects.Exists(e => e.statType == type && e.duration > 0);
     }
 
+    /// <summary>
+    /// 스턴 상태인지 확인
+    /// </summary>
+    /// <returns>스턴 여부</returns>
     public bool IsStunned() => HasEffect(BuffStatType.stun);
+
+    // block 부여
+    public void GrantBlock()
+    {
+        hasBlock = true;
+        Debug.Log($"{playerData.CharacterName}에게 block 부여 (1턴 1회 무효화)");
+    }
+
+    // block 제거
+    public void ClearBlock()
+    {
+        if (hasBlock)
+        {
+            Debug.Log($"{playerData.CharacterName}의 block 효과 만료");
+            hasBlock = false;
+        }
+    }
+
     public void ChangeStance(PlayerData.StancType newStance) //StancUI 함수
     {
 

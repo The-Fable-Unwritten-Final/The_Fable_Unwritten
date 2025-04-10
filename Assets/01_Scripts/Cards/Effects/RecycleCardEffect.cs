@@ -29,7 +29,7 @@ public class RecycleCardEffect : CardEffectBase
     }
 
     /// <summary>
-    /// 외부에서 특정 카드들을 선택했을 경우 사용하는 선택 기반 리사이클
+    /// 외부에서 특정 카드들을 선택했을 경우 그 카드를 되돌리는 선택 기반 리사이클
     /// </summary>
     public void ApplyWithSelection(IStatusReceiver caster, List<int> selectedIndexes)
     {

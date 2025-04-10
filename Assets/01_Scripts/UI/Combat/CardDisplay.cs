@@ -32,10 +32,12 @@ public class CardDisplay : MonoBehaviour
         {
             cardsInHand[i].SetCardState(CardInHand.CardState.CanDrag);// 임시로 카드 상태 설정.
         }
+    }
+    private void Start()
+    {
         GameManager.Instance.turnController.OnStartPlayerTurn += SetAllCardCanMouseOver;// 플레이어 턴 시작 시 카드 상태를 CanMouseOver로 변경
         GameManager.Instance.combatUIController.CardStatusUpdate += SetCardCanDrag;// 사용 가능한 카드들 확인 (OnPlayerTurn 과 OnEnemyTurn 액션에 CardStatusUpdate를 다시 구독해서 턴 변경시 실행.)
     }
-
     private void Update()
     {
         if(isOnDrag)
@@ -154,14 +156,14 @@ public class CardDisplay : MonoBehaviour
         card.GetComponent<CardInHand>().cardData = data;// 카드의 카드데이터 설정.
         CardArrange();
     }
-    public void UseCard(/*carddata*/)
+    public void UseCard(IStatusReceiver target)
     {
         if(currentCard == null) return;// 현재 카드가 없으면 사용 불가.
         // 만약 카드 사용을 못하게 된다면(코스트 부족 등..), SetSiblingIndex을 통해 해당 카드의 순서를 원래대로 돌려주기
         // 카드 사용 가능 조건 체크
         //
         //
-        GameManager.Instance.combatUIController.UsedCard(currentCard.cardData);// 일단은 무조건 카드를 사용할 수 있는 경우 가정.
+        GameManager.Instance.combatUIController.UsedCard(currentCard.cardData,target);// 일단은 무조건 카드를 사용할 수 있는 경우 가정.
         cardsInHand.Remove(currentCard);// 카드 사용.
         Destroy(currentCard.gameObject);// 카드 삭제.
         CardArrange();
@@ -217,7 +219,7 @@ public class CardDisplay : MonoBehaviour
             if (layer == 7 || layer == 8)// 캐릭터 또는 몬스터 레이어 (사용 성공)
             {
                 currentCard.SetCardState(CardInHand.CardState.OnUse);// 카드 상태를 OnUse로 변경
-                UseCard();// 카드 사용 메서드 호출
+                UseCard(result.gameObject.GetComponent<IStatusReceiver>());// 카드 사용 메서드 호출
                 currentCard = null; // 드래그 종료 시 현재 카드 설정 해제
                 return; // 종료
             }

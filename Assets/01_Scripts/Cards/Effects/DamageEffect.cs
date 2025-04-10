@@ -20,27 +20,10 @@ public class DamageEffect : CardEffectBase
     public override void Apply(IStatusReceiver caster, IStatusReceiver target)
     {
         if (!target.IsAlive()) return;
-        ApplyAndReturn(caster, target);
-    }
-
-
-    /// <summary>
-    /// 데미지 값을 다른 효과에 쓰기 위한 요소
-    /// </summary>
-    /// <param name="caster">시전자</param>
-    /// <param name="target">타겟</param>
-    /// <returns>공격 데미지</returns>
-    public override float ApplyAndReturn(IStatusReceiver caster, IStatusReceiver target)
-    {
-        if (!target.IsAlive()) return 0;
 
         float finalDamage = caster.ModifyStat(BuffStatType.Attack, amount);
         target.TakeDamage(finalDamage);
-
-        // 이후 효과에 활용 가능
-        return finalDamage;
     }
-
 
     /// <summary>
     /// 광역뎀에 사용
