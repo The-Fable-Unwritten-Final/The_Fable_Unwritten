@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 스테이지 흐름을 제어하는 메인 매니저 클래스
 /// </summary>
-public class StageManager : MonoBehaviour
+public class StageMapController : MonoBehaviour
 {
     [Header("Stage Settings")]  
     [SerializeField] Vector2 spacing = new(300, 200);      // 노드 간격

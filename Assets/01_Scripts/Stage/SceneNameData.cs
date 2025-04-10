@@ -8,4 +8,5 @@ public static class SceneNameData
     public const string InGameScene = "InGameScene";
     public const string CampScene = "CampScene";
     public const string RandomEventScene = "RandomEventScene";
+    public const string TitleScene = "TitleScene";
 }
