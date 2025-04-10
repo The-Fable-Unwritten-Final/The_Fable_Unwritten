@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d99085e4860989e40ba273fad6060564, type: 3}
-  m_Name: 20_PaperSoldier
+  m_Name: 20_CandleSoldier
   m_EditorClassIdentifier: 
-  iDNum: 20
-  enemyName: PaperSoldier
-  hP: 15
-  healthValue: 0
+  idNum: 20
+  enemyName: CandleSoldier
+  maxHP: 15
+  hpValue: 0
   aTK: 1
   aTKValue: 0
   dEF: 1
   dEFValue: 0
-  currentStance: 0
+  currentStance: 1

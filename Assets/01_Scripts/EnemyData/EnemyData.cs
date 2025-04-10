@@ -2,30 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewEnemy Data", menuName = "Enemy/EnemyData")] //제일 아래 배치
+[CreateAssetMenu(fileName = "NewEnemy Data", menuName = "Enemy/EnemyData")]
 public class EnemyData : ScriptableObject
 {
     [SerializeField]
-    public string iDNum;
-    public string IDNum { get { return iDNum; } } //고유번호
+    private int idNum;
+    public int IDNum { get { return idNum; } } //고유번호
+
     [SerializeField]
     private string enemyName;
     public string EnemyName { get { return enemyName; } } //이름
+
     [SerializeField]
-    private int hP;
-    public int HP { get { return hP; } } //체력
+    private int maxHP;
+    public int MaxHP { get { return maxHP; } } //체력
+
     [SerializeField]
-    private float healthValue;
-    public float HealthValue { get { return healthValue; } } //체력변화
+    private float hpValue;
+    public float HPValue { get { return hpValue; } } //체력변화
+
     [SerializeField]
     private int aTK;
     public int ATK { get { return aTK; } } //공격력
+
     [SerializeField]
     private int aTKValue;
     public int ATKValue { get { return aTKValue; } } //공격력 변화
+
     [SerializeField]
     private float dEF;
     public float DEF { get { return dEF; } } // 방어력
+
     [SerializeField]
     private float dEFValue;
     public float DEFValue { get { return dEFValue; } } // 방어력 변화
