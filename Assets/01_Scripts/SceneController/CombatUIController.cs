@@ -11,6 +11,8 @@ public class CombatUIController : MonoBehaviour
     private void Awake()
     {
         GameManager.Instance.RegisterCombatUI(this);
+        GameManager.Instance.turnController.OnPlayerTurn += CardStatusUpdate;// 카드 상태 업데이트(CanDrag 체킹을 위함)
+        GameManager.Instance.turnController.OnEnemyTurn += CardStatusUpdate;// 카드 상태 업데이트(CanDrag 체킹을 위함)
     }
 
     // 게임 매니저에서 해당 클라스 등록과 해제 활성

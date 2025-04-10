@@ -19,8 +19,8 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public enum CardState// 추후 턴 상태와 연계해서 카드의 상태관리. (카드의 상태에 따른 상호작용 가능 여부 설정.)
     {
         None,// 아무런 상호 작용이 불가능한 상태. (각종 상태들의 중간 거쳐가는 단계)
-        CanMouseOver,// 마우스 오버를 통해 정보 확인 까지만 가능한 상태. (코스트가 부족하거나, 플레이어 턴이 아닐때 모든 카드 상태)
-        CanDrag,// 드래그를 통한 사용까지 가능한 상태. (코스트도 충분하고, 플레이어의 턴일때)
+        CanMouseOver,// 마우스 오버를 통해 정보 확인 까지만 가능한 상태. (코스트가 부족하거나, 플레이어 턴이 아닐때 모든 카드 상태) (플레이어 턴 == turnState.PlayerTurn)
+        CanDrag,// 드래그를 통한 사용까지 가능한 상태. (코스트도 충분하고, 플레이어의 턴일때) 
         OnDrag,// 드래그 중인 상태.
         OnUse,// 카드 사용에 성공
     }
