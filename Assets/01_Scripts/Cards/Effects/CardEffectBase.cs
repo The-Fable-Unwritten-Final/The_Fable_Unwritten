@@ -9,9 +9,7 @@ using UnityEngine;
 public enum CardEffectType { Damage, Heal, Buff, Debuff, Conditional, Chain }
 public enum CharacterClass { Sophia, Kayla, Leon, Enemy }
 public enum SkillType { Fire, Ice, Electric, Nature, Buff, Debuff, Holy, Heal, Slash, Strike, Pierce, Defense }
-public enum BuffStatType { None, Attack, Defense, ManaRegen, block, blind, stun }
-
-
+public enum BuffStatType { None, Attack, Defense, ManaRegen, blind, stun }
 public enum TargetType { None = 0, Ally = 1, Enemy = 2 }
 
 public enum CardType
@@ -42,8 +40,9 @@ public interface IStatusReceiver
     void TakeDamage(float amount);                     // 데미지 적용
     void Heal(float amount);                           // 힐 적용
     bool IsAlive();                                  // 생존 여부 체크
-    bool IsIgnited { get; }
-    string CurrentStance { get; }
+    bool IsIgnited { get; }                         //각성 상태 확인
+    string CurrentStance { get; }                   //현재 자세 확인
+    bool IsStunned();                          //스턴 상태 여부 확인
 
 }
 
@@ -59,14 +58,6 @@ public abstract class CardEffectBase : ScriptableObject
     /// <param name="target">타겟</param>
     public abstract void Apply(IStatusReceiver caster, IStatusReceiver target);       //타겟(적, 플레이어)에게 어떤 효과를 주는 지
 
-    /// <summary>
-    /// 효과 결과를 다른 친구에게 넘겨 줄 필요가 있을 경우 사용하는 메서드
-    /// </summary>
-    /// <param name="caster">시전자</param>
-    /// <param name="target">타겟</param>
-    /// <returns>적용값</returns>
-    public virtual float ApplyAndReturn(IStatusReceiver caster, IStatusReceiver target) => 0f;
-
     // 광역 지정용 오버로드 (필요한 경우만 override)
     public virtual void ApplyAOE(IStatusReceiver caster, List<IStatusReceiver> targets) { }
 
@@ -75,8 +66,10 @@ public abstract class CardEffectBase : ScriptableObject
     /// </summary>
     /// <returns></returns>
     public abstract string GetDescription();
-
+    
+    /// <summary>
+    /// 광역기인지 확인 
+    /// </summary>
+    /// <returns></returns>
     public virtual bool isAOE() => false;
-
-    public virtual void InitializeFromCSV(string param) { }
 }

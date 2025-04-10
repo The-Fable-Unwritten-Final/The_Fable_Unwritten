@@ -235,4 +235,15 @@ public class BattleFlowController : MonoBehaviour
             Debug.LogWarning($"[BattleFlow] 캐릭터 {caster} 의 정보를 찾을 수 없습니다.");
         }
     }
+
+    public bool CanUseCard(CardModel card, IStatusReceiver caster, IStatusReceiver target, int currentMana)
+    {
+        if (caster == null || target == null || card == null) return false;
+        if (!card.IsUsable(currentMana)) return false;
+        if (!card.CanBeUsedBy(caster.CharacterClass)) return false;
+        if (!card.IsTargetValid(caster, target)) return false;
+        if (caster.IsStunned()) return false; // 스턴 상태면 사용 불가
+
+        return true;
+    }
 }

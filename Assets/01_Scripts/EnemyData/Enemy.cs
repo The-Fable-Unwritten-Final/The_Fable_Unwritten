@@ -30,6 +30,8 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         
     }
 
+    public bool IsStunned() => false;           //스턴 상태 확인
+
     public CharacterClass CharacterClass => CharacterClass.Enemy;
 
     public DeckModel Deck => null;
