@@ -24,18 +24,22 @@ public class TurnController : MonoBehaviour
     /// 카드 3장씩 드로우 + 배치, 마나 회복
     /// </summary>
     public Action OnStartPlayerTurn;// 자동 진행
+
     /// <summary>
     /// 플레이어 카드 사용 가능
     /// </summary>
     public Action OnPlayerTurn;// 수동으로 행동 후 다음 상태 진행
+
     /// <summary>
     /// 턴 종료 버튼을 누르면 호출, 캐릭터별 카드 3장 제한을 체크하고 초과하면 해당 캐릭터 카드 버릴것 선택하게 하기
     /// </summary>
     public Action OnEndPlayerTurn;// 턴 종료 버튼을 누르면 호출 되어, 카드 3장 제한여부에 따라 자동 진행 or 버리는 수동 진행 후 다음 상태 (일단은 자동으로 3장 맞추기 + 자동진행으로)
+
     /// <summary>
     /// 적 행동 진행
     /// </summary>
     public Action OnEnemyTurn;// 코루틴으로 몬스터의 행동 진행 + 끝나면 다음 상태로 자동 진행
+
     /// <summary>
     /// 전투 종료
     /// </summary>
@@ -48,7 +52,7 @@ public class TurnController : MonoBehaviour
     private void Start()
     {
         // BattleFlowController 메서드 연결
-
+        
         OnStartPlayerTurn += battleFlow.ExecutePlayerTurn;
         OnPlayerTurn += () => { }; // 현재 아무 행동 없음
         OnEndPlayerTurn += battleFlow.EndPlayerTurn;

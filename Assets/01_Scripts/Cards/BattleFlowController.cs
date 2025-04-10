@@ -78,6 +78,7 @@ public class BattleFlowController : MonoBehaviour
     public void ExecutePlayerTurn()
     {
         if (isBattleEnded) return;      //전투 종료 명령 확인 시 전투 종료
+        currentTurn = TurnState.PlayerTurn;
 
         if (currentMana < startMana)    //마나가 시작 마나보다 적을 시 시작 마나로 초기화
             currentMana = startMana;
@@ -147,15 +148,6 @@ public class BattleFlowController : MonoBehaviour
     public void ExecuteEnemyTurn()
     {
         //적 행동 설정;
-
-        CheckBattleEnd();       //배틀 종료 확인
-
-        if (!isBattleEnded)     //배틀 종료 되지 않았으면 플레이어 턴으로
-        {
-            turn++;
-            currentTurn = TurnState.PlayerTurn;
-            ExecutePlayerTurn();
-        }
     }
 
     private void PlanEnemySkills()
