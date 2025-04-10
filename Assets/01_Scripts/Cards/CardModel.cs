@@ -37,6 +37,17 @@ public class CardModel : ScriptableObject
             effect.Apply(caster, target);
     }
 
+    /// <summary>
+    /// 카드 사용자가 이 카드를 사용할 수 있는지 확인하는 카드
+    /// </summary>
+    /// <param name="casterClass"></param>
+    /// <returns></returns>
+    public bool CanBeUsedBy(CharacterClass casterClass)
+    {
+        return characterClass == casterClass;
+        // 혹은 None이나 공용 카드 처리도 가능
+    }
+
 
     /// <summary>
     /// 지정한 타겟이 카드의 타겟과 일치하는지 확인하는 함수
