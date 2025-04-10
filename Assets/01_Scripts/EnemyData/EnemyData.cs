@@ -6,8 +6,8 @@ using UnityEngine;
 public class EnemyData : ScriptableObject
 {
     [SerializeField]
-    private string idNum;
-    public string IDNum { get { return idNum; } } //고유번호
+    private int idNum;
+    public int IDNum { get { return idNum; } } //고유번호
 
     [SerializeField]
     private string enemyName;

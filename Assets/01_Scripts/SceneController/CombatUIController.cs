@@ -11,6 +11,8 @@ public class CombatUIController : MonoBehaviour
     private void Awake()
     {
         GameManager.Instance.RegisterCombatUI(this);
+        GameManager.Instance.turnController.OnPlayerTurn += CardStatusUpdate;// 카드 상태 업데이트(CanDrag 체킹을 위함)
+        GameManager.Instance.turnController.OnEnemyTurn += CardStatusUpdate;// 카드 상태 업데이트(CanDrag 체킹을 위함)
     }
 
     // 게임 매니저에서 해당 클라스 등록과 해제 활성
@@ -40,12 +42,12 @@ public class CombatUIController : MonoBehaviour
     }
     public void UsedCard(CardModel card)
     {
-        // deckmodel 에서 사용된 카드, 실제 덱에서도 제거해주기.
+        // deckmodel 에서 "사용된 카드", 실제 덱에서도 제거해주기.
         // 카드쪽 관련 스크립트 여기에..
     }
     public void ThrowCard(CardModel card)
     {
-        // 덱에서 버린 카드, 실제 덱에서도 제거해주기.
+        // 덱에서 "버린 카드", 실제 덱에서도 제거해주기.
         // 카드쪽 관련 스크립트 여기에..
     }
 }

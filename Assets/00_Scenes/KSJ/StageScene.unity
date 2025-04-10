@@ -324,10 +324,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7a84a1b78703b047b0328bd00db9691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerPrefabData: {fileID: 11400000, guid: 4e3982890a2ac5a41b04c1ae6e7849ab, type: 2}
+  playerDatas:
+  - {fileID: 11400000, guid: ae3c4eeacbe1c494e94530c396635264, type: 2}
+  - {fileID: 11400000, guid: 3f4d7a9c55d25d8478f76090b72c7cb7, type: 2}
+  - {fileID: 11400000, guid: dceb0a15874768a469f6b02b5e16a0ed, type: 2}
   stageIndex: 0
   minimumStageIndex: 0
   retryFromStart: 0
   stageCleared: 0
+  combatUIController: {fileID: 0}
+  turnController: {fileID: 0}
 --- !u!1 &814758283
 GameObject:
   m_ObjectHideFlags: 0
@@ -572,8 +579,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodePrefab: {fileID: 5334812594238698168, guid: 183d45b9008132243b6685d95f58a920,
     type: 3}
-  linePrefab: {fileID: 2508127751886912357, guid: f2ffb682cd62e1046a552e1123e59d96,
+  lineBasicPrefab: {fileID: 2508127751886912357, guid: f2ffb682cd62e1046a552e1123e59d96,
     type: 3}
+  lineBasicSprite: {fileID: 21300000, guid: 98e2d99ce29ee504f886e7ce7d0cd89c, type: 3}
+  lineCompleteSprite: {fileID: 21300000, guid: 8fe9a5f538cec334fb52ba1ac64e0426, type: 3}
   nodesContainer: {fileID: 458465399}
   linesContainer: {fileID: 1910465127}
   startIcon: {fileID: 21300000, guid: d869a719a506d6d41987502324355214, type: 3}
@@ -581,7 +590,11 @@ MonoBehaviour:
   eliteIcon: {fileID: 21300000, guid: 1bd8b65ffa6359b45add75ea7851455c, type: 3}
   randomIcon: {fileID: 21300000, guid: 19078b72bca4cf7408dd235882d669ae, type: 3}
   campIcon: {fileID: 21300000, guid: 9826e511e10e59b498e2ad787bd278f1, type: 3}
-  bossIcon: {fileID: 21300000, guid: ad1a327dbee133245b98bb266430b83b, type: 3}
+  bossStageIcons:
+  - {fileID: 21300000, guid: 91d826548645923438efb86be707121a, type: 3}
+  - {fileID: 21300000, guid: 30870cf73e4d8674ea2baca95c7268a3, type: 3}
+  - {fileID: 21300000, guid: ad1a327dbee133245b98bb266430b83b, type: 3}
+  - {fileID: 21300000, guid: ad1a327dbee133245b98bb266430b83b, type: 3}
 --- !u!114 &1421031695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1019,7 +1032,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8706856176726310021, guid: 2c9a646959d489a4bb9009ec236a14a8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
