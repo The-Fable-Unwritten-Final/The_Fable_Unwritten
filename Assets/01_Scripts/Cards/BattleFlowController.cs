@@ -98,7 +98,10 @@ public class BattleFlowController : MonoBehaviour
     public void UseCard(CardModel card, IStatusReceiver caster, IStatusReceiver target)
     {
         if (!card.IsUsable(currentMana) || !caster.IsAlive() || !target.IsAlive())      //사용 가능하지 않거나 적 또는 사용자가 죽어 있다면 생략하기
+        {
             return;
+        }
+
         //사용 가능할 시
         currentMana -= card.manaCost;         //마나 사용
         card.Play(caster, target);          //카드 사용(효과 적용)

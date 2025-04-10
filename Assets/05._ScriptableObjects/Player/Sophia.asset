@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 724ccac381890cb469ca355e81afdc26, type: 3}
   m_Name: Sophia
   m_EditorClassIdentifier: 
-  IDNum: 2
-  CharacterName: Leon
+  IDNum: 0
+  CharacterName: Sophia
   Icon: {fileID: 21300000, guid: f78835e8a63e34c4aba256ace2727fd9, type: 3}
-  MaxHP: 0
+  MaxHP: 10
   ATK: 1
   DEF: 1
   HPValue: []
@@ -31,9 +31,14 @@ MonoBehaviour:
     stencType: 1
     stanceIcon: {fileID: 0}
   defaultDeck:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  currentDeck: []
+  - {fileID: 11400000, guid: 74bf9d826e30d854886a06dc57de74a3, type: 2}
+  - {fileID: 11400000, guid: 74bf9d826e30d854886a06dc57de74a3, type: 2}
+  - {fileID: 11400000, guid: 74bf9d826e30d854886a06dc57de74a3, type: 2}
+  - {fileID: 11400000, guid: 74bf9d826e30d854886a06dc57de74a3, type: 2}
+  - {fileID: 11400000, guid: 74bf9d826e30d854886a06dc57de74a3, type: 2}
+  currentDeck:
+  - {fileID: 11400000, guid: 74bf9d826e30d854886a06dc57de74a3, type: 2}
+  - {fileID: 11400000, guid: 74bf9d826e30d854886a06dc57de74a3, type: 2}
+  - {fileID: 11400000, guid: 74bf9d826e30d854886a06dc57de74a3, type: 2}
+  - {fileID: 11400000, guid: 74bf9d826e30d854886a06dc57de74a3, type: 2}
+  - {fileID: 11400000, guid: 74bf9d826e30d854886a06dc57de74a3, type: 2}
