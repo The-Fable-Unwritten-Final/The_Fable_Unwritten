@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// EnemyPrefab 담는 SO
+/// </summary>
 [CreateAssetMenu(fileName = "EnemyPrefabData", menuName = "PrefapData/EnemyPrefabData")]
 public class EnemyPrefabData : ScriptableObject
 {

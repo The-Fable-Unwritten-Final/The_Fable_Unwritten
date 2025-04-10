@@ -5,7 +5,9 @@ using JetBrains.Annotations;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
-
+/// <summary>
+/// PlayerPrefab 담는 SO
+/// </summary>
 [CreateAssetMenu(fileName = "PlayerPrefabData", menuName = "PrefapData/PlayerPrefabData")]
 public class PlayerPrefabData : ScriptableObject
 {
