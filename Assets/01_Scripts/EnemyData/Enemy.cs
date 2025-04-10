@@ -6,7 +6,11 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 {
     [SerializeField]
     private EnemyData enemyData;
-    public EnemyData EnemyData { set { enemyData = value; } }
+    public EnemyData EnemyData
+    {
+        get { return enemyData; }
+        set { enemyData = value; }
+    }
 
     private float currentHP;
     private bool isIgnited;

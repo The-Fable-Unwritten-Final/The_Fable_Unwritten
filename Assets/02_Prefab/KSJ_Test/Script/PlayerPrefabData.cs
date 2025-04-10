@@ -3,29 +3,34 @@ using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
-[Serializable]
-public class PlayerPrefap
-{
-    public int IdNum;
-    public GameObject prefab;
-}
 
 [CreateAssetMenu(fileName = "PlayerPrefabData", menuName = "PrefapData/PlayerPrefabData")]
 public class PlayerPrefabData : ScriptableObject
 {
-    [SerializeField] private List<PlayerPrefap> playerPrefaps;
+    [SerializeField] private List<GameObject> playerPrefaps;
 
     private Dictionary<int, GameObject> prefabDict;
 
     private void OnEnable()
     {
         prefabDict = new();
-        foreach (var prefap in playerPrefaps)
+        
+        foreach (var playerPrefap in playerPrefaps)
         {
-            if (!prefabDict.ContainsKey(prefap.IdNum))
+            if (playerPrefap == null)
+                return;
+
+            var controller = playerPrefap.GetComponent<PlayerController>();
+            if (controller == null || controller.playerData == null)
+                return;
+
+            int id = controller.playerData.IDNum;
+
+            if (!prefabDict.ContainsKey(id))
             {
-                prefabDict.Add(prefap.IdNum, prefap.prefab);
+                prefabDict.Add(id, playerPrefap);
             }
         }
     }

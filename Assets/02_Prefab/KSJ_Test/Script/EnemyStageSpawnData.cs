@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class EnemySlotData
 {
-    public int slotIndex;
+    public int slotIndex; 
     public int enemyId;
 }
 
