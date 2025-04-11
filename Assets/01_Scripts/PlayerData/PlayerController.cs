@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     private List<StatusEffect> activeEffects = new List<StatusEffect>();        //현재 가지고 있는 상태이상 및 버프
 
-    private void Start()
+    private void Awake()
     {
         Setup(playerData);
     }
