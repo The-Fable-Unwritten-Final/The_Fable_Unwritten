@@ -17,7 +17,7 @@ public static class CardModelFactory
         card.targetType = (TargetType)data.targetType;
         card.characterStance = data.characterStance;
         card.note = data.description;
-        card.illustration = data.illustration;
+        //card.illustration = data.illustration;
         card.cardImage = data.cardImage;
 
 
