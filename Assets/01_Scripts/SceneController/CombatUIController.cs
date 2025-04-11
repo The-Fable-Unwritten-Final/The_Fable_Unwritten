@@ -53,7 +53,7 @@ public class CombatUIController : MonoBehaviour
 
         if (battleFlow.CanUseCard(card, caster, target, battleFlow.currentMana))
         {
-            battleFlow.TryUseCard(card, caster.CharacterClass, target);
+            battleFlow.TryUseCard(card, caster.ChClass, target);
             CardStatusUpdate?.Invoke(); // 상태 갱신
         }
         else

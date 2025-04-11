@@ -38,7 +38,7 @@ public class DamageEffect : CardEffectBase
             {
                 float finalDamage = caster.ModifyStat(BuffStatType.Attack, amount);
                 target.TakeDamage(finalDamage);
-                Debug.Log($"[AOE 피해] {target.CharacterClass}에게 {finalDamage} 피해");
+                Debug.Log($"[AOE 피해] {target.ChClass}에게 {finalDamage} 피해");
             }
         }
     }

@@ -6,7 +6,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 {
     public PlayerData playerData;       //플레이어의 데이타
     public DeckModel deckModel;         //플레이어가 들고 있는 덱
-    public CharacterClass characterClass;   //플레이어가 누구인지(추후 playerdata에 따라 삭제 가능)
     public bool hasBlock = false;           //방어막 획득 여부
 
     public void OnClickHighStance() => ChangeStance(PlayerData.StancType.High);
@@ -16,7 +15,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public DeckModel Deck => deckModel;     //덱 변환 함수
     public bool IsIgnited => false;  // 점화 여부 - 추후 확장
     public string CurrentStance => playerData.currentStance.stencType.ToString();       //현재의 자세를 가져옴
-    public CharacterClass CharacterClass{get;set;}
+    public CharacterClass ChClass{get;set;}
         //현재 캐릭터의 클래스를 가져옴.
 
     private List<StatusEffect> activeEffects = new List<StatusEffect>();        //현재 가지고 있는 상태이상 및 버프
@@ -92,7 +91,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public void Initialize(PlayerData data, CharacterClass charClass)
     {
         playerData = data;
-        characterClass = charClass;
+        ChClass = charClass;
         deckModel = new DeckModel(); // 덱은 여기서 직접 생성하거나 외부에서 주입
     }
 
@@ -157,7 +156,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public void Setup(PlayerData data)
     {
         playerData = data;
-        characterClass = data.CharacterClass;
+        ChClass = data.CharacterClass;
 
         deckModel = new DeckModel();
         if (data.currentDeck == null || data.currentDeck.Count == 0)

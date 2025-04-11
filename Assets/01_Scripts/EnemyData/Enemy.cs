@@ -37,7 +37,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     public bool IsStunned() => false;           //스턴 상태 확인
 
     private CharacterClass characterClass = CharacterClass.Enemy;
-    public CharacterClass CharacterClass
+    public CharacterClass ChClass
     {
         get => characterClass;
         set => characterClass = value;
