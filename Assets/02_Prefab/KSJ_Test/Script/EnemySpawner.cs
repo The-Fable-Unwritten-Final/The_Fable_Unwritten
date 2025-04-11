@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 /// <summary>
@@ -16,7 +17,9 @@ public class EnemySpawner : MonoBehaviour
     {
 
         int currentStage = GameManager.Instance.stageIndex;
-        var stageData = stageSpawnDatas.FirstOrDefault(x => x.stageIndex == currentStage);
+        var node = GameManager.Instance.currentBattleNode;
+
+        var stageData = stageSpawnDatas.FirstOrDefault(x => x.stageIndex == currentStage && x.type == node.type);
 
         if (stageData == null) return;
 
@@ -35,6 +38,7 @@ public class EnemySpawner : MonoBehaviour
     {
         int columnIndex = GameManager.Instance.savedVisitedNodes.Last().columnIndex;
 
+        // spawnSet는 배열이므로 0부터 확인 해야하므로 해당열에서 -1
         int index = columnIndex - 1;
 
         if (index < 0 || index >= stageData.spawnSets.Count) return;

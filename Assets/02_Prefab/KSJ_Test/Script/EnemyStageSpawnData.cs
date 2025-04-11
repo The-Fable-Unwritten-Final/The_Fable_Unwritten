@@ -24,6 +24,7 @@ public class EnemySpawnSet
 public class EnemyStageSpawnData : ScriptableObject
 {
     public int stageIndex;
+    public NodeType type;
     public List<EnemySpawnSet> spawnSets;
 
     /// <summary>

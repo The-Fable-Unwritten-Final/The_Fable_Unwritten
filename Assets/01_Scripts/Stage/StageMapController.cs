@@ -84,6 +84,7 @@ public class StageMapController : MonoBehaviour
             case NodeType.NormalBattle:
             case NodeType.EliteBattle:
             case NodeType.Boss:
+                GameManager.Instance.currentBattleNode = clicked;
                 SceneManager.LoadScene(SceneNameData.InGameScene);
                 return;
 

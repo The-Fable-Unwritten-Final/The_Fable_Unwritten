@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    public PlayerPrefabData playerPrefabData;
-    public List<PlayerData> playerDatas = new();
+    public PlayerPrefabData playerPrefabData;     // 모든케릭터 데이터
+    public List<PlayerData> playerDatas = new();  //  보유중인 케릭터 데이터
+    public GraphNode currentBattleNode;
 
     public StageData savedStageData;    // 현재 진행 중인 스테이지 데이터
     public List<GraphNode> savedVisitedNodes = new(); // 플레이어가 진행한 노드 리스트

@@ -23,8 +23,7 @@ public class PlayerSpawner : MonoBehaviour
                 var obj = Instantiate(prefab, playerSlots[i].position, Quaternion.identity, playerSlots[i]);
 
                 var controller = obj.GetComponent<PlayerController>();
-                if (controller != null)
-                    controller.playerData = playerData;
+                if (controller != null) controller.playerData = playerData;
             }
         }
     }
