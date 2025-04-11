@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 // 핸드에 소지하고 있는 개별 카드의 스크립트.
 public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
@@ -15,6 +16,13 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public Vector2 originalPos; // 원래 위치
     Vector3 targetPos; // 목표 위치
     [SerializeField] CardState cardState;
+    [Header("UI Info")]
+    [SerializeField] Image cardImage; // 카드 이미지
+    [SerializeField] Image cardTypeImage; // 카드 타입 이미지
+    [SerializeField] Image cardCharImage; // 카드 캐릭터 이미지
+    [SerializeField] TextMeshProUGUI cardCost; // 카드 코스트
+    [SerializeField] TextMeshProUGUI cardName; // 카드 이름
+    [SerializeField] TextMeshProUGUI cardDescription; // 카드 설명
 
     public enum CardState// 추후 턴 상태와 연계해서 카드의 상태관리. (카드의 상태에 따른 상호작용 가능 여부 설정.)
     {
@@ -64,14 +72,12 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         cardDisplay.arrowImage.gameObject.SetActive(true); // 드래그 중일 때 화살표 이미지 활성화
         cardState = CardState.OnDrag; // 카드 상태를 OnDrag로 변경
     }
-
     public void OnDrag(PointerEventData eventData)
     {
         //this.transform.position = eventData.position;
         if(this.rect.anchoredPosition == originalPos)
             rect.DOAnchorPos(targetPos, 0.4f).SetEase(Ease.OutSine);// 드래그 할때 카드가 위로 안올라올 경우의 후처리.
     }
-
     public void OnEndDrag(PointerEventData eventData)
     {
         if (cardState != CardState.OnDrag) return; // 카드 상태가 OnDrag가 아닌 경우 해당 메서드 실행하지 않음
@@ -85,6 +91,30 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine); // 원래 위치로 돌아가기.
     }
 
+    public void SetCardData(CardModel card)// 카드 데이터 설정
+    {
+        cardData = card;
+        UpdateCardImage();// 카드 이미지 업데이트
+        UpdatCardInfo();// 카드 정보 업데이트
+    }
+    public void UpdateCardImage()//카드의 일러스트,사용캐릭터,카드타입
+    {
+        if(cardData.illustration == null)
+            Debug.LogError($"[CardInHand] 카드 일러스트가 설정되지 않았습니다. 카드 이름: {cardData.cardName}");// 카드 데이터 SO쪽에서 resources 파일을 통해 이미지 업데이트를 하지 못했을때.
+
+        cardImage = cardData.illustration; // 카드 이미지 설정
+        cardTypeImage = cardData.cardType; // 카드 타입 이미지 설정
+        cardCharImage = cardData.chClass; // 카드 캐릭터 이미지 설정
+    }
+    /// <summary>
+    /// 카드(본인의) description, cost, name 설명 업데이트.
+    /// </summary>
+    public void UpdatCardInfo()// 외부에서 해당 메서드 for문 으로 묶어서 action에 구독하여 사용하기에, 기능 분리.
+    {
+        cardName.text = cardData.cardName; // 카드 이름 설정
+        cardCost.text = cardData.manaCost.ToString(); // 카드 코스트 설정
+        cardDescription.text = cardData.cardText; // 카드 설명 설정
+    }
     public void SetOriginalPos()// 덱 최초 세팅 시점, 카드 추가 혹은 감소시 위치 초기화.
     {
         // 원래 위치 설정
@@ -105,7 +135,6 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
         targetPos = tPos + localUpDir * distance;
     }
-
     public void SetCardState(CardState state)
     {
         cardState = state; // 카드 상태 설정
