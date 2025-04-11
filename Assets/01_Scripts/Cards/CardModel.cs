@@ -62,8 +62,8 @@ public class CardModel : ScriptableObject
         if (targetType == TargetType.None)
             return true;
 
-        bool casterIsEnemy = caster.CharacterClass == CharacterClass.Enemy;
-        bool targetIsEnemy = target.CharacterClass == CharacterClass.Enemy;
+        bool casterIsEnemy = caster.ChClass == CharacterClass.Enemy;
+        bool targetIsEnemy = target.ChClass == CharacterClass.Enemy;
 
         bool isSameTeam = casterIsEnemy == targetIsEnemy;
 

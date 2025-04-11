@@ -16,6 +16,7 @@ public class CombatUIController : MonoBehaviour
     private void Start()
     {
         
+        CardStatusUpdate += cardDisplay.SetCardCanDrag; // 카드 상태 업데이트(CanDrag 체킹을 위함)
         GameManager.Instance.turnController.OnPlayerTurn += CardStatusUpdate;// 카드 상태 업데이트(CanDrag 체킹을 위함)
         GameManager.Instance.turnController.OnEnemyTurn += CardStatusUpdate;// 카드 상태 업데이트(CanDrag 체킹을 위함)
     }
@@ -52,7 +53,7 @@ public class CombatUIController : MonoBehaviour
 
         if (battleFlow.CanUseCard(card, caster, target, battleFlow.currentMana))
         {
-            battleFlow.TryUseCard(card, caster.CharacterClass, target);
+            battleFlow.TryUseCard(card, caster.ChClass, target);
             CardStatusUpdate?.Invoke(); // 상태 갱신
         }
         else

@@ -12,7 +12,7 @@ public class BlockEffect : CardEffectBase
         if (target is PlayerController pc)
         {
             pc.GrantBlock();
-            Debug.Log($"{pc.CharacterClass}에게 block 1회 부여");
+            Debug.Log($"{pc.ChClass}에게 block 1회 부여");
         }
         // 추후 적에게도 block 가능하게 하려면 EnemyController도 체크 가능
     }

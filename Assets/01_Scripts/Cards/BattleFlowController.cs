@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -16,6 +17,7 @@ public class BattleFlowController : MonoBehaviour
 
     public int startMana = 3; //시작 마나
     public int currentMana;   //현재 마나
+    public TextMeshProUGUI Mana;
 
     public Dictionary<CharacterClass, DeckModel> decksByCharacter = new();     //캐릭터 마다의 사용, 미사용, 핸드 덱
     public Dictionary<CharacterClass, IStatusReceiver> characterMap = new();   //캐릭터클래스에 대한 정보
@@ -45,8 +47,8 @@ public class BattleFlowController : MonoBehaviour
 
         foreach (var player in playerParty)
         {
-            characterMap[player.CharacterClass] = player;
-            decksByCharacter[player.CharacterClass] = player.Deck;
+            characterMap[player.ChClass] = player;
+            decksByCharacter[player.ChClass] = player.Deck;
         }
     }
 
@@ -59,7 +61,9 @@ public class BattleFlowController : MonoBehaviour
         currentMana = startMana;
         currentTurn = TurnState.PlayerTurn;
 
-        foreach(var player in playerParty)
+        UpdateManaUI();
+
+        foreach (var player in playerParty)
         {
             if(player.IsAlive())            //모두 덱 초기화 후 3장 뽑기
             {
@@ -78,9 +82,13 @@ public class BattleFlowController : MonoBehaviour
     public void ExecutePlayerTurn()
     {
         if (isBattleEnded) return;      //전투 종료 명령 확인 시 전투 종료
+        currentTurn = TurnState.PlayerTurn;
 
         if (currentMana < startMana)    //마나가 시작 마나보다 적을 시 시작 마나로 초기화
             currentMana = startMana;
+
+        UpdateManaUI(); // << 추가
+
 
         DrawMissingHands();             //각각 패가 3장이 되도록(살아 있을 경우에만) 드로우
 
@@ -106,8 +114,10 @@ public class BattleFlowController : MonoBehaviour
         currentMana -= card.manaCost;         //마나 사용
         card.Play(caster, target);          //카드 사용(효과 적용)
         caster.Deck.Discard(card);          //사용 카드를 사용한 카드 덱으로 보내기
+        
+        UpdateManaUI();
 
-        Debug.Log($"{caster.CharacterClass} 가 {card.cardName} 사용 → {target.CharacterClass}");
+        Debug.Log($"{caster.ChClass} 가 {card.cardName} 사용 → {target.ChClass}");
 
         // 덱 상태 출력
         if (caster is PlayerController pc)
@@ -127,7 +137,7 @@ public class BattleFlowController : MonoBehaviour
 
                 if (hand.Count > DeckModel.startSize)
                 {
-                    Debug.LogWarning($"{player.CharacterClass} 카드가 3장을 초과합니다. 버릴 카드 선택이 필요합니다.");
+                    Debug.LogWarning($"{player.ChClass} 카드가 3장을 초과합니다. 버릴 카드 선택이 필요합니다.");
 
                     // todo: 외부에서 선택한 카드 전달 필요 Todisacrd
                     // 여기선 임시로 가장 뒤의 카드부터 자동으로 버린다고 가정
@@ -147,15 +157,6 @@ public class BattleFlowController : MonoBehaviour
     public void ExecuteEnemyTurn()
     {
         //적 행동 설정;
-
-        CheckBattleEnd();       //배틀 종료 확인
-
-        if (!isBattleEnded)     //배틀 종료 되지 않았으면 플레이어 턴으로
-        {
-            turn++;
-            currentTurn = TurnState.PlayerTurn;
-            ExecutePlayerTurn();
-        }
     }
 
     private void PlanEnemySkills()
@@ -193,6 +194,11 @@ public class BattleFlowController : MonoBehaviour
         }
     }
 
+    private void UpdateManaUI()
+    {
+        if (Mana != null)
+            Mana.text = $"{currentMana}";
+    }
 
     /// <summary>
     /// 전투 포기 메서드
@@ -264,7 +270,7 @@ public class BattleFlowController : MonoBehaviour
     {
         if (caster == null || target == null || card == null) return false;
         if (!card.IsUsable(currentMana)) return false;
-        if (!card.CanBeUsedBy(caster.CharacterClass)) return false;
+        if (!card.CanBeUsedBy(caster.ChClass)) return false;
         if (!card.IsTargetValid(caster, target)) return false;
         if (caster.IsStunned()) return false; // 스턴 상태면 사용 불가
 

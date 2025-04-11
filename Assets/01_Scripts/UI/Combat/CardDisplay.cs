@@ -36,7 +36,6 @@ public class CardDisplay : MonoBehaviour
     private void Start()
     {
         GameManager.Instance.turnController.OnStartPlayerTurn += SetAllCardCanMouseOver;// 플레이어 턴 시작 시 카드 상태를 CanMouseOver로 변경
-        GameManager.Instance.combatUIController.CardStatusUpdate += SetCardCanDrag;// 사용 가능한 카드들 확인 (OnPlayerTurn 과 OnEnemyTurn 액션에 CardStatusUpdate를 다시 구독해서 턴 변경시 실행.)
     }
     private void Update()
     {
@@ -154,6 +153,13 @@ public class CardDisplay : MonoBehaviour
         cardsInHand.Add(card.GetComponent<CardInHand>());// 카드 추가.
         card.GetComponent<CardInHand>().cardDisplay = this;// 카드의 카드디스플레이 설정.
         card.GetComponent<CardInHand>().cardData = data;// 카드의 카드데이터 설정.
+
+        // 카드를 Class 에 맞게 + 같은 클라스 끼리는 Index 순서대로 재배치
+        cardsInHand.Sort((x, y) => x.cardData.index.CompareTo(y.cardData.index));// 카드의 List상의 인덱스 순 정렬
+        for (int i = 0; i < cardsInHand.Count; i++)
+        {
+            cardsInHand[i].GetComponent<RectTransform>().SetSiblingIndex(i);// 카드의 자식 순서 설정(카드의 보이는 순서)
+        }
         CardArrange();
     }
     public void UseCard(IStatusReceiver target)
@@ -197,10 +203,12 @@ public class CardDisplay : MonoBehaviour
         {
             if (cardsInHand[i].cardData.IsUsable(GameManager.Instance.turnController.battleFlow.currentMana))// @@@ 임시로 현재 마나를 100으로 설정, 추후 현재 보유 마나 가져오기.
             {
+                Debug.Log("CanDrag");
                 cardsInHand[i].SetCardState(CardInHand.CardState.CanDrag);// 카드 상태를 CanDrag로 변경
             }
             else
             {
+                Debug.Log("CanMouseOver");
                 cardsInHand[i].SetCardState(CardInHand.CardState.CanMouseOver);// 카드 상태를 CanMouseOver로 변경
             }
         }
