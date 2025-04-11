@@ -57,7 +57,8 @@ public class CardDisplay : MonoBehaviour
         RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, Input.mousePosition, null, out localMousePos);// 추후 카메라 분리시 null에 UI용 카메라 넣어주기
 
         // lineRenderer를 곡선의 형태로 표시.
-        lineRenderer.Points[0] = cardRect.anchoredPosition; // 카드의 현재 위치
+        Vector2 cardHeadOffset = new Vector2(0, cardRect.rect.height * (1 - cardRect.pivot.y) * cardRect.lossyScale.y);
+        lineRenderer.Points[0] = cardRect.anchoredPosition + cardHeadOffset;// 카드의 머리 부분
         lineRenderer.Points[1] = new Vector2(localMousePos.x * 0.33f, localMousePos.y * 0.85f);
         lineRenderer.Points[2] = new Vector3(localMousePos.x * 0.66f, localMousePos.y * 0.95f);
         lineRenderer.Points[3] = localMousePos;
