@@ -152,7 +152,7 @@ public class CardDisplay : MonoBehaviour
         GameObject card = Instantiate(cardPrefab,this.transform);
         cardsInHand.Add(card.GetComponent<CardInHand>());// 카드 추가.
         card.GetComponent<CardInHand>().cardDisplay = this;// 카드의 카드디스플레이 설정.
-        card.GetComponent<CardInHand>().cardData = data;// 카드의 카드데이터 설정.
+        card.GetComponent<CardInHand>().SetCardData(data);// 카드의 카드데이터 설정 + 카드 정보
 
         // 카드를 Class 에 맞게 + 같은 클라스 끼리는 Index 순서대로 재배치
         cardsInHand.Sort((x, y) => x.cardData.index.CompareTo(y.cardData.index));// 카드의 List상의 인덱스 순 정렬
@@ -181,6 +181,16 @@ public class CardDisplay : MonoBehaviour
         cardsInHand.Remove(currentCard);// 카드 리스트에서 제거.
         Destroy(currentCard.gameObject);// 카드 삭제.
         CardArrange();
+    }
+    /// <summary>
+    /// Hand에 있는 모든 카드의 정보(Cost,Desc) 업데이트.
+    /// </summary>
+    public void AllCardInfoUpdate()
+    {
+        for(int i = 0; i < cardsInHand.Count; i++)
+        {
+            cardsInHand[i].UpdatCardInfo();// 카드 정보 업데이트.
+        }
     }
     public void SetAllCardCanMouseOver()
     {
