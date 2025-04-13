@@ -14,6 +14,8 @@ public class GameManager : MonoSingleton<GameManager>
     public bool retryFromStart = false; // 스테이지 실패여서 재시작여부
     public bool stageCleared = false;   // 전투 승리 여부
 
+    private PlayerPartySO playerParty;
+
     [Header("Controller")]
     public CombatUIController combatUIController; // 전투 UI 컨트롤러
     public TurnController turnController; // 턴 컨트롤러
@@ -22,6 +24,9 @@ public class GameManager : MonoSingleton<GameManager>
     {
         base.Awake();
 
+        LoadPlayerPartyIfNull(); // <- 플레이어 데이터 가져오기
+        playerDatas = new List<PlayerData>(playerParty.allPlayers);
+
         // 1스테이지 부터 시작
         if (stageIndex <= 0)
             stageIndex = 1;
@@ -29,6 +34,42 @@ public class GameManager : MonoSingleton<GameManager>
         if (minimumStageIndex <= 0)
             minimumStageIndex = 1;
     }
+
+    private void LoadPlayerPartyIfNull()
+    {
+        if (playerParty == null)
+        {
+            playerParty = Resources.Load<PlayerPartySO>("PlayerPartyData");
+            if (playerParty == null)
+                Debug.LogError("[GameManager] PlayerPartySO 리소스를 찾을 수 없습니다.");
+        }
+    }
+
+    /// <summary>
+    /// 카드 시스템 및 플레이어 매니저 초기화 (게임 시작 시 1회)
+    /// </summary>
+    public void InitializeGame(List<PlayerController> playerControllers)
+    {
+        CardSystemInitializer.Instance.LoadCardDatabase();
+
+        PlayerManager.Instance.RegisterAndSetupPlayers(
+            playerControllers,
+            playerDatas,
+            CardSystemInitializer.Instance.loadedCards
+        );
+
+        // 전투 초기화 및 턴 컨트롤러 시작
+        if (turnController != null)
+        {
+            turnController.battleFlow.ReceivePlayerParty(PlayerManager.Instance.GetAllPlayers());
+        }
+        else
+        {
+            Debug.LogWarning("[GameManager] TurnController가 연결되지 않았습니다.");
+        }
+    }
+
+
 
     /// <summary>
     /// 현재 스테이지 상태 저장

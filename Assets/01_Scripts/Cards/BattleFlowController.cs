@@ -28,7 +28,7 @@ public class BattleFlowController : MonoBehaviour
     private int turn = 1;               //지금 몇턴인지 확인용
 
     //임시 inspector 확인용
-    private void Awake()
+    private void Start()
     {
         playerParty = new List<IStatusReceiver>(playerObjects);
         enemyParty = new List<IStatusReceiver>(enemyObjects);
@@ -275,5 +275,19 @@ public class BattleFlowController : MonoBehaviour
         if (caster.IsStunned()) return false; // 스턴 상태면 사용 불가
 
         return true;
+    }
+
+   //파티 정보를 받아 characterMap 및 deckbyCharacters 초기화
+    public void ReceivePlayerParty(List<IStatusReceiver> players)
+    {
+        playerParty = players;
+        characterMap.Clear();
+        decksByCharacter.Clear();
+
+        foreach (var player in playerParty)
+        {
+            characterMap[player.ChClass] = player;
+            decksByCharacter[player.ChClass] = player.Deck;
+        }
     }
 }

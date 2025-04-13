@@ -28,7 +28,6 @@ public static class CardCSVParser
                 {
                     index = ParseInt(tokens, 0),
                     cost = ParseInt(tokens, 1),
-                    illustration = ParseString(tokens, 2),
                     cardName = ParseString(tokens, 3),
                     text = ParseString(tokens, 4),
                     type = ParseInt(tokens, 5),

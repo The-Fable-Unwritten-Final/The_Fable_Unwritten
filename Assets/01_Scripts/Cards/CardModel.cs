@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 [CreateAssetMenu(menuName = "Card/CardModel")]
@@ -11,7 +12,9 @@ public class CardModel : ScriptableObject
     public int manaCost;                    //카드 코스트
     public CharacterClass characterClass;   //누구의 카드인지
 
-    public string illustration;   // 일러스트 이미지 이름
+    public Image illustration;   // 일러스트 이미지 이름
+    public Image chClass;       //캐릭터 클래스에 따른 이미지
+    public Image cardType;      //카드 타입에 따른 이미지
     public string cardImage;      // 카드 프레임 또는 배경 이미지
 
     public CardType type;

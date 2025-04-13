@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CardData
 {
     public int index;
     public int cost;
-    public string illustration;
+    public Image illustration;
     public string cardName;
     public string text;
     public int type;

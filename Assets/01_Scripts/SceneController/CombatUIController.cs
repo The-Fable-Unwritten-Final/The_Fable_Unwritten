@@ -15,8 +15,9 @@ public class CombatUIController : MonoBehaviour
     }
     private void Start()
     {
-        
+        // 구독 순서 설정을 위해 cardDisplay의 메서드를 이곳에서 구독.
         CardStatusUpdate += cardDisplay.SetCardCanDrag; // 카드 상태 업데이트(CanDrag 체킹을 위함)
+        CardStatusUpdate += cardDisplay.AllCardInfoUpdate; // 카드 상태 업데이트(코스트, 설명(효과 수치) 업데이트)
         GameManager.Instance.turnController.OnPlayerTurn += CardStatusUpdate;// 카드 상태 업데이트(CanDrag 체킹을 위함)
         GameManager.Instance.turnController.OnEnemyTurn += CardStatusUpdate;// 카드 상태 업데이트(CanDrag 체킹을 위함)
     }

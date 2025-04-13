@@ -13,11 +13,13 @@ MonoBehaviour:
   m_Name: Damage
   m_EditorClassIdentifier: 
   index: 1000
-  cardName: "\uACF5\uACA9"
-  cardText: "\uACF5\uACA9\uD569\uB2C8\uB2E4."
+  cardName: Damage
+  cardText: attack
   manaCost: 1
   characterClass: 0
-  illustration: _
+  illustration: {fileID: 0}
+  chClass: {fileID: 0}
+  cardType: {fileID: 0}
   cardImage: _
   type: 0
   targetCount: 1
