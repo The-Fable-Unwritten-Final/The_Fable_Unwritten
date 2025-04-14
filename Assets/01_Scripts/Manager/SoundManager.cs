@@ -6,11 +6,11 @@ using UnityEngine;
 public class SoundManager : MonoSingleton<SoundManager>
 {
     [Header("BGM Settings")]
-    [SerializeField] private AudioSource bgmSource;  // 리소스에서 가져오고 있음(어드레스블 변경 할수도)
+    [SerializeField] private AudioSource bgmSource;
     [Range(0, 1f)] public float bgmVolume = 1f;
 
     [Header("SFX Settings")]
-    [SerializeField] private SoundSource soundSourcePrefab; // 리소스에서 가져오고 있음(어드레스블 변경 할수도)
+    [SerializeField] private SoundSource soundSourcePrefab;
     [Range(0, 1f)] public float sfxVolume = 1f;
     [SerializeField] private float sfxPitchVariance = 0.1f;
 
@@ -20,15 +20,17 @@ public class SoundManager : MonoSingleton<SoundManager>
     private Coroutine fadeCoroutine;
     private Queue<SoundSource> soundSourcePool = new();
 
-    private readonly Dictionary<string, AudioClip> loadedClips = new();
+    private readonly Dictionary<string, AudioClip> bgmClips = new();
+    private readonly Dictionary<string, AudioClip> sfxClips = new();
 
     protected override void Awake()
     {
         base.Awake();
         bgmSource = GetComponent<AudioSource>();
         bgmSource.loop = true;
-    }
 
+        LoadAllAudioClips();
+    }
     // ===== BGM =====
 
     /// <summary>
@@ -37,9 +39,8 @@ public class SoundManager : MonoSingleton<SoundManager>
     public void PlayBGM(string clipName)
     {
         if (isMuted) return;
-
-        var clip = LoadClip($"Sounds/BGM/{clipName}");
-        if (clip == null || bgmSource.clip == clip) return;
+        if (!bgmClips.TryGetValue(clipName, out var clip)) return;
+        if (bgmSource.clip == clip) return;
 
         bgmSource.Stop();
         bgmSource.clip = clip;
@@ -52,8 +53,7 @@ public class SoundManager : MonoSingleton<SoundManager>
     /// </summary>
     public void ChangeBGMWithFade(string clipName, float duration)
     {
-        if (fadeCoroutine != null)
-            StopCoroutine(fadeCoroutine);
+        if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
         fadeCoroutine = StartCoroutine(ChangeBGMCoroutine(clipName, duration));
     }
 
@@ -76,8 +76,7 @@ public class SoundManager : MonoSingleton<SoundManager>
 
     private IEnumerator FadeIn(string clipName, float duration)
     {
-        var clip = LoadClip($"Sounds/BGM/{clipName}");
-        if (clip == null) yield break;
+        if (!bgmClips.TryGetValue(clipName, out var clip)) yield break;
 
         bgmSource.clip = clip;
         bgmSource.volume = 0f;
@@ -98,9 +97,7 @@ public class SoundManager : MonoSingleton<SoundManager>
     public static void PlaySFX(string clipName)
     {
         if (Instance.isMuted) return;
-
-        var clip = Instance.LoadClip($"Sounds/SFX/{clipName}");
-        if (clip == null) return;
+        if (!Instance.sfxClips.TryGetValue(clipName, out var clip)) return;
 
         var source = Instance.GetSoundSource();
         source.Play(clip, Instance.sfxVolume, Instance.sfxPitchVariance);
@@ -121,21 +118,6 @@ public class SoundManager : MonoSingleton<SoundManager>
     {
         source.gameObject.SetActive(false);
         soundSourcePool.Enqueue(source);
-    }
-
-    // 사운드 리소스 캐싱 하기 위한 매서드
-    private AudioClip LoadClip(string path)
-    {
-        if (loadedClips.TryGetValue(path, out var cachedClip))
-            return cachedClip;
-
-        var clip = Resources.Load<AudioClip>(path);
-       
-        if (clip == null) return null;
-
-        loadedClips[path] = clip;
-
-        return clip;
     }
 
     /// <summary>
@@ -168,5 +150,23 @@ public class SoundManager : MonoSingleton<SoundManager>
     private void ApplyVolume()
     {
         bgmSource.volume = isMuted ? 0f : bgmVolume;
+    }
+
+    private void LoadAllAudioClips()
+    {
+        var bgm = Resources.LoadAll<AudioClip>("Sounds/BGM");
+        var sfx = Resources.LoadAll<AudioClip>("Sounds/SFX");
+
+        foreach (var clip in bgm)
+        {
+            if (!bgmClips.ContainsKey(clip.name))
+                bgmClips.Add(clip.name, clip);
+        }
+
+        foreach (var clip in sfx)
+        {
+            if (!sfxClips.ContainsKey(clip.name))
+                sfxClips.Add(clip.name, clip);
+        }
     }
 }
