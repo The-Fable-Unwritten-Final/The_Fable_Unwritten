@@ -21,8 +21,13 @@ public class DamageEffect : CardEffectBase
     {
         if (!target.IsAlive()) return;
 
-        float finalDamage = caster.ModifyStat(BuffStatType.Attack, amount);
+        float attackerAtk = caster.ModifyStat(BuffStatType.Attack, amount);  // 공격력 기반 수치
+        float targetDef = target.ModifyStat(BuffStatType.Defense, 0f);       // 방어력 수치
+
+        float finalDamage = Mathf.Max(attackerAtk - targetDef, 1f); // 최소 피해량 1 보장
         target.TakeDamage(finalDamage);
+
+        Debug.Log($"[피해 처리] {caster.ChClass} -> {target.ChClass} : {finalDamage} 피해 (공:{attackerAtk}, 방:{targetDef})");
     }
 
     /// <summary>
@@ -36,9 +41,12 @@ public class DamageEffect : CardEffectBase
         {
             if (target.IsAlive())
             {
-                float finalDamage = caster.ModifyStat(BuffStatType.Attack, amount);
+                float attackerAtk = caster.ModifyStat(BuffStatType.Attack, amount);
+                float targetDef = target.ModifyStat(BuffStatType.Defense, 0f);
+                float finalDamage = Mathf.Max(attackerAtk - targetDef, 1f);
+
                 target.TakeDamage(finalDamage);
-                Debug.Log($"[AOE 피해] {target.ChClass}에게 {finalDamage} 피해");
+                Debug.Log($"[AOE 피해] {caster.ChClass} -> {target.ChClass} : {finalDamage} 피해 (공:{attackerAtk}, 방:{targetDef})");
             }
         }
     }

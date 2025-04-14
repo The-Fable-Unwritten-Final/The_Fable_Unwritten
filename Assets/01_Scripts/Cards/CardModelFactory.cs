@@ -26,7 +26,7 @@ public static class CardModelFactory
         card.cardImage = data.cardFrame;
         card.cardFrame = LoadSprite($"Cards/Frame/{data.cardFrame}");
 
-
+        card.effects = effects;
 
         return card;
     }
