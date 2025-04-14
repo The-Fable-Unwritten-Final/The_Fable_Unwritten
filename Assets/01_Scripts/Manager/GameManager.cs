@@ -71,8 +71,6 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
-
-
     /// <summary>
     /// 현재 스테이지 상태 저장
     /// </summary>

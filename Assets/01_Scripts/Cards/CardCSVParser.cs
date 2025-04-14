@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public static class CardCSVParser
+public static class CardCSVParser           //csv로부터 데이터를 받아 CardData 형식으로 우선 저장해 놓음
 {
     public static List<CardData> Parse(string path)
     {
@@ -28,25 +28,27 @@ public static class CardCSVParser
                 {
                     index = ParseInt(tokens, 0),
                     cost = ParseInt(tokens, 1),
+                    illustration = ParseString(tokens, 2),
                     cardName = ParseString(tokens, 3),
                     text = ParseString(tokens, 4),
                     type = ParseInt(tokens, 5),
                     classIndex = ParseInt(tokens, 6),
-                    cardImage = ParseString(tokens, 7),
-                    damage = ParseFloat(tokens, 8),
-                    discount = ParseInt(tokens, 9),
-                    draw = ParseInt(tokens, 10),
-                    redraw = ParseInt(tokens, 11),
-                    atkBuff = ParseFloat(tokens, 12),
-                    defBuff = ParseFloat(tokens, 13),
-                    selfDamage = ParseFloat(tokens, 14),
-                    block = ParseInt(tokens, 15),
-                    blind = ParseInt(tokens, 16),
-                    stun = ParseInt(tokens, 17),
-                    targetNum = ParseInt(tokens, 18),
-                    targetType = ParseInt(tokens, 19),
-                    characterStance = ParseString(tokens, 20),
-                    description = ParseString(tokens, 21)
+                    cardFrame = ParseString(tokens, 7),    
+                    targetType = ParseInt(tokens, 8),
+                    targetNum = ParseInt(tokens, 9),
+                    damage = ParseFloat(tokens, 10),
+                    discount = ParseInt(tokens, 11),
+                    draw = ParseInt(tokens, 12),
+                    redraw = ParseInt(tokens, 13),
+                    atkBuff = ParseFloat(tokens, 14),
+                    defBuff = ParseFloat(tokens, 15),
+                    buffTime = ParseInt(tokens, 16),       
+                    selfDamage = ParseFloat(tokens, 17),
+                    block = ParseInt(tokens, 18),
+                    blind = ParseInt(tokens, 19),
+                    stun = ParseInt(tokens, 20),
+                    characterStance = ParseString(tokens, 21),
+                    description = ParseString(tokens, 22)
                 };
 
                 list.Add(data);
