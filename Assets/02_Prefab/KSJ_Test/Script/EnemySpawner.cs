@@ -15,6 +15,8 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
+        //Test용
+        SoundManager.Instance.ChangeBGMWithFade(SoundNameData.Test_BGM2, 2f);
 
         int currentStage = GameManager.Instance.stageIndex;
         var node = GameManager.Instance.currentBattleNode;

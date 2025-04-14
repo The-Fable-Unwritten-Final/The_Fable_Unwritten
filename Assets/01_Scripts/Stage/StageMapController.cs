@@ -27,6 +27,9 @@ public class StageMapController : MonoBehaviour
         // 시작 시 스테이지 복원 또는 새로 시작
         stageIndex = GameManager.Instance.stageIndex;
 
+        //Test용
+        SoundManager.Instance.PlayBGM(SoundNameData.Test_BGM1);
+
         if (!TryRestoreStage())
         {
             LoadStage(stageIndex);
@@ -75,6 +78,9 @@ public class StageMapController : MonoBehaviour
     // 노드 클릭 시 스테이지 호출 및 저장
     private void OnNodeClicked(GraphNode clicked)
     {
+        //Test용
+        SoundManager.PlaySFX(SoundNameData.Test_SFX_Click);
+
         visitedNodes.Add(clicked);
         GameManager.Instance.SaveStageState(stageData, visitedNodes, stageIndex);
 
