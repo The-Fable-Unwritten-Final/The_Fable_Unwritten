@@ -1,31 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-
-public class CardData
+public class CardData           //csv 인덱스에 따라 데이터를 받아오는 파서
 {
     public int index;
     public int cost;
-    public Image illustration;
+    public string illustration;
     public string cardName;
     public string text;
     public int type;
     public int classIndex;
-    public string cardImage;
+    public string cardFrame;
+    public int targetType;
+    public int targetNum;
     public float damage;
-    public int discount;        
+    public int discount;
     public int draw;
     public int redraw;
     public float atkBuff;
     public float defBuff;
+    public int buffTime;
     public float selfDamage;
     public int block;
     public int blind;
     public int stun;
-    public int targetNum;        
-    public int targetType;
     public string characterStance;
     public string description;
 }
-

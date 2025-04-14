@@ -102,9 +102,9 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         if(cardData.illustration == null)
             Debug.LogError($"[CardInHand] 카드 일러스트가 설정되지 않았습니다. 카드 이름: {cardData.cardName}");// 카드 데이터 SO쪽에서 resources 파일을 통해 이미지 업데이트를 하지 못했을때.
 
-        cardImage = cardData.illustration; // 카드 이미지 설정
-        cardTypeImage = cardData.cardType; // 카드 타입 이미지 설정
-        cardCharImage = cardData.chClass; // 카드 캐릭터 이미지 설정
+        cardImage.sprite = cardData.illustration; // 카드 이미지 설정
+        cardTypeImage.sprite = cardData.cardType; // 카드 타입 이미지 설정
+        cardCharImage.sprite = cardData.chClass; // 카드 캐릭터 이미지 설정
     }
     /// <summary>
     /// 카드(본인의) description, cost, name 설명 업데이트.

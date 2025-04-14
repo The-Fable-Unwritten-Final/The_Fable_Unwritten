@@ -12,17 +12,18 @@ public class CardModel : ScriptableObject
     public int manaCost;                    //카드 코스트
     public CharacterClass characterClass;   //누구의 카드인지
 
-    public Image illustration;   // 일러스트 이미지 이름
-    public Image chClass;       //캐릭터 클래스에 따른 이미지
-    public Image cardType;      //카드 타입에 따른 이미지
+    public CardType type;           //카드 타입(전격, 힐 등)
+    public int targetCount;         //카드 지정 개수
+    public TargetType targetType;   //아군 한정, 적군 한정 등
+    public string characterStance;  //자세에 따른 추가 효과 기대   
+    public string note;             //특수 효과
+
+
+    public Sprite illustration;   // 일러스트 이미지 이름
+    public Sprite chClass;       //캐릭터 클래스에 따른 이미지
+    public Sprite cardType;      //카드 타입에 따른 이미지
     public string cardImage;      // 카드 프레임 또는 배경 이미지
-
-    public CardType type;
-
-    public int targetCount;
-    public TargetType targetType;
-    public string characterStance;
-    public string note;
+    public Sprite cardFrame;         //카드 프레임 이미지
 
     public List<CardEffectBase> effects = new();    //어떤 효과를 가졌는지
 

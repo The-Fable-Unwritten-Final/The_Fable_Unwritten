@@ -159,9 +159,11 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         ChClass = data.CharacterClass;
 
         deckModel = new DeckModel();
-        if (data.currentDeck == null || data.currentDeck.Count == 0)
-            data.ResetDeckToDefault(); // fallback
 
+        if (data.currentDeck == null || data.currentDeck.Count != 5)
+            data.ResetDeckIndexesToDefault();
+
+        data.LoadDeckFromIndexes(CardSystemInitializer.Instance.loadedCards);
         deckModel.Initialize(data.currentDeck);
     }
 

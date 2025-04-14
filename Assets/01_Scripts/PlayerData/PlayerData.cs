@@ -42,12 +42,14 @@ public class PlayerData : ScriptableObject
 
     public List<int> defaultDeckIndexes;// 시작 덱 카드 인덱스 저장 (CSV 기준 index)
     public List<int> currentDeckIndexes;// 현재 덱 카드 인덱스 저장 (CSV 기준 index, 세이브 로드 용)
-    public List<CardModel> defaultDeck; // 처음 시작할 때 사용할 고정 덱
     public List<CardModel> currentDeck; // 게임 중 변화 가능한 덱
 
-    public void ResetDeckToDefault()
+    /// <summary>
+    /// 기본 덱 인덱스로 현재 덱 인덱스 초기화
+    /// </summary>
+    public void ResetDeckIndexesToDefault()
     {
-        currentDeck = new List<CardModel>(defaultDeck);
+        currentDeckIndexes = new List<int>(defaultDeckIndexes);
     }
 
     // 세이브를 위한 현재 덱 인덱스 변환
@@ -61,6 +63,13 @@ public class PlayerData : ScriptableObject
     // 로드 시 인덱스 기반으로 덱 구성
     public void LoadDeckFromIndexes(List<CardModel> cardPool)
     {
+        // 인덱스가 비어 있으면 기본 덱 인덱스로 설정
+        if (currentDeckIndexes == null || currentDeckIndexes.Count == 0)
+        {
+            currentDeckIndexes = new List<int>(defaultDeckIndexes);
+        }
+
+        // 인덱스를 기준으로 현재 덱 구성
         currentDeck = new List<CardModel>();
         foreach (var index in currentDeckIndexes)
         {

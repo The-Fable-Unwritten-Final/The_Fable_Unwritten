@@ -24,7 +24,9 @@ public class GameManager : MonoSingleton<GameManager>
     {
         base.Awake();
 
+        CardSystemInitializer.Instance.LoadCardDatabase();
         LoadPlayerPartyIfNull(); // <- 플레이어 데이터 가져오기
+        
         playerDatas = new List<PlayerData>(playerParty.allPlayers);
 
         // 1스테이지 부터 시작
@@ -59,17 +61,16 @@ public class GameManager : MonoSingleton<GameManager>
         );
 
         // 전투 초기화 및 턴 컨트롤러 시작
-        if (turnController != null)
+        if (turnController != null && turnController.battleFlow != null)
         {
             turnController.battleFlow.ReceivePlayerParty(PlayerManager.Instance.GetAllPlayers());
+            //turnController.StartBattleFlow();
         }
         else
         {
             Debug.LogWarning("[GameManager] TurnController가 연결되지 않았습니다.");
         }
     }
-
-
 
     /// <summary>
     /// 현재 스테이지 상태 저장
