@@ -1,24 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class UIManager : MonoSingleton<UIManager>
 {
-    // Resources 에서 로드한 프리팹 캐싱
-    private Dictionary<string, GameObject> popupPrefabs = new Dictionary<string, GameObject>();
+    // 확장성을 고려한 string을 통한 제네릭 메서드 호출 + Awake 에서 런타임에 Resources 파일을 통해 자동으로 등록.
+    // ShowPopupByName() 에서 string 값을 입력하면 Type을 가져올 수 있게함.
+    private Dictionary<string, System.Type> popupTypeMap = new();
 
-    // 현재 씬 내 인스턴스 캐싱
+    // 현재 씬 내 팝업 인스턴스 저장
     private Dictionary<string, BasePopupUI> popupInstances = new Dictionary<string, BasePopupUI>();
-
     private const string popupPath = "UI/Popup/";
     private Transform popupRoot;
+
+    // PopUp 형식의 UI Stack
+    public Stack<BasePopupUI> popupStack = new Stack<BasePopupUI>();
+
+    [Header("Controller")]
+    public ScenePopupController scenePopupController; // 씬 팝업 컨트롤러
+
 
     protected override void Awake()
     {
         base.Awake();
+        RegisterAllPopupsInResources();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && popupStack.Count > 0)
+        {
+            BasePopupUI popup = popupStack.Peek();// Close() 메서드 내부에 Pop() 존재.
+            popup.Close();
+        }
+    }
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -30,7 +47,8 @@ public class UIManager : MonoSingleton<UIManager>
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        popupInstances.Clear();
+        popupInstances.Clear();// 씬이 바뀔 때 팝업 인스턴스 초기화
+        popupStack.Clear();// 팝업 스택 초기화
 
         GameObject popupRootObj = GameObject.Find("Canvas/PopupUI");
         if (popupRootObj == null)
@@ -44,6 +62,20 @@ public class UIManager : MonoSingleton<UIManager>
         }
     }
 
+    public void ShowPopupByName(string popupName)
+    {
+        if (!popupTypeMap.TryGetValue(popupName, out var popupType))
+        {
+            Debug.LogError($"[UIManager] '{popupName}'에 해당하는 팝업 타입이 없습니다.");
+            return;
+        }
+
+        MethodInfo showPopupGeneric = typeof(UIManager)
+            .GetMethod(nameof(ShowPopup), BindingFlags.Public | BindingFlags.Instance);
+
+        MethodInfo showPopupTyped = showPopupGeneric.MakeGenericMethod(popupType);
+        showPopupTyped.Invoke(this, null);
+    }
 
     /// <summary>
     /// 팝업 Open 매서드(컴포넌트 기준)
@@ -59,25 +91,24 @@ public class UIManager : MonoSingleton<UIManager>
             return existingPoupup as T;
         }
 
-        GameObject prefab = null;
-
-        // 프리팹이 캐싱 되어 있는지 확인 후 없으면 캐싱
-        if (!popupPrefabs.TryGetValue(popupName, out prefab))
+        // Resources에서 프리팹 캐싱
+        GameObject prefab = Resources.Load<GameObject>($"{popupPath}{popupName}");
+        if (prefab == null)
         {
-            prefab = Resources.Load<GameObject>($"{popupPath}{popupName}");
-
-            if (prefab == null)
-            {
-                Debug.LogError($"Resources에 '{popupName}'을 찾을 수 없습니다.");
-                return null;
-            }
-   
-            popupPrefabs[popupName] = prefab;
+            Debug.LogError($"Resources에 '{popupName}'을 찾을 수 없습니다.");
+            return null;
         }
 
-        // 인스턴스 생성 후 캐싱
+        // 캐싱된 프리팹 생성
         GameObject popupObject = Instantiate(prefab, popupRoot);
         T popup = popupObject.GetComponent<T>();
+        if (popup == null)
+        {
+            Debug.LogError($"프리팹에 {typeof(T).Name} 컴포넌트가 없습니다.");
+            Destroy(popupObject);
+            return null;
+        }
+
 
         popupInstances[popupName] = popup;
         popup.Open();
@@ -94,6 +125,43 @@ public class UIManager : MonoSingleton<UIManager>
         if (popupInstances.TryGetValue(popupName, out BasePopupUI popup))
         {
             popup.Close();
+        }
+    }
+
+    public void RegisterPopup(ScenePopupController popcon)
+    {
+        scenePopupController = popcon;
+    }
+    public void UnregisterPopup()
+    {
+        scenePopupController = null;
+    }
+
+    /// <summary>
+    /// Resources 폴더에서 모든 팝업 프리팹의 Type을 등록.
+    /// </summary>
+    private void RegisterAllPopupsInResources()
+    {
+        GameObject[] popupPrefabs = Resources.LoadAll<GameObject>(popupPath);
+
+        foreach (GameObject prefab in popupPrefabs)
+        {
+            BasePopupUI popup = prefab.GetComponent<BasePopupUI>();
+            if (popup != null)
+            {
+                string popupName = prefab.name;
+                System.Type popupType = popup.GetType();
+
+                if (!popupTypeMap.ContainsKey(popupName))
+                {
+                    popupTypeMap.Add(popupName, popupType);
+                    //Debug.Log($"[UIManager] 등록됨: {popupName} → {popupType}");
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"[UIManager] {prefab.name} 프리팹에 BasePopupUI가 없음 → 등록되지 않음");
+            }
         }
     }
 }

@@ -9,6 +9,6 @@ public class UI_PopupTest : BasePopupUI
 
     private void Awake()
     {
-        closeBtn.onClick.AddListener(Close);
+        closeBtn.onClick.AddListener(Close);// 이 방식 말고 버튼의 onClick에 Close 메서드를 추가하는 방식으로 변경 해주세요.
     }
 }
