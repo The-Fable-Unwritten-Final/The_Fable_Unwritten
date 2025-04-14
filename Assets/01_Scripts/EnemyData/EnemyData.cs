@@ -42,16 +42,17 @@ public class EnemyData : ScriptableObject
     [System.Serializable]
     public class StancValue
     {
-        public enum StencType
+        // StanceType.cs 라는 파일 따로 생성
+        public enum EStancType
         {
-            High, //상단
-            Middle, //중단
-            Low //하단
+            High,
+            Middle,
+            Low
         }
 
         public float defenseBonus; //방어력 보너스
         public float attackBonus; //공격력 보너스
     }
 
-    public StancValue.StencType currentStance;
+    public StancValue.EStancType currentStance;
 }
