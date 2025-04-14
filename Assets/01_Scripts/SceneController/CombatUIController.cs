@@ -47,19 +47,23 @@ public class CombatUIController : MonoBehaviour
     {
         cardDisplay.AddCard(card); // 드로우 한 카드 UI 업데이트.
     }
-    public void UsedCard(CardModel card, IStatusReceiver target)
+    public bool UsedCard(CardModel card, IStatusReceiver target)
     {
         var caster = battleFlow.GetCharacter(card.characterClass);
-        if (caster == null || target == null) return;
+        Debug.Log($"[CombatUI] UsedCard 호출 : {card.cardName} 사용 시전 캐릭터 : {caster} / 타겟 : {target}");
+        if (caster == null || target == null) return false;
 
         if (battleFlow.CanUseCard(card, caster, target, battleFlow.currentMana))
         {
+            Debug.Log("카드 사용 가능");
             battleFlow.TryUseCard(card, caster.ChClass, target);
             CardStatusUpdate?.Invoke(); // 상태 갱신
+            return true;
         }
         else
         {
             Debug.LogWarning($"[CombatUI] {card.cardName} 사용 조건 불충족 (UsedCard 호출)");
+            return false;
         }
     }
     public void ThrowCard(CardModel card)

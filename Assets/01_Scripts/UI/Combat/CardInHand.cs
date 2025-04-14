@@ -56,7 +56,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     {
         if(cardState == CardState.OnDrag) return; // 카드 상태가 OnDrag인 경우에는 원래 위치로 돌아가지 않음.
         cardDisplay.currentCard = null;// 현재 카드 설정 해제.
-        transform.SetSiblingIndex(cardDisplay.GetCardIndex(this));// List의 순서에 맞게 원래 위치로 돌아가기.
+        ResetSiblingIndex();// List의 순서에 맞게 원래 위치로 돌아가기.
         rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine);
     }
     public void OnBeginDrag(PointerEventData eventData)
@@ -134,6 +134,10 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         Vector2 localUpDir = new Vector2(-Mathf.Sin(angle), Mathf.Cos(angle));
 
         targetPos = tPos + localUpDir * distance;
+    }
+    public void ResetSiblingIndex()// 카드 사용이 실패 했을때 등 원래 위치로 돌아가야 할때 호출.
+    {
+        transform.SetSiblingIndex(cardDisplay.GetCardIndex(this));
     }
     public void SetCardState(CardState state)
     {
