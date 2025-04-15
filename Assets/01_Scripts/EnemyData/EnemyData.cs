@@ -37,6 +37,7 @@ public class EnemyData : ScriptableObject
     private float dEFValue;
     public float DEFValue { get { return dEFValue; } } // 방어력 변화
 
+    public Dictionary<int, EnemySkill> SkillDict;       //가지고 있는 스킬 정보
 
 
     [System.Serializable]
