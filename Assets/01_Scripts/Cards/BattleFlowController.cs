@@ -129,7 +129,10 @@ public class BattleFlowController : MonoBehaviour
         }
 
         card.Play(caster, target); // 카드 효과 실행
-
+        Debug.Log(caster + ": 캐스터");
+        caster = playerObjects[0] as IStatusReceiver; // 시전 캐릭터
+        // 임시 카메라 줌 인 아웃 효과 추가 (이후 캐릭터의 모션이 추가되면, 해당 모션의 시작과 끝에 맞춰 줌 인 아웃 재설정)
+        caster.CameraActionPlay(); // 시전 캐릭터 카메라 줌 인 아웃 액션 코루틴
 
         caster.Deck.Discard(card); // 핸드에서 사용 덱으로
 

@@ -215,6 +215,17 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     
     public void CameraActionPlay()
     {
+        Debug.Log($"[카메라 액션] {playerData.CharacterName}의 카메라 액션 실행");
+        if(GameManager.Instance == null || GameManager.Instance.combatCameraController == null)
+        {
+            Debug.LogError("CameraController is not initialized.");
+            return;
+        }
+        else if(this == null)
+        {
+            Debug.LogError("null");
+            return;
+        }
         GameManager.Instance.combatCameraController.CameraZoomInAction(transform);
     }
 }
