@@ -13,10 +13,11 @@ public class PlayerData : ScriptableObject
     public string CharacterName; //캐릭터이름
     public Sprite Icon; //Icon
     public float MaxHP; //체력
+    public float currentHP; //현재 체력
     public float ATK; //공격력
     public float DEF; //방어력
     public CharacterClass CharacterClass => (CharacterClass)IDNum;
-
+    
 
 
     [Header("Stat Value")]
