@@ -40,7 +40,36 @@ public class PlayerManager : MonoSingleton<PlayerManager>
     }
 
     /// <summary>
-    /// 이미 존재하는 PlayerController 오브젝트에 Setup만 수행
+    /// 게임 도중 새 플레이어를 하나씩 추가 (ex. 이야기 흐름 따라 동료가 합류)
+    /// </summary>
+    public void AddPlayerDuringGame(PlayerController newController, PlayerData newPlayerData, List<CardModel> cardPool)
+    {
+        var character = newPlayerData.CharacterClass;
+
+        // 기존에 등록된 플레이어면 무시
+        if (activePlayers.ContainsKey(character))
+        {
+            Debug.LogWarning($"이미 등록된 플레이어: {character}");
+            return;
+        }
+
+        // 덱 초기화가 되어있지 않은 경우만 처리
+        if (newPlayerData.currentDeckIndexes == null || newPlayerData.currentDeckIndexes.Count == 0)
+        {
+            newPlayerData.currentDeckIndexes = new List<int>(newPlayerData.defaultDeckIndexes);
+            newPlayerData.LoadDeckFromIndexes(cardPool);
+        }
+
+        // 데이터 등록
+        playerDataMap[character] = newPlayerData;
+
+        // 컨트롤러 연결
+        newController.Setup(newPlayerData);
+        activePlayers[character] = newController;
+    }
+
+    /// <summary>
+    /// 게임 시작 시 초기화용: 모든 플레이어를 한 번에 등록
     /// (프리팹 생성은 외부에서 수행)
     /// </summary>
     public void RegisterAndSetupPlayers(List<PlayerController> playerControllers, List<PlayerData> allPlayerDatas, List<CardModel> cardPool)
@@ -109,23 +138,4 @@ public class PlayerManager : MonoSingleton<PlayerManager>
         }
     }
 
-    public void InitializeAllPlayer(List<PlayerData> allPlayers)
-    {
-        playerDataMap.Clear();
-
-        CardSystemInitializer.Instance.LoadCardDatabase();
-        var cardPool = CardSystemInitializer.Instance.loadedCards;
-
-        foreach (var data in allPlayers)
-        {
-            // 현재 덱 인덱스가 없으면 기본값으로 초기화
-            if (data.currentDeckIndexes == null || data.currentDeckIndexes.Count == 0)
-                data.currentDeckIndexes = new List<int>(data.defaultDeckIndexes);
-
-            // 인덱스로 덱 구성
-            data.LoadDeckFromIndexes(cardPool);
-
-            playerDataMap[data.CharacterClass] = data;
-        }
-    }
 }
