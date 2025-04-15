@@ -235,11 +235,12 @@ public class CardDisplay : MonoBehaviour
     }
     public void OnMousepoint(PointerEventData eventData)
     {
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
-
-        if (hit.collider != null)
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        Debug.Log($"[CardDisplay] OnMousePoint1 ");
+        if (Physics.Raycast(ray, out hit))
         {
+            Debug.Log($"[CardDisplay] OnMousePoint2 : {hit.collider.gameObject.name} / {hit.point}");
             GameObject target = hit.collider.gameObject;
             int layer = target.layer;
 
