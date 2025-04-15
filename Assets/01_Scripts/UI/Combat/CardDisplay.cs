@@ -13,6 +13,9 @@ public class CardDisplay : MonoBehaviour
     // cardsInHand를 SerializeField로 할 경우 에디터 상에서만 경고가 발생하나, 이후 카드 시스템이 완성될때는 cardsInHand를 실제 카드 데이터를 가져와서 하기 때문에 SerializeField를 지울 예정.
     [SerializeField] List<CardInHand> cardsInHand = new List<CardInHand>(); // 핸드에 소지하고 있는 카드들.
     [SerializeField] GameObject cardPrefab; // 카드 프리팹
+    int layerCharacter;
+    int layerMonster;
+    int layerTrash;
 
     [Header("CardsInHand")]
     [SerializeField] float cardMidPosY = 470f; // 중간에 위치할 카드의 Recttransform Y 좌표.
@@ -32,6 +35,10 @@ public class CardDisplay : MonoBehaviour
         {
             cardsInHand[i].SetCardState(CardInHand.CardState.CanDrag);// 임시로 카드 상태 설정.
         }
+        // 대상 레이어 캐싱
+        layerCharacter = LayerMask.NameToLayer("Character");
+        layerMonster = LayerMask.NameToLayer("Monster");
+        layerTrash = LayerMask.NameToLayer("Trash");
     }
     private void Start()
     {
@@ -235,21 +242,20 @@ public class CardDisplay : MonoBehaviour
     }
     public void OnMousepoint(PointerEventData eventData)
     {
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
-
-        if (hit.collider != null)
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
         {
             GameObject target = hit.collider.gameObject;
             int layer = target.layer;
 
-            if (layer == LayerMask.NameToLayer("Character") || layer == LayerMask.NameToLayer("Monster"))
+            if (layer == layerCharacter || layer == layerMonster)
             {
                 currentCard.SetCardState(CardInHand.CardState.OnUse);
                 UseCard(target.GetComponent<IStatusReceiver>());
                 currentCard = null;
             }
-            else if (layer == LayerMask.NameToLayer("Trash"))
+            else if (layer == layerTrash)
             {
                 ThrowAwayCard();
                 currentCard = null;
