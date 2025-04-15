@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static StancTypeController;
 
 [CreateAssetMenu(fileName = "NewCharacterData", menuName = "Character/CharacterData")]
 
@@ -24,10 +25,11 @@ public class PlayerData : ScriptableObject
 
     public enum StancType
     {
-        High, //상단
-        Middle, //중단
-        Low //하단
+        High,
+        Middle,
+        Low
     }
+
     [System.Serializable]
     public class StancValue
     {

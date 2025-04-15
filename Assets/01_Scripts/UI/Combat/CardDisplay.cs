@@ -168,9 +168,15 @@ public class CardDisplay : MonoBehaviour
         if(currentCard == null) return;// 현재 카드가 없으면 사용 불가.
         // 만약 카드 사용을 못하게 된다면(코스트 부족 등..), SetSiblingIndex을 통해 해당 카드의 순서를 원래대로 돌려주기
         // 카드 사용 가능 조건 체크
-        //
-        //
-        GameManager.Instance.combatUIController.UsedCard(currentCard.cardData,target);// 일단은 무조건 카드를 사용할 수 있는 경우 가정.
+
+        //카드 사용 시도
+        if(!GameManager.Instance.combatUIController.UsedCard(currentCard.cardData,target))
+        {
+            // 만약 카드 사용이 실패 했다면, 상태 복구.
+            currentCard.SetCardState(CardInHand.CardState.CanDrag);// 카드 상태를 CanDrag로 복구.
+            currentCard.ResetSiblingIndex();// 카드 순서 원래대로 복구.
+            return;
+        }
         cardsInHand.Remove(currentCard);// 카드 사용.
         Destroy(currentCard.gameObject);// 카드 삭제.
         CardArrange();
@@ -212,14 +218,12 @@ public class CardDisplay : MonoBehaviour
         // 코스트가 충분한 경우 카드의 상태를 CanDrag로 변경
         for(int i = 0; i < cardsInHand.Count; i++)
         {
-            if (cardsInHand[i].cardData.IsUsable(GameManager.Instance.turnController.battleFlow.currentMana))// @@@ 임시로 현재 마나를 100으로 설정, 추후 현재 보유 마나 가져오기.
+            if (cardsInHand[i].cardData.IsUsable(GameManager.Instance.turnController.battleFlow.currentMana))// 현재 보유 마나를 가져와, 사용 가능한지 확인. (사용 가능시 CanDrag, 불가능시 CanMouseOver)
             {
-                Debug.Log("CanDrag");
                 cardsInHand[i].SetCardState(CardInHand.CardState.CanDrag);// 카드 상태를 CanDrag로 변경
             }
             else
             {
-                Debug.Log("CanMouseOver");
                 cardsInHand[i].SetCardState(CardInHand.CardState.CanMouseOver);// 카드 상태를 CanMouseOver로 변경
             }
         }
