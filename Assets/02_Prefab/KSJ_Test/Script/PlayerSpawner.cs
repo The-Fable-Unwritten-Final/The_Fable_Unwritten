@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// </summary>
 public class PlayerSpawner : MonoBehaviour
 {
-    [SerializeField] private RectTransform[] playerSlots; // 플레이어 생성 위치
+    [SerializeField] private Transform[] playerSlots; // 플레이어 생성 위치
 
     private void Start()
     {
@@ -32,12 +32,12 @@ public class PlayerSpawner : MonoBehaviour
             else
             {
                 // 없으면 비활성화 처리 (알파값 0)
-                var image = slot.GetComponent<Image>();
-                if (image != null)
+                var sprite = slot.GetComponent<SpriteRenderer>();
+                if (sprite != null)
                 {
-                    var color = image.color;
+                    var color = sprite.color;
                     color.a = 0f;
-                    image.color = color;
+                    sprite.color = color;
                 }
             }
         }
