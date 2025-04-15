@@ -79,4 +79,9 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     }
 
     public bool IsAlive() => currentHP > 0;
+
+    public void CameraActionPlay()
+    {
+        GameManager.Instance.combatCameraController.CameraZoomInAction(transform);
+    }
 }

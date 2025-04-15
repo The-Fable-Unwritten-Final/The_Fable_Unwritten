@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2670341670134771584}
   - component: {fileID: 7297827233644207139}
+  - component: {fileID: 7262995281149659463}
   - component: {fileID: 5149937877872546870}
   - component: {fileID: 406684924489802602}
   m_Layer: 0
@@ -35,6 +36,20 @@ Transform:
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7297827233644207139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146143868957835463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba594cb193dde2649aa1243e45fd99ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardDisplay: {fileID: 0}
+  battleFlow: {fileID: 0}
+--- !u!114 &7262995281149659463
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
