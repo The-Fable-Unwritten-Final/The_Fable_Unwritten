@@ -28,7 +28,7 @@ public class StageMapController : MonoBehaviour
         stageIndex = GameManager.Instance.stageIndex;
 
         //Test용
-        SoundManager.Instance.PlayBGM(SoundNameData.Test_BGM1);
+        //SoundManager.Instance.PlayBGM(SoundNameData.Test_BGM1);
 
         if (!TryRestoreStage())
         {
@@ -79,7 +79,7 @@ public class StageMapController : MonoBehaviour
     private void OnNodeClicked(GraphNode clicked)
     {
         //Test용
-        SoundManager.PlaySFX(SoundNameData.Test_SFX_Click);
+        //SoundManager.PlaySFX(SoundNameData.Test_SFX_Click);
 
         visitedNodes.Add(clicked);
         GameManager.Instance.SaveStageState(stageData, visitedNodes, stageIndex);
