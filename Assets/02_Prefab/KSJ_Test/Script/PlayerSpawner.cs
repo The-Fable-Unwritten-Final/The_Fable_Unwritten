@@ -20,25 +20,24 @@ public class PlayerSpawner : MonoBehaviour
             var controller = slot.GetComponent<PlayerController>();
             if (controller == null) return;
 
-            // PlayerController 안의 playerData와 GameManager의 데이터 비교
-            int id = controller.playerData.IDNum;
-            var matchedData = ownedPlayerDatas.FirstOrDefault(data => data.IDNum == id);
+            var characterClass = controller.playerData.CharacterClass;
 
-            if (matchedData != null)
+            // PlayerManager의 activePlayers에 해당 캐릭터가 있는지 확인
+            if (PlayerManager.Instance.GetPlayerData(characterClass) != null)
             {
-                // 플레이어 보유 중일 경우 Setup 실행
-                controller.Setup(matchedData);
+                // 셋업 해주기
+                var data = PlayerManager.Instance.GetPlayerData(characterClass);
+                controller.Setup(data);
             }
             else
             {
-                // 보유하고 있지 않으면 이미지 알파값 0 처리
-                var image = controller.GetComponent<Image>();
+                // 없으면 비활성화 처리 (알파값 0)
+                var image = slot.GetComponent<Image>();
                 if (image != null)
                 {
                     var color = image.color;
                     color.a = 0f;
                     image.color = color;
-                    image.raycastTarget = false;
                 }
             }
         }

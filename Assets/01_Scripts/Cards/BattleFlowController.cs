@@ -31,7 +31,10 @@ public class BattleFlowController : MonoBehaviour
     //임시 inspector 확인용
     private void Start()
     {
-        playerParty = new List<IStatusReceiver>(playerObjects);
+        //playerParty = new List<IStatusReceiver>(playerObjects);
+
+        playerParty = new List<IStatusReceiver>(PlayerManager.Instance.GetAllPlayers());
+
         enemyParty = new List<IStatusReceiver>(enemyObjects);
         Initialize();
     }

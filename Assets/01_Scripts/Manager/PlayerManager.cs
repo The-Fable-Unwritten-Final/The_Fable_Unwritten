@@ -14,7 +14,7 @@ public class PlayerManager : MonoSingleton<PlayerManager>
     }
 
     private Dictionary<CharacterClass, PlayerData> playerDataMap = new();
-    private Dictionary<CharacterClass, PlayerController> activePlayers = new();
+    public Dictionary<CharacterClass, PlayerController> activePlayers = new();
 
     /// <summary>
     /// 카드 로딩 후 플레이어들의 덱을 설정하는 초기화 메서드
