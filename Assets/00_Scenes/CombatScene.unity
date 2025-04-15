@@ -1049,6 +1049,67 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1973104178
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1973104181}
+  - component: {fileID: 1973104180}
+  - component: {fileID: 1973104179}
+  m_Layer: 0
+  m_Name: Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1973104179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973104178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba5a93c57a3721e44962154a4d35c05e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerSlots: []
+--- !u!114 &1973104180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973104178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbf28cbfacfcbdf44a032a4773388330, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemySlots: []
+  stageSpawnDatas: []
+  enemyPrefabData: {fileID: 0}
+--- !u!4 &1973104181
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973104178}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.980242, y: -0.19309409, z: -0.049162686}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2077516050
 GameObject:
   m_ObjectHideFlags: 0
@@ -1224,6 +1285,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: ca1026c442338a840a15d81588272fa8, type: 2}
   hasBlock: 0
+  currentHP: 0
 --- !u!114 &764167805582297071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2050,6 +2112,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2772554136603321237, guid: 81642443dc28c7f469e808f0c4cbead3,
         type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772554136603321237, guid: 81642443dc28c7f469e808f0c4cbead3,
+        type: 3}
       propertyPath: m_Color.b
       value: 0.5852645
       objectReference: {fileID: 0}
@@ -2057,6 +2124,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Color.r
       value: 0.5613208
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772554136603321237, guid: 81642443dc28c7f469e808f0c4cbead3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5022629969448219469, guid: 81642443dc28c7f469e808f0c4cbead3,
         type: 3}
@@ -2202,6 +2274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: 55a39049fa44d7f4fbf6637398b4e81b, type: 2}
   hasBlock: 0
+  currentHP: 0
 --- !u!114 &8511024589437769270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2439,3 +2512,4 @@ SceneRoots:
   - {fileID: 466885309}
   - {fileID: 348756613}
   - {fileID: 1700917356}
+  - {fileID: 1973104181}
