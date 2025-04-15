@@ -1,4 +1,6 @@
 
+using UnityEngine;
+
 /// <summary>
 /// 공통 enum(효과 타입, 캐릭터, 스킬 타입, 버프) 
 /// </summary>
@@ -31,6 +33,7 @@ public interface IStatusReceiver
 {
     CharacterClass ChClass { get; set; }          //자신의 캐릭터 이름을 가져옴
     DeckModel Deck { get; }                         //캐릭터의 덱을 가져옴
+    void CameraActionPlay();                   //행동시 카메라의 줌인 액션 연출.
     void ApplyStatusEffect(StatusEffect effect);     // 버프, 디버프 적용
     float ModifyStat(BuffStatType statType, float baseValue); // 버프 기반 수치 계산
     void TakeDamage(float amount);                     // 데미지 적용

@@ -71,7 +71,7 @@ public class BattleFlowController : MonoBehaviour
         {
             if(player.IsAlive())            //모두 덱 초기화 후 3장 뽑기
             {
-                player.Deck.ReshuffleDiscardIntoDraw();
+                player.Deck.ResetDeckState();
                 player.Deck.Draw(DeckModel.startSize);
             }
         }
