@@ -209,6 +209,11 @@ public class CardDisplay : MonoBehaviour
     }
     public void SetCardCanDrag()
     {
+        if (GameManager.Instance == null || GameManager.Instance.turnController == null || GameManager.Instance.turnController.battleFlow == null)
+        {
+        Debug.LogWarning("GameManager or its components are not ready.");
+        return;
+        }
         // 만약 현재 턴이 적 턴이라면 카드의 상태를 CanMouseOver로
         if (GameManager.Instance.turnController.turnState == TurnController.TurnState.EnemyTurn)
         {
@@ -230,10 +235,10 @@ public class CardDisplay : MonoBehaviour
     }
     public void OnMousepoint(PointerEventData eventData)
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
-        if (Physics.Raycast(ray, out hit))
+        if (hit.collider != null)
         {
             GameObject target = hit.collider.gameObject;
             int layer = target.layer;
