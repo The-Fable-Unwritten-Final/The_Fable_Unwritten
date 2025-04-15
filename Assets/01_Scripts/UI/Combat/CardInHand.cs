@@ -112,7 +112,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public void UpdatCardInfo()// 외부에서 해당 메서드 for문 으로 묶어서 action에 구독하여 사용하기에, 기능 분리.
     {
         cardName.text = cardData.cardName; // 카드 이름 설정
-        cardCost.text = cardData.manaCost.ToString(); // 카드 코스트 설정
+        cardCost.text = cardData.GetEffectiveCost().ToString(); // 카드 코스트 설정
         cardDescription.text = cardData.cardText; // 카드 설명 설정
     }
     public void SetOriginalPos()// 덱 최초 세팅 시점, 카드 추가 혹은 감소시 위치 초기화.

@@ -30,7 +30,7 @@ public static class CardEffectBuilder
         // Discount (코스트 감소)
         if (data.discount != 0)
         {
-            var discount = Load<ReduceNextCardCostEffect>("ReduceNextCardCostEffect"); // 이 스크립트가 필요해
+            var discount = Load<ReduceNextCardCostEffect>("ReduceNextCardCostEffect");
             discount.amount = data.discount;
             effects.Add(discount);
         }
