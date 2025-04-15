@@ -212,4 +212,9 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             Debug.Log($"[피해] 일반 공격 피해 {damage} 적용");
         }
     }
+    
+    public void CameraActionPlay()
+    {
+        GameManager.Instance.combatCameraController.CameraZoomInAction(transform);
+    }
 }

@@ -1,11 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+[System.Serializable]
 public class DeckModel
 {
-    private List<CardModel> unusedDeck = new();           //사용 안한 카드
-    private List<CardModel> usedDeck = new();            //사용한 카드
-    private List<CardModel> hand = new();                //들고 있는 카드
+    public List<CardModel> unusedDeck = new();           //사용 안한 카드
+    public List<CardModel> usedDeck = new();            //사용한 카드
+    public List<CardModel> hand = new();                //들고 있는 카드
 
     public IReadOnlyList<CardModel> Hand => hand;
     public const int maxSize = 5;
@@ -171,6 +172,24 @@ public class DeckModel
         foreach (var card in usedDeck)
             card.ClearTemporaryDiscount();
     }
+
+    /// <summary>
+    /// 게임 시작 시 전체 덱 상태 초기화
+    /// (핸드와 사용 덱 모두 미사용 덱으로 병합 후 셔플)
+    /// </summary>
+    public void ResetDeckState()
+    {
+        unusedDeck.AddRange(hand);
+        unusedDeck.AddRange(usedDeck);
+
+        hand.Clear();
+        usedDeck.Clear();
+
+        Shuffle(unusedDeck);
+
+        Debug.Log($"[DeckModel] 덱 초기화 완료. 카드 수: {unusedDeck.Count}");
+    }
+
 
     public void ApplyPersistentDiscountToAllCards(int amount)
     {

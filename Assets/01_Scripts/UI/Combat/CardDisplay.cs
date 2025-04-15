@@ -230,36 +230,41 @@ public class CardDisplay : MonoBehaviour
     }
     public void OnMousepoint(PointerEventData eventData)
     {
-        List<RaycastResult> results = new List<RaycastResult>();
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
 
-        // 현재 마우스 위치에서 UI 레이캐스트 수행
-        uiRaycaster.Raycast(eventData, results);
-
-        foreach (RaycastResult result in results)
+        if (Physics.Raycast(ray, out hit))
         {
-            int layer = result.gameObject.layer;
-            // 예시: 특정 레이어 이름을 가지고 있다면 사용
-            if (layer == 7 || layer == 8)// 캐릭터 또는 몬스터 레이어 (사용 성공)
+            GameObject target = hit.collider.gameObject;
+            int layer = target.layer;
+
+            if (layer == LayerMask.NameToLayer("Character") || layer == LayerMask.NameToLayer("Monster"))
             {
-                currentCard.SetCardState(CardInHand.CardState.OnUse);// 카드 상태를 OnUse로 변경
-                UseCard(result.gameObject.GetComponent<IStatusReceiver>());// 카드 사용 메서드 호출
-                currentCard = null; // 드래그 종료 시 현재 카드 설정 해제
-                return; // 종료
+                currentCard.SetCardState(CardInHand.CardState.OnUse);
+                UseCard(target.GetComponent<IStatusReceiver>());
+                currentCard = null;
             }
-            else if(layer == 9)// 카드 버리기
+            else if (layer == LayerMask.NameToLayer("Trash"))
             {
-                ThrowAwayCard();// 카드 버리기 메서드 호출
-                currentCard = null; // 드래그 종료 시 현재 카드 설정 해제
-                return; // 종료
+                ThrowAwayCard();
+                currentCard = null;
+            }
+            else
+            {
+                ResetCardState();
             }
         }
-
-        // 만약 해당 위치에 캐릭터 또는 몬스터가 없는 경우 원상 복귀
-        currentCard.SetCardState(CardInHand.CardState.CanDrag);// 카드 상태를 CanDrag로 변경
-        currentCard.transform.SetSiblingIndex(cardsInHand.IndexOf(currentCard));// 카드의 순서를 원래대로 돌려주기
-        currentCard = null; // 드래그 종료 시 현재 카드 설정 해제
+        else
+        {
+            ResetCardState();
+        }
     }
-
+    private void ResetCardState()
+    {
+        currentCard.SetCardState(CardInHand.CardState.CanDrag);
+        currentCard.transform.SetSiblingIndex(cardsInHand.IndexOf(currentCard));
+        currentCard = null;
+    }
     // 3차 베지어 곡선 수식. (Unity 포럼에서 찾음.)
     Vector2 CalculateBezierPoint(float t, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3)
     {
