@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static ReduceNextCardCostEffect;
 
 public class PlayerController : MonoBehaviour, IStatusReceiver
 {
     public PlayerData playerData;       //플레이어의 데이타
     public DeckModel deckModel;         //플레이어가 들고 있는 덱
     public bool hasBlock = false;           //방어막 획득 여부
+    public float currentHP;
 
     public void OnClickHighStance() => ChangeStance(PlayerData.StancType.High);
     public void OnClickMidStance() => ChangeStance(PlayerData.StancType.Middle);
@@ -23,6 +25,11 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     private void Awake()
     {
         Setup(playerData);
+    }
+
+    private void Start()
+    {
+        currentHP = playerData.MaxHP;
     }
 
     /// <summary>
@@ -59,8 +66,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     public void TakeDamage(float amount)
     {
-        playerData.MaxHP -= amount;
-        Debug.Log($"{playerData.CharacterName} 피해: {amount}, 현재 체력: {playerData.MaxHP}");
+        currentHP = Mathf.Max(0, currentHP - amount);
+        Debug.Log($"{playerData.CharacterName} 피해: {amount}, 현재 체력: {currentHP}");
     }
 
     /// <summary>
@@ -69,8 +76,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// <param name="amount">회복량</param>
     public void Heal(float amount)
     {
-        playerData.MaxHP += amount;
-        Debug.Log($"{playerData.CharacterName} 회복: {amount}, 현재 체력: {playerData.MaxHP}");
+        currentHP = Mathf.Min(playerData.MaxHP, currentHP+amount);
+        Debug.Log($"{playerData.CharacterName} 회복: {amount}, 현재 체력: {currentHP}");
     }
 
 
@@ -80,7 +87,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// <returns>체력이 0 초과인지 여부</returns>
     public bool IsAlive()
     {
-        return playerData.MaxHP > 0;
+        return currentHP > 0;
     }
 
     /// <summary>

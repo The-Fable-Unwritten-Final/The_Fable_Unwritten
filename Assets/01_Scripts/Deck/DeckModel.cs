@@ -145,4 +145,41 @@ public class DeckModel
             hand.Add(card);
         }
     }
+
+    /// <summary>
+    /// 덱 자체에 일시적 할인 부여
+    /// </summary>
+    /// <param name="amount">할인 량</param>
+    public void ApplyTemporaryDiscountToAllCards(int amount)
+    {
+        foreach (var card in hand)
+            card.ApplyTemporaryDiscount(amount);
+        foreach (var card in unusedDeck)
+            card.ApplyTemporaryDiscount(amount);
+        foreach (var card in usedDeck)
+            card.ApplyTemporaryDiscount(amount);
+    }
+    /// <summary>
+    /// 덱에 일시적 할인 삭제
+    /// </summary>
+    public void ClearAllTemporaryDiscounts()
+    {
+        foreach (var card in hand)
+            card.ClearTemporaryDiscount();
+        foreach (var card in unusedDeck)
+            card.ClearTemporaryDiscount();
+        foreach (var card in usedDeck)
+            card.ClearTemporaryDiscount();
+    }
+
+    public void ApplyPersistentDiscountToAllCards(int amount)
+    {
+        foreach (var card in hand)
+            card.ApplyPersistentDiscount(amount);
+        foreach (var card in unusedDeck)
+            card.ApplyPersistentDiscount(amount);
+        foreach (var card in usedDeck)
+            card.ApplyPersistentDiscount(amount);
+    }
+
 }

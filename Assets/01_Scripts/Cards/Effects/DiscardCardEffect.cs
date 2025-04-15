@@ -25,10 +25,10 @@ public class DiscardCardEffect : CardEffectBase
         Debug.Log($"[카드 버리기] {selectedCards.Count}장 선택적으로 버림");
     }
 
-    // 기존 Apply는 경고만
+    // 기존 Apply는 경고만 apply 표시 후 discard UI 쪽에서 apply(List) 쪽을 호출하자!!!
     public override void Apply(IStatusReceiver caster, IStatusReceiver target)
     {
-        Debug.LogWarning("[DiscardCardEffect] 직접 타겟 지정이 필요 없는 효과입니다. 선택된 카드 리스트를 넘겨주세요.");
+        Debug.LogWarning("[DiscardCardEffect] 선택된 카드 리스트를 넘겨주세요.");
     }
 
     public override string GetDescription() => $"카드를 {discardCount}장 버립니다 (선택).";

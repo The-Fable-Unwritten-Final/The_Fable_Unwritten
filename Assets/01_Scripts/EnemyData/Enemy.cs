@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         set { enemyData = value; }
     }
 
-    private float currentHP;
+    public float currentHP;
     private bool isIgnited;
 
     public void WatchEnemyInfo()

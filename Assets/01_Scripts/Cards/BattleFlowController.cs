@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using static ReduceNextCardCostEffect;
 
 public enum TurnState { PlayerTurn, EnemyTurn } //적 턴인지 아군 턴인지 판별자
 
@@ -105,24 +106,41 @@ public class BattleFlowController : MonoBehaviour
     /// <param name="target">타겟</param>
     public void UseCard(CardModel card, IStatusReceiver caster, IStatusReceiver target)
     {
+        int actualCost = card.GetEffectiveCost();
+
         if (!card.IsUsable(currentMana) || !caster.IsAlive() || !target.IsAlive())      //사용 가능하지 않거나 적 또는 사용자가 죽어 있다면 생략하기
         {
             return;
         }
 
-        //사용 가능할 시
-        currentMana -= card.manaCost;         //마나 사용
-        card.Play(caster, target);          //카드 사용(효과 적용)
-        caster.Deck.Discard(card);          //사용 카드를 사용한 카드 덱으로 보내기
+        currentMana -= actualCost; // 할인된 코스트 차감
+
+        Debug.Log($"{caster.ChClass} 가 {card.cardName} 사용 → {target.ChClass}, cost : {actualCost}");
         
+        if (card.consumesDiscountOnce)
+        {
+            foreach (var player in playerParty)
+            {
+                player.Deck.ClearAllTemporaryDiscounts();
+            }
+        }
+
+        card.Play(caster, target); // 카드 효과 실행
+
+
+        caster.Deck.Discard(card); // 핸드에서 사용 덱으로
+
         UpdateManaUI();
 
-        Debug.Log($"{caster.ChClass} 가 {card.cardName} 사용 → {target.ChClass}");
 
         // 덱 상태 출력
         if (caster is PlayerController pc)
             pc.PrintDeckState();
+
+        //패 업데이트 필요 
     }
+
+
 
     /// <summary>
     /// 플레이어 턴 종료시 메서드. 카드 3장으로 맞춤 처리 (미완)
