@@ -48,7 +48,7 @@ public class EnemyPattern : MonoBehaviour
 
     void BasicAttack()
     {
-          Debug.Log("적이 일반 공격을 했습니다.");
+        Debug.Log("적이 일반 공격을 했습니다.");
         float damage = enemy.EnemyData.ATK;
         PlayerData.StancType enemyStance = (PlayerData.StancType)enemy.EnemyData.currentStance;
         if (player != null)
@@ -69,4 +69,6 @@ public class EnemyPattern : MonoBehaviour
             player.ReceiveAttack(enemyStance, baseDamage);
         }
     }
+
+
 }
