@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4969787613984143030}
   - component: {fileID: 2772554136603321237}
   - component: {fileID: 8625202598215284314}
+  - component: {fileID: 7622203804807848221}
   m_Layer: 7
   m_Name: Character Slot Test
   m_TagString: Untagged
@@ -97,3 +98,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 130, y: 220, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7622203804807848221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277843439705113669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 972265828eb536d4b96f199d9ccca4e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerData: {fileID: 0}
+  deckModel:
+    unusedDeck: []
+    usedDeck: []
+    hand: []
+  hasBlock: 0

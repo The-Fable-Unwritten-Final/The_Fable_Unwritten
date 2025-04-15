@@ -10,15 +10,21 @@ public enum TurnState { PlayerTurn, EnemyTurn } //적 턴인지 아군 턴인지
 
 public class BattleFlowController : MonoBehaviour
 {
-    [SerializeField] private List<PlayerController> playerObjects;
+    [Header("Character Setup")]
+    [SerializeField] private PlayerController frontSlot;
+    [SerializeField] private PlayerController middleSlot;
+    [SerializeField] private PlayerController backSlot;
     [SerializeField] private List<Enemy> enemyObjects;
+    [SerializeField] private GameObject playerPrefab; // 사용하지 않지만 호환성을 위해 유지
+
+    [Header("UI")]
+    public TextMeshProUGUI Mana;
 
     public List<IStatusReceiver> playerParty { get; private set; } = new();
     public List<IStatusReceiver> enemyParty { get; private set; } = new();
 
     public int startMana = 3; //시작 마나
     public int currentMana;   //현재 마나
-    public TextMeshProUGUI Mana;
 
     public Dictionary<CharacterClass, DeckModel> decksByCharacter = new();     //캐릭터 마다의 사용, 미사용, 핸드 덱
     public Dictionary<CharacterClass, IStatusReceiver> characterMap = new();   //캐릭터클래스에 대한 정보
@@ -31,13 +37,38 @@ public class BattleFlowController : MonoBehaviour
     //임시 inspector 확인용
     private void Start()
     {
-        //playerParty = new List<IStatusReceiver>(playerObjects);
-
-        playerParty = new List<IStatusReceiver>(PlayerManager.Instance.GetAllPlayers());
-
+        SetupPredefinedPlayerSlots();
         enemyParty = new List<IStatusReceiver>(enemyObjects);
         Initialize();
     }
+
+    private void SetupPredefinedPlayerSlots()
+    {
+        playerParty.Clear();
+        var playerDatas = PlayerManager.Instance.GetAllActivePlayerData();
+
+        foreach (var data in playerDatas)
+        {
+            PlayerController targetSlot = data.CharacterClass switch
+            {
+                CharacterClass.Leon => frontSlot,
+                CharacterClass.Sophia => middleSlot,
+                CharacterClass.Kayla => backSlot,
+                _ => null
+            };
+
+            if (targetSlot == null)
+            {
+                Debug.LogWarning($"[BattleFlow] 슬롯이 지정되지 않은 캐릭터입니다: {data.CharacterClass}");
+                continue;
+            }
+
+            targetSlot.Setup(data);
+            playerParty.Add(targetSlot);
+        }
+    }
+
+
 
     /// <summary>
     /// 캐릭터 및 적 초기화(배틀 처음 진입시 시작할 것.)
@@ -129,8 +160,6 @@ public class BattleFlowController : MonoBehaviour
         }
 
         card.Play(caster, target); // 카드 효과 실행
-        Debug.Log(caster + ": 캐스터");
-        caster = playerObjects[0] as IStatusReceiver; // 시전 캐릭터
         // 임시 카메라 줌 인 아웃 효과 추가 (이후 캐릭터의 모션이 추가되면, 해당 모션의 시작과 끝에 맞춰 줌 인 아웃 재설정)
         caster.CameraActionPlay(); // 시전 캐릭터 카메라 줌 인 아웃 액션 코루틴
 

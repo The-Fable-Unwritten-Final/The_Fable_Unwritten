@@ -3256,17 +3256,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a18a84b3d7558bf449ae1df5aef7e9d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerObjects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  frontSlot: {fileID: 1920819808}
+  middleSlot: {fileID: 557679515}
+  backSlot: {fileID: 106890148}
   enemyObjects:
   - {fileID: 6185736355077504898}
   - {fileID: 1679502058}
   - {fileID: 1649326878}
+  playerPrefab: {fileID: 277843439705113669, guid: 81642443dc28c7f469e808f0c4cbead3,
+    type: 3}
+  Mana: {fileID: 753105239}
   startMana: 3
   currentMana: 0
-  Mana: {fileID: 753105239}
   currentTurn: 0
 --- !u!4 &2077516052
 Transform:
