@@ -525,7 +525,7 @@ GameObject:
   - component: {fileID: 5038107446339739010}
   - component: {fileID: 4393703167450996642}
   m_Layer: 5
-  m_Name: DiaryClip5
+  m_Name: DiaryClip4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -632,7 +632,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5038107446339739010}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1754743583668710558}
+        m_TargetAssemblyTypeName: DiaryBook, Assembly-CSharp
+        m_MethodName: OnClick4
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2446969699244499585
 GameObject:
   m_ObjectHideFlags: 0
@@ -767,7 +779,7 @@ GameObject:
   - component: {fileID: 8539463275644707618}
   - component: {fileID: 2106978063366585865}
   m_Layer: 5
-  m_Name: BookClip5
+  m_Name: BookClip4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1123,7 +1135,7 @@ GameObject:
   - component: {fileID: 5951025087893921787}
   - component: {fileID: 1739516044279412218}
   m_Layer: 5
-  m_Name: DiaryClip1
+  m_Name: DiaryClip0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1230,7 +1242,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5951025087893921787}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1754743583668710558}
+        m_TargetAssemblyTypeName: DiaryBook, Assembly-CSharp
+        m_MethodName: OnClick0
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4382455306553869565
 GameObject:
   m_ObjectHideFlags: 0
@@ -1509,7 +1533,7 @@ GameObject:
   - component: {fileID: 8621585219333220950}
   - component: {fileID: 168592902991681858}
   m_Layer: 5
-  m_Name: BookClip3
+  m_Name: BookClip2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1631,11 +1655,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: -7692310700973003996}
         m_TargetAssemblyTypeName: PopupUI_Book, Assembly-CSharp
-        m_MethodName: OnClickClip3
-        m_Mode: 2
+        m_MethodName: OnClick2
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 4507501933301380658}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1865,7 +1889,7 @@ GameObject:
   - component: {fileID: 5434789447473812443}
   - component: {fileID: 3940035883573580439}
   m_Layer: 5
-  m_Name: BookClip1
+  m_Name: BookClip0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1987,11 +2011,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: -7692310700973003996}
         m_TargetAssemblyTypeName: PopupUI_Book, Assembly-CSharp
-        m_MethodName: OnClickClip1
-        m_Mode: 2
+        m_MethodName: OnClick0
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 583909545824374841}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2427,6 +2451,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6765477837254908404}
   - component: {fileID: 8593372766919896763}
+  - component: {fileID: 1754743583668710558}
   m_Layer: 5
   m_Name: Diary Base
   m_TagString: Untagged
@@ -2467,6 +2492,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6582778136646344994}
   m_CullTransparentMesh: 1
+--- !u!114 &1754743583668710558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6582778136646344994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b88e81115f90704e91196ac1dc0e031, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  diaryClip:
+  - {fileID: 7187936638876280831}
+  - {fileID: 9149303948474657138}
+  - {fileID: 6665158611547178522}
+  - {fileID: 3488144170675119678}
+  - {fileID: 1392962845038159285}
 --- !u!1 &6657775700248597193
 GameObject:
   m_ObjectHideFlags: 0
@@ -2750,7 +2793,7 @@ GameObject:
   - component: {fileID: 7562691997074522776}
   - component: {fileID: 6866952330105530385}
   m_Layer: 5
-  m_Name: DiaryClip2
+  m_Name: DiaryClip1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2857,7 +2900,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7562691997074522776}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1754743583668710558}
+        m_TargetAssemblyTypeName: DiaryBook, Assembly-CSharp
+        m_MethodName: OnClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7407254835230855403
 GameObject:
   m_ObjectHideFlags: 0
@@ -2871,7 +2926,7 @@ GameObject:
   - component: {fileID: 707291745691289674}
   - component: {fileID: 7940189894580095508}
   m_Layer: 5
-  m_Name: DiaryClip4
+  m_Name: DiaryClip3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2978,7 +3033,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 707291745691289674}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1754743583668710558}
+        m_TargetAssemblyTypeName: DiaryBook, Assembly-CSharp
+        m_MethodName: OnClick3
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7569909768767156607
 GameObject:
   m_ObjectHideFlags: 0
@@ -2992,7 +3059,7 @@ GameObject:
   - component: {fileID: 7761079649564178600}
   - component: {fileID: 1210329700289493075}
   m_Layer: 5
-  m_Name: DiaryClip3
+  m_Name: DiaryClip2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3099,7 +3166,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7761079649564178600}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1754743583668710558}
+        m_TargetAssemblyTypeName: DiaryBook, Assembly-CSharp
+        m_MethodName: OnClick2
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7574188934433493408
 GameObject:
   m_ObjectHideFlags: 0
@@ -3459,7 +3538,7 @@ GameObject:
   - component: {fileID: 4867982227324180054}
   - component: {fileID: 5776080137272656677}
   m_Layer: 5
-  m_Name: BookClip4
+  m_Name: BookClip3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3784,7 +3863,7 @@ GameObject:
   - component: {fileID: 5550019689790666404}
   - component: {fileID: 1569712824189520718}
   m_Layer: 5
-  m_Name: BookClip2
+  m_Name: BookClip1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3906,11 +3985,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: -7692310700973003996}
         m_TargetAssemblyTypeName: PopupUI_Book, Assembly-CSharp
-        m_MethodName: OnClickClip2
-        m_Mode: 2
+        m_MethodName: OnClick1
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 7974577978283922933}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

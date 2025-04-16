@@ -7,19 +7,12 @@ using UnityEngine.UI;
 
 public class UI_MainTitle : MonoBehaviour
 {
-    [Header("Diary & Setting Button")]
-    [SerializeField] Button settingBtn;
-
     [Header("MenuButton")]
     [SerializeField] Button newBtn;
     [SerializeField] Button continueBtn;
     [SerializeField] Button unlockCardBtn;
     [SerializeField] Button exitBtn;
 
-    private void Awake()
-    {
-        settingBtn.onClick.AddListener(OnClickSettingPopup);
-    }
 
     private void OnClickNewGame()
     {
@@ -41,11 +34,5 @@ public class UI_MainTitle : MonoBehaviour
     {
         //게임 데이터 저장
         //게임 종료 로직 추가
-    }
-
-    // 세팅 팝업 열어주는 매서드
-    private void OnClickSettingPopup()
-    {
-        UIManager.Instance.ShowPopup<PopupUI_Setting>();
     }
 }
