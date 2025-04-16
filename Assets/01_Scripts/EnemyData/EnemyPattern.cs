@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using System.Collections;
+using System.Collections.Generic;
 public class EnemyPattern : MonoBehaviour
 {
     // 행동 패턴 종류: 기본 공격과 스킬 공격
@@ -81,15 +82,50 @@ public class EnemyPattern : MonoBehaviour
     }
 
     /// <summary>
-    /// 스킬 공격: 기본 공격과 동일한 ATK 값을 적용하고, 추가로 상태 효과(디버프/스턴)를 플레이어에게 적용합니다.
+    /// 스킬 공격: 기본 공격과 동일한 ATK 값을 적용하고, 추가로 상태 효과(디버프/스턴)를 플레이어에게 적용
     /// </summary>
     private void ExecuteSkillAttack()
     {
         float damage = enemyData.ATK;
         player.ReceiveAttack((PlayerData.StancType)enemyData.currentStance, damage);
         Debug.Log($"[EnemyBattlePattern] 스킬 공격 실행, 기본 데미지: {damage}");
+
+        // 상태 효과 적용: 먼저 EnemyData의 개별 스킬 데이터가 있다면 사용
+        if (enemyData.SkillDict != null && enemyData.SkillDict.Count > 0)
+        {
+            List<EnemySkill> skills = new List<EnemySkill>(enemyData.SkillDict.Values);
+            int index = Random.Range(0, skills.Count);
+            EnemySkill selectedSkill = skills[index];
+            ApplyEnemySkillEffect(selectedSkill, player);
+        }
+        // 없으면, 전역 스킬 효과 에셋에서 무작위 선택하여 적용
+        else if (globalSkillEffects != null && globalSkillEffects.Length > 0)
+        {
+            int index = Random.Range(0, globalSkillEffects.Length);
+            EnemyAct act = globalSkillEffects[index];
+            ApplyEnemyActEffect(act, player);
+        }
+        else
+        {
+            Debug.LogWarning("[EnemyBattlePattern] 적용할 스킬 효과가 없습니다.");
+        }
     }
 
+    /// <summary>
+    /// EnemyData에 저장된 개별 스킬 데이터를 사용해, 플레이어에게 상태 효과(디버프/스턴 등) 적용
+    /// 스킬 인덱스: 1 → 공격력 감소, 2 → 방어력 감소, 3 → 스턴 효과
+    /// </summary>
+    /// <param name="skill">적의 스킬 데이터</param>
+    /// <param name="target">효과 적용 대상 (플레이어)</param>
+    private void ApplyEnemySkillEffect(EnemySkill skill, PlayerController target)
+    {
+        Debug.Log($"[EnemyBattlePattern] EnemySkill 효과 적용, 스킬 인덱스: {skill.skillIndex}");
+        BuffStatType statType;
+    }
+
+    private void ApplyEnemyActEffect(EnemyAct act, PlayerController target)
+    {
+    }
 
 
         //public void ExecuteNextPattern()
@@ -141,4 +177,4 @@ public class EnemyPattern : MonoBehaviour
         //}
 
 
-}
+    }
