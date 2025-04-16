@@ -22,9 +22,9 @@ public class EnemyPrefabData : ScriptableObject
             if (enemyPrefap == null) return;
 
             var controller = enemyPrefap.GetComponent<Enemy>();
-            if (controller == null || controller.EnemyData == null) return;
+            if (controller == null || controller.enemyData == null) return;
 
-            int id = controller.EnemyData.IDNum;
+            int id = controller.enemyData.IDNum;
 
             if (!prefabDict.ContainsKey(id))
             {
