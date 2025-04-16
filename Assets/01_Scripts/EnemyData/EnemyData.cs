@@ -7,35 +7,35 @@ public class EnemyData : ScriptableObject
 {
     [SerializeField]
     private int idNum;
-    public int IDNum { get { return idNum; } } //고유번호
+    public int IDNum { get { return idNum; } set { idNum = value; } } //고유번호
 
     [SerializeField]
     private string enemyName;
-    public string EnemyName { get { return enemyName; } } //이름
+    public string EnemyName { get { return enemyName; } set { enemyName = value; } } //이름
 
     [SerializeField]
     private int maxHP;
-    public int MaxHP { get { return maxHP; } } //체력
+    public int MaxHP { get { return maxHP; } set { maxHP = value; } } //체력
 
     [SerializeField]
-    private float hpValue;
-    public float HPValue { get { return hpValue; } } //체력변화
+    private float currentHP;
+    public float CurrentHP { get { return currentHP; } set { currentHP = value; } } //현재 체력
 
     [SerializeField]
     private int aTK;
-    public int ATK { get { return aTK; } } //공격력
+    public int ATK { get { return aTK; } set { aTK = value; } } //공격력
 
     [SerializeField]
     private int aTKValue;
-    public int ATKValue { get { return aTKValue; } } //공격력 변화
+    public int ATKValue { get { return aTKValue; } set { aTKValue = value; } } //공격력 변화
 
     [SerializeField]
     private float dEF;
-    public float DEF { get { return dEF; } } // 방어력
+    public float DEF { get { return dEF; } set { dEF = value; } } // 방어력
 
     [SerializeField]
     private float dEFValue;
-    public float DEFValue { get { return dEFValue; } } // 방어력 변화
+    public float DEFValue { get { return dEFValue; } set { dEFValue = value; } } // 방어력 변화
 
     public Dictionary<int, EnemySkill> SkillDict;       //가지고 있는 스킬 정보
 
