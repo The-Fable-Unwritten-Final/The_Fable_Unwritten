@@ -26,8 +26,8 @@ public class EnemyData : ScriptableObject
     public int ATK { get { return aTK; } set { aTK = value; } } //공격력
 
     [SerializeField]
-    private int aTKValue;
-    public int ATKValue { get { return aTKValue; } set { aTKValue = value; } } //공격력 변화
+    private float aTKValue;
+    public float ATKValue { get { return aTKValue; } set { aTKValue = value; } } //공격력 변화
 
     [SerializeField]
     private float dEF;
@@ -37,8 +37,12 @@ public class EnemyData : ScriptableObject
     private float dEFValue;
     public float DEFValue { get { return dEFValue; } set { dEFValue = value; } } // 방어력 변화
 
-    public Dictionary<int, EnemySkill> SkillDict;       //가지고 있는 스킬 정보
-
+    private Dictionary<int, EnemySkill> skillDict = new();
+    public Dictionary<int, EnemySkill> SkillDict
+    {
+        get => skillDict;
+        set => skillDict = value;
+    }
 
     [System.Serializable]
     public class StancValue
@@ -58,5 +62,25 @@ public class EnemyData : ScriptableObject
     public StancValue.EStancType currentStance;
 
     public RuntimeAnimatorController animationController;
+
+
+    //스킬 추가
+    public void AddSkill(int index, EnemySkill skill)
+    {
+        if (skillDict == null)
+            skillDict = new Dictionary<int, EnemySkill>();
+
+        skillDict[index] = skill;
+    }
+
+    //스킬 모두 삭제
+    public void ClearSkills()
+    {
+        skillDict?.Clear();
+    }
+
+    //스킬 전부 가져오기
+    public IEnumerable<EnemySkill> GetSkills() => skillDict?.Values;
+
 
 }

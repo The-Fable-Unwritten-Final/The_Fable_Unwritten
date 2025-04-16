@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public static class EnemySkillCSVParser
+public static class EnemyActCSVParser
 {
     public static List<EnemyAct> Parse(string path)
     {
@@ -24,8 +24,24 @@ public static class EnemySkillCSVParser
 
             try
             {
-                
+                var act = new EnemyAct
+                {
+                    index = ParseInt(t, 0),
+                    targetType = (TargetType)ParseInt(t, 1),
+                    targetNum = ParseInt(t, 2),
 
+                    target_front = ParseBool(t, 3),
+                    target_center = ParseBool(t, 4),
+                    target_back = ParseBool(t, 5),
+
+                    atk_buff = ParseInt(t, 6),
+                    def_buff = ParseInt(t, 7),
+
+                    buff_time = ParseInt(t, 8),
+                    block = ParseBool(t, 9),
+                    stun = ParseInt(t, 10),
+                };
+                list.Add(act);
             }
             catch (System.Exception e)
             {
@@ -34,11 +50,6 @@ public static class EnemySkillCSVParser
         }
 
         return list;
-    }
-
-    private static string ParseString(string[] tokens, int index)
-    {
-        return index < tokens.Length ? tokens[index] : string.Empty;
     }
 
     private static int ParseInt(string[] tokens, int index)
@@ -53,5 +64,12 @@ public static class EnemySkillCSVParser
         if (index >= tokens.Length || string.IsNullOrWhiteSpace(tokens[index])) return 0f;
         float.TryParse(tokens[index], out float result);
         return result;
+    }
+
+    private static bool ParseBool(string[] tokens, int index)
+    {
+        if (index >= tokens.Length) return false;
+        string val = tokens[index].Trim();
+        return !string.IsNullOrEmpty(val) && val != "0";
     }
 }
