@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    public PlayerPrefabData playerPrefabData;     // 모든케릭터 데이터
     public List<PlayerData> playerDatas = new();  //  보유중인 케릭터 데이터
     public GraphNode currentBattleNode;
 
@@ -92,11 +91,6 @@ public class GameManager : MonoSingleton<GameManager>
         savedStageData = null;
         savedVisitedNodes.Clear();
     }
-
-    public GameObject GetPlayerPrefab(int id)
-    {
-        return playerPrefabData.GetPrefab(id);
-    }    
 
     public void RegisterCombatUI(CombatUIController cont)
     {

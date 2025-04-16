@@ -3,12 +3,12 @@ using UnityEngine;
 
 public enum NodeType
 {
-    Start,        // 시작노드
-    NormalBattle, // 일반전투
-    EliteBattle,  // 정예전투 
-    RandomEvent,  // 랜덤이벤트
-    Camp,         // 야영지
-    Boss          // 보스
+    Start = 0,        // 시작노드
+    NormalBattle = 1, // 일반전투
+    EliteBattle = 2,  // 정예전투 
+    Boss = 3,         // 보스
+    RandomEvent = 4,  // 랜덤이벤트
+    Camp = 5          // 야영지    
 }
 
 [SerializeField]

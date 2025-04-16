@@ -17,11 +17,7 @@ public class EnemySpawnSet
     public List<EnemySlotData> slots;
 }
 
-/// <summary>
-/// Stage별 EnemySet 데이터 보관용 SO (NormalBattle)
-/// </summary>
-[CreateAssetMenu(fileName = "EnemyStageSpawnData", menuName = "SpawnData/EnemyStageSpawnData")]
-public class EnemyStageSpawnData : ScriptableObject
+public class EnemyStageSpawnData
 {
     public int stageIndex;
     public NodeType type;

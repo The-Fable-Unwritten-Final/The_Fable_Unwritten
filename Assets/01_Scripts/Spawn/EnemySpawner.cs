@@ -15,6 +15,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
+        stageSpawnDatas = StageSpawnSetCSVParser.LoadFromCSV();
         int currentStage = GameManager.Instance.stageIndex;
         var node = GameManager.Instance.currentBattleNode;
 
