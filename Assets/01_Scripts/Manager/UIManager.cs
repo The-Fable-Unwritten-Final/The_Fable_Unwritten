@@ -88,6 +88,7 @@ public class UIManager : MonoSingleton<UIManager>
         if (popupInstances.TryGetValue(popupName, out BasePopupUI existingPoupup))
         {
             existingPoupup.Open();
+            existingPoupup.gameObject.transform.SetAsLastSibling(); // 팝업이 열릴 때 가장 위로 오도록 설정
             return existingPoupup as T;
         }
 
@@ -112,6 +113,7 @@ public class UIManager : MonoSingleton<UIManager>
 
         popupInstances[popupName] = popup;
         popup.Open();
+        popup.gameObject.transform.SetAsLastSibling(); // 팝업이 열릴 때 가장 위로 오도록 설정
         return popup;
     }
 
