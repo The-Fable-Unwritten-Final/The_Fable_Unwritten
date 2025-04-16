@@ -16,7 +16,6 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         enemyData.CurrentHP = enemyData.MaxHP; //전투 시작시 EnemyHP 풀로 채우기 
     }
 
-
     /// <summary>
     /// 상태이상 혹은 버프를 적용하여 리스트에 추가
     /// </summary>
@@ -103,5 +102,24 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     public void CameraActionPlay()
     {
         GameManager.Instance.combatCameraController.CameraZoomInAction(transform);
+    }
+
+    // 최대 체력
+    public float maxHP
+    {
+        get => enemyData.MaxHP;
+        set => enemyData.MaxHP = value;
+    }
+    //현재 체력
+    public float currentHP
+    {
+        get => enemyData.CurrentHP;
+        set => enemyData.CurrentHP = value;
+    }
+    //체력 변화 시
+    public void UpdateHpStatus()
+    {
+        maxHP = enemyData.MaxHP;
+        currentHP = enemyData.CurrentHP;
     }
 }

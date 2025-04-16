@@ -63,6 +63,10 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         return modifiedValue;
     }
 
+    /// <summary>
+    /// 데미지를 받아 처리하는 함수
+    /// </summary>
+    /// <param name="amount">데미지 량</param>
     public void TakeDamage(float amount)
     {
         playerData.currentHP = Mathf.Max(0, playerData.currentHP - amount);
@@ -227,5 +231,24 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             return;
         }
         GameManager.Instance.combatCameraController.CameraZoomInAction(transform);
+    }
+
+    // 최대 체력
+    public float maxHP
+    {
+        get => playerData.MaxHP;
+        set => playerData.MaxHP = value;
+    }
+    //현재 체력
+    public float currentHP
+    {
+        get => playerData.currentHP;
+        set => playerData.currentHP = value;
+    }
+    //체력 변화 시
+    public void UpdateHpStatus()
+    {
+        maxHP = playerData.MaxHP;
+        currentHP = playerData.currentHP;
     }
 }

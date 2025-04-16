@@ -33,8 +33,8 @@ public interface IStatusReceiver
 {
     CharacterClass ChClass { get; set; }          //자신의 캐릭터 이름을 가져옴
     DeckModel Deck { get; }                         //캐릭터의 덱을 가져옴
-    int maxHP { get; set; }                            //최대 체력
-    int currentHP { get; set; }                        //현재 체력
+    float maxHP { get; set; }                            //최대 체력
+    float currentHP { get; set; }                        //현재 체력
     void UpdateHpStatus();                        //체력 상태 업데이트 (currentHp, maxHp 변수에 실제 데이터값 받아오기)
     void CameraActionPlay();                   //행동시 카메라의 줌인 액션 연출.
     void ApplyStatusEffect(StatusEffect effect);     // 버프, 디버프 적용
