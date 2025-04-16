@@ -50,12 +50,11 @@ public class CombatUIController : MonoBehaviour
     public bool UsedCard(CardModel card, IStatusReceiver target)
     {
         var caster = battleFlow.GetCharacter(card.characterClass);
-        Debug.Log($"[CombatUI] UsedCard 호출 : {card.cardName} 사용 시전 캐릭터 : {caster} / 타겟 : {target}");
+
         if (caster == null || target == null) return false;
 
         if (battleFlow.CanUseCard(card, caster, target, battleFlow.currentMana))
         {
-            Debug.Log("카드 사용 가능");
             battleFlow.TryUseCard(card, caster.ChClass, target);
             CardStatusUpdate?.Invoke(); // 상태 갱신
             return true;
