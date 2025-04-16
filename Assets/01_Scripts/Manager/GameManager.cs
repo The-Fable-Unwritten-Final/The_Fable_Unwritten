@@ -5,6 +5,7 @@ public class GameManager : MonoSingleton<GameManager>
 {
     public List<PlayerData> playerDatas = new();  //  보유중인 케릭터 데이터
     public GraphNode currentBattleNode;
+    public List<EnemyStageSpawnData> enemyStageSpawnDatas; // 초기 GameManger에서 StageSpawnData 파싱 후 보유하는 리스트 (추후 타 매니저에 옮겨줄 예정)
 
     public StageData savedStageData;    // 현재 진행 중인 스테이지 데이터
     public List<GraphNode> savedVisitedNodes = new(); // 플레이어가 진행한 노드 리스트
@@ -27,7 +28,8 @@ public class GameManager : MonoSingleton<GameManager>
         CardSystemInitializer.Instance.LoadCardDatabase();
         EnemySkillInitializer.ImportAndGenerate();
         EnemyInitializer.ImportAndGenerate();
-        
+        enemyStageSpawnDatas = StageSpawnSetCSVParser.LoadFromCSV();
+
         LoadPlayerPartyIfNull(); // <- 플레이어 데이터 가져오기
         playerDatas = new List<PlayerData>(playerParty.allPlayers);
 
