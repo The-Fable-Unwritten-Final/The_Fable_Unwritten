@@ -14,8 +14,8 @@ public class EnemyData : ScriptableObject
     public string EnemyName { get { return enemyName; } set { enemyName = value; } } //이름
 
     [SerializeField]
-    private int maxHP;
-    public int MaxHP { get { return maxHP; } set { maxHP = value; } } //체력
+    private float maxHP;
+    public float MaxHP { get { return maxHP; } set { maxHP = value; } } //체력
 
     [SerializeField]
     private float currentHP;
@@ -56,4 +56,7 @@ public class EnemyData : ScriptableObject
     }
 
     public StancValue.EStancType currentStance;
+
+    public RuntimeAnimatorController animationController;
+
 }
