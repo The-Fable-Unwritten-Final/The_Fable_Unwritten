@@ -25,8 +25,8 @@ public class EnemyPattern : MonoBehaviour
     public void ExecuteNextPattern()
     {
         int stanceCount = System.Enum.GetValues(typeof(PlayerData.StancType)).Length;
-        enemy.EnemyData.currentStance = (EnemyData.StancValue.EStancType)(PlayerData.StancType)Random.Range(0, stanceCount);
-        Debug.Log($"[적 자세 변경] 현재 자세: {enemy.EnemyData.currentStance}");
+        enemy.enemyData.currentStance = (EnemyData.StancValue.EStancType)(PlayerData.StancType)Random.Range(0, stanceCount);
+        Debug.Log($"[적 자세 변경] 현재 자세: {enemy.enemyData.currentStance}");
 
         switch (nextPattern)
         {
@@ -49,8 +49,8 @@ public class EnemyPattern : MonoBehaviour
     void BasicAttack()
     {
         Debug.Log("적이 일반 공격을 했습니다.");
-        float damage = enemy.EnemyData.ATK;
-        PlayerData.StancType enemyStance = (PlayerData.StancType)enemy.EnemyData.currentStance;
+        float damage = enemy.enemyData.ATK;
+        PlayerData.StancType enemyStance = (PlayerData.StancType)enemy.enemyData.currentStance;
         if (player != null)
         {
             player.ReceiveAttack(enemyStance, damage);
@@ -61,8 +61,8 @@ public class EnemyPattern : MonoBehaviour
     {
         Debug.Log("적이 스킬 공격을 시전합니다!");
 
-        float baseDamage = enemy.EnemyData.ATK * 1.5f;
-        PlayerData.StancType enemyStance = (PlayerData.StancType)enemy.EnemyData.currentStance;
+        float baseDamage = enemy.enemyData.ATK * 1.5f;
+        PlayerData.StancType enemyStance = (PlayerData.StancType)enemy.enemyData.currentStance;
 
         if (player != null)
         {

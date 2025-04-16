@@ -4,36 +4,73 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IStatusReceiver
 {
-    [SerializeField]
-    private EnemyData enemyData;
-    public EnemyData EnemyData
-    {
-        get { return enemyData; }
-        set { enemyData = value; }
-    }
+    public EnemyData enemyData;
 
-    public float currentHP;
-    private bool isIgnited;
+    public bool hasBlock = false;
 
-    public void WatchEnemyInfo()
-    {
-        Debug.Log("이름 :: " + enemyData.EnemyName);
-        Debug.Log("체력 :: " + enemyData.MaxHP);
-        Debug.Log("공격력 :: " + enemyData.ATK);
-    }
 
-    // Start is called before the first frame update
+    private List<StatusEffect> activeEffects = new List<StatusEffect>();  //현재 가지고 있는 상태이상 및 버프
+
     void Start()
     {
-        currentHP = enemyData.MaxHP;
+        enemyData.CurrentHP = enemyData.MaxHP; //전투 시작시 EnemyHP 풀로 채우기 
     }
 
-    // Update is called once per frame
-    void Update()
+
+    /// <summary>
+    /// 상태이상 혹은 버프를 적용하여 리스트에 추가
+    /// </summary>
+    /// <param name="effect">적용할 효과</param>
+    public void ApplyStatusEffect(StatusEffect effect)
     {
-        
+        Debug.Log($"[버프 적용] {enemyData.EnemyName} 에게 {effect.statType} +{effect.value} ({effect.duration}턴)");
+        activeEffects.Add(new StatusEffect
+        {
+            statType = effect.statType,
+            value = effect.value,
+            duration = effect.duration
+        });
     }
 
+    /// <summary>
+    /// 해당 스탯에 현재 적용 중인 버프를 계산하여 반환
+    /// </summary>
+    /// <param name="statType">수정할 스탯 타입</param>
+    /// <param name="baseValue">기본값</param>
+    /// <returns>버프 적용 후 최종 값</returns>
+    public float ModifyStat(BuffStatType statType, float baseValue)
+    {
+        float modifiedValue = baseValue;
+        foreach (var effect in activeEffects)
+        {
+            if (effect.statType == statType)
+                modifiedValue += effect.value;
+        }
+        return modifiedValue;
+    }
+
+
+    /// <summary>
+    /// 체력 회복
+    /// </summary>
+    /// <param name="amount">회복량</param>
+    public void Heal(float amount)
+    {
+        enemyData.CurrentHP = Mathf.Min(enemyData.MaxHP, enemyData.CurrentHP + amount);
+        Debug.Log($"{enemyData.EnemyName} 회복: {amount}, 현재 체력: {enemyData.CurrentHP}");
+    }
+
+
+    /// <summary>
+    /// 생존 여부 확인
+    /// </summary>
+    /// <returns>체력이 0 초과인지 여부</returns>
+    public bool IsAlive()
+    {
+        return enemyData.CurrentHP > 0;
+    }
+
+    
     public bool IsStunned() => false;           //스턴 상태 확인
 
     private CharacterClass characterClass = CharacterClass.Enemy;
@@ -45,40 +82,23 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public DeckModel Deck => null;
 
-    public bool IsIgnited => isIgnited;
+    public bool IsIgnited => false;
 
     public string CurrentStance => enemyData.currentStance.ToString();
 
-    public void ApplyStatusEffect(StatusEffect effect)
-    {
-        //버프 및 디버프 로직
-    }
 
-    public float ModifyStat(BuffStatType statType, float baseValue)
-    {
-        // 예시로 방어력 보정 처리
-        return baseValue;
-    }
 
     public void TakeDamage(float amount)
     {
         float reduced = amount - ModifyStat(BuffStatType.Defense, 0f); // 방어력으로 피해 감소
         reduced = Mathf.Max(reduced, 0);
 
-        currentHP -= reduced;
-        Debug.Log($"{enemyData.EnemyName}가 {reduced}의 피해를 받음! 현재 체력: {currentHP}");
+        enemyData.CurrentHP -= reduced;
+        Debug.Log($"{enemyData.EnemyName}가 {reduced}의 피해를 받음! 현재 체력: {enemyData.CurrentHP}");
 
-        if (currentHP <= 0)
+        if (enemyData.CurrentHP <= 0)
             Debug.Log($"{enemyData.EnemyName} 사망");
     }
-    public void Heal(float amount)
-    {
-        currentHP += amount;
-        currentHP = Mathf.Min(currentHP, enemyData.MaxHP);
-        Debug.Log($"{enemyData.EnemyName}가 {amount}의 회복을 받음. 현재 체력: {currentHP}");
-    }
-
-    public bool IsAlive() => currentHP > 0;
 
     public void CameraActionPlay()
     {

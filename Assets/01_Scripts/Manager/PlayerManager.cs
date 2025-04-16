@@ -14,7 +14,8 @@ public class PlayerManager : MonoSingleton<PlayerManager>
     }
 
     private Dictionary<CharacterClass, PlayerData> playerDataMap = new();
-    public Dictionary<CharacterClass, PlayerController> activePlayers = new();
+    public Dictionary<CharacterClass, PlayerData> activePlayers = new();
+    private List<CardModel> currentCardPool = new();
 
     /// <summary>
     /// 카드 로딩 후 플레이어들의 덱을 설정하는 초기화 메서드
@@ -22,6 +23,7 @@ public class PlayerManager : MonoSingleton<PlayerManager>
     public void InitializePlayers(List<PlayerData> allPlayers, List<CardModel> cardPool)
     {
         playerDataMap.Clear();
+        currentCardPool = cardPool;
 
         foreach (var data in allPlayers)
         {
@@ -60,12 +62,9 @@ public class PlayerManager : MonoSingleton<PlayerManager>
             newPlayerData.LoadDeckFromIndexes(cardPool);
         }
 
-        // 데이터 등록
         playerDataMap[character] = newPlayerData;
-
-        // 컨트롤러 연결
         newController.Setup(newPlayerData);
-        activePlayers[character] = newController;
+        activePlayers[character] = newPlayerData;
     }
 
     /// <summary>
@@ -80,8 +79,15 @@ public class PlayerManager : MonoSingleton<PlayerManager>
         foreach (var controller in playerControllers)
         {
             var character = controller.playerData.CharacterClass;
-            controller.Setup(playerDataMap[character]);
-            activePlayers[character] = controller;
+
+            if (!playerDataMap.TryGetValue(character, out var data))
+            {
+                Debug.LogWarning($"플레이어 데이터가 존재하지 않음: {character}");
+                continue;
+            }
+
+            controller.Setup(data);
+            activePlayers[character] = data;
         }
     }
 
@@ -90,7 +96,18 @@ public class PlayerManager : MonoSingleton<PlayerManager>
     /// </summary>
     public List<IStatusReceiver> GetAllPlayers()
     {
-        return new List<IStatusReceiver>(activePlayers.Values);
+        var result = new List<IStatusReceiver>();
+        foreach (var kvp in activePlayers)
+        {
+            var dummy = GameObject.FindObjectsOfType<PlayerController>(); // 추정 불가능하므로 비워둠
+            Debug.LogWarning($"[PlayerManager] GetAllPlayers는 PlayerController를 관리하지 않으므로 직접 BattleScene에서 생성하세요.");
+        }
+        return result;
+    }
+
+    public List<PlayerData> GetAllActivePlayerData()
+    {
+        return new List<PlayerData>(activePlayers.Values);
     }
 
     /// <summary>
