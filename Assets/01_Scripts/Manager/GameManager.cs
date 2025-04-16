@@ -25,8 +25,10 @@ public class GameManager : MonoSingleton<GameManager>
         base.Awake();
 
         CardSystemInitializer.Instance.LoadCardDatabase();
-        LoadPlayerPartyIfNull(); // <- 플레이어 데이터 가져오기
+        EnemySkillInitializer.ImportAndGenerate();
+        EnemyInitializer.ImportAndGenerate();
         
+        LoadPlayerPartyIfNull(); // <- 플레이어 데이터 가져오기
         playerDatas = new List<PlayerData>(playerParty.allPlayers);
 
         // 1스테이지 부터 시작
