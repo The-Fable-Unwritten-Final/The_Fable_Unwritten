@@ -52,7 +52,7 @@ public class EnemySpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// 슬롯에 EnemyData를 적용하고 시각적으로 알파값 처리까지 수행
+    /// 슬롯에 EnemyData를 적용하고 빈슬롯 비활성화
     /// </summary>
     private void ApplyEnemyDataToSlots(EnemySpawnSet selectedSet)
     {
@@ -61,7 +61,7 @@ public class EnemySpawner : MonoBehaviour
             slot.gameObject.SetActive(false);
         }
 
-        // Step 2. 실제 몬스터 데이터 설정
+        // 실제 몬스터 데이터 설정
         foreach (var slotData in selectedSet.slots)
         {
             if (slotData.slotIndex >= enemySlots.Length) continue;
