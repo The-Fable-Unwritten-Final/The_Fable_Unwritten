@@ -1,227 +1,208 @@
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 /// <summary>
-/// Enemy의 턴마다 공격 또는 스킬을 실행하는 패턴 스크립트
-/// CSV → EnemyParsed 데이터로부터 스탯, 스킬을 초기화
-/// IStatusReceiver(PlayerController)의 ReceiveAttack/ApplyStatusEffect로 효과를 전달
+/// Enemy의 턴마다 스킬 또는 공격을 실행하는 패턴 제어 클래스
+/// EnemyData에 저장된 스킬 정보와 EnemyAct를 기반으로 실행
 /// </summary>
 public class EnemyPattern : MonoBehaviour
 {
-    private enum PatternType { BasicAttack, SkillAttack }
+    // 전투 중 현재 플레이어 파티와 적 파티 참조
+    private List<IStatusReceiver> playerParty = GameManager.Instance.turnController.battleFlow.playerParty;
+    private List<IStatusReceiver> enemyParty = GameManager.Instance.turnController.battleFlow.enemyParty;
 
-    [Header("References")]
-    [SerializeField] private PlayerController player;  // 전투 대상, 인스펙터에서 할당 가능
-
-    private Enemy enemy;
-    private EnemyData enemyData;
-    private EnemyParsed parsed;
-    private List<EnemySkill> skillList;
-    private PatternType currentPattern;
 
     // StanceType 개수 (한 번만 계산)
     private static readonly int stanceCount =
         System.Enum.GetValues(typeof(PlayerData.StancType)).Length;
-
+    
+    
     /// <summary>
-    /// Awake 단계에서 CSV 매니저를 초기화 (한번만)
+    /// 외부에서 호출되는 메인 메서드 - 적이 턴에 행동을 수행함
     /// </summary>
-    private void Awake()
+    public void ExecutePattern(IStatusReceiver enemy)
     {
-        EnemyParseManager.Initialize("Assets/Resources/ExternalFiles/EnemyData.csv");
-    }
-
-    /// <summary>
-    /// Start 단계에서 컴포넌트/데이터 연결, 스탯 & 스킬 초기화, 초기 패턴을 설정
-    /// </summary>
-    private void Start()
-    {
-        // 1) 컴포넌트 & 레퍼런스 연결
-        if (player == null)
-            player = FindObjectOfType<PlayerController>();
-
-        enemy = GetComponent<Enemy>();
-        enemyData = enemy?.enemyData;
-        if (player == null || enemyData == null)
+        // 받은 친구가 Enemy 타입인지 확인
+        if (enemy is not Enemy enemyComponent)
         {
-            Debug.LogError("[EnemyPattern] PlayerController 또는 EnemyData 누락");
-            enabled = false;
+            Debug.LogError("[EnemyPattern] 전달된 IStatusReceiver는 Enemy가 아닙니다.");
+            return;
+        }
+        // 1. 자세 변경
+        SetRandomStance(enemyComponent);
+        
+        // 2. 사용할 스킬 선택
+        var skill = ChooseSkill(enemyComponent);
+        if (skill == null)
+        {
+            Debug.LogWarning($"[EnemyPattern] {enemyComponent.enemyData.EnemyName}의 스킬 데이터 없음.");
             return;
         }
 
-        // 2) CSV 파싱 데이터 가져오기
-        if (!EnemyParseManager.ParsedDict.TryGetValue(enemyData.IDNum, out parsed))
+        // 3. 스킬 데이터 가져오기
+        var actData = EnemySkillDatabase.Instance.Get(skill.skillIndex);
+        if (actData == null)
         {
-            Debug.LogError($"[EnemyPattern] ID={enemyData.IDNum}에 해당하는 데이터 없음");
-            enabled = false;
+            Debug.LogWarning($"[EnemyPattern] 스킬 {skill.skillIndex}에 대한 act 데이터가 없습니다.");
             return;
         }
 
-        // 3) 스탯, 스킬 초기화
-        InitializeStatsAndSkills();
+        // 4. 타겟 선택
+        var targets = ChooseTargetsFromActData(actData, enemyComponent);
 
-        // 4) 초기 행동 패턴 무작위 설정
-        currentPattern = (PatternType)Random.Range(0, 2);
-    }
-
-    /// <summary>
-    /// EnemyData와 스킬 리스트를 CSV 파싱 데이터로 초기화
-    /// </summary>
-    private void InitializeStatsAndSkills()
-    {
-        // 스탯 적용
-        enemyData.MaxHP = parsed.hp;
-        enemyData.CurrentHP = parsed.hp;
-        enemyData.ATK = Mathf.RoundToInt(parsed.atkBuff);
-        enemyData.DEF = parsed.defBuff;
-
-        // 스킬 리스트 구성
-        skillList = new List<EnemySkill>();
-        AddParsedSkill(parsed.skill0, parsed.damage0, parsed.percentage0);
-        AddParsedSkill(parsed.skill1, parsed.damage1, parsed.percentage1);
-        AddParsedSkill(parsed.skill2, parsed.damage2, parsed.percentage2);
-    }
-
-    /// <summary>
-    /// 외부(턴 매니저 등)에서 호출해 몬스터의 다음 행동을 실행
-    /// </summary>
-    public void ExecutePattern()
-    {
-        // 1) 자세 랜덤 변경
-        SetRandomStance();
-
-        // 2) 행동 패턴 실행
-        switch (currentPattern)
+        // 5. 타겟에게 데미지 및 추가 효과 적용
+        foreach (var t in targets)
         {
-            case PatternType.BasicAttack:
-                Attack(enemyData.ATK);
-                break;
-            case PatternType.SkillAttack:
-                Attack(enemyData.ATK);
-                ExecuteRandomSkill();
-                break;
+            t.TakeDamage(skill.damage);
+            ApplyStatusEffect(t, actData);
+            Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (데미지 {skill.damage})");
+        }
+    }
+
+
+    /// <summary>
+    /// 스킬 데이터에 따라서 상대 및 아군 효과 대상을 선택
+    /// </summary>
+    /// <param name="actData"></param>
+    /// <param name="self"></param>
+    /// <returns></returns>
+    private List<IStatusReceiver> ChooseTargetsFromActData(EnemyAct actData, Enemy self)
+    {
+        var targets = new List<IStatusReceiver>();
+        var candidates = new List<IStatusReceiver>();
+
+        // 1. 타겟 그룹 설정 (적 기준: Ally → 플레이어, Enemy → 적 자신 포함)
+        List<IStatusReceiver> targetGroup = actData.targetType == TargetType.Ally
+            ? playerParty
+            : enemyParty;
+
+
+        if (actData.targetType == TargetType.Ally)       // 적 기준 적 → 플레이어 파티 공격
+        {
+            // 플레이어 중에서 위치 조건에 맞는 대상만 후보로 추가
+            foreach (var target in targetGroup)
+            {
+                if (!target.IsAlive()) continue;
+
+                if ((target.ChClass == CharacterClass.Leon && actData.target_front) ||
+                (target.ChClass == CharacterClass.Sophia && actData.target_center) ||
+                (target.ChClass == CharacterClass.Kayla && actData.target_back))
+                {
+                    candidates.Add(target);
+                }
+            }
+        }
+        else
+        {
+            // 아군일 경우 enemyParty 순서대로 (0: front, 1: center, 2: back)
+            for (int i = 0; i < 3; i++)
+            {
+                if ((i == 0 && actData.target_front)||
+                    (i == 1 && actData.target_center)||
+                    (i == 2 && actData.target_back))
+                {
+                    if (targetGroup[i].IsAlive())
+                        candidates.Add(targetGroup[i]);
+                }
+            }
         }
 
-        // 3) 다음 턴을 위해 패턴 재선택
-        currentPattern = (PatternType)Random.Range(0, 2);
+        // 랜덤으로 targetNum만큼 선택하여 최종 적을 지정
+        int count = Mathf.Min(actData.targetNum, candidates.Count);
+        while (targets.Count < count)
+        {
+            var chosen = candidates[Random.Range(0, candidates.Count)];
+            if (!targets.Contains(chosen))
+                targets.Add(chosen);
+        }
+
+        return targets;
     }
+
 
     /// <summary>
     /// 랜덤한 StanceType을 설정하고 로그를 출력
     /// </summary>
-    private void SetRandomStance()
+    private void SetRandomStance(Enemy enemy)
     {
         var stance = (PlayerData.StancType)Random.Range(0, stanceCount);
-        enemyData.currentStance = (EnemyData.StancValue.EStancType)stance;
-        Debug.Log($"[EnemyPattern] {enemyData.EnemyName} 자세 → {stance}");
+        enemy.enemyData.currentStance = (EnemyData.StancValue.EStancType)stance;
+        Debug.Log($"[EnemyPattern] {enemy.enemyData.EnemyName} 자세 → {stance}");
     }
 
     /// <summary>
-    /// 지정된 데미지를 플레이어에게 전달
-    /// ReceiveAttack 내부에서 자세별 데미지 배율/회피 처리가 일어난다.
+    /// 에너미 데이터에 따라 사용할 스킬을 랜덤으로 선택
     /// </summary>
-    /// <param name="damage">전달할 데미지</param>
-    private void Attack(float damage)
+    /// <param name="enemy"></param>
+    /// <returns></returns>
+    private EnemySkill ChooseSkill(Enemy enemy)
     {
-        player.ReceiveAttack(
-            (PlayerData.StancType)enemyData.currentStance,
-            damage);
-        Debug.Log($"[EnemyPattern] 공격: {damage} 피해");
-    }
+        if (enemy.enemyData.SkillDict == null || enemy.enemyData.SkillDict.Count == 0)
+            return null; // 스킬 없으면 기본 공격
 
-    /// <summary>
-    /// 스킬 리스트에서 랜덤한 스킬을 선택해 추가 효과를 적용합니다.
-    /// </summary>
-    private void ExecuteRandomSkill()
-    {
-        if (skillList.Count == 0)
+        float total = 0;                
+        foreach (var s in enemy.enemyData.SkillDict.Values)         //스킬 스킬 공격 확률에 따라 스킬 선택
+            total += s.percentage;
+
+        float rand = Random.Range(0f, 1);
+        float cumulative = 0;
+
+        foreach (var skill in enemy.enemyData.SkillDict.Values)
         {
-            Debug.Log("[EnemyPattern] 적용할 스킬이 없습니다.");
-            return;
+            cumulative += skill.percentage;
+            if (rand <= cumulative)
+                return skill;
         }
 
-        var skill = skillList[Random.Range(0, skillList.Count)];
-        ApplyParsedSkill(skill);
+        return null;
     }
 
     /// <summary>
-    /// parsedData에 정의된 스킬 정보를 EnemySkill로 변환해 리스트에 추가
+    /// 몬스터 스킬 사용 시 추가 효과 적용
     /// </summary>
-    /// <param name="idx">스킬 인덱스</param>
-    /// <param name="dmg">기본 데미지 값</param>
-    /// <param name="pct">퍼센티지 보정 값</param>
-    private void AddParsedSkill(int idx, float dmg, float pct)
+    /// <param name="target">타겟</param>
+    /// <param name="act">스킬 데이터</param>
+    private void ApplyStatusEffect(IStatusReceiver target, EnemyAct act)
     {
-        if (idx <= 0) return;
-        skillList.Add(new EnemySkill
+        if(act.atk_buff != 0)
         {
-            skillIndex = idx,
-            damage = dmg,
-            percentage = pct
-        });
-    }
+            target.ApplyStatusEffect(new StatusEffect
+            {
+                statType = BuffStatType.Attack,
+                value = act.atk_buff,
+                duration = act.buff_time
+            });
+            Debug.Log($"[EnemyPattern] {target.ChClass} 추가 공격력 {act.atk_buff} 효과 적용");
+        }
 
-    /// <summary>
-    /// 선택된 EnemySkill을 기반으로 추가 데미지를 계산하여 공격
-    /// </summary>
-    /// <param name="sk">적의 스킬 데이터</param>
-    private void ApplyParsedSkill(EnemySkill sk)
-    {
-        float extraDamage = sk.damage * sk.percentage;
-        Attack(extraDamage);
-        Debug.Log($"[EnemyPattern] 스킬#{sk.skillIndex} 추가 데미지: {extraDamage}");
+        if (act.def_buff != 0)
+        {
+            target.ApplyStatusEffect(new StatusEffect
+            {
+                statType = BuffStatType.Defense,
+                value = act.def_buff,
+                duration = act.buff_time
+            });
+            Debug.Log($"[EnemyPattern] {target.ChClass} 추가 방어력 {act.def_buff} 효과 적용");
+        }
+
+        if (act.block)
+        {
+            //target.hasBlock = true;
+            Debug.Log($"[EnemyPattern] {target.ChClass} 블록 효과 적용");
+        }
+
+        if (act.stun > 0)
+        {
+            target.ApplyStatusEffect(new StatusEffect
+            {
+                statType = BuffStatType.stun,
+                value = -999,
+                duration = act.buff_time
+            }); 
+            Debug.Log($"[EnemyPattern] {target.ChClass} 스턴 적용 ({act.stun}턴)");
+        }
     }
 }
-
-
-//public void ExecuteNextPattern()
-//{
-//    int stanceCount = System.Enum.GetValues(typeof(PlayerData.StancType)).Length;
-//    enemy.enemyData.currentStance = (EnemyData.StancValue.EStancType)(PlayerData.StancType)Random.Range(0, stanceCount);
-//    Debug.Log($"[적 자세 변경] 현재 자세: {enemy.enemyData.currentStance}");
-
-//    switch (nextPattern)
-//    {
-//        case PatternType.None:
-//            Debug.Log("적이 아무 행동도 하지 않음");
-//            break;
-
-//        case PatternType.Attack:
-//            BasicAttack();
-//            break;
-
-//        case PatternType.Skill:
-//            SkillAttack();
-//            break;
-//    }
-
-//    nextPattern = (PatternType)Random.Range(0, 3); // 다음 행동을 랜덤으로 정함
-//}
-
-//void BasicAttack()
-//{
-//    Debug.Log("적이 일반 공격을 했습니다.");
-//    float damage = enemy.enemyData.ATK;
-//    PlayerData.StancType enemyStance = (PlayerData.StancType)enemy.enemyData.currentStance;
-//    if (player != null)
-//    {
-//        player.ReceiveAttack(enemyStance, damage);
-//    }
-//}
-
-//void SkillAttack()
-//{
-//    Debug.Log("적이 스킬 공격을 시전합니다!");
-
-//    float baseDamage = enemy.enemyData.ATK * 1.5f;
-//    PlayerData.StancType enemyStance = (PlayerData.StancType)enemy.enemyData.currentStance;
-
-//    if (player != null)
-//    {
-//        player.ReceiveAttack(enemyStance, baseDamage);
-//    }
-//}
-
-
-

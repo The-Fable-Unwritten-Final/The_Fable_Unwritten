@@ -3,7 +3,62 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 
+/// <summary>
+/// 저장은 안하고 데이터만 넘겨줌
+/// </summary>
 public class EnemySkillDataGenerator : MonoBehaviour
+{
+    private const string EnemySkillSavePath = "Assets/05._ScriptableObjects/Enemy/Skills";
+
+    public static void GenerateFromParsed(List<EnemyAct> parsedList)
+    {
+        if (!Directory.Exists(EnemySkillSavePath))
+            Directory.CreateDirectory(EnemySkillSavePath);
+
+        List<EnemyAct> generated = new();
+
+        foreach (var parsed in parsedList)
+        {
+            EnemyAct skillData = ScriptableObject.CreateInstance<EnemyAct>();
+
+            skillData.index = parsed.index;
+            skillData.targetType = parsed.targetType;
+            skillData.targetNum = parsed.targetNum;
+            skillData.target_front = parsed.target_front;
+            skillData.target_center = parsed.target_center;
+            skillData.target_back = parsed.target_back;
+            skillData.atk_buff = parsed.atk_buff;
+            skillData.def_buff = parsed.def_buff;
+            skillData.buff_time = parsed.buff_time;
+            skillData.block = parsed.block;
+            skillData.stun = parsed.stun;
+
+            generated.Add(skillData);
+        }
+
+        AutoLinkToDatabase(generated);
+    }
+
+    /// <summary>
+    /// 씬에 있는 EnemySkillDatabase에 자동으로 연결
+    /// </summary>
+    private static void AutoLinkToDatabase(List<EnemyAct> skills)
+    {
+        var db = GameObject.FindObjectOfType<EnemySkillDatabase>();
+        if (db == null)
+        {
+            Debug.LogWarning("[SkillDataGenerator] EnemySkillDatabase 오브젝트를 씬에서 찾을 수 없습니다.");
+            return;
+        }
+
+        db.skillList = skills;
+        EditorUtility.SetDirty(db);
+        Debug.Log($"[SkillDataGenerator] EnemySkillDatabase에 자동 연결 완료 ({skills.Count}개)");
+    }
+}
+
+
+/*public class EnemySkillDataGenerator : MonoBehaviour
 {
     private const string EnemySkillSavePath = "Assets/05._ScriptableObjects/Enemy/Skills";
 
@@ -12,7 +67,9 @@ public class EnemySkillDataGenerator : MonoBehaviour
         if(!Directory.Exists(EnemySkillSavePath))
             Directory.CreateDirectory(EnemySkillSavePath);
 
-        foreach(var parsed in parsedList)
+        List<EnemyAct> generated = new();
+
+        foreach (var parsed in parsedList)
         {
             string fileName = $"Skill_{parsed.index}.asset";
             string fullPath = Path.Combine(EnemySkillSavePath, fileName);
@@ -51,6 +108,8 @@ public class EnemySkillDataGenerator : MonoBehaviour
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
+
+        AutoLinkToDatabase(generated);
     }
 
     private static bool IsSame(EnemyAct data, EnemyAct act)
@@ -68,4 +127,21 @@ public class EnemySkillDataGenerator : MonoBehaviour
             data.block == act.block &&
             data.stun == act.stun;
     }
-}
+
+    /// <summary>
+    /// 씬에 있는 EnemySkillDatabase에 자동으로 연결
+    /// </summary>
+    private static void AutoLinkToDatabase(List<EnemyAct> skills)
+    {
+        var db = GameObject.FindObjectOfType<EnemySkillDatabase>();
+        if (db == null)
+        {
+            Debug.LogWarning("[SkillDataGenerator] EnemySkillDatabase 오브젝트를 씬에서 찾을 수 없습니다.");
+            return;
+        }
+
+        db.skillList = skills;
+        EditorUtility.SetDirty(db);
+        Debug.Log($"[SkillDataGenerator] EnemySkillDatabase에 자동 연결 완료 ({skills.Count}개)");
+    }
+}*/
