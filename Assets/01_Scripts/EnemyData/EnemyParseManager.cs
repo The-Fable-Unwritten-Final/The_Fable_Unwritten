@@ -21,7 +21,7 @@ public static class EnemyParseManager
     public static void Initialize(string csvPath)
     {
         if (initialized) return;
-        var list = EnemyCSVParser.Parse(csvPath);
+        var list = EnemyCSVParser.Parse(csvPath); //EnemyCSVParser 파싱
         ParsedDict = list.ToDictionary(p => p.id, p => p);
         initialized = true;
         Debug.Log($"[EnemyParseManager] {ParsedDict.Count}개의 적 데이터를 로드했습니다.");
