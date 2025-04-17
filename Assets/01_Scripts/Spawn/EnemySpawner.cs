@@ -52,29 +52,59 @@ public class EnemySpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// 슬롯에 EnemyData를 적용하고 시각적으로 알파값 처리까지 수행
+    /// 슬롯에 EnemyData를 적용하고 빈슬롯 비활성화
     /// </summary>
     private void ApplyEnemyDataToSlots(EnemySpawnSet selectedSet)
     {
-        foreach (var slot in enemySlots)
-        {
-            slot.gameObject.SetActive(false);
-        }
 
-        // Step 2. 실제 몬스터 데이터 설정
+        var enemyParty = GameManager.Instance.turnController.battleFlow.enemyParty;
+        
+        // slot 맵핑
+        Dictionary<int, EnemySlotData> slotMap = new();
+
+        // slotMap 각 슬롯 등록
         foreach (var slotData in selectedSet.slots)
         {
-            if (slotData.slotIndex >= enemySlots.Length) continue;
+            slotMap[slotData.slotIndex] = slotData;
+        }
 
-            var targetSlot = enemySlots[slotData.slotIndex];
-            var enemy = targetSlot.GetComponent<Enemy>();
-            var data = enemyDataContainer.GetData(slotData.enemyId);
+        // InGameSlot & BattleFlow 정보 등록
+        for (int i = 0; i < enemySlots.Length; i++)
+        {
+            var slot = enemySlots[i];
+            slot.gameObject.SetActive(false); // 기본 비활성화
 
-            if (enemy != null && data != null)
+            if (slotMap.TryGetValue(i, out var slotData))
             {
-                enemy.enemyData = data;
+                var enemy = slot.GetComponent<Enemy>();
+                var data = enemyDataContainer.GetData(slotData.enemyId);
+
+                if (enemy != null && data != null)
+                {
+                    enemy.enemyData = data;
+                    slot.gameObject.SetActive(true);
+
+                    enemyParty.Add(enemy as IStatusReceiver);
+                    continue;
+                }
             }
-            targetSlot.gameObject.SetActive(true);
+            
+            // enemy가 없거나 데이터가 없으면 null 삽입
+            enemyParty.Add(null);         
+        }
+
+        for (int i = 0; i < enemyParty.Count; i++)
+        {
+            var enemy = enemyParty[i];
+
+            if (enemy is Enemy e && e.enemyData != null)
+            {
+                Debug.Log($"[EnemyParty] Index {i}: {e.enemyData.EnemyName} (ID: {e.enemyData.IDNum})");
+            }
+            else
+            {
+                Debug.Log($"[EnemyParty] Index {i}: null");
+            }
         }
     }
 }

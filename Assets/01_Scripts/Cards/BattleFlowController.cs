@@ -38,7 +38,6 @@ public class BattleFlowController : MonoBehaviour
     private void Start()
     {
         SetupPredefinedPlayerSlots();
-        enemyParty = new List<IStatusReceiver>(enemyObjects);
         Initialize();
     }
 
@@ -209,7 +208,37 @@ public class BattleFlowController : MonoBehaviour
     /// </summary>
     public void ExecuteEnemyTurn()
     {
-        //적 행동 설정;
+        if (isBattleEnded) return;
+        currentTurn = TurnState.EnemyTurn;
+
+        Debug.Log("적 턴 시작");
+
+        // 1. 살아있는 적만 행동함
+        foreach (var enemy in enemyParty)
+        {
+            if (enemy == null)
+            {
+                Debug.Log("[BattleFlow] enemyParty 내 null 객체 발견");
+                continue;
+            }
+
+            if (!enemy.IsAlive()) continue;
+
+            Enemy enemyComp = enemy as Enemy;
+            if (enemyComp != null)
+            {
+                EnemyPattern.ExecutePattern(enemyComp);
+            }
+            else
+            {
+                Debug.LogWarning($"[BattleFlow] {enemy} 에 EnemyPattern 스크립트가 없습니다.");
+            }
+        }
+
+        // 3. 적 행동 종료 후 턴 종료 체크 및 다음 턴으로 전환
+        CheckBattleEnd();
+        if (!isBattleEnded)
+            ExecutePlayerTurn();
     }
 
     private void PlanEnemySkills()
@@ -233,17 +262,19 @@ public class BattleFlowController : MonoBehaviour
     private void CheckBattleEnd()
     {
         bool allPlayersDead = playerParty.TrueForAll(p => !p.IsAlive());
-        bool allEnemiesDead = enemyParty.TrueForAll(p => !p.IsAlive());
+        bool allEnemiesDead = enemyParty.TrueForAll(p => !p?.IsAlive() ?? true);
 
         if (allPlayersDead)
         {
             isBattleEnded = true;
             Debug.Log("▶ 전투 패배");
+            enemyParty.Clear();
         }
         else if (allEnemiesDead)
         {
             isBattleEnded = true;
             Debug.Log("▶ 전투 승리");
+            enemyParty.Clear();
         }
     }
 
@@ -260,6 +291,7 @@ public class BattleFlowController : MonoBehaviour
     public void ForceEndBattle(bool playerGaveUp)
     {
         isBattleEnded = true;
+        enemyParty.Clear();
         if (playerGaveUp)
         {
             Debug.Log("▶ 플레이어 전투 포기 → 타이틀로 이동");
