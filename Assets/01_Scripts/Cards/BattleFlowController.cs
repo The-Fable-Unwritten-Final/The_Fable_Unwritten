@@ -209,7 +209,35 @@ public class BattleFlowController : MonoBehaviour
     /// </summary>
     public void ExecuteEnemyTurn()
     {
-        //적 행동 설정;
+        if (isBattleEnded) return;
+        currentTurn = TurnState.EnemyTurn;
+
+        Debug.Log("적 턴 시작");
+
+        // 1. 살아있는 적만 행동함
+        foreach (var enemy in enemyParty)
+        {
+            if (!enemy.IsAlive()) continue;
+
+            Enemy enemyComp = enemy as Enemy;
+            if (enemyComp != null)
+            {
+                EnemyPattern pattern = enemyComp.GetComponent<EnemyPattern>();
+                if (pattern != null)
+                {
+                    pattern.ExecutePattern(enemyComp);
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"[BattleFlow] {enemy} 에 EnemyPattern 스크립트가 없습니다.");
+            }
+        }
+
+        // 3. 적 행동 종료 후 턴 종료 체크 및 다음 턴으로 전환
+        CheckBattleEnd();
+        if (!isBattleEnded)
+            ExecutePlayerTurn();
     }
 
     private void PlanEnemySkills()

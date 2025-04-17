@@ -45,6 +45,7 @@ public class PlayerData : ScriptableObject
 
     public List<int> defaultDeckIndexes;// 시작 덱 카드 인덱스 저장 (CSV 기준 index)
     public List<int> currentDeckIndexes;// 현재 덱 카드 인덱스 저장 (CSV 기준 index, 세이브 로드 용)
+    public List<int> unlockCardIndexes; // 현재 해금되어 사용 가능한 인덱스 저장(csv 기준 index, 세이브 로드 및 해금 카드 확인용) 
     public List<CardModel> currentDeck; // 게임 중 변화 가능한 덱
 
     /// <summary>
