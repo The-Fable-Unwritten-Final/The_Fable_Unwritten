@@ -41,7 +41,7 @@ public class EnemyPattern : MonoBehaviour
             return;
         }
 
-        // 3. 스킬 데이터 가져오기
+        // 3. 스킬 데이터 가져오기 
         var actData = EnemySkillDatabase.Instance.Get(skill.skillIndex);
         if (actData == null)
         {
