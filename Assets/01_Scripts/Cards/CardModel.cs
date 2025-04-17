@@ -36,6 +36,8 @@ public class CardModel : ScriptableObject
     [Header("Card Effects")]
     public List<CardEffectBase> effects = new();    //어떤 효과를 가졌는지
 
+    public bool isUnlocked = false;              //카드가 해금 되었는지
+
 
     // ==== 사용 조건 및 비용 ====
 
