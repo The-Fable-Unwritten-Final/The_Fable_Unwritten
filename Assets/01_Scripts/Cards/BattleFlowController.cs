@@ -38,7 +38,6 @@ public class BattleFlowController : MonoBehaviour
     private void Start()
     {
         SetupPredefinedPlayerSlots();
-        enemyParty = new List<IStatusReceiver>(enemyObjects);
         Initialize();
     }
 
@@ -217,16 +216,18 @@ public class BattleFlowController : MonoBehaviour
         // 1. 살아있는 적만 행동함
         foreach (var enemy in enemyParty)
         {
+            if (enemy == null)
+            {
+                Debug.Log("[BattleFlow] enemyParty 내 null 객체 발견");
+                continue;
+            }
+
             if (!enemy.IsAlive()) continue;
 
             Enemy enemyComp = enemy as Enemy;
             if (enemyComp != null)
             {
-                EnemyPattern pattern = enemyComp.GetComponent<EnemyPattern>();
-                if (pattern != null)
-                {
-                    pattern.ExecutePattern(enemyComp);
-                }
+                EnemyPattern.ExecutePattern(enemyComp);
             }
             else
             {
@@ -261,17 +262,19 @@ public class BattleFlowController : MonoBehaviour
     private void CheckBattleEnd()
     {
         bool allPlayersDead = playerParty.TrueForAll(p => !p.IsAlive());
-        bool allEnemiesDead = enemyParty.TrueForAll(p => !p.IsAlive());
+        bool allEnemiesDead = enemyParty.TrueForAll(p => !p?.IsAlive() ?? true);
 
         if (allPlayersDead)
         {
             isBattleEnded = true;
             Debug.Log("▶ 전투 패배");
+            enemyParty.Clear();
         }
         else if (allEnemiesDead)
         {
             isBattleEnded = true;
             Debug.Log("▶ 전투 승리");
+            enemyParty.Clear();
         }
     }
 
@@ -288,6 +291,7 @@ public class BattleFlowController : MonoBehaviour
     public void ForceEndBattle(bool playerGaveUp)
     {
         isBattleEnded = true;
+        enemyParty.Clear();
         if (playerGaveUp)
         {
             Debug.Log("▶ 플레이어 전투 포기 → 타이틀로 이동");

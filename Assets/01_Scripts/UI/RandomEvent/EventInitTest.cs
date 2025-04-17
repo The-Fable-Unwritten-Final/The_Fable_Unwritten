@@ -14,7 +14,7 @@ public class EventInitTest : MonoSingleton<EventInitTest>
     [Header("선택된 이벤트 (현재 스테이지 기준)")]
     public RandomEventData selectedEvent;
 
-    private void Awake()
+    protected override void Awake()
     {
         base.Awake();
         allEvents = RandomEventJsonLoader.LoadAllEvents();
