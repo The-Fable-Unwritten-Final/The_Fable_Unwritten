@@ -1,6 +1,5 @@
 public class CardData           //csv 인덱스에 따라 데이터를 받아오는 파서
 {
-    public bool isUnlocked = false;              //카드가 해금 되었는지
     public int index;                  // 카드 고유 번호
     public int cost;                   // 카드 코스트
     public string illustration;        // 일러스트 이름
