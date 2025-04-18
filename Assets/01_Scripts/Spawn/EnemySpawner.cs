@@ -18,12 +18,14 @@ public class EnemySpawner : MonoBehaviour
     private void Start()
     {
 
-        var stageIndex = GameManager.Instance.stageIndex;
+        var stageIndex = GameManager.Instance.StageSetting.StageIndex;
+
         backGround.sprite = GameManager.Instance.GetBackgroundForStage(stageIndex);
 
-        stageSpawnDatas = GameManager.Instance.enemyStageSpawnDatas;
-        int currentStage = GameManager.Instance.stageIndex;
-        var node = GameManager.Instance.currentBattleNode;
+        stageSpawnDatas = GameManager.Instance.GetSpawnData(stageIndex, GameManager.Instance.StageSetting.CurrentBattleNode.type);
+        int currentStage = stageIndex;
+        var node = GameManager.Instance.StageSetting.CurrentBattleNode;
+
 
         var stageData = stageSpawnDatas
             .FirstOrDefault(x => x.stageIndex == currentStage && x.type == node.type);
@@ -42,7 +44,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void FixedStage1Setting(EnemyStageSpawnData stageData)
     {
-        int columnIndex = GameManager.Instance.savedVisitedNodes.Last().columnIndex;
+        int columnIndex = GameManager.Instance.StageSetting.VisitedNodes.Last().columnIndex;
         int index = columnIndex - 1;
 
         if (index < 0 || index >= stageData.spawnSets.Count) return;

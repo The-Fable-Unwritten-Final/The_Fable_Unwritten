@@ -25,15 +25,15 @@ public class StageMapController : MonoBehaviour
 
     private void Start()
     {
-        // 시작 시 스테이지 복원 또는 새로 시작
+        var gm = GameManager.Instance;
         
 
         if (!TryRestoreStage())
         {
-            LoadStage(stageIndex);
+            LoadStage(gm.StageSetting.StageIndex);
         }
 
-        stageIndex = GameManager.Instance.stageIndex;
+        int stageIndex = gm.StageSetting.StageIndex;
         backGround.sprite = GameManager.Instance.GetBackgroundForStage(stageIndex);
     }
 
@@ -41,31 +41,35 @@ public class StageMapController : MonoBehaviour
     private bool TryRestoreStage()
     {
         var gm = GameManager.Instance;
+        var stageSetting = gm.StageSetting;
 
-        if (gm.savedStageData != null && !gm.retryFromStart)
+        if (stageSetting.SavedStageData != null && !stageSetting.RetryFromStart)
         {
-            if (gm.stageCleared)
+            if (stageSetting.StageCleared)
             {
-                var lastVisited = gm.savedVisitedNodes.Last();
-                bool wasLastColumnNode = gm.savedStageData.columns[^1].Contains(lastVisited); // 보스 노드 방문 여부
+                var lastVisited = stageSetting.VisitedNodes.Last();
+                bool wasLastColumnNode = stageSetting.SavedStageData.columns[^1].Contains(lastVisited); // 보스 노드 방문 여부
 
                 // 보스 노드 클리어면 다음 스테이지
                 if (wasLastColumnNode)
                 {
-                    gm.stageIndex++;
-                    gm.stageCleared = false;
-                    stageIndex = gm.stageIndex;
+                    stageSetting.StageIndex++;
+
+                    stageSetting.ClearStageState();
+                    stageIndex = stageSetting.StageIndex;
+
+                    stageSetting.StageCleared= false;
                     LoadStage(stageIndex);
                     return true;
                 }
             }
 
             // 스테이지 데이터 복구 (야영지, 이벤트, 인게임에서 돌아 왔을 경우)
-            stageData = gm.savedStageData;  // 게임 매니저에서 데이터 불러오기
+            stageData = stageSetting.SavedStageData;  // 게임 매니저에서 데이터 불러오기
             visitedNodes.Clear();           
-            visitedNodes.AddRange(gm.savedVisitedNodes);
-            stageIndex = gm.stageIndex;
-            gm.stageCleared = false;
+            visitedNodes.AddRange(stageSetting.VisitedNodes);
+            stageIndex = stageSetting.StageIndex;
+            stageSetting.StageCleared = false;
 
             mapRenderer.Render(stageData, OnNodeClicked);
             mapRenderer.CenterMap();
@@ -79,11 +83,12 @@ public class StageMapController : MonoBehaviour
     // 노드 클릭 시 스테이지 호출 및 저장
     private void OnNodeClicked(GraphNode clicked)
     {
-        //Test용
-        //SoundManager.PlaySFX(SoundNameData.Test_SFX_Click);
-
         visitedNodes.Add(clicked);
-        GameManager.Instance.SaveStageState(stageData, visitedNodes, stageIndex);
+
+
+        var gm = GameManager.Instance;
+        gm.StageSetting.SaveStageState(stageData, visitedNodes);
+        gm.StageSetting.SetCurrentBattleNode(clicked);
 
         // 노드 타입별 씬 전환
         switch (clicked.type)
@@ -91,7 +96,6 @@ public class StageMapController : MonoBehaviour
             case NodeType.NormalBattle:
             case NodeType.EliteBattle:
             case NodeType.Boss:
-                GameManager.Instance.currentBattleNode = clicked;
                 SceneManager.LoadScene("CombatScene_Test");
                 return;
 
@@ -107,8 +111,7 @@ public class StageMapController : MonoBehaviour
         if (IsLastColumnNode(clicked))
         {
             // 마지막 열(보스노드)의 경우 스테이지 증가
-            stageIndex++;
-            GameManager.Instance.stageIndex = stageIndex;
+            gm.StageSetting.StageIndex++;
         }
         else
         {

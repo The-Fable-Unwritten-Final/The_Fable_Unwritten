@@ -4,21 +4,8 @@ using UnityEngine;
 public class GameManager : MonoSingleton<GameManager>
 {
     public List<PlayerData> playerDatas = new();  //  보유중인 케릭터 데이터
-    public GraphNode currentBattleNode;
 
-    public List<EnemyStageSpawnData> enemyStageSpawnDatas; // 초기 GameManger에서 StageSpawnData 파싱 후 보유하는 리스트 (추후 타 매니저에 옮겨줄 예정)
-    public List<RandomEventData> allRandomEvents; // 초기 랜덤이벤트 JSon 파싱 정보 (추후 타 매니저에 옮겨줄 예정)
-    public HashSet<int> usedRandomEvnent = new(); // 랜덤 이벤트 진행 유무(게임 재시작 및 실패 시 초기화)
-    public Dictionary<int, Sprite> stageBackgrounds; // 초기 백그라운드 로드 데이터 (추후 타 매니저에 옮겨줄 예정)
-
-
-    public StageData savedStageData;    // 현재 진행 중인 스테이지 데이터
-    public List<GraphNode> savedVisitedNodes = new(); // 플레이어가 진행한 노드 리스트
-    public int stageIndex;              //현재 스테이지 인덱스
-    public int minimumStageIndex;       // 재시작 스테이지 (2스테이지 클리어시 2)
-    public bool retryFromStart = false; // 스테이지 실패여서 재시작여부
-    public bool stageCleared = false;   // 전투 승리 여부
-
+    public StageSetttingController StageSetting { get; private set; }
     private PlayerPartySO playerParty;
 
     [Header("Controller")]
@@ -30,22 +17,15 @@ public class GameManager : MonoSingleton<GameManager>
     {
         base.Awake();
 
+        StageSetting = new StageSetttingController();
+        StageSetting.Initialize();
+
         // 추후 데이터매니저? 이동 가능성 있음
         CardSystemInitializer.Instance.LoadCardDatabase();
         EnemySkillInitializer.ImportAndGenerate();
         EnemyInitializer.ImportAndGenerate();
-        enemyStageSpawnDatas = StageSpawnSetCSVParser.LoadFromCSV();
-        allRandomEvents = RandomEventJsonLoader.LoadAllEvents();
-        stageBackgrounds = BackgoundLoader.LoadBackgrounds();
         LoadPlayerPartyIfNull(); // <- 플레이어 데이터 가져오기
         playerDatas = new List<PlayerData>(playerParty.allPlayers);
-
-        // 1스테이지 부터 시작
-        if (stageIndex <= 0)
-            stageIndex = 1;
-
-        if (minimumStageIndex <= 0)
-            minimumStageIndex = 1;
     }
 
     private void LoadPlayerPartyIfNull()
@@ -83,26 +63,6 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
-    /// <summary>
-    /// 현재 스테이지 상태 저장
-    /// </summary>
-    public void SaveStageState(StageData data, List<GraphNode> visited, int index)
-    {
-        savedStageData = data;
-        savedVisitedNodes = new List<GraphNode>(visited);
-        stageIndex = index;
-    }
-
-    /// <summary>
-    /// 저장된 스테이지 상태 초기화
-    /// </summary>
-    public void ClearStageState()
-    {
-        //새로하기 기능 있으면 재시작 시테이지(minimumStageIndex)도 초기화 시켜줘야함
-        savedStageData = null;
-        savedVisitedNodes.Clear();
-    }
-
     public void RegisterCombatUI(CombatUIController cont)
     {
         combatUIController = cont;
@@ -128,17 +88,19 @@ public class GameManager : MonoSingleton<GameManager>
         turnController = null;
     }
 
-    /// <summary>
-    /// 스테이지에 맞는 배경화면 셋팅
-    /// </summary>
+
     public Sprite GetBackgroundForStage(int stageIndex)
     {
-        stageBackgrounds.TryGetValue(stageIndex, out var bg);
-        return bg;
+        return StageSetting.GetBackground(stageIndex);
     }
 
-    public void ClearUsedEvents()
+    public RandomEventData GetRandomEvent(int stageIndex)
     {
-        usedRandomEvnent.Clear();
+        return StageSetting.GetRandomEvent(stageIndex);
+    }
+
+    public List<EnemyStageSpawnData> GetSpawnData(int stageIndex, NodeType type)
+    {
+        return StageSetting.GetEnemySpawnData(stageIndex, type);
     }
 }
