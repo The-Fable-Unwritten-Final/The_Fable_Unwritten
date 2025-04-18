@@ -18,6 +18,8 @@ public class CardBook : MonoBehaviour,IBookControl
     [SerializeField] RectTransform cardInfoPopup; // 카드 정보 팝업
     [SerializeField] BookCards cardInfoDisplay; // 카드 정보 표시 카드
     [SerializeField] TextMeshProUGUI cardInfoDesc; // 카드 정보 표시 카드 설명
+    [SerializeField] RectTransform leftArrow; // 왼쪽 화살표
+    [SerializeField] RectTransform rightArrow; // 오른쪽 화살표
     enum SortType
     {
         Index,
@@ -50,6 +52,7 @@ public class CardBook : MonoBehaviour,IBookControl
             Debug.Log("첫 페이지입니다.");
         }
         UpdateCard(currentPage);// 페이지에 맞는 카드 정보 세팅.
+        UpdateArrow(); // 화살표 업데이트
     }
     public void OnclickPageAfter()
     {
@@ -63,6 +66,7 @@ public class CardBook : MonoBehaviour,IBookControl
             Debug.Log("마지막 페이지입니다.");
         }
         UpdateCard(currentPage);// 페이지에 맞는 카드 정보 세팅.
+        UpdateArrow(); // 화살표 업데이트
     }
 
     public void InitDictionary()
@@ -95,18 +99,21 @@ public class CardBook : MonoBehaviour,IBookControl
                 // 페이지내 카드 정보 업데이트 (카드의 정보, 카드 보유 유무)
                 cards = SortByIndex(cardForShopia);// 초기 카드 설정 (인덱스 순서 정렬)
                 UpdateCard(0);// 페이지에 맞는 카드 정보 세팅.
+                UpdateArrow(); // 화살표 업데이트
                 break;
             case 1:// 카일라 카드 페이지
                 maxPageCount = Mathf.CeilToInt(cardForKayla.Count / 8f);
                 currentPage = 0;
                 cards = SortByIndex(cardForKayla);
                 UpdateCard(0);// 페이지에 맞는 카드 정보 세팅.
+                UpdateArrow(); // 화살표 업데이트
                 break;
             case 2:// 레온 카드 페이지
                 maxPageCount = Mathf.CeilToInt(cardForLeon.Count / 8f);
                 currentPage = 0;
                 cards = SortByIndex(cardForLeon);
                 UpdateCard(0);// 페이지에 맞는 카드 정보 세팅.
+                UpdateArrow(); // 화살표 업데이트
                 break;
             default:
                 Debug.LogError("Invalid index for CardsSet: " + index);
@@ -212,6 +219,26 @@ public class CardBook : MonoBehaviour,IBookControl
             {
                 bookCards[slotIndex].SetCardInfo(cards[j]);// 카드에 카드 정보 대입.
             }
+        }
+    }
+    void UpdateArrow()
+    {
+        if(currentPage == 0) // 첫 페이지일 경우 왼쪽 화살표 비활성화
+        {
+            leftArrow.gameObject.SetActive(false);
+        }
+        else
+        {
+            leftArrow.gameObject.SetActive(true);
+        }
+
+        if(currentPage == maxPageCount - 1) // 마지막 페이지일 경우 오른쪽 화살표 비활성화
+        {
+            rightArrow.gameObject.SetActive(false);
+        }
+        else
+        {
+            rightArrow.gameObject.SetActive(true);
         }
     }
 }
