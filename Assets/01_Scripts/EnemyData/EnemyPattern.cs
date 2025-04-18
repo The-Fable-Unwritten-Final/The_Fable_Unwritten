@@ -7,12 +7,8 @@ using Random = UnityEngine.Random;
 /// Enemy의 턴마다 스킬 또는 공격을 실행하는 패턴 제어 클래스
 /// EnemyData에 저장된 스킬 정보와 EnemyAct를 기반으로 실행
 /// </summary>
-public class EnemyPattern : MonoBehaviour
+public static class EnemyPattern
 {
-    // 전투 중 현재 플레이어 파티와 적 파티 참조
-    private List<IStatusReceiver> playerParty = GameManager.Instance.turnController.battleFlow.playerParty;
-    private List<IStatusReceiver> enemyParty = GameManager.Instance.turnController.battleFlow.enemyParty;
-
 
     // StanceType 개수 (한 번만 계산)
     private static readonly int stanceCount =
@@ -22,7 +18,7 @@ public class EnemyPattern : MonoBehaviour
     /// <summary>
     /// 외부에서 호출되는 메인 메서드 - 적이 턴에 행동을 수행함
     /// </summary>
-    public void ExecutePattern(IStatusReceiver enemy)
+    public static void ExecutePattern(IStatusReceiver enemy)
     {
         // 받은 친구가 Enemy 타입인지 확인
         if (enemy is not Enemy enemyComponent)
@@ -68,15 +64,15 @@ public class EnemyPattern : MonoBehaviour
     /// <param name="actData"></param>
     /// <param name="self"></param>
     /// <returns></returns>
-    private List<IStatusReceiver> ChooseTargetsFromActData(EnemyAct actData, Enemy self)
+    private static List<IStatusReceiver> ChooseTargetsFromActData(EnemyAct actData, Enemy self)
     {
         var targets = new List<IStatusReceiver>();
         var candidates = new List<IStatusReceiver>();
 
         // 1. 타겟 그룹 설정 (적 기준: Ally → 플레이어, Enemy → 적 자신 포함)
         List<IStatusReceiver> targetGroup = actData.targetType == TargetType.Ally
-            ? playerParty
-            : enemyParty;
+            ? GameManager.Instance.turnController.battleFlow.playerParty
+            : GameManager.Instance.turnController.battleFlow.enemyParty;
 
 
         if (actData.targetType == TargetType.Ally)       // 적 기준 적 → 플레이어 파티 공격
@@ -120,7 +116,7 @@ public class EnemyPattern : MonoBehaviour
 
         return targets;
     }
-    private void SetRandomStance(Enemy enemy)
+    private static void SetRandomStance(Enemy enemy)
     {
         // 1) 파싱된 확률 데이터 사용
         if (!EnemyParseManager.ParsedDict.TryGetValue(enemy.enemyData.IDNum, out var parsed))
@@ -172,7 +168,7 @@ public class EnemyPattern : MonoBehaviour
     /// </summary>
     /// <param name="enemy"></param>
     /// <returns></returns>
-    private EnemySkill ChooseSkill(Enemy enemy)
+    private static EnemySkill ChooseSkill(Enemy enemy)
     {
         if (enemy.enemyData.SkillDict == null || enemy.enemyData.SkillDict.Count == 0)
             return null; // 스킬 없으면 기본 공격
@@ -199,7 +195,7 @@ public class EnemyPattern : MonoBehaviour
     /// </summary>
     /// <param name="target">타겟</param>
     /// <param name="act">스킬 데이터</param>
-    private void ApplyStatusEffect(IStatusReceiver target, EnemyAct act)
+    private static void ApplyStatusEffect(IStatusReceiver target, EnemyAct act)
     {
         if(act.atk_buff != 0)
         {
