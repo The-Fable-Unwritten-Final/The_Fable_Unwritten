@@ -47,6 +47,7 @@ public class PopupUI_Book : BasePopupUI
 
     public void OnClickIdle()// 이상 실현 버튼
     {
+        currentPageType = 1;
         SetAllToFirst(); // 모든 책갈피를 가장 아래로 내림
         SetAllPageClose(); // 모든 페이지 비활성화
         pages[1].gameObject.SetActive(true); // 이상 실현 페이지 활성화
@@ -54,6 +55,7 @@ public class PopupUI_Book : BasePopupUI
     }
     public void OnClickDiary()// 일기장 버튼
     {
+        currentPageType = 2;
         SetAllToFirst(); // 모든 책갈피를 가장 아래로 내림
         SetAllPageClose(); // 모든 페이지 비활성화
         pages[2].gameObject.SetActive(true); // 일기장 페이지 활성화

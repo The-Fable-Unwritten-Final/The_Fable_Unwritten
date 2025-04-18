@@ -8,12 +8,6 @@ public interface IBookControl
     int maxPageCount { get; set; } // 페이지 수
     int currentPage { get; set; } // 현재 페이지
 
-    void OnclickPageBefore()
-    {
-        
-    }
-    void OnclickPageAfter()
-    {
-        
-    }
+    void OnclickPageBefore();
+    void OnclickPageAfter();
 }
