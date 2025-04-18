@@ -17,7 +17,6 @@ public class CardBook : MonoBehaviour,IBookControl
     // 카드 상호작용 UI
     [SerializeField] RectTransform cardInfoPopup; // 카드 정보 팝업
     [SerializeField] BookCards cardInfoDisplay; // 카드 정보 표시 카드
-    [SerializeField] TextMeshProUGUI cardInfoName; // 카드 정보 표시 카드 이름
     [SerializeField] TextMeshProUGUI cardInfoDesc; // 카드 정보 표시 카드 설명
 
     Dictionary<int, CardModel> cardForShopia = new();
@@ -130,8 +129,6 @@ public class CardBook : MonoBehaviour,IBookControl
         BookCards card = t.GetComponent<BookCards>();
         if (card.isEmpty == true) return; // 빈 카드를 누르면 리턴.
         card.GiveCardInfo(cardInfoDisplay); // 카드 정보 표시 카드
-        cardInfoName.text = card.cardNameText.text; // 카드 이름
-        cardInfoDesc.text = card.cardDesc.text; // 카드 설명
         cardInfoPopup.gameObject.SetActive(true);// 카드 정보 팝업 활성화
     }
     public void ClickToOffCardInfo() // 카드 정보 팝업 비활성화

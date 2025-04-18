@@ -46,5 +46,7 @@ public class BookCards : MonoBehaviour
         card.cardType.sprite = cardType.sprite;
         card.cardChar.sprite = cardChar.sprite;
         card.cardCost.text = cardCost.text;
+        card.cardNameText.text = cardNameText.text;
+        card.cardDesc.text = cardDesc.text;
     }
 }
