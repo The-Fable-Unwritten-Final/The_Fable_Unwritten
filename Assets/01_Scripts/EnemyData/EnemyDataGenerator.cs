@@ -1,16 +1,14 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 /// <summary>
 /// EnemyParsed를 EnemyData 형식으로 변환하여 ScriptableObjects 목록에 저장하는 클래스
 /// </summary>
-public static class EnemyDataGenerator
+public class EnemyDataGenerator : MonoBehaviour
 {
     private const string EnemySavePath = "Assets/05._ScriptableObjects/Enemy/";
-    private const string ContainerPath = "Assets/02_Prefab/KSJ_Test/SO/EnemyDataContainer.asset";
 
     /// <summary>
     /// parsed 된 데이털f enemydata 형식으로 변환하여 저장
@@ -58,17 +56,18 @@ public static class EnemyDataGenerator
                 if (existing == null)
                 {
                     AssetDatabase.CreateAsset(data, fullPath);
+                    Debug.Log($"[EnemyData] 생성됨: {fileName}");
                 }
                 else
                 {
                     EditorUtility.SetDirty(data);
+                    Debug.Log($"[EnemyData] 갱신됨: {fileName}");
                 }
             }
         }
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        UpdateEnemyContainer();
     }
 
 
@@ -122,37 +121,5 @@ public static class EnemyDataGenerator
         }
 
         return true;
-    }
-
-    public static void UpdateEnemyContainer()
-    {
-        var guids = AssetDatabase.FindAssets("t:EnemyData", new[] { EnemySavePath });
-        var allEnemies = guids
-            .Select(guid => AssetDatabase.GUIDToAssetPath(guid))
-            .Select(path => AssetDatabase.LoadAssetAtPath<EnemyData>(path))
-            .Where(e => e != null)
-            .ToList();
-
-        EnemyDataContainer container = AssetDatabase.LoadAssetAtPath<EnemyDataContainer>(ContainerPath);
-        if (container == null)
-        {
-            container = ScriptableObject.CreateInstance<EnemyDataContainer>();
-            AssetDatabase.CreateAsset(container, ContainerPath);
-            Debug.Log("[EnemyDataContainer] 새로 생성됨");
-        }
-
-        var so = new SerializedObject(container);
-        var prop = so.FindProperty("enemyDataList");
-        prop.ClearArray();
-        for (int i = 0; i < allEnemies.Count; i++)
-        {
-            prop.InsertArrayElementAtIndex(i);
-            prop.GetArrayElementAtIndex(i).objectReferenceValue = allEnemies[i];
-        }
-
-        so.ApplyModifiedProperties();
-        EditorUtility.SetDirty(container);
-        AssetDatabase.SaveAssets();
-        Debug.Log($"[EnemyDataContainer] 총 {allEnemies.Count}개 EnemyData 등록 완료");
     }
 }

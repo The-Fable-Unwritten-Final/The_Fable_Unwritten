@@ -4,8 +4,9 @@ using UnityEngine;
 /// <summary>
 /// 모든 EnemyAct 스킬 데이터를 저장하고 조회하는 싱글톤 클래스
 /// </summary>
-public class EnemySkillDatabase : MonoSingleton<EnemySkillDatabase>
+public class EnemySkillDatabase : MonoBehaviour
 {
+    public static EnemySkillDatabase Instance { get; private set; }
 
     // 인스펙터에서 연결된 스킬 ScriptableObject 목록
     [SerializeField]
@@ -14,8 +15,16 @@ public class EnemySkillDatabase : MonoSingleton<EnemySkillDatabase>
     // 내부에서 인덱스로 빠르게 조회하기 위한 Dictionary
     private Dictionary<int, EnemyAct> skillDict = new();
 
-    private void Start()
+    private void Awake()
     {
+        // 싱글톤 패턴
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+
         InitializeSkillDictionary();
     }
 

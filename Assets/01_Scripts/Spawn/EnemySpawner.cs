@@ -3,29 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// EnemySpawn 관리자
 /// </summary>
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] Image backGround; // stage별 백그라운드 설정
     [SerializeField] private Transform[] enemySlots;                    // 몬스터 생성 위치
     [SerializeField] private List<EnemyStageSpawnData> stageSpawnDatas; // 각스테이지 스폰데이터 저장 공간
     [SerializeField] private EnemyDataContainer enemyDataContainer;     // 몬스터 프리팹 저장 공간
 
     private void Start()
     {
-
-        var stageIndex = GameManager.Instance.StageSetting.StageIndex;
-
-        backGround.sprite = GameManager.Instance.GetBackgroundForStage(stageIndex);
-
-        stageSpawnDatas = GameManager.Instance.GetSpawnData(stageIndex, GameManager.Instance.StageSetting.CurrentBattleNode.type);
-        int currentStage = stageIndex;
-        var node = GameManager.Instance.StageSetting.CurrentBattleNode;
-
+        stageSpawnDatas = GameManager.Instance.enemyStageSpawnDatas;
+        int currentStage = GameManager.Instance.stageIndex;
+        var node = GameManager.Instance.currentBattleNode;
 
         var stageData = stageSpawnDatas
             .FirstOrDefault(x => x.stageIndex == currentStage && x.type == node.type);
@@ -44,7 +36,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void FixedStage1Setting(EnemyStageSpawnData stageData)
     {
-        int columnIndex = GameManager.Instance.StageSetting.VisitedNodes.Last().columnIndex;
+        int columnIndex = GameManager.Instance.savedVisitedNodes.Last().columnIndex;
         int index = columnIndex - 1;
 
         if (index < 0 || index >= stageData.spawnSets.Count) return;

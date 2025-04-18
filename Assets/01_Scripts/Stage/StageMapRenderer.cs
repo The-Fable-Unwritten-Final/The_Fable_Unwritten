@@ -170,7 +170,7 @@ public class StageMapRenderer : MonoBehaviour
             case NodeType.Camp:
                 return campIcon;
             case NodeType.Boss:
-                return GetBossIcon(GameManager.Instance.StageSetting.StageIndex);
+                return GetBossIcon(GameManager.Instance.stageIndex);
             default: return null;
         }     
     }
@@ -179,7 +179,7 @@ public class StageMapRenderer : MonoBehaviour
     {
         if (stageIndex < 2) return null;
 
-        int bossIndex = stageIndex - 2; // Stage 2 -> 0, Stage 5 -> 3
+        int bossIndex = stageIndex - 2; // Stage 2 → 0, Stage 5 → 3
         
         return bossStageIcons[bossIndex];
     }

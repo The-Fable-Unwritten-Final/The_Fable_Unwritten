@@ -7,13 +7,13 @@ public class StageMoveTest : MonoBehaviour
 {
      public void OnClear()
     {
-        GameManager.Instance.StageSetting.RetryFromStart = false;
-        GameManager.Instance.StageSetting.StageCleared = true;
+        GameManager.Instance.retryFromStart = false;
+        GameManager.Instance.stageCleared = true;
 
         // 1 스테이지 클리어 후, 실패 시 2스테이지부터 시작하게 설정
-        if (GameManager.Instance.StageSetting.StageIndex == 2)
+        if (GameManager.Instance.stageIndex == 2)
         {
-            GameManager.Instance.StageSetting.MinStageIndex = 2;
+            GameManager.Instance.minimumStageIndex = 2;
         }
 
         SceneManager.LoadScene("StageScene");
@@ -21,12 +21,11 @@ public class StageMoveTest : MonoBehaviour
 
     public void OnFail()
     {
-
-        GameManager.Instance.StageSetting.RetryFromStart = true;
-        GameManager.Instance.StageSetting.ClearStageState();
+        GameManager.Instance.retryFromStart = true;
+        GameManager.Instance.ClearStageState();
 
         // 최소 시작 스테이지부터 재시작 (1 또는 2)
-        GameManager.Instance.StageSetting.StageIndex = GameManager.Instance.StageSetting.MinStageIndex;
+        GameManager.Instance.stageIndex = GameManager.Instance.minimumStageIndex;
 
         SceneManager.LoadScene("StageScene");
     }
