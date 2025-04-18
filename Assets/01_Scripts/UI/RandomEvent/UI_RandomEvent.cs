@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -10,6 +11,7 @@ using UnityEngine.VFX;
 public class UI_RandomEvent : MonoBehaviour
 {
     [Header("ConnetObject")]
+    [SerializeField] Image backGround;
     [SerializeField] Image illustration_Img;
     [SerializeField] TextMeshProUGUI titleTxt; 
     [SerializeField] TextMeshProUGUI descriptionTxt;
@@ -25,7 +27,8 @@ public class UI_RandomEvent : MonoBehaviour
 
     private void Start()
     {
-        currentData = EventInitTest.Instance.selectedEvent;
+        GetCurrentEvent();
+
         if (currentData != null)
         {
             InitUI(currentData);
@@ -34,6 +37,22 @@ public class UI_RandomEvent : MonoBehaviour
         {
             Debug.LogWarning("랜덤 이벤트 데이터가 없습니다.");
         }
+    }
+
+    private void GetCurrentEvent()
+    {
+        int currentStageIndex = GameManager.Instance.StageSetting.StageIndex;
+
+        currentData = GameManager.Instance.GetRandomEvent(currentStageIndex);
+
+
+        if (currentData == null)
+        {
+            Debug.LogWarning($"스테이지 {currentStageIndex}에 사용 가능한 이벤트가 없습니다.");
+            return;
+        }
+
+        backGround.sprite = GameManager.Instance.GetBackgroundForStage(currentStageIndex);
     }
 
     private void InitUI(RandomEventData data)

@@ -14,7 +14,7 @@ public class UI_MainTitle : MonoBehaviour
     [SerializeField] Button exitBtn;
 
 
-    private void OnClickNewGame()
+    public void OnClickNewGame()
     {
         // 게임 데이터 초기화 로직 추가 (DataManager 나 GameManager에 로직추가?)
         SceneManager.LoadScene(SceneNameData.StageScene);
