@@ -13,7 +13,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     void Start()
     {
-        //enemyData.CurrentHP = enemyData.MaxHP; //전투 시작시 EnemyHP 풀로 채우기 
+        //enemyData.CurrentHP = enemyData.MaxHP; //전투 시작시 EnemyHP 풀로 채우기  //예외 처리를 해주면 된다.
     }
 
     /// <summary>

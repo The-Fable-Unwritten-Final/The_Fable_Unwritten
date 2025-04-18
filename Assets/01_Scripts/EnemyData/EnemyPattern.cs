@@ -120,17 +120,52 @@ public class EnemyPattern : MonoBehaviour
 
         return targets;
     }
-
-
-    /// <summary>
-    /// 랜덤한 StanceType을 설정하고 로그를 출력
-    /// </summary>
     private void SetRandomStance(Enemy enemy)
     {
-        var stance = (PlayerData.StancType)Random.Range(0, stanceCount);
-        enemy.enemyData.currentStance = (EnemyData.StancValue.EStancType)stance;
-        Debug.Log($"[EnemyPattern] {enemy.enemyData.EnemyName} 자세 → {stance}");
+        // 1) 파싱된 확률 데이터 사용
+        if (!EnemyParseManager.ParsedDict.TryGetValue(enemy.enemyData.IDNum, out var parsed))
+        {
+            // 파싱 정보가 없으면 기존 균등 랜덤으로 대체 = 방어코드
+            var fallback = (PlayerData.StancType)Random.Range(0, stanceCount);
+            enemy.enemyData.currentStance = (EnemyData.StancValue.EStancType)fallback;
+            Debug.LogWarning($"[EnemyPattern] ID {enemy.enemyData.IDNum} 파싱 데이터 없음 → 균등 랜덤 Stance={fallback}");
+            return; // “High, Middle, Low 세 가지를 똑같은 확률(1/3씩) = 파싱 정보가 없을경우
+        }
+
+        // 2) 확률값 읽어오기
+        float topP = parsed.topPercentage;      // High 확률
+        float midP = parsed.middlePercentage;   // Middle 확률
+        float botP = parsed.bottomPercentage;   // Low 확률
+
+        // 3) 랜덤 값으로 분포 적용
+        float r = Random.value;  // 0.0 ~ 1.0
+        if (r < topP)
+        {
+            enemy.enemyData.currentStance = EnemyData.StancValue.EStancType.High;
+            Debug.Log($"[EnemyPattern] {enemy.enemyData.EnemyName} 자세 → High (r={r:F2})");
+        }
+        else if (r < topP + midP)
+        {
+            enemy.enemyData.currentStance = EnemyData.StancValue.EStancType.Middle;
+            Debug.Log($"[EnemyPattern] {enemy.enemyData.EnemyName} 자세 → Middle (r={r:F2})");
+        }
+        else
+        {
+            enemy.enemyData.currentStance = EnemyData.StancValue.EStancType.Low;
+            Debug.Log($"[EnemyPattern] {enemy.enemyData.EnemyName} 자세 → Low (r={r:F2})");
+        }
     }
+
+    ///// <summary>
+    ///// 랜덤한 StanceType을 설정하고 로그를 출력
+    ///// </summary>
+    //private void SetRandomStance(Enemy enemy)
+    //{
+    //    var stance = (PlayerData.StancType)Random.Range(0, stanceCount);
+    //    enemy.enemyData.currentStance = (EnemyData.StancValue.EStancType)stance;
+    //    Debug.Log($"[EnemyPattern] {enemy.enemyData.EnemyName} 자세 → {stance}");
+    //}
+
 
     /// <summary>
     /// 에너미 데이터에 따라 사용할 스킬을 랜덤으로 선택
@@ -142,8 +177,8 @@ public class EnemyPattern : MonoBehaviour
         if (enemy.enemyData.SkillDict == null || enemy.enemyData.SkillDict.Count == 0)
             return null; // 스킬 없으면 기본 공격
 
-        float total = 0;                
-        foreach (var s in enemy.enemyData.SkillDict.Values)         //스킬 스킬 공격 확률에 따라 스킬 선택
+        float total = 0;                 
+        foreach (var s in enemy.enemyData.SkillDict.Values) // 스킬 공격 확률에 따라 스킬 선택
             total += s.percentage;
 
         float rand = Random.Range(0f, 1);
