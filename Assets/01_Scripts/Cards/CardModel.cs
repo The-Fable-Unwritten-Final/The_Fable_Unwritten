@@ -11,6 +11,7 @@ public class CardModel : ScriptableObject
     public int index;
     public string cardName;                 //카드 이름
     public string cardText;                 // 카드 설명 필드 추가 (CSV의 text 대응)
+    public string FlavorText;               // 카드의 배경적 설명
 
     [Header("Core Cost")]
     public int manaCost;                    //카드 코스트

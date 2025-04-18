@@ -24,23 +24,23 @@ public static class EnemyActCSVParser
 
             try
             {
-                var act = new EnemyAct
-                {
-                    index = ParseInt(t, 0),
-                    targetType = (TargetType)ParseInt(t, 1),
-                    targetNum = ParseInt(t, 2),
+                var act = ScriptableObject.CreateInstance<EnemyAct>();
 
-                    target_front = ParseBool(t, 3),
-                    target_center = ParseBool(t, 4),
-                    target_back = ParseBool(t, 5),
+                act.index = ParseInt(t, 0);
+                act.targetType = (TargetType)ParseInt(t, 1);
+                act.targetNum = ParseInt(t, 2);
 
-                    atk_buff = ParseInt(t, 6),
-                    def_buff = ParseInt(t, 7),
+                act.target_front = ParseBool(t, 3);
+                act.target_center = ParseBool(t, 4);
+                act.target_back = ParseBool(t, 5);
 
-                    buff_time = ParseInt(t, 8),
-                    block = ParseBool(t, 9),
-                    stun = ParseInt(t, 10),
-                };
+                act.atk_buff = ParseInt(t, 6);
+                act.def_buff = ParseInt(t, 7);
+
+                act.buff_time = ParseInt(t, 8);
+                act.block = ParseBool(t, 9);
+                act.stun = ParseInt(t, 10);
+
                 list.Add(act);
             }
             catch (System.Exception e)

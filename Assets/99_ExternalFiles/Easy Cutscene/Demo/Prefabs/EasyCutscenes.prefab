@@ -1,0 +1,1753 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4864416127805367110
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4864416127805367105}
+  - component: {fileID: 4864416127805367107}
+  - component: {fileID: 4864416127805367104}
+  m_Layer: 5
+  m_Name: ChatText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4864416127805367105
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864416127805367110}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4864416128160793993}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 37.06, y: 3.84}
+  m_SizeDelta: {x: 2937.39, y: 348.74}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &4864416127805367107
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864416127805367110}
+  m_CullTransparentMesh: 1
+--- !u!114 &4864416127805367104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864416127805367110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.3962264, g: 0.16073334, b: 0.16073334, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: a4b5fd9ce748c4d40b2f8d285d994c7b, type: 3}
+    m_FontSize: 80
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 0
+    m_MaxSize: 300
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Chat Text
+--- !u!1 &4864416128160793998
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4864416128160793993}
+  - component: {fileID: 4864416128160793995}
+  - component: {fileID: 4864416128160793992}
+  - component: {fileID: 4864416128160793994}
+  m_Layer: 5
+  m_Name: ChatPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4864416128160793993
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864416128160793998}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4864416127805367105}
+  m_Father: {fileID: 4864416128172499124}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -361.34}
+  m_SizeDelta: {x: 1700, y: 257.32}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &4864416128160793995
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864416128160793998}
+  m_CullTransparentMesh: 1
+--- !u!114 &4864416128160793992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864416128160793998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: -763267623, guid: 4425e72bfe698e448a85267e0fc3c84e, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4864416128160793994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864416128160793998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 4864416128160793992}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4864416128425028104}
+        m_TargetAssemblyTypeName: EcCutsceneManager, Assembly-CSharp
+        m_MethodName: PlayNextCutscene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!1 &4864416128172499125
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4864416128172499124}
+  m_Layer: 0
+  m_Name: EcGUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4864416128172499124
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864416128172499125}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4864416129370184250}
+  - {fileID: 4864416128160793993}
+  m_Father: {fileID: 4864416128425028110}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4864416128425028111
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4864416128425028110}
+  - component: {fileID: 4864416128425028104}
+  m_Layer: 0
+  m_Name: EasyCutscenes
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4864416128425028110
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864416128425028111}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4864416128451967082}
+  - {fileID: 4864416128172499124}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4864416128425028104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864416128425028111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1a1bda4f59ad0c4e8c5b3c3df6d8c0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterPrefabs:
+  - {fileID: 1137766169478714206, guid: ee5295f7ddb5bbc46a50a5a93f851962, type: 3}
+  - {fileID: 1157056535566397201, guid: 6990cdbf02f1eb948a736829308c9629, type: 3}
+  - {fileID: 7684706718127042067, guid: a96647be0092694478e96a00beeb297d, type: 3}
+  propPrefabs:
+  - {fileID: 7399743632363340232, guid: 62a09ff6d1d5b8d489e3545b5e17c8c8, type: 3}
+  - {fileID: 3841345631774096638, guid: b76948456300ef44b90cf17a5f83577a, type: 3}
+  - {fileID: 3158549428789352710, guid: 212db1a3be0846842873debc27dbe8b8, type: 3}
+  - {fileID: 4836126939145481500, guid: 13c3e23154265174b90bed4c101954be, type: 3}
+  - {fileID: 7484484955183996461, guid: bc606bcb64a150c45b1ff3c90dd9d084, type: 3}
+  - {fileID: 298463473009139931, guid: 8305db84eb36f1e459d77d575e57402d, type: 3}
+  - {fileID: 6150168960913838470, guid: 15d3888e21e1dec4d8c379ce28ee2ba5, type: 3}
+  - {fileID: 4547808419636097846, guid: 018956fa509ef734da36960e8eb99dfb, type: 3}
+  - {fileID: 8373958915256024300, guid: d2e026720660b874da40dcdf1db0e8eb, type: 3}
+  - {fileID: 4090813130181302412, guid: 5341a92140246b3438994fbc6bfc6983, type: 3}
+  - {fileID: 8243452875176293774, guid: 642d09cd96bff934887f6db15ae44f6e, type: 3}
+  - {fileID: 7222813499987385234, guid: dc2eb245ed8a80349b1789dfc2a6ec3c, type: 3}
+  - {fileID: 1582238550353530861, guid: 9ec85e8ac35389b458dbef06566f9f63, type: 3}
+  - {fileID: 3985475572529535322, guid: 0321ca99c2550d54f97a9ea552b8166d, type: 3}
+  - {fileID: 1365173212684639249, guid: 0ebb6f6cc836ab944a2a738951e1cba5, type: 3}
+  - {fileID: 5413693664462037665, guid: 026f081c854bfcc4aaea3b71412f5561, type: 3}
+  - {fileID: 2613650422891741314, guid: 419b6a7901d01204cbe2cc8e90712fa1, type: 3}
+  - {fileID: 4255192613325728012, guid: 8f99f1f9fd200ea44893c5b2c7576fc5, type: 3}
+  - {fileID: 5431996790481816936, guid: e4c7ad3941d53754a9dcea3ad1dbaeb1, type: 3}
+  - {fileID: 5863677182812948657, guid: fb812c420a5fc5145b7f1a4563c332e3, type: 3}
+  - {fileID: 6337930517089529250, guid: a0cf0a98223022a429ebdde1ab3b4e91, type: 3}
+  - {fileID: 89660852077409499, guid: 5af24748004f8254bbf3f6fd2ced2bc3, type: 3}
+  cutscenes:
+  - {fileID: 4864416128451967077}
+  currentCutscene: 
+  transformSettings:
+  - name: Default
+    position: {x: 0, y: -1.75, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - name: Trunk Default
+    position: {x: 0, y: -15, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - name: Left
+    position: {x: -5, y: -1.75, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - name: Trunk Left
+    position: {x: -20, y: -1.75, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - name: Right
+    position: {x: 5, y: -1.75, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - name: Trunk Right
+    position: {x: 20, y: -1.75, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  guiPanel: {fileID: 4864416128172499125}
+  autoplayTime: 6
+  characterTransitionSpeed: 35
+  chatTypingDelay: 0.01
+--- !u!1 &4864416128451967083
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4864416128451967082}
+  - component: {fileID: 4864416128451967077}
+  m_Layer: 0
+  m_Name: EcCutscene1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4864416128451967082
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864416128451967083}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4864416128425028110}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4864416128451967077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864416128451967083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3c4a232f1b87b04ba7fa5d4567b9b8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cutsceneData:
+  - name: Scene 1A
+    charactersData:
+    - name: Hisa
+      initialTransformID: Trunk Left
+      finalTransformID: Trunk Left
+      spriteString: 
+    - name: Rico
+      initialTransformID: Trunk Right
+      finalTransformID: Trunk Right
+      spriteString: 
+    - name: Mira
+      initialTransformID: Trunk Right
+      finalTransformID: Trunk Right
+      spriteString: 
+    propsData: []
+    nameString: Narrator
+    chatString: Welcome to the world of Easy Cutscene! Let's meet our friends Hisa,
+      Mira, and Rico at their favorite coffee shop.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 1B
+    charactersData:
+    - name: Hisa
+      initialTransformID: Trunk Left
+      finalTransformID: Left
+      spriteString: Hisa_Thinking
+    - name: Rico
+      initialTransformID: Trunk Right
+      finalTransformID: Right
+      spriteString: Rico_Sick
+    propsData: []
+    nameString: Hisa
+    chatString: Hey Rico, you look stressed. What's up?
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 1C
+    charactersData:
+    - name: Hisa
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Hisa_Thinking
+    - name: Rico
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Rico_Smile
+    propsData: []
+    nameString: Rico
+    chatString: Oh hey, Hisa. Yeah, I'm in a bit of a pickle. I'm developing a game,
+      and I need to add cutscenes. I already have the character sprites and background
+      images, but I just don't have the time to code it all.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 1D
+    charactersData:
+    - name: Hisa
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Hisa_Smile
+    - name: Rico
+      initialTransformID: Right
+      finalTransformID: Default
+      spriteString: Rico_Smile
+    - name: Mira
+      initialTransformID: Trunk Right
+      finalTransformID: Right
+      spriteString: Mira_Thinking
+    propsData: []
+    nameString: Mira
+    chatString: '"Cutscenes? What''s that?'
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 2A
+    charactersData:
+    - name: Hisa
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: 
+    - name: Mira
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Mira_Thinking
+    - name: Rico
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Rico_Confident
+    propsData: []
+    nameString: Rico
+    chatString: Cutscenes are those animated sequences in games where characters
+      talk, things happen, and the story progresses without the player controlling
+      it. It's like a mini-movie within the game.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 2B
+    charactersData:
+    - name: Hisa
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: 
+    - name: Mira
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Mira_Sad
+    - name: Rico
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Rico_Confident
+    propsData: []
+    nameString: Mira
+    chatString: Oh, I see. That sounds complicated!
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 3A
+    charactersData:
+    - name: Hisa
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Hisa_Confident
+    - name: Mira
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Mira_Sad
+    - name: Rico
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Rico_Confident
+    propsData:
+    - name: Props Excited
+      position: {x: -3, y: 3, z: 0}
+      fadeSpeed: 15
+    nameString: Hisa
+    chatString: Actually, it's not that complicated if you have the right tools.
+      Have you heard of Easy Cutscene for Unity?
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 3B
+    charactersData:
+    - name: Hisa
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Hisa_Confident
+    - name: Mira
+      initialTransformID: Right
+      finalTransformID: Trunk Right
+      spriteString: Mira_Sad
+    - name: Rico
+      initialTransformID: Default
+      finalTransformID: Right
+      spriteString: Rico_Angry
+    propsData:
+    - name: Props Surprised
+      position: {x: 3, y: 3, z: 0}
+      fadeSpeed: 15
+    nameString: Rico
+    chatString: Easy Cutscene? What's that?
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 4A
+    charactersData:
+    - name: Hisa
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Hisa_Smile
+    - name: Mira
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Mira_Sad
+    - name: Rico
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Rico_Angry
+    propsData: []
+    nameString: Hisa
+    chatString: Easy Cutscene is a Unity plugin that lets you create 2D sprite-based
+      cutscenes quickly and easily without any coding. Let me show you how it works.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 4B
+    charactersData:
+    - name: Hisa
+      initialTransformID: Left
+      finalTransformID: Trunk Left
+      spriteString: Hisa_Smile
+    - name: Mira
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Mira_Sad
+    - name: Rico
+      initialTransformID: Right
+      finalTransformID: Trunk Right
+      spriteString: Rico_Angry
+    propsData: []
+    nameString: Narrator
+    chatString: Let's see the steps to create a cutscene with Easy Cutscene.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 5A
+    charactersData:
+    - name: Hisa
+      initialTransformID: Trunk Left
+      finalTransformID: Left
+      spriteString: Hisa_Stand2
+    - name: Mira
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Mira_Sad
+    - name: Rico
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Rico_Angry
+    propsData:
+    - name: Props Tutorial 1
+      position: {x: 1, y: 1, z: 0}
+      fadeSpeed: 15
+    nameString: Hisa
+    chatString: First, prepare your image assets. This includes character sprites,
+      props sprites, background images, and UI dialog panels.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 5B
+    charactersData:
+    - name: Hisa
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Hisa_Stand2
+    - name: Mira
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Mira_Sad
+    - name: Rico
+      initialTransformID: Trunk Right
+      finalTransformID: Right
+      spriteString: Rico_Confident
+    propsData:
+    - name: Props Tutorial 1
+      position: {x: 1, y: 1, z: 0}
+      fadeSpeed: 0
+    nameString: Rico
+    chatString: Got it. I have all my images ready.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 6A
+    charactersData:
+    - name: Hisa
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Hisa_Stand
+    - name: Mira
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Mira_Sad
+    - name: Rico
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Rico_Stand
+    propsData: []
+    nameString: Hisa
+    chatString: Next, create new GameObjects for your characters and props in Unity.
+      After it add a child GameObjects with <sprite renderer> component to each.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 6B
+    charactersData:
+    - name: Hisa
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Hisa_Stand
+    - name: Mira
+      initialTransformID: Trunk Right
+      finalTransformID: Right
+      spriteString: Mira_Sad
+    - name: Rico
+      initialTransformID: Right
+      finalTransformID: Trunk Right
+      spriteString: Rico_Stand
+    propsData: []
+    nameString: Mira
+    chatString: How do you do that?
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 6C
+    charactersData:
+    - name: Hisa
+      initialTransformID: Left
+      finalTransformID: Trunk Left
+      spriteString: Hisa_Confident
+    - name: Mira
+      initialTransformID: Right
+      finalTransformID: Trunk Right
+      spriteString: Mira_Sad
+    - name: Rico
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Rico_Stand
+    propsData:
+    - name: Props Tutorial 2
+      position: {x: 0, y: 1, z: 0}
+      fadeSpeed: 25
+    - name: Cloud Hisa 2
+      position: {x: -8, y: -1.6, z: 0}
+      fadeSpeed: 15
+    nameString: Hisa
+    chatString: It's easy! Just right-click in the Hierarchy, select 'Create Empty',
+      and then add the <sprite renderer> component in the Inspector for the Game
+      Object.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 6D
+    charactersData:
+    - name: Hisa
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Hisa_Confident
+    - name: Mira
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Mira_Sad
+    - name: Rico
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Rico_Stand
+    propsData:
+    - name: Props Tutorial 2
+      position: {x: 0, y: 1, z: 0}
+      fadeSpeed: 0
+    - name: Cloud Rico 1
+      position: {x: 8, y: 1, z: 0}
+      fadeSpeed: 15
+    nameString: Rico
+    chatString: And what about making them work with Easy Cutscene?
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 6E
+    charactersData:
+    - name: Hisa
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Hisa_Confident
+    - name: Mira
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Mira_Sad
+    - name: Rico
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Rico_Stand
+    propsData:
+    - name: Props Tutorial 3
+      position: {x: 0, y: 1, z: 0}
+      fadeSpeed: 25
+    - name: Cloud Hisa 2
+      position: {x: -8, y: 1.3, z: 0}
+      fadeSpeed: 15
+    nameString: Hisa
+    chatString: Just add the CSCharacter script for characters or CSCharacterProps
+      script for props. This tells Easy Cutscene how to use them.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 6F
+    charactersData: []
+    propsData:
+    - name: Props Tutorial 3
+      position: {x: 0, y: 1, z: 0}
+      fadeSpeed: 25
+    - name: Cloud Rico 1
+      position: {x: 8, y: 1.6, z: 0}
+      fadeSpeed: 15
+    nameString: Rico
+    chatString: Got it. That sounds simple!
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene7A
+    charactersData: []
+    propsData:
+    - name: Props Tutorial 4
+      position: {x: 0, y: 1, z: 0}
+      fadeSpeed: 25
+    - name: Cloud Hisa 1
+      position: {x: -8, y: -1.6, z: 0}
+      fadeSpeed: 15
+    nameString: Hisa
+    chatString: Then, on each character object, add all the sprites that will be
+      used in the character class.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene7B
+    charactersData: []
+    propsData:
+    - name: Props Tutorial 4
+      position: {x: 0, y: 1, z: 0}
+      fadeSpeed: 0
+    - name: Cloud Rico 1
+      position: {x: 8, y: 1.2, z: 0}
+      fadeSpeed: 15
+    nameString: Rico
+    chatString: This is pretty easy so far.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 7C
+    charactersData: []
+    propsData:
+    - name: Props Tutorial 5
+      position: {x: 0, y: 1, z: 0}
+      fadeSpeed: 25
+    - name: Cloud Hisa 1
+      position: {x: -8, y: -1.6, z: 0}
+      fadeSpeed: 15
+    nameString: Hisa
+    chatString: After that you need to add all object characters and props into prefab
+      and delete the object in the scenes.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 7D
+    charactersData:
+    - name: Rico
+      initialTransformID: Trunk Right
+      finalTransformID: Right
+      spriteString: Rico_Smile
+    propsData:
+    - name: Props Tutorial 5
+      position: {x: 0, y: 1, z: 0}
+      fadeSpeed: 0
+    nameString: Rico
+    chatString: Oh i know, it's needed so we can called it later on the cutscenes,
+      right?
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene 8A
+    charactersData:
+    - name: Rico
+      initialTransformID: Right
+      finalTransformID: Trunk Right
+      spriteString: Rico_Smile
+    propsData:
+    - name: Props Tutorial 6
+      position: {x: 0, y: 1, z: 0}
+      fadeSpeed: 25
+    - name: Cloud Hisa 2
+      position: {x: -8, y: -1.3, z: 0}
+      fadeSpeed: 15
+    nameString: Hisa
+    chatString: Now add the empty Canvas object to your game scene, and add the cutscene
+      prefab object from folder "Easy Cutscene->Assets->Prefabs" into that empty
+      canvas.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene8B
+    charactersData: []
+    propsData:
+    - name: Props Tutorial 6
+      position: {x: 0, y: 1, z: 0}
+      fadeSpeed: 0
+    nameString: Narrator
+    chatString: This is where the magic happens.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene9A
+    charactersData: []
+    propsData:
+    - name: Props Tutorial 7
+      position: {x: 0, y: 1, z: 0}
+      fadeSpeed: 25
+    - name: Cloud Hisa 1
+      position: {x: -8, y: -1.6, z: 0}
+      fadeSpeed: 15
+    nameString: Hisa
+    chatString: Next, set the cutscene manager. Add all the character and props prefabs
+      to the manager, and configure the location for characters to show on the scene
+      and out of the scene in the Transform settings.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene9B
+    charactersData: []
+    propsData:
+    - name: Props Tutorial 7
+      position: {x: 0, y: 1, z: 0}
+      fadeSpeed: 0
+    - name: Cloud Mira 1
+      position: {x: 8, y: 1.2, z: 0}
+      fadeSpeed: 15
+    nameString: Mira
+    chatString: Wow, this really simplifies the process!
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene10A
+    charactersData: []
+    propsData:
+    - name: Props Tutorial 8
+      position: {x: 0, y: 1, z: 0}
+      fadeSpeed: 25
+    - name: Cloud Hisa 1
+      position: {x: -8, y: 1.2, z: 0}
+      fadeSpeed: 15
+    nameString: Hisa
+    chatString: Finally, create your cutscene in the cutscene settings. Just specify
+      which characters will be shown, their positions, the text of the chat dialogue,
+      and any animations or sprite changes.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene10B
+    charactersData: []
+    propsData:
+    - name: Props Tutorial 8
+      position: {x: 0, y: 1, z: 0}
+      fadeSpeed: 0
+    - name: Cloud Rico 1
+      position: {x: 8, y: 1.1, z: 0}
+      fadeSpeed: 15
+    nameString: Rico
+    chatString: This is awesome! I don't need to code any of this?
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene10C
+    charactersData: []
+    propsData:
+    - name: Props Tutorial 8
+      position: {x: 0, y: 1, z: 0}
+      fadeSpeed: 0
+    - name: Cloud Hisa 2
+      position: {x: -8, y: -1.2, z: 0}
+      fadeSpeed: 15
+    nameString: Hisa
+    chatString: Exactly! Easy Cutscene does it all for you.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene10D
+    charactersData: []
+    propsData:
+    - name: Props Tutorial 8
+      position: {x: 0, y: 1, z: 0}
+      fadeSpeed: 0
+    - name: Cloud Hisa 2
+      position: {x: -8, y: -1.2, z: 0}
+      fadeSpeed: 15
+    nameString: Hisa
+    chatString: You can even add the pre and post event in cutscenes, like playing
+      the dubbing character voice, showing pop up panels or go to other scenes or
+      even create a branching story.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene11A
+    charactersData: []
+    propsData: []
+    nameString: Narrator
+    chatString: And that's it! You've just seen how Easy Cutscene can save you time
+      and effort in creating dynamic cutscenes for your game.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene11B
+    charactersData:
+    - name: Hisa
+      initialTransformID: Trunk Left
+      finalTransformID: Left
+      spriteString: Hisa_Smile
+    - name: Mira
+      initialTransformID: Trunk Right
+      finalTransformID: Right
+      spriteString: Mira_Smile
+    - name: Rico
+      initialTransformID: Trunk Default
+      finalTransformID: Default
+      spriteString: Rico_Smile
+    propsData: []
+    nameString: Hisa
+    chatString: So, Rico, ready to give it a try?
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene11C
+    charactersData:
+    - name: Hisa
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Hisa_Smile
+    - name: Mira
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Mira_Smile
+    - name: Rico
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Rico_Smile
+    propsData: []
+    nameString: Rico
+    chatString: Absolutely! Thanks, Hisa. This is going to make my life so much easier.
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Scene11D
+    charactersData:
+    - name: Hisa
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Hisa_Smile
+    - name: Mira
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Mira_Smile
+    - name: Rico
+      initialTransformID: 
+      finalTransformID: 
+      spriteString: Rico_Smile
+    propsData: []
+    nameString: Narrator
+    chatString: "Easy Cutscene \u2013 making game development simpler, faster, and
+      more fun. Get it now and bring your stories to life effortlessly."
+    cutscenePreEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: PlayOneShot
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8300000, guid: 8c9f1e9ead130764ca1cf04c6fba1fe9, type: 3}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    cutscenePostEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  currentID: 0
+  charaNameText: {fileID: 4864416128604407632}
+  chatText: {fileID: 4864416127805367104}
+--- !u!1 &4864416128604407638
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4864416128604407633}
+  - component: {fileID: 4864416128604407635}
+  - component: {fileID: 4864416128604407632}
+  m_Layer: 5
+  m_Name: NameText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4864416128604407633
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864416128604407638}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 4864416129370184250}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 1.21, y: 0}
+  m_SizeDelta: {x: 777.67, y: 113}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &4864416128604407635
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864416128604407638}
+  m_CullTransparentMesh: 1
+--- !u!114 &4864416128604407632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864416128604407638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.3962264, g: 0.16073334, b: 0.16073334, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: f54721bca60469a48ba61c1dd50591ab, type: 3}
+    m_FontSize: 90
+    m_FontStyle: 1
+    m_BestFit: 0
+    m_MinSize: 0
+    m_MaxSize: 100
+    m_Alignment: 3
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Character Name
+--- !u!1 &4864416129370184251
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4864416129370184250}
+  - component: {fileID: 4864416129370184247}
+  - component: {fileID: 4864416129370184244}
+  - component: {fileID: 4864416129370184245}
+  m_Layer: 5
+  m_Name: NamePanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4864416129370184250
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864416129370184251}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4864416128604407633}
+  m_Father: {fileID: 4864416128172499124}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -507.8, y: -184.08}
+  m_SizeDelta: {x: 529.34, y: 87.21}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &4864416129370184247
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864416129370184251}
+  m_CullTransparentMesh: 1
+--- !u!114 &4864416129370184244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864416129370184251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: -641622053, guid: 4425e72bfe698e448a85267e0fc3c84e, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4864416129370184245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864416129370184251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 4864416129370184244}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
