@@ -14,7 +14,7 @@ public class EventInitTest : MonoSingleton<EventInitTest>
     [Header("선택된 이벤트 (현재 스테이지 기준)")]
     public RandomEventData selectedEvent;
 
-    private void Awake()
+    protected override void Awake()
     {
         base.Awake();
         allEvents = RandomEventJsonLoader.LoadAllEvents();
@@ -23,10 +23,5 @@ public class EventInitTest : MonoSingleton<EventInitTest>
         selectedEvent = stageEvents.Count > 0
             ? stageEvents[Random.Range(0, stageEvents.Count)]
             : null;
-
-        Debug.Log($"스테이지 {selectedEvent.stage} 의 {selectedEvent.title} 의 이벤트가 실행 됩니다.");
     }
-
-
-
 }
