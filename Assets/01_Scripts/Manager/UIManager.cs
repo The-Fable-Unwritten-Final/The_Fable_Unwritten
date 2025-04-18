@@ -148,8 +148,7 @@ public class UIManager : MonoSingleton<UIManager>
 
         foreach (GameObject prefab in popupPrefabs)
         {
-            BasePopupUI popup = prefab.GetComponent<BasePopupUI>();
-            if (popup != null)
+            if (prefab.TryGetComponent<BasePopupUI>(out var popup))
             {
                 string popupName = prefab.name;
                 System.Type popupType = popup.GetType();
@@ -157,7 +156,7 @@ public class UIManager : MonoSingleton<UIManager>
                 if (!popupTypeMap.ContainsKey(popupName))
                 {
                     popupTypeMap.Add(popupName, popupType);
-                    //Debug.Log($"[UIManager] 등록됨: {popupName} → {popupType}");
+                    // Debug.Log($"[UIManager] 등록됨: {popupName} → {popupType}");
                 }
             }
             else
