@@ -3246,7 +3246,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 31, y: 65}
-  m_SizeDelta: {x: 90, y: 30}
+  m_SizeDelta: {x: 100, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5451377739741620197
 CanvasRenderer:
@@ -8445,7 +8445,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 153, y: 65}
-  m_SizeDelta: {x: 90, y: 30}
+  m_SizeDelta: {x: 100, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1000535876670580159
 CanvasRenderer:
@@ -8831,7 +8831,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uD0C0\uC785"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ee7dfd5aa68108a4cae7a9c288dfbdce, type: 2}
   m_sharedMaterial: {fileID: -8146178071228311197, guid: ee7dfd5aa68108a4cae7a9c288dfbdce,
@@ -9116,6 +9116,10 @@ MonoBehaviour:
   cardInfoPopup: {fileID: 5286348403194896841}
   cardInfoDisplay: {fileID: 1705129895986735086}
   cardInfoDesc: {fileID: 6263086559932313784}
+  sortTypeText: {fileID: 3480717035638728436}
+  sortTypeTextString: "\uD0C0\uC785"
+  sortCostText: {fileID: 1712410616798506233}
+  sortCostTextString: "\uCF54\uC2A4\uD2B8"
 --- !u!1 &6221118010556742655
 GameObject:
   m_ObjectHideFlags: 0
@@ -12267,7 +12271,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uCF54\uC2A4\uD2B8"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ee7dfd5aa68108a4cae7a9c288dfbdce, type: 2}
   m_sharedMaterial: {fileID: -8146178071228311197, guid: ee7dfd5aa68108a4cae7a9c288dfbdce,
@@ -12444,7 +12448,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4073474340803366314
 RectTransform:
   m_ObjectHideFlags: 0

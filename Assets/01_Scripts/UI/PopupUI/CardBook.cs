@@ -18,6 +18,20 @@ public class CardBook : MonoBehaviour,IBookControl
     [SerializeField] RectTransform cardInfoPopup; // 카드 정보 팝업
     [SerializeField] BookCards cardInfoDisplay; // 카드 정보 표시 카드
     [SerializeField] TextMeshProUGUI cardInfoDesc; // 카드 정보 표시 카드 설명
+    enum SortType
+    {
+        Index,
+        TypeUp,
+        TypeDown,
+        CostUp,
+        CostDown
+    }
+    SortType sortType = SortType.Index; // 카드 정렬 타입
+    [SerializeField] TextMeshProUGUI sortTypeText; // 타입 정렬 버튼의 텍스트
+    [SerializeField] string sortTypeTextString; // 타입 정렬 버튼의 기본 텍스트 (버튼 텍스트 로컬라이징 고려)
+
+    [SerializeField] TextMeshProUGUI sortCostText; // 코스트 정렬 버튼의 텍스트
+    [SerializeField] string sortCostTextString; // 코스트 정렬 버튼의 기본 텍스트 (버튼 텍스트 로컬라이징 고려)
 
     Dictionary<int, CardModel> cardForShopia = new();
     Dictionary<int, CardModel> cardForKayla = new();
@@ -105,13 +119,29 @@ public class CardBook : MonoBehaviour,IBookControl
     {
         List<KeyValuePair<int, CardModel>> sortedList = new List<KeyValuePair<int, CardModel>>(cardDictionary);
         sortedList.Sort((pair1, pair2) => pair1.Key.CompareTo(pair2.Key));// key값을 index로 받았기에 key값으로 정렬.
+        sortType = SortType.Index; // 정렬 타입 초기화.
+        sortTypeText.text = sortTypeTextString; // 타입 정렬 텍스트 초기화.
+        sortCostText.text = sortCostTextString; // 코스트 정렬 텍스트 초기화.
 
         return sortedList.ConvertAll(pair => pair.Value);// 딕셔너리의 value값만 list로 반환.
     }
     public void ClickToSortByType() // 카드 데이터 정렬 (카드 타입 순)
     {
         List<CardModel> sortedCards = new List<CardModel>(cards); // 이미 cards 로 정렬된 카드 리스트를 사용.
-        sortedCards.Sort((card1, card2) => card1.type.CompareTo(card2.type)); // 카드 타입으로 정렬
+        if(sortType == SortType.TypeUp) // 이미 타입 정렬이 적용 중인 경우 역순
+        {
+            sortType = SortType.TypeDown; // 타입 역순 정렬.
+            sortTypeText.text = sortTypeTextString + " \u25BC"; // 아래 화살표 표시
+            sortCostText.text = sortCostTextString; // 코스트 정렬 텍스트 초기화.
+            sortedCards.Sort((card1, card2) => card2.type.CompareTo(card1.type)); // 카드 타입으로 역순 정렬
+        }
+        else
+        {
+            sortType = SortType.TypeUp; // 타입 정렬.
+            sortTypeText.text = sortTypeTextString + " \u25B2"; // 위 화살표 표시
+            sortCostText.text = sortCostTextString; // 코스트 정렬 텍스트 초기화.
+            sortedCards.Sort((card1, card2) => card1.type.CompareTo(card2.type)); // 카드 타입으로 정렬
+        }
 
         cards = sortedCards; // 정렬된 카드 리스트로 업데이트
         UpdateCard(currentPage); // 페이지 업데이트
@@ -119,7 +149,20 @@ public class CardBook : MonoBehaviour,IBookControl
     public void ClickToSortByCost() // 카드 데이터 정렬 (카드 코스트 순)
     {
         List<CardModel> sortedCards = new List<CardModel>(cards); // 이미 cards 로 정렬된 카드 리스트를 사용.
-        sortedCards.Sort((card1, card2) => card1.manaCost.CompareTo(card2.manaCost)); // 카드 코스트로 정렬
+        if(sortType == SortType.CostUp) // 이미 기본 코스트 정렬이 적용 중인 경우 역순
+        {
+            sortType = SortType.CostDown; // 코스트 역순 정렬.
+            sortCostText.text = sortCostTextString + " \u25BC"; // 아래 화살표 표시
+            sortTypeText.text = sortTypeTextString; // 타입 정렬 텍스트 초기화.
+            sortedCards.Sort((card1, card2) => card2.manaCost.CompareTo(card1.manaCost)); // 카드 코스트로 역순 정렬
+        }
+        else
+        {
+            sortType = SortType.CostUp; // 코스트 정렬.
+            sortCostText.text = sortCostTextString + " \u25B2"; // 위 화살표 표시
+            sortTypeText.text = sortTypeTextString; // 타입 정렬 텍스트 초기화.
+            sortedCards.Sort((card1, card2) => card1.manaCost.CompareTo(card2.manaCost)); // 카드 코스트로 정렬
+        }
 
         cards = sortedCards; // 정렬된 카드 리스트로 업데이트
         UpdateCard(currentPage); // 페이지 업데이트
