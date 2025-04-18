@@ -227,7 +227,10 @@ public class BattleFlowController : MonoBehaviour
             Enemy enemyComp = enemy as Enemy;
             if (enemyComp != null)
             {
-                EnemyPattern.ExecutePattern(enemyComp);
+                //EnemyPattern.ExecutePattern(enemyComp);
+                //
+                //
+                //
             }
             else
             {
