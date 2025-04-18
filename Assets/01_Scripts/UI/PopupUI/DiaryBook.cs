@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DiaryBook : MonoBehaviour
+public class DiaryBook : MonoBehaviour, IBookControl
 {
-    [SerializeField] List<Transform> diaryClip;
 
+    [SerializeField] List<Transform> diaryClip;
+    public int maxPageCount { get; set; } // 페이지 수
+    public int currentPage { get; set; } = 0; // 현재 페이지
+ 
     private void OnEnable()
     {
         // 처음 다이어리 페이지를 열었을때 최초 페이지 == 0번 인덱스의 카드페이지
@@ -31,6 +34,31 @@ public class DiaryBook : MonoBehaviour
     public void OnClick4()
     {
         OnClickClip(diaryClip[4],4);
+    }
+
+    public void OnclickPageBefore()
+    {
+        if (currentPage > 0)
+        {
+            currentPage--;
+            Debug.Log("이전 페이지로 이동: " + currentPage);
+        }
+        else
+        {
+            Debug.Log("첫 페이지입니다.");
+        }
+    }
+    public void OnclickPageAfter()
+    {
+        if (currentPage < maxPageCount - 1)
+        {
+            currentPage++;
+            Debug.Log("다음 페이지로 이동: " + currentPage);
+        }
+        else
+        {
+            Debug.Log("마지막 페이지입니다.");
+        }
     }
 
     void OnClickClip(Transform t,int i)
