@@ -23,10 +23,5 @@ public class EventInitTest : MonoSingleton<EventInitTest>
         selectedEvent = stageEvents.Count > 0
             ? stageEvents[Random.Range(0, stageEvents.Count)]
             : null;
-
-        Debug.Log($"스테이지 {selectedEvent.stage} 의 {selectedEvent.title} 의 이벤트가 실행 됩니다.");
     }
-
-
-
 }
