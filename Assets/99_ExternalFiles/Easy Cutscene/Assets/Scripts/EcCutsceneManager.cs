@@ -41,7 +41,7 @@ namespace HisaGames.CutsceneManager
 
         [Header("Other Settings")]
         [Tooltip("Panel that contains gui elements such as character, props and others.")]
-        [SerializeField] GameObject guiPanel;
+        [SerializeField] public GameObject guiPanel;
 
         [Tooltip("Timer for auto-playing the next cutscene. Set to 0 to disable auto-play.")]
         public float autoplayTime;
@@ -57,7 +57,8 @@ namespace HisaGames.CutsceneManager
             instance = this;
             InitCharacters();
             InitProps();
-            InitCutscenes(currentCutscene);
+
+            closeCutscenes();
         }
 
         /// <summary>
@@ -111,6 +112,7 @@ namespace HisaGames.CutsceneManager
             if (temp != null)
             {
                 guiPanel.SetActive(true);
+
                 temp.gameObject.SetActive(true);
                 temp.StartCutscene();
             }

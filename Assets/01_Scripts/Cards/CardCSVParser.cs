@@ -48,7 +48,8 @@ public static class CardCSVParser           //csv로부터 데이터를 받아 C
                     blind = ParseInt(tokens, 19),
                     stun = ParseInt(tokens, 20),
                     characterStance = ParseString(tokens, 21),
-                    description = ParseString(tokens, 22)
+                    description = ParseString(tokens, 22),
+                    flavorText = ParseString(tokens,23)
                 };
 
                 list.Add(data);

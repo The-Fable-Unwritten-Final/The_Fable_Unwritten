@@ -70,6 +70,8 @@ namespace HisaGames.Cutscene
 
             [Tooltip("Event triggered after the cutscene ends.")]
             public CSUnityEvent cutscenePostEvent;
+
+            public string type;
         }
 
         [SerializeField]
@@ -133,11 +135,16 @@ namespace HisaGames.Cutscene
             if (startTyping)
                 StartTypingAnimation(chatText, chatTextString);
 
-            for (int i = 0; i < cutsceneData[currentID].charactersData.Length; i++)
+            var charas = cutsceneData[currentID].charactersData;
+
+            if (charas != null)
             {
-                string tempName = cutsceneData[currentID].charactersData[i].name;
-                EcCharacter character = EcCutsceneManager.instance.getCharacterObject(tempName);
-                character.CheckingCharacterState();
+                for (int i = 0; i < charas.Length; i++)
+                {
+                    string tempName = cutsceneData[currentID].charactersData[i].name;
+                    EcCharacter character = EcCutsceneManager.instance.getCharacterObject(tempName);
+                    character.CheckingCharacterState();
+                }
             }
 
             if (activePropsData != null)
@@ -150,18 +157,35 @@ namespace HisaGames.Cutscene
             }
         }
 
-        /// <summary>
-        /// Plays the current cutscene.
-        /// </summary>
         void PlayCutscene()
         {
+            var data = cutsceneData[currentID];
+
+            // 연출 타입 처리
+            switch (data.type) // type이 name에 포함된 경우면 수정 필요
+            {
+                case "animation":
+                    // 애니메이션 재생 함수
+                    break;
+
+                case "blackout":
+                    // 암전 처리
+                    break;
+
+                case "center":
+                    // 중앙 텍스트 띄우기
+                    break;
+
+                case "basic":
+                default:
+                    PlayChatTypingAnimation();
+                    ShowingCurrentCharacters();
+                    ClearPreviousProps();
+                    ShowingCurrentProps();
+                    break;
+            }
+
             InvokePreEvent();
-            PlayChatTypingAnimation();
-
-            ShowingCurrentCharacters();
-
-            ClearPreviousProps();
-            ShowingCurrentProps();
         }
 
         /// <summary>
@@ -384,5 +408,11 @@ namespace HisaGames.Cutscene
                 }
             }
         }
+
+        public void SetCutSceneData(CutsceneData[] data)
+        {
+            cutsceneData = data;
+        }
+
     }
 }

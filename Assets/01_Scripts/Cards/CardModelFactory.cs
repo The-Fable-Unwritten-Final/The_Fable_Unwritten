@@ -18,6 +18,7 @@ public static class CardModelFactory
         card.targetType = (TargetType)data.targetType;
         card.characterStance = data.characterStance;
         card.note = data.description;
+        card.FlavorText = data.flavorText;
 
         // 리소스에서 Sprite 할당
         card.illustration = LoadSprite($"Cards/Illustration/{data.illustration}");
