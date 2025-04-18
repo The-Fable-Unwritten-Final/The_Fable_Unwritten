@@ -9,7 +9,8 @@ using UnityEngine.UI;
 /// </summary>
 public class StageMapController : MonoBehaviour
 {
-    [Header("Stage Settings")]  
+    [Header("Stage Settings")]
+    [SerializeField] Image backGround; // stage별 백그라운드 설정
     [SerializeField] Vector2 spacing = new(300, 200);      // 노드 간격
     [SerializeField] int mapTargetWidth;                   // 지도 가로 크기
 
@@ -25,15 +26,15 @@ public class StageMapController : MonoBehaviour
     private void Start()
     {
         // 시작 시 스테이지 복원 또는 새로 시작
-        stageIndex = GameManager.Instance.stageIndex;
-
-        //Test용
-        //SoundManager.Instance.PlayBGM(SoundNameData.Test_BGM1);
+        
 
         if (!TryRestoreStage())
         {
             LoadStage(stageIndex);
         }
+
+        stageIndex = GameManager.Instance.stageIndex;
+        backGround.sprite = GameManager.Instance.GetBackgroundForStage(stageIndex);
     }
 
     // 저장된 상태가 있다면 복원 시도

@@ -5,7 +5,12 @@ public class GameManager : MonoSingleton<GameManager>
 {
     public List<PlayerData> playerDatas = new();  //  보유중인 케릭터 데이터
     public GraphNode currentBattleNode;
+
     public List<EnemyStageSpawnData> enemyStageSpawnDatas; // 초기 GameManger에서 StageSpawnData 파싱 후 보유하는 리스트 (추후 타 매니저에 옮겨줄 예정)
+    public List<RandomEventData> allRandomEvents; // 초기 랜덤이벤트 JSon 파싱 정보 (추후 타 매니저에 옮겨줄 예정)
+    public HashSet<int> usedRandomEvnent = new(); // 랜덤 이벤트 진행 유무(게임 재시작 및 실패 시 초기화)
+    public Dictionary<int, Sprite> stageBackgrounds; // 초기 백그라운드 로드 데이터 (추후 타 매니저에 옮겨줄 예정)
+
 
     public StageData savedStageData;    // 현재 진행 중인 스테이지 데이터
     public List<GraphNode> savedVisitedNodes = new(); // 플레이어가 진행한 노드 리스트
@@ -25,11 +30,13 @@ public class GameManager : MonoSingleton<GameManager>
     {
         base.Awake();
 
+        // 추후 데이터매니저? 이동 가능성 있음
         CardSystemInitializer.Instance.LoadCardDatabase();
         EnemySkillInitializer.ImportAndGenerate();
         EnemyInitializer.ImportAndGenerate();
         enemyStageSpawnDatas = StageSpawnSetCSVParser.LoadFromCSV();
-
+        allRandomEvents = RandomEventJsonLoader.LoadAllEvents();
+        stageBackgrounds = BackgoundLoader.LoadBackgrounds();
         LoadPlayerPartyIfNull(); // <- 플레이어 데이터 가져오기
         playerDatas = new List<PlayerData>(playerParty.allPlayers);
 
@@ -119,5 +126,19 @@ public class GameManager : MonoSingleton<GameManager>
     public void UnregisterTurnController()
     {
         turnController = null;
+    }
+
+    /// <summary>
+    /// 스테이지에 맞는 배경화면 셋팅
+    /// </summary>
+    public Sprite GetBackgroundForStage(int stageIndex)
+    {
+        stageBackgrounds.TryGetValue(stageIndex, out var bg);
+        return bg;
+    }
+
+    public void ClearUsedEvents()
+    {
+        usedRandomEvnent.Clear();
     }
 }
