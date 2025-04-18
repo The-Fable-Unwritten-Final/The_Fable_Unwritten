@@ -15,6 +15,7 @@ public class PopupUI_Book : BasePopupUI
         playerDatas = GameManager.Instance.playerDatas;// 플레이어 데이터 받아오기.
         // pages에서 ibookcont을 상속받는 각 페이지들의 페이지 값과 내부 데이터값 받아오기.(받아온 데이터 값을 빠르게 불러올 수 있게 dictionary로 제작.)
         pages[0].GetComponent<CardBook>().InitDictionary();// 각 카드 딕셔너리 데이터값 초기화
+        pages[1].GetComponent<DiaryBook>().InitDictionary(); // 일기장 딕셔너리 데이터값 초기화
     }
 
     private void OnEnable()
