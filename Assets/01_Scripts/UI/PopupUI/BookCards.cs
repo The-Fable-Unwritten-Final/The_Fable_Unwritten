@@ -13,6 +13,7 @@ public class BookCards : MonoBehaviour
     [SerializeField] TextMeshProUGUI cardCost;
     public TextMeshProUGUI cardNameText;
     public TextMeshProUGUI cardDesc;
+    public string flavorText; 
 
     public bool isEmpty = true; // 카드가 비어있는지 체크하는 변수
 
@@ -27,6 +28,7 @@ public class BookCards : MonoBehaviour
             cardCost.text = string.Empty;
             cardNameText.text = string.Empty;
             cardDesc.text = string.Empty;
+            flavorText = string.Empty;
             isEmpty = true; // 카드가 비어있음
             return;
         }
@@ -37,6 +39,7 @@ public class BookCards : MonoBehaviour
         cardCost.text = c.manaCost.ToString();
         cardNameText.text = c.cardName;
         cardDesc.text = c.cardText;
+        flavorText = c.FlavorText;
         isEmpty = false;
     }
 
@@ -48,5 +51,6 @@ public class BookCards : MonoBehaviour
         card.cardCost.text = cardCost.text;
         card.cardNameText.text = cardNameText.text;
         card.cardDesc.text = cardDesc.text;
+        card.flavorText = flavorText;
     }
 }
