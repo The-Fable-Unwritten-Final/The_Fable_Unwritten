@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 /// <summary>
 /// 스테이지 노드와 연결선을 UI에 표시해주는 클래스
@@ -18,7 +19,7 @@ public class StageMapRenderer : MonoBehaviour
 
     [Header("Node Icons")]
     [SerializeField] Sprite startIcon, normalIcon, eliteIcon, randomIcon, campIcon; // 노드아이콘 설정
-    [SerializeField] private Sprite[] bossStageIcons; // Stage2 = 0, Stage3 = 1, Stage4 = 2, Stage5 = 3
+    [SerializeField] private Sprite[] bossStageIcons;
 
     public Dictionary<GraphNode, RectTransform> nodeUIMap = new();
     private readonly List<LineInfo> lineInfos = new();
@@ -36,7 +37,7 @@ public class StageMapRenderer : MonoBehaviour
             foreach (var node in column)
             {
                 var go = Instantiate(nodePrefab, nodesContainer);  // 해당 노드 UI 생성
-                var rt = go.GetComponent<RectTransform>();        
+                var rt = go.GetComponent<RectTransform>();
                 rt.anchoredPosition = node.position;               // 해당 노드 위치 설정
                 nodeUIMap[node] = rt;                              // 해당 노드의 UI 위치 저장 (라인 이어주기 위해)
 
@@ -163,7 +164,7 @@ public class StageMapRenderer : MonoBehaviour
                 return startIcon;
             case NodeType.NormalBattle:
                 return normalIcon;
-            case NodeType.EliteBattle: 
+            case NodeType.EliteBattle:
                 return eliteIcon;
             case NodeType.RandomEvent:
                 return randomIcon;
@@ -172,15 +173,27 @@ public class StageMapRenderer : MonoBehaviour
             case NodeType.Boss:
                 return GetBossIcon(GameManager.Instance.StageSetting.StageIndex);
             default: return null;
-        }     
+        }
     }
 
     private Sprite GetBossIcon(int stageIndex)
     {
-        if (stageIndex < 2) return null;
+        var theme = GameManager.Instance.StageSetting.CurrentTheme;
 
-        int bossIndex = stageIndex - 2; // Stage 2 -> 0, Stage 5 -> 3
-        
-        return bossStageIcons[bossIndex];
+        if (stageIndex == 5) return bossStageIcons.ElementAtOrDefault(3); // 보스스테이지 4번째 아이콘 가져오기
+
+        int index = theme switch
+        {
+            StageTheme.Wisdom => 0,
+            StageTheme.Love => 1,
+            StageTheme.Courage => 2,
+        };
+
+        if (index >= 0 && index < bossStageIcons.Length)
+        {
+            return bossStageIcons[index];
+        }
+
+        return null;
     }
 }

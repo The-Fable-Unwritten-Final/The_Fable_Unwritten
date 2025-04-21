@@ -19,7 +19,7 @@ public class EnemySpawnSet
 
 public class EnemyStageSpawnData
 {
-    public int stageIndex;
+    public StageTheme theme;
     public NodeType type;
     public List<EnemySpawnSet> spawnSets;
 
@@ -32,7 +32,7 @@ public class EnemyStageSpawnData
 
         var selected = spawnSets[UnityEngine.Random.Range(0, spawnSets.Count)];
 
-        Debug.Log($"[EnemySpawnSet] Stage {stageIndex}에서 '{selected.setName}' 세트 선택됨");
+        Debug.Log($"[EnemySpawnSet] Theme {theme}에서 '{selected.setName}' 세트 선택됨");
 
         return selected;
     }

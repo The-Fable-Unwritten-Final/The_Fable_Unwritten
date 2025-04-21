@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,20 +18,21 @@ public class EnemySpawner : MonoBehaviour
     {
 
         var stageIndex = GameManager.Instance.StageSetting.StageIndex;
+        var theme = GameManager.Instance.StageSetting.CurrentTheme;
+        var node = GameManager.Instance.StageSetting.CurrentBattleNode;
 
         backGround.sprite = GameManager.Instance.GetBackgroundForStage(stageIndex);
 
-        stageSpawnDatas = GameManager.Instance.GetSpawnData(stageIndex, GameManager.Instance.StageSetting.CurrentBattleNode.type);
-        int currentStage = stageIndex;
-        var node = GameManager.Instance.StageSetting.CurrentBattleNode;
+        stageSpawnDatas = GameManager.Instance.GetSpawnData(theme, node.type);      
 
+        var stageData = stageSpawnDatas.FirstOrDefault();
 
-        var stageData = stageSpawnDatas
-            .FirstOrDefault(x => x.stageIndex == currentStage && x.type == node.type);
+        Debug.Log($"{theme} 테마 입니다.");
+        Debug.Log($"{stageData}  입니다.");
 
         if (stageData == null) return;
 
-        if (currentStage == 1)
+        if (stageIndex == 1)
         {
             FixedStage1Setting(stageData);
         }
@@ -40,6 +40,8 @@ public class EnemySpawner : MonoBehaviour
         {
             RandomSetting(stageData);
         }
+
+       
     }
 
     private void FixedStage1Setting(EnemyStageSpawnData stageData)

@@ -29,8 +29,8 @@ public class StageSpawnSetCSVParser : MonoBehaviour
         // 헤더 스킵
         var dataLines = lines.Skip(1);
 
-        // stageIndex, type / 스폰세트
-        Dictionary<(int, NodeType), List<EnemySpawnSet>> spawnMap = new();
+        // stageTheme, type / 스폰세트
+        Dictionary<(StageTheme, NodeType), List<EnemySpawnSet>> spawnMap = new();
 
         foreach (var line in dataLines)
         {
@@ -38,7 +38,9 @@ public class StageSpawnSetCSVParser : MonoBehaviour
             if (cols.Length < 6) continue;
 
             string setName = cols[0];             // 배치 세트 indexName 셋팅
-            int stageIndex = int.Parse(cols[1]);  // stageIndex 셋팅
+
+            if (!int.TryParse(cols[1], out int themeInt)) continue;
+            StageTheme theme = (StageTheme)themeInt;  // 테마 셋팅
 
             if (!int.TryParse(cols[2], out int typeInt)) continue;
             NodeType type = (NodeType)typeInt;    // 노드 타입 셋팅
@@ -63,7 +65,7 @@ public class StageSpawnSetCSVParser : MonoBehaviour
                 slots = slots
             };
 
-            var key = (stageIndex, type);
+            var key = (theme, type);
             if (!spawnMap.ContainsKey(key))
                 spawnMap[key] = new List<EnemySpawnSet>();
 
@@ -72,13 +74,13 @@ public class StageSpawnSetCSVParser : MonoBehaviour
 
         List<EnemyStageSpawnData> result = new();
 
-        foreach (var kvp in spawnMap)
+        foreach (var kye in spawnMap)
         {
             var data = new EnemyStageSpawnData
             {
-                stageIndex = kvp.Key.Item1,
-                type = kvp.Key.Item2,
-                spawnSets = kvp.Value
+                theme = kye.Key.Item1,
+                type = kye.Key.Item2,
+                spawnSets = kye.Value
             };
             result.Add(data);
         }

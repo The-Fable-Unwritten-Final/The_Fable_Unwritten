@@ -25,15 +25,20 @@ public class StageMapController : MonoBehaviour
 
     private void Start()
     {
-        var gm = GameManager.Instance;
-        
+        var stageSetting = GameManager.Instance.StageSetting;
+
 
         if (!TryRestoreStage())
         {
-            LoadStage(gm.StageSetting.StageIndex);
+            var theme = stageSetting.GetThemeForStage(stageSetting.StageIndex);
+            stageSetting.SetTheme(theme);
+
+            Debug.Log($"[StageMapController] StageIndex = {GameManager.Instance.StageSetting.StageIndex}, Theme = {theme}");
+
+            LoadStage(stageSetting.StageIndex);
         }
 
-        int stageIndex = gm.StageSetting.StageIndex;
+        int stageIndex = stageSetting.StageIndex;
         backGround.sprite = GameManager.Instance.GetBackgroundForStage(stageIndex);
     }
 
@@ -54,6 +59,9 @@ public class StageMapController : MonoBehaviour
                 if (wasLastColumnNode)
                 {
                     stageSetting.StageIndex++;
+
+                    var newTheme = stageSetting.GetThemeForStage(stageSetting.StageIndex);
+                    stageSetting.SetTheme(newTheme);
 
                     stageSetting.ClearStageState();
                     stageIndex = stageSetting.StageIndex;

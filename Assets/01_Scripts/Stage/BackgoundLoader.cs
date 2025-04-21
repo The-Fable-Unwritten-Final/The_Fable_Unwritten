@@ -21,7 +21,7 @@ public static class BackgoundLoader
             }
         }
 
-        Debug.Log($"총 {dic.Count}개의 배경 이미지 로드 완료");
+        //Debug.Log($"총 {dic.Count}개의 배경 이미지 로드 완료");
 
         return dic;
     }

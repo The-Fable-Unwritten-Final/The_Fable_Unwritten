@@ -43,7 +43,7 @@ public class UI_RandomEvent : MonoBehaviour
     {
         int currentStageIndex = GameManager.Instance.StageSetting.StageIndex;
 
-        currentData = GameManager.Instance.GetRandomEvent(currentStageIndex);
+        currentData = GameManager.Instance.GetRandomEvent();
 
 
         if (currentData == null)
