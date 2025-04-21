@@ -41,27 +41,11 @@ public class JsonCutsceneLoader
             switch (item.type)
             {
                 case "animation":
-                    converted.cutscenePreEvent.AddListener(() =>
-                    {
-                        Debug.Log($"[Cutscene] 애니메이션 재생: {item.animationName}");
-                        // 여기에 애니메이션 호출 코드 삽입
-                        // e.g., AnimationManager.Instance.Play(item.animationName);
-                    });
-                    break;
-
                 case "blackout":
-                    converted.cutscenePreEvent.AddListener(() =>
-                    {
-                        Debug.Log("[Cutscene] 화면 암전");
-                        // 예: UIManager.Instance.FadeToBlack();
-                    });
-                    break;
-
                 case "center":
                     converted.cutscenePreEvent.AddListener(() =>
                     {
-                        Debug.Log($"[Cutscene] 중앙 텍스트 연출: {item.chatString}");
-                        // 예: CenterTextEffect.Show(item.chatString);
+                        CutsceneEffectPlayer.Instance.Play(item.type, item.chatString);
                     });
                     break;
             }

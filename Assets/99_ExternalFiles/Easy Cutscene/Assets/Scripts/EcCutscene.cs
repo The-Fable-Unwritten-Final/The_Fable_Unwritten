@@ -161,28 +161,19 @@ namespace HisaGames.Cutscene
         {
             var data = cutsceneData[currentID];
 
-            // 연출 타입 처리
-            switch (data.type) // type이 name에 포함된 경우면 수정 필요
+
+            if (data.type == "basic" || string.IsNullOrEmpty(data.type))
             {
-                case "animation":
-                    // 애니메이션 재생 함수
-                    break;
-
-                case "blackout":
-                    // 암전 처리
-                    break;
-
-                case "center":
-                    // 중앙 텍스트 띄우기
-                    break;
-
-                case "basic":
-                default:
-                    PlayChatTypingAnimation();
-                    ShowingCurrentCharacters();
-                    ClearPreviousProps();
-                    ShowingCurrentProps();
-                    break;
+                // 기본 대화 연출 처리
+                PlayChatTypingAnimation();
+                ShowingCurrentCharacters();
+                ClearPreviousProps();
+                ShowingCurrentProps();
+            }
+            else
+            {
+                // basic이 아닌 특수 연출만 따로 처리
+                CutsceneEffectPlayer.Instance.Play(data.type, data.chatString);
             }
 
             InvokePreEvent();
