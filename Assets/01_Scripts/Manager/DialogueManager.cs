@@ -11,11 +11,16 @@ public class DialogueManager : MonoSingleton<DialogueManager>
     [Header("JSON 데이터")]
     [SerializeField] private TextAsset jsonFile;
 
-    [Header("컷씬 이름 (Hierarchy에 존재하는 오브젝트 이름)")]
+    [Header("트리거 JSON (Trigger -> sceneID 매핑)")]
+    [SerializeField] private TextAsset triggerJson;
+
+    [Header("컷씬 이름 (Hierarchy에 존재하는 오브젝트)")]
     [SerializeField] private EcCutscene targetCutscene;
 
 
-    private Dictionary<string, List<JsonCutsceneData>> dialogueDatabase;
+    private Dictionary<string, List<JsonCutsceneData>> dialogueDatabase;    //대화 데이터 저장용
+    private Dictionary<string, string> noteToSceneIDMap;    //대화 트리거 확인용 
+    private HashSet<string> playedCampScenes = new(); // 야영 이벤트 중복 방지용
     private bool isPlaying = false;
 
 
@@ -23,6 +28,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
     {
         base.Awake();
         LoadDialogueFromJSON(jsonFile);
+        LoadTriggerFromJSON(triggerJson);
 
         if (targetCutscene == null)
         {
@@ -47,7 +53,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
     private void LoadDialogueFromJSON(TextAsset json)
     {
         var parsedList = JsonCutsceneLoader.ParseFromJSON(json);
-        dialogueDatabase = new Dictionary<string, List<JsonCutsceneData>>();
+        dialogueDatabase = new();
 
         foreach (var line in parsedList)
         {
@@ -57,6 +63,27 @@ public class DialogueManager : MonoSingleton<DialogueManager>
             dialogueDatabase[line.id].Add(line);
         }
     }
+
+    /// <summary>
+    /// JSON 파일에서 대화 트리거를 로드하여 Dictionary에 저장
+    /// </summary>
+    /// <param name="triggerJson">대화 트리거 파일</param>
+    private void LoadTriggerFromJSON(TextAsset triggerJson)
+    {
+        noteToSceneIDMap = new();
+
+        List<DialogueTriggerData> triggerList = JsonUtilityWrapper.FromJsonList<DialogueTriggerData>(triggerJson.text);
+        foreach (var data in triggerList)
+        {
+            string triggerKey = ParseNoteToTriggerKey(data.note);
+            if (!string.IsNullOrEmpty(triggerKey))
+            {
+                noteToSceneIDMap[triggerKey] = data.index;
+                Debug.Log($"[Trigger] 등록됨: {triggerKey} → {data.index}");
+            }
+        }
+    }
+
     /// <summary>
     /// 특정 ID에 맞는 대화를 실행
     /// </summary>
@@ -108,4 +135,108 @@ public class DialogueManager : MonoSingleton<DialogueManager>
         PlayDialogue("scene_0");
     }
 
+    public void TryPlaySceneByTrigger(string key, UnityAction onComplete = null)
+    {
+        if (noteToSceneIDMap.TryGetValue(key, out var sceneID))
+        {
+            PlayDialogue(sceneID, onComplete);
+        }
+    }
+
+    /// <summary>
+    /// 스테이지 시작 시 스테이지 단계에 따라 대화 씬 출력
+    /// </summary>
+    /// <param name="stage">현재 스테이지</param>
+    public void OnStageStart(int stage) => TryPlaySceneByTrigger($"StageStart:{stage}");
+
+    /// <summary>
+    /// 스테이지의 배틀 노드를 클릭했을 때에 맞는 대화 씬 출력
+    /// </summary>
+    /// <param name="stage">현재 스테이지</param>
+    public void OnBattleNodeClicked(int stage, int nodeIndex) => TryPlaySceneByTrigger($"Battle:{stage}_{nodeIndex}");
+
+    /// <summary>
+    /// 스테이지의 엘리트 배틀 노드를 클리어 했을 때 대화 씬 출력
+    /// </summary>
+    /// <param name="stage">현재 스테이지</param>
+    public void OnEliteBattleEnd(int stage) => TryPlaySceneByTrigger($"EliteEnd:{stage}");
+
+    /// <summary>
+    /// 스테이지의 보스 배틀 노드를 클리어 했을 때 대화 씬 출력 (5층)
+    /// </summary>
+    /// <param name="stage">현재 스테이지</param>
+    public void OnBossClear(int stage) => TryPlaySceneByTrigger($"Boss:{stage}");
+
+    /// <summary>
+    /// 야영 중 야영 대화 이벤트 중 하나를 골라서 출력함
+    /// </summary>
+    /// <param name="onComplete"></param>
+    public void OnCamp(UnityAction onComplete = null)
+    {
+        List<string> campScenes = new();
+
+        foreach (var kvp in noteToSceneIDMap)
+        {
+            if (kvp.Key == "Camp")
+                campScenes.Add(kvp.Value);
+        }
+
+        if (campScenes.Count > 0)
+        {
+            string randomScene = campScenes[Random.Range(0, campScenes.Count)];
+            playedCampScenes.Add(randomScene); // 사용 처리
+            PlayDialogue(randomScene, onComplete);
+        }
+        else
+        {
+            Debug.Log("[DialogueManager] 모든 야영 컷씬을 재생했습니다.");
+            onComplete?.Invoke();
+        }
+    }
+
+    /// <summary>
+    /// 파싱된 데이터의 note를 정제
+    /// </summary>
+    /// <param name="note"></param>
+    /// <returns></returns>
+    private string ParseNoteToTriggerKey(string note)
+    {
+        if (note.Contains("시작 전"))
+        {
+            var stage = System.Text.RegularExpressions.Regex.Match(note, "\\d+").Value;
+            return $"StageStart:{stage}";
+        }
+        if (note.Contains("전투 노드 클릭"))
+        {
+            var match = System.Text.RegularExpressions.Regex.Match(note, "\\d+번째");
+            var node = match.Value.Replace("번째", "");
+            var stage = System.Text.RegularExpressions.Regex.Match(note, "스테이지 (\\d+)").Groups[1].Value;
+            return $"Battle:{stage}_{node}";
+        }
+        if (note.Contains("엘리트 전투 후"))
+        {
+            var stage = System.Text.RegularExpressions.Regex.Match(note, "\\d+").Value;
+            return $"EliteEnd:{stage}";
+        }
+        if (note.Contains("보스 전투 승리 후"))
+        {
+            var stage = System.Text.RegularExpressions.Regex.Match(note, "\\d+").Value;
+            return $"Boss:{stage}";
+        }
+        if (note.Contains("야영"))
+        {
+            return "Camp";
+        }
+        return null;
+    }
+
 }
+
+[System.Serializable]
+public class DialogueTriggerData
+{
+    public string index;
+    public string bg;
+    public string note;
+}
+

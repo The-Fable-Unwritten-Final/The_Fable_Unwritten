@@ -37,7 +37,7 @@ public class JsonCutsceneLoader
                 cutscenePostEvent = new EcCutscene.CSUnityEvent()
             };
 
-            // 🎬 연출 타입별 분기 이벤트 등록
+            // 연출 타입별 분기 이벤트 등록
             switch (item.type)
             {
                 case "animation":
@@ -66,7 +66,7 @@ public class JsonCutsceneLoader
                     break;
             }
 
-            // 🎵 사운드 이펙트 처리
+            // 사운드 이펙트 처리
             if (!string.IsNullOrEmpty(item.sfx))
             {
                 converted.cutscenePreEvent.AddListener(() =>
@@ -76,7 +76,7 @@ public class JsonCutsceneLoader
                 });
             }
 
-            // 🖼 배경 전환 처리 (선택)
+            // 배경 전환 처리 (선택)
             if (!string.IsNullOrEmpty(item.bgName))
             {
                 converted.cutscenePreEvent.AddListener(() =>
