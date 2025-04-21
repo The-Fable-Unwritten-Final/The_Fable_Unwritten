@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -8,16 +9,15 @@ public class DiaryBook : MonoBehaviour, IBookControl
     // 각 스테이지 별 다이어리 데이터 (1 스테이지 ~ 5 스테이지)
     [Header("Diary Data")]
     [SerializeField] string csvPath = "ExternalFiles/DiaryData.csv"; // 다이어리 데이터 csv 경로
-    Dictionary <int,DiaryData> Diary0 = new (); // <스토리 진행정도 , 스토리 내용> 구조로 기록
-    Dictionary <int,DiaryData> Diary1 = new ();
-    Dictionary <int,DiaryData> Diary2 = new ();
-    Dictionary <int,DiaryData> Diary3 = new ();
-    Dictionary <int,DiaryData> Diary4 = new ();
+    List<DiaryData>[] diaryGroups = new List<DiaryData>[5]; // tag_num 0~4
 
     [Header("UI Selection / Info")]
     [SerializeField] List<Transform> diaryClip;
     [SerializeField] TextMeshProUGUI diaryTitle; // 다이어리 제목
     [SerializeField] TextMeshProUGUI diaryContents; // 다이어리 내용
+    [SerializeField] RectTransform leftArrow; // 왼쪽 화살표
+    [SerializeField] RectTransform rightArrow; // 오른쪽 화살표
+
     public int diarySelection = 0; // 다이어리 선택 0 ~ 4
     public int maxPageCount { get; set; } // 페이지 수
     public int currentPage { get; set; } = 0; // 현재 페이지
@@ -61,6 +61,7 @@ public class DiaryBook : MonoBehaviour, IBookControl
             Debug.Log("첫 페이지입니다.");
         }
         UpdatePage(currentPage, diarySelection); // 다이어리 내용 업데이트
+        UpdateArrow(); // 화살표 업데이트
     }
     public void OnclickPageAfter()
     {
@@ -74,37 +75,37 @@ public class DiaryBook : MonoBehaviour, IBookControl
             Debug.Log("마지막 페이지입니다.");
         }
         UpdatePage(currentPage, diarySelection); // 다이어리 내용 업데이트
+        UpdateArrow(); // 화살표 업데이트
     }
 
     public void InitDictionary()
     {
-        var list = DiaryCSVParser.Parse(csvPath);
-
         // 추후 스테이지의 진행도 데이터를 받아와서, diaryData의 isOpen를 설정.
         // EX) int storyComplete == 11 이면, list의 0~10까지의 isOpen을 true로 설정.
 
-        // Parse 한 데이터를 각 딕셔너리에 저장.
-        for (int i = 0; i < list.Count; i++)
+        // Resources 폴더에 있는 DiaryData.json 로드
+        TextAsset jsonText = Resources.Load<TextAsset>("ExternalFiles/DiaryData"); // 확장자 제거
+        if (jsonText == null)
         {
-            switch (list[i].stageNum)
-            {
-                case 0:
-                    Diary0.Add(list[i].index, list[i]);
-                    break;
-                case 1:
-                    Diary1.Add(list[i].index, list[i]);
-                    break;
-                case 2:
-                    Diary2.Add(list[i].index, list[i]);
-                    break;
-                case 3:
-                    Diary3.Add(list[i].index, list[i]);
-                    break;
-                case 4:
-                    Diary4.Add(list[i].index, list[i]);
-                    break;
-            }
+            Debug.LogError("[InitDictionary] DiaryData.json not found.");
+            return;
         }
+
+        for (int i = 0; i < 5; i++)
+            diaryGroups[i] = new List<DiaryData>();
+
+        DiaryListWrapper wrapper = JsonUtility.FromJson<DiaryListWrapper>(jsonText.text);
+        foreach (var data in wrapper.diaries)
+        {
+            if (data.tag_num >= 0 && data.tag_num < 5)
+                diaryGroups[data.tag_num].Add(data);
+        }
+
+        // 정렬까지 해놓고 저장
+        for (int i = 0; i < 5; i++)
+            diaryGroups[i] = diaryGroups[i].OrderBy(d => d.index).ToList();
+
+        Debug.Log($"[InitDictionary] JSON loaded. Total count: {wrapper.diaries.Count}");
     }
 
     private void OnClickClip(Transform t,int selection)// 클릭한 책갈피 최초 오픈
@@ -113,37 +114,18 @@ public class DiaryBook : MonoBehaviour, IBookControl
         currentPage = 0; // 페이지 초기화
         diarySelection = selection; // 다이어리 선택
         UpdatePage(0,selection); // 다이어리 내용 업데이트
+        UpdateArrow(); // 화살표 업데이트
         SetLastSibling(t); // 클릭한 책갈피를 가장 위로 올림
     }
-    void UpdatePage(int i,int selection)// 다이어리 내용 업데이트
+    void UpdatePage(int pagenum,int selection)// 다이어리 내용 업데이트
     {
-        switch (selection)
+        var list = diaryGroups[selection];
+        maxPageCount = list.Count;
+
+        if (pagenum >= 0 && pagenum < list.Count)
         {
-            case 0:
-                maxPageCount = Diary0.Count;
-                diaryTitle.text = Diary0[i].title; // 다이어리 제목
-                diaryContents.text = Diary0[i].contents; // 다이어리 내용
-                break;
-            case 1:
-                maxPageCount = Diary1.Count;
-                diaryTitle.text = Diary1[i].title; // 다이어리 제목
-                diaryContents.text = Diary1[i].contents; // 다이어리 내용
-                break;
-            case 2:
-                maxPageCount = Diary2.Count;
-                diaryTitle.text = Diary2[i].title; // 다이어리 제목
-                diaryContents.text = Diary2[i].contents; // 다이어리 내용
-                break;
-            case 3:
-                maxPageCount = Diary3.Count;
-                diaryTitle.text = Diary3[i].title; // 다이어리 제목
-                diaryContents.text = Diary3[i].contents; // 다이어리 내용
-                break;
-            case 4:
-                maxPageCount = Diary4.Count;
-                diaryTitle.text = Diary4[i].title; // 다이어리 제목
-                diaryContents.text = Diary4[i].contents; // 다이어리 내용
-                break;
+            diaryTitle.text = list[pagenum].title;
+            diaryContents.text = list[pagenum].contents;
         }
     }
     void SetLastSibling(Transform t)
@@ -157,4 +139,30 @@ public class DiaryBook : MonoBehaviour, IBookControl
             diaryClip[i].SetAsFirstSibling();
         }
     }
+    void UpdateArrow()
+    {
+        if (currentPage == 0) // 첫 페이지일 경우 왼쪽 화살표 비활성화
+        {
+            leftArrow.gameObject.SetActive(false);
+        }
+        else
+        {
+            leftArrow.gameObject.SetActive(true);
+        }
+
+        if (currentPage == maxPageCount - 1) // 마지막 페이지일 경우 오른쪽 화살표 비활성화
+        {
+            rightArrow.gameObject.SetActive(false);
+        }
+        else
+        {
+            rightArrow.gameObject.SetActive(true);
+        }
+    }
+}
+
+[System.Serializable]
+public class DiaryListWrapper
+{
+    public List<DiaryData> diaries;
 }
