@@ -30,7 +30,7 @@ public static class DiaryCSVParser
                 var data = new DiaryData
                 {
                     index = ParseInt(tokens, 0),
-                    stageNum = ParseInt(tokens, 1),
+                    tag_num = ParseInt(tokens, 1),
                     title = ParseString(tokens, 2),
                     contents = ParseString(tokens, 3),
                     isOpen = false,
