@@ -15,7 +15,7 @@ public static class EnemyParseManager
     static EnemyParseManager()
     {
         // 실제 프로젝트 내 CSV 경로로 수정필요
-        string csvPath = Path.Combine(Application.dataPath, "Resources/ExternalFiles/EnemyData.csv");
+        string csvPath = Path.Combine(Application.dataPath, "Resources/ExternalFiles/Enemy.csv");
 
         // 기존 EnemyCSVParser.Parse()를 그대로 사용
         var list = EnemyCSVParser.Parse(csvPath);

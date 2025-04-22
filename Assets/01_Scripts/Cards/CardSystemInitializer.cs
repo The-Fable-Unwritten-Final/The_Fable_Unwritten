@@ -9,10 +9,19 @@ public class CardSystemInitializer : MonoSingleton<CardSystemInitializer>
     [Header("로드된 카드들")]
     public List<CardModel> loadedCards;
 
+    public Dictionary<int, CardModel> cardLookup = new();
+
+
     public void LoadCardDatabase()
     {
         string fullPath = $"{Application.dataPath}/Resources/{csvRelativePath}";
         loadedCards = CardDatabaseLoader.LoadAll(fullPath);
+        cardLookup.Clear();
+
+        foreach (var card in loadedCards)
+        {
+            cardLookup[card.index] = card;
+        }
 
         Debug.Log($"총 {loadedCards.Count}장의 카드 로드 완료!");
     }

@@ -116,7 +116,7 @@ public static class EnemyPattern
 
         return targets;
     }
-    private static void SetRandomStance(Enemy enemy)
+    private static void SetRandomStance(Enemy enemy) //enemy 자세 변경
     {
         // 1) 파싱된 확률 데이터 사용
         if (!EnemyParseManager.ParsedDict.TryGetValue(enemy.enemyData.IDNum, out var parsed))
@@ -152,22 +152,7 @@ public static class EnemyPattern
         }
     }
 
-    ///// <summary>
-    ///// 랜덤한 StanceType을 설정하고 로그를 출력
-    ///// </summary>
-    //private void SetRandomStance(Enemy enemy)
-    //{
-    //    var stance = (PlayerData.StancType)Random.Range(0, stanceCount);
-    //    enemy.enemyData.currentStance = (EnemyData.StancValue.EStancType)stance;
-    //    Debug.Log($"[EnemyPattern] {enemy.enemyData.EnemyName} 자세 → {stance}");
-    //}
 
-
-    /// <summary>
-    /// 에너미 데이터에 따라 사용할 스킬을 랜덤으로 선택
-    /// </summary>
-    /// <param name="enemy"></param>
-    /// <returns></returns>
     private static EnemySkill ChooseSkill(Enemy enemy)
     {
         if (enemy.enemyData.SkillDict == null || enemy.enemyData.SkillDict.Count == 0)
