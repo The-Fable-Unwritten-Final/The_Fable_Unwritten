@@ -10,11 +10,12 @@ public class UI_CampController : MonoBehaviour
     [SerializeField] Sprite[] campBackgrounds;
 
     [Header("PanelConnect")]
-    [SerializeField] GameObject restPanel;
-    [SerializeField] GameObject trainingPanel;
-    [SerializeField] GameObject readingPanel;
-    [SerializeField] GameObject conversationPanel;
+    [SerializeField] BaseCampPanel restPanel;
+    [SerializeField] BaseCampPanel trainingPanel;
+    [SerializeField] BaseCampPanel readingPanel;
+    [SerializeField] BaseCampPanel conversationPanel;
 
+    private BaseCampPanel currentPanel;
     private void Start()
     {
         SetBackGround();
@@ -33,7 +34,6 @@ public class UI_CampController : MonoBehaviour
                 background.sprite = campBackgrounds[index];
             }      
         }
-
     }
 
     // 각패널 버튼 등록
@@ -42,13 +42,10 @@ public class UI_CampController : MonoBehaviour
     public void ShowReadingPanel() => ShowPanel(readingPanel);
     public void ShowConversationPanel() => ShowPanel(conversationPanel);
 
-    private void ShowPanel(GameObject target)
+    private void ShowPanel(BaseCampPanel panel)
     {
-        restPanel.SetActive(target == restPanel);
-        trainingPanel.SetActive(target == trainingPanel);
-        readingPanel.SetActive(target == readingPanel);
-        conversationPanel.SetActive(target == conversationPanel);
+        currentPanel?.Close();
+        currentPanel = panel;
+        currentPanel.Open();
     }
-
-    
 }
