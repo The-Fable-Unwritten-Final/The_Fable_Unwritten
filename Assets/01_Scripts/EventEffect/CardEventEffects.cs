@@ -17,7 +17,7 @@ public class CardEventEffects : EventEffects
 
     public override void Apply()
     {
-
+        Debug.Log($"{name} : CardEvent");
     }
     public override EventEffects Clone()
     {

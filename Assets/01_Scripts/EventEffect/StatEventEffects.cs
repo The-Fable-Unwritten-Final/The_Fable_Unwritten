@@ -18,7 +18,7 @@ public class StatEventEffects : EventEffects
 
     public override void Apply()
     {
-
+        Debug.Log($"{name} : StatEvent");
     }
     public override EventEffects Clone()
     {

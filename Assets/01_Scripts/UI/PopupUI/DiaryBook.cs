@@ -8,7 +8,6 @@ public class DiaryBook : MonoBehaviour, IBookControl
 {
     // 각 스테이지 별 다이어리 데이터 (1 스테이지 ~ 5 스테이지)
     [Header("Diary Data")]
-    [SerializeField] string csvPath = "ExternalFiles/DiaryData.csv"; // 다이어리 데이터 csv 경로
     List<DiaryData>[] diaryGroups = new List<DiaryData>[5]; // tag_num 0~4
 
     [Header("UI Selection / Info")]
