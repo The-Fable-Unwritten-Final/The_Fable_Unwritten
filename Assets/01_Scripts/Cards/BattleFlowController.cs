@@ -31,12 +31,14 @@ public class BattleFlowController : MonoBehaviour
     public  Dictionary<IStatusReceiver, CardModel> enemyPlannedSkill = new();   //적의 스킬 예측 정보
 
     private bool isBattleEnded = true;      //배틀 끝났는지 확인용
+    public short isWin;                 //배틀 결과 확인용    0, 전투 중 1 승리 -1 패배
     public TurnState currentTurn;       //누구 턴인지 확인용
-    private int turn = 1;               //지금 몇턴인지 확인용
+    public int turn = 1;               //지금 몇턴인지 확인용
 
     //임시 inspector 확인용
     private void Start()
     {
+        isWin = 0;
         SetupPredefinedPlayerSlots();
         Initialize();
     }
@@ -271,12 +273,14 @@ public class BattleFlowController : MonoBehaviour
         {
             isBattleEnded = true;
             Debug.Log("▶ 전투 패배");
+            isWin = -1;
             enemyParty.Clear();
         }
         else if (allEnemiesDead)
         {
             isBattleEnded = true;
             Debug.Log("▶ 전투 승리");
+            isWin = 1;
             enemyParty.Clear();
         }
     }
