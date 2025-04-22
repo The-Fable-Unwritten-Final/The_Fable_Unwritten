@@ -5,7 +5,7 @@ using UnityEngine;
 public class EventEffectManager : MonoSingleton<EventEffectManager>
 {
     [Header("CSV Data path")]
-    [SerializeField] string csvPath; // CSV 파일 경로
+    [SerializeField] string csvPath = "ExternalFiles/EventEffects.csv"; // CSV 파일 경로
     [Header("Event effect Lists")]
     [SerializeField] List<EventEffects> eventEffectList;// 이벤트 효과 SO 리스트.
 
@@ -20,11 +20,25 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
         // CSV 파일에서 데이터 로드
         eventEffectList = LoadDatas(csvPath);
     }
+    private void Update()
+    {
+        // 테스트용
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            AddEventEffect(0);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            AddEventEffect(2);
+        }
+    }
 
     private List<EventEffects> LoadDatas(string csvPath) // CSV의 이벤트 효과 데이터를 기반으로 이벤트 효과 SO의 리스트를 생성.
     {
+        string fullPath = $"{Application.dataPath}/Resources/{csvPath}";
+
         var eventEffectList = new List<EventEffects>();
-        var eventEffectDatas = EventEffectCSVParser.Parse(csvPath);
+        var eventEffectDatas = EventEffectCSVParser.Parse(fullPath);
 
         foreach (var data in eventEffectDatas)
         {
@@ -98,6 +112,11 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
     /// </summary>
     public void EndNextCombat()
     {
+        for (int i = 0; i < untillNextCombat.Count; i++)
+        {
+            untillNextCombat[i].UnApply(); // 효과 해제 메서드 호출
+        }
+
         untillNextCombat.Clear();
     }
     /// <summary>
@@ -115,6 +134,10 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
     /// </summary>
     public void EndNextStage()
     {
+        for (int i = 0; i < untillNextStage.Count; i++)
+        {
+            untillNextStage[i].UnApply(); // 효과 해제 메서드 호출
+        }
         untillNextStage.Clear();
     }
     /// <summary>
@@ -132,6 +155,10 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
     /// <summary>
     public void EndAdventure()
     {
+        for (int i = 0; i < untillEndAdventure.Count; i++)
+        {
+            untillEndAdventure[i].UnApply(); // 효과 해제 메서드 호출
+        }
         untillEndAdventure.Clear();
     }
     /// <summary>

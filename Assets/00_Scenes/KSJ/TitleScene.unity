@@ -1741,6 +1741,55 @@ MonoBehaviour:
   continueBtn: {fileID: 0}
   unlockCardBtn: {fileID: 0}
   exitBtn: {fileID: 0}
+--- !u!1 &968648906
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 968648908}
+  - component: {fileID: 968648907}
+  m_Layer: 0
+  m_Name: EventEffectManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &968648907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 968648906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 079662b4846fa0842b68af3937337e14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  csvPath: ExternalFiles/EventEffects.csv
+  eventEffectList: []
+  untillNextCombat: []
+  untillNextStage: []
+  untillEndAdventure: []
+--- !u!4 &968648908
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 968648906}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1173, y: 476, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1171646123
 GameObject:
   m_ObjectHideFlags: 0
@@ -2519,3 +2568,4 @@ SceneRoots:
   - {fileID: 1327625011}
   - {fileID: 511480267}
   - {fileID: 814068348}
+  - {fileID: 968648908}

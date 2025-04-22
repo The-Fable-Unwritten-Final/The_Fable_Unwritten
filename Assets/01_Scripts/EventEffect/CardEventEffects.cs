@@ -19,6 +19,10 @@ public class CardEventEffects : EventEffects
     {
         Debug.Log($"{name} : CardEvent");
     }
+    public override void UnApply()
+    {
+        Debug.Log($"{name} : CardEvent UnApply");
+    }
     public override EventEffects Clone()
     {
         return Instantiate(this);

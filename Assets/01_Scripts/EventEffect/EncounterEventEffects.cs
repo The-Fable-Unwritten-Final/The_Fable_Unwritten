@@ -8,6 +8,9 @@ public class EncounterEventEffects : EventEffects
     {
         Debug.Log("EncounterEvent");
     }
+    public override void UnApply()
+    {
+    }
     public override EventEffects Clone()
     {
         return Instantiate(this);
