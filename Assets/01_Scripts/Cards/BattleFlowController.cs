@@ -16,6 +16,7 @@ public class BattleFlowController : MonoBehaviour
     [SerializeField] private PlayerController backSlot;
     [SerializeField] private List<Enemy> enemyObjects;
     [SerializeField] private GameObject playerPrefab; // 사용하지 않지만 호환성을 위해 유지
+    [SerializeField] private StageMoveTest StageMove;
 
     [Header("UI")]
     public TextMeshProUGUI Mana;
@@ -275,6 +276,11 @@ public class BattleFlowController : MonoBehaviour
             Debug.Log("▶ 전투 패배");
             isWin = -1;
             enemyParty.Clear();
+
+            if(StageMove != null)
+            {
+                StageMove.OnFail();
+            }
         }
         else if (allEnemiesDead)
         {
@@ -282,6 +288,11 @@ public class BattleFlowController : MonoBehaviour
             Debug.Log("▶ 전투 승리");
             isWin = 1;
             enemyParty.Clear();
+
+            if (StageMove != null)
+            {
+                StageMove.OnClear();
+            }
         }
     }
 

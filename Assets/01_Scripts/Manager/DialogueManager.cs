@@ -87,7 +87,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
     /// <summary>
     /// 특정 ID에 맞는 대화를 실행
     /// </summary>
-    public void PlayDialogue(string dialogueID, UnityAction onComplete = null)
+    public void PlayDialogue(string dialogueID)
     {
         if (isPlaying)
         {
@@ -115,7 +115,6 @@ public class DialogueManager : MonoSingleton<DialogueManager>
         targetCutscene.SetCutSceneData(data);
         targetCutscene.StartCutscene();
 
-        StartCoroutine(WaitUntilCutsceneEnds(onComplete));
     }
 
     /// <summary>
@@ -132,14 +131,14 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 
     public void PlayDialogueScene0()
     {
-        PlayDialogue("scene_0");
+        OnCamp(CharacterClass.Leon);
     }
 
     public void TryPlaySceneByTrigger(string key, UnityAction onComplete = null)
     {
         if (noteToSceneIDMap.TryGetValue(key, out var sceneID))
         {
-            PlayDialogue(sceneID, onComplete);
+            PlayDialogue(sceneID);
         }
     }
 
@@ -171,27 +170,27 @@ public class DialogueManager : MonoSingleton<DialogueManager>
     /// 야영 중 야영 대화 이벤트 중 하나를 골라서 출력함
     /// </summary>
     /// <param name="onComplete"></param>
-    public void OnCamp(UnityAction onComplete = null)
+    public void OnCamp(CharacterClass character)
     {
-        List<string> campScenes = new();
+        string charName = character.ToString(); // 예: "Sophia"
+        List<string> candidateScenes = new();
 
-        foreach (var kvp in noteToSceneIDMap)
+        for (int i = 1; i <= 5; i++) // 최대 5개까지 있다고 가정
         {
-            if (kvp.Key == "Camp")
-                campScenes.Add(kvp.Value);
+            string key = $"Camp:{charName}:{i}";
+
+            if (noteToSceneIDMap.TryGetValue(key, out var sceneID))
+            {
+                if (!playedCampScenes.Contains(sceneID))
+                {
+                    playedCampScenes.Add(sceneID);
+                    PlayDialogue(sceneID);
+                    return;
+                }
+            }
         }
 
-        if (campScenes.Count > 0)
-        {
-            string randomScene = campScenes[Random.Range(0, campScenes.Count)];
-            playedCampScenes.Add(randomScene); // 사용 처리
-            PlayDialogue(randomScene, onComplete);
-        }
-        else
-        {
-            Debug.Log("[DialogueManager] 모든 야영 컷씬을 재생했습니다.");
-            onComplete?.Invoke();
-        }
+        Debug.Log($"[DialogueManager] {character}의 야영 컷씬은 모두 재생됨");
     }
 
     /// <summary>
@@ -223,9 +222,15 @@ public class DialogueManager : MonoSingleton<DialogueManager>
             var stage = System.Text.RegularExpressions.Regex.Match(note, "\\d+").Value;
             return $"Boss:{stage}";
         }
-        if (note.Contains("야영"))
+        if (note.StartsWith("야영"))
         {
-            return "Camp";
+            var match = System.Text.RegularExpressions.Regex.Match(note, @"야영\s*(\S+)\s*(\d+)");
+            if (match.Success)
+            {
+                string charName = match.Groups[1].Value.Trim();  // 예: 소피아
+                string index = match.Groups[2].Value.Trim();      // 예: 1, 2
+                return $"Camp:{charName}:{index}";
+            }
         }
         return null;
     }
