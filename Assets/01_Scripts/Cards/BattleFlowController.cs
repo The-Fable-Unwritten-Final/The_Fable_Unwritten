@@ -255,15 +255,17 @@ public class BattleFlowController : MonoBehaviour
             isBattleEnded = true;
             Debug.Log("▶ 전투 패배");
             isWin = -1;
+            enemyParty.Clear();
+            GameManager.Instance.turnController.ToGameEnd();
         }
         else if (allEnemiesDead)
         {
             isBattleEnded = true;
             Debug.Log("▶ 전투 승리");
             isWin = 1;
+            enemyParty.Clear();
+            GameManager.Instance.turnController.ToGameEnd();
         }
-        enemyParty.Clear();
-        GameManager.Instance.turnController.ToGameEnd();
     }
 
     private void UpdateManaUI()
