@@ -16,7 +16,6 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
-
         var stageIndex = GameManager.Instance.StageSetting.StageIndex;
         var theme = GameManager.Instance.StageSetting.CurrentTheme;
         var node = GameManager.Instance.StageSetting.CurrentBattleNode;
@@ -40,8 +39,6 @@ public class EnemySpawner : MonoBehaviour
         {
             RandomSetting(stageData);
         }
-
-       
     }
 
     private void FixedStage1Setting(EnemyStageSpawnData stageData)

@@ -70,8 +70,6 @@ public class BattleFlowController : MonoBehaviour
         }
     }
 
-
-
     /// <summary>
     /// 캐릭터 및 적 초기화(배틀 처음 진입시 시작할 것.)
     /// </summary>
@@ -104,6 +102,7 @@ public class BattleFlowController : MonoBehaviour
         {
             if(player.IsAlive())            //모두 덱 초기화 후 3장 뽑기
             {
+                if (!player.IsAlive()) continue;
                 player.Deck.ResetDeckState();
                 player.Deck.Draw(DeckModel.startSize);
             }
@@ -124,8 +123,6 @@ public class BattleFlowController : MonoBehaviour
             currentMana = startMana;
 
         UpdateManaUI(); // << 추가
-
-
         DrawMissingHands();             //각각 패가 3장이 되도록(살아 있을 경우에만) 드로우
 
         Debug.Log("플레이어 턴 시작");
@@ -141,13 +138,13 @@ public class BattleFlowController : MonoBehaviour
     /// <param name="target">타겟</param>
     public void UseCard(CardModel card, IStatusReceiver caster, IStatusReceiver target)
     {
-        int actualCost = card.GetEffectiveCost();
 
         if (!card.IsUsable(currentMana) || !caster.IsAlive() || !target.IsAlive())      //사용 가능하지 않거나 적 또는 사용자가 죽어 있다면 생략하기
         {
             return;
         }
 
+        int actualCost = card.GetEffectiveCost();
         currentMana -= actualCost; // 할인된 코스트 차감
 
         Debug.Log($"{caster.ChClass} 가 {card.cardName} 사용 → {target.ChClass}, cost : {actualCost}");
@@ -203,41 +200,31 @@ public class BattleFlowController : MonoBehaviour
         }
         currentTurn = TurnState.EnemyTurn;          //적 턴으로 이행
     }
-    
+
     /// <summary>
     /// 적 턴 진행
     /// </summary>
-    public void ExecuteEnemyTurn()
+    public void ExecuteEnemyTurn(Action onEnemyTurnComplete)
     {
         if (isBattleEnded) return;
-
         Debug.Log("적 턴 시작");
+        StartCoroutine(EnemyTurnCoroutine(onEnemyTurnComplete));
+    }
 
-        // 1. 살아있는 적만 행동함
+    private IEnumerator EnemyTurnCoroutine(Action onEnemyTurnComplete)
+    {
         foreach (var enemy in enemyParty)
         {
-            if (enemy == null)
-            {
-                Debug.Log("[BattleFlow] enemyParty 내 null 객체 발견");
-                continue;
-            }
+            if (enemy == null || !enemy.IsAlive()) continue;
 
-            if (!enemy.IsAlive()) continue;
-
-            Enemy enemyComp = enemy as Enemy;
-            if (enemyComp != null)
-            {
-                EnemyPattern.ExecutePattern(enemyComp);   
-            }
-            else
-            {
-                Debug.LogWarning($"[BattleFlow] {enemy} 에 EnemyPattern 스크립트가 없습니다.");
-            }
-
-            // 3. 적 행동 종료 후 턴 종료 체크 및 다음 턴으로 전환
-            CheckBattleEnd();
+            yield return EnemyPattern.ExecutePattern(enemy); // 애니메이션 포함
+            yield return new WaitForSeconds(0.5f); // 적 한 명당 텀
         }
+        //배틀 종료 확인
+        CheckBattleEnd();
+        onEnemyTurnComplete?.Invoke(); // 적 행동 끝났다고 알림
     }
+
 
     private void PlanEnemySkills()
     {
@@ -249,7 +236,6 @@ public class BattleFlowController : MonoBehaviour
         foreach (var player in playerParty)
         {
             if (!player.IsAlive()) continue;
-
             int toDraw = DeckModel.startSize - player.Deck.Hand.Count;  //손패가 3장 보다 적다면 3장이 될때까지 드로우
             if (toDraw > 0)
                 player.Deck.Draw(toDraw);
