@@ -170,17 +170,18 @@ public static class EnemyPattern
 
     private static EnemySkill ChooseSkill(Enemy enemy)
     {
-        if (enemy.enemyData.SkillDict == null || enemy.enemyData.SkillDict.Count == 0)
-            return null; // 스킬 없으면 기본 공격
+        var skills = enemy.enemyData.SkillList;
+        if (skills == null || skills.Count == 0)
+            return null;        // 스킬 없으면 기본 공격
 
         float total = 0;                 
-        foreach (var s in enemy.enemyData.SkillDict.Values) // 스킬 공격 확률에 따라 스킬 선택
+        foreach (var s in skills) // 스킬 공격 확률에 따라 스킬 선택
             total += s.percentage;
 
         float rand = Random.Range(0f, 1);
         float cumulative = 0;
 
-        foreach (var skill in enemy.enemyData.SkillDict.Values)
+        foreach (var skill in skills)
         {
             cumulative += skill.percentage;
             if (rand <= cumulative)

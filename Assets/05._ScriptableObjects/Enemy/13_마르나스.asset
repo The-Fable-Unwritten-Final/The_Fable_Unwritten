@@ -20,5 +20,15 @@ MonoBehaviour:
   aTKValue: 5
   dEF: 0
   dEFValue: 0
+  skillList:
+  - skillIndex: 100
+    damage: 5
+    percentage: 0.4
+  - skillIndex: 107
+    damage: 0
+    percentage: 0.3
+  - skillIndex: 108
+    damage: 5
+    percentage: 0.3
   currentStance: 1
   animationController: {fileID: 0}

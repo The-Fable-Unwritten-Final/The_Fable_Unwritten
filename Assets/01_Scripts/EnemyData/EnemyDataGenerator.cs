@@ -29,7 +29,7 @@ public static class EnemyDataGenerator
             EnemyData existing = AssetDatabase.LoadAssetAtPath<EnemyData>(fullPath);
 
             // Dictionary 형태로 스킬 구성하여 임시 저장
-            var parsedSkills = new Dictionary<int, EnemySkill>();
+            List<EnemySkill> parsedSkills = new();
             AddSkillIfValid(parsedSkills, parsed.skill0, parsed.damage0, parsed.percentage0);
             AddSkillIfValid(parsedSkills, parsed.skill1, parsed.damage1, parsed.percentage1);
             AddSkillIfValid(parsedSkills, parsed.skill2, parsed.damage2, parsed.percentage2);
@@ -50,11 +50,10 @@ public static class EnemyDataGenerator
 
                 // 스킬 설정
                 data.ClearSkills();
-                foreach (var kvp in parsedSkills)
+                foreach (var skill in parsedSkills)
                 {
-                    data.AddSkill(kvp.Key, kvp.Value);
+                    data.AddSkill(skill);
                 }
-
                 if (existing == null)
                 {
                     AssetDatabase.CreateAsset(data, fullPath);
@@ -79,16 +78,16 @@ public static class EnemyDataGenerator
     /// <param name="index"></param>
     /// <param name="damage"></param>
     /// <param name="percentage"></param>
-    private static void AddSkillIfValid(Dictionary<int, EnemySkill> dict, int index, float damage, float percentage)
+    private static void AddSkillIfValid(List<EnemySkill> list, int index, float damage, float percentage)
     {
         if (index == 0) return;
 
-        dict[index] = new EnemySkill
+        list.Add(new EnemySkill
         {
             skillIndex = index,
             damage = damage,
             percentage = percentage
-        };
+        });
     }
 
     /// <summary>
@@ -98,7 +97,7 @@ public static class EnemyDataGenerator
     /// <param name="parsed">가져온 데이터</param>
     /// <param name="parsedSkills">가져온 스킬 데이터</param>
     /// <returns></returns>
-    private static bool IsSame(EnemyData data, EnemyParsed parsed, Dictionary<int, EnemySkill> parsedSkills)
+    private static bool IsSame(EnemyData data, EnemyParsed parsed, List<EnemySkill> parsedSkills)
     {
         if (data.IDNum != parsed.id) return false;
         if (data.EnemyName != parsed.enemyName) return false;
@@ -106,19 +105,17 @@ public static class EnemyDataGenerator
         if (data.ATKValue != parsed.damage0) return false;
         if (!Mathf.Approximately(data.DEFValue, parsed.defBuff)) return false;
 
-        var existingSkills = data.SkillDict;
+        List<EnemySkill> existingSkills = data.SkillList;
         if (existingSkills == null || existingSkills.Count != parsedSkills.Count)
             return false;
 
-        foreach (var kvp in parsedSkills)
+        foreach (var skill in parsedSkills)
         {
-            if (!existingSkills.ContainsKey(kvp.Key)) return false;
+            var match = existingSkills.Find(s => s.skillIndex == skill.skillIndex);
+            if (match == null) return false;
 
-            var a = existingSkills[kvp.Key];
-            var b = kvp.Value;
-
-            if (!Mathf.Approximately(a.damage, b.damage)) return false;
-            if (!Mathf.Approximately(a.percentage, b.percentage)) return false;
+            if (!Mathf.Approximately(match.damage, skill.damage)) return false;
+            if (!Mathf.Approximately(match.percentage, skill.percentage)) return false;
         }
 
         return true;

@@ -37,11 +37,12 @@ public class EnemyData : ScriptableObject
     private float dEFValue;
     public float DEFValue { get { return dEFValue; } set { dEFValue = value; } } // 방어력 변화
 
-    private Dictionary<int, EnemySkill> skillDict = new();
-    public Dictionary<int, EnemySkill> SkillDict
+    [Header("스킬 목록")]
+    [SerializeField] private List<EnemySkill> skillList = new();
+    public List<EnemySkill> SkillList
     {
-        get => skillDict;
-        set => skillDict = value;
+        get => skillList;
+        set => skillList = value ?? new List<EnemySkill>();
     }
 
     [System.Serializable]
@@ -65,20 +66,12 @@ public class EnemyData : ScriptableObject
 
 
     //스킬 추가
-    public void AddSkill(int index, EnemySkill skill)
+    public void AddSkill(EnemySkill skill)
     {
-        if (skillDict == null)
-            skillDict = new Dictionary<int, EnemySkill>();
-
-        skillDict[index] = skill;
+        if (skill != null && !skillList.Contains(skill))
+            skillList.Add(skill);
     }
 
     //스킬 모두 삭제
-    public void ClearSkills()
-    {
-        skillDict?.Clear();
-    }
-
-    //스킬 전부 가져오기
-    public IEnumerable<EnemySkill> GetSkills() => skillDict?.Values;
+    public void ClearSkills() => skillList.Clear();
 }
