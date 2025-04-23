@@ -161,21 +161,15 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
         }
         untillEndAdventure.Clear();
     }
-    /// <summary>
-    /// EventEffects 중 즉시 효과를 적용하는 경우 호출.
-    /// </summary>
-    public void InstantEffect(int index)
-    {
-        eventEffectList[index].Apply();
-    }
 
-    // List에 효과를 추가하는 메서드
+
+    // List에 효과를 추가하는 메서드 + 즉시 효과 사용의 경우 실행.
     public void AddEventEffect(int index)
     {
         EventEffects effect = eventEffectList[index].Clone();
         switch (effect.duration)
         {
-            case 0: // 즉시 사용 효과 적용, 왠만하면 InstantEffect(int index) 로 호출 할 것.
+            case 0:
                 effect.Apply();
                 break;
             case 1:
@@ -188,5 +182,10 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
                 untillEndAdventure.Add(effect);
                 break;
         }
+    }
+
+    public string GetEventEffectText(int index)
+    {
+        return eventEffectList[index].text;
     }
 }
