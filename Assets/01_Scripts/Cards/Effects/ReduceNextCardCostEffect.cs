@@ -28,7 +28,7 @@ public class ReduceNextCardCostEffect : CardEffectBase
         }
     }
 
-    private void ApplyDiscountToHand(IStatusReceiver receiver)
+    public void ApplyDiscountToHand(IStatusReceiver receiver)
     {
         if (onlyOneCard)
         {
@@ -39,6 +39,8 @@ public class ReduceNextCardCostEffect : CardEffectBase
             receiver.Deck.ApplyPersistentDiscountToAllCards(amount);
         }
     }
+
+
 
     public override string GetDescription() => onlyOneCard
         ? $"대상의 다음 카드 1장의 코스트를 {amount} 감소시킵니다."
