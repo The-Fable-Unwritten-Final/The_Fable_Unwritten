@@ -114,13 +114,18 @@ public class StageSetttingController
 
     private void AssignTemesToStages()
     {
-        List<StageTheme> themePool = new() { StageTheme.Wisdom, StageTheme.Love, StageTheme.Courage };
-        var shuffled = themePool.OrderBy(x => Random.value).ToList();
+        stageThemes[2] = StageTheme.Wisdom;
+        stageThemes[3] = StageTheme.Love;
+        stageThemes[4] = StageTheme.Courage;
 
-        for (int i = 0; i < themePool.Count; i++)
-        {
-            stageThemes[2 + i] = shuffled[i];
-        }
+        // 랜덤한 순서로 진행 되는 로직, 타 태마도 완성 시에 위 로직 제거 후 주석 해제
+        //List<StageTheme> themePool = new() { StageTheme.Wisdom, StageTheme.Love, StageTheme.Courage };
+        //var shuffled = themePool.OrderBy(x => Random.value).ToList();
+
+        //for (int i = 0; i < themePool.Count; i++)
+        //{
+        //    stageThemes[2 + i] = shuffled[i];
+        //}
     }
 
     public StageTheme GetThemeForStage(int stageIndex)

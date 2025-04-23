@@ -147,7 +147,7 @@ public class UI_RandomEvent : MonoBehaviour
 
         EventEffectManager.Instance.AddEventEffect(resultIndex);
 
-        string resultText = EventEffectManager.Instance.GetEffectText(resultIndex);
+        string resultText = EventEffectManager.Instance.GetEventEffectText(resultIndex);
 
         yield return StartCoroutine(TypeText(descriptionTxt, resultDescription));
         yield return new WaitForSeconds(0.5f);

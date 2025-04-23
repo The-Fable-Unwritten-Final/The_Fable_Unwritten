@@ -87,11 +87,12 @@ public class EnemySpawner : MonoBehaviour
             if (slotMap.TryGetValue(i, out var slotData))
             {
                 var enemy = slot.GetComponent<Enemy>();
-                var data = enemyDataContainer.GetData(slotData.enemyId);
+                var origndata = enemyDataContainer.GetData(slotData.enemyId);
 
-                if (enemy != null && data != null)
+                if (enemy != null && origndata != null)
                 {
-                    enemy.enemyData = data;
+                    var copydata = ScriptableObject.Instantiate(origndata);
+                    enemy.enemyData = copydata;
                     slot.gameObject.SetActive(true);
 
                     enemyParty.Add(enemy as IStatusReceiver);
