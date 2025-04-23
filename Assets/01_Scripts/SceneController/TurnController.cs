@@ -102,7 +102,7 @@ public class TurnController : MonoBehaviour
 
             case TurnState.EnemyTurn:
                 OnEnemyTurn?.Invoke();
-                // 적 행동이 끝났을 때 다시 StartPlayerTurn으로
+                OnStartPlayerTurn?.Invoke();
                 break;
 
             case TurnState.GameEnd:

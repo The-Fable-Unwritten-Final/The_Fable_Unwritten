@@ -110,7 +110,6 @@ public class BattleFlowController : MonoBehaviour
         }
 
         PlanEnemySkills();      //적 스킬 목록 설정
-        ExecutePlayerTurn();    //플레이어 턴 실행
     }
 
     /// <summary>
@@ -203,7 +202,6 @@ public class BattleFlowController : MonoBehaviour
             }
         }
         currentTurn = TurnState.EnemyTurn;          //적 턴으로 이행
-        ExecuteEnemyTurn();
     }
     
     /// <summary>
@@ -212,7 +210,6 @@ public class BattleFlowController : MonoBehaviour
     public void ExecuteEnemyTurn()
     {
         if (isBattleEnded) return;
-        currentTurn = TurnState.EnemyTurn;
 
         Debug.Log("적 턴 시작");
 
@@ -230,21 +227,16 @@ public class BattleFlowController : MonoBehaviour
             Enemy enemyComp = enemy as Enemy;
             if (enemyComp != null)
             {
-                EnemyPattern.ExecutePattern(enemyComp);
-                //
-                //
-                //
+                EnemyPattern.ExecutePattern(enemyComp);   
             }
             else
             {
                 Debug.LogWarning($"[BattleFlow] {enemy} 에 EnemyPattern 스크립트가 없습니다.");
             }
-        }
 
-        // 3. 적 행동 종료 후 턴 종료 체크 및 다음 턴으로 전환
-        CheckBattleEnd();
-        if (!isBattleEnded)
-            ExecutePlayerTurn();
+            // 3. 적 행동 종료 후 턴 종료 체크 및 다음 턴으로 전환
+            CheckBattleEnd();
+        }
     }
 
     private void PlanEnemySkills()
