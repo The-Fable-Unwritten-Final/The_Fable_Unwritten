@@ -27,15 +27,15 @@ public class CardEventEffects : EventEffects
                 {
                     case CharacterClass.Sophia:
                         if(sophia)
-                            chars.Deck.ApplyPersistentDiscountToAllCards(cost);
+                            chars.Deck.ApplyPersistentDiscountToAllCards(-cost);
                         break;
                     case CharacterClass.Kayla:
                         if(kyla)
-                            chars.Deck.ApplyPersistentDiscountToAllCards(cost);
+                            chars.Deck.ApplyPersistentDiscountToAllCards(-cost);
                         break;
                     case CharacterClass.Leon:
                         if(leon)
-                            chars.Deck.ApplyPersistentDiscountToAllCards(cost);
+                            chars.Deck.ApplyPersistentDiscountToAllCards(-cost);
                         break;
                 }
             }
@@ -66,15 +66,15 @@ public class CardEventEffects : EventEffects
                 {
                     case CharacterClass.Sophia:
                         if(sophia)
-                            chars.Deck.ApplyPersistentDiscountToAllCards(-cost);
+                            chars.Deck.ApplyPersistentDiscountToAllCards(cost);
                         break;
                     case CharacterClass.Kayla:
                         if(kyla)
-                            chars.Deck.ApplyPersistentDiscountToAllCards(-cost);
+                            chars.Deck.ApplyPersistentDiscountToAllCards(cost);
                         break;
                     case CharacterClass.Leon:
                         if(leon)
-                            chars.Deck.ApplyPersistentDiscountToAllCards(-cost);
+                            chars.Deck.ApplyPersistentDiscountToAllCards(cost);
                         break;
                 }
             }
