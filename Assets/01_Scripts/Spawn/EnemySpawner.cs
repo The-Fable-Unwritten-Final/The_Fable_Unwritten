@@ -89,6 +89,14 @@ public class EnemySpawner : MonoBehaviour
                 if (enemy != null && origndata != null)
                 {
                     var copydata = ScriptableObject.Instantiate(origndata);
+                    
+                    // 깊은 복사 (값을 직접 복사)
+                    copydata.SkillDict = new Dictionary<int, EnemySkill>();
+                    foreach (var kvp in origndata.SkillDict)
+                    {
+                        copydata.SkillDict[kvp.Key] = kvp.Value; // 또는 new EnemySkill(kvp.Value); 깊은 복사 원할 시
+                    }
+
                     enemy.enemyData = copydata;
                     slot.gameObject.SetActive(true);
 
