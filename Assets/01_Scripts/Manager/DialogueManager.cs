@@ -131,7 +131,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 
     public void PlayDialogueScene0()
     {
-        OnCamp(CharacterClass.Leon);
+        PlayDialogue("scene_0");
     }
 
     public void TryPlaySceneByTrigger(string key, UnityAction onComplete = null)
