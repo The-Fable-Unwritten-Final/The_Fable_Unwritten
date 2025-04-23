@@ -29,7 +29,23 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
+            AddEventEffect(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
             AddEventEffect(2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            PlayNextCombat();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            EndNextCombat();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            PlayNextStage();
         }
     }
 
@@ -102,6 +118,7 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
     /// </summary>
     public void PlayNextCombat()
     {
+        Debug.Log("Play Next Combat");
         for (int i = 0; i < untillNextCombat.Count; i++)
         {
             untillNextCombat[i].Apply();

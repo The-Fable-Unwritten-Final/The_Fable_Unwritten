@@ -21,17 +21,23 @@ public class CardEventEffects : EventEffects
     {
         if(cost != 0)// 코스트 변화.
         {
-            if(sophia)
+            foreach(var chars in GameManager.Instance.turnController.battleFlow.playerParty)
             {
-                GameManager.Instance.playerDatas[1].GetComponent<IStatusReceiver>().Deck.ApplyPersistentDiscountToAllCards(cost);
-            }
-            if(kyla)
-            {
-                GameManager.Instance.playerDatas[0].GetComponent<IStatusReceiver>().Deck.ApplyPersistentDiscountToAllCards(cost);
-            }
-            if(leon)
-            {
-                GameManager.Instance.playerDatas[2].GetComponent<IStatusReceiver>().Deck.ApplyPersistentDiscountToAllCards(cost);
+                switch(chars.ChClass)
+                {
+                    case CharacterClass.Sophia:
+                        if(sophia)
+                            chars.Deck.ApplyPersistentDiscountToAllCards(cost);
+                        break;
+                    case CharacterClass.Kayla:
+                        if(kyla)
+                            chars.Deck.ApplyPersistentDiscountToAllCards(cost);
+                        break;
+                    case CharacterClass.Leon:
+                        if(leon)
+                            chars.Deck.ApplyPersistentDiscountToAllCards(cost);
+                        break;
+                }
             }
         }
         if(newCardIndex != 0)// 카드 추가.
@@ -54,17 +60,23 @@ public class CardEventEffects : EventEffects
     {
         if(cost != 0)
         {
-            if(sophia)
+            foreach(var chars in GameManager.Instance.turnController.battleFlow.playerParty)
             {
-                GameManager.Instance.playerDatas[1].GetComponent<IStatusReceiver>().Deck.ApplyPersistentDiscountToAllCards(-cost);
-            }
-            if(kyla)
-            {
-                GameManager.Instance.playerDatas[0].GetComponent<IStatusReceiver>().Deck.ApplyPersistentDiscountToAllCards(-cost);
-            }
-            if(leon)
-            {
-                GameManager.Instance.playerDatas[2].GetComponent<IStatusReceiver>().Deck.ApplyPersistentDiscountToAllCards(-cost);
+                switch(chars.ChClass)
+                {
+                    case CharacterClass.Sophia:
+                        if(sophia)
+                            chars.Deck.ApplyPersistentDiscountToAllCards(-cost);
+                        break;
+                    case CharacterClass.Kayla:
+                        if(kyla)
+                            chars.Deck.ApplyPersistentDiscountToAllCards(-cost);
+                        break;
+                    case CharacterClass.Leon:
+                        if(leon)
+                            chars.Deck.ApplyPersistentDiscountToAllCards(-cost);
+                        break;
+                }
             }
         }
     }

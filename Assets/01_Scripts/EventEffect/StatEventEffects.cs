@@ -12,7 +12,7 @@ public class StatEventEffects : EventEffects
     public bool enemy;
 
     // value 값
-    public int hp; // 단순 증감
+    public int hp; // 힐 사용.
     public float hpPercent; // 퍼센트 변화
     public int atk; // 단순 증감
     public int def; // 단순 증감
@@ -23,8 +23,14 @@ public class StatEventEffects : EventEffects
         {
             if(hp != 0)
             {
-                GameManager.Instance.playerDatas[1].currentHP += hp;
-                GameManager.Instance.playerDatas[1].currentHP = Mathf.Clamp(GameManager.Instance.playerDatas[1].currentHP, 1, GameManager.Instance.playerDatas[1].MaxHP);// 변경된 hp 가 1~최대hp 가 유지되도록.
+                foreach (var chars in GameManager.Instance.turnController.battleFlow.playerParty)
+                {
+                    if (chars.ChClass == CharacterClass.Sophia)
+                    {
+                        chars.Heal(hp); // 힐 적용
+                        break;
+                    }
+                }
             }
             if (hpPercent != 0)
             {
@@ -32,29 +38,49 @@ public class StatEventEffects : EventEffects
             }
             if (atk != 0)
             {
-                GameManager.Instance.playerDatas[1].GetComponent<IStatusReceiver>().ApplyStatusEffect(new StatusEffect
+                foreach (var chars in GameManager.Instance.turnController.battleFlow.playerParty)
                 {
-                    statType = BuffStatType.Attack,
-                    value = atk,
-                    duration = 1000 // 전투 동안 유지되도록 높게
-                });
+                    if (chars.ChClass == CharacterClass.Sophia)
+                    {
+                        chars.ApplyStatusEffect(new StatusEffect
+                        {
+                            statType = BuffStatType.Attack,
+                            value = atk,
+                            duration = 1000 // 전투 동안 유지되도록 높게
+                        });
+                        break;
+                    }
+                }
             }
             if (def != 0)
             {
-                GameManager.Instance.playerDatas[1].GetComponent<IStatusReceiver>().ApplyStatusEffect(new StatusEffect
+                foreach (var chars in GameManager.Instance.turnController.battleFlow.playerParty)
                 {
-                    statType = BuffStatType.Defense,
-                    value = def,
-                    duration = 1000 // 전투 동안 유지되도록 높게
-                });
+                    if (chars.ChClass == CharacterClass.Sophia)
+                    {
+                        chars.ApplyStatusEffect(new StatusEffect
+                        {
+                            statType = BuffStatType.Defense,
+                            value = def,
+                            duration = 1000 // 전투 동안 유지되도록 높게
+                        });
+                        break;
+                    }
+                }
             }
         }
         if (kyla)
         {
             if(hp != 0)
             {
-                GameManager.Instance.playerDatas[0].currentHP += hp;
-                GameManager.Instance.playerDatas[0].currentHP = Mathf.Clamp(GameManager.Instance.playerDatas[0].currentHP, 1, GameManager.Instance.playerDatas[0].MaxHP);// 변경된 hp 가 1~최대hp 가 유지되도록.
+                foreach (var chars in GameManager.Instance.turnController.battleFlow.playerParty)
+                {
+                    if (chars.ChClass == CharacterClass.Kayla)
+                    {
+                        chars.Heal(hp); // 힐 적용
+                        break;
+                    }
+                }
             }
             if (hpPercent != 0)
             {
@@ -62,29 +88,49 @@ public class StatEventEffects : EventEffects
             }
             if (atk != 0)
             {
-                GameManager.Instance.playerDatas[0].GetComponent<IStatusReceiver>().ApplyStatusEffect(new StatusEffect
+                foreach (var chars in GameManager.Instance.turnController.battleFlow.playerParty)
                 {
-                    statType = BuffStatType.Attack,
-                    value = atk,
-                    duration = 1000 // 전투 동안 유지되도록 높게
-                });
+                    if (chars.ChClass == CharacterClass.Kayla)
+                    {
+                        chars.ApplyStatusEffect(new StatusEffect
+                        {
+                            statType = BuffStatType.Attack,
+                            value = atk,
+                            duration = 1000 // 전투 동안 유지되도록 높게
+                        });
+                        break;
+                    }
+                }
             }
             if (def != 0)
             {
-                GameManager.Instance.playerDatas[0].GetComponent<IStatusReceiver>().ApplyStatusEffect(new StatusEffect
+                foreach (var chars in GameManager.Instance.turnController.battleFlow.playerParty)
                 {
-                    statType = BuffStatType.Defense,
-                    value = def,
-                    duration = 1000 // 전투 동안 유지되도록 높게
-                });
+                    if (chars.ChClass == CharacterClass.Kayla)
+                    {
+                        chars.ApplyStatusEffect(new StatusEffect
+                        {
+                            statType = BuffStatType.Defense,
+                            value = def,
+                            duration = 1000 // 전투 동안 유지되도록 높게
+                        });
+                        break;
+                    }
+                }
             }
         }
         if (leon)
         {
             if(hp != 0)
             {
-                GameManager.Instance.playerDatas[2].currentHP += hp;
-                GameManager.Instance.playerDatas[2].currentHP = Mathf.Clamp(GameManager.Instance.playerDatas[2].currentHP, 1, GameManager.Instance.playerDatas[2].MaxHP);// 변경된 hp 가 1~최대hp 가 유지되도록.
+                foreach (var chars in GameManager.Instance.turnController.battleFlow.playerParty)
+                {
+                    if (chars.ChClass == CharacterClass.Leon)
+                    {
+                        chars.Heal(hp); // 힐 적용
+                        break;
+                    }
+                }
             }
             if (hpPercent != 0)
             {
@@ -92,21 +138,35 @@ public class StatEventEffects : EventEffects
             }
             if (atk != 0)
             {
-                GameManager.Instance.playerDatas[2].GetComponent<IStatusReceiver>().ApplyStatusEffect(new StatusEffect
+                foreach (var chars in GameManager.Instance.turnController.battleFlow.playerParty)
                 {
-                    statType = BuffStatType.Attack,
-                    value = atk,
-                    duration = 1000 // 전투 동안 유지되도록 높게
-                });
+                    if (chars.ChClass == CharacterClass.Leon)
+                    {
+                        chars.ApplyStatusEffect(new StatusEffect
+                        {
+                            statType = BuffStatType.Attack,
+                            value = atk,
+                            duration = 1000 // 전투 동안 유지되도록 높게
+                        });
+                        break;
+                    }
+                }
             }
             if (def != 0)
             {
-                GameManager.Instance.playerDatas[2].GetComponent<IStatusReceiver>().ApplyStatusEffect(new StatusEffect
+                foreach (var chars in GameManager.Instance.turnController.battleFlow.playerParty)
                 {
-                    statType = BuffStatType.Defense,
-                    value = def,
-                    duration = 1000 // 전투 동안 유지되도록 높게
-                });
+                    if (chars.ChClass == CharacterClass.Leon)
+                    {
+                        chars.ApplyStatusEffect(new StatusEffect
+                        {
+                            statType = BuffStatType.Defense,
+                            value = def,
+                            duration = 1000 // 전투 동안 유지되도록 높게
+                        });
+                        break;
+                    }
+                }
             }
         }
         if (enemy)
