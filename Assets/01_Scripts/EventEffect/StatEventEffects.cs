@@ -24,6 +24,7 @@ public class StatEventEffects : EventEffects
             if(hp != 0)
             {
                 GameManager.Instance.playerDatas[1].currentHP += hp;
+                GameManager.Instance.playerDatas[1].currentHP = Mathf.Clamp(GameManager.Instance.playerDatas[1].currentHP, 1, GameManager.Instance.playerDatas[1].MaxHP);// 변경된 hp 가 1~최대hp 가 유지되도록.
             }
             if (hpPercent != 0)
             {
@@ -53,6 +54,7 @@ public class StatEventEffects : EventEffects
             if(hp != 0)
             {
                 GameManager.Instance.playerDatas[0].currentHP += hp;
+                GameManager.Instance.playerDatas[0].currentHP = Mathf.Clamp(GameManager.Instance.playerDatas[0].currentHP, 1, GameManager.Instance.playerDatas[0].MaxHP);// 변경된 hp 가 1~최대hp 가 유지되도록.
             }
             if (hpPercent != 0)
             {
@@ -82,6 +84,7 @@ public class StatEventEffects : EventEffects
             if(hp != 0)
             {
                 GameManager.Instance.playerDatas[2].currentHP += hp;
+                GameManager.Instance.playerDatas[2].currentHP = Mathf.Clamp(GameManager.Instance.playerDatas[2].currentHP, 1, GameManager.Instance.playerDatas[2].MaxHP);// 변경된 hp 가 1~최대hp 가 유지되도록.
             }
             if (hpPercent != 0)
             {
@@ -114,7 +117,10 @@ public class StatEventEffects : EventEffects
             }
             if (hpPercent != 0)
             {
-                Debug.Log($"{name} : Enemy StatEvent HP Percent {hpPercent}");
+                foreach (var enemyData in GameManager.Instance.turnController.battleFlow.enemyParty)
+                {
+                    enemyData.currentHP = enemyData.maxHP * hpPercent;
+                }
             }
             if (atk != 0)
             {

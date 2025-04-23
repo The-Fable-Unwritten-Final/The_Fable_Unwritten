@@ -51,8 +51,6 @@ public class TurnController : MonoBehaviour
     }
     private void Start()
     {
-        // BattleFlowController 메서드 연결
-      
         OnStartPlayerTurn += battleFlow.ExecutePlayerTurn;
         OnEndPlayerTurn += battleFlow.EndPlayerTurn;
         //OnGameEnd += () => battleFlow.ForceEndBattle(true); // 기본 처리, 필요시 수정
@@ -131,6 +129,11 @@ public class TurnController : MonoBehaviour
     IEnumerator AtStartGame()
     {
         yield return new WaitForSeconds(0.3f);
+        // 데이터 처리
+        EventEffectManager.Instance.PlayNextCombat();
+        EventEffectManager.Instance.PlayNextStage();
+        EventEffectManager.Instance.PlayEndAdventure();
+
         battleFlow.StartBattle();
         SetTurnState(TurnState.StartPlayerTurn); // 게임 시작 후 플레이어 턴으로
     }
@@ -154,6 +157,10 @@ public class TurnController : MonoBehaviour
     }
     public void ToGameEnd()// 아군, 적군 중 한쪽의 체력이 전부 0 이되면 호출. (플레이어 or 몬스터가 행동을 할때마다 전투 종료 체크, 해당 메서드 호출)
     {
+        // 결과창 팝업을 띄우기 (승패 결과는 battleflowCon 에서 가져올 수 있음 win <<)
+
+        // 데이터 처리
+        EventEffectManager.Instance.EndNextCombat();
         SetTurnState(TurnState.GameEnd); // 전투 종료
     }
 }
