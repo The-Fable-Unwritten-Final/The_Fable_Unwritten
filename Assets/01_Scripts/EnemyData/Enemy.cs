@@ -116,6 +116,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         get => enemyData.CurrentHP;
         set => enemyData.CurrentHP = value;
     }
+
     //체력 변화 시
     public void UpdateHpStatus()
     {

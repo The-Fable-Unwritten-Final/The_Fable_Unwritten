@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
@@ -18,23 +19,25 @@ public static class EnemyPattern
     /// <summary>
     /// 외부에서 호출되는 메인 메서드 - 적이 턴에 행동을 수행함
     /// </summary>
-    public static void ExecutePattern(IStatusReceiver enemy)
+    public static IEnumerator ExecutePattern(IStatusReceiver enemy)
     {
         // 받은 친구가 Enemy 타입인지 확인
         if (enemy is not Enemy enemyComponent)
         {
             Debug.LogError("[EnemyPattern] 전달된 IStatusReceiver는 Enemy가 아닙니다.");
-            return;
+            yield break;
         }
         // 1. 자세 변경
         SetRandomStance(enemyComponent);
-        
+        yield return new WaitForSeconds(0.3f); // 자세 변경 연출 대기
+
         // 2. 사용할 스킬 선택
         var skill = ChooseSkill(enemyComponent);
+
         if (skill == null)
         {
             Debug.LogWarning($"[EnemyPattern] {enemyComponent.enemyData.EnemyName}의 스킬 데이터 없음.");
-            return;
+            yield break;
         }
 
         // 3. 스킬 데이터 가져오기 
@@ -42,11 +45,21 @@ public static class EnemyPattern
         if (actData == null)
         {
             Debug.LogWarning($"[EnemyPattern] 스킬 {skill.skillIndex}에 대한 act 데이터가 없습니다.");
-            return;
+            yield break;
         }
+
+        // 4. 스킬 발동 (애니메이션 자리)
+        // Animator anim = enemyComponent.GetComponent<Animator>();
+        // if (anim != null)
+        // {
+        //     anim.SetTrigger($"Skill{skill.skillIndex}");
+        // }
+        yield return new WaitForSeconds(1.5f); // 애니메이션 대체용 시간
+
 
         // 4. 타겟 선택
         var targets = ChooseTargetsFromActData(actData, enemyComponent);
+        yield return new WaitForSeconds(0.3f);
 
         // 5. 타겟에게 데미지 및 추가 효과 적용
         foreach (var t in targets)
@@ -54,6 +67,8 @@ public static class EnemyPattern
             t.TakeDamage(skill.damage);
             ApplyStatusEffect(t, actData);
             Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (데미지 {skill.damage})");
+
+            yield return new WaitForSeconds(0.4f); // 타격 연출용 대기
         }
     }
 

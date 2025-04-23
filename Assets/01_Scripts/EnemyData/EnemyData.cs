@@ -81,6 +81,4 @@ public class EnemyData : ScriptableObject
 
     //스킬 전부 가져오기
     public IEnumerable<EnemySkill> GetSkills() => skillDict?.Values;
-
-
 }

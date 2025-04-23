@@ -55,7 +55,6 @@ public class TurnController : MonoBehaviour
       
         OnStartPlayerTurn += battleFlow.ExecutePlayerTurn;
         OnEndPlayerTurn += battleFlow.EndPlayerTurn;
-        OnEnemyTurn += battleFlow.ExecuteEnemyTurn;
         //OnGameEnd += () => battleFlow.ForceEndBattle(true); // 기본 처리, 필요시 수정
 
         StartCoroutine(AtStartGame()); // 게임 시작 후 1초 후에 플레이어 턴으로
@@ -102,13 +101,27 @@ public class TurnController : MonoBehaviour
 
             case TurnState.EnemyTurn:
                 OnEnemyTurn?.Invoke();
-                OnStartPlayerTurn?.Invoke();
+                StartCoroutine(WaitForEnemyTurn());
                 break;
 
             case TurnState.GameEnd:
                 OnGameEnd?.Invoke();
                 break;
         }
+    }
+
+    private IEnumerator WaitForEnemyTurn()
+    {
+        bool isDone = false;
+
+        // 적 턴이 끝나면 이 콜백이 실행되도록
+        battleFlow.ExecuteEnemyTurn(() => isDone = true);
+
+        // 기다림
+        yield return new WaitUntil(() => isDone);
+
+        yield return new WaitForSeconds(0.5f); // 텀 살짝 주고
+        SetTurnState(TurnState.StartPlayerTurn); // 다음 턴
     }
 
     private void OnSceneUnloaded(Scene scene)
