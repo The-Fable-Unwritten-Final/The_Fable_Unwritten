@@ -115,6 +115,7 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
         for (int i = 0; i < untillNextCombat.Count; i++)
         {
             untillNextCombat[i].UnApply(); // 효과 해제 메서드 호출
+            Destroy(untillNextCombat[i]); // 메모리 해제
         }
 
         untillNextCombat.Clear();
@@ -137,6 +138,7 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
         for (int i = 0; i < untillNextStage.Count; i++)
         {
             untillNextStage[i].UnApply(); // 효과 해제 메서드 호출
+            Destroy(untillNextStage[i]); // 메모리 해제
         }
         untillNextStage.Clear();
     }
@@ -158,6 +160,7 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
         for (int i = 0; i < untillEndAdventure.Count; i++)
         {
             untillEndAdventure[i].UnApply(); // 효과 해제 메서드 호출
+            Destroy(untillEndAdventure[i]); // 메모리 해제
         }
         untillEndAdventure.Clear();
     }
