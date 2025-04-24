@@ -11,7 +11,11 @@ public class ReadingPanel : BaseCampPanel
 
     [Header("CardInfo")]
     [SerializeField] GameObject campCardPrefap;
+    [SerializeField] GameObject cardBook;
     [SerializeField] Transform cardsRoot;
+
+    public int currentCardIndex;
+    public int chageCardIndex;
 
     public void OnSophiaClicked() => ShowCards(CharacterClass.Sophia);
     public void OnKaylaClicked() => ShowCards(CharacterClass.Kayla);
@@ -41,7 +45,7 @@ public class ReadingPanel : BaseCampPanel
             var onclick = go.GetComponent<Button>();
 
             cardUI.SetCard(card);
-            onclick.onClick.AddListener(() => ShowBook(characterClass));
+            onclick.onClick.AddListener(() => ShowBook(characterClass , card));
    
         }
     }
@@ -68,8 +72,32 @@ public class ReadingPanel : BaseCampPanel
             Destroy(child.gameObject);
     }
 
-    private void ShowBook(CharacterClass characterClass)
+    private void ShowBook(CharacterClass characterClass , CardModel selectCard)
     {
-        UIManager.Instance.ShowPopupByName("PopupUI_Book");
+        cardBook.SetActive(true);
+        currentCardIndex = selectCard.index;
+        cardBook.GetComponent<CampCardBook>().Character = characterClass;
     }
+
+    public void SetChangeCardIndex(Transform selectCard)
+    {
+        if (selectCard.TryGetComponent<BookCards>(out var bookCard))
+        {
+            chageCardIndex = bookCard.cardIndex;
+
+            var player = GameManager.Instance.playerDatas
+          .FirstOrDefault(p => p.CharacterClass == cardBook.GetComponent<CampCardBook>().Character);
+
+            // 인덱스 위치 찾아서 교체
+            int targetIndex = player.currentDeckIndexes.IndexOf(currentCardIndex);
+            if (targetIndex != -1)
+            {
+                player.currentDeckIndexes[targetIndex] = chageCardIndex;
+                Debug.Log($"[Card Swap] {currentCardIndex} → {chageCardIndex}로 교체 완료");
+
+                StartCoroutine(FadeExit());
+            }
+        }
+    }
+
 }
