@@ -46,7 +46,6 @@ public class GameManager : MonoSingleton<GameManager>
         CardSystemInitializer.Instance.LoadCardDatabase();
 
         PlayerManager.Instance.RegisterAndSetupPlayers(
-            playerControllers,
             playerDatas,
             CardSystemInitializer.Instance.loadedCards
         );

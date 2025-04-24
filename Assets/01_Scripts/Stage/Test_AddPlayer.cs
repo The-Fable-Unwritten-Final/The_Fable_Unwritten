@@ -30,15 +30,9 @@ public class Test_AddPlayer : MonoBehaviour
         var targetData = playerDatas.Find(p => p.CharacterClass == chClass);
         if (targetData == null) return;
 
-        var obj = new GameObject(name);
-        var controller = obj.AddComponent<PlayerController>();
-
         PlayerManager.Instance.AddPlayerDuringGame(
-            controller,
             targetData,
             CardSystemInitializer.Instance.loadedCards
         );
-
-        Debug.Log($"{chClass} 등록 완료");
     }
 }
