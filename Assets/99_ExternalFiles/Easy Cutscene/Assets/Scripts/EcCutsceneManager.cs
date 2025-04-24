@@ -54,7 +54,14 @@ namespace HisaGames.CutsceneManager
 
         private void Awake()
         {
+            if (instance != null && instance != this)
+            {
+                Destroy(gameObject); // 중복 방지
+                return;
+            }
+
             instance = this;
+            DontDestroyOnLoad(gameObject); // 씬 변경 시 파괴 방지
             InitCharacters();
             InitProps();
 

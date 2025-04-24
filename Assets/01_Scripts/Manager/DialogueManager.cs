@@ -116,8 +116,8 @@ public class DialogueManager : MonoSingleton<DialogueManager>
         SetCutsceneBackground(stageIndex);
 
         isPlaying = true;
-        EcCutsceneManager.instance.guiPanel.SetActive(true);
         targetCutscene.gameObject.SetActive(true);
+        EcCutsceneManager.instance.guiPanel.SetActive(true);
         targetCutscene.SetCutSceneData(data);
         targetCutscene.StartCutscene();
 
@@ -143,6 +143,8 @@ public class DialogueManager : MonoSingleton<DialogueManager>
         // 추가: 배경도 함께 꺼줌
         if (backgroundImage != null)
             backgroundImage.enabled = false;
+
+        CutsceneEffectPlayer.Instance?.ClearAll();
 
         callback?.Invoke();
     }

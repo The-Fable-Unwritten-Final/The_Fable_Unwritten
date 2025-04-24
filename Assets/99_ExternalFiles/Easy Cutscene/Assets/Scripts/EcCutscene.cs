@@ -404,6 +404,5 @@ namespace HisaGames.Cutscene
         {
             cutsceneData = data;
         }
-
     }
 }

@@ -88,7 +88,33 @@ public class CutsceneEffectPlayer : MonoBehaviour
 
     public void ClearAll()
     {
-        blackoutImage.gameObject.SetActive(false);
-        centerText.gameObject.SetActive(false);
+        // 🔹 Blackout
+        if (blackoutImage != null)
+        {
+            blackoutImage.color = new Color(0, 0, 0, 0); // 완전히 투명하게 초기화
+            blackoutImage.gameObject.SetActive(false);
+        }
+
+        // 🔹 Center Text
+        if (centerText != null)
+        {
+            centerText.text = "";
+            centerText.gameObject.SetActive(false);
+        }
+
+        // 🔹 Top/Bottom Mask 위치 초기화 및 비활성화
+        if (topMask != null)
+        {
+            topMask.anchoredPosition = Vector2.zero;
+            topMask.gameObject.SetActive(false);
+        }
+
+        if (bottomMask != null)
+        {
+            bottomMask.anchoredPosition = Vector2.zero;
+            bottomMask.gameObject.SetActive(false);
+        }
+
+        Debug.Log("[CutsceneEffectPlayer] All effects cleared.");
     }
 }
