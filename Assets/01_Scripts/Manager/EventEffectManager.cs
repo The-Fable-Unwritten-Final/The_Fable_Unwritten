@@ -37,15 +37,15 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            PlayNextCombat();
+            AddEventEffect(4);
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            EndNextCombat();
+            AddEventEffect(5);
         }
         if (Input.GetKeyDown(KeyCode.Alpha6))
         {
-            PlayNextStage();
+            AddEventEffect(6);
         }
     }
 

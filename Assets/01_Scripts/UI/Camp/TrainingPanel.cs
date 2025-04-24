@@ -23,7 +23,19 @@ public class TrainingPanel : BaseCampPanel
 
     public void OnClickTarget(CharacterClass characterClass)
     {
-        Debug.Log($" {characterClass} 선택됨 - 공격력 2턴 증가 예정");
+        switch (characterClass)
+        {
+            case CharacterClass.Sophia:
+                EventEffectManager.Instance.AddEventEffect(1); // 소피아 수련
+                break;
+            case CharacterClass.Kayla:
+                EventEffectManager.Instance.AddEventEffect(2); // 카일라 수련
+                break;
+            case CharacterClass.Leon:
+                EventEffectManager.Instance.AddEventEffect(3); // 레온 수련
+                break;
+        }
+  
         StartCoroutine(FadeExit());
     }
 }

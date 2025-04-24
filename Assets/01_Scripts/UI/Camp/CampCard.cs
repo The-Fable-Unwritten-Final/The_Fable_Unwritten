@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class CampCard : MonoBehaviour
 {
+    [SerializeField] int cardIndex;
     [SerializeField] Image cardIllust;
     [SerializeField] Image cardType;
     [SerializeField] Image cardChar;
@@ -15,6 +16,7 @@ public class CampCard : MonoBehaviour
 
     public void SetCard(CardModel card)
     {
+        cardIndex = card.index;
         cardIllust.sprite = card.illustration;
         cardType.sprite = card.cardType;
         cardChar.sprite = card.chClass;

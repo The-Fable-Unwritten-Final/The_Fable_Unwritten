@@ -23,14 +23,8 @@ public class StatEventEffects : EventEffects
         {
             if(hp != 0)
             {
-                foreach (var chars in GameManager.Instance.turnController.battleFlow.playerParty)
-                {
-                    if (chars.ChClass == CharacterClass.Sophia)
-                    {
-                        chars.Heal(hp); // 힐 적용
-                        break;
-                    }
-                }
+                GameManager.Instance.playerDatas[1].currentHP += hp;
+                GameManager.Instance.playerDatas[1].currentHP = Mathf.Clamp(GameManager.Instance.playerDatas[1].currentHP, 1, GameManager.Instance.playerDatas[1].MaxHP);
             }
             if (hpPercent != 0)
             {
@@ -73,14 +67,8 @@ public class StatEventEffects : EventEffects
         {
             if(hp != 0)
             {
-                foreach (var chars in GameManager.Instance.turnController.battleFlow.playerParty)
-                {
-                    if (chars.ChClass == CharacterClass.Kayla)
-                    {
-                        chars.Heal(hp); // 힐 적용
-                        break;
-                    }
-                }
+                GameManager.Instance.playerDatas[0].currentHP += hp;
+                GameManager.Instance.playerDatas[0].currentHP = Mathf.Clamp(GameManager.Instance.playerDatas[0].currentHP, 1, GameManager.Instance.playerDatas[0].MaxHP);
             }
             if (hpPercent != 0)
             {
@@ -123,14 +111,8 @@ public class StatEventEffects : EventEffects
         {
             if(hp != 0)
             {
-                foreach (var chars in GameManager.Instance.turnController.battleFlow.playerParty)
-                {
-                    if (chars.ChClass == CharacterClass.Leon)
-                    {
-                        chars.Heal(hp); // 힐 적용
-                        break;
-                    }
-                }
+                GameManager.Instance.playerDatas[2].currentHP += hp;
+                GameManager.Instance.playerDatas[2].currentHP = Mathf.Clamp(GameManager.Instance.playerDatas[2].currentHP, 1, GameManager.Instance.playerDatas[2].MaxHP);
             }
             if (hpPercent != 0)
             {
