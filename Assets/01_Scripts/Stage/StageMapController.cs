@@ -36,6 +36,7 @@ public class StageMapController : MonoBehaviour
             Debug.Log($"[StageMapController] StageIndex = {GameManager.Instance.StageSetting.StageIndex}, Theme = {theme}");
 
             LoadStage(stageSetting.StageIndex);
+            DialogueManager.Instance.OnStageStart(stageSetting.StageIndex); // 대화 호출
         }
 
         int stageIndex = stageSetting.StageIndex;
@@ -65,9 +66,10 @@ public class StageMapController : MonoBehaviour
 
                     stageSetting.ClearStageState();
                     stageIndex = stageSetting.StageIndex;
-
                     stageSetting.StageCleared= false;
+
                     LoadStage(stageIndex);
+                    DialogueManager.Instance.OnStageStart(stageSetting.StageIndex); // 대화 호출
                     return true;
                 }
             }
