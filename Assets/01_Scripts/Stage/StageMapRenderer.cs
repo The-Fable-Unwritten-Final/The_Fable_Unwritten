@@ -21,6 +21,11 @@ public class StageMapRenderer : MonoBehaviour
     [SerializeField] Sprite startIcon, normalIcon, eliteIcon, randomIcon, campIcon; // 노드아이콘 설정
     [SerializeField] private Sprite[] bossStageIcons;
 
+    [Header("숨길 UI들")]
+    [SerializeField] private GameObject[] hideDuringDialogue;
+
+    public GameObject[] GetUIToHideDuringDialogue() => hideDuringDialogue;
+
     public Dictionary<GraphNode, RectTransform> nodeUIMap = new();
     private readonly List<LineInfo> lineInfos = new();
 
@@ -93,9 +98,9 @@ public class StageMapRenderer : MonoBehaviour
             // 그 외 노드 버튼 비활성화, 색상 흐리게
             else
             {
-                btn.enabled = false;
+                //btn.enabled = false;
                 btn.interactable = false;
-                btn.image.color = new Color(1, 1, 1, 0.6f);
+                //btn.image.color = new Color(1, 1, 1, 0.6f); 버튼 노드 불투명도 제거 요청
                 stageNode.StopPulse();
             }
         }

@@ -36,6 +36,7 @@ public class StageMapController : MonoBehaviour
             Debug.Log($"[StageMapController] StageIndex = {GameManager.Instance.StageSetting.StageIndex}, Theme = {theme}");
 
             LoadStage(stageSetting.StageIndex);
+            DialogueManager.Instance.OnStageStart(stageSetting.StageIndex); // 대화 호출
         }
 
         int stageIndex = stageSetting.StageIndex;
@@ -65,9 +66,10 @@ public class StageMapController : MonoBehaviour
 
                     stageSetting.ClearStageState();
                     stageIndex = stageSetting.StageIndex;
-
                     stageSetting.StageCleared= false;
+
                     LoadStage(stageIndex);
+                    DialogueManager.Instance.OnStageStart(stageSetting.StageIndex); // 대화 호출
                     return true;
                 }
             }
@@ -93,13 +95,39 @@ public class StageMapController : MonoBehaviour
     {
         visitedNodes.Add(clicked);
 
-
         var gm = GameManager.Instance;
         gm.StageSetting.SaveStageState(stageData, visitedNodes);
         gm.StageSetting.SetCurrentBattleNode(clicked);
 
-        // 노드 타입별 씬 전환
-        switch (clicked.type)
+        int stageIndex = gm.StageSetting.StageIndex;
+        int columnIndex = clicked.columnIndex;
+
+        if (stageIndex == 1 && (clicked.type == NodeType.NormalBattle))
+        {
+            CharacterClass charToAdd = CharacterClass.Sophia;
+
+            switch (columnIndex)
+            {
+                case 1:
+                    charToAdd = CharacterClass.Sophia;
+                    break;
+                case 2:
+                    charToAdd = CharacterClass.Kayla;
+                    break;
+                case 3:
+                    charToAdd = CharacterClass.Leon;
+                    break;
+            }
+
+            var playerData = gm.playerDatas.FirstOrDefault(p => p.CharacterClass == charToAdd);
+            if (playerData != null)
+            {
+                PlayerManager.Instance.AddPlayerDuringGame(playerData, CardSystemInitializer.Instance.loadedCards);
+            }
+        }
+
+            // 노드 타입별 씬 전환
+            switch (clicked.type)
         {
             case NodeType.NormalBattle:
             case NodeType.EliteBattle:
@@ -175,8 +203,7 @@ public class StageMapController : MonoBehaviour
 
                 ui.gameObject.SetActive(true);
                 btn.enabled = false;
-                btn.interactable = false;
-                btn.image.color = new Color(1, 1, 1, 0.4f);
+                btn.interactable = false;                
             }
         }
     }

@@ -44,7 +44,7 @@ public class PlayerManager : MonoSingleton<PlayerManager>
     /// <summary>
     /// 게임 도중 새 플레이어를 하나씩 추가 (ex. 이야기 흐름 따라 동료가 합류)
     /// </summary>
-    public void AddPlayerDuringGame(PlayerController newController, PlayerData newPlayerData, List<CardModel> cardPool)
+    public void AddPlayerDuringGame(PlayerData newPlayerData, List<CardModel> cardPool)
     {
         var character = newPlayerData.CharacterClass;
 
@@ -63,7 +63,6 @@ public class PlayerManager : MonoSingleton<PlayerManager>
         }
 
         playerDataMap[character] = newPlayerData;
-        newController.Setup(newPlayerData);
         activePlayers[character] = newPlayerData;
     }
 
@@ -71,24 +70,10 @@ public class PlayerManager : MonoSingleton<PlayerManager>
     /// 게임 시작 시 초기화용: 모든 플레이어를 한 번에 등록
     /// (프리팹 생성은 외부에서 수행)
     /// </summary>
-    public void RegisterAndSetupPlayers(List<PlayerController> playerControllers, List<PlayerData> allPlayerDatas, List<CardModel> cardPool)
+    public void RegisterAndSetupPlayers(List<PlayerData> allPlayerDatas, List<CardModel> cardPool)
     {
         InitializePlayers(allPlayerDatas, cardPool);
         activePlayers.Clear();
-
-        foreach (var controller in playerControllers)
-        {
-            var character = controller.playerData.CharacterClass;
-
-            if (!playerDataMap.TryGetValue(character, out var data))
-            {
-                Debug.LogWarning($"플레이어 데이터가 존재하지 않음: {character}");
-                continue;
-            }
-
-            controller.Setup(data);
-            activePlayers[character] = data;
-        }
     }
 
     /// <summary>
