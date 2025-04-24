@@ -158,7 +158,7 @@ public class TurnController : MonoBehaviour
     public void ToGameEnd()// 아군, 적군 중 한쪽의 체력이 전부 0 이되면 호출. (플레이어 or 몬스터가 행동을 할때마다 전투 종료 체크, 해당 메서드 호출)
     {
         // 결과창 팝업을 띄우기 (승패 결과는 battleflowCon 에서 가져올 수 있음 win <<)
-
+        UIManager.Instance.PopupRewardUI();
         // 데이터 처리
         EventEffectManager.Instance.EndNextCombat();
         SetTurnState(TurnState.GameEnd); // 전투 종료
