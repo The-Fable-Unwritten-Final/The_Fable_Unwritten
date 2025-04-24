@@ -175,8 +175,7 @@ public class StageMapController : MonoBehaviour
 
                 ui.gameObject.SetActive(true);
                 btn.enabled = false;
-                btn.interactable = false;
-                btn.image.color = new Color(1, 1, 1, 0.4f);
+                btn.interactable = false;                
             }
         }
     }

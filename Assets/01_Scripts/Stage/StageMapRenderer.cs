@@ -93,9 +93,9 @@ public class StageMapRenderer : MonoBehaviour
             // 그 외 노드 버튼 비활성화, 색상 흐리게
             else
             {
-                btn.enabled = false;
+                //btn.enabled = false;
                 btn.interactable = false;
-                btn.image.color = new Color(1, 1, 1, 0.6f);
+                //btn.image.color = new Color(1, 1, 1, 0.6f); 버튼 노드 불투명도 제거 요청
                 stageNode.StopPulse();
             }
         }
