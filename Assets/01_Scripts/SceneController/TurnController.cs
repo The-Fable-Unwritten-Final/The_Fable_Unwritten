@@ -51,11 +51,8 @@ public class TurnController : MonoBehaviour
     }
     private void Start()
     {
-        // BattleFlowController 메서드 연결
-      
         OnStartPlayerTurn += battleFlow.ExecutePlayerTurn;
         OnEndPlayerTurn += battleFlow.EndPlayerTurn;
-        OnEnemyTurn += battleFlow.ExecuteEnemyTurn;
         //OnGameEnd += () => battleFlow.ForceEndBattle(true); // 기본 처리, 필요시 수정
 
         StartCoroutine(AtStartGame()); // 게임 시작 후 1초 후에 플레이어 턴으로
@@ -102,13 +99,27 @@ public class TurnController : MonoBehaviour
 
             case TurnState.EnemyTurn:
                 OnEnemyTurn?.Invoke();
-                // 적 행동이 끝났을 때 다시 StartPlayerTurn으로
+                StartCoroutine(WaitForEnemyTurn());
                 break;
 
             case TurnState.GameEnd:
                 OnGameEnd?.Invoke();
                 break;
         }
+    }
+
+    private IEnumerator WaitForEnemyTurn()
+    {
+        bool isDone = false;
+
+        // 적 턴이 끝나면 이 콜백이 실행되도록
+        battleFlow.ExecuteEnemyTurn(() => isDone = true);
+
+        // 기다림
+        yield return new WaitUntil(() => isDone);
+
+        yield return new WaitForSeconds(0.5f); // 텀 살짝 주고
+        SetTurnState(TurnState.StartPlayerTurn); // 다음 턴
     }
 
     private void OnSceneUnloaded(Scene scene)
@@ -118,6 +129,11 @@ public class TurnController : MonoBehaviour
     IEnumerator AtStartGame()
     {
         yield return new WaitForSeconds(0.3f);
+        // 데이터 처리
+        EventEffectManager.Instance.PlayNextCombat();
+        EventEffectManager.Instance.PlayNextStage();
+        EventEffectManager.Instance.PlayEndAdventure();
+
         battleFlow.StartBattle();
         SetTurnState(TurnState.StartPlayerTurn); // 게임 시작 후 플레이어 턴으로
     }
@@ -141,6 +157,10 @@ public class TurnController : MonoBehaviour
     }
     public void ToGameEnd()// 아군, 적군 중 한쪽의 체력이 전부 0 이되면 호출. (플레이어 or 몬스터가 행동을 할때마다 전투 종료 체크, 해당 메서드 호출)
     {
+        // 결과창 팝업을 띄우기 (승패 결과는 battleflowCon 에서 가져올 수 있음 win <<)
+
+        // 데이터 처리
+        EventEffectManager.Instance.EndNextCombat();
         SetTurnState(TurnState.GameEnd); // 전투 종료
     }
 }

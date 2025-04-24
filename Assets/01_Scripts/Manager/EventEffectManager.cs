@@ -29,7 +29,23 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
+            AddEventEffect(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
             AddEventEffect(2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            PlayNextCombat();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            EndNextCombat();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            PlayNextStage();
         }
     }
 
@@ -102,6 +118,7 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
     /// </summary>
     public void PlayNextCombat()
     {
+        Debug.Log("Play Next Combat");
         for (int i = 0; i < untillNextCombat.Count; i++)
         {
             untillNextCombat[i].Apply();
@@ -115,6 +132,7 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
         for (int i = 0; i < untillNextCombat.Count; i++)
         {
             untillNextCombat[i].UnApply(); // 효과 해제 메서드 호출
+            Destroy(untillNextCombat[i]); // 메모리 해제
         }
 
         untillNextCombat.Clear();
@@ -137,6 +155,7 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
         for (int i = 0; i < untillNextStage.Count; i++)
         {
             untillNextStage[i].UnApply(); // 효과 해제 메서드 호출
+            Destroy(untillNextStage[i]); // 메모리 해제
         }
         untillNextStage.Clear();
     }
@@ -158,24 +177,19 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
         for (int i = 0; i < untillEndAdventure.Count; i++)
         {
             untillEndAdventure[i].UnApply(); // 효과 해제 메서드 호출
+            Destroy(untillEndAdventure[i]); // 메모리 해제
         }
         untillEndAdventure.Clear();
     }
-    /// <summary>
-    /// EventEffects 중 즉시 효과를 적용하는 경우 호출.
-    /// </summary>
-    public void InstantEffect(int index)
-    {
-        eventEffectList[index].Apply();
-    }
 
-    // List에 효과를 추가하는 메서드
+
+    // List에 효과를 추가하는 메서드 + 즉시 효과 사용의 경우 실행.
     public void AddEventEffect(int index)
     {
         EventEffects effect = eventEffectList[index].Clone();
         switch (effect.duration)
         {
-            case 0: // 즉시 사용 효과 적용, 왠만하면 InstantEffect(int index) 로 호출 할 것.
+            case 0:
                 effect.Apply();
                 break;
             case 1:
@@ -188,5 +202,10 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
                 untillEndAdventure.Add(effect);
                 break;
         }
+    }
+
+    public string GetEventEffectText(int index)
+    {
+        return eventEffectList[index].text;
     }
 }

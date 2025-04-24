@@ -7,8 +7,7 @@ using UnityEngine;
 public class RandomEventData
 {
     public int index;
-    public int stage;
-    public string bg_illust;
+    public StageTheme theme;
     public string title;
     public string illustration;
     public string description;
@@ -17,15 +16,15 @@ public class RandomEventData
     public float percentage_0;
     public string description_01;
     public string description_02;
-    public string result_01;
-    public string result_02;
+    public int result_01;
+    public int result_02;
 
     public string option_1;
     public float percentage_1;
     public string description_11;
     public string description_12;
-    public string result_11;
-    public string result_12;
+    public int result_11;
+    public int result_12;
 
     [NonSerialized] public Sprite illustrationSprite;
 }

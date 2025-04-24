@@ -15,8 +15,8 @@ MonoBehaviour:
   IDNum: 2
   CharacterName: Leon
   Icon: {fileID: 21300000, guid: f78835e8a63e34c4aba256ace2727fd9, type: 3}
-  MaxHP: 10
-  currentHP: 10
+  MaxHP: 30
+  currentHP: 30
   ATK: 1
   DEF: 1
   HPValue: []
@@ -33,4 +33,9 @@ MonoBehaviour:
     stanceIcon: {fileID: 0}
   defaultDeckIndexes: b80b0000b90b0000ba0b0000bb0b0000bc0b0000
   currentDeckIndexes: b80b0000b90b0000ba0b0000bb0b0000bc0b0000
-  currentDeck: []
+  currentDeck:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

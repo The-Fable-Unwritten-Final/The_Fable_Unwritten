@@ -59,8 +59,9 @@ public class EventEffectCSVParser : MonoBehaviour
 
     private static bool ParseBool(string[] tokens, int index)
     {
-        if (index >= tokens.Length || string.IsNullOrWhiteSpace(tokens[index])) return false;
-        return tokens[index].Trim().ToLower() == "true";
+        if (index >= tokens.Length) return false;
+        string val = tokens[index].Trim();
+        return !string.IsNullOrEmpty(val) && val != "0";
     }
 
     private static string ParseString(string[] tokens, int index)

@@ -24,7 +24,7 @@ public static class RandomEventJsonLoader
                 Debug.LogWarning($"일러스트 '{evnt.illustration}' 로드 실패");
         }
 
-        Debug.Log($"랜덤 이벤트 {eventList.Count}개 로드됨.");
+        //Debug.Log($"랜덤 이벤트 {eventList.Count}개 로드됨.");
         return eventList;
     }
 

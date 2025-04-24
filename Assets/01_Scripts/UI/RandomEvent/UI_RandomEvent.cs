@@ -43,7 +43,7 @@ public class UI_RandomEvent : MonoBehaviour
     {
         int currentStageIndex = GameManager.Instance.StageSetting.StageIndex;
 
-        currentData = GameManager.Instance.GetRandomEvent(currentStageIndex);
+        currentData = GameManager.Instance.GetRandomEvent();
 
 
         if (currentData == null)
@@ -116,19 +116,19 @@ public class UI_RandomEvent : MonoBehaviour
 
         float randomValue = Random.value; // 0 ~ 1 사이
         string resultDescription = "";
-        string resultText = "";
+        int resultIndex = -1;
 
         if (optionIndex == 0)
         {
             if (randomValue < currentData.percentage_0)
             {
                 resultDescription = currentData.description_01;
-                resultText = currentData.result_01;
+                resultIndex = currentData.result_01;
             }
             else
             {
                 resultDescription = currentData.description_02;
-                resultText = currentData.result_02;
+                resultIndex = currentData.result_02;
             }
         }
         else if (optionIndex == 1)
@@ -136,17 +136,22 @@ public class UI_RandomEvent : MonoBehaviour
             if (randomValue < currentData.percentage_1)
             {
                 resultDescription = currentData.description_11;
-                resultText = currentData.result_11;
+                resultIndex = currentData.result_11;
             }
             else
             {
                 resultDescription = currentData.description_12;
-                resultText = currentData.result_12;
+                resultIndex = currentData.result_12;
             }
         }
 
+        EventEffectManager.Instance.AddEventEffect(resultIndex);
+
+        string resultText = EventEffectManager.Instance.GetEventEffectText(resultIndex);
+
         yield return StartCoroutine(TypeText(descriptionTxt, resultDescription));
         yield return new WaitForSeconds(0.5f);
+
         yield return StartCoroutine(TypeText(optionTxt_1, resultText));
 
         optionButton_1.onClick.RemoveAllListeners();

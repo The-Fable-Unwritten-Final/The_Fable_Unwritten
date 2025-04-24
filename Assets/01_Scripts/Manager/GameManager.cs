@@ -94,13 +94,14 @@ public class GameManager : MonoSingleton<GameManager>
         return StageSetting.GetBackground(stageIndex);
     }
 
-    public RandomEventData GetRandomEvent(int stageIndex)
+    public RandomEventData GetRandomEvent()
     {
-        return StageSetting.GetRandomEvent(stageIndex);
+        var theme = StageSetting.CurrentTheme;
+        return StageSetting.GetRandomEvent(theme);
     }
 
-    public List<EnemyStageSpawnData> GetSpawnData(int stageIndex, NodeType type)
+    public List<EnemyStageSpawnData> GetSpawnData(StageTheme theme, NodeType type)
     {
-        return StageSetting.GetEnemySpawnData(stageIndex, type);
+        return StageSetting.GetEnemySpawnData(theme, type);
     }
 }

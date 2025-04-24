@@ -25,23 +25,20 @@ public class StageMapController : MonoBehaviour
 
     private void Start()
     {
-        var gm = GameManager.Instance;
-        
+        var stageSetting = GameManager.Instance.StageSetting;
+
 
         if (!TryRestoreStage())
         {
             var theme = stageSetting.GetThemeForStage(stageSetting.StageIndex);
-
-            LoadStage(gm.StageSetting.StageIndex);
-
             stageSetting.SetTheme(theme);
 
             Debug.Log($"[StageMapController] StageIndex = {GameManager.Instance.StageSetting.StageIndex}, Theme = {theme}");
 
-            DialogueManager.Instance.OnStageStart(stageSetting.StageIndex);
+            LoadStage(stageSetting.StageIndex);
         }
 
-        int stageIndex = gm.StageSetting.StageIndex;
+        int stageIndex = stageSetting.StageIndex;
         backGround.sprite = GameManager.Instance.GetBackgroundForStage(stageIndex);
     }
 
@@ -63,10 +60,11 @@ public class StageMapController : MonoBehaviour
                 {
                     stageSetting.StageIndex++;
 
+                    var newTheme = stageSetting.GetThemeForStage(stageSetting.StageIndex);
+                    stageSetting.SetTheme(newTheme);
+
                     stageSetting.ClearStageState();
                     stageIndex = stageSetting.StageIndex;
-
-                    DialogueManager.Instance.OnStageStart(stageIndex);
 
                     stageSetting.StageCleared= false;
                     LoadStage(stageIndex);
@@ -93,9 +91,6 @@ public class StageMapController : MonoBehaviour
     // 노드 클릭 시 스테이지 호출 및 저장
     private void OnNodeClicked(GraphNode clicked)
     {
-        int nodeIndex = visitedNodes.Count; // 또는 column 기반 인덱싱
-        DialogueManager.Instance.OnBattleNodeClicked(stageIndex, nodeIndex);
-
         visitedNodes.Add(clicked);
 
 
