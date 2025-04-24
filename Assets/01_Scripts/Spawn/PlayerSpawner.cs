@@ -31,14 +31,17 @@ public class PlayerSpawner : MonoBehaviour
             }
             else
             {
-                // 없으면 비활성화 처리 (알파값 0)
-                var sprite = slot.GetComponent<SpriteRenderer>();
-                if (sprite != null)
-                {
-                    var color = sprite.color;
-                    color.a = 0f;
-                    sprite.color = color;
-                }
+                slot.gameObject.SetActive(false);
+
+                // 슬롯 비활성화로 변경
+                //// 없으면 비활성화 처리 (알파값 0)
+                //var sprite = slot.GetComponent<SpriteRenderer>();
+                //if (sprite != null)
+                //{
+                //    var color = sprite.color;
+                //    color.a = 0f;
+                //    sprite.color = color;
+                //}
             }
         }
     }
