@@ -818,7 +818,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5208fc07e98164341b023b5268b4b963, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  resultText: {fileID: 47907782131222647}
   rewardText: {fileID: 8633526205459032011}
+  confirmButton: {fileID: 1202616299035312430}
 --- !u!1 &8622544734519891929
 GameObject:
   m_ObjectHideFlags: 0
@@ -886,8 +888,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Item....
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ee7dfd5aa68108a4cae7a9c288dfbdce, type: 2}
+  m_sharedMaterial: {fileID: -8146178071228311197, guid: ee7dfd5aa68108a4cae7a9c288dfbdce,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
