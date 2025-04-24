@@ -16,6 +16,7 @@ public class BookCards : MonoBehaviour
     public string flavorText; 
 
     public bool isEmpty = true; // 카드가 비어있는지 체크하는 변수
+    public int cardIndex;
 
     public void SetCardInfo(CardModel c)
     {
@@ -41,6 +42,7 @@ public class BookCards : MonoBehaviour
         cardDesc.text = c.cardText;
         flavorText = c.FlavorText;
         isEmpty = false;
+        cardIndex = c.index; // 카드 인덱스 저장
     }
 
     public void GiveCardInfo(BookCards card) // card 로 들어오는 참조값에 현재의 값 넣어주기.
