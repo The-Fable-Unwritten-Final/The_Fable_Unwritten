@@ -13,7 +13,7 @@ public class UIManager : MonoSingleton<UIManager>
     // 현재 씬 내 팝업 인스턴스 저장
     private Dictionary<string, BasePopupUI> popupInstances = new Dictionary<string, BasePopupUI>();
     private const string popupPath = "UI/Popup/";
-    private Transform popupRoot;
+    [SerializeField] private Transform popupRoot;
 
     // PopUp 형식의 UI Stack
     public Stack<BasePopupUI> popupStack = new Stack<BasePopupUI>();
@@ -47,18 +47,14 @@ public class UIManager : MonoSingleton<UIManager>
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        popupInstances.Clear();// 씬이 바뀔 때 팝업 인스턴스 초기화
+        //popupInstances.Clear();// 씬이 바뀔 때 팝업 인스턴스 초기화 << 초기화가 안되는게 맞을듯. 팝업 UI는 Dontdestroy 캔버스에 보관중.
         popupStack.Clear();// 팝업 스택 초기화
 
-        GameObject popupRootObj = GameObject.Find("Canvas/PopupUI");
-        if (popupRootObj == null)
+        if (popupRoot == null)
         {
             Debug.Log("PopupUI 의 캔버스가 없습니다.");
-            popupRoot = null;
-        }
-        else
-        {
-            popupRoot = popupRootObj.transform;         
+            GameObject popupRootObj = GameObject.Find("Canvas/PopupUI");
+            popupRoot = popupRootObj.transform;
         }
     }
 
