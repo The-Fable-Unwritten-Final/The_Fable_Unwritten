@@ -20,6 +20,11 @@ public class StageMapRenderer : MonoBehaviour
     [SerializeField] Sprite startIcon, normalIcon, eliteIcon, randomIcon, campIcon; // 노드아이콘 설정
     [SerializeField] private Sprite[] bossStageIcons; // Stage2 = 0, Stage3 = 1, Stage4 = 2, Stage5 = 3
 
+    [Header("숨길 UI들")]
+    [SerializeField] private GameObject[] hideDuringDialogue;
+
+    public GameObject[] GetUIToHideDuringDialogue() => hideDuringDialogue;
+
     public Dictionary<GraphNode, RectTransform> nodeUIMap = new();
     private readonly List<LineInfo> lineInfos = new();
 

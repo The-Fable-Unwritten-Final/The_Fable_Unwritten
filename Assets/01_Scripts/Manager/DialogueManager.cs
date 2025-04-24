@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class DialogueManager : MonoSingleton<DialogueManager>
 {
@@ -16,6 +17,9 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 
     [Header("컷씬 이름 (Hierarchy에 존재하는 오브젝트)")]
     [SerializeField] private EcCutscene targetCutscene;
+
+    [Header("컷씬 배경 이미지 (StageScene 전용)")]
+    [SerializeField] private Image backgroundImage;
 
 
     private Dictionary<string, List<JsonCutsceneData>> dialogueDatabase;    //대화 데이터 저장용
@@ -108,6 +112,8 @@ public class DialogueManager : MonoSingleton<DialogueManager>
         }
 
         var data = JsonCutsceneLoader.Convert(dialogueDatabase[dialogueID]);
+        int stageIndex = GameManager.Instance.StageSetting.StageIndex;
+        SetCutsceneBackground(stageIndex);
 
         isPlaying = true;
         EcCutsceneManager.instance.guiPanel.SetActive(true);
@@ -115,6 +121,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
         targetCutscene.SetCutSceneData(data);
         targetCutscene.StartCutscene();
 
+        StartCoroutine(WaitUntilCutsceneEnds());
     }
 
     /// <summary>
@@ -124,6 +131,19 @@ public class DialogueManager : MonoSingleton<DialogueManager>
     {
         yield return new WaitUntil(() => !targetCutscene.gameObject.activeSelf);
         isPlaying = false;
+
+        if (targetCutscene != null)
+        {
+            targetCutscene.gameObject.SetActive(false);
+
+            // 추가: 위치 초기화
+            targetCutscene.transform.localPosition = Vector3.zero; // 또는 초기 위치 저장해두기
+        }
+
+        // 추가: 배경도 함께 꺼줌
+        if (backgroundImage != null)
+            backgroundImage.enabled = false;
+
         callback?.Invoke();
     }
 
@@ -233,6 +253,17 @@ public class DialogueManager : MonoSingleton<DialogueManager>
             }
         }
         return null;
+    }
+
+    private void SetCutsceneBackground(int stageIndex)
+    {
+        var bg = GameManager.Instance.StageSetting.GetBackground(stageIndex);
+        if (backgroundImage != null)
+        {
+            backgroundImage.sprite = bg;
+            backgroundImage.enabled = (bg != null);
+            backgroundImage.gameObject.SetActive(bg != null);
+        }
     }
 
 }
