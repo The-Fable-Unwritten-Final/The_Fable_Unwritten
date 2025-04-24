@@ -62,6 +62,7 @@ public class UIManager : MonoSingleton<UIManager>
         }
     }
 
+    // 버튼 등의 외부에서 파라미터 값을 받아서 팝업 등장시키는 메서드
     public void ShowPopupByName(string popupName)
     {
         if (!popupTypeMap.TryGetValue(popupName, out var popupType))
@@ -75,6 +76,13 @@ public class UIManager : MonoSingleton<UIManager>
 
         MethodInfo showPopupTyped = showPopupGeneric.MakeGenericMethod(popupType);
         showPopupTyped.Invoke(this, null);
+    }
+    /// <summary>
+    /// 전투 보상을 띄워주는 팝업 UI 호출
+    /// </summary>
+    public void PopupRewardUI()
+    {
+        ShowPopupByName("PopupUI_CombatReward");
     }
 
     /// <summary>

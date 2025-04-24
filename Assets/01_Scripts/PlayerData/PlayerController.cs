@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public DeckModel Deck => deckModel;     //덱 변환 함수
     public bool IsIgnited => false;  // 점화 여부 - 추후 확장
     public string CurrentStance => playerData.currentStance.stencType.ToString();       //현재의 자세를 가져옴
-    public CharacterClass ChClass{get;set;}
+    public CharacterClass ChClass{get; set;}
         //현재 캐릭터의 클래스를 가져옴.
 
     private List<StatusEffect> activeEffects = new List<StatusEffect>();        //현재 가지고 있는 상태이상 및 버프
@@ -26,10 +26,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         Setup(playerData);
     }*/
 
-    private void Start()
-    {
-        playerData.currentHP = playerData.MaxHP;
-    }
 
     /// <summary>
     /// 상태이상 혹은 버프를 적용하여 리스트에 추가
@@ -82,7 +78,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         playerData.currentHP = Mathf.Min(playerData.MaxHP, playerData.currentHP +amount);
         Debug.Log($"{playerData.CharacterName} 회복: {amount}, 현재 체력: {playerData.currentHP}");
     }
-
 
     /// <summary>
     /// 생존 여부 확인
@@ -187,9 +182,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             playerData.currentStance = stance;
             float finalAtk = playerData.ATK + stance.attackBonus; //스텐스 공격력 계산
             float finalDef = playerData.DEF + stance.defenseBonus;
-
-
-
         }
     }
     //---

@@ -184,10 +184,13 @@ public class BattleFlowController : MonoBehaviour
     {
         foreach (var player in playerParty)
         {
+            /*player.Deck.DiscardHand();  // 손패 전체 버리기
+
+            GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();*/
             if (player.IsAlive())
             {
-                var hand = player.Deck.Hand;
 
+                var hand = player.Deck.Hand;
                 if (hand.Count > DeckModel.startSize)
                 {
                     Debug.LogWarning($"{player.ChClass} 카드가 3장을 초과합니다. 버릴 카드 선택이 필요합니다.");
@@ -200,6 +203,8 @@ public class BattleFlowController : MonoBehaviour
                 }
             }
         }
+
+
         currentTurn = TurnState.EnemyTurn;          //적 턴으로 이행
     }
 
