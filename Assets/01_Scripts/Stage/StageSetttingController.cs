@@ -10,7 +10,7 @@ public class StageSetttingController
     private HashSet<int> usedRandomEvnent = new();     // RandomEvent 진행 유무(게임 재시작 및 실패 시 초기화 - ClearUsedEvents())
     private Dictionary<int, Sprite> stageBackgrounds;  // StageBackground Image 파싱 리스트
     private Dictionary<int, StageTheme> stageThemes = new(); // 2~4 스테이지용 테마
-
+    private HashSet<StageTheme> eliteClearThemes = new(); // Theme 별 Elite Clear 리스트
 
     public int StageIndex { get; set; }                // 현재 스테이지
     public int MinStageIndex { get; set; }             // 재시작 스테이지 (2스테이지 클리어시 2)
@@ -136,5 +136,15 @@ public class StageSetttingController
     public void SetTheme(StageTheme theme)
     {
         CurrentTheme = theme;
+    }
+
+    public void EliteClear(StageTheme theme)
+    {
+        eliteClearThemes.Add(theme);
+    }
+
+    public bool IsEliteClear(StageTheme theme)
+    {
+        return eliteClearThemes.Contains(theme);
     }
 }
