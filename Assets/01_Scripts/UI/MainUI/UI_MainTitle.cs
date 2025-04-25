@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,12 +8,27 @@ using UnityEngine.UI;
 
 public class UI_MainTitle : MonoBehaviour
 {
-    [Header("MenuButton")]
-    [SerializeField] Button newBtn;
-    [SerializeField] Button continueBtn;
-    [SerializeField] Button unlockCardBtn;
-    [SerializeField] Button exitBtn;
+    [Header("TitleSetting")]
+    [SerializeField] Image title;
+    [SerializeField] float titleSpeed;
 
+    private void Start()
+    {
+        StartCoroutine(ShowTitle());   
+    }
+
+    private IEnumerator ShowTitle()
+    {
+        title.fillAmount = 0f;
+
+        while(title.fillAmount < 1f)
+        {
+            title.fillAmount += Time.deltaTime * titleSpeed;
+            yield return null;
+        }
+
+        title.fillAmount = 1f;
+    }
 
     public void OnClickNewGame()
     {

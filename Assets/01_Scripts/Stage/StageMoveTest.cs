@@ -24,6 +24,11 @@ public class StageMoveTest : MonoBehaviour
             }            
         }
 
+        if (setting.CurrentBattleNode.type == NodeType.EliteBattle)
+        {
+            setting.EliteClear(setting.CurrentTheme);
+        }
+
         SceneManager.LoadScene("StageScene");
     }
 
