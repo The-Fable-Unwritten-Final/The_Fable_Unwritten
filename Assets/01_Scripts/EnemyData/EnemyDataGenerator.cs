@@ -10,7 +10,7 @@ using UnityEngine;
 public static class EnemyDataGenerator
 {
     private const string EnemySavePath = "Assets/05._ScriptableObjects/Enemy/";
-    private const string ContainerPath = "Assets/02_Prefab/KSJ_Test/SO/EnemyDataContainer.asset";
+    private const string ContainerPath = "Assets/05._ScriptableObjects/Enemy/EnemyContainer/EnemyDataContainer.asset";
 
     /// <summary>
     /// parsed 된 데이털f enemydata 형식으로 변환하여 저장
