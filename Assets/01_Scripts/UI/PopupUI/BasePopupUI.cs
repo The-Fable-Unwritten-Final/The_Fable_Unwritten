@@ -6,6 +6,18 @@ public abstract class BasePopupUI : MonoBehaviour
 {
     public virtual void Open()
     {
+        Stack<BasePopupUI> popStack = UIManager.Instance.popupStack;
+
+        if (popStack.Count > 0)
+        {
+            if(popStack.Peek() == this)
+            {
+                gameObject.SetActive(false);
+                UIManager.Instance.popupStack.Pop();
+                return;
+            }
+        }
+
         UIManager.Instance.popupStack.Push(this);
         gameObject.SetActive(true);
     }
