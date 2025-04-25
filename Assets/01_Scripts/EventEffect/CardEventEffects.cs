@@ -82,6 +82,19 @@ public class CardEventEffects : EventEffects
     }
     public override EventEffects Clone()
     {
-        return Instantiate(this);
+        return new CardEventEffects
+        {
+            index = this.index,
+            text = this.text,
+            eventType = this.eventType,
+            duration = this.duration,
+            sophia = this.sophia,
+            kyla = this.kyla,
+            leon = this.leon,
+            unusable = this.unusable,
+            newCardIndex = this.newCardIndex,
+            cardType = this.cardType,
+            cost = this.cost
+        };
     }
 }

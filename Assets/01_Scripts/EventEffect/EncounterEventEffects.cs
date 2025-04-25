@@ -13,6 +13,12 @@ public class EncounterEventEffects : EventEffects
     }
     public override EventEffects Clone()
     {
-        return Instantiate(this);
+        return new EncounterEventEffects
+        {
+            index = this.index,
+            text = this.text,
+            eventType = this.eventType,
+            duration = this.duration
+        };
     }
 }

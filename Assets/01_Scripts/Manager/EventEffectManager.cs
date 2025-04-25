@@ -6,47 +6,20 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
 {
     [Header("CSV Data path")]
     [SerializeField] string csvPath = "ExternalFiles/EventEffects.csv"; // CSV 파일 경로
-    [Header("Event effect Lists")]
-    [SerializeField] List<EventEffects> eventEffectList;// 이벤트 효과 SO 리스트.
+
+    //[Header("Event effect Lists")]
+    List<EventEffects> eventEffectList;// 이벤트 효과 SO 리스트.
 
     // 액션 처럼 사용할 효과들 List
-    [SerializeField] List<EventEffects> untillNextCombat; // 다음 전투까지 지속되는 효과 리스트
-    [SerializeField] List<EventEffects> untillNextStage; // 다음 스테이지까지 지속되는 효과 리스트
-    [SerializeField] List<EventEffects> untillEndAdventure; // 모험이 끝날 때까지 지속되는 효과 리스트
+    List<EventEffects> untillNextCombat = new List<EventEffects>(); // 다음 전투까지 지속되는 효과 리스트
+    List<EventEffects> untillNextStage = new List<EventEffects>(); // 다음 스테이지까지 지속되는 효과 리스트
+    List<EventEffects> untillEndAdventure = new List<EventEffects>(); // 모험이 끝날 때까지 지속되는 효과 리스트
 
     protected override void Awake()
     {
         base.Awake();
         // CSV 파일에서 데이터 로드
         eventEffectList = LoadDatas(csvPath);
-    }
-    private void Update()
-    {
-        // 테스트용
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            AddEventEffect(0);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            AddEventEffect(1);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            AddEventEffect(2);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            AddEventEffect(4);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            AddEventEffect(5);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha6))
-        {
-            AddEventEffect(6);
-        }
     }
 
     private List<EventEffects> LoadDatas(string csvPath) // CSV의 이벤트 효과 데이터를 기반으로 이벤트 효과 SO의 리스트를 생성.
@@ -62,43 +35,54 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
             switch (data.eventType)
             {
                 case 0:
-                    var statEffect = ScriptableObject.CreateInstance<StatEventEffects>();
+                    var statEffect = new StatEventEffects
+                    {
+                        index = data.index,
+                        text = data.text,
+                        eventType = data.eventType,
+                        duration = data.duration,
+                        sophia = data.sophia,
+                        kyla = data.kyla,
+                        leon = data.leon,
+                        enemy = data.enemy,
 
-                    statEffect.index = data.index;
-                    statEffect.text = data.text;
-                    statEffect.eventType = data.eventType;
-                    statEffect.duration = data.duration;
-                    statEffect.sophia = data.sophia;
-                    statEffect.kyla = data.kyla;
-                    statEffect.leon = data.leon;
-                    statEffect.enemy = data.enemy;
-                    statEffect.hp = data.hp;
-                    statEffect.hpPercent = data.hpPercent;
-                    statEffect.atk = data.atk;
-                    statEffect.def = data.def;
+                        hp = data.hp,
+                        hpPercent = data.hpPercent,
+                        atk = data.atk,
+                        def = data.def
+                    };
 
                     eventEffectList.Add(statEffect);
                     break;
 
                 case 1:
-                    var cardEventEffect = ScriptableObject.CreateInstance<CardEventEffects>();
-                    cardEventEffect.index = data.index;
-                    cardEventEffect.text = data.text;
-                    cardEventEffect.eventType = data.eventType;
-                    cardEventEffect.duration = data.duration;
-                    cardEventEffect.sophia = data.sophia;
-                    cardEventEffect.kyla = data.kyla;
-                    cardEventEffect.leon = data.leon;
-                    cardEventEffect.cardType = data.cardType;
-                    cardEventEffect.cost = data.cost;
-                    cardEventEffect.newCardIndex = data.newCardIndex;
-                    cardEventEffect.unusable = data.unusable;
+                    var cardEventEffect = new CardEventEffects
+                    {
+                        index = data.index,
+                        text = data.text,
+                        eventType = data.eventType,
+                        duration = data.duration,
+                        sophia = data.sophia,
+                        kyla = data.kyla,
+                        leon = data.leon,
+                        unusable = data.unusable,
+
+                        newCardIndex = data.newCardIndex,
+                        cardType = data.cardType,
+                        cost = data.cost
+                    };
 
                     eventEffectList.Add(cardEventEffect);
                     break;
 
                 case 2:
-                    var enemyEventEffect = ScriptableObject.CreateInstance<EncounterEventEffects>();
+                    var enemyEventEffect = new EncounterEventEffects
+                    {
+                        index = data.index,
+                        text = data.text,
+                        eventType = data.eventType,
+                        duration = data.duration,
+                    };
 
                     eventEffectList.Add(enemyEventEffect);
                     break;
@@ -132,7 +116,6 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
         for (int i = 0; i < untillNextCombat.Count; i++)
         {
             untillNextCombat[i].UnApply(); // 효과 해제 메서드 호출
-            Destroy(untillNextCombat[i]); // 메모리 해제
         }
 
         untillNextCombat.Clear();
@@ -155,7 +138,6 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
         for (int i = 0; i < untillNextStage.Count; i++)
         {
             untillNextStage[i].UnApply(); // 효과 해제 메서드 호출
-            Destroy(untillNextStage[i]); // 메모리 해제
         }
         untillNextStage.Clear();
     }
@@ -177,7 +159,6 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
         for (int i = 0; i < untillEndAdventure.Count; i++)
         {
             untillEndAdventure[i].UnApply(); // 효과 해제 메서드 호출
-            Destroy(untillEndAdventure[i]); // 메모리 해제
         }
         untillEndAdventure.Clear();
     }

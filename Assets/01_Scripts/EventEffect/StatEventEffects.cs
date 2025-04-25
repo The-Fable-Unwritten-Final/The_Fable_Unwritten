@@ -28,7 +28,7 @@ public class StatEventEffects : EventEffects
             }
             if (hpPercent != 0)
             {
-                Debug.Log($"{name} : Sophia StatEvent HP Percent {hpPercent}");
+                
             }
             if (atk != 0)
             {
@@ -72,7 +72,7 @@ public class StatEventEffects : EventEffects
             }
             if (hpPercent != 0)
             {
-                Debug.Log($"{name} : Kyla StatEvent HP Percent {hpPercent}");
+                
             }
             if (atk != 0)
             {
@@ -116,7 +116,7 @@ public class StatEventEffects : EventEffects
             }
             if (hpPercent != 0)
             {
-                Debug.Log($"{name} : Leon StatEvent HP Percent {hpPercent}");
+                
             }
             if (atk != 0)
             {
@@ -155,7 +155,7 @@ public class StatEventEffects : EventEffects
         {
             if(hp != 0)
             {
-                Debug.Log($"{name} : Enemy StatEvent HP {hp}");
+                
             }
             if (hpPercent != 0)
             {
@@ -166,11 +166,11 @@ public class StatEventEffects : EventEffects
             }
             if (atk != 0)
             {
-                Debug.Log($"{name} : Enemy StatEvent ATK {atk}");
+                
             }
             if (def != 0)
             {
-                Debug.Log($"{name} : Enemy StatEvent DEF {def}");
+                
             }
         }
     }
@@ -179,6 +179,20 @@ public class StatEventEffects : EventEffects
     }
     public override EventEffects Clone()
     {
-        return Instantiate(this);
+        return new StatEventEffects
+        {
+            index = this.index,
+            text = this.text,
+            eventType = this.eventType,
+            duration = this.duration,
+            sophia = this.sophia,
+            kyla = this.kyla,
+            leon = this.leon,
+            enemy = this.enemy,
+            hp = this.hp,
+            hpPercent = this.hpPercent,
+            atk = this.atk,
+            def = this.def
+        };
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class EventEffects : ScriptableObject
+public abstract class EventEffects
 {
     public int index; // 인덱스
     public string text; // 효과 설명
