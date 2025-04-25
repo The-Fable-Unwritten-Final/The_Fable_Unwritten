@@ -46,13 +46,14 @@ public class PopupUI_Book : BasePopupUI
         SetLastSibling(t); // 클릭한 책갈피를 가장 위로 올림
     }// i번 캐릭터에 맞는 카드 페이지 펼치기 래핑. (i == 0 : 소피아, 1 : 카일라, 2: 레온)
 
-    public void OnClickIdle()// 이상 실현 버튼
+    public void OnClickIdle(Transform t)// 이상 실현 버튼
     {
         currentPageType = 1;
         SetAllToFirst(); // 모든 책갈피를 가장 아래로 내림
         SetAllPageClose(); // 모든 페이지 비활성화
         pages[1].gameObject.SetActive(true); // 이상 실현 페이지 활성화
         // 이상 실현 페이지 초기화.
+        SetLastSibling(t);
     }
     public void OnClickDiary()// 일기장 버튼
     {
