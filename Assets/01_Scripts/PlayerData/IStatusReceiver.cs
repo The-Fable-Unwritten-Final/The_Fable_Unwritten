@@ -46,4 +46,8 @@ public interface IStatusReceiver
     string CurrentStance { get; }                   //현재 자세 확인
     bool IsStunned();                          //스턴 상태 여부 확인
 
+    // 💥 애니메이션 관련 추가
+    void PlayAttackAnimation();
+    void PlayHitAnimation();
+
 }

@@ -123,4 +123,14 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         maxHP = enemyData.MaxHP;
         currentHP = enemyData.CurrentHP;
     }
+
+    public void PlayAttackAnimation()
+    {
+
+    }
+
+    public void PlayHitAnimation()
+    {
+
+    }
 }

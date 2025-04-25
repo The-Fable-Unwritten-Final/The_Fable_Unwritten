@@ -17,7 +17,8 @@ public class PlayerData : ScriptableObject
     public float ATK; //공격력
     public float DEF; //방어력
     public CharacterClass CharacterClass => (CharacterClass)IDNum;
-    
+
+    public RuntimeAnimatorController animationController;
 
 
     [Header("Stat Value")]
