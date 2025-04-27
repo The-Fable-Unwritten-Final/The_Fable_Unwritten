@@ -27,6 +27,12 @@ public class ReadingPanel : BaseCampPanel
         changeCardPanel.SetActive(false);
     }
 
+    // 카드 외 선택 시 CardPanel 비활성화
+    public void OnClickBookExept()
+    {
+        cardBook.SetActive(false);
+    }
+
     /// <summary>
     /// 선택한 캐릭터의 현재 보유중인 카드 보여주기
     /// </summary>
@@ -73,10 +79,10 @@ public class ReadingPanel : BaseCampPanel
     }
 
     private void ShowBook(CharacterClass characterClass , CardModel selectCard)
-    {
-        cardBook.SetActive(true);
+    { 
         currentCardIndex = selectCard.index;
         cardBook.GetComponent<CampCardBook>().Character = characterClass;
+        cardBook.SetActive(true);
     }
 
     public void SetChangeCardIndex(Transform selectCard)
