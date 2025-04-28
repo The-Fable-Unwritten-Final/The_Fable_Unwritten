@@ -1475,10 +1475,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bgmSource: {fileID: 0}
-  bgmVolume: 1
+  bgmVolume: 0
   soundSourcePrefab: {fileID: 8436956468747680117, guid: aea962f8a1df18448b556b9ba22b3132,
     type: 3}
-  sfxVolume: 1
+  sfxVolume: 0
   sfxPitchVariance: 0.1
 --- !u!82 &594935834
 AudioSource:
@@ -1492,7 +1492,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0
   m_Pitch: 1
   Loop: 0
   Mute: 0

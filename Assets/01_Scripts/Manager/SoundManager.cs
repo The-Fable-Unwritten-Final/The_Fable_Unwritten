@@ -9,11 +9,11 @@ public class SoundManager : MonoSingleton<SoundManager>
 {
     [Header("BGM Settings")]
     [SerializeField] private AudioSource bgmSource;
-    [Range(0, 1f)] public float bgmVolume = 1f;
+    [Range(0, 1f)] public float bgmVolume = 0f;
 
     [Header("SFX Settings")]
     [SerializeField] private SoundSource soundSourcePrefab;
-    [Range(0, 1f)] public float sfxVolume = 1f;
+    [Range(0, 1f)] public float sfxVolume = 0f;
     [SerializeField] private float sfxPitchVariance = 0.1f;
 
     [Header("Mute")]
