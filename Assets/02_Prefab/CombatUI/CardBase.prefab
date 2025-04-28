@@ -238,7 +238,7 @@ GameObject:
   - component: {fileID: 916121049196613197}
   - component: {fileID: 8103704918924770617}
   m_Layer: 6
-  m_Name: Card Test
+  m_Name: CardBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -326,6 +326,7 @@ MonoBehaviour:
   cardDisplay: {fileID: 0}
   originalPos: {x: 0, y: 0}
   cardState: 0
+  cardFrame: {fileID: 4673567227732135363}
   cardImage: {fileID: 3597426812342236278}
   cardTypeImage: {fileID: 5144240998936378874}
   cardCharImage: {fileID: 8835497748109246123}

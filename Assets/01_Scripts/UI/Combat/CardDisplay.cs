@@ -11,7 +11,7 @@ public class CardDisplay : MonoBehaviour
 {
     [SerializeField] RectTransform canvasRect;
     // cardsInHand를 SerializeField로 할 경우 에디터 상에서만 경고가 발생하나, 이후 카드 시스템이 완성될때는 cardsInHand를 실제 카드 데이터를 가져와서 하기 때문에 SerializeField를 지울 예정.
-    [SerializeField] List<CardInHand> cardsInHand = new List<CardInHand>(); // 핸드에 소지하고 있는 카드들.
+    public List<CardInHand> cardsInHand = new List<CardInHand>(); // 핸드에 소지하고 있는 카드들.
     [SerializeField] GameObject cardPrefab; // 카드 프리팹
     int layerCharacter;
     int layerMonster;
@@ -188,12 +188,12 @@ public class CardDisplay : MonoBehaviour
         Destroy(currentCard.gameObject);// 카드 삭제.
         CardArrange();
     }
-    public void ThrowAwayCard()// 카드 버리기
+    public void ThrowAwayCard(CardInHand card)// 카드 버리기
     {
-        if (currentCard == null) return;
-        GameManager.Instance.combatUIController.ThrowCard(currentCard.cardData);// 카드 버리기.
-        cardsInHand.Remove(currentCard);// 카드 리스트에서 제거.
-        Destroy(currentCard.gameObject);// 카드 삭제.
+        if (card == null) return;
+        GameManager.Instance.combatUIController.ThrowCard(card.cardData);// 카드 버리기.
+        cardsInHand.Remove(card);// 카드 리스트에서 제거.
+        Destroy(card.gameObject);// 카드 삭제.
         CardArrange();
     }
     /// <summary>
@@ -240,8 +240,26 @@ public class CardDisplay : MonoBehaviour
             }
         }
     }
+    /// <summary>
+    /// 손안의 카드들의 상태를 버릴 카드 선택이 가능한 상태로 변경.
+    /// </summary>
+    public void SetCardCanDiscard()
+    {
+        // 만약 현재 턴이 적 턴이라면 카드의 상태를 CanMouseOver로
+        if (GameManager.Instance.turnController.turnState == TurnController.TurnState.EnemyTurn)
+        {
+            SetAllCardCanMouseOver();
+            return;
+        }
+
+        for (int i = 0; i < cardsInHand.Count; i++)
+        {
+            cardsInHand[i].SetCardState(CardInHand.CardState.CanDiscard);// 카드 상태를 CanDiscard로 변경
+        }
+    }
     public void OnMousepoint(PointerEventData eventData)
     {
+        Debug.Log("OnMousePoint");
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
@@ -257,7 +275,7 @@ public class CardDisplay : MonoBehaviour
             }
             else if (layer == layerTrash)
             {
-                ThrowAwayCard();
+                //ThrowAwayCard();
                 currentCard = null;
             }
             else

@@ -12,6 +12,7 @@ public class GameManager : MonoSingleton<GameManager>
     public CombatUIController combatUIController; // 전투 UI 컨트롤러
     public CombatCameraController combatCameraController; // 전투 카메라 컨트롤러
     public TurnController turnController; // 턴 컨트롤러
+    public CardDiscardController cardDiscardController; // 카드 버리기 컨트롤러
 
     protected override void Awake()
     {
@@ -85,6 +86,14 @@ public class GameManager : MonoSingleton<GameManager>
     public void UnregisterTurnController()
     {
         turnController = null;
+    }
+    public void RegisterCardDiscardController(CardDiscardController cont)
+    {
+        cardDiscardController = cont;
+    }
+    public void UnregisterCardDiscardController()
+    {
+        cardDiscardController = null;
     }
 
 
