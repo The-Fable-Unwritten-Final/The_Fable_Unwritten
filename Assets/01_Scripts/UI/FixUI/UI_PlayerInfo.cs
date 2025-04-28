@@ -36,6 +36,28 @@ public class UI_PlayerInfo : MonoBehaviour
 
         SetEndingBadge();
         UPdatePlayerInfoUI();
+
+        RegisterHpUpdateEvent();
+    }
+
+    private void RegisterHpUpdateEvent()
+    {
+        var players = PlayerManager.Instance.activePlayers;
+
+        foreach (var kvp in players)
+        {
+            CharacterClass character = kvp.Key;
+            PlayerData playerData = kvp.Value;
+
+            if (charInfoText.TryGetValue(character, out var textObj))
+            {
+                // 체력 변경 이벤트 등록
+                playerData.OnHpChanged += (currentHp, maxHp) =>
+                {
+                    textObj.text = $"{currentHp}/{maxHp}";
+                };
+            }
+        }
     }
 
     public void OnSophiaClicked() => ShowCards(CharacterClass.Sophia);

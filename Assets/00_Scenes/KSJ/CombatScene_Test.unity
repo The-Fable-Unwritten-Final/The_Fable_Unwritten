@@ -453,6 +453,7 @@ MonoBehaviour:
     usedDeck: []
     hand: []
   hasBlock: 0
+  hpBarDisplay: {fileID: 2017042513}
 --- !u!65 &106890149
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -749,6 +750,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyData: {fileID: 0}
   hasBlock: 0
+  hpBarDisplay: {fileID: 1486308578}
 --- !u!65 &259473995
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1439,6 +1441,7 @@ MonoBehaviour:
     usedDeck: []
     hand: []
   hasBlock: 0
+  hpBarDisplay: {fileID: 1515297823862666476}
 --- !u!95 &557679516
 Animator:
   serializedVersion: 5
@@ -1756,6 +1759,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 637407626}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &637407628 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3565488263827323511, guid: 65156d57c85164d4e9ad08fe6e85bae7,
+    type: 3}
+  m_PrefabInstance: {fileID: 637407626}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09886d608f029bf4bbb5469c00905d25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &706556658 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5235349579849048487, guid: 65156d57c85164d4e9ad08fe6e85bae7,
@@ -2165,6 +2180,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyData: {fileID: 0}
   hasBlock: 0
+  hpBarDisplay: {fileID: 1735268614}
 --- !u!1 &1145303237
 GameObject:
   m_ObjectHideFlags: 0
@@ -2449,6 +2465,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6367243676782794070, guid: 65156d57c85164d4e9ad08fe6e85bae7,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2460,6 +2481,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1340192383}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1340192385 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3565488263827323511, guid: 65156d57c85164d4e9ad08fe6e85bae7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1340192383}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09886d608f029bf4bbb5469c00905d25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1407086303 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5746098958361090236, guid: 3c86841a53c34374696152435a2c1552,
@@ -2683,6 +2716,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1486308576}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1486308578 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3565488263827323511, guid: 65156d57c85164d4e9ad08fe6e85bae7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1486308576}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09886d608f029bf4bbb5469c00905d25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1661200918
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2979,6 +3024,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6367243676782794070, guid: 65156d57c85164d4e9ad08fe6e85bae7,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2990,6 +3040,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1735268612}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1735268614 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3565488263827323511, guid: 65156d57c85164d4e9ad08fe6e85bae7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1735268612}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09886d608f029bf4bbb5469c00905d25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1739155343
 GameObject:
   m_ObjectHideFlags: 0
@@ -3039,6 +3101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyData: {fileID: 0}
   hasBlock: 0
+  hpBarDisplay: {fileID: 637407628}
 --- !u!65 &1739155346
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3151,6 +3214,7 @@ MonoBehaviour:
     usedDeck: []
     hand: []
   hasBlock: 0
+  hpBarDisplay: {fileID: 1340192385}
 --- !u!65 &1920819809
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3624,6 +3688,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 2017042511}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2017042513 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3565488263827323511, guid: 65156d57c85164d4e9ad08fe6e85bae7,
+    type: 3}
+  m_PrefabInstance: {fileID: 2017042511}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09886d608f029bf4bbb5469c00905d25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2077516050
 GameObject:
   m_ObjectHideFlags: 0
@@ -3975,11 +4051,28 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6367243676782794070, guid: 65156d57c85164d4e9ad08fe6e85bae7,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65156d57c85164d4e9ad08fe6e85bae7, type: 3}
+--- !u!114 &1515297823862666476 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3565488263827323511, guid: 65156d57c85164d4e9ad08fe6e85bae7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1515297823862666475}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09886d608f029bf4bbb5469c00905d25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1894818076658003801
 GameObject:
   m_ObjectHideFlags: 0
