@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public PlayerData playerData;       //플레이어의 데이타
     public DeckModel deckModel;         //플레이어가 들고 있는 덱
     public bool hasBlock = false;           //방어막 획득 여부
+    [SerializeField] private HpBarDisplay hpBarDisplay;
 
     private Animator animator;
 
@@ -37,10 +38,12 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             Debug.LogWarning($"[{name}] PlayerData 또는 AnimationController가 누락되었습니다.");
         }
     }
-    /*private void Awake()
+
+    public void BindHpBar(HpBarDisplay bar)
     {
-        Setup(playerData);
-    }*/
+        hpBarDisplay = bar;
+        hpBarDisplay.BindPlayerData(playerData);
+    }
 
 
     /// <summary>
@@ -187,6 +190,14 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         data.LoadDeckFromIndexes(CardSystemInitializer.Instance.loadedCards);
         deckModel.Initialize(data.currentDeck);
+        
+        // 체력 1 강제 (죽은 상태로 시작 방지)
+        if (playerData.currentHP <= 0)
+            playerData.currentHP = 1;
+
+
+        if (hpBarDisplay != null)
+            hpBarDisplay.BindPlayerData(playerData);
     }
 
 

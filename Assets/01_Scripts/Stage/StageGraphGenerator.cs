@@ -16,7 +16,7 @@ public static class StageGraphGenerator
         int id = 0;
 
         // 1스테이지, 5스테이지는 4열 중간스테이지는 7열
-        stage.columnCount = (stageIndex == 1 || stageIndex == 5) ? 4 : 7;
+        stage.columnCount = (stageIndex == 1 || stageIndex == 5) ? 4 : 8;
 
         // 시작 노드 (열 , id  0으로 고정)
         stage.columns.Add(new List<GraphNode> {
@@ -71,23 +71,23 @@ public static class StageGraphGenerator
         });
     }
 
-    // 일반 스테이지 구성 (2~4 스테이지): 노드 타입별 총 12개, 열당 1~3개 분배
+    // 일반 스테이지 구성 (2~4 스테이지): 노드 타입별 총 14개, 열당 1~3개 분배
     private static void GenerateStandardStage(StageData stage, Vector2 spacing, ref int id)
     {
         // 일반 스테이지에 들어갈 노드들 무작위 배치를 위한 셔플 작업
         var pool = new List<NodeType>();
-        pool.AddRange(Enumerable.Repeat(NodeType.NormalBattle, 6));
+        pool.AddRange(Enumerable.Repeat(NodeType.NormalBattle, 7));
         pool.AddRange(Enumerable.Repeat(NodeType.EliteBattle, 1));
         pool.AddRange(Enumerable.Repeat(NodeType.RandomEvent, 3));
-        pool.AddRange(Enumerable.Repeat(NodeType.Camp, 2));
+        pool.AddRange(Enumerable.Repeat(NodeType.Camp, 3));
         pool = pool.OrderBy(_ => Random.value).ToList();
 
         // 1~5열 까지 고르게 배치하는 로직
-        int[] counts = new int[5];
-        for (int i = 0; i < 5; i++) counts[i] = 1; // 최소 1개는 배치 하도록 초기값 1로 설정
+        int[] counts = new int[6];
+        for (int i = 0; i < 6; i++) counts[i] = 1; // 최소 1개는 배치 하도록 초기값 1로 설정
 
-        int remaining = 12 - 5;                    // 최소 배치하고 남은 노드 수(총 12개 중 각 열마다 1개씩 총 5개 사용)
-        List<int> indices = Enumerable.Range(0, 5).ToList();
+        int remaining = 14 - 6;                    // 최소 배치하고 남은 노드 수(총 12개 중 각 열마다 1개씩 총 5개 사용)
+        List<int> indices = Enumerable.Range(0, 6).ToList();
 
         // 각 열에 들어 갈 노드 수 랜덤하게 지정
         while (remaining > 0 && indices.Count > 0)
@@ -107,7 +107,7 @@ public static class StageGraphGenerator
         }
 
         // 각 열에 들어갈 노드 수 정해 졌으면 각 열에 노드 넣어주기
-        for (int col = 1; col <= 5; col++)
+        for (int col = 1; col <= 6; col++)
         {
             var column = new List<GraphNode>();
             int count = counts[col - 1];                   // 현재 열에 들어갈 노드 수
@@ -134,7 +134,7 @@ public static class StageGraphGenerator
 
         // 마지막 보스 열 추가
         stage.columns.Add(new List<GraphNode> {
-            new GraphNode { id = id++, type = NodeType.Boss, columnIndex = 6, position = new Vector2(6 * spacing.x, 0) }
+            new GraphNode { id = id++, type = NodeType.Boss, columnIndex = 7, position = new Vector2(7 * spacing.x, 0) }
         });
     }
 

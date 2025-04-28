@@ -7,7 +7,7 @@ public class CampCardBook : PopupUI_Book
 {
     public CharacterClass Character { get; set; }
 
-    private void Start()
+    private void OnEnable()
     {
         SetBook(Character);
     }

@@ -2,16 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SoundManager : MonoSingleton<SoundManager>
 {
     [Header("BGM Settings")]
     [SerializeField] private AudioSource bgmSource;
-    [Range(0, 1f)] public float bgmVolume = 1f;
+    [Range(0, 1f)] public float bgmVolume = 0f;
 
     [Header("SFX Settings")]
     [SerializeField] private SoundSource soundSourcePrefab;
-    [Range(0, 1f)] public float sfxVolume = 1f;
+    [Range(0, 1f)] public float sfxVolume = 0f;
     [SerializeField] private float sfxPitchVariance = 0.1f;
 
     [Header("Mute")]
@@ -22,6 +24,15 @@ public class SoundManager : MonoSingleton<SoundManager>
 
     private readonly Dictionary<string, AudioClip> bgmClips = new();
     private readonly Dictionary<string, AudioClip> sfxClips = new();
+    private Dictionary<string, string> sceneToBGM = new()
+    {
+        { SceneNameData.TitleScene, "Title" },
+        { SceneNameData.StageScene, "Stage" },
+        { SceneNameData.CombatScene_Test, "CombatScene_Test"},
+        { SceneNameData.CampScene, "Camp" },
+        { SceneNameData.RandomEventScene, "Event" },
+    };
+
 
     protected override void Awake()
     {
@@ -30,7 +41,21 @@ public class SoundManager : MonoSingleton<SoundManager>
         bgmSource.loop = true;
 
         LoadAllAudioClips();
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
+        AttachAllButtonClickSounds();
+        SceneManager.sceneLoaded += (scene, mode) => AttachAllButtonClickSounds();
     }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (sceneToBGM.TryGetValue(scene.name, out var bgmName))
+        {
+            PlayBGM(bgmName);
+        }
+    }
+
     // ===== BGM =====
 
     /// <summary>
@@ -111,7 +136,9 @@ public class SoundManager : MonoSingleton<SoundManager>
             src.gameObject.SetActive(true);
             return src;
         }
-        return Instantiate(soundSourcePrefab, transform);
+
+        var newSource = Instantiate(soundSourcePrefab, transform);
+        return newSource;
     }
 
     public void ReturnSoundSource(SoundSource source)
@@ -168,5 +195,21 @@ public class SoundManager : MonoSingleton<SoundManager>
             if (!sfxClips.ContainsKey(clip.name))
                 sfxClips.Add(clip.name, clip);
         }
+    }
+
+
+    private void AttachAllButtonClickSounds()
+    {
+        Button[] buttons = FindObjectsOfType<Button>(true);
+
+        foreach (var button in buttons)
+        {
+            button.onClick.RemoveListener(PlayClickSFX);
+            button.onClick.AddListener(PlayClickSFX);
+        }
+    }
+    private void PlayClickSFX()
+    {
+        PlaySFX("Click");
     }
 }
