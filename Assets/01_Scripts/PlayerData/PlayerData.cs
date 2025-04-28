@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,16 +9,40 @@ using UnityEngine;
 
 public class PlayerData : ScriptableObject
 {
+    public event Action<float, float> OnHpChanged; //체력 변경 감지 이벤트
+
     [Header("Basic Stat")]
     public int IDNum; //고유번호
     public string CharacterName; //캐릭터이름
     public Sprite Icon; //Icon
-    public float MaxHP; //체력
-    public float currentHP; //현재 체력
+
+    [SerializeField] private float _maxHP;  //최대 체력
+    public float MaxHP
+    {
+        get => _maxHP;
+        set
+        {
+            _maxHP = value;
+            OnHpChanged?.Invoke(currentHP, _maxHP);
+        }
+    }
+
+    [SerializeField] private float _currentHP;   //현재 체력
+    public float currentHP
+    {
+        get => _currentHP;
+        set
+        {
+            _currentHP = Mathf.Clamp(value, 0, MaxHP);
+            OnHpChanged?.Invoke(_currentHP, MaxHP);
+        }
+    }
+
     public float ATK; //공격력
     public float DEF; //방어력
     public CharacterClass CharacterClass => (CharacterClass)IDNum;
-    
+
+    public RuntimeAnimatorController animationController;
 
 
     [Header("Stat Value")]

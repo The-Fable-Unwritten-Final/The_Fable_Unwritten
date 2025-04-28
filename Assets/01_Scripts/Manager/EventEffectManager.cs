@@ -22,7 +22,7 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
         eventEffectList = LoadDatas(csvPath);
     }
 
-    private List<EventEffects> LoadDatas(string csvPath) // CSV의 이벤트 효과 데이터를 기반으로 이벤트 효과 SO의 리스트를 생성.
+    private List<EventEffects> LoadDatas(string csvPath)
     {
         string fullPath = $"{Application.dataPath}/Resources/{csvPath}";
 
@@ -31,7 +31,6 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
 
         foreach (var data in eventEffectDatas)
         {
-            // 이벤트 타입에 따른 다른 종류의 SO 생성
             switch (data.eventType)
             {
                 case 0:

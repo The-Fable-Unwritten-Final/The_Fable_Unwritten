@@ -8,6 +8,9 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public PlayerData playerData;       //플레이어의 데이타
     public DeckModel deckModel;         //플레이어가 들고 있는 덱
     public bool hasBlock = false;           //방어막 획득 여부
+    [SerializeField] private HpBarDisplay hpBarDisplay;
+
+    private Animator animator;
 
     public void OnClickHighStance() => ChangeStance(PlayerData.StancType.High);
     public void OnClickMidStance() => ChangeStance(PlayerData.StancType.Middle);
@@ -21,10 +24,26 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     private List<StatusEffect> activeEffects = new List<StatusEffect>();        //현재 가지고 있는 상태이상 및 버프
 
-    /*private void Awake()
+    private void Awake()
     {
-        Setup(playerData);
-    }*/
+
+        animator = GetComponent<Animator>();
+
+        if (playerData != null && playerData.animationController != null)
+        {
+            animator.runtimeAnimatorController = playerData.animationController;
+        }
+        else
+        {
+            Debug.LogWarning($"[{name}] PlayerData 또는 AnimationController가 누락되었습니다.");
+        }
+    }
+
+    public void BindHpBar(HpBarDisplay bar)
+    {
+        hpBarDisplay = bar;
+        hpBarDisplay.BindPlayerData(playerData);
+    }
 
 
     /// <summary>
@@ -65,6 +84,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// <param name="amount">데미지 량</param>
     public void TakeDamage(float amount)
     {
+
         playerData.currentHP = Mathf.Max(0, playerData.currentHP - amount);
         Debug.Log($"{playerData.CharacterName} 피해: {amount}, 현재 체력: {playerData.currentHP}");
     }
@@ -170,6 +190,14 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         data.LoadDeckFromIndexes(CardSystemInitializer.Instance.loadedCards);
         deckModel.Initialize(data.currentDeck);
+        
+        // 체력 1 강제 (죽은 상태로 시작 방지)
+        if (playerData.currentHP <= 0)
+            playerData.currentHP = 1;
+
+
+        if (hpBarDisplay != null)
+            hpBarDisplay.BindPlayerData(playerData);
     }
 
 
@@ -291,5 +319,30 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     {
         maxHP = playerData.MaxHP;
         currentHP = playerData.currentHP;
+    }
+
+    //공격 애니메이션 호출 시
+    public void PlayAttackAnimation()
+    {
+        if (animator != null)
+        {
+            animator.SetBool("Attack", true);
+            GameManager.Instance.StartCoroutine(ResetBool("Attack", 1f));
+        }
+    }
+    //피격 애니메이션 호출 시
+    public void PlayHitAnimation()
+    {
+        if (animator != null)
+        {
+            animator.SetBool("Hit", true);
+            GameManager.Instance.StartCoroutine(ResetBool("Hit", 1f));
+        }
+    }
+
+    private IEnumerator ResetBool(string param, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        animator.SetBool(param, false);
     }
 }

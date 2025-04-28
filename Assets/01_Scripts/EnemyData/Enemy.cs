@@ -8,12 +8,33 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public bool hasBlock = false;
 
+    [SerializeField] private HpBarDisplay hpBarDisplay;
+
+    private Animator animator;
 
     private List<StatusEffect> activeEffects = new List<StatusEffect>();  //현재 가지고 있는 상태이상 및 버프
 
     void Start()
     {
+        
         //enemyData.CurrentHP = enemyData.MaxHP; //전투 시작시 EnemyHP 풀로 채우기  //예외 처리를 해주면 된다.
+    }
+
+    public void SetData(EnemyData data)
+    {
+        enemyData = data;
+
+        if (enemyData.CurrentHP <= 0)
+            enemyData.CurrentHP = enemyData.MaxHP;
+
+        if (animator == null)
+            animator = GetComponent<Animator>();
+
+        if (enemyData.animationController != null && animator != null)
+            animator.runtimeAnimatorController = enemyData.animationController;
+
+        if (hpBarDisplay != null)
+            hpBarDisplay.BindEnemyData(enemyData);
     }
 
     /// <summary>
@@ -29,6 +50,12 @@ public class Enemy : MonoBehaviour, IStatusReceiver
             value = effect.value,
             duration = effect.duration
         });
+    }
+
+    public void BindHpBar(HpBarDisplay bar)
+    {
+        hpBarDisplay = bar;
+        hpBarDisplay.BindEnemyData(enemyData);
     }
 
     /// <summary>
@@ -122,5 +149,15 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     {
         maxHP = enemyData.MaxHP;
         currentHP = enemyData.CurrentHP;
+    }
+
+    public void PlayAttackAnimation()
+    {
+
+    }
+
+    public void PlayHitAnimation()
+    {
+
     }
 }

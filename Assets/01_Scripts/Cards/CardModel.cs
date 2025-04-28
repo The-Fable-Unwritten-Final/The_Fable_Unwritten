@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -62,9 +63,28 @@ public class CardModel : ScriptableObject
 
     public void Play(IStatusReceiver caster, IStatusReceiver target)
     {
+
+        GameManager.Instance.StartCoroutine(PlayWithAnimation(caster, target));
+    }
+
+    private IEnumerator PlayWithAnimation(IStatusReceiver caster, IStatusReceiver target)
+    {
+        // 1. 공격 애니메이션
+        caster.PlayAttackAnimation();
+        yield return new WaitForSeconds(0.5f); // 애니메이션 길이에 맞게 조정
+
+        // 2. (선택) 스킬 이펙트 재생
+        // yield return PlaySkillEffect(caster, target);
+
+        // 3. 피격 애니메이션
+        target.PlayHitAnimation();
+        yield return new WaitForSeconds(0.3f);
+
+        // 4. 효과 적용
         foreach (var effect in effects)
             effect.Apply(caster, target);
 
+        // 5. 카드 상태 UI 업데이트
         GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
     }
 
