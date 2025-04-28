@@ -130,7 +130,7 @@ public class StageMapController : MonoBehaviour
             case NodeType.NormalBattle:
             case NodeType.EliteBattle:
             case NodeType.Boss:
-                SceneManager.LoadScene("CombatScene_Test");
+                SceneManager.LoadScene(SceneNameData.CombatScene_Test);
                 return;
 
             case NodeType.Camp:
