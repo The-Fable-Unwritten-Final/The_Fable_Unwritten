@@ -41,6 +41,7 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+
     private void FixedStage1Setting(EnemyStageSpawnData stageData)
     {
         int columnIndex = GameManager.Instance.StageSetting.VisitedNodes.Last().columnIndex;
@@ -92,7 +93,7 @@ public class EnemySpawner : MonoBehaviour
                     
                     copydata.SkillList = origndata.SkillList;
 
-                    enemy.enemyData = copydata;
+                    enemy.SetData(copydata);
                     slot.gameObject.SetActive(true);
 
                     enemyParty.Add(enemy as IStatusReceiver);

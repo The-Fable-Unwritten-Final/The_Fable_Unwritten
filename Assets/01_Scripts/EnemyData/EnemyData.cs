@@ -1,41 +1,52 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewEnemy Data", menuName = "Enemy/EnemyData")]
+[CreateAssetMenu(fileName = "NewEnemyData", menuName = "Enemy/EnemyData")]
 public class EnemyData : ScriptableObject
 {
-    [SerializeField]
-    private int idNum;
-    public int IDNum { get { return idNum; } set { idNum = value; } } //고유번호
+    public event Action<float, float> OnHpChanged; // 체력 변경 시 호출할 이벤트 추가
 
-    [SerializeField]
-    private string enemyName;
-    public string EnemyName { get { return enemyName; } set { enemyName = value; } } //이름
+    [SerializeField] private int idNum;
+    public int IDNum { get => idNum; set => idNum = value; }
 
-    [SerializeField]
-    private float maxHP;
-    public float MaxHP { get { return maxHP; } set { maxHP = value; } } //체력
+    [SerializeField] private string enemyName;
+    public string EnemyName { get => enemyName; set => enemyName = value; }
 
-    [SerializeField]
-    private float currentHP;
-    public float CurrentHP { get { return currentHP; } set { currentHP = value; } } //현재 체력
+    [SerializeField] private float maxHP;
+    public float MaxHP
+    {
+        get => maxHP;
+        set
+        {
+            maxHP = value;
+            OnHpChanged?.Invoke(currentHP, maxHP); // 최대 체력 변경 시 알림
+        }
+    }
 
-    [SerializeField]
-    private int aTK;
-    public int ATK { get { return aTK; } set { aTK = value; } } //공격력
+    [SerializeField] private float currentHP;
+    public float CurrentHP
+    {
+        get => currentHP;
+        set
+        {
+            currentHP = Mathf.Clamp(value, 0, MaxHP);
+            OnHpChanged?.Invoke(currentHP, MaxHP); // 현재 체력 변경 시 알림
+        }
+    }
 
-    [SerializeField]
-    private float aTKValue;
-    public float ATKValue { get { return aTKValue; } set { aTKValue = value; } } //공격력 변화
+    [SerializeField] private int aTK;
+    public int ATK { get => aTK; set => aTK = value; }
 
-    [SerializeField]
-    private float dEF;
-    public float DEF { get { return dEF; } set { dEF = value; } } // 방어력
+    [SerializeField] private float aTKValue;
+    public float ATKValue { get => aTKValue; set => aTKValue = value; }
 
-    [SerializeField]
-    private float dEFValue;
-    public float DEFValue { get { return dEFValue; } set { dEFValue = value; } } // 방어력 변화
+    [SerializeField] private float dEF;
+    public float DEF { get => dEF; set => dEF = value; }
+
+    [SerializeField] private float dEFValue;
+    public float DEFValue { get => dEFValue; set => dEFValue = value; }
 
     [Header("스킬 목록")]
     [SerializeField] private List<EnemySkill> skillList = new();
@@ -48,7 +59,6 @@ public class EnemyData : ScriptableObject
     [System.Serializable]
     public class StancValue
     {
-        // StanceType.cs 라는 파일 따로 생성
         public enum EStancType
         {
             High,
@@ -56,22 +66,21 @@ public class EnemyData : ScriptableObject
             Low
         }
 
-        public float defenseBonus; //방어력 보너스
-        public float attackBonus; //공격력 보너스
+        public float defenseBonus;
+        public float attackBonus;
     }
 
     public StancValue.EStancType currentStance;
 
     public RuntimeAnimatorController animationController;
 
-
-    //스킬 추가
+    // 스킬 추가
     public void AddSkill(EnemySkill skill)
     {
         if (skill != null && !skillList.Contains(skill))
             skillList.Add(skill);
     }
 
-    //스킬 모두 삭제
+    // 스킬 모두 삭제
     public void ClearSkills() => skillList.Clear();
 }

@@ -5,29 +5,63 @@ using UnityEngine.UI;
 
 public class HpBarDisplay : MonoBehaviour
 {
-    [SerializeField] Image hpBar;
-    private Coroutine changeHpCoroutine;
+    [Header("References")]
+    [SerializeField] private Image hpBar;
 
-    /// <summary>
-    /// 최초 객체의 데이터를 세팅해줄때 호출
-    /// </summary>
+    private Coroutine changeHpCoroutine;
+    private PlayerData linkedPlayerData;
+    private EnemyData linkedEnemyData;
+
+    // 플레이어 데이터 연결
+    public void BindPlayerData(PlayerData data)
+    {
+        if (linkedPlayerData != null)
+            linkedPlayerData.OnHpChanged -= OnHpChanged;
+
+        linkedPlayerData = data;
+        linkedPlayerData.OnHpChanged += OnHpChanged;
+
+        SetHpBar(linkedPlayerData.currentHP, linkedPlayerData.MaxHP);
+    }
+
+    // 적 데이터 연결
+    public void BindEnemyData(EnemyData data)
+    {
+        if (linkedEnemyData != null)
+            linkedEnemyData.OnHpChanged -= OnHpChanged;
+
+        linkedEnemyData = data;
+        linkedEnemyData.OnHpChanged += OnHpChanged;
+
+        SetHpBar(linkedEnemyData.CurrentHP, linkedEnemyData.MaxHP);
+    }
+
+    private void OnDestroy()
+    {
+        if (linkedPlayerData != null)
+            linkedPlayerData.OnHpChanged -= OnHpChanged;
+
+        if (linkedEnemyData != null)
+            linkedEnemyData.OnHpChanged -= OnHpChanged;
+    }
+
+    private void OnHpChanged(float hp, float maxHp)
+    {
+        ChangeHpBar(hp, maxHp);
+    }
+
     public void SetHpBar(float hp, float maxHp)
     {
         if (hpBar == null) return;
-
         hpBar.fillAmount = hp / maxHp;
     }
 
-    /// <summary>
-    /// 원하는 체력 값으로 변환해 줄때 호출
-    /// </summary>
     public void ChangeHpBar(float hp, float maxHp)
     {
         if (hpBar == null) return;
 
         float targetFill = hp / maxHp;
 
-        // 이전 코루틴이 있다면 멈추고 새로 시작 (체력 변경중, 체력변경 요청이 들어올 경우.)
         if (changeHpCoroutine != null)
             StopCoroutine(changeHpCoroutine);
 
