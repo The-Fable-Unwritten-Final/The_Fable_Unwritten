@@ -86,7 +86,7 @@ public static class StageGraphGenerator
         int[] counts = new int[6];
         for (int i = 0; i < 6; i++) counts[i] = 1; // 최소 1개는 배치 하도록 초기값 1로 설정
 
-        int remaining = 14 - 6;                    // 최소 배치하고 남은 노드 수(총 12개 중 각 열마다 1개씩 총 5개 사용)
+        int remaining = 14 - 6;                    // 최소 배치하고 남은 노드 수(총 14개 중 각 열마다 1개씩 총 6개 사용)
         List<int> indices = Enumerable.Range(0, 6).ToList();
 
         // 각 열에 들어 갈 노드 수 랜덤하게 지정
