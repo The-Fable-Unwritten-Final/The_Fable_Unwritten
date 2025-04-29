@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -157,7 +157,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -4, y: 0}
   m_SizeDelta: {x: 1800, y: 900}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &27217162
@@ -1345,8 +1345,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backGround: {fileID: 1206525854}
-  spacing: {x: 250, y: 250}
-  mapTargetWidth: 1350
+  spacing: {x: 250, y: 230}
+  mapTargetWidth: 1400
   mapRenderer: {fileID: 1421031694}
 --- !u!1 &1544313872
 GameObject:

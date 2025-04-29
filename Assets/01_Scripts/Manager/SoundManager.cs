@@ -9,11 +9,11 @@ public class SoundManager : MonoSingleton<SoundManager>
 {
     [Header("BGM Settings")]
     [SerializeField] private AudioSource bgmSource;
-    [Range(0, 1f)] public float bgmVolume = 0f;
+    [Range(0, 1f)] public float bgmVolume = 1f;
 
     [Header("SFX Settings")]
     [SerializeField] private SoundSource soundSourcePrefab;
-    [Range(0, 1f)] public float sfxVolume = 0f;
+    [Range(0, 1f)] public float sfxVolume = 1f;
     [SerializeField] private float sfxPitchVariance = 0.1f;
 
     [Header("Mute")]
@@ -46,6 +46,10 @@ public class SoundManager : MonoSingleton<SoundManager>
 
         AttachAllButtonClickSounds();
         SceneManager.sceneLoaded += (scene, mode) => AttachAllButtonClickSounds();
+
+        // 우선 볼륨 0으로 해뒀어요
+        SetBGMVolume(0);
+        SetSFXVolume(0);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

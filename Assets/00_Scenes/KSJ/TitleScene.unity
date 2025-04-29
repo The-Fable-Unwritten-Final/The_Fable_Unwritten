@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1475,10 +1475,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bgmSource: {fileID: 0}
-  bgmVolume: 0
+  bgmVolume: 1
   soundSourcePrefab: {fileID: 8436956468747680117, guid: aea962f8a1df18448b556b9ba22b3132,
     type: 3}
-  sfxVolume: 0
+  sfxVolume: 1
   sfxPitchVariance: 0.1
 --- !u!82 &594935834
 AudioSource:
@@ -1492,7 +1492,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2556,6 +2556,7 @@ MonoBehaviour:
   combatUIController: {fileID: 0}
   combatCameraController: {fileID: 0}
   turnController: {fileID: 0}
+  cardDiscardController: {fileID: 0}
 --- !u!1 &1786120687
 GameObject:
   m_ObjectHideFlags: 0
@@ -2950,7 +2951,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2068523864
 MonoBehaviour:
   m_ObjectHideFlags: 0

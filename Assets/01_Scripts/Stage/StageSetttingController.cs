@@ -27,9 +27,9 @@ public class StageSetttingController
         allRandomEvents = RandomEventJsonLoader.LoadAllEvents() ?? new();
         stageBackgrounds = BackgoundLoader.LoadBackgrounds() ?? new();
 
-        // 1스테이지 부터 시작
-        StageIndex = Mathf.Max(1, StageIndex);
-        MinStageIndex = Mathf.Max(1, MinStageIndex);
+        // 1스테이지 부터 시작 (기획자 요청으로 임시 2스테이지 부터 시작)
+        StageIndex = Mathf.Max(2, StageIndex);
+        MinStageIndex = Mathf.Max(2, MinStageIndex);
 
         AssignTemesToStages(); // 테마 스테이지별로 배정
     }

@@ -34,7 +34,9 @@ public class StageMapController : MonoBehaviour
             Debug.Log($"[StageMapController] StageIndex = {GameManager.Instance.StageSetting.StageIndex}, Theme = {theme}");
 
             LoadStage(stageSetting.StageIndex);
-            DialogueManager.Instance.OnStageStart(stageSetting.StageIndex); // 대화 호출
+
+            // 기획자 요청으로 대화씬 스킵
+            //DialogueManager.Instance.OnStageStart(stageSetting.StageIndex); // 대화 호출
         }
 
         int stageIndex = stageSetting.StageIndex;
