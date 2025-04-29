@@ -216,7 +216,35 @@ public class BattleFlowController : MonoBehaviour
     {
         if (isBattleEnded) return;
         Debug.Log("적 턴 시작");
-        StartCoroutine(EnemyTurnCoroutine(onEnemyTurnComplete));
+        StartCoroutine(EnemyTurnCoroutine(() =>
+        {
+            onEnemyTurnComplete?.Invoke();
+            AfterEnemyTurn(); // 적 턴 끝난 후 처리
+        }));
+    }
+
+
+    private void AfterEnemyTurn()
+    {
+        // 1. 플레이어/적 모두 상태효과 지속시간 감소
+        foreach (var player in playerParty)
+        {
+            if (player.IsAlive())
+                (player as PlayerController)?.TickStatusEffects();
+        }
+
+        foreach (var enemy in enemyParty)
+        {
+            if (enemy != null && enemy.IsAlive())
+                (enemy as Enemy)?.TickStatusEffects();
+        }
+
+        // 2. 턴 수 증가
+        turn++;
+        Debug.Log($"턴 종료 → 새로운 턴 시작: {turn}턴");
+
+        // 3. 플레이어 턴 시작
+        ExecutePlayerTurn();
     }
 
     private IEnumerator EnemyTurnCoroutine(Action onEnemyTurnComplete)

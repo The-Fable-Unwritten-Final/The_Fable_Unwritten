@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public CharacterClass ChClass{get; set;}
         //현재 캐릭터의 클래스를 가져옴.
 
-    private List<StatusEffect> activeEffects = new List<StatusEffect>();        //현재 가지고 있는 상태이상 및 버프
+    [SerializeField]private List<StatusEffect> activeEffects = new List<StatusEffect>();        //현재 가지고 있는 상태이상 및 버프
 
     private void Awake()
     {
@@ -84,8 +84,11 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// <param name="amount">데미지 량</param>
     public void TakeDamage(float amount)
     {
-        playerData.currentHP = Mathf.Max(0, playerData.currentHP - amount);
-        Debug.Log($"{playerData.CharacterName} 피해: {amount}, 현재 체력: {playerData.currentHP}");
+        float reduced = amount - ModifyStat(BuffStatType.Defense, 0f);
+        reduced = Mathf.Max(reduced, 1f);
+
+        playerData.currentHP = Mathf.Max(0, playerData.currentHP - reduced);
+        Debug.Log($"{playerData.CharacterName} 피해: {reduced}, 현재 체력: {playerData.currentHP}");
 
         if (playerData.currentHP <= 0)
         {
