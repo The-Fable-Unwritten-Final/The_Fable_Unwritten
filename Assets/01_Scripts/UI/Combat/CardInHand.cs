@@ -161,7 +161,12 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     {
         cardName.text = cardData.cardName; // 카드 이름 설정
         cardCost.text = cardData.GetEffectiveCost().ToString(); // 카드 코스트 설정
-        cardDescription.text = cardData.cardText; // 카드 설명 설정
+
+
+        var battleFlow = GameManager.Instance.turnController.battleFlow;
+        IStatusReceiver caster = battleFlow.playerParty.Find(p => p.ChClass == cardData.characterClass);
+
+        cardDescription.text = cardData.GetFormattedCardText(caster);// 카드 설명 설정
     }
     public void SetOriginalPos()// 덱 최초 세팅 시점, 카드 추가 혹은 감소시 위치 초기화.
     {

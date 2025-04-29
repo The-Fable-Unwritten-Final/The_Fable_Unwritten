@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     private Animator animator;
 
-    private List<StatusEffect> activeEffects = new List<StatusEffect>();  //현재 가지고 있는 상태이상 및 버프
+    [SerializeField]private List<StatusEffect> activeEffects = new List<StatusEffect>();  //현재 가지고 있는 상태이상 및 버프
 
     void Start()
     {
@@ -50,6 +50,22 @@ public class Enemy : MonoBehaviour, IStatusReceiver
             value = effect.value,
             duration = effect.duration
         });
+    }
+
+    /// <summary>
+    /// 턴 종료 시 버프 감소 용
+    /// </summary>
+    public void TickStatusEffects()
+    {
+        for (int i = activeEffects.Count - 1; i >= 0; i--)
+        {
+            activeEffects[i].duration--;
+            if (activeEffects[i].duration <= 0)
+            {
+                Debug.Log($"[버프 종료] {enemyData.EnemyName} 의 {activeEffects[i].statType} 효과 종료");
+                activeEffects.RemoveAt(i);
+            }
+        }
     }
 
     public void BindHpBar(HpBarDisplay bar)
@@ -123,7 +139,15 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         Debug.Log($"{enemyData.EnemyName}가 {reduced}의 피해를 받음! 현재 체력: {enemyData.CurrentHP}");
 
         if (enemyData.CurrentHP <= 0)
+        {
             Debug.Log($"{enemyData.EnemyName} 사망");
+
+            // 💡 전투 종료 체크
+            if (GameManager.Instance != null && GameManager.Instance.turnController.battleFlow != null)
+            {
+                GameManager.Instance.turnController.battleFlow.CheckBattleEnd();
+            }
+        }
     }
 
     public void CameraActionPlay()

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 [CreateAssetMenu(menuName = "Card/CardModel")]
@@ -161,4 +163,32 @@ public class CardModel : ScriptableObject
         consumesDiscountOnce = false;
     }
     public bool HasAnyDiscount() => temporaryCostModifier > 0 || persistentCostModifier > 0;
+
+    public string GetFormattedCardText(IStatusReceiver caster)
+    {
+        string result = cardText;
+
+        foreach (var effect in effects)
+        {
+            if(effect is DamageEffect damageEffect)
+            {
+                Match match = Regex.Match(result, @"(\d+)(?=의 피해)");
+
+                if (match.Success)
+                {
+                    int baseDamage = int.Parse(match.Value);
+
+                    // 2. 공격자(caster) 기준으로 예측 피해 계산
+                    float predicted = (caster != null)
+                        ? damageEffect.PredictPureDamage(caster)
+                        : baseDamage;
+
+                    // 3. "피해 숫자"만 교체
+                    result = Regex.Replace(result, @"(\d+)(?=의 피해)", ((int)predicted).ToString());
+                }
+            }
+            // 필요한 경우 atk_buff, def_buff 별도 처리 가능
+        }
+        return result;
+    }
 }
