@@ -555,6 +555,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6908468179247912569, guid: 9d992e23956946c4b84f963117157093,
+        type: 3}
+      propertyPath: autoplayTime
+      value: -1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -566,6 +571,42 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1042495136}
   m_PrefabAsset: {fileID: 0}
+--- !u!224 &1042495138 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 265950554951452871, guid: 9d992e23956946c4b84f963117157093,
+    type: 3}
+  m_PrefabInstance: {fileID: 1042495136}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &1042495139 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4455274718985677549, guid: 9d992e23956946c4b84f963117157093,
+    type: 3}
+  m_PrefabInstance: {fileID: 1042495136}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1042495140 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3823982866784797619, guid: 9d992e23956946c4b84f963117157093,
+    type: 3}
+  m_PrefabInstance: {fileID: 1042495136}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1042495141 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6336809721607040670, guid: 9d992e23956946c4b84f963117157093,
+    type: 3}
+  m_PrefabInstance: {fileID: 1042495136}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1216143320
 GameObject:
   m_ObjectHideFlags: 0
@@ -717,7 +758,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1242599005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1134,10 +1175,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 575933835}
-  blackoutImage: {fileID: 0}
-  centerText: {fileID: 0}
-  topMask: {fileID: 0}
-  bottomMask: {fileID: 0}
+  blackoutImage: {fileID: 1042495141}
+  centerText: {fileID: 1042495140}
+  topMask: {fileID: 1042495139}
+  bottomMask: {fileID: 1042495138}
   duration: 1.5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

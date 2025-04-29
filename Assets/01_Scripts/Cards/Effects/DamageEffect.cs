@@ -21,13 +21,13 @@ public class DamageEffect : CardEffectBase
     {
         if (!target.IsAlive()) return;
 
-        float attackerAtk = caster.ModifyStat(BuffStatType.Attack, amount);  // 공격력 기반 수치
-        float targetDef = target.ModifyStat(BuffStatType.Defense, 0f);       // 방어력 수치
+        // 공격자는 자신의 공격력만 고려
+        float attackerAtk = caster.ModifyStat(BuffStatType.Attack, amount);
 
-        float finalDamage = Mathf.Max(attackerAtk - targetDef, 1f); // 최소 피해량 1 보장
-        target.TakeDamage(finalDamage);
+        // target은 받은 amount에서 방어력을 적용해서 처리
+        target.TakeDamage(attackerAtk);
 
-        Debug.Log($"[피해 처리] {caster.ChClass} -> {target.ChClass} : {finalDamage} 피해 (공:{attackerAtk}, 방:{targetDef})");
+        Debug.Log($"[피해 처리] {caster.ChClass} -> {target.ChClass} : {attackerAtk} 공격력으로 타격");
     }
 
     /// <summary>
@@ -41,14 +41,22 @@ public class DamageEffect : CardEffectBase
         {
             if (target.IsAlive())
             {
+                // 공격자는 자신의 공격력만 고려
                 float attackerAtk = caster.ModifyStat(BuffStatType.Attack, amount);
-                float targetDef = target.ModifyStat(BuffStatType.Defense, 0f);
-                float finalDamage = Mathf.Max(attackerAtk - targetDef, 1f);
 
-                target.TakeDamage(finalDamage);
-                Debug.Log($"[AOE 피해] {caster.ChClass} -> {target.ChClass} : {finalDamage} 피해 (공:{attackerAtk}, 방:{targetDef})");
+                // target은 받은 amount에서 방어력을 적용해서 처리
+                target.TakeDamage(attackerAtk);
+                Debug.Log($"[AOE 피해] {caster.ChClass} -> {target.ChClass} : {attackerAtk} 피해 (공:{attackerAtk})");
             }
         }
+    }
+
+    /// <summary>
+    /// 방어력 무시하고 순수 공격자 기준의 예상 데미지 반환 (UI용)
+    /// </summary>
+    public float PredictPureDamage(IStatusReceiver caster)
+    {
+        return caster.ModifyStat(BuffStatType.Attack, amount);
     }
 
     public override string GetDescription()
