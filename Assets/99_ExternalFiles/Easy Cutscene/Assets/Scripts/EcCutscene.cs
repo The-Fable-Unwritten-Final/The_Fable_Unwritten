@@ -404,5 +404,10 @@ namespace HisaGames.Cutscene
         {
             cutsceneData = data;
         }
+
+        public void OnSkipPanelClicked()
+        {
+            EcCutsceneManager.instance.closeCutscenes();
+        }
     }
 }
