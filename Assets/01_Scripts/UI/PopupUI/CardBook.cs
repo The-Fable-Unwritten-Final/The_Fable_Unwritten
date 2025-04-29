@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CardBook : MonoBehaviour,IBookControl
 {
@@ -30,9 +31,11 @@ public class CardBook : MonoBehaviour,IBookControl
     }
     SortType sortType = SortType.Index; // 카드 정렬 타입
     [SerializeField] TextMeshProUGUI sortTypeText; // 타입 정렬 버튼의 텍스트
+    [SerializeField] Image sortTypeArrow;
     [SerializeField] string sortTypeTextString; // 타입 정렬 버튼의 기본 텍스트 (버튼 텍스트 로컬라이징 고려)
 
     [SerializeField] TextMeshProUGUI sortCostText; // 코스트 정렬 버튼의 텍스트
+    [SerializeField] Image sortCostArrow;
     [SerializeField] string sortCostTextString; // 코스트 정렬 버튼의 기본 텍스트 (버튼 텍스트 로컬라이징 고려)
 
     Dictionary<int, CardModel> cardForShopia = new();
@@ -128,7 +131,9 @@ public class CardBook : MonoBehaviour,IBookControl
         sortedList.Sort((pair1, pair2) => pair1.Key.CompareTo(pair2.Key));// key값을 index로 받았기에 key값으로 정렬.
         sortType = SortType.Index; // 정렬 타입 초기화.
         sortTypeText.text = sortTypeTextString; // 타입 정렬 텍스트 초기화.
+        SortTypeArrow(0); // 타입 정렬 화살표 비활성화
         sortCostText.text = sortCostTextString; // 코스트 정렬 텍스트 초기화.
+        SortCostArrow(0); // 코스트 정렬 화살표 비활성화
 
         return sortedList.ConvertAll(pair => pair.Value);// 딕셔너리의 value값만 list로 반환.
     }
@@ -138,15 +143,19 @@ public class CardBook : MonoBehaviour,IBookControl
         if(sortType == SortType.TypeUp) // 이미 타입 정렬이 적용 중인 경우 역순
         {
             sortType = SortType.TypeDown; // 타입 역순 정렬.
-            sortTypeText.text = sortTypeTextString + " \u25BC"; // 아래 화살표 표시
+            sortTypeText.text = sortTypeTextString + ""; // 아래 화살표 표시
+            SortTypeArrow(1); // 타입 정렬 화살표 활성화
             sortCostText.text = sortCostTextString; // 코스트 정렬 텍스트 초기화.
+            SortCostArrow(0); // 코스트 정렬 화살표 비활성화
             sortedCards.Sort((card1, card2) => card2.type.CompareTo(card1.type)); // 카드 타입으로 역순 정렬
         }
         else
         {
             sortType = SortType.TypeUp; // 타입 정렬.
-            sortTypeText.text = sortTypeTextString + " \u25B2"; // 위 화살표 표시
+            sortTypeText.text = sortTypeTextString + ""; // 위 화살표 표시
+            SortTypeArrow(2);
             sortCostText.text = sortCostTextString; // 코스트 정렬 텍스트 초기화.
+            SortCostArrow(0); // 코스트 정렬 화살표 비활성화
             sortedCards.Sort((card1, card2) => card1.type.CompareTo(card2.type)); // 카드 타입으로 정렬
         }
 
@@ -159,15 +168,19 @@ public class CardBook : MonoBehaviour,IBookControl
         if(sortType == SortType.CostUp) // 이미 기본 코스트 정렬이 적용 중인 경우 역순
         {
             sortType = SortType.CostDown; // 코스트 역순 정렬.
-            sortCostText.text = sortCostTextString + " \u25BC"; // 아래 화살표 표시
+            sortCostText.text = sortCostTextString + ""; // 아래 화살표 표시
+            SortCostArrow(1); 
             sortTypeText.text = sortTypeTextString; // 타입 정렬 텍스트 초기화.
+            SortTypeArrow(0); // 타입 정렬 화살표 비활성화
             sortedCards.Sort((card1, card2) => card2.manaCost.CompareTo(card1.manaCost)); // 카드 코스트로 역순 정렬
         }
         else
         {
             sortType = SortType.CostUp; // 코스트 정렬.
-            sortCostText.text = sortCostTextString + " \u25B2"; // 위 화살표 표시
+            sortCostText.text = sortCostTextString + ""; // 위 화살표 표시
+            SortCostArrow(2);
             sortTypeText.text = sortTypeTextString; // 타입 정렬 텍스트 초기화.
+            SortTypeArrow(0); // 타입 정렬 화살표 비활성화
             sortedCards.Sort((card1, card2) => card1.manaCost.CompareTo(card2.manaCost)); // 카드 코스트로 정렬
         }
 
@@ -240,6 +253,46 @@ public class CardBook : MonoBehaviour,IBookControl
         else
         {
             rightArrow.gameObject.SetActive(true);
+        }
+    }
+    void SortTypeArrow(int i)
+    {
+        switch (i)
+        {
+            case 0:
+                sortTypeArrow.gameObject.SetActive(false); // 기본 정렬
+                break;
+            case 1:// 아래 방향
+                sortTypeArrow.gameObject.SetActive(true); // 타입 정렬
+                sortTypeArrow.rectTransform.localRotation = Quaternion.Euler(0, 0, 0); // 타입 정렬
+                break;
+            case 2:// 위 방향
+                sortTypeArrow.gameObject.SetActive(true); // 타입 역순 정렬
+                sortTypeArrow.rectTransform.localRotation = Quaternion.Euler(0, 0, 180); // 코스트 정렬
+                break;
+            default:
+                Debug.LogError("Invalid index for SortTypeArrow: " + i);
+                break;
+        }
+    }
+    void SortCostArrow(int i)
+    {
+        switch (i)
+        {
+            case 0:
+                sortCostArrow.gameObject.SetActive(false); // 기본 정렬
+                break;
+            case 1:// 아래 방향
+                sortCostArrow.gameObject.SetActive(true); // 코스트 정렬
+                sortCostArrow.rectTransform.localRotation = Quaternion.Euler(0, 0, 0); // 타입 정렬
+                break;
+            case 2:// 위 방향
+                sortCostArrow.gameObject.SetActive(true); // 코스트 역순 정렬
+                sortCostArrow.rectTransform.localRotation = Quaternion.Euler(0, 0, 180); // 코스트 정렬
+                break;
+            default:
+                Debug.LogError("Invalid index for SortTypeArrow: " + i);
+                break;
         }
     }
 }
