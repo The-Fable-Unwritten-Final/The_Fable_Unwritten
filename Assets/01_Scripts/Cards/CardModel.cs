@@ -83,9 +83,12 @@ public class CardModel : ScriptableObject
             GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(skillEffectName, spawnPos);
         }
 
-        // 3. 피격 애니메이션
-        target.PlayHitAnimation();
-        yield return new WaitForSeconds(0.3f);
+        // 3. 피격 애니메이션: 효과가 피해 관련일 때만 실행
+        if (effects.Exists(e => e.isTriggerHitAnim))
+        {
+            target.PlayHitAnimation();
+            yield return new WaitForSeconds(0.3f);
+        }
 
         // 4. 효과 적용
         foreach (var effect in effects)

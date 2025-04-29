@@ -29,4 +29,6 @@ public abstract class CardEffectBase : ScriptableObject
     /// </summary>
     /// <returns></returns>
     public virtual bool isAOE() => false;
+
+    public virtual bool isTriggerHitAnim => false;
 }

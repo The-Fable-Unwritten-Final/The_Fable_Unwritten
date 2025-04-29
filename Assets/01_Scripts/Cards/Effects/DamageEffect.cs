@@ -63,4 +63,6 @@ public class DamageEffect : CardEffectBase
     {
         return $"적에게 {amount}의 피해를 줍니다.";
     }
+
+    public override bool isTriggerHitAnim => true;
 }
