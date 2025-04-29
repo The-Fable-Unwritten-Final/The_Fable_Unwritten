@@ -29,6 +29,8 @@ public static class CardModelFactory
 
         card.effects = effects;
 
+        card.skillEffectName = data.skillEffect;
+
         return card;
     }
 

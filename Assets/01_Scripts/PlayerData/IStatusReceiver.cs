@@ -49,5 +49,6 @@ public interface IStatusReceiver
     // 💥 애니메이션 관련 추가
     void PlayAttackAnimation();
     void PlayHitAnimation();
+    Transform CachedTransform { get; }
 
 }

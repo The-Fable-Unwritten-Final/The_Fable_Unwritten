@@ -345,4 +345,10 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         yield return new WaitForSeconds(delay);
         animator.SetBool(param, false);
     }
+
+    /// <summary>
+    /// 자신의 위치 돌려주기
+    /// </summary>
+    public Transform CachedTransform => transform;
+
 }

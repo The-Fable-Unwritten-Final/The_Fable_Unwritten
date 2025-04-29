@@ -112,7 +112,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public string CurrentStance => enemyData.currentStance.ToString();
 
-
+    public Transform CachedTransform => transform;
 
     public void TakeDamage(float amount)
     {
