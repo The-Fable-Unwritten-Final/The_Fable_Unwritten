@@ -32,6 +32,16 @@ public class UI_MainTitle : MonoBehaviour
 
     public void OnClickNewGame()
     {
+        // 플레이어 덱 초기화
+        foreach (var player in PlayerManager.Instance.activePlayers.Values)
+        {
+            player.currentDeckIndexes.Clear();
+        }
+
+        // 보유 플레이어 초기화
+        PlayerManager.Instance.activePlayers.Clear();
+
+
         // 게임 데이터 초기화 로직 추가 (DataManager 나 GameManager에 로직추가?)
         SceneManager.LoadScene(SceneNameData.StageScene);
     }

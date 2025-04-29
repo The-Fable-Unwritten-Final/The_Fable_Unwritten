@@ -44,12 +44,14 @@ public class SoundManager : MonoSingleton<SoundManager>
 
         SceneManager.sceneLoaded += OnSceneLoaded;
 
-        AttachAllButtonClickSounds();
-        SceneManager.sceneLoaded += (scene, mode) => AttachAllButtonClickSounds();
-
         // 우선 볼륨 0으로 해뒀어요
         SetBGMVolume(0);
         SetSFXVolume(0);
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;        
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -58,6 +60,8 @@ public class SoundManager : MonoSingleton<SoundManager>
         {
             PlayBGM(bgmName);
         }
+
+        AttachAllButtonClickSounds();
     }
 
     // ===== BGM =====
@@ -201,14 +205,14 @@ public class SoundManager : MonoSingleton<SoundManager>
         }
     }
 
-
+    // 크릭 버튼 소리 추가 매서드
     private void AttachAllButtonClickSounds()
     {
         Button[] buttons = FindObjectsOfType<Button>(true);
 
         foreach (var button in buttons)
         {
-            button.onClick.RemoveListener(PlayClickSFX);
+            button.onClick.RemoveListener(PlayClickSFX);  
             button.onClick.AddListener(PlayClickSFX);
         }
     }

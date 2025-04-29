@@ -83,6 +83,28 @@ public class ReadingPanel : BaseCampPanel
         currentCardIndex = selectCard.index;
         cardBook.GetComponent<CampCardBook>().Character = characterClass;
         cardBook.SetActive(true);
+
+       // 카드 중복 보유 방지 코드 (기획자분 확인 중)
+       // var player = GameManager.Instance.playerDatas
+       //.FirstOrDefault(p => p.CharacterClass == characterClass);
+
+       // if (player == null) return;
+
+       // var currentDeck = player.currentDeckIndexes; // 현재 보유 카드 인덱스들
+
+       // var bookCards = cardBook.GetComponentsInChildren<BookCards>();
+
+       // foreach (var bookCard in bookCards)
+       // {
+       //     var button = bookCard.GetComponent<Button>();
+       //     if (button == null) continue;
+
+       //     // 현재 덱에 이미 들어 있는 카드라면 클릭 불가
+       //     if (currentDeck.Contains(bookCard.cardIndex))
+       //         button.interactable = false;
+       //     else
+       //         button.interactable = true;                      
+       // }
     }
 
     public void SetChangeCardIndex(Transform selectCard)
