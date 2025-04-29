@@ -237,6 +237,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3083881295344097970}
   - {fileID: 871968025311778721}
   - {fileID: 2574665354287192974}
   - {fileID: 5375597565920296800}
@@ -445,7 +446,7 @@ MonoBehaviour:
     rotation: {x: 0, y: 0, z: 0}
     scale: {x: 2, y: 2, z: 2}
   guiPanel: {fileID: 1204323289027791744}
-  autoplayTime: 6
+  autoplayTime: 0
   characterTransitionSpeed: 35
   chatTypingDelay: 0.01
 --- !u!1 &3217836897372359841
