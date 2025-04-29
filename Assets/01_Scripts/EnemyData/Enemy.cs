@@ -123,7 +123,15 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         Debug.Log($"{enemyData.EnemyName}가 {reduced}의 피해를 받음! 현재 체력: {enemyData.CurrentHP}");
 
         if (enemyData.CurrentHP <= 0)
+        {
             Debug.Log($"{enemyData.EnemyName} 사망");
+
+            // 💡 전투 종료 체크
+            if (GameManager.Instance != null && GameManager.Instance.turnController.battleFlow != null)
+            {
+                GameManager.Instance.turnController.battleFlow.CheckBattleEnd();
+            }
+        }
     }
 
     public void CameraActionPlay()

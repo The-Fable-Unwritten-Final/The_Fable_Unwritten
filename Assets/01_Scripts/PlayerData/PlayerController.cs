@@ -84,9 +84,18 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// <param name="amount">데미지 량</param>
     public void TakeDamage(float amount)
     {
-
         playerData.currentHP = Mathf.Max(0, playerData.currentHP - amount);
         Debug.Log($"{playerData.CharacterName} 피해: {amount}, 현재 체력: {playerData.currentHP}");
+
+        if (playerData.currentHP <= 0)
+        {
+            Debug.Log($"{playerData.CharacterName} 사망");
+
+            if (GameManager.Instance != null && GameManager.Instance.turnController.battleFlow != null)
+            {
+                GameManager.Instance.turnController.battleFlow.CheckBattleEnd();
+            }
+        }
     }
 
     /// <summary>

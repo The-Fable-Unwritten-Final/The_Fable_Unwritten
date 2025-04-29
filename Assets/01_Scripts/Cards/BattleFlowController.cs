@@ -173,7 +173,7 @@ public class BattleFlowController : MonoBehaviour
         if (caster is PlayerController pc)
             pc.PrintDeckState();
 
-        CheckBattleEnd();
+
     }
 
 
@@ -251,7 +251,7 @@ public class BattleFlowController : MonoBehaviour
     }
 
 
-    private void CheckBattleEnd()
+    public void CheckBattleEnd()
     {
         bool allPlayersDead = playerParty.TrueForAll(p => !p.IsAlive());
         bool allEnemiesDead = enemyParty.TrueForAll(p => !p?.IsAlive() ?? true);
