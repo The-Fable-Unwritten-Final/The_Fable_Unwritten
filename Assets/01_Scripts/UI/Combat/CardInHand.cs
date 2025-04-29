@@ -8,7 +8,7 @@ using DG.Tweening;
 using TMPro;
 
 // 핸드에 소지하고 있는 개별 카드의 스크립트.
-public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     public CardModel cardData; // 카드 정보
     public CardDisplay cardDisplay; // 핸드내의 모든 카드들을 관리하는 중앙 스크립트. ( + UI LineRenderer가 이곳에 존재.) 
@@ -17,6 +17,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     Vector3 targetPos; // 목표 위치
     [SerializeField] CardState cardState;
     [Header("UI Info")]
+    [SerializeField] Image cardFrame;
     [SerializeField] Image cardImage; // 카드 이미지
     [SerializeField] Image cardTypeImage; // 카드 타입 이미지
     [SerializeField] Image cardCharImage; // 카드 캐릭터 이미지
@@ -31,6 +32,8 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         CanDrag,// 드래그를 통한 사용까지 가능한 상태. (코스트도 충분하고, 플레이어의 턴일때) 
         OnDrag,// 드래그 중인 상태.
         OnUse,// 카드 사용에 성공
+        CanDiscard,// 카드 버리기 선택 가능 상태. (UI에서 카드 버리기 선택 시 true로 설정됨)
+        OnDiscard,// 카드 버리기 선택된 상태.
     }
 
     private void Awake()
@@ -43,6 +46,51 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         StopAllCoroutines(); // 카드가 파괴될 때 모든 코루틴 정지
     }
 
+    public void OnPointerClick(PointerEventData eventData)// 카드 버리기 관련 상호작용 클릭
+    {
+        CardDiscardController con = GameManager.Instance.cardDiscardController;
+
+        if(cardState == CardState.CanDiscard)
+        {
+            if(con.isAll )// 전체 카드 버리기인 경우, 카드 버리기 카운트가 0 이하인 경우 리턴
+            {
+                if(con.ReqTotalCount <= 0) return;
+                else
+                {
+
+                }
+            }
+            else
+            {
+                switch (cardData.characterClass)
+                {
+                    case CharacterClass.Sophia:
+                        if (con.ReqSophiaCount <= 0) return;
+                        break;
+
+                    case CharacterClass.Kayla:
+                        if (con.ReqKylaCount <= 0) return;
+                        break;
+
+                    case CharacterClass.Leon:
+                        if (con.ReqLeonCount <= 0) return;
+                        break;
+
+                    default:
+                        Debug.LogError($"[CardInHand] 카드 클릭 시 오류 발생. 카드 이름: {cardData.cardName}");
+                        break;
+                }
+            }
+
+            con.AddDiscardCard(this);// 카드 버리기 UI에 카드 정보 전달.
+            cardFrame.color = Color.yellow; // 임시 색상 변경          
+        }
+        else if(cardState == CardState.OnDiscard)
+        {
+            con.RemoveDiscardCard(this);// 카드 버리기 UI에서 카드 정보 제거.
+            cardFrame.color = Color.white; // 임시 색상 변경
+        }
+    }
     public void OnPointerEnter(PointerEventData eventData)
     {
         if(cardState == CardState.None) return; // 상태가 None인 경우 상호작용 불가능

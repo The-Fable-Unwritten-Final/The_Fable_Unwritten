@@ -52,7 +52,7 @@ public class TurnController : MonoBehaviour
     private void Start()
     {
         OnStartPlayerTurn += battleFlow.ExecutePlayerTurn;
-        OnEndPlayerTurn += battleFlow.EndPlayerTurn;
+        //OnEndPlayerTurn += battleFlow.EndPlayerTurn; // 카드 자동 버리기 제거.
         //OnGameEnd += () => battleFlow.ForceEndBattle(true); // 기본 처리, 필요시 수정
 
         StartCoroutine(AtStartGame()); // 게임 시작 후 1초 후에 플레이어 턴으로
@@ -144,6 +144,8 @@ public class TurnController : MonoBehaviour
     }
     public void AtPlayerTurn()// 턴 종료 버튼을 눌러서 EndPlayerTurn으로 진입
     {
+        // 카드 초과 체크하고 초과시 카드 버리기 요청.
+        if (!GameManager.Instance.cardDiscardController.CheckCountOk()) return; // 만약 카드수량이 초과시 return.
         SetTurnState(TurnState.EndPlayerTurn); // 플레이어 턴 종료
     }
     IEnumerator AtEndPlayerTurn()

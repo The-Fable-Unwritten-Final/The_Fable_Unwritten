@@ -17,6 +17,7 @@ public class BattleFlowController : MonoBehaviour
     [SerializeField] private List<Enemy> enemyObjects;
     [SerializeField] private GameObject playerPrefab; // 사용하지 않지만 호환성을 위해 유지
     [SerializeField] private StageMoveTest StageMove;
+    [SerializeField] public EffectManager effectManage;
 
     [Header("UI")]
     public TextMeshProUGUI Mana;

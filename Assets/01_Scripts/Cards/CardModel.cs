@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using static ReduceNextCardCostEffect;
 
 
 [CreateAssetMenu(menuName = "Card/CardModel")]
@@ -40,6 +38,9 @@ public class CardModel : ScriptableObject
     [Header("Card Effects")]
     public List<CardEffectBase> effects = new();    //어떤 효과를 가졌는지
 
+    [Header("Skill Effect")]
+    public string skillEffectName;   // 스킬 이펙트 이름
+
     public bool isUnlocked = true;              //카드가 해금 되었는지
 
 
@@ -73,8 +74,12 @@ public class CardModel : ScriptableObject
         caster.PlayAttackAnimation();
         yield return new WaitForSeconds(0.5f); // 애니메이션 길이에 맞게 조정
 
-        // 2. (선택) 스킬 이펙트 재생
-        // yield return PlaySkillEffect(caster, target);
+        // 2. 스킬 이펙트 재생
+        if (!string.IsNullOrEmpty(skillEffectName))
+        {
+            Vector3 spawnPos = (target != null) ? target.CachedTransform.position : caster.CachedTransform.position;
+            GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(skillEffectName, spawnPos);
+        }
 
         // 3. 피격 애니메이션
         target.PlayHitAnimation();

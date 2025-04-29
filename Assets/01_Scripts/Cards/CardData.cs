@@ -29,4 +29,5 @@ public class CardData           //csv 인덱스에 따라 데이터를 받아오
     public string characterStance;     // 요구 자세
     public string description;         // 조건부 효과 또는 부가 설명
     public string flavorText;           //플레이버 텍스트 받기;
+    public string skillEffect;          //스킬 적용시 재생할 이펙트
 }
