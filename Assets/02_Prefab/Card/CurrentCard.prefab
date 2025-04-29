@@ -131,7 +131,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 1632128745849163349}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -159,6 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9903f70ab04434d4abd2b0d9df323efb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardIndex: 0
   cardIllust: {fileID: 5607324534466996471}
   cardType: {fileID: 3893083000124834637}
   cardChar: {fileID: 5068911403032463280}
@@ -288,8 +289,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 6
-  m_fontSizeBase: 6
+  m_fontSize: 5
+  m_fontSizeBase: 5
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
