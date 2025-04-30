@@ -1,0 +1,99 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class TestCustomWindow : EditorWindow
+{
+    [MenuItem("Tools/Player Test Window")]
+    public static void ShowWindow()
+    {
+        GetWindow<TestCustomWindow>("Tester");
+    }
+
+    private void OnGUI()
+    {
+        GUILayout.Label("테스트 유닛 추가", EditorStyles.boldLabel);
+        EditorGUILayout.BeginVertical("box");
+        if (GUILayout.Button("전체 추가"))
+        {
+            TryAddPlayer(CharacterClass.Leon, "LeonPlayer");
+            TryAddPlayer(CharacterClass.Sophia, "SopiaPlayer");
+            TryAddPlayer(CharacterClass.Kayla, "KaylaPlayer");
+        }
+        GUILayout.Space(8);
+        if (GUILayout.Button("레온 추가"))
+        {
+            TryAddPlayer(CharacterClass.Leon, "LeonPlayer");
+        }
+        if (GUILayout.Button("소피아 추가"))
+        {
+            TryAddPlayer(CharacterClass.Sophia, "SopiaPlayer");
+        }
+        if (GUILayout.Button("카일라 추가"))
+        {
+            TryAddPlayer(CharacterClass.Kayla, "KaylaPlayer");
+        }
+        EditorGUILayout.EndVertical();
+
+
+
+        GUILayout.Space(20);
+
+
+
+        GUILayout.Label("스테이지 클리어 / 실패 즉시 실행", EditorStyles.boldLabel);
+        EditorGUILayout.BeginVertical("box");
+        if(GUILayout.Button("스테이지 클리어"))
+        {
+            var setting = GameManager.Instance.StageSetting;
+            setting.RetryFromStart = false;
+            setting.StageCleared = true;
+
+            // 1 스테이지 클리어 후, 실패 시 2스테이지부터 시작하게 설정
+            if (setting.StageIndex == 1)
+            {
+                var lasVisitde = setting.VisitedNodes.Last();
+                var lasColum = setting.SavedStageData.columns[^1];
+
+                if (lasColum.Contains(lasVisitde))
+                {
+                    setting.MinStageIndex = 2;
+                }
+            }
+
+            if (setting.CurrentBattleNode.type == NodeType.EliteBattle)
+            {
+                setting.EliteClear(setting.CurrentTheme);
+            }
+
+            SceneManager.LoadScene("StageScene");
+        }
+        if (GUILayout.Button("스테이지 실패"))
+        {
+            GameManager.Instance.StageSetting.RetryFromStart = true;
+            GameManager.Instance.StageSetting.ClearStageState();
+
+            // 최소 시작 스테이지부터 재시작 (1 또는 2)
+            GameManager.Instance.StageSetting.StageIndex = GameManager.Instance.StageSetting.MinStageIndex;
+
+            SceneManager.LoadScene("TitleScene");
+        }
+        EditorGUILayout.EndVertical();
+    }
+
+    private void TryAddPlayer(CharacterClass chClass, string name)
+    {
+        var playerDatas = GameManager.Instance.playerDatas;
+        var targetData = playerDatas.Find(p => p.CharacterClass == chClass);
+        if (targetData == null) return;
+
+        PlayerManager.Instance.AddPlayerDuringGame(
+            targetData,
+            CardSystemInitializer.Instance.loadedCards
+        );
+    }
+
+}
