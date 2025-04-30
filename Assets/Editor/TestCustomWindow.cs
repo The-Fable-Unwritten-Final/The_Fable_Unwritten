@@ -39,9 +39,7 @@ public class TestCustomWindow : EditorWindow
         EditorGUILayout.EndVertical();
 
 
-
         GUILayout.Space(20);
-
 
 
         GUILayout.Label("스테이지 클리어 / 실패 즉시 실행", EditorStyles.boldLabel);
@@ -82,6 +80,35 @@ public class TestCustomWindow : EditorWindow
             SceneManager.LoadScene("TitleScene");
         }
         EditorGUILayout.EndVertical();
+
+
+        GUILayout.Space(20);
+
+
+        GUILayout.Label("전투 관련 기능", EditorStyles.boldLabel);
+        var turnController = GameManager.Instance?.turnController;
+        var battleFlow = turnController?.battleFlow;
+
+
+        EditorGUILayout.BeginHorizontal(); // 한 줄로 배치
+        if(battleFlow == null) // 전투 씬 입장 전, 예외처리.
+        {
+            EditorGUILayout.HelpBox("현재 씬에 전투 컨트롤러가 없습니다.", MessageType.Info);
+        }
+        else
+        {
+            GUILayout.Label("    현재 마나:  ", GUILayout.Width(70));
+            GUILayout.Label(GameManager.Instance.turnController.battleFlow.currentMana.ToString(), GUILayout.Width(20));
+
+            if (GUILayout.Button("+ 5 마나", GUILayout.Width(70)))
+            {
+                battleFlow.currentMana += 5;
+                battleFlow.Mana.text = battleFlow.currentMana.ToString();
+                EditorUtility.SetDirty(battleFlow);
+            }
+        }
+        EditorGUILayout.EndHorizontal();
+
     }
 
     private void TryAddPlayer(CharacterClass chClass, string name)
