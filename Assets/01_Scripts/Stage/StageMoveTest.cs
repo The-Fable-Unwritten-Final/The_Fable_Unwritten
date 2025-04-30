@@ -29,6 +29,8 @@ public class StageMoveTest : MonoBehaviour
             setting.EliteClear(setting.CurrentTheme);
         }
 
+
+
         SceneManager.LoadScene("StageScene");
     }
 
@@ -42,5 +44,15 @@ public class StageMoveTest : MonoBehaviour
         GameManager.Instance.StageSetting.StageIndex = GameManager.Instance.StageSetting.MinStageIndex;
 
         SceneManager.LoadScene("TitleScene");
+    }
+
+    private void CheckFinalStage()
+    {
+        if (GameManager.Instance.StageSetting.StageIndex == 4 && 
+            GameManager.Instance.StageSetting.CurrentBattleNode.type == NodeType.Boss)
+        {
+            SceneManager.LoadScene("StageScene");
+        }
+        
     }
 }
