@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using static CombatLightingController;
 
 /// <summary>
 /// EnemySpawn 관리자
@@ -24,7 +25,9 @@ public class EnemySpawner : MonoBehaviour
 
         //backGround.sprite = GameManager.Instance.GetBackgroundForStage(stageIndex);
 
+        // 백그라운드 & 조명 설정
         background.GetComponent<MeshRenderer>().material.SetTexture("_BaseMap", GameManager.Instance.GetBackgroundForStage(stageIndex).texture);
+        GameManager.Instance.CombatLightingController.SetLighting((LightingState)(stageIndex - 1));
 
         stageSpawnDatas = GameManager.Instance.GetSpawnData(theme, node.type);      
 
