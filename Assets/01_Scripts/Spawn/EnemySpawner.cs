@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +10,8 @@ using UnityEngine.UI;
 /// </summary>
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] Image backGround; // stage별 백그라운드 설정
+    //[SerializeField] Image backGround; // stage별 백그라운드 설정
+    [SerializeField] GameObject background;
     [SerializeField] private Transform[] enemySlots;                    // 몬스터 생성 위치
     [SerializeField] private List<EnemyStageSpawnData> stageSpawnDatas; // 각스테이지 스폰데이터 저장 공간
     [SerializeField] private EnemyDataContainer enemyDataContainer;     // 몬스터 프리팹 저장 공간
@@ -20,7 +22,9 @@ public class EnemySpawner : MonoBehaviour
         var theme = GameManager.Instance.StageSetting.CurrentTheme;
         var node = GameManager.Instance.StageSetting.CurrentBattleNode;
 
-        backGround.sprite = GameManager.Instance.GetBackgroundForStage(stageIndex);
+        //backGround.sprite = GameManager.Instance.GetBackgroundForStage(stageIndex);
+
+        background.GetComponent<MeshRenderer>().material.SetTexture("_BaseMap", GameManager.Instance.GetBackgroundForStage(stageIndex).texture);
 
         stageSpawnDatas = GameManager.Instance.GetSpawnData(theme, node.type);      
 
