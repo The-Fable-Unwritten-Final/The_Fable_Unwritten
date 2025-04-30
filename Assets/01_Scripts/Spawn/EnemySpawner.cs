@@ -109,6 +109,7 @@ public class EnemySpawner : MonoBehaviour
                         spriteRenderer.sprite = copydata.enemyImage;
                         enemy.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
                     }
+                    //enemy.UpdateHpBarFollowTarget();
 
                     enemyParty.Add(enemy as IStatusReceiver);
                     continue;

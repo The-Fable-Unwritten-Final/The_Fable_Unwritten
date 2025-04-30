@@ -35,7 +35,6 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
         if (hpBarDisplay != null){
             hpBarDisplay.BindEnemyData(enemyData);
-            hpBarDisplay.FollowTarget(GetComponent<SpriteRenderer>());
         }
     }
 
@@ -177,6 +176,17 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     {
         maxHP = enemyData.MaxHP;
         currentHP = enemyData.CurrentHP;
+    }
+
+    //HP바 위치 조절용
+    public void UpdateHpBarFollowTarget()
+    {
+        if (hpBarDisplay != null)
+        {
+            var sr = GetComponent<SpriteRenderer>();
+            if (sr != null)
+                hpBarDisplay.FollowTarget(sr);
+        }
     }
 
     public void PlayAttackAnimation()
