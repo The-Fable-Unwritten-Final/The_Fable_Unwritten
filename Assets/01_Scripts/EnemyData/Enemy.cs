@@ -142,6 +142,8 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         {
             Debug.Log($"{enemyData.EnemyName} 사망");
 
+            gameObject.SetActive(false); // ▶ 사망 시 비활성화
+
             // 💡 전투 종료 체크
             if (GameManager.Instance != null && GameManager.Instance.turnController.battleFlow != null)
             {

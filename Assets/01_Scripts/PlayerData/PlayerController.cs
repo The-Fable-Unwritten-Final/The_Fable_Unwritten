@@ -94,6 +94,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         {
             Debug.Log($"{playerData.CharacterName} 사망");
 
+            gameObject.SetActive(false); // ▶ 사망 시 비활성화
+
             if (GameManager.Instance != null && GameManager.Instance.turnController.battleFlow != null)
             {
                 GameManager.Instance.turnController.battleFlow.CheckBattleEnd();
