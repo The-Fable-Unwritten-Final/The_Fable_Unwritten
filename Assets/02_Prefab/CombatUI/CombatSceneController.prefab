@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 406684924489802602}
   - component: {fileID: 6036770042426981051}
   - component: {fileID: 9019229718022954933}
+  - component: {fileID: 1294180902310897565}
   m_Layer: 0
   m_Name: CombatSceneController
   m_TagString: Untagged
@@ -104,4 +105,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   discardDisplay: {fileID: 0}
+  discardInfoText: {fileID: 0}
   cardDisplay: {fileID: 0}
+  isAll: 0
+--- !u!114 &1294180902310897565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146143868957835463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18013bca6471e548b8c66204e651b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
