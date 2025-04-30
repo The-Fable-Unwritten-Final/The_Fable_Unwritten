@@ -62,13 +62,21 @@ public static class EnemyPattern
         yield return new WaitForSeconds(0.3f);
 
         // 5. 타겟에게 데미지 및 추가 효과 적용
+
+        enemyComponent.PlayAttackAnimation();
+        yield return new WaitForSeconds(0.3f);
+
         foreach (var t in targets)
         {
+            t.PlayHitAnimation();
+            yield return new WaitForSeconds(0.2f); // 피격 애니메이션 여유
+
             t.TakeDamage(skill.damage);
             ApplyStatusEffect(t, actData);
+
             Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (데미지 {skill.damage})");
 
-            yield return new WaitForSeconds(0.4f); // 타격 연출용 대기
+            yield return new WaitForSeconds(0.3f); // 타격 연출용 대기
         }
     }
 

@@ -205,11 +205,25 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public void PlayAttackAnimation()
     {
-
+        if (animator != null)
+        {
+            animator.SetBool("Attack", true);
+            GameManager.Instance.StartCoroutine(ResetBool("Attack", 1f));
+        }
     }
 
     public void PlayHitAnimation()
     {
+        if (animator != null)
+        {
+            animator.SetBool("Hit", true);
+            GameManager.Instance.StartCoroutine(ResetBool("Hit", 1f));
+        }
+    }
 
+    private IEnumerator ResetBool(string param, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        animator.SetBool(param, false);
     }
 }
