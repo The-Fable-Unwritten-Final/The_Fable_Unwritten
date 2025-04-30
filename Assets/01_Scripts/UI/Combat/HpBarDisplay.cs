@@ -8,9 +8,16 @@ public class HpBarDisplay : MonoBehaviour
     [Header("References")]
     [SerializeField] private Image hpBar;
 
+    [Header("Follow Settings")]
+    [SerializeField] private Vector3 offset = new Vector3(0, -0.6f, 0); // 스프라이트 아래 위치
+    [SerializeField] private float widthRatio = 1f; // 스프라이트 너비 비율 조절
+
     private Coroutine changeHpCoroutine;
     private PlayerData linkedPlayerData;
     private EnemyData linkedEnemyData;
+
+    private Transform targetTransform;
+    private SpriteRenderer targetRenderer;
 
     // 플레이어 데이터 연결
     public void BindPlayerData(PlayerData data)
@@ -82,5 +89,26 @@ public class HpBarDisplay : MonoBehaviour
         }
 
         hpBar.fillAmount = targetFill;
+    }
+
+    // 🔹 SpriteRenderer 기준 위치/크기 추적
+    public void FollowTarget(SpriteRenderer spriteRenderer)
+    {
+        targetTransform = spriteRenderer.transform;
+        targetRenderer = spriteRenderer;
+    }
+
+    void LateUpdate()
+    {
+        if (targetTransform == null || targetRenderer == null)
+            return;
+
+        // 위치: 아래 offset
+        transform.position = targetTransform.position + offset;
+
+        // 너비: 스프라이트 실제 크기 반영
+        float spriteWidth = targetRenderer.bounds.size.x;
+        RectTransform rt = GetComponent<RectTransform>();
+        rt.sizeDelta = new Vector2(spriteWidth * widthRatio, rt.sizeDelta.y);
     }
 }

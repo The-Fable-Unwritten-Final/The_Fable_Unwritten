@@ -33,8 +33,10 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         if (enemyData.animationController != null && animator != null)
             animator.runtimeAnimatorController = enemyData.animationController;
 
-        if (hpBarDisplay != null)
+        if (hpBarDisplay != null){
             hpBarDisplay.BindEnemyData(enemyData);
+            hpBarDisplay.FollowTarget(GetComponent<SpriteRenderer>());
+        }
     }
 
     /// <summary>

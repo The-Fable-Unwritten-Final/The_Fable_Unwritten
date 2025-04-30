@@ -47,6 +47,8 @@ public static class EnemyDataGenerator
                 data.ATKValue = parsed.damage0;
                 data.DEFValue = parsed.defBuff;
                 data.currentStance = EnemyData.StancValue.EStancType.Middle;
+                data.illust = parsed.art;
+                data.LoadIllust();
 
                 // 스킬 설정
                 data.ClearSkills();
@@ -63,6 +65,7 @@ public static class EnemyDataGenerator
                     EditorUtility.SetDirty(data);
                 }
             }
+
         }
 
         AssetDatabase.SaveAssets();
