@@ -14,6 +14,20 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     [SerializeField]private List<StatusEffect> activeEffects = new List<StatusEffect>();  //현재 가지고 있는 상태이상 및 버프
 
+    private void Awake()
+    {
+
+        animator = GetComponent<Animator>();
+
+        if (enemyData != null && enemyData.animationController != null)
+        {
+            animator.runtimeAnimatorController = enemyData.animationController;
+        }
+        else
+        {
+            Debug.LogWarning($"[{name}] PlayerData 또는 AnimationController가 누락되었습니다.");
+        }
+    }
     void Start()
     {
         

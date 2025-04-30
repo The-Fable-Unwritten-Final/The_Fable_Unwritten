@@ -102,14 +102,6 @@ public class EnemySpawner : MonoBehaviour
                     enemy.SetData(copydata);
                     slot.gameObject.SetActive(true);
 
-                    // 스프라이트 렌더러에 이미지 적용
-                    var spriteRenderer = enemy.GetComponent<SpriteRenderer>();
-                    if (spriteRenderer != null && copydata.enemyImage != null)
-                    {
-                        spriteRenderer.sprite = copydata.enemyImage;
-                        enemy.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
-                    }
-                    //enemy.UpdateHpBarFollowTarget();
 
                     enemyParty.Add(enemy as IStatusReceiver);
                     continue;

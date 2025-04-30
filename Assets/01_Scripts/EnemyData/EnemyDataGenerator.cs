@@ -48,7 +48,7 @@ public static class EnemyDataGenerator
                 data.DEFValue = parsed.defBuff;
                 data.currentStance = EnemyData.StancValue.EStancType.Middle;
                 data.illust = parsed.art;
-                data.LoadIllust();
+                data.animationController = FindAnimatorController(parsed.art);
 
                 // 스킬 설정
                 data.ClearSkills();
@@ -154,5 +154,17 @@ public static class EnemyDataGenerator
         EditorUtility.SetDirty(container);
         AssetDatabase.SaveAssets();
         Debug.Log($"[EnemyDataContainer] 총 {allEnemies.Count}개 EnemyData 등록 완료");
+    }
+
+    private static RuntimeAnimatorController FindAnimatorController(string illustName)
+    {
+        if (string.IsNullOrEmpty(illustName)) return null;
+
+        string[] guids = AssetDatabase.FindAssets($"{illustName} t:AnimatorController", new[] { "Assets/04_Animation/Enemy" });
+
+        if (guids.Length == 0) return null;
+
+        string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+        return AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(path);
     }
 }
