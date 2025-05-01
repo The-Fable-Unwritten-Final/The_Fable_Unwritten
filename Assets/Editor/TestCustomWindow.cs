@@ -73,6 +73,7 @@ public class TestCustomWindow : EditorWindow
         {
             GameManager.Instance.StageSetting.RetryFromStart = true;
             GameManager.Instance.StageSetting.ClearStageState();
+            GameManager.Instance.gameStartType = GameStartType.New;
 
             // 최소 시작 스테이지부터 재시작 (1 또는 2)
             GameManager.Instance.StageSetting.StageIndex = GameManager.Instance.StageSetting.MinStageIndex;

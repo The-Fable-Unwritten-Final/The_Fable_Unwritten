@@ -67,7 +67,7 @@ public class BattleFlowController : MonoBehaviour
                 continue;
             }
 
-            targetSlot.Setup(data);
+            //targetSlot.Setup(data);
             playerParty.Add(targetSlot);
         }
     }
@@ -248,16 +248,26 @@ public class BattleFlowController : MonoBehaviour
 
     private IEnumerator EnemyTurnCoroutine(Action onEnemyTurnComplete)
     {
-        foreach (var enemy in enemyParty)
+        var currentEnemies = new List<IStatusReceiver>(enemyParty); // 복사본
+
+        foreach (var enemy in currentEnemies)
         {
             if (enemy == null || !enemy.IsAlive()) continue;
 
-            yield return EnemyPattern.ExecutePattern(enemy); // 애니메이션 포함
-            yield return new WaitForSeconds(0.5f); // 적 한 명당 텀
+            yield return EnemyPattern.ExecutePattern(enemy);
+            yield return new WaitForSeconds(0.5f);
+            CheckBattleEnd();
         }
-        //배틀 종료 확인
-        CheckBattleEnd();
-        onEnemyTurnComplete?.Invoke(); // 적 행동 끝났다고 알림
+
+        // 사망자 제거 (원본 리스트 정리)
+        for (int i = enemyParty.Count - 1; i >= 0; i--)
+        {
+            var enemy = enemyParty[i];
+            if (enemy == null || !enemy.IsAlive())
+                enemyParty.RemoveAt(i);
+        }
+
+        onEnemyTurnComplete?.Invoke();
     }
 
 
@@ -289,6 +299,7 @@ public class BattleFlowController : MonoBehaviour
             Debug.Log("▶ 전투 패배");
             isWin = -1;
             enemyParty.Clear();
+            StopAllCoroutines();
             GameManager.Instance.turnController.ToGameEnd();
         }
         else if (allEnemiesDead)
@@ -297,6 +308,7 @@ public class BattleFlowController : MonoBehaviour
             Debug.Log("▶ 전투 승리");
             isWin = 1;
             enemyParty.Clear();
+            StopAllCoroutines();
             GameManager.Instance.turnController.ToGameEnd();
         }
     }

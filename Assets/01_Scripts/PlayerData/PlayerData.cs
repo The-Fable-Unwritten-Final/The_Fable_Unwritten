@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 
@@ -105,6 +106,17 @@ public class PlayerData : ScriptableObject
             if (card != null)
                 currentDeck.Add(card);
         }
+    }
+    //체력 초기화 용
+    public void ResetHPToMax()
+    {
+        currentHP = MaxHP;
+    }
+    //부활 용
+    public void ReviveIfDead()
+    {
+        if (currentHP <= 0)
+            currentHP = 1;
     }
 
     public void GoToDefaultDeck()

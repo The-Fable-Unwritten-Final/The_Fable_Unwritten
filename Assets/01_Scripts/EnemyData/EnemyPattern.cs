@@ -48,15 +48,6 @@ public static class EnemyPattern
             yield break;
         }
 
-        // 4. 스킬 발동 (애니메이션 자리)
-        // Animator anim = enemyComponent.GetComponent<Animator>();
-        // if (anim != null)
-        // {
-        //     anim.SetTrigger($"Skill{skill.skillIndex}");
-        // }
-        yield return new WaitForSeconds(1.5f); // 애니메이션 대체용 시간
-
-
         // 4. 타겟 선택
         var targets = ChooseTargetsFromActData(actData, enemyComponent);
         yield return new WaitForSeconds(0.3f);

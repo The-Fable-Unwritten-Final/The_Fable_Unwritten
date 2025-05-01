@@ -141,3 +141,9 @@ public class PlayerManager : MonoSingleton<PlayerManager>
     }
 
 }
+
+public enum GameStartType
+{
+    New,
+    Respawn
+}
