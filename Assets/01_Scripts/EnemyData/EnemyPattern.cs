@@ -68,9 +68,18 @@ public static class EnemyPattern
 
         foreach (var t in targets)
         {
+            // 1. 피격 애니메이션 재생
             t.PlayHitAnimation();
-            yield return new WaitForSeconds(0.2f); // 피격 애니메이션 여유
+            yield return new WaitForSeconds(0.2f);
 
+            string effectname = enemyComponent.enemyData.skillEffect;
+            // 2. 스킬 이펙트 재생
+            if (!string.IsNullOrEmpty(effectname))
+            {
+                Vector3 spawnPos = (t != null) ? t.CachedTransform.position : t.CachedTransform.position;
+                GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(effectname, spawnPos);
+            }
+            // 3. 피격 데미지 적용
             t.TakeDamage(skill.damage);
             ApplyStatusEffect(t, actData);
 

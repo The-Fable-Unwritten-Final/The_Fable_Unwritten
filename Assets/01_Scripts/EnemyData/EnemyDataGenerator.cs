@@ -49,6 +49,9 @@ public static class EnemyDataGenerator
                 data.currentStance = EnemyData.StancValue.EStancType.Middle;
                 data.illust = parsed.art;
                 data.animationController = FindAnimatorController(parsed.art);
+                data.skillEffect = parsed.skillEffect;
+                data.hpScale = parsed.hpScale;
+                data.damageScale = parsed.damageScale;
 
                 // 스킬 설정
                 data.ClearSkills();
