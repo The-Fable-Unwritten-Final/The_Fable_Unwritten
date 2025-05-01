@@ -28,27 +28,34 @@ public static class EnemyCSVParser
                 {
                     id = ParseInt(t, 0),
                     enemyName = ParseString(t, 1),
-                    hp = ParseInt(t, 2),
-                    art = ParseString(t, 3),
-                    atkBuff = ParseFloat(t, 4),
-                    defBuff = ParseFloat(t, 5),
-                    block = !string.IsNullOrWhiteSpace(t[6]),
-                    blind = !string.IsNullOrWhiteSpace(t[7]),
-                    stun = !string.IsNullOrWhiteSpace(t[8]),
-                    skill0 = ParseInt(t, 9),
-                    damage0 = ParseInt(t, 10),
-                    percentage0 = ParseFloat(t, 11),
-                    skill1 = ParseInt(t, 12),
-                    damage1 = ParseInt(t, 13),
-                    percentage1 = ParseFloat(t, 14),
-                    skill2 = ParseInt(t, 15),
-                    damage2 = ParseInt(t, 16),
-                    percentage2 = ParseFloat(t, 17),
-                    topPercentage = ParseFloat(t, 18),
-                    middlePercentage = ParseFloat(t, 19),
-                    bottomPercentage = ParseFloat(t, 20),
-                    loot = ParseString(t, 21),
-                    note = ParseString(t, 22)
+                    art = ParseString(t, 2),
+                    hp = ParseInt(t, 3),
+                    hpScale = ParseFloat(t, 4),
+                    damageScale = ParseFloat(t, 5),
+                    skillEffect = ParseString(t, 6),
+
+                    skill0 = ParseInt(t, 7),
+                    damage0 = ParseInt(t, 8),
+                    percentage0 = ParseFloat(t, 9),
+
+                    skill1 = ParseInt(t, 10),
+                    damage1 = ParseInt(t, 11),
+                    percentage1 = ParseFloat(t, 12),
+
+                    skill2 = ParseInt(t, 13),
+                    damage2 = ParseInt(t, 14),
+                    percentage2 = ParseFloat(t, 15),
+
+                    topPercentage = ParseFloat(t, 16),
+                    middlePercentage = ParseFloat(t, 17),
+                    bottomPercentage = ParseFloat(t, 18),
+
+                    atkBuff = ParseFloat(t, 19),
+                    defBuff = ParseFloat(t, 20),
+
+                    block = !string.IsNullOrWhiteSpace(t[21]),
+                    blind = !string.IsNullOrWhiteSpace(t[22]),
+                    stun = !string.IsNullOrWhiteSpace(t[23]),
                 };
 
                 list.Add(data);
