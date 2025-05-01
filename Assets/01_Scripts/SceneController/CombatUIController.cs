@@ -18,6 +18,8 @@ public class CombatUIController : MonoBehaviour
         // 구독 순서 설정을 위해 cardDisplay의 메서드를 이곳에서 구독.
         CardStatusUpdate += cardDisplay.SetCardCanDrag; // 카드 상태 업데이트(CanDrag 체킹을 위함)
         CardStatusUpdate += cardDisplay.AllCardInfoUpdate; // 카드 상태 업데이트(코스트, 설명(효과 수치) 업데이트)
+        CardStatusUpdate += cardDisplay.RemoveDeadCharacterCards;   //사망자 카드 상태 업데이트
+
         GameManager.Instance.turnController.OnPlayerTurn += CardStatusUpdate;// 카드 상태 업데이트(CanDrag 체킹을 위함)
         GameManager.Instance.turnController.OnEnemyTurn += CardStatusUpdate;// 카드 상태 업데이트(CanDrag 체킹을 위함)
     }
@@ -72,6 +74,6 @@ public class CombatUIController : MonoBehaviour
 
         // 핸드에서 제거하고 사용 덱에 추가
         caster.Deck.Discard(card);
-        CardStatusUpdate?.Invoke(); // 상태 갱신
+        //CardStatusUpdate?.Invoke(); // 상태 갱신
     }
 }

@@ -321,4 +321,21 @@ public class CardDisplay : MonoBehaviour
         }
         return 0; // 카드가 리스트에 없을 경우 0 반환
     }
+    /// <summary>
+    /// 사망자 카드 삭제 처리
+    /// </summary>
+    public void RemoveDeadCharacterCards()
+    {
+        foreach (var card in new List<CardInHand>(cardsInHand))
+        {
+            var caster = GameManager.Instance.turnController.battleFlow.GetCharacter(card.cardData.characterClass);
+            if (caster == null || !caster.IsAlive())
+            {
+                GameManager.Instance.combatUIController.ThrowCard(card.cardData);
+                cardsInHand.Remove(card);
+                Destroy(card.gameObject);
+            }
+        }
+        CardArrange();
+    }
 }
