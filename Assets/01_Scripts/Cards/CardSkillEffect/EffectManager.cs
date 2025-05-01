@@ -13,7 +13,7 @@ public class EffectManager : MonoBehaviour
     /// <summary>
     /// 특정 이펙트를 위치에 재생
     /// </summary>
-    public void PlayEffect(string effectName, Vector3 position)
+    public void PlayEffect(string effectName, Vector3 position, bool flipX = false)
     {
         if (spriteLoader == null)
         {
@@ -30,6 +30,6 @@ public class EffectManager : MonoBehaviour
 
         var effectInstance = Instantiate(effectPrefab, effectRoot);
         effectInstance.transform.position = position;
-        effectInstance.Play(frames, 15f); // 15fps 고정
+        effectInstance.Play(frames, 15f, flipX); // 15fps 고정
     }
 }

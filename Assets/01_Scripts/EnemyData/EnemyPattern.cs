@@ -68,7 +68,7 @@ public static class EnemyPattern
             if (!string.IsNullOrEmpty(effectname))
             {
                 Vector3 spawnPos = (t != null) ? t.CachedTransform.position : t.CachedTransform.position;
-                GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(effectname, spawnPos);
+                GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(effectname, spawnPos, true);
             }
             // 3. 피격 데미지 적용
             t.TakeDamage(skill.damage);

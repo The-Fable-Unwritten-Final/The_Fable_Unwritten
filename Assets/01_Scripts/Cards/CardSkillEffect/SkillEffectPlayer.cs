@@ -17,7 +17,7 @@ public class SkillEffectPlayer : MonoBehaviour
     /// </summary>
     /// <param name="animationFrames">재생할 스프라이트 리스트</param>
     /// <param name="fps">초당 프레임 수</param>
-    public void Play(List<Sprite> animationFrames, float fps)
+    public void Play(List<Sprite> animationFrames, float fps, bool flipX = false)
     {
         if (animationFrames == null || animationFrames.Count == 0)
         {
@@ -27,6 +27,7 @@ public class SkillEffectPlayer : MonoBehaviour
         }
 
         frames = animationFrames;
+        spriteRenderer.flipX = flipX; // ← 방향 반영
         StartCoroutine(PlayCoroutine(fps));
     }
 
