@@ -204,15 +204,14 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         data.LoadDeckFromIndexes(CardSystemInitializer.Instance.loadedCards);
         deckModel.Initialize(data.currentDeck);
-        
-        // 체력 1 강제 (죽은 상태로 시작 방지)
-        if (playerData.currentHP <= 0)
-            playerData.currentHP = 1;
 
+        if (!IsAlive())
+            playerData.ReviveIfDead();
 
         if (hpBarDisplay != null)
             hpBarDisplay.BindPlayerData(playerData);
     }
+
 
 
     public void ChangeStance(PlayerData.StancType newStance) //StancUI 함수
@@ -357,7 +356,11 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     private IEnumerator ResetBool(string param, float delay)
     {
         yield return new WaitForSeconds(delay);
-        animator.SetBool(param, false);
+        // 오브젝트가 살아있을 때만 실행
+        if (this != null && animator != null)
+        {
+            animator.SetBool(param, false);
+        }
     }
 
     /// <summary>

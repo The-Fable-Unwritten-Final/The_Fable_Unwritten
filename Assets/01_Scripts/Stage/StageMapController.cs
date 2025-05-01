@@ -25,6 +25,7 @@ public class StageMapController : MonoBehaviour
     {
         var stageSetting = GameManager.Instance.StageSetting;
 
+        GameManager.Instance.InitializePlayerHPByGameType();
 
         if (!TryRestoreStage())
         {

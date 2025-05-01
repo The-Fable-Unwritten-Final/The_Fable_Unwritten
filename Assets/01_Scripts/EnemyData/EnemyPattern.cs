@@ -48,15 +48,6 @@ public static class EnemyPattern
             yield break;
         }
 
-        // 4. 스킬 발동 (애니메이션 자리)
-        // Animator anim = enemyComponent.GetComponent<Animator>();
-        // if (anim != null)
-        // {
-        //     anim.SetTrigger($"Skill{skill.skillIndex}");
-        // }
-        yield return new WaitForSeconds(1.5f); // 애니메이션 대체용 시간
-
-
         // 4. 타겟 선택
         var targets = ChooseTargetsFromActData(actData, enemyComponent);
         yield return new WaitForSeconds(0.3f);
@@ -68,9 +59,18 @@ public static class EnemyPattern
 
         foreach (var t in targets)
         {
+            // 1. 피격 애니메이션 재생
             t.PlayHitAnimation();
-            yield return new WaitForSeconds(0.2f); // 피격 애니메이션 여유
+            yield return new WaitForSeconds(0.2f);
 
+            string effectname = enemyComponent.enemyData.skillEffect;
+            // 2. 스킬 이펙트 재생
+            if (!string.IsNullOrEmpty(effectname))
+            {
+                Vector3 spawnPos = (t != null) ? t.CachedTransform.position : t.CachedTransform.position;
+                GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(effectname, spawnPos);
+            }
+            // 3. 피격 데미지 적용
             t.TakeDamage(skill.damage);
             ApplyStatusEffect(t, actData);
 

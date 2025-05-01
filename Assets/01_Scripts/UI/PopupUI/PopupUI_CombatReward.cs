@@ -56,6 +56,7 @@ public class PopupUI_CombatReward : BasePopupUI
 
                 // 최소 시작 스테이지부터 재시작 (1 또는 2)
                 GameManager.Instance.StageSetting.StageIndex = GameManager.Instance.StageSetting.MinStageIndex;
+                GameManager.Instance.gameStartType = GameStartType.New;
 
                 SceneManager.LoadScene("TitleScene");
                 gameObject.SetActive(false);

@@ -76,6 +76,11 @@ public class EnemyData : ScriptableObject
 
     public RuntimeAnimatorController animationController;
 
+    public string skillEffect;
+
+    public float hpScale;
+    public float damageScale;
+
 
 
     // 스킬 추가

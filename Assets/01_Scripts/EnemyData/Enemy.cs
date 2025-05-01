@@ -224,6 +224,11 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     private IEnumerator ResetBool(string param, float delay)
     {
         yield return new WaitForSeconds(delay);
-        animator.SetBool(param, false);
+
+        // 오브젝트가 살아있을 때만 실행
+        if (this != null && animator != null)
+        {
+            animator.SetBool(param, false);
+        }
     }
 }

@@ -5,6 +5,9 @@ public class GameManager : MonoSingleton<GameManager>
 {
     public List<PlayerData> playerDatas = new();  //  보유중인 케릭터 데이터
 
+    public GameStartType gameStartType = GameStartType.New;
+
+
     public StageSetttingController StageSetting { get; private set; }
     private PlayerPartySO playerParty;
 
@@ -31,6 +34,27 @@ public class GameManager : MonoSingleton<GameManager>
         playerDatas = new List<PlayerData>(playerParty.allPlayers);
     }
 
+    public void InitializePlayerHPByGameType()
+    {
+        switch (gameStartType)
+        {
+            case GameStartType.New:
+                foreach (var data in playerDatas)
+                    data.ResetHPToMax();
+                gameStartType = GameStartType.Respawn;
+                break;
+
+            case GameStartType.Respawn:
+                foreach (var data in playerDatas)
+                {
+                    if (data.currentHP <= 0)
+                        data.currentHP = 1;
+                    // 살아있다면 유지
+                }
+                break;
+        }
+    }
+
     private void LoadPlayerPartyIfNull()
     {
         if (playerParty == null)
@@ -38,30 +62,6 @@ public class GameManager : MonoSingleton<GameManager>
             playerParty = Resources.Load<PlayerPartySO>("PlayerPartyData");
             if (playerParty == null)
                 Debug.LogError("[GameManager] PlayerPartySO 리소스를 찾을 수 없습니다.");
-        }
-    }
-
-    /// <summary>
-    /// 카드 시스템 및 플레이어 매니저 초기화 (게임 시작 시 1회)
-    /// </summary>
-    public void InitializeGame(List<PlayerController> playerControllers)
-    {
-        CardSystemInitializer.Instance.LoadCardDatabase();
-
-        PlayerManager.Instance.RegisterAndSetupPlayers(
-            playerDatas,
-            CardSystemInitializer.Instance.loadedCards
-        );
-
-        // 전투 초기화 및 턴 컨트롤러 시작
-        if (turnController != null && turnController.battleFlow != null)
-        {
-            turnController.battleFlow.ReceivePlayerParty(PlayerManager.Instance.GetAllPlayers());
-            //turnController.StartBattleFlow();
-        }
-        else
-        {
-            Debug.LogWarning("[GameManager] TurnController가 연결되지 않았습니다.");
         }
     }
 

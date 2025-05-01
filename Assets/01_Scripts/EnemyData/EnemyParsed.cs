@@ -4,13 +4,10 @@ public class EnemyParsed
     public string enemyName;
     public int hp;
     public string art;
+    public float hpScale;
+    public float damageScale;
 
-    public float atkBuff;
-    public float defBuff;
-
-    public bool block;
-    public bool blind;
-    public bool stun;
+    public string skillEffect;
 
     public int skill0;
     public int damage0;
@@ -30,4 +27,11 @@ public class EnemyParsed
 
     public string loot;
     public string note;
+
+    public float atkBuff;
+    public float defBuff;
+
+    public bool block;
+    public bool blind;
+    public bool stun;
 }

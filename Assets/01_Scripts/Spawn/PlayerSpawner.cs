@@ -25,13 +25,12 @@ public class PlayerSpawner : MonoBehaviour
             // PlayerManager의 activePlayers에 해당 캐릭터가 있는지 확인
             if (PlayerManager.Instance.activePlayers.TryGetValue(characterClass, out var playerData))
             {                
-
                 controller.Setup(playerData);
             }
             else
             {
                 slot.gameObject.SetActive(false);
             }
-        }
+        }   
     }
 }
