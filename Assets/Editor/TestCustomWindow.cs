@@ -90,6 +90,17 @@ public class TestCustomWindow : EditorWindow
         var turnController = GameManager.Instance?.turnController;
         var battleFlow = turnController?.battleFlow;
 
+        if (GUILayout.Button("전체 체력 회복"))
+        {
+            foreach (var player in GameManager.Instance.playerDatas)
+            {
+                player.currentHP = player.MaxHP;
+            }
+        }
+
+
+        GUILayout.Space(20);
+
 
         EditorGUILayout.BeginHorizontal(); // 한 줄로 배치
         if(battleFlow == null) // 전투 씬 입장 전, 예외처리.
