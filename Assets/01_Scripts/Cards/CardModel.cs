@@ -13,14 +13,16 @@ public class CardModel : ScriptableObject
     public string cardName;                 //카드 이름
     public string cardText;                 // 카드 설명 필드 추가 (CSV의 text 대응)
     public string FlavorText;               // 카드의 배경적 설명
-    public bool isOneUse = false;           //일회성 카드인지 확인
-    public bool isMaintain = true;          //한턴 유지 카드인지 확인
+    public bool isOneUse { get; set; }           //일회성 카드인지 확인
+    public bool isMaintain { get; set; }          //한턴 유지 카드인지 확인
 
     [Header("Core Cost")]
     public int manaCost;                    //카드 코스트
-    public int temporaryCostModifier = 0;       //할인 값 확인용
-    public int persistentCostModifier = 0;
-    public bool consumesDiscountOnce = false;
+    private int temporaryCostModifier;       //할인 값 확인용
+    private int persistentCostModifier = 0;
+    private bool consumesDiscountOnce = false;
+
+    public bool ConsumesDiscountOnce { get => consumesDiscountOnce; }
 
     [Header("Card Meta")]
     public CharacterClass characterClass;   //누구의 카드인지

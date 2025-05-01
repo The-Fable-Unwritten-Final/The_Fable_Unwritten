@@ -151,7 +151,7 @@ public class BattleFlowController : MonoBehaviour
 
         Debug.Log($"{caster.ChClass} 가 {card.cardName} 사용 → {target.ChClass}, cost : {actualCost}");
         
-        if (card.consumesDiscountOnce)
+        if (card.ConsumesDiscountOnce)
         {
             foreach (var player in playerParty)
             {

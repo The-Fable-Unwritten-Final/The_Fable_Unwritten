@@ -17,9 +17,11 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private List<EnemyStageSpawnData> stageSpawnDatas; // 각스테이지 스폰데이터 저장 공간
     [SerializeField] private EnemyDataContainer enemyDataContainer;     // 몬스터 프리팹 저장 공간
 
+    int stageIndex;
+    
     private void Start()
     {
-        var stageIndex = GameManager.Instance.StageSetting.StageIndex;
+        stageIndex = GameManager.Instance.StageSetting.StageIndex;
         var theme = GameManager.Instance.StageSetting.CurrentTheme;
         var node = GameManager.Instance.StageSetting.CurrentBattleNode;
 
@@ -71,7 +73,6 @@ public class EnemySpawner : MonoBehaviour
     /// </summary>
     private void ApplyEnemyDataToSlots(EnemySpawnSet selectedSet)
     {
-
         var enemyParty = GameManager.Instance.turnController.battleFlow.enemyParty;
         
         // slot 맵핑
@@ -97,7 +98,8 @@ public class EnemySpawner : MonoBehaviour
                 if (enemy != null && origndata != null)
                 {
                     var copydata = ScriptableObject.Instantiate(origndata);
-                    copydata.SkillList = origndata.SkillList;
+                    copydata.SkillList = origndata.SkillList.Select(skill => skill.Clone()).ToList();
+                    copydata.UpgradeEnemybyStage(stageIndex);
 
                     enemy.SetData(copydata);
                     slot.gameObject.SetActive(true);

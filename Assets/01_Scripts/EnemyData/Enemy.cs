@@ -38,8 +38,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     {
         enemyData = data;
 
-        if (enemyData.CurrentHP <= 0)
-            enemyData.CurrentHP = enemyData.MaxHP;
+        enemyData.CurrentHP = enemyData.MaxHP;
 
         if (animator == null)
             animator = GetComponent<Animator>();

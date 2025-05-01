@@ -13,7 +13,7 @@ public class EnemyData : ScriptableObject
 
     [SerializeField] private string enemyName;
     public string EnemyName { get => enemyName; set => enemyName = value; }
-
+    
     [SerializeField] private float maxHP;
     public float MaxHP
     {
@@ -92,4 +92,19 @@ public class EnemyData : ScriptableObject
 
     // 스킬 모두 삭제
     public void ClearSkills() => skillList.Clear();
+
+    /// <summary>
+    /// 스테이지에 따라 체력 및 스킬 공격력 변화 함수.
+    /// </summary>
+    /// <param name="stage"></param>
+    public void UpgradeEnemybyStage(int stage)
+    {                                           //현재 코드가 원래의 enemydata를 그대로 사용하는 것이 아니라 복제 후 사용하는 것이기 때문에 본래 데이터를 가지고 사용하지 않도록 만들었다.
+        MaxHP = MaxHP * (1 + (stage - 1) * hpScale);
+
+        foreach(var skill in skillList)
+        {
+            skill.damage = skill.damage * (1 + (stage - 1) * damageScale);
+        }
+
+    }
 }
