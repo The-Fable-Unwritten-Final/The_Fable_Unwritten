@@ -83,7 +83,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
             if (!string.IsNullOrEmpty(triggerKey))
             {
                 noteToSceneIDMap[triggerKey] = data.index;
-                Debug.Log($"[Trigger] 등록됨: {triggerKey} → {data.index}");
+                //Debug.Log($"[Trigger] 등록됨: {triggerKey} → {data.index}");
             }
         }
     }

@@ -113,5 +113,17 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
             set.Add(log.type);
         return new List<CardType>(set);
     }
+
+    /// <summary>
+    /// 현재 턴 사용 카드 타입을 돌려주는 함수
+    /// </summary>
+    /// <returns></returns>
+    public List<CardType> GetCurrentTurnCardTypes()
+    {
+        var set = new HashSet<CardType>();
+        foreach (var log in UsedCardsForCurrent)
+            set.Add(log.type);
+        return new List<CardType>(set);
+    }
 }
 

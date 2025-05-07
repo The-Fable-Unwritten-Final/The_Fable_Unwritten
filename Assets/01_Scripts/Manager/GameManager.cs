@@ -28,8 +28,12 @@ public class GameManager : MonoSingleton<GameManager>
 
         // 추후 데이터매니저? 이동 가능성 있음
         CardSystemInitializer.Instance.LoadCardDatabase();
+
+#if UNITY_EDITOR
         EnemySkillInitializer.ImportAndGenerate();
         EnemyInitializer.ImportAndGenerate();
+#endif
+
         LoadPlayerPartyIfNull(); // <- 플레이어 데이터 가져오기
         playerDatas = new List<PlayerData>(playerParty.allPlayers);
     }
