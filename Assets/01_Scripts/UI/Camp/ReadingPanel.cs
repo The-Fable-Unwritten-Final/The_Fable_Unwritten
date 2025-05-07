@@ -123,7 +123,8 @@ public class ReadingPanel : BaseCampPanel
                 player.currentDeckIndexes[targetIndex] = chageCardIndex;
                 Debug.Log($"[Card Swap] {currentCardIndex} → {chageCardIndex}로 교체 완료");
 
-                StartCoroutine(FadeExit());
+                changeCardPanel.SetActive(false);
+                cardBook.SetActive(false);
             }
         }
     }
