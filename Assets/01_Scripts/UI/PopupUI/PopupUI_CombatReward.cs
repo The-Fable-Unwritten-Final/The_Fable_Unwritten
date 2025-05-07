@@ -22,7 +22,7 @@ public class PopupUI_CombatReward : BasePopupUI
             confirmButton.onClick.RemoveAllListeners();
             confirmButton.onClick.AddListener(() =>
             {
-                var setting = GameManager.Instance.StageSetting;
+                var setting = ProgressDataManager.Instance;
                 setting.RetryFromStart = false;
                 setting.StageCleared = true;
 
@@ -51,11 +51,11 @@ public class PopupUI_CombatReward : BasePopupUI
             confirmButton.onClick.RemoveAllListeners();
             confirmButton.onClick.AddListener(() =>
             {
-                GameManager.Instance.StageSetting.RetryFromStart = true;
-                GameManager.Instance.StageSetting.ClearStageState();
+                ProgressDataManager.Instance.RetryFromStart = true;
+                ProgressDataManager.Instance.ClearStageState();
 
                 // 최소 시작 스테이지부터 재시작 (1 또는 2)
-                GameManager.Instance.StageSetting.StageIndex = GameManager.Instance.StageSetting.MinStageIndex;
+                ProgressDataManager.Instance.StageIndex = ProgressDataManager.Instance.MinStageIndex;
                 GameManager.Instance.gameStartType = GameStartType.New;
 
                 SceneManager.LoadScene("TitleScene");

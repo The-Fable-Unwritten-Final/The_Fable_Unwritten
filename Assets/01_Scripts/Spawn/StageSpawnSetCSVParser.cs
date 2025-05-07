@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class StageSpawnSetCSVParser : MonoBehaviour
+public class StageSpawnSetCSVParser
 {
     [Header("CSV 파일 (Resources 폴더 하위 경로)")]
     public static string csvPath = "ExternalFiles/StageDataTest"; // Resources 폴더 기준
 
-    public static List<EnemyStageSpawnData> LoadFromCSV()
+    public static List<EnemyStageSpawnData> LoadEnemySpawnSet()
     {
         TextAsset csvFile = Resources.Load<TextAsset>(csvPath);
         if (csvFile == null)
@@ -85,7 +85,7 @@ public class StageSpawnSetCSVParser : MonoBehaviour
             result.Add(data);
         }
 
-        Debug.Log($"CSV 로드 완료: {result.Count}개의 EnemyStageSpawnData 생성됨");
+        //Debug.Log($"CSV 로드 완료: {result.Count}개의 EnemyStageSpawnData 생성됨");
         return result;
     }
 }

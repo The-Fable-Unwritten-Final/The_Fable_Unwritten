@@ -176,14 +176,14 @@ public class StageMapRenderer : MonoBehaviour
             case NodeType.Camp:
                 return campIcon;
             case NodeType.Boss:
-                return GetBossIcon(GameManager.Instance.StageSetting.StageIndex);
+                return GetBossIcon(ProgressDataManager.Instance.StageIndex);
             default: return null;
         }
     }
 
     private Sprite GetBossIcon(int stageIndex)
     {
-        var theme = GameManager.Instance.StageSetting.CurrentTheme;
+        var theme = ProgressDataManager.Instance.CurrentTheme;
 
         if (stageIndex == 5) return bossStageIcons.ElementAtOrDefault(3); // 보스스테이지 4번째 아이콘 가져오기
 

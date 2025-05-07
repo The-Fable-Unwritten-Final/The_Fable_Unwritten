@@ -46,7 +46,7 @@ public class TestCustomWindow : EditorWindow
         EditorGUILayout.BeginVertical("box");
         if(GUILayout.Button("스테이지 클리어"))
         {
-            var setting = GameManager.Instance.StageSetting;
+            var setting = ProgressDataManager.Instance;
             setting.RetryFromStart = false;
             setting.StageCleared = true;
 
@@ -71,12 +71,13 @@ public class TestCustomWindow : EditorWindow
         }
         if (GUILayout.Button("스테이지 실패"))
         {
-            GameManager.Instance.StageSetting.RetryFromStart = true;
-            GameManager.Instance.StageSetting.ClearStageState();
+            var setting = ProgressDataManager.Instance;
+            setting.RetryFromStart = true;
+            setting.ClearStageState();
             GameManager.Instance.gameStartType = GameStartType.New;
 
             // 최소 시작 스테이지부터 재시작 (1 또는 2)
-            GameManager.Instance.StageSetting.StageIndex = GameManager.Instance.StageSetting.MinStageIndex;
+            setting.StageIndex = setting.MinStageIndex;
 
             SceneManager.LoadScene("TitleScene");
         }

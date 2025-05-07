@@ -136,7 +136,7 @@ public class UI_PlayerInfo : MonoBehaviour
 
     private void SetEndingBadge()
     {
-        var stageSetting = GameManager.Instance.StageSetting;
+        var stageSetting = ProgressDataManager.Instance;
 
         courageBadge.SetActive(stageSetting.IsEliteClear(StageTheme.Courage));
         loveBadge.SetActive(stageSetting.IsEliteClear(StageTheme.Love));

@@ -8,7 +8,6 @@ public class GameManager : MonoSingleton<GameManager>
     public GameStartType gameStartType = GameStartType.New;
 
 
-    public StageSetttingController StageSetting { get; private set; }
     private PlayerPartySO playerParty;
 
     [Header("Controller")]
@@ -22,9 +21,6 @@ public class GameManager : MonoSingleton<GameManager>
     protected override void Awake()
     {
         base.Awake();
-
-        StageSetting = new StageSetttingController();
-        StageSetting.Initialize();
 
         // 추후 데이터매니저? 이동 가능성 있음
         CardSystemInitializer.Instance.LoadCardDatabase();
@@ -108,22 +104,5 @@ public class GameManager : MonoSingleton<GameManager>
     public void UnregisterCombatLightingController()
     {
         CombatLightingController = null;
-    }
-
-
-    public Sprite GetBackgroundForStage(int stageIndex)
-    {
-        return StageSetting.GetBackground(stageIndex);
-    }
-
-    public RandomEventData GetRandomEvent()
-    {
-        var theme = StageSetting.CurrentTheme;
-        return StageSetting.GetRandomEvent(theme);
-    }
-
-    public List<EnemyStageSpawnData> GetSpawnData(StageTheme theme, NodeType type)
-    {
-        return StageSetting.GetEnemySpawnData(theme, type);
     }
 }

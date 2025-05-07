@@ -24,7 +24,7 @@ public class UI_CampController : MonoBehaviour
     // 스테이지에 따른 백그라운드 설정
     private void SetBackGround()
     {
-        int stageIndex = GameManager.Instance.StageSetting.StageIndex;
+        int stageIndex = ProgressDataManager.Instance.StageIndex;
 
         if (stageIndex >= 2 && stageIndex <= 4)
         {

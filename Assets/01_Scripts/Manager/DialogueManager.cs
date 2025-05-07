@@ -119,7 +119,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
         }
 
         var data = JsonCutsceneLoader.Convert(dialogueDatabase[dialogueID]);
-        int stageIndex = GameManager.Instance.StageSetting.StageIndex;
+        int stageIndex = ProgressDataManager.Instance.StageIndex;
         SetCutsceneBackground(stageIndex); // sprite 설정만
 
         // 컷씬 및 배경 활성화
@@ -278,7 +278,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
     {
         if (backgroundImage == null) return;
 
-        var bg = GameManager.Instance.StageSetting.GetBackground(stageIndex);
+        var bg = DataManager.Instance.GetBackground(stageIndex);
 
         if (bg != null)
             backgroundImage.sprite = bg;
