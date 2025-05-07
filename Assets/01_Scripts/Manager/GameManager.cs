@@ -111,19 +111,19 @@ public class GameManager : MonoSingleton<GameManager>
     }
 
 
-    public Sprite GetBackgroundForStage(int stageIndex)
-    {
-        return StageSetting.GetBackground(stageIndex);
-    }
+    //public Sprite GetBackgroundForStage(int stageIndex)
+    //{
+    //    return StageSetting.GetBackground(stageIndex);
+    //}
 
-    public RandomEventData GetRandomEvent()
-    {
-        var theme = StageSetting.CurrentTheme;
-        return StageSetting.GetRandomEvent(theme);
-    }
+    //public RandomEventData GetRandomEvent()
+    //{
+    //    var theme = StageSetting.CurrentTheme;
+    //    return StageSetting.GetRandomEvent(theme);
+    //}
 
-    public List<EnemyStageSpawnData> GetSpawnData(StageTheme theme, NodeType type)
-    {
-        return StageSetting.GetEnemySpawnData(theme, type);
-    }
+    //public List<EnemyStageSpawnData> GetSpawnData(StageTheme theme, NodeType type)
+    //{
+    //    return StageSetting.GetEnemySpawnData(theme, type);
+    //}
 }

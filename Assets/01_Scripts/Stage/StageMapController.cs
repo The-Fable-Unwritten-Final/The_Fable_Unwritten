@@ -23,7 +23,7 @@ public class StageMapController : MonoBehaviour
 
     private void Start()
     {
-        var stageSetting = GameManager.Instance.StageSetting;
+        var stageSetting = ProgressDataManager.Instance;
 
         GameManager.Instance.InitializePlayerHPByGameType();
 
@@ -32,7 +32,7 @@ public class StageMapController : MonoBehaviour
             var theme = stageSetting.GetThemeForStage(stageSetting.StageIndex);
             stageSetting.SetTheme(theme);
 
-            Debug.Log($"[StageMapController] StageIndex = {GameManager.Instance.StageSetting.StageIndex}, Theme = {theme}");
+            Debug.Log($"[StageMapController] StageIndex = {ProgressDataManager.Instance.StageIndex}, Theme = {theme}");
 
             LoadStage(stageSetting.StageIndex);
 
@@ -41,14 +41,13 @@ public class StageMapController : MonoBehaviour
         }
 
         int stageIndex = stageSetting.StageIndex;
-        backGround.sprite = GameManager.Instance.GetBackgroundForStage(stageIndex);
+        backGround.sprite = DataManager.Instance.GetBackground(stageIndex);
     }
 
     // 저장된 상태가 있다면 복원 시도
     private bool TryRestoreStage()
     {
-        var gm = GameManager.Instance;
-        var stageSetting = gm.StageSetting;
+        var stageSetting = ProgressDataManager.Instance;
 
         if (stageSetting.SavedStageData != null && !stageSetting.RetryFromStart)
         {
@@ -96,11 +95,11 @@ public class StageMapController : MonoBehaviour
     {
         visitedNodes.Add(clicked);
 
-        var gm = GameManager.Instance;
-        gm.StageSetting.SaveStageState(stageData, visitedNodes);
-        gm.StageSetting.SetCurrentBattleNode(clicked);
+        var pdm = ProgressDataManager.Instance;
+        pdm.SaveStageState(stageData, visitedNodes);
+        pdm.SetCurrentBattleNode(clicked);
 
-        int stageIndex = gm.StageSetting.StageIndex;
+        int stageIndex = pdm.StageIndex;
         int columnIndex = clicked.columnIndex;
 
         if (stageIndex == 1 && (clicked.type == NodeType.NormalBattle))
@@ -120,7 +119,7 @@ public class StageMapController : MonoBehaviour
                     break;
             }
 
-            var playerData = gm.playerDatas.FirstOrDefault(p => p.CharacterClass == charToAdd);
+            var playerData = GameManager.Instance.playerDatas.FirstOrDefault(p => p.CharacterClass == charToAdd);
             if (playerData != null)
             {
                 PlayerManager.Instance.AddPlayerDuringGame(playerData, CardSystemInitializer.Instance.loadedCards);
@@ -148,7 +147,7 @@ public class StageMapController : MonoBehaviour
         if (IsLastColumnNode(clicked))
         {
             // 마지막 열(보스노드)의 경우 스테이지 증가
-            gm.StageSetting.StageIndex++;
+            pdm.StageIndex++;
         }
         else
         {

@@ -14,18 +14,30 @@ public class DataManager : MonoSingleton<DataManager>
     public IReadOnlyList<DiaryData>[] DiaryGroups => diaryGroups; // 외부에서 읽기 전용으로 접근 가능
 
     // 카드북 카드 데이터
-    private Dictionary<int, CardModel> cardForShopia = new();
-    private Dictionary<int, CardModel> cardForKayla = new();
-    private Dictionary<int, CardModel> cardForLeon = new();
+    private Dictionary<int, CardModel> cardForShopia;
+    private Dictionary<int, CardModel> cardForKayla;
+    private Dictionary<int, CardModel> cardForLeon;
 
     public IReadOnlyDictionary<int, CardModel> CardForShopia => cardForShopia; // 외부에서 읽기 전용으로 접근 가능
     public IReadOnlyDictionary<int, CardModel> CardForKayla => cardForKayla; // 외부에서 읽기 전용으로 접근 가능
     public IReadOnlyDictionary<int, CardModel> CardForLeon => cardForLeon; // 외부에서 읽기 전용으로 접근 가능
 
+    // 스테이지 데이터
+    private List<EnemyStageSpawnData> enemySpawnData;
+
+    // 랜덤 이벤트 데이터
+    public List<RandomEventData> allRandomEvents { get; set;}
+
+    // 백그라운드 이미지 데이터
+    private Dictionary<int, Sprite> stageBackgrounds;
+
     protected override void Awake()
     {
         base.Awake();
         InitDiaryDictionary();
+        enemySpawnData = StageSpawnSetCSVParser.LoadEnemySpawnSet() ?? new();
+        allRandomEvents = RandomEventJsonLoader.LoadAllEvents() ?? new();
+        stageBackgrounds = BackgoundLoader.LoadBackgrounds() ?? new();
         //InitCardBookDictionary();
     }
     private void Start()
@@ -85,5 +97,28 @@ public class DataManager : MonoSingleton<DataManager>
                 cardForLeon.Add(card.index, card);
             }
         }
+    }
+
+    /// <summary>
+    /// 특정 스테이지 및 노드타입에 해당하는 적 배치 데이터 리스트 반환
+    /// </summary>
+
+    public List<EnemyStageSpawnData> GetEnemySpawnData(StageTheme theme, NodeType type)
+    {
+        var result = enemySpawnData
+        .Where(x => x.theme == theme && x.type == type)
+        .ToList();
+
+        Debug.Log($"[StageSettingController] 스폰 데이터 검색: Theme={theme}, Type={type}, 결과={result.Count}개");
+
+        return result;
+    }
+
+    /// <summary>
+    /// 특정 스테이지에 해당하는 배경 이미지 반환
+    /// </summary>
+    public Sprite GetBackground(int stageIndex)
+    {
+        return stageBackgrounds.TryGetValue(stageIndex, out var sprite) ? sprite : null;
     }
 }

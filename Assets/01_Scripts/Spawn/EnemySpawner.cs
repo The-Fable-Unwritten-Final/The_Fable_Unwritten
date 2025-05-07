@@ -21,22 +21,21 @@ public class EnemySpawner : MonoBehaviour
     
     private void Start()
     {
-        stageIndex = GameManager.Instance.StageSetting.StageIndex;
-        var theme = GameManager.Instance.StageSetting.CurrentTheme;
-        var node = GameManager.Instance.StageSetting.CurrentBattleNode;
+        stageIndex = ProgressDataManager.Instance.StageIndex;
+        var theme = ProgressDataManager.Instance.CurrentTheme;
+        var node = ProgressDataManager.Instance.CurrentBattleNode;
 
         //backGround.sprite = GameManager.Instance.GetBackgroundForStage(stageIndex);
 
         // 백그라운드 & 조명 설정
-        background.GetComponent<MeshRenderer>().material.SetTexture("_BaseMap", GameManager.Instance.GetBackgroundForStage(stageIndex).texture);
+        background.GetComponent<MeshRenderer>().material.SetTexture("_BaseMap", DataManager.Instance.GetBackground(stageIndex).texture);
         GameManager.Instance.CombatLightingController.SetLighting((LightingState)(stageIndex - 1));
 
-        stageSpawnDatas = GameManager.Instance.GetSpawnData(theme, node.type);      
+        stageSpawnDatas = DataManager.Instance.GetEnemySpawnData(theme, node.type);      
 
         var stageData = stageSpawnDatas.FirstOrDefault();
 
-        Debug.Log($"{theme} 테마 입니다.");
-        Debug.Log($"{stageData}  입니다.");
+        //Debug.Log($"{theme} 테마 입니다.");
 
         if (stageData == null) return;
 
@@ -53,7 +52,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void FixedStage1Setting(EnemyStageSpawnData stageData)
     {
-        int columnIndex = GameManager.Instance.StageSetting.VisitedNodes.Last().columnIndex;
+        int columnIndex = ProgressDataManager.Instance.VisitedNodes.Last().columnIndex;
         int index = columnIndex - 1;
 
         if (index < 0 || index >= stageData.spawnSets.Count) return;

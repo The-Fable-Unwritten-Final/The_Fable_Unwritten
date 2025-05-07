@@ -41,18 +41,13 @@ public class UI_RandomEvent : MonoBehaviour
 
     private void GetCurrentEvent()
     {
-        int currentStageIndex = GameManager.Instance.StageSetting.StageIndex;
+        var pdm = ProgressDataManager.Instance; 
+        int currentStageIndex = pdm.StageIndex;
+        currentData = pdm.GetRandomEvent(pdm.CurrentTheme);
 
-        currentData = GameManager.Instance.GetRandomEvent();
+        if (currentData == null) return;
 
-
-        if (currentData == null)
-        {
-            Debug.LogWarning($"스테이지 {currentStageIndex}에 사용 가능한 이벤트가 없습니다.");
-            return;
-        }
-
-        backGround.sprite = GameManager.Instance.GetBackgroundForStage(currentStageIndex);
+        backGround.sprite = DataManager.Instance.GetBackground(currentStageIndex);
     }
 
     private void InitUI(RandomEventData data)
