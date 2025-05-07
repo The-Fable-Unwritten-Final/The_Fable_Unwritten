@@ -48,6 +48,13 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 
             if (targetCutscene == null)
                 Debug.LogError("[DialogueManager] targetCutscene 연결 실패 (비활성화 포함 탐색 실패)");
+            else
+                targetCutscene.gameObject.SetActive(false);
+        }
+        if (backgroundImage != null)
+        {
+            backgroundImage.enabled = false;
+            backgroundImage.gameObject.SetActive(false);
         }
     }
 
@@ -113,7 +120,14 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 
         var data = JsonCutsceneLoader.Convert(dialogueDatabase[dialogueID]);
         int stageIndex = GameManager.Instance.StageSetting.StageIndex;
-        SetCutsceneBackground(stageIndex);
+        SetCutsceneBackground(stageIndex); // sprite 설정만
+
+        // 컷씬 및 배경 활성화
+        if (backgroundImage != null)
+        {
+            backgroundImage.enabled = true;
+            backgroundImage.gameObject.SetActive(true);
+        }
 
         isPlaying = true;
         targetCutscene.gameObject.SetActive(true);
@@ -142,7 +156,10 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 
         // 추가: 배경도 함께 꺼줌
         if (backgroundImage != null)
+        {   
             backgroundImage.enabled = false;
+            backgroundImage.gameObject.SetActive(false);
+        }
 
         CutsceneEffectPlayer.Instance?.ClearAll();
 
@@ -259,13 +276,13 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 
     private void SetCutsceneBackground(int stageIndex)
     {
+        if (backgroundImage == null) return;
+
         var bg = GameManager.Instance.StageSetting.GetBackground(stageIndex);
-        if (backgroundImage != null)
-        {
-            backgroundImage.sprite = bg;
-            backgroundImage.enabled = (bg != null);
-            backgroundImage.gameObject.SetActive(bg != null);
-        }
+        
+        //  스프라이트는 유지하되, 평소엔 꺼둠
+        backgroundImage.enabled = false;
+        backgroundImage.gameObject.SetActive(false);
     }
 
 }
