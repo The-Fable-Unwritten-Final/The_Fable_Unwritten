@@ -8,7 +8,7 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
     [SerializeField] string csvPath = "ExternalFiles/EventEffects.csv"; // CSV 파일 경로
 
     //[Header("Event effect Lists")]
-    List<EventEffects> eventEffectList;// 이벤트 효과 SO 리스트.
+    List<EventEffects> eventEffectList;// 이벤트 효과 리스트.
 
     // 액션 처럼 사용할 효과들 List
     List<EventEffects> untillNextCombat = new List<EventEffects>(); // 다음 전투까지 지속되는 효과 리스트
@@ -118,6 +118,7 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
         }
 
         untillNextCombat.Clear();
+        ProgressDataManager.Instance.UpdateEventEffectsData(untillNextCombat, untillNextStage, untillEndAdventure);
     }
     /// <summary>
     /// "다음 스테이지까지 지속되는 효과"를 실행합니다.
@@ -139,6 +140,7 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
             untillNextStage[i].UnApply(); // 효과 해제 메서드 호출
         }
         untillNextStage.Clear();
+        ProgressDataManager.Instance.UpdateEventEffectsData(untillNextCombat, untillNextStage, untillEndAdventure);
     }
     /// <summary>
     /// "모험이 끝날 때까지 지속되는 효과"를 실행합니다.
@@ -160,6 +162,7 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
             untillEndAdventure[i].UnApply(); // 효과 해제 메서드 호출
         }
         untillEndAdventure.Clear();
+        ProgressDataManager.Instance.UpdateEventEffectsData(untillNextCombat, untillNextStage, untillEndAdventure);
     }
 
 
@@ -182,7 +185,10 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
                 untillEndAdventure.Add(effect);
                 break;
         }
+
+        ProgressDataManager.Instance.UpdateEventEffectsData(untillNextCombat,untillNextStage,untillEndAdventure); // 현재 적용중인 효과 리스트들 저장 및 관리.
     }
+
 
     public string GetEventEffectText(int index)
     {
