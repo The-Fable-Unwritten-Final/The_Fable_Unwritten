@@ -37,7 +37,7 @@ public class StageMapController : MonoBehaviour
             LoadStage(stageSetting.StageIndex);
 
             // 기획자 요청으로 대화씬 스킵
-            //DialogueManager.Instance.OnStageStart(stageSetting.StageIndex); // 대화 호출
+            DialogueManager.Instance.OnStageStart(stageSetting.StageIndex); // 대화 호출
         }
 
         int stageIndex = stageSetting.StageIndex;
