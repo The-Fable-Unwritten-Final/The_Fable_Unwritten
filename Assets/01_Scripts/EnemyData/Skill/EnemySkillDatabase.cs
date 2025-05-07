@@ -6,7 +6,6 @@ using UnityEngine;
 /// </summary>
 public class EnemySkillDatabase : MonoSingleton<EnemySkillDatabase>
 {
-
     // 인스펙터에서 연결된 스킬 ScriptableObject 목록
     [SerializeField]
     public List<EnemyAct> skillList;

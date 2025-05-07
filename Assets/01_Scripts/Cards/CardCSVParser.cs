@@ -8,13 +8,15 @@ public static class CardCSVParser           //csv로부터 데이터를 받아 C
     {
         var list = new List<CardData>();
 
-        if (!File.Exists(path))
+        TextAsset csvAsset = Resources.Load<TextAsset>(path);
+
+        if (csvAsset == null)
         {
-            Debug.LogError($"[CardCSVParser] 경로에 CSV 파일이 없습니다: {path}");
+            Debug.LogError($"[CardCSVParser] Resources/{path} 경로에 CSV가 없습니다.");
             return list;
         }
 
-        var lines = File.ReadAllLines(path);
+        var lines = csvAsset.text.Split(new[] { '\n', '\r' }, System.StringSplitOptions.RemoveEmptyEntries);
 
         for (int i = 1; i < lines.Length; i++)
         {
