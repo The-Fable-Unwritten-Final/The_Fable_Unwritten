@@ -4,7 +4,7 @@ using UnityEngine;
 public class CardSystemInitializer : MonoSingleton<CardSystemInitializer>
 {
     [Header("CSV 파일 (Resources 폴더 하위 경로)")]
-    public string csvRelativePath = "ExternalFiles/Cards.csv";
+    public string csvRelativePath = "ExternalFiles/Cards";
 
     [Header("로드된 카드들")]
     public List<CardModel> loadedCards;
@@ -14,8 +14,7 @@ public class CardSystemInitializer : MonoSingleton<CardSystemInitializer>
 
     public void LoadCardDatabase()
     {
-        string fullPath = $"{Application.dataPath}/Resources/{csvRelativePath}";
-        loadedCards = CardDatabaseLoader.LoadAll(fullPath);
+        loadedCards = CardDatabaseLoader.LoadAll(csvRelativePath);
         cardLookup.Clear();
 
         foreach (var card in loadedCards)

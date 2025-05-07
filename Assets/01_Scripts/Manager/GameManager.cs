@@ -29,8 +29,8 @@ public class GameManager : MonoSingleton<GameManager>
         // 추후 데이터매니저? 이동 가능성 있음
         CardSystemInitializer.Instance.LoadCardDatabase();
 
-#if UNITY_EDITOR
         EnemySkillInitializer.ImportAndGenerate();
+#if UNITY_EDITOR
         EnemyInitializer.ImportAndGenerate();
 #endif
 

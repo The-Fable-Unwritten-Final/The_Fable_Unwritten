@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 
 /// <summary>
 /// 저장은 안하고 데이터만 넘겨줌
@@ -19,7 +18,7 @@ public class EnemySkillDataGenerator : MonoBehaviour
 
         foreach (var parsed in parsedList)
         {
-            EnemyAct skillData = ScriptableObject.CreateInstance<EnemyAct>();
+            EnemyAct skillData = new EnemyAct();
 
             skillData.index = parsed.index;
             skillData.targetType = parsed.targetType;
@@ -52,7 +51,7 @@ public class EnemySkillDataGenerator : MonoBehaviour
         }
 
         db.skillList = skills;
-        EditorUtility.SetDirty(db);
+
         Debug.Log($"[SkillDataGenerator] EnemySkillDatabase에 자동 연결 완료 ({skills.Count}개)");
     }
 }

@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -171,3 +172,4 @@ public static class EnemyDataGenerator
         return AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(path);
     }
 }
+#endif

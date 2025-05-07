@@ -24,7 +24,7 @@ public static class EnemyActCSVParser
 
             try
             {
-                var act = ScriptableObject.CreateInstance<EnemyAct>();
+                var act = new EnemyAct();
 
                 act.index = ParseInt(t, 0);
                 act.targetType = (TargetType)ParseInt(t, 1);

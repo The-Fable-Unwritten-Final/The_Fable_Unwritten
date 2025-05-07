@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAct : ScriptableObject
+
+[System.Serializable]
+public class EnemyAct
 {
     public int index;               //적 스킬의 고유 번호입니다.
     public TargetType targetType; // 적 기준이므로 2번이 적 기준 아군이고, 1번이 적 기준 적, 0번은 대상 없음
