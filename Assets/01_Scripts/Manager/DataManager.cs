@@ -14,10 +14,11 @@ public class DataManager : MonoSingleton<DataManager>
     public IReadOnlyList<DiaryData>[] DiaryGroups => diaryGroups; // 외부에서 읽기 전용으로 접근 가능
 
     // 카드북 카드 데이터
-    private Dictionary<int, CardModel> cardForShopia;
-    private Dictionary<int, CardModel> cardForKayla;
-    private Dictionary<int, CardModel> cardForLeon;
-
+    private Dictionary<int, CardModel> cardForShopia = new();
+    private Dictionary<int, CardModel> cardForKayla = new();
+    private Dictionary<int, CardModel> cardForLeon = new();
+    
+    
     public IReadOnlyDictionary<int, CardModel> CardForShopia => cardForShopia; // 외부에서 읽기 전용으로 접근 가능
     public IReadOnlyDictionary<int, CardModel> CardForKayla => cardForKayla; // 외부에서 읽기 전용으로 접근 가능
     public IReadOnlyDictionary<int, CardModel> CardForLeon => cardForLeon; // 외부에서 읽기 전용으로 접근 가능
