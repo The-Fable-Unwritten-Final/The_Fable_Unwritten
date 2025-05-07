@@ -10,7 +10,6 @@ public static class EnemySkillInitializer
 {
     private const string CsvPath = "Assets/Resources/ExternalFiles/EnemyAct.csv";
 
-    [MenuItem("Tools/Import/Generate EnemySkillData from CSV")]
     public static void ImportAndGenerate()
     {
         if (!File.Exists(CsvPath))

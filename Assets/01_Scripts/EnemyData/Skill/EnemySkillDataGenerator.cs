@@ -52,7 +52,7 @@ public class EnemySkillDataGenerator : MonoBehaviour
         }
 
         db.skillList = skills;
-        EditorUtility.SetDirty(db);
+
         Debug.Log($"[SkillDataGenerator] EnemySkillDatabase에 자동 연결 완료 ({skills.Count}개)");
     }
 }
