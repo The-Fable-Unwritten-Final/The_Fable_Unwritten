@@ -279,7 +279,12 @@ public class DialogueManager : MonoSingleton<DialogueManager>
         if (backgroundImage == null) return;
 
         var bg = GameManager.Instance.StageSetting.GetBackground(stageIndex);
-        
+
+        if (bg != null)
+            backgroundImage.sprite = bg;
+        else
+            Debug.LogWarning($"[DialogueManager] 스테이지 {stageIndex}에 대한 배경 스프라이트가 없습니다.");
+
         //  스프라이트는 유지하되, 평소엔 꺼둠
         backgroundImage.enabled = false;
         backgroundImage.gameObject.SetActive(false);
