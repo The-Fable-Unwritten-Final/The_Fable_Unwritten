@@ -6,10 +6,6 @@ using UnityEngine;
 
 public class DiaryBook : MonoBehaviour, IBookControl
 {
-    // 각 스테이지 별 다이어리 데이터 (1 스테이지 ~ 5 스테이지)
-    [Header("Diary Data")]
-    List<DiaryData>[] diaryGroups = new List<DiaryData>[5]; // tag_num 0~4
-
     [Header("UI Selection / Info")]
     [SerializeField] List<Transform> diaryClip;
     [SerializeField] TextMeshProUGUI diaryTitle; // 다이어리 제목
@@ -77,36 +73,6 @@ public class DiaryBook : MonoBehaviour, IBookControl
         UpdateArrow(); // 화살표 업데이트
     }
 
-    public void InitDictionary()
-    {
-        // 추후 스테이지의 진행도 데이터를 받아와서, diaryData의 isOpen를 설정.
-        // EX) int storyComplete == 11 이면, list의 0~10까지의 isOpen을 true로 설정.
-
-        // Resources 폴더에 있는 DiaryData.json 로드
-        TextAsset jsonText = Resources.Load<TextAsset>("ExternalFiles/DiaryData"); // 확장자 제거
-        if (jsonText == null)
-        {
-            Debug.LogError("[InitDictionary] DiaryData.json not found.");
-            return;
-        }
-
-        for (int i = 0; i < 5; i++)
-            diaryGroups[i] = new List<DiaryData>();
-
-        DiaryListWrapper wrapper = JsonUtility.FromJson<DiaryListWrapper>(jsonText.text);
-        foreach (var data in wrapper.diaries)
-        {
-            if (data.tag_num >= 0 && data.tag_num < 5)
-                diaryGroups[data.tag_num].Add(data);
-        }
-
-        // 정렬까지 해놓고 저장
-        for (int i = 0; i < 5; i++)
-            diaryGroups[i] = diaryGroups[i].OrderBy(d => d.index).ToList();
-
-        Debug.Log($"[InitDictionary] JSON loaded. Total count: {wrapper.diaries.Count}");
-    }
-
     private void OnClickClip(Transform t,int selection)// 클릭한 책갈피 최초 오픈
     {
         SetAllToFirst(); // 모든 책갈피를 가장 아래로 내림
@@ -118,7 +84,13 @@ public class DiaryBook : MonoBehaviour, IBookControl
     }
     void UpdatePage(int pagenum,int selection)// 다이어리 내용 업데이트
     {
-        var list = diaryGroups[selection];
+        if(selection < 0 || selection >= diaryClip.Count)
+        {
+            Debug.LogError("Invalid diary selection: " + selection);
+            return;
+        }
+
+        var list = DataManager.Instance.DiaryGroups[selection];
         maxPageCount = list.Count;
 
         if (pagenum >= 0 && pagenum < list.Count)

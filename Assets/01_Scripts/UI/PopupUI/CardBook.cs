@@ -38,10 +38,6 @@ public class CardBook : MonoBehaviour,IBookControl
     [SerializeField] Image sortCostArrow;
     [SerializeField] string sortCostTextString; // 코스트 정렬 버튼의 기본 텍스트 (버튼 텍스트 로컬라이징 고려)
 
-    Dictionary<int, CardModel> cardForShopia = new();
-    Dictionary<int, CardModel> cardForKayla = new();
-    Dictionary<int, CardModel> cardForLeon = new();
-
     // 다음 페이지 화살표를 누르면 외부에서 호출하는 함수 (IBookControl 인터페이스)
     public void OnclickPageBefore()
     {
@@ -72,49 +68,30 @@ public class CardBook : MonoBehaviour,IBookControl
         UpdateArrow(); // 화살표 업데이트
     }
 
-    public void InitDictionary()
-    {
-        List<CardModel> allcards = CardSystemInitializer.Instance.loadedCards;
-        foreach (var card in allcards)
-        {
-            if (card.characterClass == CharacterClass.Sophia)
-            {
-                cardForShopia.Add(card.index, card);
-            }
-            else if (card.characterClass == CharacterClass.Kayla)
-            {
-                cardForKayla.Add(card.index, card);
-            }
-            else if (card.characterClass == CharacterClass.Leon)
-            {
-                cardForLeon.Add(card.index, card);
-            }
-        }
-    }// 각 캐릭터별 카드 데이터 초기화.
     public void CardsSet(int index)
     {
         switch (index)
         {
             case 0:// 소피아 카드 페이지
                 // 페이지 업데이트
-                maxPageCount = Mathf.CeilToInt(cardForShopia.Count / 8f);
+                maxPageCount = Mathf.CeilToInt(DataManager.Instance.CardForShopia.Count / 8f);
                 currentPage = 0;
                 // 페이지내 카드 정보 업데이트 (카드의 정보, 카드 보유 유무)
-                cards = SortByIndex(cardForShopia);// 초기 카드 설정 (인덱스 순서 정렬)
+                cards = SortByIndex((Dictionary<int,CardModel>)DataManager.Instance.CardForShopia);// 초기 카드 설정 (인덱스 순서 정렬)
                 UpdateCard(0);// 페이지에 맞는 카드 정보 세팅.
                 UpdateArrow(); // 화살표 업데이트
                 break;
             case 1:// 카일라 카드 페이지
-                maxPageCount = Mathf.CeilToInt(cardForKayla.Count / 8f);
+                maxPageCount = Mathf.CeilToInt(DataManager.Instance.CardForKayla.Count / 8f);
                 currentPage = 0;
-                cards = SortByIndex(cardForKayla);
+                cards = SortByIndex((Dictionary<int,CardModel>)DataManager.Instance.CardForKayla);
                 UpdateCard(0);// 페이지에 맞는 카드 정보 세팅.
                 UpdateArrow(); // 화살표 업데이트
                 break;
             case 2:// 레온 카드 페이지
-                maxPageCount = Mathf.CeilToInt(cardForLeon.Count / 8f);
+                maxPageCount = Mathf.CeilToInt(DataManager.Instance.CardForLeon.Count / 8f);
                 currentPage = 0;
-                cards = SortByIndex(cardForLeon);
+                cards = SortByIndex((Dictionary<int,CardModel>)DataManager.Instance.CardForLeon);
                 UpdateCard(0);// 페이지에 맞는 카드 정보 세팅.
                 UpdateArrow(); // 화살표 업데이트
                 break;
@@ -211,32 +188,35 @@ public class CardBook : MonoBehaviour,IBookControl
             card.gameObject.SetActive(false);
         }
 
-        // 카드의 갯수에 따라 빈 카드 칸 활성화 비활성화 여부 설정
-        int startIndex = i * 8;
-        int endIndex = Mathf.Min(startIndex + 8, cards.Count);
-        for (int j = startIndex; j < endIndex; j++)
+   
+        int offset = i * 8; // 페이지 오프셋
+        int endCardIndex = Mathf.Min(cards.Count - offset, 8); // 이번 페이지에 실제로 표시할 카드 수
+
+        for (int j = 0; j < endCardIndex; j++)
         {
+            int cardIndex = offset + j;
+            var cardData = cards[cardIndex];
+
             bookCards[j].gameObject.SetActive(true);
-            bookCards[j].SetCardInfo(cards[j]);
-        }
 
-        // 카드 해금 여부에 따른 정보 표시 유무
-        for (int j = startIndex; j < endIndex; j++)
-        {
-            int slotIndex = j - startIndex; // 슬롯 인덱스
-
-            if (!cards[j].isUnlocked) // 카드가 아직 해금되지 않았다면.
+            if (!cardData.isUnlocked)
             {
-                bookCards[slotIndex].SetCardInfo(null);// 카드에 null 값 대입.
+                bookCards[j].SetCardInfo(null); // 잠금 카드
             }
             else
             {
-                bookCards[slotIndex].SetCardInfo(cards[j]);// 카드에 카드 정보 대입.
+                bookCards[j].SetCardInfo(cardData); // 정상 카드
             }
         }
     }
     void UpdateArrow()
     {
+        if(maxPageCount <= 1) // 페이지가 1페이지 이하일 경우 화살표 비활성화
+        {
+            leftArrow.gameObject.SetActive(false);
+            rightArrow.gameObject.SetActive(false);
+            return;
+        }
         if(currentPage == 0) // 첫 페이지일 경우 왼쪽 화살표 비활성화
         {
             leftArrow.gameObject.SetActive(false);
