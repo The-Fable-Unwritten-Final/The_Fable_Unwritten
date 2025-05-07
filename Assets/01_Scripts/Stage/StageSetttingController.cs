@@ -5,12 +5,16 @@ using UnityEngine;
 
 public class StageSetttingController
 {
+    //Resources
     private List<EnemyStageSpawnData> enemySpawnData;  // StageSpawnData 파싱 리스트
     private List<RandomEventData> allRandomEvents;     // RandomEvent JSon 파싱 리스트
-    private HashSet<int> usedRandomEvnent = new();     // RandomEvent 진행 유무(게임 재시작 및 실패 시 초기화 - ClearUsedEvents())
     private Dictionary<int, Sprite> stageBackgrounds;  // StageBackground Image 파싱 리스트
+
+    //Data
+    private HashSet<int> usedRandomEvnent = new();     // RandomEvent 진행 유무(게임 재시작 및 실패 시 초기화 - ClearUsedEvents())
     private Dictionary<int, StageTheme> stageThemes = new(); // 2~4 스테이지용 테마
     private HashSet<StageTheme> eliteClearThemes = new(); // Theme 별 Elite Clear 리스트
+    
 
     public int StageIndex { get; set; }                // 현재 스테이지
     public int MinStageIndex { get; set; }             // 재시작 스테이지 (2스테이지 클리어시 2)
@@ -21,19 +25,23 @@ public class StageSetttingController
     public List<GraphNode> VisitedNodes { get; private set; } = new();  // 플레이어가 진행한 노드 리스트
     public StageTheme CurrentTheme { get; private set; }
 
+
+
     public void Initialize()
     {
         enemySpawnData = StageSpawnSetCSVParser.LoadFromCSV() ?? new();
         allRandomEvents = RandomEventJsonLoader.LoadAllEvents() ?? new();
         stageBackgrounds = BackgoundLoader.LoadBackgrounds() ?? new();
 
+
+
         // 1스테이지 부터 시작 (기획자 요청으로 임시 2스테이지 부터 시작)
         StageIndex = Mathf.Max(1, StageIndex);
         MinStageIndex = Mathf.Max(1, MinStageIndex);
-
         AssignTemesToStages(); // 테마 스테이지별로 배정
     }
 
+    // Resources
     /// <summary>
     /// 특정 스테이지 및 노드타입에 해당하는 적 배치 데이터 리스트 반환
     /// </summary>
@@ -50,6 +58,7 @@ public class StageSetttingController
     }
 
 
+    // data
     /// <summary>
     /// 특정 스테이지에서 아직 등장하지 않은 랜덤 이벤트 중 하나를 반환하고, 사용
     /// </summary>
@@ -112,6 +121,8 @@ public class StageSetttingController
         CurrentBattleNode = node;
     }
 
+
+    // data
     private void AssignTemesToStages()
     {
         stageThemes[2] = StageTheme.Wisdom;
@@ -138,11 +149,13 @@ public class StageSetttingController
         CurrentTheme = theme;
     }
 
+    //data
     public void EliteClear(StageTheme theme)
     {
         eliteClearThemes.Add(theme);
     }
 
+    //data
     public bool IsEliteClear(StageTheme theme)
     {
         return eliteClearThemes.Contains(theme);
