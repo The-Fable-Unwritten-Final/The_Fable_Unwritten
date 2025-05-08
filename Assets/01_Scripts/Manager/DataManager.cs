@@ -1,16 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 public class DataManager : MonoSingleton<DataManager>
 {
+    [SerializeField]
+    private EnemyDataContainer enemyDataContainer;
+
     [Header("CSV Data path")]
     // csv
 
     [Header("Data Loaded")]
     // 다이어리 데이터
     private List<DiaryData>[] diaryGroups = new List<DiaryData>[5]; // tag_num 0~4 (스테이지 1~5까지)
+
     public IReadOnlyList<DiaryData>[] DiaryGroups => diaryGroups; // 외부에서 읽기 전용으로 접근 가능
 
     // 카드북 카드 데이터
@@ -18,9 +24,22 @@ public class DataManager : MonoSingleton<DataManager>
     private Dictionary<int, CardModel> cardForKayla = new();
     private Dictionary<int, CardModel> cardForLeon = new();
 
+    private Dictionary<string, List<Sprite>> cardEffects = new();   //효과 스프라이트
+
+    private Dictionary<int, EnemyAct> enemyActDict = new();       //적 행동
+
+    private Dictionary<string, string> dialogueTriggers = new();    //대화 트리거
+
+    private Dictionary<string, List<JsonCutsceneData>> dialogueDatabase = new();    //대화 내용
+
+
     public IReadOnlyDictionary<int, CardModel> CardForShopia => cardForShopia; // 외부에서 읽기 전용으로 접근 가능
     public IReadOnlyDictionary<int, CardModel> CardForKayla => cardForKayla; // 외부에서 읽기 전용으로 접근 가능
     public IReadOnlyDictionary<int, CardModel> CardForLeon => cardForLeon; // 외부에서 읽기 전용으로 접근 가능
+    public IReadOnlyDictionary<string, List<Sprite>> CardEffects => cardEffects;        //카드 애니메이션 스프라이트
+    public IReadOnlyDictionary<int, EnemyAct> EnemyActDict => enemyActDict;        //적 스킬 유형
+    public IReadOnlyDictionary<string, string> DialogueTriggers => dialogueTriggers;    //대화 트리거
+    public IReadOnlyDictionary<string, List<JsonCutsceneData>> DialogueDatabase => dialogueDatabase;
 
     // 스테이지 데이터
     private List<EnemyStageSpawnData> enemySpawnData;
@@ -39,6 +58,11 @@ public class DataManager : MonoSingleton<DataManager>
         allRandomEvents = RandomEventJsonLoader.LoadAllEvents() ?? new();
         stageBackgrounds = BackgoundLoader.LoadBackgrounds() ?? new();
         //InitCardBookDictionary();
+        InitEnemySkillDictionary();
+        InitDialogueTriggers();
+        InitDialogueDatabase();
+        InitCardEffectSprites();
+
     }
     private void Start()
     {
@@ -121,4 +145,112 @@ public class DataManager : MonoSingleton<DataManager>
     {
         return stageBackgrounds.TryGetValue(stageIndex, out var sprite) ? sprite : null;
     }
+
+    /// <summary>
+    /// 적 스킬 로딩
+    /// </summary>
+    private void InitEnemySkillDictionary()
+    {
+        TextAsset csvText = Resources.Load<TextAsset>("ExternalFiles/EnemyAct");
+        if (csvText == null)
+        {
+            Debug.LogError("[DataManager] EnemyAct.csv를 Resources/ExternalFiles/ 에서 찾을 수 없습니다.");
+            return;
+        }
+
+        List<EnemyAct> parsedActs = EnemyActCSVParser.ParseEnemyAct(csvText.text);
+        enemyActDict.Clear();
+
+        foreach (var act in parsedActs)
+        {
+            if (!enemyActDict.ContainsKey(act.index))
+                enemyActDict.Add(act.index, act);
+            else
+                Debug.LogWarning($"[DataManager] 중복 스킬 인덱스: {act.index}");
+        }
+
+        Debug.Log($"[DataManager] EnemySkill {enemyActDict.Count}개 등록 완료.");
+    }
+
+    /// <summary>
+    /// 대화 로딩
+    /// </summary>
+    private void InitDialogueTriggers()
+    {
+        TextAsset triggerJson = Resources.Load<TextAsset>("ExternalFiles/DialogueTrigger");
+        if (triggerJson == null)
+        {
+            Debug.LogError("[DataManager] DialogueTrigger.json이 없습니다.");
+            return;
+        }
+
+        dialogueTriggers.Clear();
+        List<DialogueTriggerData> triggerList = JsonUtilityWrapper.FromJsonList<DialogueTriggerData>(triggerJson.text);
+
+        foreach (var data in triggerList)
+        {
+            string triggerKey = DialogueTriggerParser.ParseNoteToKey(data.note);
+            if (!string.IsNullOrEmpty(triggerKey))
+            {
+                dialogueTriggers[triggerKey] = data.index;
+            }
+        }
+
+        Debug.Log($"[DataManager] Dialogue Trigger {dialogueTriggers.Count}개 등록 완료");
+    }
+
+    private void InitDialogueDatabase()
+    {
+        TextAsset json = Resources.Load<TextAsset>("ExternalFiles/scene_0_cutscene");
+        if (json == null)
+        {
+            Debug.LogError("[DataManager] DialogueData.json 이 없습니다.");
+            return;
+        }
+
+        dialogueDatabase.Clear();
+        List<JsonCutsceneData> parsedList = JsonCutsceneLoader.ParseFromJSON(json);
+
+        foreach (var line in parsedList)
+        {
+            if (!dialogueDatabase.ContainsKey(line.id))
+                dialogueDatabase[line.id] = new List<JsonCutsceneData>();
+
+            dialogueDatabase[line.id].Add(line);
+        }
+
+        Debug.Log($"[DataManager] DialogueDatabase에 총 {dialogueDatabase.Count}개 씬 등록 완료");
+    }
+
+    private void InitCardEffectSprites()
+    {
+        string basePath = "CardSkillEffects";
+
+        TextAsset folderListAsset = Resources.Load<TextAsset>($"{basePath}/SkillEffectFolders");
+        if (folderListAsset == null)
+        {
+            Debug.LogError("[DataManager] SkillEffectFolders.txt 파일을 찾을 수 없습니다.");
+            return;
+        }
+
+        string[] folderNames = folderListAsset.text.Split('\n');
+
+        foreach (var folderNameRaw in folderNames)
+        {
+            string folderName = folderNameRaw.Trim();
+            if (string.IsNullOrEmpty(folderName)) continue;
+
+            Sprite[] sprites = Resources.LoadAll<Sprite>($"{basePath}/{folderName}");
+            if (sprites == null || sprites.Length == 0)
+            {
+                Debug.LogWarning($"[DataManager] {folderName} 폴더에 스프라이트 없음.");
+                continue;
+            }
+
+            cardEffects[folderName] = new List<Sprite>(sprites);
+        }
+
+        Debug.Log($"[DataManager] 총 {cardEffects.Count}개의 카드 이펙트 그룹 로드 완료.");
+    }
+
 }

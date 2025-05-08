@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 
 /// <summary>
-/// EnemyAct.csv를 기반으로 EnemySkillData ScriptableObject를 생성하는 통합 실행 클래스
+/// EnemyAct.csv를 기반으 EnemySkillData ScriptableObject를 생성하는 통합 실행 클래스
 /// </summary>
 public static class EnemySkillInitializer
 {
@@ -18,7 +18,7 @@ public static class EnemySkillInitializer
             return;
         }
 
-        List<EnemyAct> parsedList = EnemyActCSVParser.Parse(CsvPath);
+        List<EnemyAct> parsedList = EnemyActCSVParser.ParseEnemyAct(CsvPath);
         if (parsedList == null || parsedList.Count == 0)
         {
             Debug.LogWarning("[EnemySkillInitializer] 파싱된 스킬 데이터가 없습니다.");
