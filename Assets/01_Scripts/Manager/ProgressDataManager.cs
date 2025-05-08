@@ -22,8 +22,8 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     public GraphNode CurrentBattleNode { get; set; }   // 현재 선택한 노드
     public StageData SavedStageData { get; private set; }               // 현재 진행 중인 스테이지 데이터
     public List<GraphNode> VisitedNodes { get; private set; } = new();  // 플레이어가 진행한 노드 리스트
-    public StageTheme CurrentTheme { get; private set; }
-    public int SavedEnemySetIndex { get; set; }
+    public StageTheme CurrentTheme { get; private set; }  // 진행 테마 저장용
+    public int SavedEnemySetIndex { get; set; }           // 진행 에너미 세트 저장용
 
 
     protected override void Awake()
@@ -89,12 +89,6 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         }
 
         string json = PlayerPrefs.GetString("ProgressSaveData");
-        //
-        string path = Application.persistentDataPath + "/progress_dump.json";
-        System.IO.File.WriteAllText(path, json);
-        Debug.Log("Progress JSON saved to: " + path);
-        //
-
         ProgressSaveData data = JsonUtility.FromJson<ProgressSaveData>(json);
 
         StageIndex = data.stageIndex;

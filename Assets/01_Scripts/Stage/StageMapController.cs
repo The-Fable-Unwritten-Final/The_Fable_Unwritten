@@ -48,41 +48,38 @@ public class StageMapController : MonoBehaviour
     private bool TryRestoreStage()
     {
         var stageSetting = ProgressDataManager.Instance;
-
-
+        
         if (stageSetting.SavedStageData != null && !stageSetting.RetryFromStart)
         {
-            stageData = stageSetting.SavedStageData;
-            visitedNodes.Clear();
-            visitedNodes.AddRange(stageSetting.VisitedNodes);
-            stageIndex = stageSetting.StageIndex;
-
-            var currentNode = stageSetting.CurrentBattleNode;
-
-            // 전투에서 클리어했을 경우에만 현재 노드를 방문 처리
-            if (stageSetting.StageCleared && currentNode != null)
+            if (stageSetting.StageCleared)
             {
-                if (!visitedNodes.Contains(currentNode))
-                    visitedNodes.Add(currentNode);
+                var lastVisited = stageSetting.VisitedNodes.LastOrDefault();
+                bool wasLastColumnNode = stageSetting.SavedStageData.columns[^1].Contains(lastVisited); // 보스 노드 방문 여부
 
-                stageSetting.StageCleared = false;
-
-                // 보스 노드였다면 다음 스테이지로 진입
-                bool wasLastColumnNode = stageData.columns[^1].Contains(currentNode);
+                // 보스 노드 클리어면 다음 스테이지
                 if (wasLastColumnNode)
                 {
                     stageSetting.StageIndex++;
-                    stageSetting.SetTheme(stageSetting.GetThemeForStage(stageSetting.StageIndex));
-                    stageSetting.ClearStageState(); // 현재 스테이지 데이터 초기화
 
+                    var newTheme = stageSetting.GetThemeForStage(stageSetting.StageIndex);
+                    stageSetting.SetTheme(newTheme);
+
+                    stageSetting.ClearStageState();
                     stageIndex = stageSetting.StageIndex;
+                    stageSetting.StageCleared= false;
+
                     LoadStage(stageIndex);
                     DialogueManager.Instance.OnStageStart(stageSetting.StageIndex); // 대화 호출
                     return true;
                 }
             }
+            // 스테이지 데이터 복구 (야영지, 이벤트, 인게임에서 돌아 왔을 경우)
+            stageData = stageSetting.SavedStageData;  // 게임 매니저에서 데이터 불러오기
+            visitedNodes.Clear();           
+            visitedNodes.AddRange(stageSetting.VisitedNodes);
+            stageIndex = stageSetting.StageIndex;
+            stageSetting.StageCleared = false;
 
-            // 전투 클리어하지 않았거나 중간 노드일 경우 맵 그대로 복원
             mapRenderer.Render(stageData, OnNodeClicked);
             mapRenderer.CenterMap();
 
@@ -97,6 +94,7 @@ public class StageMapController : MonoBehaviour
     // 노드 클릭 시 스테이지 호출 및 저장
     private void OnNodeClicked(GraphNode clicked)
     {
+        visitedNodes.Add(clicked);
 
         var pdm = ProgressDataManager.Instance;
         pdm.SaveStageState(stageData, visitedNodes);

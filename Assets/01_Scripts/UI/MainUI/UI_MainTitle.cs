@@ -48,8 +48,28 @@ public class UI_MainTitle : MonoBehaviour
         SceneManager.LoadScene(SceneNameData.StageScene);
     }
     public void OnClickSaveGame()
-    {        
-        SceneManager.LoadScene(SceneNameData.StageScene);
+    {
+        var currentNode = ProgressDataManager.Instance.CurrentBattleNode;
+
+        switch (currentNode.type)
+        {
+            case NodeType.NormalBattle:
+            case NodeType.EliteBattle:
+            case NodeType.Boss:
+                SceneManager.LoadScene(SceneNameData.CombatScene_Test);
+                break;
+
+            case NodeType.Camp:
+                SceneManager.LoadScene(SceneNameData.CampScene);
+                break;
+
+            case NodeType.RandomEvent:
+                SceneManager.LoadScene(SceneNameData.RandomEventScene);
+                break;
+            default:
+                SceneManager.LoadScene(SceneNameData.StageScene);
+                break;
+        }
     }
 
     private void OnClickUnlockCard()

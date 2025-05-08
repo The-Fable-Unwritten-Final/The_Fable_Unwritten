@@ -77,6 +77,8 @@ public class TestCustomWindow : EditorWindow
             setting.ClearStageState();
             GameManager.Instance.gameStartType = GameStartType.New;
 
+            //초기화
+            ProgressDataManager.Instance.ResetProgress();
             // 최소 시작 스테이지부터 재시작 (1 또는 2)
             setting.StageIndex = setting.MinStageIndex;
 
