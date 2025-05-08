@@ -7,7 +7,7 @@ using UnityEngine;
 public class StageSpawnSetCSVParser
 {
     [Header("CSV 파일 (Resources 폴더 하위 경로)")]
-    public static string csvPath = "ExternalFiles/StageDataTest"; // Resources 폴더 기준
+    public static string csvPath = "ExternalFiles/EnemySpawnSetData"; // Resources 폴더 기준
 
     public static List<EnemyStageSpawnData> LoadEnemySpawnSet()
     {
