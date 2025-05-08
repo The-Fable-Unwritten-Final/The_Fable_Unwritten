@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    public List<PlayerData> playerDatas = new();  //  보유중인 케릭터 데이터
+ /*   public List<PlayerData> playerDatas = new();  //  보유중인 케릭터 데이터
 
     public GameStartType gameStartType = GameStartType.New;
 
 
-    private PlayerPartySO playerParty;
+    private PlayerPartySO playerParty;*/
 
     [Header("Controller")]
     public CombatUIController combatUIController; // 전투 UI 컨트롤러
@@ -26,11 +26,11 @@ public class GameManager : MonoSingleton<GameManager>
         EnemyInitializer.ImportAndGenerate();
 #endif
 
-        LoadPlayerPartyIfNull(); // <- 플레이어 데이터 가져오기
-        playerDatas = new List<PlayerData>(playerParty.allPlayers);
+//        LoadPlayerPartyIfNull(); // <- 플레이어 데이터 가져오기
+//        playerDatas = new List<PlayerData>(playerParty.allPlayers);
     }
 
-    public void InitializePlayerHPByGameType()
+    /*public void InitializePlayerHPByGameType()
     {
         switch (gameStartType)
         {
@@ -49,9 +49,9 @@ public class GameManager : MonoSingleton<GameManager>
                 }
                 break;
         }
-    }
+    }*/
 
-    private void LoadPlayerPartyIfNull()
+  /*  private void LoadPlayerPartyIfNull()
     {
         if (playerParty == null)
         {
@@ -59,7 +59,8 @@ public class GameManager : MonoSingleton<GameManager>
             if (playerParty == null)
                 Debug.LogError("[GameManager] PlayerPartySO 리소스를 찾을 수 없습니다.");
         }
-    }
+    }*/
+
 
     public void RegisterCombatUI(CombatUIController cont)
     {

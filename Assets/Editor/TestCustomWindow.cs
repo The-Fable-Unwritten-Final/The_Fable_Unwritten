@@ -75,7 +75,7 @@ public class TestCustomWindow : EditorWindow
             var setting = ProgressDataManager.Instance;
             setting.RetryFromStart = true;
             setting.ClearStageState();
-            GameManager.Instance.gameStartType = GameStartType.New;
+            ProgressDataManager.Instance.GameStartType = GameStartType.New;
 
             //초기화
             ProgressDataManager.Instance.ResetProgress();
@@ -96,7 +96,7 @@ public class TestCustomWindow : EditorWindow
 
         if (GUILayout.Button("전체 체력 회복"))
         {
-            foreach (var player in GameManager.Instance.playerDatas)
+            foreach (var player in ProgressDataManager.Instance.PlayerDatas)
             {
                 player.currentHP = player.MaxHP;
             }
@@ -129,7 +129,7 @@ public class TestCustomWindow : EditorWindow
 
     private void TryAddPlayer(CharacterClass chClass, string name)
     {
-        var playerDatas = GameManager.Instance.playerDatas;
+        var playerDatas = ProgressDataManager.Instance.PlayerDatas;
         var targetData = playerDatas.Find(p => p.CharacterClass == chClass);
         if (targetData == null) return;
 

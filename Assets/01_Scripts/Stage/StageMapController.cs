@@ -25,7 +25,7 @@ public class StageMapController : MonoBehaviour
     {
         var stageSetting = ProgressDataManager.Instance;
         
-        GameManager.Instance.InitializePlayerHPByGameType();
+        ProgressDataManager.Instance.InitializePlayerHPByGameType();
 
         if (!TryRestoreStage())
         {
@@ -123,7 +123,7 @@ public class StageMapController : MonoBehaviour
                     break;
             }
 
-            var playerData = GameManager.Instance.playerDatas.FirstOrDefault(p => p.CharacterClass == charToAdd);
+            var playerData = ProgressDataManager.Instance.PlayerDatas.FirstOrDefault(p => p.CharacterClass == charToAdd);
             if (playerData != null)
             {
                 PlayerManager.Instance.AddPlayerDuringGame(playerData, DataManager.Instance.AllCards);

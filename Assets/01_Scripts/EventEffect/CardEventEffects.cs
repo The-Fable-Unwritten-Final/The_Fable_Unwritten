@@ -44,15 +44,15 @@ public class CardEventEffects : EventEffects
         {
             if(sophia)
             {
-                GameManager.Instance.playerDatas[1].currentDeckIndexes.Add(newCardIndex);
+                ProgressDataManager.Instance.PlayerDatas[1].currentDeckIndexes.Add(newCardIndex);
             }
             if(kyla)
             {
-                GameManager.Instance.playerDatas[0].currentDeckIndexes.Add(newCardIndex);
+                ProgressDataManager.Instance.PlayerDatas[0].currentDeckIndexes.Add(newCardIndex);
             }
             if(leon)
             {
-                GameManager.Instance.playerDatas[2].currentDeckIndexes.Add(newCardIndex);
+                ProgressDataManager.Instance.PlayerDatas[2].currentDeckIndexes.Add(newCardIndex);
             }
         }
     }

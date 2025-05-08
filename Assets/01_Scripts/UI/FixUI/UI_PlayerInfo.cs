@@ -94,7 +94,7 @@ public class UI_PlayerInfo : MonoBehaviour
     // 현재 캐릭터의 보유 카드 확인
     private List<CardModel> CurrentCharacterDeck(CharacterClass characterClass)
     {
-        var player = GameManager.Instance.playerDatas
+        var player = ProgressDataManager.Instance.PlayerDatas
             .FirstOrDefault(p => p.CharacterClass == characterClass);
 
         if (player == null) return new();

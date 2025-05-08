@@ -23,8 +23,8 @@ public class StatEventEffects : EventEffects
         {
             if(hp != 0)
             {
-                GameManager.Instance.playerDatas[1].currentHP += hp;
-                GameManager.Instance.playerDatas[1].currentHP = Mathf.Clamp(GameManager.Instance.playerDatas[1].currentHP, 1, GameManager.Instance.playerDatas[1].MaxHP);
+                ProgressDataManager.Instance.PlayerDatas[1].currentHP += hp;
+                ProgressDataManager.Instance.PlayerDatas[1].currentHP = Mathf.Clamp(ProgressDataManager.Instance.PlayerDatas[1].currentHP, 1, ProgressDataManager.Instance.PlayerDatas[1].MaxHP);
             }
             if (hpPercent != 0)
             {
@@ -67,8 +67,8 @@ public class StatEventEffects : EventEffects
         {
             if(hp != 0)
             {
-                GameManager.Instance.playerDatas[0].currentHP += hp;
-                GameManager.Instance.playerDatas[0].currentHP = Mathf.Clamp(GameManager.Instance.playerDatas[0].currentHP, 1, GameManager.Instance.playerDatas[0].MaxHP);
+                ProgressDataManager.Instance.PlayerDatas[0].currentHP += hp;
+                ProgressDataManager.Instance.PlayerDatas[0].currentHP = Mathf.Clamp(ProgressDataManager.Instance.PlayerDatas[0].currentHP, 1, ProgressDataManager.Instance.PlayerDatas[0].MaxHP);
             }
             if (hpPercent != 0)
             {
@@ -111,8 +111,8 @@ public class StatEventEffects : EventEffects
         {
             if(hp != 0)
             {
-                GameManager.Instance.playerDatas[2].currentHP += hp;
-                GameManager.Instance.playerDatas[2].currentHP = Mathf.Clamp(GameManager.Instance.playerDatas[2].currentHP, 1, GameManager.Instance.playerDatas[2].MaxHP);
+                ProgressDataManager.Instance.PlayerDatas[2].currentHP += hp;
+                ProgressDataManager.Instance.PlayerDatas[2].currentHP = Mathf.Clamp(ProgressDataManager.Instance.PlayerDatas[2].currentHP, 1, ProgressDataManager.Instance.PlayerDatas[2].MaxHP);
             }
             if (hpPercent != 0)
             {
