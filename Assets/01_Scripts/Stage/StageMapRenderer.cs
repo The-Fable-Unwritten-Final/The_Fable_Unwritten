@@ -192,6 +192,7 @@ public class StageMapRenderer : MonoBehaviour
             StageTheme.Wisdom => 0,
             StageTheme.Love => 1,
             StageTheme.Courage => 2,
+            _ => -1
         };
 
         if (index >= 0 && index < bossStageIcons.Length)

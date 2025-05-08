@@ -66,6 +66,7 @@ public class TestCustomWindow : EditorWindow
             {
                 setting.EliteClear(setting.CurrentTheme);
             }
+            ProgressDataManager.Instance.SavedEnemySetIndex = -1; // 랜덤 에너미 셋 초기화
 
             SceneManager.LoadScene("StageScene");
         }

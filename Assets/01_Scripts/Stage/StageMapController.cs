@@ -24,7 +24,7 @@ public class StageMapController : MonoBehaviour
     private void Start()
     {
         var stageSetting = ProgressDataManager.Instance;
-
+        
         GameManager.Instance.InitializePlayerHPByGameType();
 
         if (!TryRestoreStage())
@@ -39,7 +39,7 @@ public class StageMapController : MonoBehaviour
             // 기획자 요청으로 대화씬 스킵
             DialogueManager.Instance.OnStageStart(stageSetting.StageIndex); // 대화 호출
         }
-
+        
         int stageIndex = stageSetting.StageIndex;
         backGround.sprite = DataManager.Instance.GetBackground(stageIndex);
     }
@@ -48,12 +48,12 @@ public class StageMapController : MonoBehaviour
     private bool TryRestoreStage()
     {
         var stageSetting = ProgressDataManager.Instance;
-
+        
         if (stageSetting.SavedStageData != null && !stageSetting.RetryFromStart)
         {
             if (stageSetting.StageCleared)
             {
-                var lastVisited = stageSetting.VisitedNodes.Last();
+                var lastVisited = stageSetting.VisitedNodes.LastOrDefault();
                 bool wasLastColumnNode = stageSetting.SavedStageData.columns[^1].Contains(lastVisited); // 보스 노드 방문 여부
 
                 // 보스 노드 클리어면 다음 스테이지
@@ -73,7 +73,6 @@ public class StageMapController : MonoBehaviour
                     return true;
                 }
             }
-
             // 스테이지 데이터 복구 (야영지, 이벤트, 인게임에서 돌아 왔을 경우)
             stageData = stageSetting.SavedStageData;  // 게임 매니저에서 데이터 불러오기
             visitedNodes.Clear();           
@@ -83,7 +82,9 @@ public class StageMapController : MonoBehaviour
 
             mapRenderer.Render(stageData, OnNodeClicked);
             mapRenderer.CenterMap();
-            mapRenderer.UpdateInteractables(visitedNodes.Last(), visitedNodes);
+
+            var lastNode = visitedNodes.LastOrDefault() ?? stageData.columns[0].First();
+            mapRenderer.UpdateInteractables(lastNode, visitedNodes);
             return true;
         }
 

@@ -41,13 +41,14 @@ public class UI_MainTitle : MonoBehaviour
         // 보유 플레이어 초기화
         PlayerManager.Instance.activePlayers.Clear();
 
+        // 데이터 초기화
+        ProgressDataManager.Instance.ResetProgress();
 
         // 게임 데이터 초기화 로직 추가 (DataManager 나 GameManager에 로직추가?)
         SceneManager.LoadScene(SceneNameData.StageScene);
     }
-    private void OnClickSaveGame()
-    {
-        // 플레이어정보(덱, 재료) 및 Stage 진행 정도 정보 가지고 오기
+    public void OnClickSaveGame()
+    {        
         SceneManager.LoadScene(SceneNameData.StageScene);
     }
 

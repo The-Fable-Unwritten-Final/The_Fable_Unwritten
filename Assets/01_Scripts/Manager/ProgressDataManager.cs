@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using static StageDataSaveHelper;
 
 public class ProgressDataManager : MonoSingleton<ProgressDataManager>
 {
@@ -22,15 +23,12 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     public StageData SavedStageData { get; private set; }               // 현재 진행 중인 스테이지 데이터
     public List<GraphNode> VisitedNodes { get; private set; } = new();  // 플레이어가 진행한 노드 리스트
     public StageTheme CurrentTheme { get; private set; }
+    public int SavedEnemySetIndex { get; set; }
 
 
     protected override void Awake()
     {
         base.Awake();
-
-        StageIndex = Mathf.Max(1, StageIndex);
-        MinStageIndex = Mathf.Max(1, MinStageIndex);
-        AssignTemesToStages();
     }
 
     private void Start()
@@ -56,9 +54,13 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         data.retryFromStart = RetryFromStart;
         data.stageCleared = StageCleared;
 
-        // CurrentBattleNode
-        // SavedStageData
-        // VisitedNodes
+        if (SavedStageData != null && VisitedNodes != null)
+        {
+            var dto = StageDataSaveHelper.ConvertToDTO(SavedStageData, VisitedNodes, CurrentBattleNode);
+            data.stageDataJson = JsonUtility.ToJson(dto);
+        }
+
+
         data.currentTheme = (int)CurrentTheme;
 
         data.untilNextCombatEffects = untillNextCombat.Select(e => e.index).ToList();
@@ -66,7 +68,9 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         data.untilEndAdventureEffects = untillEndAdventure.Select(e => e.index).ToList();
 
         data.usedRandomEventIds = usedRandomEvnent.ToList();
-        data.stageThemes = stageThemes.ToDictionary(pair => pair.Key, pair => (int)pair.Value);
+        data.stageThemePairs = stageThemes
+            .Select(pair => new StageThemePair { stageIndex = pair.Key, theme = (int)pair.Value })
+            .ToList();
         data.eliteClearThemes = eliteClearThemes.Select(e => (int)e).ToList();
 
         string json = JsonUtility.ToJson(data, true);
@@ -85,6 +89,12 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         }
 
         string json = PlayerPrefs.GetString("ProgressSaveData");
+        //
+        string path = Application.persistentDataPath + "/progress_dump.json";
+        System.IO.File.WriteAllText(path, json);
+        Debug.Log("Progress JSON saved to: " + path);
+        //
+
         ProgressSaveData data = JsonUtility.FromJson<ProgressSaveData>(json);
 
         StageIndex = data.stageIndex;
@@ -92,10 +102,19 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         RetryFromStart = data.retryFromStart;
         StageCleared = data.stageCleared;
 
-        // CurrentBattleNode
-        // SavedStageData
-        // VisitedNodes
+        //stageThemes = data.stageThemes.ToDictionary(pair => pair.Key, pair => (StageTheme)pair.Value);
+
+        stageThemes = data.stageThemePairs.ToDictionary(pair => pair.stageIndex, pair => (StageTheme)pair.theme);
+
         CurrentTheme = (StageTheme)data.currentTheme;
+
+        if (!string.IsNullOrEmpty(data.stageDataJson))
+        {
+            var dto = JsonUtility.FromJson<StageDataDTO>(data.stageDataJson);
+            SavedStageData = StageDataSaveHelper.ConvertFromDTO(dto, out var visited, out var current);
+            VisitedNodes = visited;
+            CurrentBattleNode = current;
+        }
 
         untillNextCombat = data.untilNextCombatEffects
             .Select(index => EventEffectManager.Instance.eventEffectDict[index].Clone())
@@ -110,7 +129,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
             .ToList();
 
         usedRandomEvnent = data.usedRandomEventIds.ToHashSet();
-        stageThemes = data.stageThemes.ToDictionary(pair => pair.Key, pair => (StageTheme)pair.Value);
+        
         eliteClearThemes = data.eliteClearThemes.Select(i => (StageTheme)i).ToHashSet();
 
 
@@ -127,14 +146,23 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         stageThemes.Clear();
         eliteClearThemes.Clear();
 
-        StageIndex = 0;
-        MinStageIndex = 0;
+        //이걸로 설정 예정
+        //StageIndex = Mathf.Max(1, StageIndex);
+        //MinStageIndex = Mathf.Max(1, MinStageIndex);
+        AssignTemesToStages();
+
+        StageIndex = 1;
+        MinStageIndex = 1;
+        SavedEnemySetIndex = -1;
+
         RetryFromStart = false;
         StageCleared = false;
         CurrentBattleNode = null;
         SavedStageData = null;
         VisitedNodes.Clear();
         CurrentTheme = default;
+
+        PlayerPrefs.DeleteKey("ProgressSaveData");
 
         SaveProgress();
         Debug.Log("[ProgressDataManager] 데이터 초기화 완료");
@@ -184,7 +212,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         CurrentBattleNode = node;
     }
 
-    private void AssignTemesToStages()
+    public void AssignTemesToStages()
     {
         stageThemes[2] = StageTheme.Wisdom;
         stageThemes[3] = StageTheme.Love;
@@ -233,6 +261,11 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         usedRandomEvnent.Add(selected.index);
         return selected;
     }
+    public void SaveEnemySetIndex(int index)
+    {
+        SavedEnemySetIndex = index;
+    }
+
 }
 
 [System.Serializable]
@@ -243,8 +276,7 @@ public class ProgressSaveData
     public bool retryFromStart;
     public bool stageCleared;
 
-    public List<int> visitedNodeIds = new();
-    public int currentNodeId;
+    public string stageDataJson;
     public int currentTheme;
 
     public List<int> untilNextCombatEffects = new();
@@ -252,12 +284,134 @@ public class ProgressSaveData
     public List<int> untilEndAdventureEffects = new();
 
     public List<int> usedRandomEventIds = new();
-    public Dictionary<int, int> stageThemes = new();
+    public List<StageThemePair> stageThemePairs = new();
     public List<int> eliteClearThemes = new();
 }
 
+//
 [System.Serializable]
-public class SavedEventEffect
+public class StageDataDTO
 {
-    public int index; // EventEffects의 고유 ID만 저장
+    public int columnCount;
+    public List<GraphNodeDTOList> columns = new();
+    public List<int> visitedNodeIds = new();
+    public int currentNodeId = -1;
 }
+
+[System.Serializable]
+public class GraphNodeDTOList
+{
+    public List<GraphNodeDTO> nodes = new();
+}
+
+[System.Serializable]
+public class GraphNodeDTO
+{
+    public int id;
+    public NodeType type;
+    public int columnIndex;
+    public float posX;
+    public float posY;
+
+    public List<int> nextNodeIds = new();
+}
+
+[System.Serializable]
+public class StageThemePair
+{
+    public int stageIndex;
+    public int theme;
+}
+
+public static class StageDataSaveHelper
+{
+    // 저장용 DTO로 변환
+    public static StageDataDTO ConvertToDTO(StageData stage, List<GraphNode> visitedNodes, GraphNode currentNode)
+    {
+        var dto = new StageDataDTO
+        {
+            columnCount = stage.columnCount,
+            visitedNodeIds = visitedNodes.Select(n => n.id).ToList(),
+            currentNodeId = currentNode?.id ?? -1
+        };
+
+        foreach (var column in stage.columns)
+        {
+            var columnDTO = new GraphNodeDTOList();
+
+            foreach (var node in column)
+            {
+                columnDTO.nodes.Add(new GraphNodeDTO
+                {
+                    id = node.id,
+                    type = node.type,
+                    columnIndex = node.columnIndex,
+                    posX = node.position.x,
+                    posY = node.position.y,
+                    nextNodeIds = node.nextNodes.Select(n => n.id).ToList()
+                });
+            }
+
+            dto.columns.Add(columnDTO);
+        }
+
+        return dto;
+    }
+
+    // DTO를 실제 StageData로 복원
+    public static StageData ConvertFromDTO(StageDataDTO dto, out List<GraphNode> visitedNodes, out GraphNode currentNode)
+    {
+        var stage = new StageData
+        {
+            columnCount = dto.columnCount,
+            columns = new List<List<GraphNode>>()
+        };
+
+        Dictionary<int, GraphNode> nodeMap = new();
+
+        foreach (var columnDTO in dto.columns)
+        {
+            var column = new List<GraphNode>();
+
+            foreach (var nodeDTO in columnDTO.nodes)
+            {
+                var node = new GraphNode
+                {
+                    id = nodeDTO.id,
+                    type = nodeDTO.type,
+                    columnIndex = nodeDTO.columnIndex,
+                    position = new Vector2(nodeDTO.posX, nodeDTO.posY)
+                };
+                column.Add(node);
+                nodeMap[node.id] = node;
+            }
+
+            stage.columns.Add(column);
+        }
+
+        // 여기가 연결 복원 구간
+        foreach (var columnDTO in dto.columns)
+        {
+            foreach (var nodeDTO in columnDTO.nodes)
+            {
+                var node = nodeMap[nodeDTO.id];
+                node.nextNodes = nodeDTO.nextNodeIds
+                    .Where(id => nodeMap.ContainsKey(id))
+                    .Select(id => nodeMap[id])
+                    .ToList();
+            }
+        }
+
+        visitedNodes = dto.visitedNodeIds
+            .Where(nodeMap.ContainsKey)
+            .Select(id => nodeMap[id])
+            .ToList();
+
+        currentNode = nodeMap.ContainsKey(dto.currentNodeId) ? nodeMap[dto.currentNodeId] : null;
+
+        return stage;
+    }
+}
+
+
+

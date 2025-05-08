@@ -20,7 +20,7 @@ public static class StageGraphGenerator
 
         // 시작 노드 (열 , id  0으로 고정)
         stage.columns.Add(new List<GraphNode> {
-            new GraphNode {id = 0, type = NodeType.Start, columnIndex = 0 }
+        new GraphNode { id = id++, type = NodeType.Start, columnIndex = 0 }
         });
 
         if (stageIndex == 1)
