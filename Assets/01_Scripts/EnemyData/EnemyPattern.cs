@@ -41,7 +41,7 @@ public static class EnemyPattern
         }
 
         // 3. 스킬 데이터 가져오기 
-        var actData = EnemySkillDatabase.Instance.Get(skill.skillIndex);
+        var actData = DataManager.Instance.EnemyActDict[skill.skillIndex];
         if (actData == null)
         {
             Debug.LogWarning($"[EnemyPattern] 스킬 {skill.skillIndex}에 대한 act 데이터가 없습니다.");

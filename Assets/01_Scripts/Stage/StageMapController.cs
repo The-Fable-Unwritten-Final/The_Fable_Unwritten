@@ -122,7 +122,7 @@ public class StageMapController : MonoBehaviour
             var playerData = GameManager.Instance.playerDatas.FirstOrDefault(p => p.CharacterClass == charToAdd);
             if (playerData != null)
             {
-                PlayerManager.Instance.AddPlayerDuringGame(playerData, CardSystemInitializer.Instance.loadedCards);
+                PlayerManager.Instance.AddPlayerDuringGame(playerData, DataManager.Instance.AllCards);
             }
         }
 

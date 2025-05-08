@@ -13,7 +13,7 @@ public class DuplicateCardEffect : CardEffectBase
         int lastCardID = BattleLogManager.Instance.GetLastCardUsed(caster);
         if (lastCardID == -1) return;
 
-        if (CardSystemInitializer.Instance.cardLookup.TryGetValue(lastCardID, out var original))
+        if (DataManager.Instance.CardLookup.TryGetValue(lastCardID, out var original))
         {
             CardModel clone = Object.Instantiate(original);
             clone.name = original.name + "_Copy";

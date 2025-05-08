@@ -202,7 +202,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         if (data.currentDeck == null || data.currentDeck.Count != 5)
             data.ResetDeckIndexesToDefault();
 
-        data.LoadDeckFromIndexes(CardSystemInitializer.Instance.loadedCards);
+        data.LoadDeckFromIndexes(DataManager.Instance.AllCards);
         deckModel.Initialize(data.currentDeck);
 
         if (!IsAlive())

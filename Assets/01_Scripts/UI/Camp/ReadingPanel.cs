@@ -64,7 +64,7 @@ public class ReadingPanel : BaseCampPanel
 
         if (player == null) return new();
 
-        var allCards = CardSystemInitializer.Instance.loadedCards;
+        var allCards = DataManager.Instance.AllCards;
 
         return player.currentDeckIndexes
             .Select(i => allCards.FirstOrDefault(c => c.index == i))
