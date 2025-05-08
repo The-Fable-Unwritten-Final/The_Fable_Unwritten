@@ -8,6 +8,7 @@ public class CameraProvider : MonoBehaviour
 
     private void Awake()
     {
+        /*
         Instance = this;
         UICamera = Camera.main;
 
@@ -26,6 +27,6 @@ public class CameraProvider : MonoBehaviour
         else
         {
             Debug.LogWarning("[CameraProvider] MainCanvas_Camera 찾을 수 없음.");
-        }
+        }*/
     }
 }

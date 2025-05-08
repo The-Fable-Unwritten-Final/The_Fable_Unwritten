@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainCanvas_Camera : MonoBehaviour
 {
@@ -17,8 +18,22 @@ public class MainCanvas_Camera : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)// 메인 카메라 변경
+    {
+        canvas.renderMode = RenderMode.ScreenSpaceCamera;
+        canvas.worldCamera = Camera.main;
+    }
+
+    /*
     public void TrySetCamera(Camera cam)
     {
         if (canvas == null)
@@ -33,5 +48,5 @@ public class MainCanvas_Camera : MonoBehaviour
 
         canvas.renderMode = RenderMode.ScreenSpaceCamera;
         canvas.worldCamera = cam;
-    }
+    }*/
 }
