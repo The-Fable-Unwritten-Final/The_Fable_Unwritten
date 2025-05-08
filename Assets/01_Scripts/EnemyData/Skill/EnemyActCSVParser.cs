@@ -4,19 +4,16 @@ using UnityEngine;
 
 public static class EnemyActCSVParser
 {
-    public static List<EnemyAct> Parse(string path)
+    /// <summary>
+    /// Resources.Load<TextAsset>()로 불러온 csvText.text에서 파싱
+    /// </summary>
+    public static List<EnemyAct> ParseEnemyAct(string text)
     {
         var list = new List<EnemyAct>();
 
-        if (!File.Exists(path))
-        {
-            Debug.LogError($"[EnemyCSVParser] 경로에 CSV 파일이 없습니다: {path}");
-            return list;
-        }
+        var lines = text.Split('\n');
 
-        var lines = File.ReadAllLines(path);
-
-        for (int i = 1; i < lines.Length; i++)
+        for (int i = 1; i < lines.Length; i++) // 0번은 헤더
         {
             if (string.IsNullOrWhiteSpace(lines[i])) continue;
 
@@ -24,22 +21,23 @@ public static class EnemyActCSVParser
 
             try
             {
-                var act = new EnemyAct();
+                var act = new EnemyAct
+                {
+                    index = ParseInt(t, 0),
+                    targetType = (TargetType)ParseInt(t, 1),
+                    targetNum = ParseInt(t, 2),
 
-                act.index = ParseInt(t, 0);
-                act.targetType = (TargetType)ParseInt(t, 1);
-                act.targetNum = ParseInt(t, 2);
+                    target_front = ParseBool(t, 3),
+                    target_center = ParseBool(t, 4),
+                    target_back = ParseBool(t, 5),
 
-                act.target_front = ParseBool(t, 3);
-                act.target_center = ParseBool(t, 4);
-                act.target_back = ParseBool(t, 5);
+                    atk_buff = ParseInt(t, 6),
+                    def_buff = ParseInt(t, 7),
 
-                act.atk_buff = ParseInt(t, 6);
-                act.def_buff = ParseInt(t, 7);
-
-                act.buff_time = ParseInt(t, 8);
-                act.block = ParseBool(t, 9);
-                act.stun = ParseInt(t, 10);
+                    buff_time = ParseInt(t, 8),
+                    block = ParseBool(t, 9),
+                    stun = ParseInt(t, 10)
+                };
 
                 list.Add(act);
             }
