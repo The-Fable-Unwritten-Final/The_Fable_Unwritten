@@ -63,7 +63,7 @@ public static class EnemyPattern
             t.PlayHitAnimation();
             yield return new WaitForSeconds(0.2f);
 
-            string effectname = enemyComponent.enemyData.skillEffect;
+            string effectname = enemyComponent.enemyData.AttackSkillEffect;
             // 2. 스킬 이펙트 재생
             if (!string.IsNullOrEmpty(effectname))
             {
@@ -139,38 +139,37 @@ public static class EnemyPattern
 
         return targets;
     }
-    private static void SetRandomStance(Enemy enemy) //enemy 자세 변경
+
+    public static void SetRandomStance(Enemy enemy) //enemy 자세 변경
     {
-        // 1) 파싱된 확률 데이터 사용
-        if (!EnemyParseManager.ParsedDict.TryGetValue(enemy.enemyData.IDNum, out var parsed))
+        var enemyData = enemy.enemyData;
+
+        if (enemyData == null)
         {
-            // 파싱 정보가 없으면 기존 균등 랜덤으로 대체 = 방어코드
-            var fallback = (PlayerData.StancType)Random.Range(0, stanceCount);
-            enemy.enemyData.currentStance = (EnemyData.StancValue.EStancType)fallback;
-            Debug.LogWarning($"[EnemyPattern] ID {enemy.enemyData.IDNum} 파싱 데이터 없음 → 균등 랜덤 Stance={fallback}");
-            return; // “High, Middle, Low 세 가지를 똑같은 확률(1/3씩) = 파싱 정보가 없을경우
+            Debug.LogWarning("[EnemyPattern] EnemyData가 null입니다.");
+            return;
         }
 
         // 2) 확률값 읽어오기
-        float topP = parsed.topPercentage;      // High 확률
-        float midP = parsed.middlePercentage;   // Middle 확률
-        float botP = parsed.bottomPercentage;   // Low 확률
+        float topP = enemyData.TopStance;      // High 확률
+        float midP = enemyData.MiddleStance;   // Middle 확률
+        float botP = enemyData.BottomStance;   // Low 확률
 
         // 3) 랜덤 값으로 분포 적용
         float r = Random.value;  // 0.0 ~ 1.0
         if (r < topP)
         {
-            enemy.enemyData.currentStance = EnemyData.StancValue.EStancType.High;
+            enemy.enemyData.currentStance = StancValue.EStancType.High;
             Debug.Log($"[EnemyPattern] {enemy.enemyData.EnemyName} 자세 → High (r={r:F2})");
         }
         else if (r < topP + midP)
         {
-            enemy.enemyData.currentStance = EnemyData.StancValue.EStancType.Middle;
+            enemy.enemyData.currentStance = StancValue.EStancType.Middle;
             Debug.Log($"[EnemyPattern] {enemy.enemyData.EnemyName} 자세 → Middle (r={r:F2})");
         }
         else
         {
-            enemy.enemyData.currentStance = EnemyData.StancValue.EStancType.Low;
+            enemy.enemyData.currentStance = StancValue.EStancType.Low;
             Debug.Log($"[EnemyPattern] {enemy.enemyData.EnemyName} 자세 → Low (r={r:F2})");
         }
     }

@@ -10,29 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d99085e4860989e40ba273fad6060564, type: 3}
-  m_Name: "14_\uD30C\uB974\uB9C8\uB178"
+  m_Name: "11_\uC6B0\uB450\uBA38\uB9AC \uB291\uB300"
   m_EditorClassIdentifier: 
-  idNum: 14
-  enemyName: "\uD30C\uB974\uB9C8\uB178"
+  idNum: 11
+  enemyName: "\uC6B0\uB450\uBA38\uB9AC \uB291\uB300"
+  exp: 10
   maxHP: 30
   currentHP: 30
-  aTK: 0
-  aTKValue: 10
-  dEF: 0
+  aTKValue: 0
   dEFValue: 0
+  stun: 0
+  blind: 0
+  block: 0
+  note: 
   skillList:
   - skillIndex: 100
     damage: 10
-    percentage: 0.4
-  - skillIndex: 106
-    damage: 5
-    percentage: 0.4
-  - skillIndex: 111
-    damage: 0
-    percentage: 0.2
-  illust: illust2_4
+    percentage: 75
+  - skillIndex: 104
+    damage: 6
+    percentage: 100
+  illust: illust1_1
   currentStance: 1
-  animationController: {fileID: 9100000, guid: fbcd9c40c9d48854c9db59688c3bedf1, type: 2}
-  skillEffect: 
-  hpScale: 0.3
-  damageScale: 0.4
+  animationController: {fileID: 0}
+  AttackSkillEffect: fx3_bite_large_red
+  AllySkillEffect: 
+  TopStance: 0.3
+  MiddleStance: 0.4
+  BottomStance: 0.3
+  loot: 000000000000000000000000

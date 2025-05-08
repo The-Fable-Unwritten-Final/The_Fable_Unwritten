@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+
 public static class EnemyCSVParser
 {
     public static List<EnemyParsed> Parse(string path)
@@ -30,33 +31,43 @@ public static class EnemyCSVParser
                     enemyName = ParseString(t, 1),
                     art = ParseString(t, 2),
                     hp = ParseInt(t, 3),
-                    hpScale = ParseFloat(t, 4),
-                    damageScale = ParseFloat(t, 5),
-                    skillEffect = ParseString(t, 6),
+                    exp = ParseInt(t, 4),
 
-                    skill0 = ParseInt(t, 7),
-                    damage0 = ParseInt(t, 8),
-                    percentage0 = ParseFloat(t, 9),
+                    loots = new int[]
+                    {
+                        ParseInt(t, 5),
+                        ParseInt(t, 6),
+                        ParseInt(t, 7)
+                    },
 
-                    skill1 = ParseInt(t, 10),
-                    damage1 = ParseInt(t, 11),
-                    percentage1 = ParseFloat(t, 12),
+                    attackEffect = ParseString(t, 8),
+                    allyEffect = ParseString(t, 9),
 
-                    skill2 = ParseInt(t, 13),
-                    damage2 = ParseInt(t, 14),
-                    percentage2 = ParseFloat(t, 15),
-
-                    topPercentage = ParseFloat(t, 16),
-                    middlePercentage = ParseFloat(t, 17),
-                    bottomPercentage = ParseFloat(t, 18),
-
-                    atkBuff = ParseFloat(t, 19),
-                    defBuff = ParseFloat(t, 20),
-
-                    block = !string.IsNullOrWhiteSpace(t[21]),
-                    blind = !string.IsNullOrWhiteSpace(t[22]),
-                    stun = !string.IsNullOrWhiteSpace(t[23]),
+                    skillIndices = new int[5],
+                    skillDamages = new float[5],
+                    skillPercents = new float[5]
                 };
+
+                for (int j = 0; j < 5; j++)
+                {
+                    int baseCol = 10 + j * 3;
+                    data.skillIndices[j] = ParseInt(t, baseCol);
+                    data.skillDamages[j] = ParseFloat(t, baseCol + 1);
+                    data.skillPercents[j] = ParseFloat(t, baseCol + 2);
+                }
+
+                data.topPercentage = ParseFloat(t, 25);
+                data.middlePercentage = ParseFloat(t, 26);
+                data.bottomPercentage = ParseFloat(t, 27);
+
+                data.atkBuff = ParseFloat(t, 28);
+                data.defBuff = ParseFloat(t, 29);
+
+                data.block = !string.IsNullOrWhiteSpace(t[30]);
+                data.blind = !string.IsNullOrWhiteSpace(t[31]);
+                data.stun = !string.IsNullOrWhiteSpace(t[32]);
+
+                data.note = ParseString(t, 33);
 
                 list.Add(data);
             }

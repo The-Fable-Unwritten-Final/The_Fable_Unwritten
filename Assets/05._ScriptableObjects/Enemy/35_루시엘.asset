@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d99085e4860989e40ba273fad6060564, type: 3}
+  m_Name: "35_\uB8E8\uC2DC\uC5D8"
+  m_EditorClassIdentifier: 
+  idNum: 35
+  enemyName: "\uB8E8\uC2DC\uC5D8"
+  exp: 15
+  maxHP: 80
+  currentHP: 80
+  aTKValue: 0
+  dEFValue: 0
+  stun: 0
+  blind: 0
+  block: 0
+  note: 
+  skillList:
+  - skillIndex: 100
+    damage: 15
+    percentage: 20
+  - skillIndex: 104
+    damage: 8
+    percentage: 35
+  - skillIndex: 105
+    damage: 6
+    percentage: 60
+  - skillIndex: 115
+    damage: -15
+    percentage: 80
+  - skillIndex: 116
+    damage: -5
+    percentage: 100
+  illust: illust3_5
+  currentStance: 1
+  animationController: {fileID: 0}
+  AttackSkillEffect: fx3_lightning_aura_large_yellow
+  AllySkillEffect: fanfx2_cure_large_yellow
+  TopStance: 0.3
+  MiddleStance: 0.4
+  BottomStance: 0.3
+  loot: 020000000100000003000000

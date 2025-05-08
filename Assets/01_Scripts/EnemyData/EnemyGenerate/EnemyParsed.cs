@@ -1,37 +1,33 @@
+[System.Serializable]
 public class EnemyParsed
 {
     public int id;
     public string enemyName;
-    public int hp;
     public string art;
-    public float hpScale;
-    public float damageScale;
+    public int hp;
+    public int exp;
 
-    public string skillEffect;
+    public int[] loots = new int[3];
 
-    public int skill0;
-    public int damage0;
-    public float percentage0;
+    public string attackEffect;
+    public string allyEffect;
 
-    public int skill1;
-    public int damage1;
-    public float percentage1;
-
-    public int skill2;
-    public int damage2;
-    public float percentage2;
+    public int[] skillIndices = new int[5];
+    public float[] skillDamages = new float[5];
+    public float[] skillPercents = new float[5];
 
     public float topPercentage;
     public float middlePercentage;
     public float bottomPercentage;
 
-    public string loot;
-    public string note;
-
     public float atkBuff;
     public float defBuff;
+    public int buffTime;
 
     public bool block;
     public bool blind;
     public bool stun;
+
+    public string note;
+
 }

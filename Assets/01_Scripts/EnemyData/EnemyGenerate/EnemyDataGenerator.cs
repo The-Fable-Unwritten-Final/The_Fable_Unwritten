@@ -1,7 +1,9 @@
 #if UNITY_EDITOR
+using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,9 +33,11 @@ public static class EnemyDataGenerator
 
             // Dictionary 형태로 스킬 구성하여 임시 저장
             List<EnemySkill> parsedSkills = new();
-            AddSkillIfValid(parsedSkills, parsed.skill0, parsed.damage0, parsed.percentage0);
-            AddSkillIfValid(parsedSkills, parsed.skill1, parsed.damage1, parsed.percentage1);
-            AddSkillIfValid(parsedSkills, parsed.skill2, parsed.damage2, parsed.percentage2);
+            AddSkillIfValid(parsedSkills, parsed.skillIndices[0], parsed.skillDamages[0], parsed.skillPercents[0]);
+            AddSkillIfValid(parsedSkills, parsed.skillIndices[1], parsed.skillDamages[1], parsed.skillPercents[1]);
+            AddSkillIfValid(parsedSkills, parsed.skillIndices[2], parsed.skillDamages[2], parsed.skillPercents[2]);
+            AddSkillIfValid(parsedSkills, parsed.skillIndices[3], parsed.skillDamages[3], parsed.skillPercents[3]);
+            AddSkillIfValid(parsedSkills, parsed.skillIndices[4], parsed.skillDamages[4], parsed.skillPercents[4]);
 
             bool needCreate = existing == null || !IsSame(existing, parsed, parsedSkills);
 
@@ -45,14 +49,17 @@ public static class EnemyDataGenerator
                 data.EnemyName = parsed.enemyName;
                 data.MaxHP = parsed.hp;
                 data.CurrentHP = parsed.hp;
-                data.ATKValue = parsed.damage0;
-                data.DEFValue = parsed.defBuff;
-                data.currentStance = EnemyData.StancValue.EStancType.Middle;
-                data.illust = parsed.art;
-                data.animationController = FindAnimatorController(parsed.art);
-                data.skillEffect = parsed.skillEffect;
-                data.hpScale = parsed.hpScale;
-                data.damageScale = parsed.damageScale;
+                data.illust = parsed.art; // 필드가 private면 public 프로퍼티 사용
+                data.exp = parsed.exp;
+
+                data.loot.Clear();
+                foreach(var i in parsed.loots)
+                {
+                    data.loot.Add(i);
+                }
+
+                data.AttackSkillEffect = parsed.attackEffect; // 정확한 필드명과 연결 확인
+                data.AllySkillEffect = parsed.allyEffect;
 
                 // 스킬 설정
                 data.ClearSkills();
@@ -60,6 +67,23 @@ public static class EnemyDataGenerator
                 {
                     data.AddSkill(skill);
                 }
+
+                data.TopStance = parsed.topPercentage;
+                data.MiddleStance = parsed.middlePercentage;
+                data.BottomStance = parsed.bottomPercentage;
+
+                data.ATKValue = parsed.atkBuff; // 첫 스킬 데미지
+                data.DEFValue = parsed.defBuff;
+
+                data.blind = parsed.blind;
+                data.stun = parsed.stun;
+                data.block = parsed.block;
+
+                data.note = parsed.note;
+
+                data.currentStance = StancValue.EStancType.Middle;
+                data.animationController = FindAnimatorController(parsed.art);
+
                 if (existing == null)
                 {
                     AssetDatabase.CreateAsset(data, fullPath);
@@ -109,7 +133,7 @@ public static class EnemyDataGenerator
         if (data.IDNum != parsed.id) return false;
         if (data.EnemyName != parsed.enemyName) return false;
         if (data.MaxHP != parsed.hp) return false;
-        if (data.ATKValue != parsed.damage0) return false;
+        if (data.ATKValue != parsed.atkBuff) return false;
         if (!Mathf.Approximately(data.DEFValue, parsed.defBuff)) return false;
 
         List<EnemySkill> existingSkills = data.SkillList;

@@ -13,7 +13,9 @@ public class EnemyData : ScriptableObject
 
     [SerializeField] private string enemyName;
     public string EnemyName { get => enemyName; set => enemyName = value; }
-    
+
+    public int exp;
+
     [SerializeField] private float maxHP;
     public float MaxHP
     {
@@ -36,17 +38,19 @@ public class EnemyData : ScriptableObject
         }
     }
 
-    [SerializeField] private int aTK;
-    public int ATK { get => aTK; set => aTK = value; }
-
-    [SerializeField] private float aTKValue;
+    [SerializeField] private float aTKValue;        //기본 공방 버프로 써야겠다
     public float ATKValue { get => aTKValue; set => aTKValue = value; }
-
-    [SerializeField] private float dEF;
-    public float DEF { get => dEF; set => dEF = value; }
 
     [SerializeField] private float dEFValue;
     public float DEFValue { get => dEFValue; set => dEFValue = value; }
+
+    public bool stun;
+
+    public bool blind;
+
+    public bool block;
+
+    public string note;
 
     [Header("스킬 목록")]
     [SerializeField] private List<EnemySkill> skillList = new();
@@ -56,32 +60,18 @@ public class EnemyData : ScriptableObject
         set => skillList = value ?? new List<EnemySkill>();
     }
 
-    [System.Serializable]
-    public class StancValue
-    {
-        public enum EStancType
-        {
-            High,
-            Middle,
-            Low
-        }
-
-        public float defenseBonus;
-        public float attackBonus;
-    }
-
     public string illust;       //캐릭터 이미지 이름
 
     public StancValue.EStancType currentStance;
 
     public RuntimeAnimatorController animationController;
 
-    public string skillEffect;
+    public string AttackSkillEffect;
+    public string AllySkillEffect;
 
-    public float hpScale;
-    public float damageScale;
+    public float TopStance, MiddleStance, BottomStance;
 
-
+    public List<int> loot = new();
 
     // 스킬 추가
     public void AddSkill(EnemySkill skill)
@@ -93,7 +83,7 @@ public class EnemyData : ScriptableObject
     // 스킬 모두 삭제
     public void ClearSkills() => skillList.Clear();
 
-    /// <summary>
+/*    /// <summary>
     /// 스테이지에 따라 체력 및 스킬 공격력 변화 함수.
     /// </summary>
     /// <param name="stage"></param>
@@ -106,5 +96,20 @@ public class EnemyData : ScriptableObject
             skill.damage = skill.damage * (1 + (stage - 1) * damageScale);
         }
 
-    }
+    }*/
 }
+
+[System.Serializable]
+public class StancValue
+{
+    public enum EStancType
+    {
+        High,
+        Middle,
+        Low
+    }
+
+    public float defenseBonus;
+    public float attackBonus;
+}
+
