@@ -32,7 +32,116 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         MinStageIndex = Mathf.Max(1, MinStageIndex);
         AssignTemesToStages();
     }
-    
+
+    private void Start()
+    {
+        LoadProgress();
+    }
+
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.S))
+        {
+            SaveProgress();
+        }
+    }
+
+    public void SaveProgress()
+    {
+        ProgressSaveData data = new ProgressSaveData();
+
+        data.stageIndex = StageIndex;
+        data.minStageIndex = MinStageIndex;
+        data.retryFromStart = RetryFromStart;
+        data.stageCleared = StageCleared;
+
+        // CurrentBattleNode
+        // SavedStageData
+        // VisitedNodes
+        data.currentTheme = (int)CurrentTheme;
+
+        data.untilNextCombatEffects = untillNextCombat.Select(e => e.index).ToList();
+        data.untilNextStageEffects = untillNextStage.Select(e => e.index).ToList();
+        data.untilEndAdventureEffects = untillEndAdventure.Select(e => e.index).ToList();
+
+        data.usedRandomEventIds = usedRandomEvnent.ToList();
+        data.stageThemes = stageThemes.ToDictionary(pair => pair.Key, pair => (int)pair.Value);
+        data.eliteClearThemes = eliteClearThemes.Select(e => (int)e).ToList();
+
+        string json = JsonUtility.ToJson(data, true);
+        PlayerPrefs.SetString("ProgressSaveData", json);
+        PlayerPrefs.Save();
+
+        Debug.Log("[ProgressDataManager] 진행 저장 완료");
+    }
+
+    public void LoadProgress()
+    {
+        if (!PlayerPrefs.HasKey("ProgressSaveData"))
+        {
+            Debug.LogWarning("[ProgressDataManager] 저장된 데이터가 없습니다.");
+            return;
+        }
+
+        string json = PlayerPrefs.GetString("ProgressSaveData");
+        ProgressSaveData data = JsonUtility.FromJson<ProgressSaveData>(json);
+
+        StageIndex = data.stageIndex;
+        MinStageIndex = data.minStageIndex;
+        RetryFromStart = data.retryFromStart;
+        StageCleared = data.stageCleared;
+
+        // CurrentBattleNode
+        // SavedStageData
+        // VisitedNodes
+        CurrentTheme = (StageTheme)data.currentTheme;
+
+        untillNextCombat = data.untilNextCombatEffects
+            .Select(index => EventEffectManager.Instance.eventEffectDict[index].Clone())
+            .ToList();
+
+        untillNextStage = data.untilNextStageEffects
+            .Select(index => EventEffectManager.Instance.eventEffectDict[index].Clone())
+            .ToList();
+
+        untillEndAdventure = data.untilEndAdventureEffects
+            .Select(index => EventEffectManager.Instance.eventEffectDict[index].Clone())
+            .ToList();
+
+        usedRandomEvnent = data.usedRandomEventIds.ToHashSet();
+        stageThemes = data.stageThemes.ToDictionary(pair => pair.Key, pair => (StageTheme)pair.Value);
+        eliteClearThemes = data.eliteClearThemes.Select(i => (StageTheme)i).ToHashSet();
+
+
+        EventEffectManager.Instance.LoadEventEffectsData(untillNextCombat, untillNextStage, untillEndAdventure);
+    }
+
+    public void ResetProgress() // 초기화 및 저장
+    {
+        untillNextCombat.Clear();
+        untillNextStage.Clear();
+        untillEndAdventure.Clear();
+
+        usedRandomEvnent.Clear();
+        stageThemes.Clear();
+        eliteClearThemes.Clear();
+
+        StageIndex = 0;
+        MinStageIndex = 0;
+        RetryFromStart = false;
+        StageCleared = false;
+        CurrentBattleNode = null;
+        SavedStageData = null;
+        VisitedNodes.Clear();
+        CurrentTheme = default;
+
+        SaveProgress();
+        Debug.Log("[ProgressDataManager] 데이터 초기화 완료");
+    }
+
+
+
     public void UpdateEventEffectsData(List<EventEffects> com, List<EventEffects> stage, List<EventEffects> adv)
     {
         untillNextCombat = com;
@@ -124,5 +233,31 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         usedRandomEvnent.Add(selected.index);
         return selected;
     }
-    // 추후 세이브 로드 추가.
+}
+
+[System.Serializable]
+public class ProgressSaveData
+{
+    public int stageIndex;
+    public int minStageIndex;
+    public bool retryFromStart;
+    public bool stageCleared;
+
+    public List<int> visitedNodeIds = new();
+    public int currentNodeId;
+    public int currentTheme;
+
+    public List<int> untilNextCombatEffects = new();
+    public List<int> untilNextStageEffects = new();
+    public List<int> untilEndAdventureEffects = new();
+
+    public List<int> usedRandomEventIds = new();
+    public Dictionary<int, int> stageThemes = new();
+    public List<int> eliteClearThemes = new();
+}
+
+[System.Serializable]
+public class SavedEventEffect
+{
+    public int index; // EventEffects의 고유 ID만 저장
 }
