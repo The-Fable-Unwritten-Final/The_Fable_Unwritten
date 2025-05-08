@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EventEffectManager : MonoSingleton<EventEffectManager>
@@ -9,6 +10,7 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
 
     //[Header("Event effect Lists")]
     List<EventEffects> eventEffectList;// 이벤트 효과 리스트.
+    public Dictionary<int, EventEffects> eventEffectDict;// 데이터 외부 접근용 딕셔너리.
 
     // 액션 처럼 사용할 효과들 List
     List<EventEffects> untillNextCombat = new List<EventEffects>(); // 다음 전투까지 지속되는 효과 리스트
@@ -20,6 +22,7 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
         base.Awake();
         // CSV 파일에서 데이터 로드
         eventEffectList = LoadDatas(csvPath);
+        eventEffectDict = eventEffectList.ToDictionary(effect => effect.index);
     }
 
     private List<EventEffects> LoadDatas(string csvPath)
@@ -90,7 +93,6 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
                 // 추후 다른 이벤트 타입에 대한 처리 추가
             }
         }
-
         return eventEffectList;
     }
 
@@ -189,7 +191,12 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
         ProgressDataManager.Instance.UpdateEventEffectsData(untillNextCombat,untillNextStage,untillEndAdventure); // 현재 적용중인 효과 리스트들 저장 및 관리.
     }
 
-
+    public void LoadEventEffectsData(List<EventEffects> com, List<EventEffects> stage, List<EventEffects> adv)
+    {
+        untillNextCombat = com;
+        untillNextStage = stage;
+        untillEndAdventure = adv;
+    }
     public string GetEventEffectText(int index)
     {
         return eventEffectList[index].text;

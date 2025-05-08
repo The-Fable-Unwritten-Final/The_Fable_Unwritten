@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1919,7 +1919,6 @@ MonoBehaviour:
   - {fileID: 1016949503}
   - {fileID: 1739155344}
   - {fileID: 259473993}
-  enemyDataContainer: {fileID: 11400000, guid: 10fc3748c6a6ee344bc3139c9f9ce31c, type: 2}
 --- !u!114 &1145303239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3455,7 +3454,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2101769380}
   - component: {fileID: 2101769382}
-  - component: {fileID: 2101769381}
   m_Layer: 0
   m_Name: EffectManager
   m_TagString: Untagged
@@ -3478,19 +3476,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 931124442}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2101769381
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2101769379}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81e8adcafe63b6a49a872cda68bdb908, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourcePath: CardSkillEffects
 --- !u!114 &2101769382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3505,7 +3490,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectPrefab: {fileID: 279291400}
   effectRoot: {fileID: 1719576056}
-  spriteLoader: {fileID: 2101769381}
 --- !u!224 &187443505252887166
 RectTransform:
   m_ObjectHideFlags: 0

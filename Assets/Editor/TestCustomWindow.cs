@@ -132,7 +132,7 @@ public class TestCustomWindow : EditorWindow
 
         PlayerManager.Instance.AddPlayerDuringGame(
             targetData,
-            CardSystemInitializer.Instance.loadedCards
+            DataManager.Instance.AllCards
         );
     }
 

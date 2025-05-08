@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -7,32 +8,40 @@ using UnityEngine;
 
 public class DataManager : MonoSingleton<DataManager>
 {
-    [SerializeField]
-    private EnemyDataContainer enemyDataContainer;
-
     [Header("CSV Data path")]
     // csv
 
     [Header("Data Loaded")]
     // 다이어리 데이터
     private List<DiaryData>[] diaryGroups = new List<DiaryData>[5]; // tag_num 0~4 (스테이지 1~5까지)
-
-    public IReadOnlyList<DiaryData>[] DiaryGroups => diaryGroups; // 외부에서 읽기 전용으로 접근 가능
-
+    private List<CardModel> allCards = new();
+    //카드 통합
+    private Dictionary<int, CardModel> cardLookup = new();
     // 카드북 카드 데이터
     private Dictionary<int, CardModel> cardForShopia = new();
     private Dictionary<int, CardModel> cardForKayla = new();
     private Dictionary<int, CardModel> cardForLeon = new();
+    //효과 스프라이트
+    private Dictionary<string, List<Sprite>> cardEffects = new();
+    //적 행동
+    private Dictionary<int, EnemyAct> enemyActDict = new();
+    //대화 트리거
+    private Dictionary<string, string> dialogueTriggers = new();
+    //대화 내용
+    private Dictionary<string, List<JsonCutsceneData>> dialogueDatabase = new();
+    public List<CardModel> AllCards => allCards;
+    // 적 데이터
+    [SerializeField]
+    public EnemyDataContainer enemyDataContainer;
+    // 스테이지 데이터
+    private List<EnemyStageSpawnData> enemySpawnData;
+    // 랜덤 이벤트 데이터
+    public List<RandomEventData> allRandomEvents { get; set;}
+    // 백그라운드 이미지 데이터
+    private Dictionary<int, Sprite> stageBackgrounds;
 
-    private Dictionary<string, List<Sprite>> cardEffects = new();   //효과 스프라이트
-
-    private Dictionary<int, EnemyAct> enemyActDict = new();       //적 행동
-
-    private Dictionary<string, string> dialogueTriggers = new();    //대화 트리거
-
-    private Dictionary<string, List<JsonCutsceneData>> dialogueDatabase = new();    //대화 내용
-
-
+    public IReadOnlyList<DiaryData>[] DiaryGroups => diaryGroups; // 외부에서 읽기 전용으로 접근 가능
+    public IReadOnlyDictionary<int, CardModel> CardLookup => cardLookup;
     public IReadOnlyDictionary<int, CardModel> CardForShopia => cardForShopia; // 외부에서 읽기 전용으로 접근 가능
     public IReadOnlyDictionary<int, CardModel> CardForKayla => cardForKayla; // 외부에서 읽기 전용으로 접근 가능
     public IReadOnlyDictionary<int, CardModel> CardForLeon => cardForLeon; // 외부에서 읽기 전용으로 접근 가능
@@ -41,14 +50,6 @@ public class DataManager : MonoSingleton<DataManager>
     public IReadOnlyDictionary<string, string> DialogueTriggers => dialogueTriggers;    //대화 트리거
     public IReadOnlyDictionary<string, List<JsonCutsceneData>> DialogueDatabase => dialogueDatabase;
 
-    // 스테이지 데이터
-    private List<EnemyStageSpawnData> enemySpawnData;
-
-    // 랜덤 이벤트 데이터
-    public List<RandomEventData> allRandomEvents { get; set;}
-
-    // 백그라운드 이미지 데이터
-    private Dictionary<int, Sprite> stageBackgrounds;
 
     protected override void Awake()
     {
@@ -57,18 +58,13 @@ public class DataManager : MonoSingleton<DataManager>
         enemySpawnData = StageSpawnSetCSVParser.LoadEnemySpawnSet() ?? new();
         allRandomEvents = RandomEventJsonLoader.LoadAllEvents() ?? new();
         stageBackgrounds = BackgoundLoader.LoadBackgrounds() ?? new();
-        //InitCardBookDictionary();
         InitEnemySkillDictionary();
         InitDialogueTriggers();
         InitDialogueDatabase();
         InitCardEffectSprites();
+        InitCardBookDictionary();
 
     }
-    private void Start()
-    {
-        InitCardBookDictionary(); // 나중에 동환님쪽 카드데이터 로드함수 이후에 이거 넣어주세요.
-    }
-
 
     /// <summary>
     /// 다이어리의 데이터를 JSON 파일에서 로드합니다.
@@ -100,14 +96,19 @@ public class DataManager : MonoSingleton<DataManager>
         for (int i = 0; i < 5; i++)
             diaryGroups[i] = diaryGroups[i].OrderBy(d => d.index).ToList();
     }
+
     /// <summary>
     /// 카드북 카드 데이터를 초기화 + 분류작업.
     /// </summary>
     private void InitCardBookDictionary()
     {
-        List<CardModel> allcards = CardSystemInitializer.Instance.loadedCards;
-        foreach (var card in allcards)
+        allCards = CardDatabaseLoader.LoadAll("ExternalFiles/Cards");
+        cardLookup.Clear();
+        foreach (var card in allCards)
         {
+            cardLookup[card.index] = card;
+
+            ///이부분은 나중에 최적화 위해 이야기 필요할 것 같습니다. 분류가 필수라면 이쪽을 남기는게 좋을 수도 있겠네요.
             if (card.characterClass == CharacterClass.Sophia)
             {
                 cardForShopia.Add(card.index, card);
@@ -168,8 +169,6 @@ public class DataManager : MonoSingleton<DataManager>
             else
                 Debug.LogWarning($"[DataManager] 중복 스킬 인덱스: {act.index}");
         }
-
-        Debug.Log($"[DataManager] EnemySkill {enemyActDict.Count}개 등록 완료.");
     }
 
     /// <summary>
@@ -195,8 +194,6 @@ public class DataManager : MonoSingleton<DataManager>
                 dialogueTriggers[triggerKey] = data.index;
             }
         }
-
-        Debug.Log($"[DataManager] Dialogue Trigger {dialogueTriggers.Count}개 등록 완료");
     }
 
     private void InitDialogueDatabase()
@@ -218,8 +215,6 @@ public class DataManager : MonoSingleton<DataManager>
 
             dialogueDatabase[line.id].Add(line);
         }
-
-        Debug.Log($"[DataManager] DialogueDatabase에 총 {dialogueDatabase.Count}개 씬 등록 완료");
     }
 
     private void InitCardEffectSprites()
@@ -249,8 +244,6 @@ public class DataManager : MonoSingleton<DataManager>
 
             cardEffects[folderName] = new List<Sprite>(sprites);
         }
-
-        Debug.Log($"[DataManager] 총 {cardEffects.Count}개의 카드 이펙트 그룹 로드 완료.");
     }
 
 }

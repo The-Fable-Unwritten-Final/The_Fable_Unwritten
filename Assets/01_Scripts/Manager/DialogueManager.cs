@@ -9,11 +9,6 @@ using UnityEngine.UI;
 
 public class DialogueManager : MonoSingleton<DialogueManager>
 {
-    [Header("JSON 데이터")]
-    [SerializeField] private TextAsset jsonFile;
-
-    [Header("트리거 JSON (Trigger -> sceneID 매핑)")]
-    [SerializeField] private TextAsset triggerJson;
 
     [Header("컷씬 이름 (Hierarchy에 존재하는 오브젝트)")]
     [SerializeField] private EcCutscene targetCutscene;
@@ -21,9 +16,6 @@ public class DialogueManager : MonoSingleton<DialogueManager>
     [Header("컷씬 배경 이미지 (StageScene 전용)")]
     [SerializeField] private Image backgroundImage;
 
-
-    private Dictionary<string, List<JsonCutsceneData>> dialogueDatabase;    //대화 데이터 저장용
-    private Dictionary<string, string> noteToSceneIDMap;    //대화 트리거 확인용 
     private HashSet<string> playedCampScenes = new(); // 야영 이벤트 중복 방지용
     private bool isPlaying = false;
 
@@ -31,8 +23,6 @@ public class DialogueManager : MonoSingleton<DialogueManager>
     protected override void Awake()
     {
         base.Awake();
-        LoadDialogueFromJSON(jsonFile);
-        LoadTriggerFromJSON(triggerJson);
 
         if (targetCutscene == null)
         {
@@ -59,43 +49,6 @@ public class DialogueManager : MonoSingleton<DialogueManager>
     }
 
     /// <summary>
-    /// JSON 파일에서 대화 데이터를 로드하여 Dictionary로 저장
-    /// </summary>
-    private void LoadDialogueFromJSON(TextAsset json)
-    {
-        var parsedList = JsonCutsceneLoader.ParseFromJSON(json);
-        dialogueDatabase = new();
-
-        foreach (var line in parsedList)
-        {
-            if (!dialogueDatabase.ContainsKey(line.id))
-                dialogueDatabase[line.id] = new List<JsonCutsceneData>();
-
-            dialogueDatabase[line.id].Add(line);
-        }
-    }
-
-    /// <summary>
-    /// JSON 파일에서 대화 트리거를 로드하여 Dictionary에 저장
-    /// </summary>
-    /// <param name="triggerJson">대화 트리거 파일</param>
-    private void LoadTriggerFromJSON(TextAsset triggerJson)
-    {
-        noteToSceneIDMap = new();
-
-        List<DialogueTriggerData> triggerList = JsonUtilityWrapper.FromJsonList<DialogueTriggerData>(triggerJson.text);
-        foreach (var data in triggerList)
-        {
-            string triggerKey = ParseNoteToTriggerKey(data.note);
-            if (!string.IsNullOrEmpty(triggerKey))
-            {
-                noteToSceneIDMap[triggerKey] = data.index;
-                //Debug.Log($"[Trigger] 등록됨: {triggerKey} → {data.index}");
-            }
-        }
-    }
-
-    /// <summary>
     /// 특정 ID에 맞는 대화를 실행
     /// </summary>
     public void PlayDialogue(string dialogueID)
@@ -106,7 +59,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
             return;
         }
 
-        if (!dialogueDatabase.ContainsKey(dialogueID))
+        if (!DataManager.Instance.DialogueDatabase.ContainsKey(dialogueID))
         {
             Debug.LogError($"[DialogueManager] ID '{dialogueID}' 대화 없음");
             return;
@@ -118,7 +71,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
             return;
         }
 
-        var data = JsonCutsceneLoader.Convert(dialogueDatabase[dialogueID]);
+        var data = JsonCutsceneLoader.Convert(DataManager.Instance.DialogueDatabase[dialogueID]);
         int stageIndex = ProgressDataManager.Instance.StageIndex;
         SetCutsceneBackground(stageIndex); // sprite 설정만
 
@@ -175,7 +128,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 
     public void TryPlaySceneByTrigger(string key, UnityAction onComplete = null)
     {
-        if (noteToSceneIDMap.TryGetValue(key, out var sceneID))
+        if (DataManager.Instance.DialogueTriggers.TryGetValue(key, out var sceneID))
         {
             PlayDialogue(sceneID);
         }
@@ -218,7 +171,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
         {
             string key = $"Camp:{charName}:{i}";
 
-            if (noteToSceneIDMap.TryGetValue(key, out var sceneID))
+            if (DataManager.Instance.DialogueTriggers.TryGetValue(key, out var sceneID))
             {
                 if (!playedCampScenes.Contains(sceneID))
                 {
@@ -230,48 +183,6 @@ public class DialogueManager : MonoSingleton<DialogueManager>
         }
 
         Debug.Log($"[DialogueManager] {character}의 야영 컷씬은 모두 재생됨");
-    }
-
-    /// <summary>
-    /// 파싱된 데이터의 note를 정제
-    /// </summary>
-    /// <param name="note"></param>
-    /// <returns></returns>
-    private string ParseNoteToTriggerKey(string note)
-    {
-        if (note.Contains("시작 전"))
-        {
-            var stage = System.Text.RegularExpressions.Regex.Match(note, "\\d+").Value;
-            return $"StageStart:{stage}";
-        }
-        if (note.Contains("전투 노드 클릭"))
-        {
-            var match = System.Text.RegularExpressions.Regex.Match(note, "\\d+번째");
-            var node = match.Value.Replace("번째", "");
-            var stage = System.Text.RegularExpressions.Regex.Match(note, "스테이지 (\\d+)").Groups[1].Value;
-            return $"Battle:{stage}_{node}";
-        }
-        if (note.Contains("엘리트 전투 후"))
-        {
-            var stage = System.Text.RegularExpressions.Regex.Match(note, "\\d+").Value;
-            return $"EliteEnd:{stage}";
-        }
-        if (note.Contains("보스 전투 승리 후"))
-        {
-            var stage = System.Text.RegularExpressions.Regex.Match(note, "\\d+").Value;
-            return $"Boss:{stage}";
-        }
-        if (note.StartsWith("야영"))
-        {
-            var match = System.Text.RegularExpressions.Regex.Match(note, @"야영\s*(\S+)\s*(\d+)");
-            if (match.Success)
-            {
-                string charName = match.Groups[1].Value.Trim();  // 예: 소피아
-                string index = match.Groups[2].Value.Trim();      // 예: 1, 2
-                return $"Camp:{charName}:{index}";
-            }
-        }
-        return null;
     }
 
     private void SetCutsceneBackground(int stageIndex)

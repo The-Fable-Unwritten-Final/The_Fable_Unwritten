@@ -15,7 +15,6 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] GameObject background;
     [SerializeField] private Transform[] enemySlots;                    // 몬스터 생성 위치
     [SerializeField] private List<EnemyStageSpawnData> stageSpawnDatas; // 각스테이지 스폰데이터 저장 공간
-    [SerializeField] private EnemyDataContainer enemyDataContainer;     // 몬스터 프리팹 저장 공간
 
     int stageIndex;
     
@@ -73,7 +72,7 @@ public class EnemySpawner : MonoBehaviour
     private void ApplyEnemyDataToSlots(EnemySpawnSet selectedSet)
     {
         var enemyParty = GameManager.Instance.turnController.battleFlow.enemyParty;
-        
+        EnemyDataContainer enemyDataContainer = DataManager.Instance.enemyDataContainer;
         // slot 맵핑
         Dictionary<int, EnemySlotData> slotMap = new();
 

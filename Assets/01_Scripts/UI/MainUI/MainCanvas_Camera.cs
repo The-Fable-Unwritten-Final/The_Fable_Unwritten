@@ -33,6 +33,5 @@ public class MainCanvas_Camera : MonoBehaviour
 
         canvas.renderMode = RenderMode.ScreenSpaceCamera;
         canvas.worldCamera = cam;
-        Debug.Log("[MainCanvas_Camera] 카메라 연결 완료: " + cam.name);
     }
 }
