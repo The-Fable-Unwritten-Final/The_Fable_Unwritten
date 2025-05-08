@@ -10,14 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d99085e4860989e40ba273fad6060564, type: 3}
-  m_Name: 20_CandleSoldier
+  m_Name: "10_\uB291\uB300"
   m_EditorClassIdentifier: 
-  idNum: 20
-  enemyName: CandleSoldier
+  idNum: 10
+  enemyName: "\uB291\uB300"
+  exp: 5
   maxHP: 15
-  hpValue: 0
-  aTK: 1
+  currentHP: 15
   aTKValue: 0
-  dEF: 1
   dEFValue: 0
+  stun: 0
+  blind: 0
+  block: 0
+  note: 
+  skillList:
+  - skillIndex: 100
+    damage: 5
+    percentage: 1
+  illust: illust1_0
   currentStance: 1
+  animationController: {fileID: 0}
+  AttackSkillEffect: fx3_bite_large_yellow
+  AllySkillEffect: 
+  TopStance: 0.3
+  MiddleStance: 0.4
+  BottomStance: 0.3
+  loot: 00000000

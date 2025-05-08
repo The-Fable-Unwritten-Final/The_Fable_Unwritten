@@ -115,7 +115,7 @@ public class EnemySpawner : MonoBehaviour
                 {
                     var copydata = ScriptableObject.Instantiate(origndata);
                     copydata.SkillList = origndata.SkillList.Select(skill => skill.Clone()).ToList();
-                    copydata.UpgradeEnemybyStage(stageIndex);
+                    //copydata.UpgradeEnemybyStage(stageIndex);     //스테이지에 따라 HP 성장 계수 추가
 
                     enemy.SetData(copydata);
                     slot.gameObject.SetActive(true);

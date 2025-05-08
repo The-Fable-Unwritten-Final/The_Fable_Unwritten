@@ -10,29 +10,41 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d99085e4860989e40ba273fad6060564, type: 3}
-  m_Name: "15_\uC774\uC988\uCE7C"
+  m_Name: "25_\uC774\uC988\uCE7C"
   m_EditorClassIdentifier: 
-  idNum: 15
+  idNum: 25
   enemyName: "\uC774\uC988\uCE7C"
-  maxHP: 40
-  currentHP: 40
-  aTK: 0
+  exp: 15
+  maxHP: 120
+  currentHP: 120
   aTKValue: 0
-  dEF: 0
   dEFValue: 0
+  stun: 0
+  blind: 0
+  block: 0
+  note: 
   skillList:
-  - skillIndex: 109
-    damage: 0
-    percentage: 0.4
-  - skillIndex: 110
-    damage: 5
-    percentage: 0.2
+  - skillIndex: 100
+    damage: 15
+    percentage: 15
+  - skillIndex: 104
+    damage: 8
+    percentage: 35
+  - skillIndex: 105
+    damage: 6
+    percentage: 55
+  - skillIndex: 111
+    damage: 10
+    percentage: 80
   - skillIndex: 112
-    damage: 0
-    percentage: 0.4
+    damage: 5
+    percentage: 100
   illust: illust2_5
   currentStance: 1
   animationController: {fileID: 9100000, guid: 168ef65833d7ea2468bb054f4a512bb0, type: 2}
-  skillEffect: 
-  hpScale: 0.6
-  damageScale: 0.6
+  AttackSkillEffect: pj1_fireball_large_red
+  AllySkillEffect: 
+  TopStance: 0.3
+  MiddleStance: 0.4
+  BottomStance: 0.3
+  loot: 010000000200000003000000

@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d99085e4860989e40ba273fad6060564, type: 3}
+  m_Name: "34_\uADF8\uB864\uB9AC"
+  m_EditorClassIdentifier: 
+  idNum: 34
+  enemyName: "\uADF8\uB864\uB9AC"
+  exp: 10
+  maxHP: 65
+  currentHP: 65
+  aTKValue: 0
+  dEFValue: 0
+  stun: 0
+  blind: 0
+  block: 0
+  note: 
+  skillList:
+  - skillIndex: 100
+    damage: 10
+    percentage: 35
+  - skillIndex: 101
+    damage: 6
+    percentage: 65
+  - skillIndex: 114
+    damage: -10
+    percentage: 80
+  - skillIndex: 116
+    damage: 0
+    percentage: 100
+  illust: illust3_4
+  currentStance: 1
+  animationController: {fileID: 0}
+  AttackSkillEffect: fx3_bite_large_violet
+  AllySkillEffect: fanfx2_cure_large_yellow
+  TopStance: 0.2
+  MiddleStance: 0.3
+  BottomStance: 0.5
+  loot: 0200000000000000

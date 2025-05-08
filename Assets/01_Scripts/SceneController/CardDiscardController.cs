@@ -34,9 +34,6 @@ public class CardDiscardController : MonoBehaviour
             DiscardCard(3); // 테스트용 카드 버리기 호출
         if(Input.GetKeyDown(KeyCode.O))
             DiscardCard(1, 1, 0); // 테스트용 카드 버리기 호출
-
-        if(Input.GetKeyDown(KeyCode.P))
-            ConfirmDiscard(); // 테스트용 카드 버리기 확정 호출
     }
     private void Awake()
     {
@@ -64,17 +61,18 @@ public class CardDiscardController : MonoBehaviour
         }
         else
         {
+            text = "버릴 카드를 선택하세요.\n\n";
             if(reqSophiaCount > 0)
             {
-                text += $"소피아의 카드 {reqSophiaCount}장을 버려야 합니다.";
+                text += $"<sprite=0> {reqSophiaCount} 장\n";
             }
             if(reqKylaCount > 0 )
             {
-                text += $"\n카일라의 카드 {reqKylaCount}장을 버려야 합니다.";
+                text += $"\n<sprite=1> {reqKylaCount} 장\n";
             }
             if(reqLeonCount > 0)
             {
-                text += $"\n레온의 카드 {reqLeonCount}장을 버려야 합니다.";
+                text += $"\n<sprite=2> {reqLeonCount} 장";
             }
         }
 
