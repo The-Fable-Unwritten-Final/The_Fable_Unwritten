@@ -134,8 +134,6 @@ public class DataManager : MonoSingleton<DataManager>
         .Where(x => x.theme == theme && x.type == type)
         .ToList();
 
-        Debug.Log($"[StageSettingController] 스폰 데이터 검색: Theme={theme}, Type={type}, 결과={result.Count}개");
-
         return result;
     }
 

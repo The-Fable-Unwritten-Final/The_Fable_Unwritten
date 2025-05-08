@@ -51,7 +51,10 @@ public class EnemySpawner : MonoBehaviour
 
     private void FixedStage1Setting(EnemyStageSpawnData stageData)
     {
-        int columnIndex = ProgressDataManager.Instance.VisitedNodes.Last().columnIndex;
+        var currentNode = ProgressDataManager.Instance.CurrentBattleNode;
+        if (currentNode == null) return;
+
+        int columnIndex = currentNode.columnIndex;
         int index = columnIndex - 1;
 
         if (index < 0 || index >= stageData.spawnSets.Count) return;
