@@ -13,7 +13,7 @@ public class PlayerSpawner : MonoBehaviour
 
     private void Start()
     {
-        var ownedPlayerDatas = GameManager.Instance.playerDatas;
+        var ownedPlayerDatas = ProgressDataManager.Instance.PlayerDatas;
 
         foreach (var slot in playerSlots)
         {

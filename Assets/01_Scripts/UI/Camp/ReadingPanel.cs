@@ -59,7 +59,7 @@ public class ReadingPanel : BaseCampPanel
     // 현재 캐릭터의 보유 카드 확인
     private List<CardModel> CurrentCharacterDeck(CharacterClass characterClass)
     {
-        var player = GameManager.Instance.playerDatas
+        var player = ProgressDataManager.Instance.PlayerDatas
             .FirstOrDefault(p => p.CharacterClass == characterClass);
 
         if (player == null) return new();
@@ -113,7 +113,7 @@ public class ReadingPanel : BaseCampPanel
         {
             chageCardIndex = bookCard.cardIndex;
 
-            var player = GameManager.Instance.playerDatas
+            var player = ProgressDataManager.Instance.PlayerDatas
           .FirstOrDefault(p => p.CharacterClass == cardBook.GetComponent<CampCardBook>().Character);
 
             // 인덱스 위치 찾아서 교체

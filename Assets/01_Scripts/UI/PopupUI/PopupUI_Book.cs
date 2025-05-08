@@ -12,7 +12,7 @@ public class PopupUI_Book : BasePopupUI
 
     private void Awake()
     {
-        playerDatas = GameManager.Instance.playerDatas;// 플레이어 데이터 받아오기.
+        playerDatas = ProgressDataManager.Instance.PlayerDatas;// 플레이어 데이터 받아오기.
     }
 
     private void OnEnable()
