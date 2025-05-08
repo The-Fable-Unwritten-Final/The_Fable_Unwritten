@@ -46,6 +46,8 @@ public class EnemySpawner : MonoBehaviour
         {
             RandomSetting(stageData);
         }
+
+        ProgressDataManager.Instance.SaveProgress();
     }
 
 
@@ -78,7 +80,6 @@ public class EnemySpawner : MonoBehaviour
             selectedSet = stageData.GetRandomSet();
             int selectedIndex = stageData.spawnSets.IndexOf(selectedSet);
             ProgressDataManager.Instance.SaveEnemySetIndex(selectedIndex);
-            Debug.Log($"[EnemySpawner] 랜덤으로 선택한 EnemySet 인덱스: {selectedIndex}");
         }
         ApplyEnemyDataToSlots(selectedSet);
     }

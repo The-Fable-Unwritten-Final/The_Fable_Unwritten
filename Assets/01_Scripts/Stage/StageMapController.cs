@@ -100,6 +100,9 @@ public class StageMapController : MonoBehaviour
         pdm.SaveStageState(stageData, visitedNodes);
         pdm.SetCurrentBattleNode(clicked);
 
+        // 노드 클릭 시 저장
+        ProgressDataManager.Instance.SaveProgress();
+
         int stageIndex = pdm.StageIndex;
         int columnIndex = clicked.columnIndex;
 
@@ -127,8 +130,8 @@ public class StageMapController : MonoBehaviour
             }
         }
 
-            // 노드 타입별 씬 전환
-            switch (clicked.type)
+        // 노드 타입별 씬 전환
+        switch (clicked.type)
         {
             case NodeType.NormalBattle:
             case NodeType.EliteBattle:
@@ -154,7 +157,7 @@ public class StageMapController : MonoBehaviour
         {
             // 중간 노드의 경우 다음 스테이지 연결
             mapRenderer.UpdateInteractables(clicked, visitedNodes);
-        }
+        }     
     }
 
     // 클릭된 노드가 마지막 열에 있는지 확인
