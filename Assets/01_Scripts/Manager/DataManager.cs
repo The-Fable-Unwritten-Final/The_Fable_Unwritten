@@ -169,8 +169,6 @@ public class DataManager : MonoSingleton<DataManager>
             else
                 Debug.LogWarning($"[DataManager] 중복 스킬 인덱스: {act.index}");
         }
-
-        Debug.Log($"[DataManager] EnemySkill {enemyActDict.Count}개 등록 완료.");
     }
 
     /// <summary>
@@ -196,8 +194,6 @@ public class DataManager : MonoSingleton<DataManager>
                 dialogueTriggers[triggerKey] = data.index;
             }
         }
-
-        Debug.Log($"[DataManager] Dialogue Trigger {dialogueTriggers.Count}개 등록 완료");
     }
 
     private void InitDialogueDatabase()
@@ -219,8 +215,6 @@ public class DataManager : MonoSingleton<DataManager>
 
             dialogueDatabase[line.id].Add(line);
         }
-
-        Debug.Log($"[DataManager] DialogueDatabase에 총 {dialogueDatabase.Count}개 씬 등록 완료");
     }
 
     private void InitCardEffectSprites()
@@ -250,8 +244,6 @@ public class DataManager : MonoSingleton<DataManager>
 
             cardEffects[folderName] = new List<Sprite>(sprites);
         }
-
-        Debug.Log($"[DataManager] 총 {cardEffects.Count}개의 카드 이펙트 그룹 로드 완료.");
     }
 
 }

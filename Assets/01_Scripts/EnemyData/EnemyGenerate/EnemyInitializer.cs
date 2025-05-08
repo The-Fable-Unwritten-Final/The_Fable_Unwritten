@@ -28,7 +28,6 @@ public static class EnemyInitializer
         }
 
         EnemyDataGenerator.GenerateFromParsed(parsedList);
-        Debug.Log($"[EnemyDataImporter] 총 {parsedList.Count}개의 EnemyData를 처리했습니다.");
     }
 }
 #endif

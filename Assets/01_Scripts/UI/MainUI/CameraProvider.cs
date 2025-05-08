@@ -17,8 +17,6 @@ public class CameraProvider : MonoBehaviour
             return;
         }
 
-        Debug.Log("[CameraProvider] 카메라 설정 완료: " + UICamera.name);
-
         // 씬마다 있는 CameraProvider가 MainCanvas를 찾아서 카메라 연결
         var canvasController = FindObjectOfType<MainCanvas_Camera>();
         if (canvasController != null)

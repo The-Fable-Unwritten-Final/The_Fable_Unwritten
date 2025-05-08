@@ -114,7 +114,5 @@ public class CutsceneEffectPlayer : MonoBehaviour
             bottomMask.anchoredPosition = Vector2.zero;
             bottomMask.gameObject.SetActive(false);
         }
-
-        Debug.Log("[CutsceneEffectPlayer] All effects cleared.");
     }
 }

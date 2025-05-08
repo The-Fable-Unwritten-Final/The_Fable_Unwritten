@@ -157,7 +157,6 @@ public static class EnemyDataGenerator
         so.ApplyModifiedProperties();
         EditorUtility.SetDirty(container);
         AssetDatabase.SaveAssets();
-        Debug.Log($"[EnemyDataContainer] 총 {allEnemies.Count}개 EnemyData 등록 완료");
     }
 
     private static RuntimeAnimatorController FindAnimatorController(string illustName)
