@@ -33,12 +33,7 @@ public static class EnemyCSVParser
                     hp = ParseInt(t, 3),
                     exp = ParseInt(t, 4),
 
-                    loots = new int[]
-                    {
-                        ParseInt(t, 5),
-                        ParseInt(t, 6),
-                        ParseInt(t, 7)
-                    },
+                    loots = new List<int>(),
 
                     attackEffect = ParseString(t, 8),
                     allyEffect = ParseString(t, 9),
@@ -48,12 +43,23 @@ public static class EnemyCSVParser
                     skillPercents = new float[5]
                 };
 
+                //스킬 처리
                 for (int j = 0; j < 5; j++)
                 {
                     int baseCol = 10 + j * 3;
                     data.skillIndices[j] = ParseInt(t, baseCol);
                     data.skillDamages[j] = ParseFloat(t, baseCol + 1);
                     data.skillPercents[j] = ParseFloat(t, baseCol + 2);
+                }
+
+                // loot0 ~ loot2 처리
+                for (int lootIndex = 5; lootIndex <= 7; lootIndex++)
+                {
+                    string raw = ParseString(t, lootIndex);
+                    if (string.IsNullOrWhiteSpace(raw)) continue;
+
+                    if (int.TryParse(raw, out int lootValue))
+                        data.loots.Add(lootValue);
                 }
 
                 data.topPercentage = ParseFloat(t, 25);
@@ -98,4 +104,6 @@ public static class EnemyCSVParser
         float.TryParse(tokens[index], out float result);
         return result;
     }
+
 }
+

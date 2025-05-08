@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 [System.Serializable]
 public class EnemyParsed
 {
@@ -7,7 +9,7 @@ public class EnemyParsed
     public int hp;
     public int exp;
 
-    public int[] loots = new int[3];
+    public List<int> loots;
 
     public string attackEffect;
     public string allyEffect;
