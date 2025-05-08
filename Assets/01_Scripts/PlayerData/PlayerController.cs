@@ -20,7 +20,14 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public bool IsIgnited => false;  // 점화 여부 - 추후 확장
     public string CurrentStance => playerData.currentStance.stencType.ToString();       //현재의 자세를 가져옴
     public CharacterClass ChClass{get; set;}
-        //현재 캐릭터의 클래스를 가져옴.
+    //현재 캐릭터의 클래스를 가져옴.
+
+    //---
+    [Header("Stance UI")]
+    [SerializeField]
+    private GameObject stanceButtonContainerPrefab; // 상·중·하 버튼 3개 묶음 프리팹
+    private GameObject _stanceContainer;
+    //---
 
     [SerializeField]private List<StatusEffect> activeEffects = new List<StatusEffect>();        //현재 가지고 있는 상태이상 및 버프
 
@@ -213,9 +220,35 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     }
 
 
+    //---
+    /// <summary>
+    /// 캐릭터 아이콘 클릭 시 호출 (UI 버튼에 연결)
+    /// </summary>
+    public void OnCharacterIconClicked()
+    {
+        // 1) 플레이어 턴이 아닐 때 무시
+        if (!FindObjectOfType<BattleFlowController>().IsPlayerTurn())
+            return;
 
+        // 2) 이미 열려 있으면 닫기
+        if (_stanceContainer != null)
+        {
+            Destroy(_stanceContainer);
+            _stanceContainer = null;
+            return;
+        }
+
+        // 3) 컨테이너 생성 & 초기화
+        _stanceContainer = Instantiate(
+            stanceButtonContainerPrefab,
+            transform     // 캐릭터 오브젝트 자식으로
+        );
+        foreach (var btn in _stanceContainer.GetComponentsInChildren<StanceButton>())
+            btn.Initialize(this);
+    }
     public void ChangeStance(PlayerData.StancType newStance) //StancUI 함수
     {
+
 
         PlayerData.StancValue stance = playerData.allStances.Find(s => s.stencType == newStance);
         if (stance != null)
@@ -224,6 +257,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             float finalAtk = playerData.ATK + stance.attackBonus; //스텐스 공격력 계산
             float finalDef = playerData.DEF + stance.defenseBonus;
         }
+
     }
     //---
 
