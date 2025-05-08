@@ -14,26 +14,33 @@ public class DataManager : MonoSingleton<DataManager>
     [Header("Data Loaded")]
     // 다이어리 데이터
     private List<DiaryData>[] diaryGroups = new List<DiaryData>[5]; // tag_num 0~4 (스테이지 1~5까지)
-
-    public IReadOnlyList<DiaryData>[] DiaryGroups => diaryGroups; // 외부에서 읽기 전용으로 접근 가능
-
     private List<CardModel> allCards = new();
-    private Dictionary<int, CardModel> cardLookup = new();      //카드 통합
-
+    //카드 통합
+    private Dictionary<int, CardModel> cardLookup = new();
     // 카드북 카드 데이터
     private Dictionary<int, CardModel> cardForShopia = new();
     private Dictionary<int, CardModel> cardForKayla = new();
     private Dictionary<int, CardModel> cardForLeon = new();
-
-    private Dictionary<string, List<Sprite>> cardEffects = new();   //효과 스프라이트
-
-    private Dictionary<int, EnemyAct> enemyActDict = new();       //적 행동
-
-    private Dictionary<string, string> dialogueTriggers = new();    //대화 트리거
-
-    private Dictionary<string, List<JsonCutsceneData>> dialogueDatabase = new();    //대화 내용
-
+    //효과 스프라이트
+    private Dictionary<string, List<Sprite>> cardEffects = new();
+    //적 행동
+    private Dictionary<int, EnemyAct> enemyActDict = new();
+    //대화 트리거
+    private Dictionary<string, string> dialogueTriggers = new();
+    //대화 내용
+    private Dictionary<string, List<JsonCutsceneData>> dialogueDatabase = new();
     public List<CardModel> AllCards => allCards;
+    // 적 데이터
+    [SerializeField]
+    public EnemyDataContainer enemyDataContainer;
+    // 스테이지 데이터
+    private List<EnemyStageSpawnData> enemySpawnData;
+    // 랜덤 이벤트 데이터
+    public List<RandomEventData> allRandomEvents { get; set;}
+    // 백그라운드 이미지 데이터
+    private Dictionary<int, Sprite> stageBackgrounds;
+
+    public IReadOnlyList<DiaryData>[] DiaryGroups => diaryGroups; // 외부에서 읽기 전용으로 접근 가능
     public IReadOnlyDictionary<int, CardModel> CardLookup => cardLookup;
     public IReadOnlyDictionary<int, CardModel> CardForShopia => cardForShopia; // 외부에서 읽기 전용으로 접근 가능
     public IReadOnlyDictionary<int, CardModel> CardForKayla => cardForKayla; // 외부에서 읽기 전용으로 접근 가능
@@ -43,18 +50,6 @@ public class DataManager : MonoSingleton<DataManager>
     public IReadOnlyDictionary<string, string> DialogueTriggers => dialogueTriggers;    //대화 트리거
     public IReadOnlyDictionary<string, List<JsonCutsceneData>> DialogueDatabase => dialogueDatabase;
 
-    // 적 데이터
-    [SerializeField]
-    public EnemyDataContainer enemyDataContainer;
-
-    // 스테이지 데이터
-    private List<EnemyStageSpawnData> enemySpawnData;
-
-    // 랜덤 이벤트 데이터
-    public List<RandomEventData> allRandomEvents { get; set;}
-
-    // 백그라운드 이미지 데이터
-    private Dictionary<int, Sprite> stageBackgrounds;
 
     protected override void Awake()
     {
@@ -63,18 +58,13 @@ public class DataManager : MonoSingleton<DataManager>
         enemySpawnData = StageSpawnSetCSVParser.LoadEnemySpawnSet() ?? new();
         allRandomEvents = RandomEventJsonLoader.LoadAllEvents() ?? new();
         stageBackgrounds = BackgoundLoader.LoadBackgrounds() ?? new();
-        //InitCardBookDictionary();
         InitEnemySkillDictionary();
         InitDialogueTriggers();
         InitDialogueDatabase();
         InitCardEffectSprites();
+        InitCardBookDictionary();
 
     }
-    private void Start()
-    {
-        InitCardBookDictionary(); // 나중에 동환님쪽 카드데이터 로드함수 이후에 이거 넣어주세요.
-    }
-
 
     /// <summary>
     /// 다이어리의 데이터를 JSON 파일에서 로드합니다.
