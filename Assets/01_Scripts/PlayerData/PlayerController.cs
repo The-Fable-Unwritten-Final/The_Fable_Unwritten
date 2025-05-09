@@ -24,9 +24,12 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     //---
     [Header("Stance UI")]
-    [SerializeField]
-    private GameObject stanceButtonContainerPrefab; // 상·중·하 버튼 3개 묶음 프리팹
-    private GameObject _stanceContainer;
+    [Tooltip("상·중·하 버튼 컨테이너 프리팹")]
+    [SerializeField] private GameObject stanceButtonContainerPrefab;
+
+    // 런타임에 생성된 팝업을 보관
+    private GameObject stanceContainer;
+
     //---
 
     [SerializeField]private List<StatusEffect> activeEffects = new List<StatusEffect>();        //현재 가지고 있는 상태이상 및 버프
@@ -221,31 +224,39 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
 
     //---
+
+
     /// <summary>
     /// 캐릭터 아이콘 클릭 시 호출 (UI 버튼에 연결)
     /// </summary>
     public void OnCharacterIconClicked()
     {
-        // 1) 플레이어 턴이 아닐 때 무시
-        if (!FindObjectOfType<BattleFlowController>().IsPlayerTurn())
+        // 1) 플레이어 턴이 아닐 때는 무시
+        var flow = FindObjectOfType<BattleFlowController>();
+        if (flow == null || !flow.IsPlayerTurn())
             return;
 
-        // 2) 이미 열려 있으면 닫기
-        if (_stanceContainer != null)
+        // 2) 이미 팝업이 떠 있으면 닫고 종료
+        if (stanceContainer != null)
         {
-            Destroy(_stanceContainer);
-            _stanceContainer = null;
+            Destroy(stanceContainer);
+            stanceContainer = null;
             return;
         }
 
-        // 3) 컨테이너 생성 & 초기화
-        _stanceContainer = Instantiate(
+        // 3) 팝업 생성
+        stanceContainer = Instantiate(
             stanceButtonContainerPrefab,
-            transform     // 캐릭터 오브젝트 자식으로
+            transform  // 캐릭터 오브젝트 자식으로 붙인다
         );
-        foreach (var btn in _stanceContainer.GetComponentsInChildren<StanceButton>())
+
+        // 4) 생성된 팝업 내부의 StanceButton들을 초기화
+        foreach (var btn in stanceContainer.GetComponentsInChildren<StanceButton>())
+        {
             btn.Initialize(this);
+        }
     }
+    //---
     public void ChangeStance(PlayerData.StancType newStance) //StancUI 함수
     {
 
@@ -256,6 +267,19 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             playerData.currentStance = stance;
             float finalAtk = playerData.ATK + stance.attackBonus; //스텐스 공격력 계산
             float finalDef = playerData.DEF + stance.defenseBonus;
+
+            var sv = playerData.allStances.Find(s => s.stencType == newStance);
+            if (sv == null) return;
+
+            // 데이터 갱신
+            playerData.currentStance = sv;
+
+            // 스프라이트 교체 (2D SpriteRenderer 사용 예시)
+            var sr = GetComponent<SpriteRenderer>();
+            if (sr != null && sv.stanceIcon != null)
+                sr.sprite = sv.stanceIcon;
+            // 만약 UI Image라면:
+            // GetComponent<Image>().sprite = sv.stanceIcon;
         }
 
     }
