@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1694,13 +1694,26 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 747000800}
+  - component: {fileID: 747000799}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: CamerProvider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &747000799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747000798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51d9b6a9eaecb7741b3e77d144e02a73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &747000800
 Transform:
   m_ObjectHideFlags: 0
@@ -2615,8 +2628,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7a84a1b78703b047b0328bd00db9691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerDatas: []
-  gameStartType: 0
   combatUIController: {fileID: 0}
   combatCameraController: {fileID: 0}
   CombatLightingController: {fileID: 0}
@@ -2680,6 +2691,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67e86dbcf1292934caba85f4b838eb26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultPlayerParty: {fileID: 11400000, guid: 1b186ef57e341354c9e4977557ce3e3e, type: 2}
+  itemCounts: 00000000000000000000000000000000
 --- !u!1 &1786120687
 GameObject:
   m_ObjectHideFlags: 0
