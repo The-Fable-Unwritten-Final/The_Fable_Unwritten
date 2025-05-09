@@ -153,7 +153,8 @@ public class TestCustomWindow : EditorWindow
             EditorGUILayout.BeginHorizontal();  // Begin
 
             // 값 입력 부분 시작
-            casterIndex = EditorGUILayout.IntField("Caster", casterIndex);
+            GUILayout.Label("Caster:", GUILayout.Width(70));
+            casterIndex = EditorGUILayout.IntField(casterIndex, GUILayout.Width(50));
 
             GUILayout.Label("Targets:", GUILayout.Width(60));
             for (int i = 0; i < targetToggles.Length; i++)
