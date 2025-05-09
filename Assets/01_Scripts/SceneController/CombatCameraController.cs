@@ -90,8 +90,17 @@ public class CombatCameraController : MonoBehaviour
 
         if (caster is PlayerController player) // 시전자가 플레이어 진영
         {
+            Vector3 playerPos = player.transform.position; // 플레이어 위치 저장
+            Vector3 targetPos = new Vector3(-1.75f,-0.25f,0); // 플레이어를 이동시킬 위치
+
+            CameraZoomInAction(time);// 카메라 줌인
             //0.3초동안 전투배경 alpha값 페이드인
-            combatBackgroundMaterial.DOFade(1f, 0.3f); // 알파 1로
+            combatBackgroundMaterial
+                .DOFade(1f, 0.3f) // 알파 1로
+                .OnStart(() =>
+                {
+                    player.transform.DOMove(targetPos,0.3f); // 플레이어 이동
+                });
             player.GetComponent<SpriteRenderer>().sortingOrder = 1;
             foreach (var t in target)
             {
@@ -106,7 +115,11 @@ public class CombatCameraController : MonoBehaviour
 
             //0.2초동안 전투배경 alpha값 페이드아웃
             combatBackgroundMaterial
-                .DOFade(0f, 0.2f) // 알파 0으로
+                .DOFade(0f, 0.3f) // 알파 0으로
+                .OnStart(() =>
+                {
+                    player.transform.DOMove(playerPos, 0.3f); // 플레이어 위치 복구
+                })
                 .onComplete = () =>
                 {
                     player.GetComponent<SpriteRenderer>().sortingOrder = -1;
@@ -136,7 +149,7 @@ public class CombatCameraController : MonoBehaviour
 
             //0.2초동안 전투배경 alpha값 페이드아웃
             combatBackgroundMaterial
-                .DOFade(0f, 0.2f) // 알파 0으로
+                .DOFade(0f, 0.3f) // 알파 0으로
                 .onComplete = () =>
                 {
                     foreach (var t in target)
@@ -169,19 +182,16 @@ public class CombatCameraController : MonoBehaviour
             });
     }
 
-    /*
-    public void CameraZoomInAction(Transform subject)
+    private void CameraZoomInAction(float time)
     {
         // 이후 플레이어의 동작에 맞춰 줌인/아웃 분리 호출.
         // 지금은 코루틴으로 임시 구현.
-        StartCoroutine(ActionStart(subject));
+        StartCoroutine(ActionStart(time));
     }
-    IEnumerator ActionStart(Transform subject)
+    IEnumerator ActionStart(float time)
     {
-        combatCam.Follow = subject;
         mainCam.enabled = false;
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(time);
         mainCam.enabled = true;
-        combatCam.Follow = null;
-    }*/
+    }
 }
