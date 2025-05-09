@@ -43,7 +43,8 @@ public class EventEffectCSVParser : MonoBehaviour
                     atk = ParseInt(tokens, 13),
                     def = ParseInt(tokens, 14),
                     unusable = ParseBool(tokens, 15),
-                    note = ParseString(tokens, 16)
+                    note = ParseString(tokens, 16),
+                    battle = ParseInt(tokens, 17)
                 };
 
                 list.Add(data);

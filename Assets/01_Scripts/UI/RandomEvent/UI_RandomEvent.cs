@@ -24,6 +24,7 @@ public class UI_RandomEvent : MonoBehaviour
     [SerializeField] float typingSpeed;
 
     private RandomEventData currentData;
+    private List<int> results;
 
     private void Start()
     {
@@ -111,19 +112,19 @@ public class UI_RandomEvent : MonoBehaviour
 
         float randomValue = Random.value; // 0 ~ 1 사이
         string resultDescription = "";
-        int resultIndex = -1;
+        results = null;
 
         if (optionIndex == 0)
         {
             if (randomValue < currentData.percentage_0)
             {
                 resultDescription = currentData.description_01;
-                resultIndex = currentData.result_01;
+                results = currentData.parsed_result_01;
             }
             else
             {
                 resultDescription = currentData.description_02;
-                resultIndex = currentData.result_02;
+                results = currentData.parsed_result_02;
             }
         }
         else if (optionIndex == 1)
@@ -131,18 +132,16 @@ public class UI_RandomEvent : MonoBehaviour
             if (randomValue < currentData.percentage_1)
             {
                 resultDescription = currentData.description_11;
-                resultIndex = currentData.result_11;
+                results = currentData.parsed_result_11;
             }
             else
             {
                 resultDescription = currentData.description_12;
-                resultIndex = currentData.result_12;
+                results = currentData.parsed_result_12;
             }
         }
 
-        EventEffectManager.Instance.AddEventEffect(resultIndex);
-
-        string resultText = EventEffectManager.Instance.GetEventEffectText(resultIndex);
+        string resultText = string.Join("\n", results.Select(i => EventEffectManager.Instance.GetEventEffectText(i)));
 
         yield return StartCoroutine(TypeText(descriptionTxt, resultDescription));
         yield return new WaitForSeconds(0.5f);
@@ -150,12 +149,20 @@ public class UI_RandomEvent : MonoBehaviour
         yield return StartCoroutine(TypeText(optionTxt_1, resultText));
 
         optionButton_1.onClick.RemoveAllListeners();
-        optionButton_1.onClick.AddListener(GoToStage);
+        optionButton_1.onClick.AddListener(ApplyEffectsAndGoToStage);
         optionButton_1.interactable = true;
     }
 
-    private void GoToStage()
+    private void ApplyEffectsAndGoToStage()
     {
-        SceneManager.LoadScene(SceneNameData.StageScene);
+        foreach(int resultIndex in results)
+        {
+            EventEffectManager.Instance.AddEventEffect(resultIndex);
+
+            if (resultIndex != 14)
+            {
+                SceneManager.LoadScene(SceneNameData.StageScene);
+            }
+        }  
     }
 }

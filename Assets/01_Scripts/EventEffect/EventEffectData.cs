@@ -21,4 +21,5 @@ public class EventEffectData
     public int def;
     public bool unusable;
     public string note;
+    public int battle;
 }

@@ -34,7 +34,7 @@ public class DataManager : MonoSingleton<DataManager>
     [SerializeField]
     public EnemyDataContainer enemyDataContainer;
     // 스테이지 데이터
-    private List<EnemyStageSpawnData> enemySpawnData;
+    public List<EnemyStageSpawnData> enemySpawnData;
     // 랜덤 이벤트 데이터
     public List<RandomEventData> allRandomEvents { get; set;}
     // 백그라운드 이미지 데이터

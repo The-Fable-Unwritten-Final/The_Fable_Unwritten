@@ -34,8 +34,6 @@ public class EnemySpawner : MonoBehaviour
 
         var stageData = stageSpawnDatas.FirstOrDefault();
 
-        //Debug.Log($"{theme} 테마 입니다.");
-
         if (stageData == null) return;
 
         if (stageIndex == 1)
@@ -69,8 +67,7 @@ public class EnemySpawner : MonoBehaviour
     {
         EnemySpawnSet selectedSet;
 
-        if (ProgressDataManager.Instance.SavedEnemySetIndex >= 0 &&
-            ProgressDataManager.Instance.SavedEnemySetIndex < stageData.spawnSets.Count)
+        if (ProgressDataManager.Instance.SavedEnemySetIndex >= 0)
         {
             selectedSet = stageData.spawnSets[ProgressDataManager.Instance.SavedEnemySetIndex];
         }

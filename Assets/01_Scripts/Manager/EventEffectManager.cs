@@ -84,6 +84,7 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
                         text = data.text,
                         eventType = data.eventType,
                         duration = data.duration,
+                        battle = data.battle,
                     };
 
                     eventEffectList.Add(enemyEventEffect);

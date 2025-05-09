@@ -22,9 +22,8 @@ public static class RandomEventJsonLoader
             evnt.illustrationSprite = Resources.Load<Sprite>($"RandomEvent/{evnt.illustration}");
             if (evnt.illustrationSprite == null)
                 Debug.LogWarning($"일러스트 '{evnt.illustration}' 로드 실패");
+            evnt.ParseResults();
         }
-
-        //Debug.Log($"랜덤 이벤트 {eventList.Count}개 로드됨.");
         return eventList;
     }
 
