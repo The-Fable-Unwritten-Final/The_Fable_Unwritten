@@ -1557,8 +1557,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7a84a1b78703b047b0328bd00db9691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerDatas: []
-  gameStartType: 0
   combatUIController: {fileID: 0}
   combatCameraController: {fileID: 0}
   CombatLightingController: {fileID: 0}
@@ -3730,6 +3728,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 260082002}
+    - target: {fileID: 6871549582828708497, guid: e80e55e4d7839ad4a97cd864c52efb28,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7713199374628244937, guid: e80e55e4d7839ad4a97cd864c52efb28,
         type: 3}
       propertyPath: m_Pivot.x
