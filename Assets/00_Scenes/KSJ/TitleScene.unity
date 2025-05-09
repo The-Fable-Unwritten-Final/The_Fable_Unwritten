@@ -1003,7 +1003,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 338576908}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 953478099}
+        m_TargetAssemblyTypeName: UI_MainTitle, Assembly-CSharp
+        m_MethodName: OnClickSaveGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &338576908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2616,8 +2628,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7a84a1b78703b047b0328bd00db9691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerDatas: []
-  gameStartType: 0
   combatUIController: {fileID: 0}
   combatCameraController: {fileID: 0}
   CombatLightingController: {fileID: 0}
@@ -2681,6 +2691,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67e86dbcf1292934caba85f4b838eb26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultPlayerParty: {fileID: 11400000, guid: 1b186ef57e341354c9e4977557ce3e3e, type: 2}
+  itemCounts: 00000000000000000000000000000000
 --- !u!1 &1786120687
 GameObject:
   m_ObjectHideFlags: 0
@@ -3259,8 +3271,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4602f3a5d2ab2f46ae8256b12438fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jsonFile: {fileID: 4900000, guid: 32221442588627944b43203109b8da41, type: 3}
-  triggerJson: {fileID: 4900000, guid: c4932e40f20cb4d4097bef1d7c61e79b, type: 3}
   targetCutscene: {fileID: 254551270}
   backgroundImage: {fileID: 1794682183}
 --- !u!4 &2098837879

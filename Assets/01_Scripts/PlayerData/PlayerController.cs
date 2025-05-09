@@ -370,7 +370,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             Debug.LogError("null");
             return;
         }
-        GameManager.Instance.combatCameraController.CameraZoomInAction(transform);
+        //GameManager.Instance.combatCameraController.CameraZoomInAction(transform);
     }
 
     // 최대 체력

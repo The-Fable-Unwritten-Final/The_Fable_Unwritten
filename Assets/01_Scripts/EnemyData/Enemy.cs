@@ -168,7 +168,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public void CameraActionPlay()
     {
-        GameManager.Instance.combatCameraController.CameraZoomInAction(transform);
+        //GameManager.Instance.combatCameraController.CameraZoomInAction(transform);
     }
 
     // 최대 체력

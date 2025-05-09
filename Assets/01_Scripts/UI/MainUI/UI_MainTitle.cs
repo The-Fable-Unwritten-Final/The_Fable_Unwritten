@@ -41,14 +41,41 @@ public class UI_MainTitle : MonoBehaviour
         // 보유 플레이어 초기화
         PlayerManager.Instance.activePlayers.Clear();
 
+        // 데이터 초기화
+        ProgressDataManager.Instance.ResetProgress();
 
         // 게임 데이터 초기화 로직 추가 (DataManager 나 GameManager에 로직추가?)
         SceneManager.LoadScene(SceneNameData.StageScene);
     }
-    private void OnClickSaveGame()
+    public void OnClickSaveGame()
     {
-        // 플레이어정보(덱, 재료) 및 Stage 진행 정도 정보 가지고 오기
-        SceneManager.LoadScene(SceneNameData.StageScene);
+        var currentNode = ProgressDataManager.Instance.CurrentBattleNode;
+
+        if (currentNode == null)
+        {
+            SceneManager.LoadScene(SceneNameData.StageScene);
+            return;
+        }
+
+        switch (currentNode.type)
+        {
+            case NodeType.NormalBattle:
+            case NodeType.EliteBattle:
+            case NodeType.Boss:
+                SceneManager.LoadScene(SceneNameData.CombatScene_Test);
+                break;
+
+            case NodeType.Camp:
+                SceneManager.LoadScene(SceneNameData.CampScene);
+                break;
+
+            case NodeType.RandomEvent:
+                SceneManager.LoadScene(SceneNameData.RandomEventScene);
+                break;
+            default:
+                SceneManager.LoadScene(SceneNameData.StageScene);
+                break;
+        }
     }
 
     private void OnClickUnlockCard()

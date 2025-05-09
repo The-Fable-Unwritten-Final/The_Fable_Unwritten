@@ -1638,13 +1638,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7a84a1b78703b047b0328bd00db9691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerDatas:
-  - {fileID: 11400000, guid: a6642074c90f5fa49ac122d3055b17c7, type: 2}
-  - {fileID: 11400000, guid: ca1026c442338a840a15d81588272fa8, type: 2}
-  - {fileID: 11400000, guid: 55a39049fa44d7f4fbf6637398b4e81b, type: 2}
   combatUIController: {fileID: 0}
   combatCameraController: {fileID: 0}
+  CombatLightingController: {fileID: 0}
   turnController: {fileID: 0}
+  cardDiscardController: {fileID: 0}
 --- !u!4 &1606734181
 Transform:
   m_ObjectHideFlags: 0

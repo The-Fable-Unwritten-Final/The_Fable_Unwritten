@@ -34,8 +34,6 @@ public class EnemySpawner : MonoBehaviour
 
         var stageData = stageSpawnDatas.FirstOrDefault();
 
-        //Debug.Log($"{theme} 테마 입니다.");
-
         if (stageData == null) return;
 
         if (stageIndex == 1)
@@ -46,12 +44,17 @@ public class EnemySpawner : MonoBehaviour
         {
             RandomSetting(stageData);
         }
+
+        ProgressDataManager.Instance.SaveProgress();
     }
 
 
     private void FixedStage1Setting(EnemyStageSpawnData stageData)
     {
-        int columnIndex = ProgressDataManager.Instance.VisitedNodes.Last().columnIndex;
+        var currentNode = ProgressDataManager.Instance.CurrentBattleNode;
+        if (currentNode == null) return;
+
+        int columnIndex = currentNode.columnIndex;
         int index = columnIndex - 1;
 
         if (index < 0 || index >= stageData.spawnSets.Count) return;
@@ -62,7 +65,19 @@ public class EnemySpawner : MonoBehaviour
 
     private void RandomSetting(EnemyStageSpawnData stageData)
     {
-        var selectedSet = stageData.GetRandomSet();
+        EnemySpawnSet selectedSet;
+
+        if (ProgressDataManager.Instance.SavedEnemySetIndex >= 0)
+        {
+            selectedSet = stageData.spawnSets[ProgressDataManager.Instance.SavedEnemySetIndex];
+        }
+        else
+        {
+            // 새로 랜덤 선택하고 저장
+            selectedSet = stageData.GetRandomSet();
+            int selectedIndex = stageData.spawnSets.IndexOf(selectedSet);
+            ProgressDataManager.Instance.SaveEnemySetIndex(selectedIndex);
+        }
         ApplyEnemyDataToSlots(selectedSet);
     }
 
