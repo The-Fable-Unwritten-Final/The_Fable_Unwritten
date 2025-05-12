@@ -33,9 +33,9 @@ public class CardDiscardController : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.I))
-            DiscardCard(3); // 테스트용 카드 버리기 호출
         if(Input.GetKeyDown(KeyCode.O))
+            DiscardCard(3); // 테스트용 카드 버리기 호출
+        if(Input.GetKeyDown(KeyCode.P))
             DiscardCard(1, 1, 0); // 테스트용 카드 버리기 호출
     }
     private void Awake()
