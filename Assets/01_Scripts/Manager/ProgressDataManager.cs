@@ -50,6 +50,8 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     {
         InitializePlayerData();
         LoadProgress();
+
+        DataManager.Instance.InitCardUnlockStatus();
     }
 
 
@@ -244,7 +246,10 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         {
             case GameStartType.New:
                 foreach (var data in PlayerDatas)
+                {
                     data.ResetHPToMax();
+                    data.ResetDeckIndexesToDefault();
+                }
                 GameStartType = GameStartType.Respawn;
                 break;
 

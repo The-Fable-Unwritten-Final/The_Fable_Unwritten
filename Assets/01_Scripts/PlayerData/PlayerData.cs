@@ -95,7 +95,7 @@ public class PlayerData : ScriptableObject
         // 인덱스가 비어 있으면 기본 덱 인덱스로 설정
         if (currentDeckIndexes == null || currentDeckIndexes.Count == 0)
         {
-            GoToDefaultDeck();
+            ResetDeckIndexesToDefault();
         }
 
         // 인덱스를 기준으로 현재 덱 구성
@@ -117,10 +117,5 @@ public class PlayerData : ScriptableObject
     {
         if (currentHP <= 0)
             currentHP = 1;
-    }
-
-    public void GoToDefaultDeck()
-    {
-        currentDeckIndexes = new List<int>(defaultDeckIndexes);
     }
 }

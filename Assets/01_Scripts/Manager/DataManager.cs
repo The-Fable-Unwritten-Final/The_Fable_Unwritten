@@ -50,6 +50,11 @@ public class DataManager : MonoSingleton<DataManager>
     public IReadOnlyDictionary<string, string> DialogueTriggers => dialogueTriggers;    //대화 트리거
     public IReadOnlyDictionary<string, List<JsonCutsceneData>> DialogueDatabase => dialogueDatabase;
 
+    /// <summary>
+    /// 기본 해금 카드 덱
+    /// </summary>
+    private static readonly HashSet<int> DefaultUnlockedCards = new() { 1000, 2007, 3000 };
+
 
     protected override void Awake()
     {
@@ -242,6 +247,21 @@ public class DataManager : MonoSingleton<DataManager>
 
             cardEffects[folderName] = new List<Sprite>(sprites);
         }
+    }
+
+    /// <summary>
+    /// ProgressManager에서 불린 뒤 해금 상태 반영
+    /// </summary>
+    public void InitCardUnlockStatus()
+    {
+        var unlocked = new HashSet<int>(DefaultUnlockedCards);
+        if (ProgressDataManager.Instance != null)
+            unlocked.UnionWith(ProgressDataManager.Instance.unlockedCards);
+
+        foreach (var card in allCards)
+            card.isUnlocked = unlocked.Contains(card.index);
+
+        Debug.Log($"[DataManager] 카드 해금 상태 갱신 완료: {allCards.Count(c => c.isUnlocked)}개 해금됨");
     }
 
 }
