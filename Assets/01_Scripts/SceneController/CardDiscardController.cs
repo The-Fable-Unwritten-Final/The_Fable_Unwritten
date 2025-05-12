@@ -17,8 +17,11 @@ public class CardDiscardController : MonoBehaviour
     int reqTotalCount; // 전체 카드 버리기 카운트
 
     int reqSophiaCount; // 소피아 카드 버리기 카운트
+    int totalSophiaCount; // 소피아 카드 (버려야 할) 총 수
     int reqKylaCount; // 카일라 카드 버리기 카운트
+    int totalKylaCount; // 카일라 카드 (버려야 할) 총 수
     int reqLeonCount; // 레온 카드 버리기 카운트
+    int totalLeonCount; // 레온 카드 (버려야 할) 총 수
 
     // 외부에 공개할 읽기 전용 프로퍼티
     public int ReqTotalCount => reqTotalCount;
@@ -62,17 +65,17 @@ public class CardDiscardController : MonoBehaviour
         else
         {
             text = "버릴 카드를 선택하세요.\n\n";
-            if(reqSophiaCount > 0)
+            if(totalSophiaCount > 0)
             {
-                text += $"<sprite=0> {reqSophiaCount} 장\n";
+                text += $"<sprite=0> {reqSophiaCount}/{totalSophiaCount} 장\n";
             }
-            if(reqKylaCount > 0 )
+            if(totalKylaCount > 0 )
             {
-                text += $"\n<sprite=1> {reqKylaCount} 장\n";
+                text += $"\n<sprite=1> {reqKylaCount}/{totalKylaCount} 장\n";
             }
-            if(reqLeonCount > 0)
+            if(totalLeonCount > 0)
             {
-                text += $"\n<sprite=2> {reqLeonCount} 장";
+                text += $"\n<sprite=2> {reqLeonCount}/{totalLeonCount} 장";
             }
         }
 
@@ -83,8 +86,11 @@ public class CardDiscardController : MonoBehaviour
         reqTotalCount = 0; // 전체 버리기 카운트 초기화
 
         reqSophiaCount = 0; // 소피아 카드 버리기 카운트 초기화
+        totalSophiaCount = 0; // 소피아 카드 (버려야 할) 총 수 초기화
         reqKylaCount = 0; // 카일라 카드 버리기 카운트 초기화
+        totalKylaCount = 0; // 카일라 카드 (버려야 할) 총 수 초기화
         reqLeonCount = 0; // 레온 카드 버리기 카운트 초기화
+        totalLeonCount = 0; // 레온 카드 (버려야 할) 총 수 초기화
     }
     private void DiscardCounting(CardInHand card)
     {
@@ -149,8 +155,11 @@ public class CardDiscardController : MonoBehaviour
         ResetCount(); // 카운트 초기화
         reqTotalCount = sop + ky + leo; // 요구 버리기 카운트 설정
         reqSophiaCount = sop; // 요구 버리기 카운트 설정
+        totalSophiaCount = sop; // 요구 버리기 카운트 설정
         reqKylaCount = ky; // 요구 버리기 카운트 설정
+        totalKylaCount = ky; // 요구 버리기 카운트 설정
         reqLeonCount = leo; // 요구 버리기 카운트 설정
+        totalLeonCount = leo; // 요구 버리기 카운트 설정
         discardDisplay.SetActive(true); // 카드 버리기 UI 활성화
         UpdateText(); // 카드 버리기 UI 텍스트 업데이트
 
@@ -209,7 +218,7 @@ public class CardDiscardController : MonoBehaviour
             return true; // 카드 수가 3장 이하인 경우 턴 종료
     }
     /// <summary>
-    /// UI에서 카드 버리기를 확정하는 호출
+    /// UI에서 카드 버리기를 확정하는 버튼
     /// </summary>
     public void ConfirmDiscard()
     {
