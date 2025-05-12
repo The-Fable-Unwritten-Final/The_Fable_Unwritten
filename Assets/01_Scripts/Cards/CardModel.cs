@@ -76,6 +76,7 @@ public class CardModel : ScriptableObject
     {
         // 1. 공격 애니메이션
         caster.PlayAttackAnimation();
+        SoundManager.Instance.PlaySFX(SoundCategory.Card, (int)type);
         yield return new WaitForSeconds(0.5f); // 애니메이션 길이에 맞게 조정
 
         // 2. 스킬 이펙트 재생

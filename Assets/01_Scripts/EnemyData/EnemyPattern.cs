@@ -67,6 +67,16 @@ public static class EnemyPattern
             // 2. 스킬 이펙트 재생
             if (!string.IsNullOrEmpty(effectname))
             {
+                // 에너미 스킬 행동 시 사운드 출력
+                if (t == enemy)
+                {
+                    SoundManager.Instance.PlaySFX(SoundCategory.Enemy, 0); // 디폴트값 (에너미 -> 에너미 스킬일경우)
+                }
+                else
+                {
+                    SoundManager.Instance.PlaySFX(SoundCategory.Enemy, enemyComponent.enemyData.IDNum);
+                }
+
                 Vector3 spawnPos = (t != null) ? t.CachedTransform.position : t.CachedTransform.position;
                 GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(effectname, spawnPos, true);
             }

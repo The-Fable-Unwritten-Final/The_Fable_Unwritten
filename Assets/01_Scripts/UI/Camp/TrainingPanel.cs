@@ -23,6 +23,7 @@ public class TrainingPanel : BaseCampPanel
 
     public void OnClickTarget(CharacterClass characterClass)
     {
+        SoundManager.Instance.PlaySFX(SoundCategory.Player, (int)characterClass);
         switch (characterClass)
         {
             case CharacterClass.Sophia:

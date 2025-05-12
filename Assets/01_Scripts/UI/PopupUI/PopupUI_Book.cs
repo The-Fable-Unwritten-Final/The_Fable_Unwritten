@@ -17,10 +17,17 @@ public class PopupUI_Book : BasePopupUI
 
     private void OnEnable()
     {
+        SoundManager.Instance.PlaySFX(SoundCategory.UI, 0); // 책 활성화 시 사운드
         // 처음 책을 열었을때 최초 페이지 == 0번 인덱스의 카드페이지
         OnClick0();
         currentPageType = 0; // 패이지 초기화.
     }
+
+    private void OnDisable()
+    {
+        SoundManager.Instance.PlaySFX(SoundCategory.UI, 1); // 책 비활성화 시 사운드
+    }
+
     // 클릭한 책갈피가 펼쳐줄 캐릭터 카드 종류(해당 데이터를 cardPage 에서 받아서 보여줄 카드 업데이트) 1: 소피아, 2: 카일라, 3: 레온
     public void OnClick0()
     {
@@ -89,3 +96,4 @@ public class PopupUI_Book : BasePopupUI
         }
     }// 책의 모든 페이지 비활성화
 }
+

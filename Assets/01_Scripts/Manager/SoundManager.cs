@@ -1,9 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
+public enum SoundCategory
+{
+    BGM,
+    EvenetBGM,
+    BossBGM,
+    Button,
+    Player,
+    UI,
+    Card,
+    Enemy,
+}
 
 public class SoundManager : MonoSingleton<SoundManager>
 {
@@ -22,15 +35,17 @@ public class SoundManager : MonoSingleton<SoundManager>
     private Coroutine fadeCoroutine;
     private Queue<SoundSource> soundSourcePool = new();
 
-    private readonly Dictionary<string, AudioClip> bgmClips = new();
-    private readonly Dictionary<string, AudioClip> sfxClips = new();
-    private Dictionary<string, string> sceneToBGM = new()
+    private readonly Dictionary<SoundCategory, Dictionary<int, AudioClip>> bgmClips = new();
+    private readonly Dictionary<SoundCategory, Dictionary<int, AudioClip>> sfxClips = new();
+
+    private Dictionary<string, int> sceneToBGMKey = new()
     {
-        { SceneNameData.TitleScene, "Title" },
-        { SceneNameData.StageScene, "Stage" },
-        { SceneNameData.CombatScene, "CombatScene"},
-        { SceneNameData.CampScene, "Camp" },
-        { SceneNameData.RandomEventScene, "Event" },
+
+        { SceneNameData.TitleScene, 0 },
+        { SceneNameData.RandomEventScene, 1 },
+        { SceneNameData.StageScene, 1 },
+        { SceneNameData.CampScene, 2 },
+        { SceneNameData.CombatScene, 3 },
     };
 
 
@@ -40,28 +55,35 @@ public class SoundManager : MonoSingleton<SoundManager>
         bgmSource = GetComponent<AudioSource>();
         bgmSource.loop = true;
 
-        LoadAllAudioClips();
+        LoadAudioFromJson();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
 
-        // 우선 볼륨 0으로 해뒀어요
         SetBGMVolume(0);
         SetSFXVolume(0);
     }
 
+
     private void OnDestroy()
     {
-        SceneManager.sceneLoaded -= OnSceneLoaded;        
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (sceneToBGM.TryGetValue(scene.name, out var bgmName))
-        {
-            PlayBGM(bgmName);
-        }
+        var node = ProgressDataManager.Instance.CurrentBattleNode;
+        var theme = ProgressDataManager.Instance.CurrentTheme;
 
-        AttachAllButtonClickSounds();
+
+        if (scene.name == SceneNameData.CombatScene &&
+        node != null && node.type == NodeType.Boss)
+        {
+            PlayBossBGMByTheme(theme);
+        }
+        else if (sceneToBGMKey.TryGetValue(scene.name, out var bgmKey))
+        {
+            PlayBGM(SoundCategory.BGM, bgmKey);
+        }
     }
 
     // ===== BGM =====
@@ -69,10 +91,12 @@ public class SoundManager : MonoSingleton<SoundManager>
     /// <summary>
     /// BGM 변경 매서드
     /// </summary>
-    public void PlayBGM(string clipName)
+    public void PlayBGM(SoundCategory category, int key)
     {
-        if (isMuted) return;
-        if (!bgmClips.TryGetValue(clipName, out var clip)) return;
+        if (isMuted ||
+            !bgmClips.TryGetValue(category, out var categoryDict) ||
+            !categoryDict.TryGetValue(key, out var clip)) return;
+
         if (bgmSource.clip == clip) return;
 
         bgmSource.Stop();
@@ -81,19 +105,20 @@ public class SoundManager : MonoSingleton<SoundManager>
         bgmSource.Play();
     }
 
+
     /// <summary>
     /// BGM 전환 시 페이드 효과 매서드
     /// </summary>
-    public void ChangeBGMWithFade(string clipName, float duration)
+    public void ChangeBGMWithFade(SoundCategory category, int key, float duration)
     {
         if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
-        fadeCoroutine = StartCoroutine(ChangeBGMCoroutine(clipName, duration));
+        fadeCoroutine = StartCoroutine(ChangeBGMCoroutine(category, key, duration));
     }
 
-    private IEnumerator ChangeBGMCoroutine(string clipName, float duration)
+    private IEnumerator ChangeBGMCoroutine(SoundCategory category, int key, float duration)
     {
         yield return FadeOut(duration * 0.5f);
-        yield return FadeIn(clipName, duration * 0.5f);
+        yield return FadeIn(category, key, duration * 0.5f);
     }
 
     private IEnumerator FadeOut(float duration)
@@ -107,9 +132,9 @@ public class SoundManager : MonoSingleton<SoundManager>
         bgmSource.Stop();
     }
 
-    private IEnumerator FadeIn(string clipName, float duration)
+    private IEnumerator FadeIn(SoundCategory category, int key, float duration)
     {
-        if (!bgmClips.TryGetValue(clipName, out var clip)) yield break;
+        if (!bgmClips.TryGetValue(category, out var categoryDict) || !categoryDict.TryGetValue(key, out var clip)) yield break;
 
         bgmSource.clip = clip;
         bgmSource.volume = 0f;
@@ -122,16 +147,23 @@ public class SoundManager : MonoSingleton<SoundManager>
         }
     }
 
+    public void PlayBossBGMByTheme(StageTheme theme)
+    {
+        PlayBGM(SoundCategory.BossBGM, (int)theme);
+    }
+
+
     // ===== SFX =====
 
     /// <summary>
     /// 효과음 사용 매서드
     /// </summary>
-    public static void PlaySFX(string clipName)
+    public void PlaySFX(SoundCategory category, int key)
     {
         if (Instance.isMuted) return;
-        if (!Instance.sfxClips.TryGetValue(clipName, out var clip)) return;
+        if (!Instance.sfxClips.TryGetValue(category, out var dict) || !dict.TryGetValue(key, out var clip)) return;
 
+        Debug.Log("실행됨");
         var source = Instance.GetSoundSource();
         source.Play(clip, Instance.sfxVolume, Instance.sfxPitchVariance);
     }
@@ -156,21 +188,12 @@ public class SoundManager : MonoSingleton<SoundManager>
     }
 
     /// <summary>
-    /// 음소거 매서드
-    /// </summary>
-    public void SetMute(bool mute)
-    {
-        isMuted = mute;
-        ApplyVolume();
-    }
-
-    /// <summary>
     /// BGM 효과음 조절
     /// </summary>
     public void SetBGMVolume(float volume)
     {
         bgmVolume = Mathf.Clamp01(volume);
-        ApplyVolume();
+        bgmSource.volume = isMuted ? 0f : bgmVolume;
     }
 
     /// <summary>
@@ -179,45 +202,88 @@ public class SoundManager : MonoSingleton<SoundManager>
     public void SetSFXVolume(float volume)
     {
         sfxVolume = Mathf.Clamp01(volume);
+        sfxVolume = isMuted ? 0f : sfxVolume;
     }
 
-    // 소리 크기 셋팅 
-    private void ApplyVolume()
+    private void LoadAudioFromJson()
     {
-        bgmSource.volume = isMuted ? 0f : bgmVolume;
-    }
-
-    private void LoadAllAudioClips()
-    {
-        var bgm = Resources.LoadAll<AudioClip>("Sounds/BGM");
-        var sfx = Resources.LoadAll<AudioClip>("Sounds/SFX");
-
-        foreach (var clip in bgm)
+        TextAsset json = Resources.Load<TextAsset>("ExternalFiles/Sounds");
+        if (json == null)
         {
-            if (!bgmClips.ContainsKey(clip.name))
-                bgmClips.Add(clip.name, clip);
+            Debug.LogError("SoundManager: JSON file not found at Resources/ExternalFiles/Sounds.json");
+            return;
         }
 
-        foreach (var clip in sfx)
+        string wrappedJson = $"{{\"sounds\":{json.text}}}";
+        SoundDatabase database = JsonUtility.FromJson<SoundDatabase>(wrappedJson);
+
+        foreach (var entry in database.sounds)
         {
-            if (!sfxClips.ContainsKey(clip.name))
-                sfxClips.Add(clip.name, clip);
+            string rawCategory = entry.category?.Trim();
+
+            if (!Enum.TryParse(rawCategory, true, out SoundCategory parsedCategory))
+            {
+                Debug.LogWarning($"[SoundManager] Invalid category: '{entry.category}' at index {entry.index}");
+                continue;
+            }
+
+            string rawSound = entry.sound?.Trim();
+            if (string.IsNullOrEmpty(rawSound))
+            {
+                Debug.LogWarning($"[SoundManager] Skipped (empty sound): category={rawCategory}, key={entry.key}");
+                continue;
+            }
+
+            string path = $"Sounds/{rawSound}";
+            AudioClip clip = Resources.Load<AudioClip>(path);
+
+            if (clip == null)
+            {
+                Debug.LogWarning($"[SoundManager] Missing AudioClip at path: {path}");
+                continue;
+            }
+
+            bool isBGMType = parsedCategory == SoundCategory.BGM || parsedCategory == SoundCategory.BossBGM || parsedCategory == SoundCategory.EvenetBGM;
+            var targetDict = isBGMType ? bgmClips : sfxClips;
+
+            if (!targetDict.ContainsKey(parsedCategory))
+                targetDict[parsedCategory] = new Dictionary<int, AudioClip>();
+
+            if (targetDict[parsedCategory].ContainsKey(entry.key))
+                Debug.LogWarning($"[SoundManager] Duplicate {parsedCategory} key: {entry.key} — Overwriting.");
+
+            targetDict[parsedCategory][entry.key] = clip;
         }
     }
 
     // 크릭 버튼 소리 추가 매서드
-    private void AttachAllButtonClickSounds()
+    public void AttachAllButtonClickSounds(int sfxIndex)
     {
         Button[] buttons = FindObjectsOfType<Button>(true);
 
         foreach (var button in buttons)
         {
-            button.onClick.RemoveListener(PlayClickSFX);  
-            button.onClick.AddListener(PlayClickSFX);
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(() => PlayButtonSFX(sfxIndex));
         }
     }
-    private void PlayClickSFX()
+    private void PlayButtonSFX(int sfxIndex)
     {
-        PlaySFX("Click");
+        PlaySFX(SoundCategory.Button, sfxIndex);
     }
+}
+
+[System.Serializable]
+public class SoundEntry
+{
+    public int index;
+    public string category;
+    public int key;
+    public string sound;
+}
+
+[System.Serializable]
+public class SoundDatabase
+{
+    public List<SoundEntry> sounds;
 }

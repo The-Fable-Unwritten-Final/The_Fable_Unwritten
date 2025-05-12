@@ -8,7 +8,8 @@ using UnityEngine.UI;
 public class PopupUI_Setting : BasePopupUI
 {
     [Header("Sound")]
-    [SerializeField] Slider volumSlider;
+    [SerializeField] Slider BGMvolumSlider;
+    [SerializeField] Slider SFXvolumSlider;
 
     [Header("Resoolution")]
     [SerializeField] TMP_Dropdown resolutionDropdown;
@@ -24,9 +25,11 @@ public class PopupUI_Setting : BasePopupUI
     private void OnEnable()
     {   
         // 사운드 셋팅
-        volumSlider = GetComponentInChildren<Slider>();
-        volumSlider.value = SoundManager.Instance.bgmVolume;
-        volumSlider.onValueChanged.AddListener(OnVolumChange);
+        BGMvolumSlider.value = SoundManager.Instance.bgmVolume;
+        BGMvolumSlider.onValueChanged.AddListener(OnBGMVolumChange);
+
+        SFXvolumSlider.value = SoundManager.Instance.sfxVolume;
+        SFXvolumSlider.onValueChanged.AddListener(OnSFXVolumChange);
 
         // 해상도 셋팅
         resolutionDropdown.ClearOptions();
@@ -40,6 +43,18 @@ public class PopupUI_Setting : BasePopupUI
         resolutionDropdown.AddOptions(options);
         resolutionDropdown.onValueChanged.AddListener(OnResolutionChanged);
     }
+
+    public void OnBGMVolumChange(float value)
+    {
+        SoundManager.Instance.SetBGMVolume(value);
+
+    }
+
+    public void OnSFXVolumChange(float value)
+    {
+        SoundManager.Instance.SetSFXVolume(value);
+    }
+
     private void OnResolutionChanged(int index)
     {
         var selectedResolution = resolutions[index];
@@ -61,7 +76,7 @@ public class PopupUI_Setting : BasePopupUI
     }
     public void GoToTitle()
     {
-        if(SceneManager.GetActiveScene().name == SceneNameData.CombatScene) //전투씬 에서의 타이틀로 돌아가기.
+        if (SceneManager.GetActiveScene().name == SceneNameData.CombatScene) //전투씬 에서의 타이틀로 돌아가기.
         {
             UIManager.Instance.ShowPopupByName("PopupUI_ReturnTitle");
         }
@@ -71,6 +86,4 @@ public class PopupUI_Setting : BasePopupUI
             SceneManager.LoadScene(SceneNameData.SubTitleScene);
         }
     }
-
- 
 }

@@ -17,6 +17,7 @@ public class PopupUI_CombatReward : BasePopupUI
         short iswin = GameManager.Instance.turnController.battleFlow.isWin;
         if(iswin == 1)
         {
+            SoundManager.Instance.PlaySFX(SoundCategory.UI, 5); // 승리 시 효과음 적용
             resultText.text = "전투 승리";
             // 리워드 로드 + 텍스트 표시
             confirmButton.onClick.RemoveAllListeners();
@@ -37,6 +38,12 @@ public class PopupUI_CombatReward : BasePopupUI
                         setting.MinStageIndex = 2;
                     }
                 }
+
+                if (setting.CurrentBattleNode.type == NodeType.EliteBattle)
+                {
+                    setting.EliteClear(setting.CurrentTheme);
+                }
+                ProgressDataManager.Instance.SavedEnemySetIndex = -1; // 랜덤 에너미 셋 초기화
 
                 SceneManager.LoadScene("StageScene");
                 gameObject.SetActive(false);
