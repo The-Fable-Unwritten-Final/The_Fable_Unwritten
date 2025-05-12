@@ -66,16 +66,16 @@ public static class CardEffectBuilder
             var buff = Load<ApplyStatusEffect>("ApplyBuff");
             buff.statType = BuffStatType.Attack;
             buff.value = data.atkBuff;
-            buff.duration = 2;
+            buff.duration = data.buffTime;
             effects.Add(buff);
         }
-
+        
         if (data.defBuff != 0)
         {
             var buff = Load<ApplyStatusEffect>("ApplyBuff");
             buff.statType = BuffStatType.Defense;
             buff.value = data.defBuff;
-            buff.duration = 2;
+            buff.duration = data.buffTime;
             effects.Add(buff);
         }
 
@@ -118,12 +118,9 @@ public static class CardEffectBuilder
             effects.Add(stun);
         }
 
-        if (!string.IsNullOrEmpty(data.characterStance))
-        {
-            var stance = Load<StanceConditionEffect>("StanceConditionEffect");
-            stance.requiredStance = data.characterStance;
-            effects.Add(stance);
-        }
+        bool isAOE = data.text.Contains("모든");
+
+
 
         return effects;
     }

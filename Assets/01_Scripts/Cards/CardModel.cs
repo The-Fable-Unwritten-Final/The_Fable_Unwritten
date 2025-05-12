@@ -50,6 +50,12 @@ public class CardModel : ScriptableObject
 
     // ==== 사용 조건 및 비용 ====
 
+    private void OnEnable()
+    {
+        isMaintain = true;
+        isOneUse = false;
+    }
+
 
     /// <summary>
     /// 현재 마나로 카드 사용한지 확인하는 코드
