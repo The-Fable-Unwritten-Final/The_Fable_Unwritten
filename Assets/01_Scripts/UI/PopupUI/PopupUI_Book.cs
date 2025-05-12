@@ -76,6 +76,11 @@ public class PopupUI_Book : BasePopupUI
         pages[currentPageType].GetComponent<IBookControl>().OnclickPageAfter();
     }// 오른쪽 화살표 클릭시 페이지 넘기기
 
+    // 카드 북 버튼 소리 처리(이상현실 제외)
+    public void OnClickBookButton()
+    {
+        SoundManager.Instance.PlaySFX(SoundCategory.Button, 2);
+    }
 
     void SetLastSibling(Transform t)
     {

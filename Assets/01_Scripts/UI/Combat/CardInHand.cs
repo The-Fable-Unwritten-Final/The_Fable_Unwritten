@@ -8,7 +8,7 @@ using DG.Tweening;
 using TMPro;
 
 // 핸드에 소지하고 있는 개별 카드의 스크립트.
-public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IPointerDownHandler
 {
     public CardModel cardData; // 카드 정보
     public CardDisplay cardDisplay; // 핸드내의 모든 카드들을 관리하는 중앙 스크립트. ( + UI LineRenderer가 이곳에 존재.) 
@@ -214,6 +214,12 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         {
             SetCardState(CardInHand.CardState.CanMouseOver);
         }
+    }
+
+    // 핸드 카드 선택 시 출력 사운드
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        SoundManager.Instance.PlaySFX(SoundCategory.UI, 4);
     }
 }
 

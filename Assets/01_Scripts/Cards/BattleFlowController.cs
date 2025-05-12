@@ -278,6 +278,8 @@ public class BattleFlowController : MonoBehaviour
 
     private void DrawMissingHands()
     {
+        //카드 드로우 사운드 출력
+        SoundManager.Instance.PlaySFX(SoundCategory.UI, 3);
         foreach (var player in playerParty)
         {
             if (!player.IsAlive()) continue;
