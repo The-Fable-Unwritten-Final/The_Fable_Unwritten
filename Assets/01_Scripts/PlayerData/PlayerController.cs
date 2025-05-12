@@ -25,18 +25,20 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     //---
     [Header("Stance UI")]
     [Tooltip("상·중·하 버튼 컨테이너 프리팹")]
-    [SerializeField] private GameObject stanceButtonContainerPrefab;
+ [SerializeField] private GameObject UI_StanceSlot;  // 위에서 만든 Prefab
 
     // 런타임에 생성된 팝업을 보관
-    private GameObject stanceContainer;
-
+    private GameObject stancePopup;  // 팝업 인스턴스
+    private BattleFlowController flow;
     //---
 
     [SerializeField]private List<StatusEffect> activeEffects = new List<StatusEffect>();        //현재 가지고 있는 상태이상 및 버프
 
     private void Awake()
     {
-
+        //---
+        flow = FindObjectOfType<BattleFlowController>();
+        //---
         animator = GetComponent<Animator>();
 
         if (playerData != null && playerData.animationController != null)
@@ -224,37 +226,27 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
 
     //---
-
-
     /// <summary>
-    /// 캐릭터 아이콘 클릭 시 호출 (UI 버튼에 연결)
+    /// Sophia/Kayla/Leon 아이콘 버튼에 연결할 메서드
     /// </summary>
     public void OnCharacterIconClicked()
     {
-        // 1) 플레이어 턴이 아닐 때는 무시
-        var flow = FindObjectOfType<BattleFlowController>();
+        // 플레이어 턴이 아니면 무시
         if (flow == null || !flow.IsPlayerTurn())
             return;
 
-        // 2) 이미 팝업이 떠 있으면 닫고 종료
-        if (stanceContainer != null)
+        // 이미 팝업이 떠 있으면 닫기
+        if (stancePopup != null)
         {
-            Destroy(stanceContainer);
-            stanceContainer = null;
+            Destroy(stancePopup);
+            stancePopup = null;
             return;
         }
 
-        // 3) 팝업 생성
-        stanceContainer = Instantiate(
-            stanceButtonContainerPrefab,
-            transform  // 캐릭터 오브젝트 자식으로 붙인다
-        );
-
-        // 4) 생성된 팝업 내부의 StanceButton들을 초기화
-        foreach (var btn in stanceContainer.GetComponentsInChildren<StanceButton>())
-        {
+        // 팝업 생성 & 버튼 초기화
+        stancePopup = Instantiate(UI_StanceSlot, transform);
+        foreach (var btn in stancePopup.GetComponentsInChildren<StanceButton>())
             btn.Initialize(this);
-        }
     }
     //---
     public void ChangeStance(PlayerData.StancType newStance) //StancUI 함수
@@ -276,14 +268,13 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
             // 스프라이트 교체 (2D SpriteRenderer 사용 예시)
             var sr = GetComponent<SpriteRenderer>();
-            if (sr != null && sv.stanceIcon != null)
-                sr.sprite = sv.stanceIcon;
+            if (sr != null) sr.sprite = sv.stanceIcon;
             // 만약 UI Image라면:
             // GetComponent<Image>().sprite = sv.stanceIcon;
         }
 
     }
-    //---
+
 
     /// <summary>
     /// 적이 공격해올 때 호출

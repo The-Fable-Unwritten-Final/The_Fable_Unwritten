@@ -13,29 +13,31 @@ public class StanceButton : MonoBehaviour
     [SerializeField] private Image iconImage;
 
 
-    private PlayerController ownerController;
-    private BattleFlowController battleFlowController;
-    private Button buttonComponent;
+    private PlayerController owner;
+    private BattleFlowController flow;
+    private Button button;
 
-    public void Initialize(PlayerController owner)
+    public void Initialize(PlayerController ownerController)
     {
-        ownerController = owner;
-        battleFlowController = FindObjectOfType<BattleFlowController>();
-        buttonComponent = GetComponent<Button>();
+        owner = ownerController;
+        flow = FindObjectOfType<BattleFlowController>();
+        button = GetComponent<Button>();
 
-        var stanceValue = ownerController.playerData.allStances
-            .Find(s => s.stencType == stanceType);
-        if (stanceValue != null) iconImage.sprite = stanceValue.stanceIcon;
+        // 버튼 아이콘 설정
+        var sv = owner.playerData.allStances
+                  .Find(s => s.stencType == stanceType);
+        if (sv != null) iconImage.sprite = sv.stanceIcon;
 
-        buttonComponent.onClick.AddListener(OnClicked);
+        button.onClick.AddListener(OnClicked);
     }
 
     private void OnClicked()
     {
-        if (battleFlowController == null || !battleFlowController.IsPlayerTurn())
-            return;
+        if (flow == null || !flow.IsPlayerTurn()) return;
 
-        ownerController.ChangeStance(stanceType);
+        // 1) 스탠스 변경  
+        owner.ChangeStance(stanceType);
+        // 2) 팝업 닫기  
         Destroy(transform.parent.gameObject);
     }
 }
