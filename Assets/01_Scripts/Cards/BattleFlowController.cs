@@ -30,6 +30,7 @@ public class BattleFlowController : MonoBehaviour
     public Dictionary<CharacterClass, DeckModel> decksByCharacter = new();     //캐릭터 마다의 사용, 미사용, 핸드 덱
     public Dictionary<CharacterClass, IStatusReceiver> characterMap = new();   //캐릭터클래스에 대한 정보
     public Dictionary<IStatusReceiver, CardModel> enemyPlannedSkill = new();   //적의 스킬 예측 정보
+    public List<int> recentLoots { get; private set; } = new();     //현재 전리품 정보
 
     private bool isBattleEnded = true;      //배틀 끝났는지 확인용
 
@@ -307,6 +308,30 @@ public class BattleFlowController : MonoBehaviour
             isBattleEnded = true;
             Debug.Log("▶ 전투 승리");
             isWin = 1;
+
+            foreach(var enemy in enemyParty)
+            {
+                if(enemy is Enemy enemyComponent)
+                {
+                    var enemyData = enemyComponent.enemyData;
+                    if( enemyData != null && enemyData.loot != null)
+                    {
+                        foreach (int lootIndex in enemyData.loot)
+                        {
+                            recentLoots.Add(lootIndex);
+                            if (lootIndex >= 0 && lootIndex < ProgressDataManager.MAX_ITEM_COUNT)
+                            {
+                                ProgressDataManager.Instance.itemCounts[lootIndex]++;
+                            }
+                            else
+                            {
+                                Debug.LogWarning($"[BattleFlow] 잘못된 lootIndex: {lootIndex} (범위 초과)");
+                            }
+                        }
+                    }
+                }
+            }
+
             enemyParty.Clear();
             StopAllCoroutines();
             GameManager.Instance.turnController.ToGameEnd();
