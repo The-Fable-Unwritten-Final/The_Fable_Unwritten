@@ -168,13 +168,25 @@ public class CombatCameraController : MonoBehaviour
             yield return null;
         }
     }
-
+    // 몬스터의 공격 애니메이션의 싱크에 맞춰서 공격시점에서 >> 데미지 적용 + 카메라 액션을 하기에, 매개변수로 받는 형식이 아니라 체력에 적용을 해주는 시점에서 각각의 메서드(CameraPunch)를 상황에 맞게 호출 형식으로 변경.
     public void CameraPunch()
     {
         Vector3 mainCamPos = mainCam.transform.localPosition; // 카메라 원래 위치 저장
 
         // 카메라 흔들림 효과
-        mainCam.transform.DOShakePosition(0.5f, 0.15f, 8, 40, false, true)
+        mainCam.transform.DOShakePosition(0.5f, 0.10f, 8, 40, false, true)
+            .OnComplete(() =>
+            {
+                mainCam.transform.DOKill();
+                mainCam.transform.localPosition = mainCamPos;
+            });
+    }
+    public void CameraPunchHard()
+    {
+        Vector3 mainCamPos = mainCam.transform.localPosition; // 카메라 원래 위치 저장
+
+        // 카메라 흔들림 효과
+        mainCam.transform.DOShakePosition(0.5f, 0.20f, 8, 40, false, true)
             .OnComplete(() =>
             {
                 mainCam.transform.DOKill();

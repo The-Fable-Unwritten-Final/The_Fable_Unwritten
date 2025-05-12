@@ -148,7 +148,10 @@ public class TestCustomWindow : EditorWindow
             {
                 GameManager.Instance.combatCameraController.CameraPunch();
             }
-
+            if (GUILayout.Button("카메라 흔들림 2"))
+            {
+                GameManager.Instance.combatCameraController.CameraPunchHard();
+            }
             GUILayout.Space(10);
             EditorGUILayout.BeginHorizontal();  // Begin
 
