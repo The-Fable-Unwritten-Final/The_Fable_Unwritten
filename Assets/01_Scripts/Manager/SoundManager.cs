@@ -28,7 +28,7 @@ public class SoundManager : MonoSingleton<SoundManager>
     {
         { SceneNameData.TitleScene, "Title" },
         { SceneNameData.StageScene, "Stage" },
-        { SceneNameData.CombatScene_Test, "CombatScene_Test"},
+        { SceneNameData.CombatScene, "CombatScene"},
         { SceneNameData.CampScene, "Camp" },
         { SceneNameData.RandomEventScene, "Event" },
     };

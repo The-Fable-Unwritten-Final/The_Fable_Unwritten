@@ -32,8 +32,6 @@ public class StageMapController : MonoBehaviour
             var theme = stageSetting.GetThemeForStage(stageSetting.StageIndex);
             stageSetting.SetTheme(theme);
 
-            Debug.Log($"[StageMapController] StageIndex = {ProgressDataManager.Instance.StageIndex}, Theme = {theme}");
-
             LoadStage(stageSetting.StageIndex);
 
             // 기획자 요청으로 대화씬 스킵
@@ -136,7 +134,7 @@ public class StageMapController : MonoBehaviour
             case NodeType.NormalBattle:
             case NodeType.EliteBattle:
             case NodeType.Boss:
-                SceneManager.LoadScene(SceneNameData.CombatScene_Test);
+                SceneManager.LoadScene(SceneNameData.CombatScene);
                 return;
 
             case NodeType.Camp:

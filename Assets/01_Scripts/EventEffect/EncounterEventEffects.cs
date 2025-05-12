@@ -23,7 +23,7 @@ public class EncounterEventEffects : EventEffects
                 break;
             }
         }
-        SceneManager.LoadScene(SceneNameData.CombatScene_Test);
+        SceneManager.LoadScene(SceneNameData.CombatScene);
     }
     public override void UnApply()
     {

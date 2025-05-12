@@ -105,11 +105,8 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
             .ToList();
 
         string json = JsonUtility.ToJson(data, true);
-        Debug.Log(json);
         PlayerPrefs.SetString("ProgressSaveData", json);
         PlayerPrefs.Save();
-
-        Debug.Log("[ProgressDataManager] 진행 저장 완료");
     }
 
     public void LoadProgress()
@@ -230,7 +227,6 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         PlayerPrefs.DeleteKey("ProgressSaveData");
 
         SaveProgress();
-        Debug.Log("[ProgressDataManager] 데이터 초기화 완료");
     }
 
     public void InitializePlayerData()      //아예 초기 데이터로 완전 초기화

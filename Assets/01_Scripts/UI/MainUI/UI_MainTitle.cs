@@ -62,7 +62,7 @@ public class UI_MainTitle : MonoBehaviour
             case NodeType.NormalBattle:
             case NodeType.EliteBattle:
             case NodeType.Boss:
-                SceneManager.LoadScene(SceneNameData.CombatScene_Test);
+                SceneManager.LoadScene(SceneNameData.CombatScene);
                 break;
 
             case NodeType.Camp:
