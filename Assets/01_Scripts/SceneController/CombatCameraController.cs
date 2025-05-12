@@ -28,14 +28,6 @@ public class CombatCameraController : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.X)) // 테스트용 카메라 흔들림
-        {
-            CameraPunch();
-        }
-        if(Input.GetKeyDown(KeyCode.C)) // 테스트용 카메라 흔들림
-        {
-            CameraPunchHard();
-        }
         if(Input.GetKeyDown(KeyCode.V)) // 테스트용 카메라 액션
         {
             List<IStatusReceiver> enemies = new List<IStatusReceiver>();

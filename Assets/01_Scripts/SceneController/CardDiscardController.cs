@@ -67,15 +67,15 @@ public class CardDiscardController : MonoBehaviour
             text = "버릴 카드를 선택하세요.\n\n";
             if(totalSophiaCount > 0)
             {
-                text += $"<sprite=0> {reqSophiaCount}/{totalSophiaCount} 장\n";
+                text += $"<sprite=0> {reqSophiaCount}/{totalSophiaCount} \n";
             }
             if(totalKylaCount > 0 )
             {
-                text += $"\n<sprite=1> {reqKylaCount}/{totalKylaCount} 장\n";
+                text += $"\n<sprite=1> {reqKylaCount}/{totalKylaCount} \n";
             }
             if(totalLeonCount > 0)
             {
-                text += $"\n<sprite=2> {reqLeonCount}/{totalLeonCount} 장";
+                text += $"\n<sprite=2> {reqLeonCount}/{totalLeonCount} ";
             }
         }
 
