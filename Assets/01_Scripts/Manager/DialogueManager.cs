@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class DialogueManager : MonoSingleton<DialogueManager>
@@ -52,7 +53,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
     /// 특정 ID에 맞는 대화를 실행
     /// </summary>
     public void PlayDialogue(string dialogueID)
-    {
+    {        
         if (isPlaying)
         {
             Debug.LogWarning("[DialogueManager] 대화 재생 중!");
@@ -69,6 +70,14 @@ public class DialogueManager : MonoSingleton<DialogueManager>
         {
             Debug.LogError("[DialogueManager] targetCutscene 연결 실패");
             return;
+        }
+
+        // 다일얼로그 BGM 실행(숫자만 추출)
+        string[] parts = dialogueID.Split('_');
+
+        if (parts.Length == 2 && int.TryParse(parts[1], out int number))
+        {
+            SoundManager.Instance.PlayBGM(SoundCategory.EvenetBGM, number);
         }
 
         var data = JsonCutsceneLoader.Convert(DataManager.Instance.DialogueDatabase[dialogueID]);
@@ -115,7 +124,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
         }
 
         CutsceneEffectPlayer.Instance?.ClearAll();
-
+        SoundManager.Instance.PlayBGMForCurrentScene();
         callback?.Invoke();
     }
 
