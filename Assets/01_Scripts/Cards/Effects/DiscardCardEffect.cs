@@ -11,25 +11,43 @@ using UnityEngine;
 public class DiscardCardEffect : CardEffectBase
 {
     public int discardCount = 1;
-    // 실제 선택은 외부에서 UI로 받고 여기서 처리
+
+    /// <summary>
+    /// UI에서 선택한 카드들 버리기 처리 (패가 부족하면 전체 버림)
+    /// </summary>
     public void Apply(IStatusReceiver caster, List<CardModel> selectedCards)
     {
         var deck = caster.Deck;
 
-        foreach (var card in selectedCards)
+        if (deck.hand.Count > discardCount)     //버리는 카드가 핸드의 카드보다 많을 경우
         {
-            if (deck.Hand.Contains(card))
-                deck.Discard(card);
+            deck.DiscardHand();
+            Debug.Log("[카드 버리기] 패 전부 버리기");
         }
+        else                                    //버리는 카드가 핸드의 카드보다 적을 경우
+        {
+            if(selectedCards.Count < discardCount)
+            {
+                Debug.LogWarning($"[DiscardCardEffect] 선택된 카드 수가 부족합니다. 필요: {discardCount}, 선택됨: {selectedCards.Count}");
+            }
 
-        Debug.Log($"[카드 버리기] {selectedCards.Count}장 선택적으로 버림");
+            foreach (var card in selectedCards)
+            {
+                if (deck.Hand.Contains(card))
+                    deck.Discard(card);
+            }
+
+            Debug.Log($"[카드 버리기] {selectedCards.Count}장 선택적으로 버림");
+        }
     }
 
-    // 기존 Apply는 경고만 apply 표시 후 discard UI 쪽에서 apply(List) 쪽을 호출하자!!!
     public override void Apply(IStatusReceiver caster, IStatusReceiver target)
     {
-        Debug.LogWarning("[DiscardCardEffect] 선택된 카드 리스트를 넘겨주세요.");
+        Debug.LogWarning("[DiscardCardEffect] 선택된 카드 리스트를 넘겨주세요. 자동 버리기는 ApplyAuto()를 사용하세요.");
     }
 
-    public override string GetDescription() => $"카드를 {discardCount}장 버립니다 (선택).";
+    public override string GetDescription() => $"카드를 선택하여 최대 {discardCount}장 버립니다.";
+
+    public override void ApplyAOE(IStatusReceiver caster, List<IStatusReceiver> targets) { }
+    public override bool isAOE() => false;
 }
