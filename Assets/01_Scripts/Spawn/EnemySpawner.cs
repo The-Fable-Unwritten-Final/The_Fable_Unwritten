@@ -67,13 +67,14 @@ public class EnemySpawner : MonoBehaviour
     {
         EnemySpawnSet selectedSet;
 
-        if (ProgressDataManager.Instance.SavedEnemySetIndex >= 0)
+        if (ProgressDataManager.Instance.SavedEnemySetIndex > 0)
         {
             selectedSet = stageData.spawnSets[ProgressDataManager.Instance.SavedEnemySetIndex];
         }
         else
         {
             // 새로 랜덤 선택하고 저장
+            
             selectedSet = stageData.GetRandomSet();
             int selectedIndex = stageData.spawnSets.IndexOf(selectedSet);
             ProgressDataManager.Instance.SaveEnemySetIndex(selectedIndex);

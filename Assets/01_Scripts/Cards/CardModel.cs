@@ -50,6 +50,12 @@ public class CardModel : ScriptableObject
 
     // ==== 사용 조건 및 비용 ====
 
+    private void OnEnable()
+    {
+        isMaintain = true;
+        isOneUse = false;
+    }
+
 
     /// <summary>
     /// 현재 마나로 카드 사용한지 확인하는 코드
@@ -76,6 +82,7 @@ public class CardModel : ScriptableObject
     {
         // 1. 공격 애니메이션
         caster.PlayAttackAnimation();
+        SoundManager.Instance.PlaySFX(SoundCategory.Card, (int)type);
         yield return new WaitForSeconds(0.5f); // 애니메이션 길이에 맞게 조정
 
         // 2. 스킬 이펙트 재생

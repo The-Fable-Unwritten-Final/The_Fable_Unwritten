@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class ScenePopupController : MonoBehaviour
 {
-
     private void Awake()
     {
         UIManager.Instance.RegisterPopup(this);

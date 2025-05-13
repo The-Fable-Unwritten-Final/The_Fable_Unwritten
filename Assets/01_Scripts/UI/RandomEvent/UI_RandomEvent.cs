@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -28,16 +29,34 @@ public class UI_RandomEvent : MonoBehaviour
 
     private void Start()
     {
-        GetCurrentEvent();
+        backGround.sprite = DataManager.Instance.GetBackground(ProgressDataManager.Instance.StageIndex);
+
+        if(ProgressDataManager.Instance.SavedRandomEvent <= 0) // 저장 된 현재 랜덤이밴트 없을 경우
+        {
+            GetCurrentEvent();
+        }
+        else
+        {
+            GetSavedEvent();
+        }
+
+        ProgressDataManager.Instance.SaveProgress();
 
         if (currentData != null)
         {
             InitUI(currentData);
         }
-        else
-        {
-            Debug.LogWarning("랜덤 이벤트 데이터가 없습니다.");
-        }
+
+        
+    }
+
+    private void GetSavedEvent()
+    {
+        int savedIndex = ProgressDataManager.Instance.SavedRandomEvent;
+
+        var savedEventData = DataManager.Instance.allRandomEvents.FirstOrDefault(e => e.index == savedIndex);
+
+        currentData = savedEventData;
     }
 
     private void GetCurrentEvent()
@@ -46,9 +65,9 @@ public class UI_RandomEvent : MonoBehaviour
         int currentStageIndex = pdm.StageIndex;
         currentData = pdm.GetRandomEvent(pdm.CurrentTheme);
 
-        if (currentData == null) return;
+        ProgressDataManager.Instance.SavedRandomEvent = currentData.index;
 
-        backGround.sprite = DataManager.Instance.GetBackground(currentStageIndex);
+        if (currentData == null) return;        
     }
 
     private void InitUI(RandomEventData data)
@@ -155,7 +174,9 @@ public class UI_RandomEvent : MonoBehaviour
 
     private void ApplyEffectsAndGoToStage()
     {
-        foreach(int resultIndex in results)
+        ProgressDataManager.Instance.SavedRandomEvent = -1;
+
+        foreach (int resultIndex in results)
         {
             EventEffectManager.Instance.AddEventEffect(resultIndex);
 

@@ -2,15 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PopupUI_Setting : BasePopupUI
 {
-    [Header("Panel")]
-    [SerializeField] GameObject creditsPanel;
-
     [Header("Sound")]
-    [SerializeField] Slider volumSlider;
+    [SerializeField] Slider BGMvolumSlider;
+    [SerializeField] Slider SFXvolumSlider;
 
     [Header("Resoolution")]
     [SerializeField] TMP_Dropdown resolutionDropdown;
@@ -26,9 +25,11 @@ public class PopupUI_Setting : BasePopupUI
     private void OnEnable()
     {   
         // 사운드 셋팅
-        volumSlider = GetComponentInChildren<Slider>();
-        volumSlider.value = SoundManager.Instance.bgmVolume;
-        volumSlider.onValueChanged.AddListener(OnVolumChange);
+        BGMvolumSlider.value = SoundManager.Instance.bgmVolume;
+        BGMvolumSlider.onValueChanged.AddListener(OnBGMVolumChange);
+
+        SFXvolumSlider.value = SoundManager.Instance.sfxVolume;
+        SFXvolumSlider.onValueChanged.AddListener(OnSFXVolumChange);
 
         // 해상도 셋팅
         resolutionDropdown.ClearOptions();
@@ -41,18 +42,17 @@ public class PopupUI_Setting : BasePopupUI
 
         resolutionDropdown.AddOptions(options);
         resolutionDropdown.onValueChanged.AddListener(OnResolutionChanged);
-
-        creditsPanel.SetActive(false);
     }
-    public void OnVolumChange(float value)
+
+    public void OnBGMVolumChange(float value)
     {
         SoundManager.Instance.SetBGMVolume(value);
-        SoundManager.Instance.SetSFXVolume(value);
+
     }
 
-    public void CreditPanelToggle()
+    public void OnSFXVolumChange(float value)
     {
-        creditsPanel.SetActive(!creditsPanel.activeInHierarchy);
+        SoundManager.Instance.SetSFXVolume(value);
     }
 
     private void OnResolutionChanged(int index)
@@ -62,5 +62,28 @@ public class PopupUI_Setting : BasePopupUI
 
         Debug.Log($"Requested resolution: {selectedResolution.x}x{selectedResolution.y}");
         Debug.Log($"Actual resolution: {Screen.width}x{Screen.height}");
+    }
+
+
+    public void OnVolumChange(float value)
+    {
+        SoundManager.Instance.SetBGMVolume(value);
+        SoundManager.Instance.SetSFXVolume(value);
+    }
+    public void CreditPanel()
+    {
+        UIManager.Instance.ShowPopupByName("PopupUI_CreditsPanel");
+    }
+    public void GoToTitle()
+    {
+        if (SceneManager.GetActiveScene().name == SceneNameData.CombatScene) //전투씬 에서의 타이틀로 돌아가기.
+        {
+            UIManager.Instance.ShowPopupByName("PopupUI_ReturnTitle");
+        }
+        else // 다른 씬에서의 타이틀로 돌아가기.
+        {
+            Close();
+            SceneManager.LoadScene(SceneNameData.SubTitleScene);
+        }
     }
 }

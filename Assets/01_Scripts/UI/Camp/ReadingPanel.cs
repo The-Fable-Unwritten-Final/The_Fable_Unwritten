@@ -16,6 +16,7 @@ public class ReadingPanel : BaseCampPanel
 
     public int currentCardIndex;
     public int chageCardIndex;
+    CharacterClass selectClass;
 
     public void OnSophiaClicked() => ShowCards(CharacterClass.Sophia);
     public void OnKaylaClicked() => ShowCards(CharacterClass.Kayla);
@@ -30,6 +31,7 @@ public class ReadingPanel : BaseCampPanel
     // 카드 외 선택 시 CardPanel 비활성화
     public void OnClickBookExept()
     {
+        SoundManager.Instance.PlaySFX(SoundCategory.UI, 1); // 책 비활성화 시 사운드
         cardBook.SetActive(false);
     }
 
@@ -42,6 +44,7 @@ public class ReadingPanel : BaseCampPanel
 
         ClearCards();
 
+        selectClass = characterClass;
         var deck = CurrentCharacterDeck(characterClass);
 
         foreach (var card in deck)
@@ -51,8 +54,7 @@ public class ReadingPanel : BaseCampPanel
             var onclick = go.GetComponent<Button>();
 
             cardUI.SetCard(card);
-            onclick.onClick.AddListener(() => ShowBook(characterClass , card));
-   
+            onclick.onClick.AddListener(() => ShowBook(characterClass, card));
         }
     }
 
@@ -78,8 +80,9 @@ public class ReadingPanel : BaseCampPanel
             Destroy(child.gameObject);
     }
 
-    private void ShowBook(CharacterClass characterClass , CardModel selectCard)
-    { 
+    private void ShowBook(CharacterClass characterClass, CardModel selectCard)
+    {
+        SoundManager.Instance.PlaySFX(SoundCategory.UI, 0); // 책 비활성화 시 사운드
         currentCardIndex = selectCard.index;
         cardBook.GetComponent<CampCardBook>().Character = characterClass;
         cardBook.SetActive(true);
@@ -109,6 +112,8 @@ public class ReadingPanel : BaseCampPanel
 
     public void SetChangeCardIndex(Transform selectCard)
     {
+        SoundManager.Instance.PlaySFX(SoundCategory.Player, (int)selectClass);
+
         if (selectCard.TryGetComponent<BookCards>(out var bookCard))
         {
             chageCardIndex = bookCard.cardIndex;

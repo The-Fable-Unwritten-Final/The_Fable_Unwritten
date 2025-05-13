@@ -88,7 +88,7 @@ public class TestCustomWindow : EditorWindow
             // 최소 시작 스테이지부터 재시작 (1 또는 2)
             setting.StageIndex = setting.MinStageIndex;
 
-            SceneManager.LoadScene("TitleScene");
+            SceneManager.LoadScene("SubTitleScene");
         }
         EditorGUILayout.EndVertical();
 
