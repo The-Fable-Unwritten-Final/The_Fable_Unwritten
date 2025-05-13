@@ -1,16 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// 플레이어 클릭 시 상/중/하 버튼으로 스탠스를 변경하도록 처리하는 컴포넌트
-/// BattleFlowController를 참고해 플레이어 턴에만 반응합니다.
-/// </summary>
+[RequireComponent(typeof(Button))]
 public class StanceButton : MonoBehaviour
 {
-    [Tooltip("토글할 StanceSlot 창")]
+    [Tooltip("토글할 StanceSlot 팝업(부모 오브젝트)")]
     [SerializeField] private GameObject stanceSlot;
 
-    [Tooltip("이 버튼이 영향을 줄 PlayerController")]
+    [Tooltip("이 버튼이 제어할 플레이어 컨트롤러")]
     [SerializeField] private PlayerController owner;
 
     private Button button;
@@ -18,36 +15,29 @@ public class StanceButton : MonoBehaviour
     private void Awake()
     {
         button = GetComponent<Button>();
-        if (button == null)
-            Debug.LogError($"[{name}] Button 컴포넌트가 없습니다.");
+        if (stanceSlot == null) Debug.LogError($"{name}: stanceSlot 할당해주세요.");
+        if (owner == null) Debug.LogError($"{name}: owner(PlayerController) 할당해주세요.");
 
-        button.onClick.AddListener(ToggleStanceSlot);
-
+        button.onClick.AddListener(TogglePopup);
     }
 
-    private void ToggleStanceSlot()
+    private void TogglePopup()
     {
-        // 1) 할당 안 된 필드 체크
-        if (stanceSlot == null)
-        {
-            Debug.LogError($"[{name}] stanceSlot(GameObject)이 할당되지 않았습니다.");
-            return;
-        }
-        if (owner == null)
-        {
-            Debug.LogError($"[{name}] owner(PlayerController)가 할당되지 않았습니다.");
-            return;
-        }
+        if (stanceSlot == null || owner == null) return;
 
-        // 2) on/off 토글
-        bool open = !stanceSlot.activeSelf;
-        stanceSlot.SetActive(open);
+        // 팝업 on/off
+        bool show = !stanceSlot.activeSelf;
+        stanceSlot.SetActive(show);
 
-        // 3) 팝업이 열릴 때만 하위 옵션 초기화
-        if (open)
-        {
-            foreach (var opt in stanceSlot.GetComponentsInChildren<StanceOptionButton>(true))
-                opt.Initialize(owner);
-        }
+        // 팝업을 연 경우에만, 하위 옵션 초기화
+        if (show) BindOptions();
+    }
+
+    private void BindOptions()
+    {
+        // 팝업 내부 StanceOptionButton 컴포넌트 전부 찾아서 owner 세팅
+        var options = stanceSlot.GetComponentsInChildren<StanceOptionButton>(true);
+        foreach (var opt in options)
+            opt.Initialize(owner);
     }
 }
