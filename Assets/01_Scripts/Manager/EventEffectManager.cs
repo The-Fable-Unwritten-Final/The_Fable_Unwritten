@@ -104,7 +104,6 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
     /// </summary>
     public void PlayNextCombat()
     {
-        Debug.Log("Play Next Combat");
         for (int i = 0; i < untillNextCombat.Count; i++)
         {
             untillNextCombat[i].Apply();
