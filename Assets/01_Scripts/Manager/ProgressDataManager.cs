@@ -15,11 +15,10 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     [SerializeField]public List<PlayerData> PlayerDatas { get; private set; } = new();  //게임에 적용할 플레이어 데이터들.
 
 
-
     public GameStartType GameStartType { get; set; } = new();           //게임이 새로 시작한 게임인지 계속 진행되는 게임인지를 판별
 
     public HashSet<int> unlockedCards = new();          //unlock된 카드들의 index가 들어있는 hashset
-    public int[] itemCounts = new int[MAX_ITEM_COUNT];  //현재 전리품의 개수가 들어있는 배열
+    [SerializeField]public int[] itemCounts = new int[MAX_ITEM_COUNT];  //현재 전리품의 개수가 들어있는 배열
 
     List<EventEffects> untillNextCombat = new List<EventEffects>(); // 다음 전투까지 지속되는 효과 리스트
     List<EventEffects> untillNextStage = new List<EventEffects>(); // 다음 스테이지까지 지속되는 효과 리스트

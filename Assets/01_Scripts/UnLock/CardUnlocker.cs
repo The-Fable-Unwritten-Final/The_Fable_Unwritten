@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class CardUnlocker : MonoBehaviour
 {
-    public static bool CanUnlock(CardUnlockRecipe recipe)
+    public static bool CanUnlock(UnlockRecipe recipe)
     {
-        foreach (var pair in recipe.requiredTypes)
+        foreach (var pair in recipe.materials)
         {
-            if (ProgressDataManager.Instance.itemCounts[pair.lootIndex] < pair.count)
+            if (ProgressDataManager.Instance.itemCounts[pair.index] < pair.count)
                 return false;
         }
         return true;
@@ -18,7 +18,7 @@ public class CardUnlocker : MonoBehaviour
     /// <summary>
     /// 조합식에 따라 해당 타입의 해금되지 않은 카드 중 하나를 해금하고 반환함
     /// </summary>
-    public static CardModel TryUnlock(CardUnlockRecipe recipe)
+    public static CardModel TryUnlock(UnlockRecipe recipe)
     {
         if (!CanUnlock(recipe))
             return null;
@@ -29,7 +29,7 @@ public class CardUnlocker : MonoBehaviour
         var candidates = allCards
            .Where(card =>
                card.characterClass == recipe.character &&
-               card.type == recipe.resultType &&
+               card.type == recipe.result &&
                !card.isUnlocked)
            .ToList();
 
@@ -37,9 +37,9 @@ public class CardUnlocker : MonoBehaviour
             return null;
 
         // 재료 소모
-        foreach (var pair in recipe.requiredTypes)
+        foreach (var pair in recipe.materials)
         {
-            ProgressDataManager.Instance.itemCounts[pair.lootIndex] -= pair.count;
+            ProgressDataManager.Instance.itemCounts[pair.index] -= pair.count;
         }
 
         // 랜덤 해금
