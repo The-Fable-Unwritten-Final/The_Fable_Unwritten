@@ -256,6 +256,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 15499363}
   m_CullTransparentMesh: 1
+--- !u!114 &157859357 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4096001098545073985, guid: 6a8a8b7577625024db1742592b6ef6a5,
+    type: 3}
+  m_PrefabInstance: {fileID: 1531573720}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 492fa4cff95d8234b89eb5a9068f5a56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &175380842
 GameObject:
   m_ObjectHideFlags: 0
@@ -1705,6 +1717,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 157859357}
+        m_TargetAssemblyTypeName: UI_PlayerInfo, Assembly-CSharp
+        m_MethodName: OnClickButtonSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &518723677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1829,6 +1853,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1882752459}
         m_TargetAssemblyTypeName: UI_CampController, Assembly-CSharp
         m_MethodName: ShowConversationPanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 157859357}
+        m_TargetAssemblyTypeName: UI_PlayerInfo, Assembly-CSharp
+        m_MethodName: OnClickButtonSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2498,6 +2534,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1882752459}
         m_TargetAssemblyTypeName: UI_CampController, Assembly-CSharp
         m_MethodName: ShowTrainingPanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 157859357}
+        m_TargetAssemblyTypeName: UI_PlayerInfo, Assembly-CSharp
+        m_MethodName: OnClickButtonSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3694,6 +3742,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1235878891}
         m_TargetAssemblyTypeName: RestPanel, Assembly-CSharp
         m_MethodName: OnClickConfirm
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 157859357}
+        m_TargetAssemblyTypeName: UI_PlayerInfo, Assembly-CSharp
+        m_MethodName: OnClickButtonSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5047,6 +5107,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1882752459}
         m_TargetAssemblyTypeName: UI_CampController, Assembly-CSharp
         m_MethodName: ShowRestPanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 157859357}
+        m_TargetAssemblyTypeName: UI_PlayerInfo, Assembly-CSharp
+        m_MethodName: OnClickButtonSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

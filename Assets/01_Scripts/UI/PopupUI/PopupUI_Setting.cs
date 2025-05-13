@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -23,7 +24,8 @@ public class PopupUI_Setting : BasePopupUI
 
     
     private void OnEnable()
-    {   
+    {
+        OnClickButtonSound();
         // 사운드 셋팅
         BGMvolumSlider.value = SoundManager.Instance.bgmVolume;
         BGMvolumSlider.onValueChanged.AddListener(OnBGMVolumChange);
@@ -85,5 +87,10 @@ public class PopupUI_Setting : BasePopupUI
             Close();
             SceneManager.LoadScene(SceneNameData.SubTitleScene);
         }
+    }
+
+    public void OnClickButtonSound()
+    {
+        SoundManager.Instance.PlaySFX(SoundCategory.Button, 0); // 기본 버튼 사운드
     }
 }

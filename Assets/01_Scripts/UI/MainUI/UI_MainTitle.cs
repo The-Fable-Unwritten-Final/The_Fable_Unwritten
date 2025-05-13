@@ -88,4 +88,9 @@ public class UI_MainTitle : MonoBehaviour
         //게임 데이터 저장
         //게임 종료 로직 추가
     }
+
+    public void OnClickButtonSound()
+    {
+        SoundManager.Instance.PlaySFX(SoundCategory.Button, 0); // 기본 버튼 사운드
+    }
 }

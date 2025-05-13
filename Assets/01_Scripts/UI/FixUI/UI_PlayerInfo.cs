@@ -75,6 +75,7 @@ public class UI_PlayerInfo : MonoBehaviour
     /// </summary>
     public void ShowCards(CharacterClass characterClass)
     {
+        OnClickButtonSound();
         currentDeck.SetActive(true);
 
         ClearCards();
@@ -141,5 +142,9 @@ public class UI_PlayerInfo : MonoBehaviour
         courageBadge.SetActive(stageSetting.IsEliteClear(StageTheme.Courage));
         loveBadge.SetActive(stageSetting.IsEliteClear(StageTheme.Love));
         wisdomBadge.SetActive(stageSetting.IsEliteClear(StageTheme.Wisdom));
+    }
+    public void OnClickButtonSound()
+    {
+        SoundManager.Instance.PlaySFX(SoundCategory.Button, 0); // 기본 버튼 사운드
     }
 }

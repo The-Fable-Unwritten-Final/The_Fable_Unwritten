@@ -33,6 +33,7 @@ public class PopupUI_CombatReward : BasePopupUI
             confirmButton.onClick.RemoveAllListeners();
             confirmButton.onClick.AddListener(() =>
             {
+                SoundManager.Instance.PlaySFX(SoundCategory.Button, 0); // 기본 버튼 사운드
                 var setting = ProgressDataManager.Instance;
                 setting.RetryFromStart = false;
                 setting.StageCleared = true;
