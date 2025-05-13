@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using static ReduceNextCardCostEffect;
 
 public class PlayerController : MonoBehaviour, IStatusReceiver
@@ -23,13 +24,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     //현재 캐릭터의 클래스를 가져옴.
 
     //---
-    [Header("Stance UI")]
-    [Tooltip("상·중·하 버튼 컨테이너 프리팹")]
- [SerializeField] private GameObject UI_StanceSlot;  // 위에서 만든 Prefab
 
-    // 런타임에 생성된 팝업을 보관
-    private GameObject stancePopup;  // 팝업 인스턴스
-    private BattleFlowController flow;
     //---
 
     [SerializeField]private List<StatusEffect> activeEffects = new List<StatusEffect>();        //현재 가지고 있는 상태이상 및 버프
@@ -37,7 +32,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     private void Awake()
     {
         //---
-        flow = FindObjectOfType<BattleFlowController>();
+
         //---
         animator = GetComponent<Animator>();
 
@@ -231,22 +226,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// </summary>
     public void OnCharacterIconClicked()
     {
-        // 플레이어 턴이 아니면 무시
-        if (flow == null || !flow.IsPlayerTurn())
-            return;
 
-        // 이미 팝업이 떠 있으면 닫기
-        if (stancePopup != null)
-        {
-            Destroy(stancePopup);
-            stancePopup = null;
-            return;
-        }
-
-        // 팝업 생성 & 버튼 초기화
-        stancePopup = Instantiate(UI_StanceSlot, transform);
-        foreach (var btn in stancePopup.GetComponentsInChildren<StanceButton>())
-            btn.Initialize(this);
     }
     //---
     public void ChangeStance(PlayerData.StancType newStance) //StancUI 함수
@@ -260,17 +240,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             float finalAtk = playerData.ATK + stance.attackBonus; //스텐스 공격력 계산
             float finalDef = playerData.DEF + stance.defenseBonus;
 
-            var sv = playerData.allStances.Find(s => s.stencType == newStance);
-            if (sv == null) return;
-
-            // 데이터 갱신
-            playerData.currentStance = sv;
-
-            // 스프라이트 교체 (2D SpriteRenderer 사용 예시)
-            var sr = GetComponent<SpriteRenderer>();
-            if (sr != null) sr.sprite = sv.stanceIcon;
-            // 만약 UI Image라면:
-            // GetComponent<Image>().sprite = sv.stanceIcon;
         }
 
     }

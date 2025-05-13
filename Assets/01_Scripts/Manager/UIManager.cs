@@ -20,6 +20,7 @@ public class UIManager : MonoSingleton<UIManager>
 
     [Header("Controller")]
     public ScenePopupController scenePopupController; // 씬 팝업 컨트롤러
+    public NextSceneFade nextSceneFade; // 씬 전환 페이드
 
 
     protected override void Awake()
