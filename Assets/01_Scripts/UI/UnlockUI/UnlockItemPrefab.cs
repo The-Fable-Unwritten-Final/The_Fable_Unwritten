@@ -19,17 +19,20 @@ public class UnlockItemPrefab : MonoBehaviour
     [Header("전리품 아이콘들 (Resources/illust0 ~ illust3)")]
     [SerializeField] private List<Sprite> lootIcons;
 
-    private void OnEnable()
-    {
-        UpdateUI();
-    }
 
     public void UpdateUI()
     {
+        var itemCounts = ProgressDataManager.Instance.itemCounts;
+        if (itemCounts == null || itemCounts.Length == 0)
+        {
+            Debug.LogWarning("[UnlockItemPrefab] itemCounts가 초기화되지 않았습니다.");
+            return;
+        }
+
         for (int i = 0; i < slots.Count; i++)
         {
             slots[i].icon.sprite = lootIcons[i];
-            slots[i].countText.text = ProgressDataManager.Instance.itemCounts[i].ToString();
+            slots[i].countText.text = itemCounts[i].ToString();
         }
     }
 }

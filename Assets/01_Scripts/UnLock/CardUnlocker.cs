@@ -1,10 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using UnityEngine;
 
 public class CardUnlocker : MonoBehaviour
 {
+
+    public static event Action<CharacterClass> OnRecipeUnlocked;
+    public static event Action<CardModel> OnCardUnlocked;
+
     public static bool CanUnlock(UnlockRecipe recipe)
     {
         foreach (var pair in recipe.materials)
@@ -43,10 +46,13 @@ public class CardUnlocker : MonoBehaviour
         }
 
         // 랜덤 해금
-        var selected = candidates[Random.Range(0, candidates.Count)];
+        var selected = candidates[UnityEngine.Random.Range(0, candidates.Count)];
 
         selected.isUnlocked = true;
         ProgressDataManager.Instance.unlockedCards.Add(selected.index);
+
+        OnRecipeUnlocked?.Invoke(recipe.character);
+        OnCardUnlocked?.Invoke(selected);
 
         return selected;
     }

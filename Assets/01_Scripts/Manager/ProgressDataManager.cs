@@ -54,7 +54,6 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         DataManager.Instance.InitCardUnlockStatus();
     }
 
-
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.S))

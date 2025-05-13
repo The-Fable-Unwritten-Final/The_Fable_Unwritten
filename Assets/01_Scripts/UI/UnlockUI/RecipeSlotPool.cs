@@ -12,6 +12,8 @@ public class RecipeSlotPool : MonoBehaviour
     [SerializeField] private Transform recipeParent;
 
     [SerializeField] private Dictionary<CharacterClass,List<GameObject>> pooled = new();
+    private Dictionary<CharacterClass, List<RecipeView>> recipeViews = new();
+
 
     [SerializeField] private List<Sprite> lootIcons;
     [SerializeField] private GameObject materialSlot;
@@ -20,7 +22,7 @@ public class RecipeSlotPool : MonoBehaviour
     [SerializeField] private GameObject resultIcon;
 
 
-    private void Start()
+    private void OnEnable()
     {
         PreloadAllRecipes();
     }
@@ -63,6 +65,17 @@ public class RecipeSlotPool : MonoBehaviour
                 pooled[recipe.character] = new List<GameObject>();
 
             pooled[recipe.character].Add(go);
+
+            var recipeView = new RecipeView
+            {
+                recipe = recipe,
+                resultButton = button
+            };
+
+            if (!recipeViews.ContainsKey(recipe.character))
+                recipeViews[recipe.character] = new List<RecipeView>();
+
+            recipeViews[recipe.character].Add(recipeView);
         }
     }
 
@@ -105,5 +118,33 @@ public class RecipeSlotPool : MonoBehaviour
     {
         // CardType에 따라 리소스에서 아이콘 로드 (예: Resources/Type/type_0.png)
         return Resources.Load<Sprite>($"Cards/Type/type_{(int)type}");
+    }
+
+    private bool CanCreateRecipe(UnlockRecipe recipe)
+    {
+        foreach (var material in recipe.materials)
+        {
+            int owned = ProgressDataManager.Instance.itemCounts[material.index];
+            if (owned < material.count)
+                return false;
+        }
+        return true;
+    }
+
+    public void UpdateRecipeButtons(CharacterClass character)
+    {
+        if (!recipeViews.ContainsKey(character)) return;
+
+        foreach (var view in recipeViews[character])
+        {
+            bool canCreate = CanCreateRecipe(view.recipe);
+            view.resultButton.interactable = canCreate;
+        }
+    }
+
+    private class RecipeView
+    {
+        public UnlockRecipe recipe;
+        public Button resultButton;
     }
 }

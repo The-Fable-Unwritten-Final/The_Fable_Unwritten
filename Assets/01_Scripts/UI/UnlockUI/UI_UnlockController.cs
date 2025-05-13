@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_UnlockController : MonoBehaviour
+public class UI_UnlockController : BasePopupUI
 {
     /// <summary>
     /// 캐릭터 스프라이트 및 출력할 dialogue를 설정
@@ -17,6 +17,8 @@ public class UI_UnlockController : MonoBehaviour
         public string[] dialogue;
     }
 
+    [SerializeField] private UnlockItemPrefab unlockItemPrefab;
+    [SerializeField] private GameObject popupPanel;
 
     [Header("오른쪽 캐릭터 패널")]
     [SerializeField] private Image characterImage;
@@ -31,22 +33,42 @@ public class UI_UnlockController : MonoBehaviour
     [Header("책갈피 버튼들")]
     [SerializeField] private List<RectTransform> tabButtons;  // 책갈피 UI의 Transform들
 
+    [Header("미리 생성한 레시피 프리팹")]
     [SerializeField] private RecipeSlotPool recipeSlotPool;
 
     private CharacterClass? currentVisibleCharacter = null;     //현재 캐릭터
 
     private Dictionary<CharacterClass, CharacterUnlockUIData> characterDataDict;
 
+
+    private void OnEnable()
+    {
+        CardUnlocker.OnRecipeUnlocked += RefreshAllUI;
+    }
+
+    private void OnDisable()
+    {
+        CardUnlocker.OnRecipeUnlocked -= RefreshAllUI;
+    }
+
     private void Awake()
     {
         characterDataDict = characterDataList.ToDictionary(c => c.character, c => c);
     }
 
-    private void Start()
+    public override void Open()
     {
-        // 기본 선택: 소피아 (CharacterIndex = 0)
-        OnTabSelected(0);
+        base.Open();
+        OpenUnlockPopup();
     }
+
+
+    public void RefreshAllUI(CharacterClass character)
+    {
+        unlockItemPrefab.UpdateUI();               // 아이템 개수 갱신
+        recipeSlotPool.UpdateRecipeButtons(character); // 버튼 활성화 여부 갱신
+    }
+
 
     public void OnTabSelected(int characterIndex)
     {
@@ -56,6 +78,8 @@ public class UI_UnlockController : MonoBehaviour
         CharacterClass selectedClass = (CharacterClass)characterIndex;
 
         recipeSlotPool.OnCharacterRecipe(selectedClass);
+
+        RefreshAllUI(selectedClass);
 
         if (characterDataDict.TryGetValue(selectedClass, out var data))
         {
@@ -110,6 +134,19 @@ public class UI_UnlockController : MonoBehaviour
         Vector3 textScale = speechBubbleText.rectTransform.localScale;
         textScale.x = -1f;
         speechBubbleText.rectTransform.localScale = textScale;
+    }
+
+    //팝업 켜기
+    public void OpenUnlockPopup()
+    {
+        popupPanel.SetActive(true); // 이 타이밍에 Enable 발생
+        OnTabSelected(0); //기존 창으로 이동
+    }
+
+    //팝업 끄기
+    public void CloseUnlockPopup()
+    {
+        popupPanel.SetActive(false);
     }
 }
 

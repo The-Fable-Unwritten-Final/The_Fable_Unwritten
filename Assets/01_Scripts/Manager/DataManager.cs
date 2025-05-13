@@ -11,8 +11,6 @@ public class DataManager : MonoSingleton<DataManager>
     [Header("CSV Data path")]
     // csv
 
-    [SerializeField] private TextAsset recipeJson;
-
     [Header("Data Loaded")]
     // 다이어리 데이터
     private List<DiaryData>[] diaryGroups = new List<DiaryData>[5]; // tag_num 0~4 (스테이지 1~5까지)
@@ -271,9 +269,10 @@ public class DataManager : MonoSingleton<DataManager>
 
     private void InitializeUnlockRecipes()
     {
+        TextAsset recipeJson = Resources.Load<TextAsset>("ExternalFiles/UnlockCardRecipe"); // 확장자 없이
         if (recipeJson == null)
         {
-            Debug.LogError("[DataManager] recipeJson 파일이 할당되지 않았습니다.");
+            Debug.LogError("[DataManager] recipe.json을 Resources/ExternalFiles/에서 찾을 수 없습니다.");
             LoadedRecipes = new();
             return;
         }

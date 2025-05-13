@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2618,7 +2618,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 681c9007c8bca6c4facdca080ef47623, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recipeJson: {fileID: 4900000, guid: 32221442588627944b43203109b8da41, type: 3}
   enemyDataContainer: {fileID: 11400000, guid: 10fc3748c6a6ee344bc3139c9f9ce31c, type: 2}
   LoadedRecipes: []
 --- !u!4 &1656118352
@@ -2732,7 +2731,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1786120690}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 425447233}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: ShowPopupByName
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: UI_UnlockController
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1786120690
 MonoBehaviour:
   m_ObjectHideFlags: 0
