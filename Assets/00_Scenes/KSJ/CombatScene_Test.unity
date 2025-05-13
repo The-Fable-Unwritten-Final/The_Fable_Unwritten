@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -320,7 +320,6 @@ MonoBehaviour:
     hand: []
   hasBlock: 0
   hpBarDisplay: {fileID: 2017042513}
-  UI_StanceSlot: {fileID: 0}
   activeEffects: []
 --- !u!65 &106890149
 BoxCollider:
@@ -1181,7 +1180,6 @@ MonoBehaviour:
     hand: []
   hasBlock: 0
   hpBarDisplay: {fileID: 1515297823862666476}
-  UI_StanceSlot: {fileID: 0}
   activeEffects: []
 --- !u!95 &557679516
 Animator:
@@ -2931,7 +2929,6 @@ MonoBehaviour:
     hand: []
   hasBlock: 0
   hpBarDisplay: {fileID: 1340192385}
-  UI_StanceSlot: {fileID: 0}
   activeEffects: []
 --- !u!65 &1920819809
 BoxCollider:
@@ -3790,6 +3787,66 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 518221310495574982, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1013092538685107924, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1516769630095686556, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4534972575191200850, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4534972575191200850, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1920819808}
+    - target: {fileID: 4534972575191200850, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnCharacterIconClicked
+      objectReference: {fileID: 0}
+    - target: {fileID: 6475700872752529926, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6475700872752529926, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 106890148}
+    - target: {fileID: 6475700872752529926, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnCharacterIconClicked
+      objectReference: {fileID: 0}
+    - target: {fileID: 7379407711479859306, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7379407711479859306, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 557679515}
+    - target: {fileID: 7379407711479859306, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnCharacterIconClicked
+      objectReference: {fileID: 0}
     - target: {fileID: 8428517933431492622, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
       propertyPath: m_Pivot.x
@@ -3890,12 +3947,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8457958401431017885, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: iconImage
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8766541299586457489, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
       propertyPath: m_Name
       value: IconStanceCanvas
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5628029680531811423, guid: 2ae221dc0f448b946a8444ad1e39b903, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
