@@ -62,7 +62,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 
         if (!DataManager.Instance.DialogueDatabase.ContainsKey(dialogueID))
         {
-            Debug.LogError($"[DialogueManager] ID '{dialogueID}' 대화 없음");
+            Debug.LogWarning($"[DialogueManager] ID '{dialogueID}' 대화 없음");
             return;
         }
 
