@@ -79,6 +79,20 @@ public static class EnemyPattern
 
                 Vector3 spawnPos = (t != null) ? t.CachedTransform.position : t.CachedTransform.position;
                 GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(effectname, spawnPos, true);
+                // ──────── K.T.H 변경 ────────
+                if (t is PlayerController pc)
+                {
+                    // 스탠스 상성 로직 적용
+                    var enemyStance = (PlayerData.StancType)enemyComponent.enemyData.currentStance;
+                    pc.ReceiveAttack(enemyStance, skill.damage);
+                }
+                else
+                {
+                    // 그 외(적 등) 일반 데미지
+                    t.TakeDamage(skill.damage);
+                }
+                // ───────────────────────
+
             }
             // 3. 피격 데미지 적용
             t.TakeDamage(skill.damage);

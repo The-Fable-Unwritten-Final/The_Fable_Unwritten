@@ -11,7 +11,7 @@ public class StanceOptionButton : MonoBehaviour
     private Button button;
 
     /// <summary>
-    /// StanceButton에서 owner를 넘겨 호출해야 합니다.
+    /// StanceButton에서 owner를 넘겨 호출
     /// </summary>
     public void Initialize(PlayerController ownerController)
     {
@@ -33,7 +33,10 @@ public class StanceOptionButton : MonoBehaviour
         // 1) 스탠스 변경
         owner.ChangeStance(stanceType);
 
-        // 2) 팝업 닫기
+        // 2) 변경된 스탠스를 로그로 확인
+        Debug.Log($"[StanceOptionButton] {owner.ChClass} 스탠스 → {stanceType}");
+
+        // 3) 팝업 닫기
         transform.parent.gameObject.SetActive(false);
     }
 }
