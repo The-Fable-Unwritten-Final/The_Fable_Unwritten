@@ -152,6 +152,22 @@ public class SoundManager : MonoSingleton<SoundManager>
         PlayBGM(SoundCategory.BossBGM, (int)theme);
     }
 
+    public void PlayBGMForCurrentScene()
+    {
+        Scene scene = SceneManager.GetActiveScene();
+        var node = ProgressDataManager.Instance.CurrentBattleNode;
+        var theme = ProgressDataManager.Instance.CurrentTheme;
+
+        if (scene.name == SceneNameData.CombatScene &&
+            node != null && node.type == NodeType.Boss)
+        {
+            PlayBossBGMByTheme(theme);
+        }
+        else if (sceneToBGMKey.TryGetValue(scene.name, out var bgmKey))
+        {
+            PlayBGM(SoundCategory.BGM, bgmKey);
+        }
+    }
 
     // ===== SFX =====
 
