@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -7,7 +8,7 @@ using UnityEngine;
 public class SelfDamageEffect : CardEffectBase
 {
     public float amount;    //자해량
-    public override void Apply(IStatusReceiver caster, IStatusReceiver target)
+    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets)
     {
         caster.TakeDamage(amount);  //시전자에게 데미지
     }

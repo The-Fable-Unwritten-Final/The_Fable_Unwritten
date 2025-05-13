@@ -8,7 +8,7 @@ using UnityEngine;
 public class NotCurrentCardTypeCondition : TriggerCondition
 {
     public List<CardType> forbiddenTypes;
-    public override bool IsConditionMet(IStatusReceiver caster, IStatusReceiver target)
+    public override bool IsConditionMet(IStatusReceiver caster, List<IStatusReceiver> target)
     {
         var usedTypes = BattleLogManager.Instance.GetCurrentTurnCardTypes();
 

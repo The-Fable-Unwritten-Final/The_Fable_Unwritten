@@ -6,15 +6,18 @@ using UnityEngine;
 public class StunEffect : CardEffectBase
 {
     public int duration;
-    public override void Apply(IStatusReceiver caster, IStatusReceiver target)
+    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets)
     {
-        target.ApplyStatusEffect(new StatusEffect
+        foreach(var target in targets)
         {
-            statType = BuffStatType.stun,
-            value = -999, // stun은 value로 처리하기보다 별도 처리 권장
-            duration = duration
-        });
-        // 타겟 내부에서 stun 상태를 해석하도록
+            target.ApplyStatusEffect(new StatusEffect
+            {
+                statType = BuffStatType.stun,
+                value = -999, // stun은 value로 처리하기보다 별도 처리 권장
+                duration = duration
+            });
+            // 타겟 내부에서 stun 상태를 해석하도록
+        }
     }
 
     public override string GetDescription() => "대상을 1턴간 기절시킵니다.";
