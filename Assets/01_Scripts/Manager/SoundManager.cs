@@ -163,7 +163,6 @@ public class SoundManager : MonoSingleton<SoundManager>
         if (Instance.isMuted) return;
         if (!Instance.sfxClips.TryGetValue(category, out var dict) || !dict.TryGetValue(key, out var clip)) return;
 
-        Debug.Log("실행됨");
         var source = Instance.GetSoundSource();
         source.Play(clip, Instance.sfxVolume, Instance.sfxPitchVariance);
     }

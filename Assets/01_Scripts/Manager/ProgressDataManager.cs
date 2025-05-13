@@ -34,12 +34,13 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     public int MinStageIndex { get; set; }             // 재시작 스테이지 (2스테이지 클리어시 2)
     public bool RetryFromStart { get; set; }           // 스테이지 실패시 재시작여부
     public bool StageCleared { get; set; }             // 전투 승리 여부
+    public bool IsStageScene { get; set; }             // 마지막 컨텐츠 스테이지씬 여부
     public GraphNode CurrentBattleNode { get; set; }   // 현재 선택한 노드
     public StageData SavedStageData { get; private set; }               // 현재 진행 중인 스테이지 데이터
     public List<GraphNode> VisitedNodes { get; private set; } = new();  // 플레이어가 진행한 노드 리스트
     public StageTheme CurrentTheme { get; private set; }  // 진행 테마 저장용
     public int SavedEnemySetIndex { get; set; }           // 진행 에너미 세트 저장용
-
+    public int SavedRandomEvent { get; set; }             // 저장용 랜던이밴트 인덱스
 
     protected override void Awake()
     {
@@ -69,6 +70,8 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         data.minStageIndex = MinStageIndex;
         data.retryFromStart = RetryFromStart;
         data.stageCleared = StageCleared;
+        data.isStageScene = IsStageScene;
+        data.savedEnemySetIndex = SavedEnemySetIndex;
 
         if (SavedStageData != null && VisitedNodes != null)
         {
@@ -84,6 +87,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         data.untilEndAdventureEffects = untillEndAdventure.Select(e => e.index).ToList();
 
         data.usedRandomEventIds = usedRandomEvnent.ToList();
+        data.savedRandomEvent = SavedRandomEvent;
         data.stageThemePairs = stageThemes
             .Select(pair => new StageThemePair { stageIndex = pair.Key, theme = (int)pair.Value })
             .ToList();
@@ -107,6 +111,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         string json = JsonUtility.ToJson(data, true);
         PlayerPrefs.SetString("ProgressSaveData", json);
         PlayerPrefs.Save();
+        Debug.Log($"[ProgressSaveData]\n{json}");
     }
 
     public void LoadProgress()
@@ -124,6 +129,8 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         MinStageIndex = data.minStageIndex;
         RetryFromStart = data.retryFromStart;
         StageCleared = data.stageCleared;
+        IsStageScene = data.isStageScene;
+        SavedEnemySetIndex = data.savedEnemySetIndex;
 
         //stageThemes = data.stageThemes.ToDictionary(pair => pair.Key, pair => (StageTheme)pair.Value);
 
@@ -151,6 +158,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
             .Select(index => EventEffectManager.Instance.eventEffectDict[index].Clone())
             .ToList();
 
+        SavedRandomEvent = data.savedRandomEvent;
         usedRandomEvnent = data.usedRandomEventIds.ToHashSet();
         
         eliteClearThemes = data.eliteClearThemes.Select(i => (StageTheme)i).ToHashSet();
@@ -215,10 +223,12 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
         StageIndex = 1;
         MinStageIndex = 1;
-        SavedEnemySetIndex = -1;
 
+        SavedEnemySetIndex = -1;
+        SavedRandomEvent = -1;
         RetryFromStart = false;
         StageCleared = false;
+        IsStageScene = true;
         CurrentBattleNode = null;
         SavedStageData = null;
         VisitedNodes.Clear();
@@ -366,6 +376,8 @@ public class ProgressSaveData
     public int minStageIndex;
     public bool retryFromStart;
     public bool stageCleared;
+    public bool isStageScene;
+    public int savedEnemySetIndex;
 
     public string stageDataJson;
     public int currentTheme;
@@ -374,6 +386,7 @@ public class ProgressSaveData
     public List<int> untilNextStageEffects = new();
     public List<int> untilEndAdventureEffects = new();
 
+    public int savedRandomEvent;
     public List<int> usedRandomEventIds = new();
     public List<StageThemePair> stageThemePairs = new();
     public List<int> eliteClearThemes = new();
