@@ -12,6 +12,15 @@ public class PopupUI_CombatReward : BasePopupUI
     [SerializeField] TextMeshProUGUI rewardText; // 리워드 텍스트
     [SerializeField] Button confirmButton;
 
+    private static readonly Dictionary<int, string> lootNames = new()
+    {
+        { 0, "백색의 결정" },
+        { 1, "지혜의 잎사귀" },
+        { 2, "사랑의 물약" },
+        { 3, "용기의 돌덩이" }
+    };
+
+
     private void OnEnable()
     {
         short iswin = GameManager.Instance.turnController.battleFlow.isWin;
@@ -19,6 +28,7 @@ public class PopupUI_CombatReward : BasePopupUI
         {
             SoundManager.Instance.PlaySFX(SoundCategory.UI, 5); // 승리 시 효과음 적용
             resultText.text = "전투 승리";
+            rewardText.text = GenerateLootText(GameManager.Instance.turnController.battleFlow.recentLoots);
             // 리워드 로드 + 텍스트 표시
             confirmButton.onClick.RemoveAllListeners();
             confirmButton.onClick.AddListener(() =>
@@ -71,5 +81,22 @@ public class PopupUI_CombatReward : BasePopupUI
                 // StageMoveTest.cs 를 임시로 가져만 왔음. 추후 전투 승리/패배시 기능 재 구현
             });
         }
+    }
+
+    private string GenerateLootText(List<int> loots)
+    {
+        if (loots == null || loots.Count == 0)
+            return "획득한 전리품이 없습니다.";
+
+        var countMap = loots.GroupBy(x => x).ToDictionary(g => g.Key, g => g.Count());
+
+        List<string> lines = new();
+        foreach (var pair in countMap)
+        {
+            string name = lootNames.TryGetValue(pair.Key, out var result) ? result : $"알 수 없는 전리품({pair.Key})";
+            lines.Add($"{name} x{pair.Value}");
+        }
+
+        return string.Join("\n", lines);
     }
 }

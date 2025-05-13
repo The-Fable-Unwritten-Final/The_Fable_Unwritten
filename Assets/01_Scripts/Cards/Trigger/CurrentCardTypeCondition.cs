@@ -7,15 +7,25 @@ using UnityEngine;
 /// </summary>
 public class CurrentCardTypeCondition : TriggerCondition
 {
+    [Tooltip("모든 타입을 만족해야 하는지(And), 하나라도 만족하면 되는지(Or)")]
+    public bool isAnd = true;
+
     public List<CardType> requiredTypes;
 
     public override bool IsConditionMet(IStatusReceiver caster, IStatusReceiver target)
     {
         var currentTypes = BattleLogManager.Instance.GetCurrentTurnCardTypes();
-        foreach (var type in requiredTypes)
-            if (currentTypes.Contains(type)) return true;
-        return false;
+
+        if (isAnd)
+        {
+            return requiredTypes.TrueForAll(type => currentTypes.Contains(type));
+        }
+        else
+        {
+            return requiredTypes.Exists(type => currentTypes.Contains(type));
+        }
     }
 
-    public override string Description => "이번 턴에 '" + string.Join(", ", requiredTypes) + "' 타입 사용됨";
+    public override string Description =>
+            $"이번 턴에 {(isAnd ? "모든" : "하나 이상의")} 타입 사용됨: {string.Join(", ", requiredTypes)}";
 }
