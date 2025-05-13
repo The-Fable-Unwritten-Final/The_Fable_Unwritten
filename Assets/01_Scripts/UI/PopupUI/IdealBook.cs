@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleBook : MonoBehaviour ,IBookControl
+public class IdealBook : MonoBehaviour ,IBookControl
 {
     // 페이지 인터페이스
     public int maxPageCount { get; set; } = 3;// 페이지 수
