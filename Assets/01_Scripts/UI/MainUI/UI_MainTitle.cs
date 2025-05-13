@@ -51,7 +51,7 @@ public class UI_MainTitle : MonoBehaviour
     {
         var currentNode = ProgressDataManager.Instance.CurrentBattleNode;
 
-        if (currentNode == null)
+        if (currentNode == null || ProgressDataManager.Instance.IsStageScene)
         {
             SceneManager.LoadScene(SceneNameData.StageScene);
             return;

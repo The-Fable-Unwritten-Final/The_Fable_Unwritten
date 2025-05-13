@@ -23,23 +23,26 @@ public class StageMapController : MonoBehaviour
 
     private void Start()
     {
-        var stageSetting = ProgressDataManager.Instance;
-        
-        ProgressDataManager.Instance.InitializePlayerHPByGameType();
+        var pd = ProgressDataManager.Instance;
+
+        pd.IsStageScene = true;
+        pd.InitializePlayerHPByGameType();
 
         if (!TryRestoreStage())
         {
-            var theme = stageSetting.GetThemeForStage(stageSetting.StageIndex);
-            stageSetting.SetTheme(theme);
+            var theme = pd.GetThemeForStage(pd.StageIndex);
+            pd.SetTheme(theme);
 
-            LoadStage(stageSetting.StageIndex);
+            LoadStage(pd.StageIndex);
 
             // 기획자 요청으로 대화씬 스킵
-            DialogueManager.Instance.OnStageStart(stageSetting.StageIndex); // 대화 호출
+            DialogueManager.Instance.OnStageStart(pd.StageIndex); // 대화 호출
         }
         
-        int stageIndex = stageSetting.StageIndex;
+        int stageIndex = pd.StageIndex;
         backGround.sprite = DataManager.Instance.GetBackground(stageIndex);
+
+        pd.SaveProgress();
     }
 
     // 저장된 상태가 있다면 복원 시도
@@ -99,7 +102,8 @@ public class StageMapController : MonoBehaviour
         pdm.SetCurrentBattleNode(clicked);
 
         // 노드 클릭 시 저장
-        ProgressDataManager.Instance.SaveProgress();
+        pdm.IsStageScene = false;
+        pdm.SaveProgress();
         SoundManager.Instance.PlaySFX(SoundCategory.Button, 1
             );
 
@@ -123,7 +127,7 @@ public class StageMapController : MonoBehaviour
                     break;
             }
 
-            var playerData = ProgressDataManager.Instance.PlayerDatas.FirstOrDefault(p => p.CharacterClass == charToAdd);
+            var playerData = pdm.PlayerDatas.FirstOrDefault(p => p.CharacterClass == charToAdd);
             if (playerData != null)
             {
                 PlayerManager.Instance.AddPlayerDuringGame(playerData, DataManager.Instance.AllCards);
