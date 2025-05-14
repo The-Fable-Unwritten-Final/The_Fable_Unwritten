@@ -135,8 +135,8 @@
         {
           "type": "conditional",
           "condition": {
-            "trigger": "isUsedParticularCard",
-            "value": [1003]
+            "trigger": "isStance",
+            "value": [0]
           },
           "result": {
             "type": "heal",

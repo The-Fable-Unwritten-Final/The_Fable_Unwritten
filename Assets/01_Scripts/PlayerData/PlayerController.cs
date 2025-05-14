@@ -231,8 +231,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     //---
     public void ChangeStance(PlayerData.StancType newStance) //StancUI 함수
     {
-
-
         PlayerData.StancValue stance = playerData.allStances.Find(s => s.stencType == newStance);
         if (stance != null)
         {
@@ -241,7 +239,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             float finalDef = playerData.DEF + stance.defenseBonus;
 
         }
-
     }
 
 
