@@ -30,6 +30,7 @@ public class DuplicateCardEffect : CardEffectBase
                 clone.isMaintain = false;
 
                 player.Deck.AddToHand(clone);
+                GameManager.Instance.combatUIController.DrawCard(clone);
             }
 
             Debug.Log($"[복제] {original.cardName} 카드가 {duplicateNum}장 복제되어 핸드에 추가됨");

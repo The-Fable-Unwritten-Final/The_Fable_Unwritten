@@ -146,6 +146,7 @@ public class BattleFlowController : MonoBehaviour
         {
             return;
         }
+        
 
         int actualCost = card.GetEffectiveCost();
         currentMana -= actualCost; // 할인된 코스트 차감
@@ -153,7 +154,7 @@ public class BattleFlowController : MonoBehaviour
         if (targets == null || targets.Count == 0)
         {
             int count = Mathf.Max(1, card.targetCount);
-            targets = AutoChooseTargets(card.targetType, count);
+            targets = AutoChooseTargets(card.targetType, count, targets[0]);
         }
 
         Debug.Log($"{caster.ChClass} 가 {card.cardName} 사용 → {string.Join(", ", targets.ConvertAll(t => t.ChClass.ToString()))}, cost : {actualCost}");
@@ -232,6 +233,9 @@ public class BattleFlowController : MonoBehaviour
         {
             if (player.IsAlive())
                 (player as PlayerController)?.TickStatusEffects();
+
+            player.Deck.DiscardUnmaintainedCardsAtTurnEnd();
+
         }
 
         foreach (var enemy in enemyParty)
@@ -401,11 +405,12 @@ public class BattleFlowController : MonoBehaviour
 
         if (characterMap.TryGetValue(caster, out var casterController))
         {
-            List<IStatusReceiver> targets = AutoChooseTargets(card.targetType, card.targetCount);
+            List<IStatusReceiver> targets = AutoChooseTargets(card.targetType, card.targetCount, target);
 
             if (targets.Count > 0)
             {
                 UseCard(card, casterController, targets);
+                BattleLogManager.Instance.RegisterCardUse(casterController, card);
             }
         }
         else
@@ -431,6 +436,16 @@ public class BattleFlowController : MonoBehaviour
         if (!card.IsTargetValid(caster, target)) return false;
         if (caster.IsStunned()) return false; // 스턴 상태면 사용 불가
 
+        foreach (var effect in card.effects)        //버릴 카드 부족하면 사용 불가
+        {
+            if (effect is DiscardCardEffect discard)
+            {
+                if (caster.Deck.Hand.Count < discard.discardCount)
+                {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
@@ -454,7 +469,7 @@ public class BattleFlowController : MonoBehaviour
     /// <param name="type"></param>
     /// <param name="targetNum"></param>
     /// <returns></returns>
-    public List<IStatusReceiver> AutoChooseTargets(TargetType type, int targetNum)
+    public List<IStatusReceiver> AutoChooseTargets(TargetType type, int targetNum, IStatusReceiver originTarget)
     {
         var pool = type switch
         {
@@ -463,12 +478,11 @@ public class BattleFlowController : MonoBehaviour
             TargetType.Enemy => enemyParty,
             _ => new List<IStatusReceiver>()
         };
-        List<IStatusReceiver> candidates = pool.FindAll(p => p != null && p.IsAlive());
+        List<IStatusReceiver> candidates = pool.FindAll(p => p != null && p.IsAlive() && p != originTarget);
+        List<IStatusReceiver> result = new() { originTarget };
 
-        int finalCount = Mathf.Max(1, Mathf.Min(targetNum, candidates.Count));
-        List<IStatusReceiver> result = new();
 
-        while (result.Count < finalCount && candidates.Count > 0)
+        while (result.Count < candidates.Count && candidates.Count > 0)
         {
             var pick = candidates[UnityEngine.Random.Range(0, candidates.Count)];
             result.Add(pick);

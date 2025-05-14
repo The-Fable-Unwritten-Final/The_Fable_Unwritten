@@ -65,6 +65,8 @@ public class ApplyStatusEffect : CardEffectBase
                 duration = duration
             });
         }
+
+        GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
     }
 
     public override string GetDescription() => $"{statType} 스탯에 {value}만큼 {duration}턴 동안 적용";
