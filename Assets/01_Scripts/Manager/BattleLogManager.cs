@@ -29,7 +29,20 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
     public LinkedList<CardUseLog> UsedCardsForBattle = new();       //단일 전투 카드 사용 정보
     public LinkedList<CardUseLog> UsedCardsForPrevious = new();     //전턴 카드 사용 정보
     public LinkedList<CardUseLog> UsedCardsForCurrent = new();      //현재 턴 카드 사용 정보
+    /// <summary>
+    /// 마지막 드로우 카드
+    /// </summary>
+    public CardModel LastDrawnCard { get; private set; }
     
+    /// <summary>
+    /// 마지막 드로우 카드
+    /// </summary>
+    /// <param name="card"></param>
+    public void RegisterDrawnCard(CardModel card)
+    {
+        if (card != null)
+            LastDrawnCard = card;
+    }
     /// <summary>
     /// 사용 한 카드를 위 리스트에 저장
     /// </summary>

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
-using static ReduceNextCardCostEffect;
 
 public enum TurnState { PlayerTurn, EnemyTurn } //적 턴인지 아군 턴인지 판별자
 
@@ -31,6 +30,7 @@ public class BattleFlowController : MonoBehaviour
     public Dictionary<CharacterClass, IStatusReceiver> characterMap = new();   //캐릭터클래스에 대한 정보
     public Dictionary<IStatusReceiver, CardModel> enemyPlannedSkill = new();   //적의 스킬 예측 정보
     public List<int> recentLoots { get; private set; } = new();     //현재 전리품 정보
+    public int totalExp = 0;                      //현재 층 총 exp 정보
 
     private bool isBattleEnded = true;      //배틀 끝났는지 확인용
 
@@ -160,7 +160,9 @@ public class BattleFlowController : MonoBehaviour
             }
         }
 
-        card.Play(caster, target); // 카드 효과 실행
+        List<IStatusReceiver> receivers = new();
+        receivers.Add(target);
+        card.Play(caster, receivers); // 카드 효과 실행
         // 임시 카메라 줌 인 아웃 효과 추가 (이후 캐릭터의 모션이 추가되면, 해당 모션의 시작과 끝에 맞춰 줌 인 아웃 재설정)
         caster.CameraActionPlay(); // 시전 캐릭터 카메라 줌 인 아웃 액션 코루틴
 
@@ -316,7 +318,10 @@ public class BattleFlowController : MonoBehaviour
                 if(enemy is Enemy enemyComponent)
                 {
                     var enemyData = enemyComponent.enemyData;
-                    if( enemyData != null && enemyData.loot != null)
+                    ProgressDataManager.Instance.CurrentExp += enemyData.exp;
+                    totalExp += enemyData.exp;
+
+                    if (enemyData != null && enemyData.loot != null)
                     {
                         foreach (int lootIndex in enemyData.loot)
                         {
@@ -324,6 +329,7 @@ public class BattleFlowController : MonoBehaviour
                             if (lootIndex >= 0 && lootIndex < ProgressDataManager.MAX_ITEM_COUNT)
                             {
                                 ProgressDataManager.Instance.itemCounts[lootIndex]++;
+                                
                             }
                             else
                             {

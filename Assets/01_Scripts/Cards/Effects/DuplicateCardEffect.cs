@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "CardEffect/DuplicateCardEffect")]
+
 public class DuplicateCardEffect : CardEffectBase
 {
     public int duplicateNum = 1;
-    public override void Apply(IStatusReceiver caster, IStatusReceiver target)
+    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets)
     {
         if (caster is not PlayerController player) return;
 

@@ -230,4 +230,21 @@ public class Enemy : MonoBehaviour, IStatusReceiver
             animator.SetBool(param, false);
         }
     }
+
+    /// <summary>
+    /// 해당 자세로 공격 가능한지 확인
+    /// </summary>
+    /// <param name="stance">공격 가능한지 확인하는 함수</param>
+    /// <returns></returns>
+    public bool IsAttackBlockedByStance(StancValue.EStancType stance)
+    {
+        var blockEffects = activeEffects.FindAll(e => e.statType == BuffStatType.CantAttackInStance);
+
+        foreach (var effect in blockEffects)
+        {
+            if ((int)stance == (int)effect.value)
+                return true;
+        }
+        return false;
+    }
 }

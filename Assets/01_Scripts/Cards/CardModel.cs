@@ -72,36 +72,38 @@ public class CardModel : ScriptableObject
 
     // ==== 카드 사용 ====
 
-    public void Play(IStatusReceiver caster, IStatusReceiver target)
+    public void Play(IStatusReceiver caster, List<IStatusReceiver> targets)
     {
-
-        GameManager.Instance.StartCoroutine(PlayWithAnimation(caster, target));
+        GameManager.Instance.StartCoroutine(PlayWithAnimation(caster, targets));
     }
 
-    private IEnumerator PlayWithAnimation(IStatusReceiver caster, IStatusReceiver target)
+    private IEnumerator PlayWithAnimation(IStatusReceiver caster, List<IStatusReceiver> targets)
     {
         // 1. 공격 애니메이션
         caster.PlayAttackAnimation();
         SoundManager.Instance.PlaySFX(SoundCategory.Card, (int)type);
         yield return new WaitForSeconds(0.5f); // 애니메이션 길이에 맞게 조정
 
-        // 2. 스킬 이펙트 재생
-        if (!string.IsNullOrEmpty(skillEffectName))
+        // 2. 이펙트 재생: 대표 타겟(첫 번째) 위치 기준
+        if (!string.IsNullOrEmpty(skillEffectName) && targets.Count > 0)
         {
-            Vector3 spawnPos = (target != null) ? target.CachedTransform.position : caster.CachedTransform.position;
+            Vector3 spawnPos = targets[0].CachedTransform.position;
             GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(skillEffectName, spawnPos);
         }
 
-        // 3. 피격 애니메이션: 효과가 피해 관련일 때만 실행
+        // 3. 피격 애니메이션: 효과 중 하나라도 HitTrigger면 전원 재생
         if (effects.Exists(e => e.isTriggerHitAnim))
         {
-            target.PlayHitAnimation();
+            foreach (var t in targets)
+            {
+                if (t.IsAlive()) t.PlayHitAnimation();
+            }
             yield return new WaitForSeconds(0.3f);
         }
 
         // 4. 효과 적용
         foreach (var effect in effects)
-            effect.Apply(caster, target);
+            effect.Apply(caster, targets);
 
         // 5. 카드 상태 UI 업데이트
         GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();

@@ -13,41 +13,24 @@ public class DamageEffect : CardEffectBase
     public float amount;    //기본 데미지
 
     /// <summary>
-    /// 데미지 처리
+    /// 데미지 처리 (다중)
     /// </summary>
     /// <param name="caster">시전자</param>
     /// <param name="target">타겟</param>
-    public override void Apply(IStatusReceiver caster, IStatusReceiver target)
+    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets)
     {
-        if (!target.IsAlive()) return;
+        if (targets == null || targets.Count == 0) return;
 
         // 공격자는 자신의 공격력만 고려
         float attackerAtk = caster.ModifyStat(BuffStatType.Attack, amount);
 
         // target은 받은 amount에서 방어력을 적용해서 처리
-        target.TakeDamage(attackerAtk);
-
-        Debug.Log($"[피해 처리] {caster.ChClass} -> {target.ChClass} : {attackerAtk} 공격력으로 타격");
-    }
-
-    /// <summary>
-    /// 광역뎀에 사용
-    /// </summary>
-    /// <param name="caster">시전자</param>
-    /// <param name="targets">타겟 리스트</param>
-    public override void ApplyAOE(IStatusReceiver caster, List<IStatusReceiver> targets)
-    {
         foreach (var target in targets)
         {
-            if (target.IsAlive())
-            {
-                // 공격자는 자신의 공격력만 고려
-                float attackerAtk = caster.ModifyStat(BuffStatType.Attack, amount);
+            if (target == null || !target.IsAlive()) continue;
 
-                // target은 받은 amount에서 방어력을 적용해서 처리
-                target.TakeDamage(attackerAtk);
-                Debug.Log($"[AOE 피해] {caster.ChClass} -> {target.ChClass} : {attackerAtk} 피해 (공:{attackerAtk})");
-            }
+            target.TakeDamage(attackerAtk);
+            Debug.Log($"[피해 처리] {caster.ChClass} -> {target.ChClass} : {attackerAtk} 공격력으로 타격");
         }
     }
 

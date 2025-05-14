@@ -39,8 +39,8 @@ public class DeckModel
             unusedDeck.RemoveAt(0);
             hand.Add(card);                     //핸드에 넣기
             GameManager.Instance.combatUIController.DrawCard(card);
+            BattleLogManager.Instance.RegisterDrawnCard(card);
         }
-        
     }
 
     /// <summary>

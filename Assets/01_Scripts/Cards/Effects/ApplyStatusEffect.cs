@@ -11,33 +11,59 @@ public class ApplyStatusEffect : CardEffectBase
     public BuffStatType statType;
     public float value;
     public int duration;
+    public int? target;
 
     /// <summary>
     /// 시전자가 타겟에게 버프/디버프를 줌
     /// </summary>
     /// <param name="caster">시전자</param>
     /// <param name="target">타겟</param>
-    public override void Apply(IStatusReceiver caster, IStatusReceiver target)
+    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets)
     {
-        target.ApplyStatusEffect(new StatusEffect
-        {
-            statType = statType,
-            value = value,
-            duration = duration
-        });
-    }
+        List<IStatusReceiver> filteredTargets = new();
 
-    /// <summary>
-    /// 시전자가 광역으로 버프/디버프 줌
-    /// </summary>
-    /// <param name="caster">시전자</param>
-    /// <param name="targets">타겟</param>
-    public override void ApplyAOE(IStatusReceiver caster, List<IStatusReceiver> targets)
-    {
-        foreach (var target in targets)
+        switch (target)
         {
-            if (target.IsAlive())
-                Apply(caster, target);
+            case 0: // 소피아
+                foreach (var t in GameManager.Instance.turnController.battleFlow.playerParty)
+                {
+                    if (t.ChClass == CharacterClass.Sophia) filteredTargets.Add(t);
+                }
+                break;
+
+            case 1: // 카일라
+                foreach (var t in targets)
+                {
+                    if (t.ChClass == CharacterClass.Kayla) filteredTargets.Add(t);
+                }
+                break;
+
+            case 2: // 레온
+                foreach (var t in targets)
+                {
+                    if (t.ChClass == CharacterClass.Leon) filteredTargets.Add(t);
+                }
+                break;
+
+            case 3: // 모든 대상
+                filteredTargets.AddRange(targets); break;
+
+            case 4:
+            case null:
+            default:
+                filteredTargets.AddRange(targets); break;
+        }
+
+        foreach (var t in filteredTargets)
+        {
+            if (!t.IsAlive()) continue;
+
+            t.ApplyStatusEffect(new StatusEffect
+            {
+                statType = statType,
+                value = value,
+                duration = duration
+            });
         }
     }
 
