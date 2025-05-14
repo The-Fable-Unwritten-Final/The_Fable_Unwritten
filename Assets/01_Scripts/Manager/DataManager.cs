@@ -263,8 +263,6 @@ public class DataManager : MonoSingleton<DataManager>
 
         foreach (var card in allCards)
             card.isUnlocked = unlocked.Contains(card.index);
-
-        Debug.Log($"[DataManager] 카드 해금 상태 갱신 완료: {allCards.Count(c => c.isUnlocked)}개 해금됨");
     }
 
     private void InitializeUnlockRecipes()
@@ -281,7 +279,6 @@ public class DataManager : MonoSingleton<DataManager>
         {
             var wrapper = JsonUtility.FromJson<Wrapper>("{\"recipes\":" + recipeJson.text + "}");
             LoadedRecipes = wrapper.recipes ?? new();
-            Debug.Log($"[DataManager] 총 {LoadedRecipes.Count}개의 조합식 로드됨");
         }
         catch (System.Exception e)
         {

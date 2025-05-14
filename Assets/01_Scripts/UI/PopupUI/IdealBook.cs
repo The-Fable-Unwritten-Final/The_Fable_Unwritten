@@ -25,11 +25,9 @@ public class IdealBook : MonoBehaviour ,IBookControl
         if(currentPage > 0)
         {
             currentPage--;
-            Debug.Log("이전 페이지로 이동: " + currentPage);
         }
         else
         {
-            Debug.Log("첫 페이지입니다.");
         }
         UpdateArrow(); // 화살표 업데이트
     }
@@ -38,11 +36,9 @@ public class IdealBook : MonoBehaviour ,IBookControl
         if(currentPage < maxPageCount - 1)
         {
             currentPage++;
-            Debug.Log("다음 페이지로 이동: " + currentPage);
         }
         else
         {
-            Debug.Log("마지막 페이지입니다.");
         }
         UpdateArrow(); // 화살표 업데이트
     }

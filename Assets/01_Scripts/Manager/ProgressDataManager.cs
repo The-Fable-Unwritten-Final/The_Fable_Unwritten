@@ -113,7 +113,6 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         string json = JsonUtility.ToJson(data, true);
         PlayerPrefs.SetString("ProgressSaveData", json);
         PlayerPrefs.Save();
-        Debug.Log($"[ProgressSaveData]\n{json}");
     }
 
     public void LoadProgress()
