@@ -604,8 +604,6 @@ MonoBehaviour:
     hand: []
   hasBlock: 0
   hpBarDisplay: {fileID: 1411513667}
-  stanceButtonContainerPrefab: {fileID: 2578520984183085487, guid: cb7b23896d4ff0e4a9c0c44c22a80eb6,
-    type: 3}
   activeEffects: []
 --- !u!65 &550457369
 BoxCollider:
@@ -688,11 +686,46 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3604495956579860683, guid: 2ae221dc0f448b946a8444ad1e39b903,
+    - target: {fileID: 405980362404917481, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
+      propertyPath: owner
+      value: 
+      objectReference: {fileID: 680139001}
+    - target: {fileID: 908734538679653883, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: owner
+      value: 
+      objectReference: {fileID: 1931096918}
+    - target: {fileID: 2207268802317870497, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: owner
+      value: 
+      objectReference: {fileID: 550457368}
+    - target: {fileID: 5160905957720700359, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: owner
+      value: 
+      objectReference: {fileID: 550457368}
+    - target: {fileID: 6170647166373578141, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: owner
+      value: 
+      objectReference: {fileID: 1931096918}
+    - target: {fileID: 6673392525651943567, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: owner
+      value: 
+      objectReference: {fileID: 680139001}
+    - target: {fileID: 7448116105639881159, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: owner
+      value: 
+      objectReference: {fileID: 1931096918}
+    - target: {fileID: 7954249609974058197, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: owner
+      value: 
+      objectReference: {fileID: 680139001}
     - target: {fileID: 8428517933431492622, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
       propertyPath: m_Pivot.x
@@ -793,6 +826,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8457958401431017885, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: owner
+      value: 
+      objectReference: {fileID: 550457368}
     - target: {fileID: 8766541299586457489, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
       propertyPath: m_Name
@@ -879,8 +917,6 @@ MonoBehaviour:
     hand: []
   hasBlock: 0
   hpBarDisplay: {fileID: 45081455}
-  stanceButtonContainerPrefab: {fileID: 2578520984183085487, guid: cb7b23896d4ff0e4a9c0c44c22a80eb6,
-    type: 3}
   activeEffects: []
 --- !u!65 &680139002
 BoxCollider:
@@ -1488,8 +1524,6 @@ MonoBehaviour:
     hand: []
   hasBlock: 0
   hpBarDisplay: {fileID: 191477387}
-  stanceButtonContainerPrefab: {fileID: 2578520984183085487, guid: cb7b23896d4ff0e4a9c0c44c22a80eb6,
-    type: 3}
   activeEffects: []
 --- !u!65 &1931096919
 BoxCollider:

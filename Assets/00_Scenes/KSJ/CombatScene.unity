@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -320,7 +320,6 @@ MonoBehaviour:
     hand: []
   hasBlock: 0
   hpBarDisplay: {fileID: 2017042513}
-  UI_StanceSlot: {fileID: 0}
   activeEffects: []
 --- !u!65 &106890149
 BoxCollider:
@@ -1181,7 +1180,6 @@ MonoBehaviour:
     hand: []
   hasBlock: 0
   hpBarDisplay: {fileID: 1515297823862666476}
-  UI_StanceSlot: {fileID: 0}
   activeEffects: []
 --- !u!95 &557679516
 Animator:
@@ -2931,7 +2929,6 @@ MonoBehaviour:
     hand: []
   hasBlock: 0
   hpBarDisplay: {fileID: 1340192385}
-  UI_StanceSlot: {fileID: 0}
   activeEffects: []
 --- !u!65 &1920819809
 BoxCollider:
@@ -3777,6 +3774,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 610198008561888857, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: owner
+      value: 
+      objectReference: {fileID: 106890148}
+    - target: {fileID: 6461392838900801095, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: owner
+      value: 
+      objectReference: {fileID: 1920819808}
+    - target: {fileID: 7881545393416490403, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: owner
+      value: 
+      objectReference: {fileID: 557679515}
     - target: {fileID: 8428517933431492622, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
       propertyPath: m_Pivot.x
