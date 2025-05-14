@@ -74,7 +74,7 @@ public class TestCustomWindow : EditorWindow
             }
             ProgressDataManager.Instance.SavedEnemySetIndex = -1; // 랜덤 에너미 셋 초기화
 
-            SceneManager.LoadScene("StageScene");
+            UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
         }
         if (GUILayout.Button("스테이지 실패"))
         {
@@ -87,8 +87,7 @@ public class TestCustomWindow : EditorWindow
             ProgressDataManager.Instance.ResetProgress();
             // 최소 시작 스테이지부터 재시작 (1 또는 2)
             setting.StageIndex = setting.MinStageIndex;
-
-            SceneManager.LoadScene("SubTitleScene");
+            UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.SubTitleScene);
         }
         EditorGUILayout.EndVertical();
 

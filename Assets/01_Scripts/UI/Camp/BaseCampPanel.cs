@@ -19,36 +19,4 @@ public class BaseCampPanel : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
-
-    protected IEnumerator FadeExit()
-    {
-        fadeImage.gameObject.SetActive(true);
-        SetFadeAlpha(0f);
-
-        yield return StartCoroutine(FadeOut());
-
-        SceneManager.LoadScene(SceneNameData.StageScene);
-    }
-
-    private IEnumerator FadeOut()
-    {
-        float time = 0f;
-
-        while (time < fadeDuration)
-        {
-            float alpha = Mathf.Lerp(0f, 1f, time / fadeDuration);
-            SetFadeAlpha(alpha);
-            time += Time.deltaTime;
-            yield return null;
-        }
-
-        SetFadeAlpha(1f); // Fade Out 완료
-    }
-
-    private void SetFadeAlpha(float alpha)
-    {
-        Color color = fadeImage.color;
-        color.a = alpha;
-        fadeImage.color = color;
-    }
 }

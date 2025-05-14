@@ -56,7 +56,7 @@ public class PopupUI_CombatReward : BasePopupUI
                 }
                 ProgressDataManager.Instance.SavedEnemySetIndex = -1; // 랜덤 에너미 셋 초기화
 
-                SceneManager.LoadScene("StageScene");
+                UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
                 gameObject.SetActive(false);
 
                 // StageMoveTest.cs 를 임시로 가져만 왔음. 추후 전투 승리/패배시 기능 재 구현
@@ -77,7 +77,7 @@ public class PopupUI_CombatReward : BasePopupUI
                 ProgressDataManager.Instance.GameStartType = GameStartType.New;
                 ProgressDataManager.Instance.ResetProgress();
 
-                SceneManager.LoadScene("SubTitleScene");
+                UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.SubTitleScene);
                 gameObject.SetActive(false);
 
                 // StageMoveTest.cs 를 임시로 가져만 왔음. 추후 전투 승리/패배시 기능 재 구현

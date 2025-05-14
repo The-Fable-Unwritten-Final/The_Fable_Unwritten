@@ -85,7 +85,7 @@ public class PopupUI_Setting : BasePopupUI
         else // 다른 씬에서의 타이틀로 돌아가기.
         {
             Close();
-            SceneManager.LoadScene(SceneNameData.SubTitleScene);
+            UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.SubTitleScene);
         }
     }
 
