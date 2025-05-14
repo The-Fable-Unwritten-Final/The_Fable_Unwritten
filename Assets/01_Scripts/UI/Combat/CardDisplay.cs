@@ -102,9 +102,9 @@ public class CardDisplay : MonoBehaviour
             for(int i = 0; i < cardsInHand.Count; i++)
             {
                 int cash = i;// 카드의 인덱스를 캐싱해서 OnComplete에서 사용
-                // 각도 설정
+                // 각도 설정(1.2)
                 float angle = 0f;
-                angle = (oddeven * 2.5f) + (i * - 2.5f);
+                angle = (oddeven * 1.2f) + (i * - 1.2f);
                 cardsInHand[i].GetComponent<RectTransform>().DORotate(new Vector3(0, 0, angle), 0.5f).SetEase(Ease.OutSine);
 
                 // 카드의 좌표 설정
@@ -129,9 +129,9 @@ public class CardDisplay : MonoBehaviour
             for(int i = 0; i < cardsInHand.Count; i++)
             {
                 int cash = i;// 카드의 인덱스를 캐싱해서 OnComplete에서 사용
-                // 각도 설정
+                // 각도 설정(1.2)
                 float angle = 0f;
-                angle = (oddeven * 2.5f - 1.25f) + (i * - 2.5f);
+                angle = (oddeven * 1.2f - 1.25f) + (i * - 1.2f);
                 cardsInHand[i].GetComponent<RectTransform>().DORotate(new Vector3(0, 0, angle), 0.5f).SetEase(Ease.OutSine);
 
                 // 카드의 좌표 설정
