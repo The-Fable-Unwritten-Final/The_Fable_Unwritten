@@ -239,6 +239,15 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             float finalDef = playerData.DEF + stance.defenseBonus;
 
         }
+        //──────── K.T.H 변경 ────────
+        var sv = playerData.allStances.Find(s => s.stencType == newStance); // newStance 에 맞는 StancValue 찾아서 currentStance 에 할당
+        if (sv == null) return;
+
+        playerData.currentStance = sv;
+        //──────── K.T.H 변경 ────────
+
+        // (선택) 화면에 스프라이트를 바꿔주거나, UI 텍스트를 갱신하려면 여기에 추가
+
     }
 
 
