@@ -482,7 +482,7 @@ public class BattleFlowController : MonoBehaviour
         List<IStatusReceiver> result = new() { originTarget };
 
 
-        while (result.Count < candidates.Count && candidates.Count > 0)
+        while (result.Count < targetNum && candidates.Count > 0)
         {
             var pick = candidates[UnityEngine.Random.Range(0, candidates.Count)];
             result.Add(pick);
