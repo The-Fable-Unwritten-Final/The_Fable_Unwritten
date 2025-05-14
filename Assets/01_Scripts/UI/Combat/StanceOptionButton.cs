@@ -16,8 +16,7 @@ public class StanceOptionButton : MonoBehaviour
     public void Initialize(PlayerController ownerController)
     {
         owner = ownerController;
-        button = GetComponent<Button>();
-
+        button = GetComponent<Button>(); 
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(OnClicked);
     }
@@ -34,9 +33,11 @@ public class StanceOptionButton : MonoBehaviour
         owner.ChangeStance(stanceType);
 
         // 2) 변경된 스탠스를 로그로 확인
-        Debug.Log($"[StanceOptionButton] {owner.ChClass} 스탠스 → {stanceType}");
+        Debug.Log($"[Stance] {owner.playerData.CharacterName} 자세 변경 → {owner.CurrentStance}"); //+
+        //Debug.Log($"[StanceOptionButton] {owner.ChClass} 스탠스 → {stanceType}");
 
         // 3) 팝업 닫기
+        var slot = transform.parent.gameObject; //+
         transform.parent.gameObject.SetActive(false);
     }
 }
