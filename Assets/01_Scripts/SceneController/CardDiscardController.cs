@@ -229,12 +229,18 @@ public class CardDiscardController : MonoBehaviour
         else if (reqTotalCount != 0 || reqSophiaCount != 0 || reqKylaCount != 0 || reqLeonCount != 0) return; // 카드 버리기 카운트가 0이 아닌 경우 리턴
 
 
-        foreach (var card in cardInHands)
+        foreach (var card in cardInHands) // 이곳의 cardInHands는 손안의 카드중 버리기로 정해진 카드들.
         {
-            cardDisplay.ThrowAwayCard(card); // 카드 버리기
+            cardDisplay.ThrowAwayCard(card); // 카드 버리기            
         }
         cardInHands.Clear(); // 카드 리스트 초기화
         discardDisplay.SetActive(false); // 카드 버리기 UI 비활성화
+        
+        foreach(var c in cardDisplay.cardsInHand)
+        {
+            c.SetCardState(CardState.None); // 카드 상태를 리셋
+        }
+        GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke(); // 카드 상태 업데이트
 
         if(!isAll) GameManager.Instance.turnController.AtPlayerTurn(); // 턴 종료 버튼과 동일한 효과. (isAll 이 아닌 경우, 턴 종료시의 호출이기 때문.)
     }
