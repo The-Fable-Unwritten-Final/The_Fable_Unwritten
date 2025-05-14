@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
-using static ReduceNextCardCostEffect;
 
 public enum TurnState { PlayerTurn, EnemyTurn } //적 턴인지 아군 턴인지 판별자
 
@@ -31,6 +30,7 @@ public class BattleFlowController : MonoBehaviour
     public Dictionary<CharacterClass, IStatusReceiver> characterMap = new();   //캐릭터클래스에 대한 정보
     public Dictionary<IStatusReceiver, CardModel> enemyPlannedSkill = new();   //적의 스킬 예측 정보
     public List<int> recentLoots { get; private set; } = new();     //현재 전리품 정보
+    public int totalExp = 0;                      //현재 층 총 exp 정보
 
     private bool isBattleEnded = true;      //배틀 끝났는지 확인용
 
@@ -139,19 +139,26 @@ public class BattleFlowController : MonoBehaviour
     /// <param name="card">사용하는 카드</param>
     /// <param name="caster">시전자</param>
     /// <param name="target">타겟</param>
-    public void UseCard(CardModel card, IStatusReceiver caster, IStatusReceiver target)
+    public void UseCard(CardModel card, IStatusReceiver caster, List<IStatusReceiver> targets)
     {
 
-        if (!card.IsUsable(currentMana) || !caster.IsAlive() || !target.IsAlive())      //사용 가능하지 않거나 적 또는 사용자가 죽어 있다면 생략하기
+        if (!card.IsUsable(currentMana) || !caster.IsAlive())      //사용 가능하지 않거나 적 또는 사용자가 죽어 있다면 생략하기
         {
             return;
         }
+        
 
         int actualCost = card.GetEffectiveCost();
         currentMana -= actualCost; // 할인된 코스트 차감
 
-        Debug.Log($"{caster.ChClass} 가 {card.cardName} 사용 → {target.ChClass}, cost : {actualCost}");
-        
+        if (targets == null || targets.Count == 0)
+        {
+            int count = Mathf.Max(1, card.targetCount);
+            targets = AutoChooseTargets(card.targetType, count, targets[0]);
+        }
+
+        Debug.Log($"{caster.ChClass} 가 {card.cardName} 사용 → {string.Join(", ", targets.ConvertAll(t => t.ChClass.ToString()))}, cost : {actualCost}");
+
         if (card.ConsumesDiscountOnce)
         {
             foreach (var player in playerParty)
@@ -160,7 +167,7 @@ public class BattleFlowController : MonoBehaviour
             }
         }
 
-        card.Play(caster, target); // 카드 효과 실행
+        card.Play(caster, targets); // 카드 효과 실행
         // 임시 카메라 줌 인 아웃 효과 추가 (이후 캐릭터의 모션이 추가되면, 해당 모션의 시작과 끝에 맞춰 줌 인 아웃 재설정)
         caster.CameraActionPlay(); // 시전 캐릭터 카메라 줌 인 아웃 액션 코루틴
 
@@ -168,12 +175,9 @@ public class BattleFlowController : MonoBehaviour
 
         UpdateManaUI();
 
-
         // 덱 상태 출력
         if (caster is PlayerController pc)
             pc.PrintDeckState();
-
-
     }
 
 
@@ -204,8 +208,6 @@ public class BattleFlowController : MonoBehaviour
                 }
             }
         }
-
-
         currentTurn = TurnState.EnemyTurn;          //적 턴으로 이행
     }
 
@@ -231,6 +233,9 @@ public class BattleFlowController : MonoBehaviour
         {
             if (player.IsAlive())
                 (player as PlayerController)?.TickStatusEffects();
+
+            player.Deck.DiscardUnmaintainedCardsAtTurnEnd();
+
         }
 
         foreach (var enemy in enemyParty)
@@ -316,7 +321,10 @@ public class BattleFlowController : MonoBehaviour
                 if(enemy is Enemy enemyComponent)
                 {
                     var enemyData = enemyComponent.enemyData;
-                    if( enemyData != null && enemyData.loot != null)
+                    ProgressDataManager.Instance.CurrentExp += enemyData.exp;
+                    totalExp += enemyData.exp;
+
+                    if (enemyData != null && enemyData.loot != null)
                     {
                         foreach (int lootIndex in enemyData.loot)
                         {
@@ -324,6 +332,7 @@ public class BattleFlowController : MonoBehaviour
                             if (lootIndex >= 0 && lootIndex < ProgressDataManager.MAX_ITEM_COUNT)
                             {
                                 ProgressDataManager.Instance.itemCounts[lootIndex]++;
+                                
                             }
                             else
                             {
@@ -396,7 +405,13 @@ public class BattleFlowController : MonoBehaviour
 
         if (characterMap.TryGetValue(caster, out var casterController))
         {
-            UseCard(card, casterController, target);
+            List<IStatusReceiver> targets = AutoChooseTargets(card.targetType, card.targetCount, target);
+
+            if (targets.Count > 0)
+            {
+                UseCard(card, casterController, targets);
+                BattleLogManager.Instance.RegisterCardUse(casterController, card);
+            }
         }
         else
         {
@@ -421,6 +436,16 @@ public class BattleFlowController : MonoBehaviour
         if (!card.IsTargetValid(caster, target)) return false;
         if (caster.IsStunned()) return false; // 스턴 상태면 사용 불가
 
+        foreach (var effect in card.effects)        //버릴 카드 부족하면 사용 불가
+        {
+            if (effect is DiscardCardEffect discard)
+            {
+                if (caster.Deck.Hand.Count < discard.discardCount)
+                {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
@@ -436,5 +461,34 @@ public class BattleFlowController : MonoBehaviour
             characterMap[player.ChClass] = player;
             decksByCharacter[player.ChClass] = player.Deck;
         }
+    }
+
+    /// <summary>
+    /// 자동 타겟 설정
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="targetNum"></param>
+    /// <returns></returns>
+    public List<IStatusReceiver> AutoChooseTargets(TargetType type, int targetNum, IStatusReceiver originTarget)
+    {
+        var pool = type switch
+        {
+            TargetType.None => playerParty,
+            TargetType.Ally => playerParty,
+            TargetType.Enemy => enemyParty,
+            _ => new List<IStatusReceiver>()
+        };
+        List<IStatusReceiver> candidates = pool.FindAll(p => p != null && p.IsAlive() && p != originTarget);
+        List<IStatusReceiver> result = new() { originTarget };
+
+
+        while (result.Count < candidates.Count && candidates.Count > 0)
+        {
+            var pick = candidates[UnityEngine.Random.Range(0, candidates.Count)];
+            result.Add(pick);
+            candidates.Remove(pick);
+        }
+
+        return result;
     }
 }

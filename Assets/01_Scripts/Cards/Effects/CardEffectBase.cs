@@ -13,10 +13,7 @@ public abstract class CardEffectBase : ScriptableObject
     /// </summary>
     /// <param name="caster">시전자</param>
     /// <param name="target">타겟</param>
-    public abstract void Apply(IStatusReceiver caster, IStatusReceiver target);       //타겟(적, 플레이어)에게 어떤 효과를 주는 지
-
-    // 광역 지정용 오버로드 (필요한 경우만 override)
-    public virtual void ApplyAOE(IStatusReceiver caster, List<IStatusReceiver> targets) { }
+    public abstract void Apply(IStatusReceiver caster, List<IStatusReceiver> targets);       //타겟(적, 플레이어)에게 어떤 효과를 주는 지
 
     /// <summary>
     /// 카드 효과 설명 반환
@@ -24,11 +21,5 @@ public abstract class CardEffectBase : ScriptableObject
     /// <returns></returns>
     public abstract string GetDescription();
     
-    /// <summary>
-    /// 광역기인지 확인 
-    /// </summary>
-    /// <returns></returns>
-    public virtual bool isAOE() => false;
-
     public virtual bool isTriggerHitAnim => false;
 }

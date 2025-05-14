@@ -8,7 +8,7 @@ public class PreviousCardTypeCondition : TriggerCondition
 {
     public List<CardType> requiredTypes;    //요구된 사용 카드 타입
 
-    public override bool IsConditionMet(IStatusReceiver caster, IStatusReceiver target)
+    public override bool IsConditionMet(IStatusReceiver caster, List<IStatusReceiver> target)
     {
         var previousTypes = BattleLogManager.Instance.GetPreviousTurnCardTypes();
         foreach (var type in requiredTypes)

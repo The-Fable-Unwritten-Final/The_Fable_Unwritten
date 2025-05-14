@@ -14,7 +14,7 @@ public class TrainingPanel : BaseCampPanel
         // 캐릭터의 2턴 동안 공격력 증가 버프 함수 추가
 
         //고유사운드 출력
-        StartCoroutine(FadeExit());
+        UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
     }
 
     public void OnSophiaClicked() => OnClickTarget(CharacterClass.Sophia);
@@ -36,7 +36,7 @@ public class TrainingPanel : BaseCampPanel
                 EventEffectManager.Instance.AddEventEffect(3); // 레온 수련
                 break;
         }
-  
-        StartCoroutine(FadeExit());
+
+        UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
     }
 }

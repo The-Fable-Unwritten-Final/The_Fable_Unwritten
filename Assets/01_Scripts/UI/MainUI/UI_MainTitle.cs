@@ -45,7 +45,7 @@ public class UI_MainTitle : MonoBehaviour
         ProgressDataManager.Instance.ResetProgress();
 
         // 게임 데이터 초기화 로직 추가 (DataManager 나 GameManager에 로직추가?)
-        SceneManager.LoadScene(SceneNameData.StageScene);
+        UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
     }
     public void OnClickSaveGame()
     {
@@ -53,7 +53,7 @@ public class UI_MainTitle : MonoBehaviour
 
         if (currentNode == null || ProgressDataManager.Instance.IsStageScene)
         {
-            SceneManager.LoadScene(SceneNameData.StageScene);
+            UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
             return;
         }
 
@@ -62,18 +62,17 @@ public class UI_MainTitle : MonoBehaviour
             case NodeType.NormalBattle:
             case NodeType.EliteBattle:
             case NodeType.Boss:
-                SceneManager.LoadScene(SceneNameData.CombatScene);
+                UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.CombatScene);
                 break;
 
             case NodeType.Camp:
-                SceneManager.LoadScene(SceneNameData.CampScene);
+                UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.CampScene);
                 break;
-
             case NodeType.RandomEvent:
-                SceneManager.LoadScene(SceneNameData.RandomEventScene);
+                UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.RandomEventScene);
                 break;
             default:
-                SceneManager.LoadScene(SceneNameData.StageScene);
+                UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
                 break;
         }
     }
@@ -87,5 +86,10 @@ public class UI_MainTitle : MonoBehaviour
     {
         //게임 데이터 저장
         //게임 종료 로직 추가
+    }
+
+    public void OnClickButtonSound()
+    {
+        SoundManager.Instance.PlaySFX(SoundCategory.Button, 0); // 기본 버튼 사운드
     }
 }

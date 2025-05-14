@@ -23,13 +23,17 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public CharacterClass ChClass{get; set;}
     //현재 캐릭터의 클래스를 가져옴.
 
+    //---
 
+    //---
 
     [SerializeField]private List<StatusEffect> activeEffects = new List<StatusEffect>();        //현재 가지고 있는 상태이상 및 버프
 
     private void Awake()
     {
+        //---
 
+        //---
         animator = GetComponent<Animator>();
 
         if (playerData != null && playerData.animationController != null)
@@ -227,8 +231,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     //---
     public void ChangeStance(PlayerData.StancType newStance) //StancUI 함수
     {
-
-
         PlayerData.StancValue stance = playerData.allStances.Find(s => s.stencType == newStance);
         if (stance != null)
         {
@@ -237,12 +239,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             float finalDef = playerData.DEF + stance.defenseBonus;
 
         }
-        // ──────── K.T.H 변경 ────────
-        var sv = playerData.allStances.Find(s => s.stencType == newStance); // newStance 에 맞는 StancValue 찾아서 currentStance 에 할당
-        if (sv == null) return;
-
-        playerData.currentStance = sv;
-        // ──────── K.T.H 변경 ────────
     }
 
 
@@ -280,7 +276,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             finalDamage = baseDamage;
         }
 
-        // 데미지 적용 또는 회피 로그 // 데미지 처리 확인
+        // 데미지 적용 또는 회피 로그
         if (finalDamage > 0f)
         {
             TakeDamage(finalDamage);

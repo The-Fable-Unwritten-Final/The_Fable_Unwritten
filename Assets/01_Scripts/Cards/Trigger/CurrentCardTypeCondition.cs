@@ -12,7 +12,7 @@ public class CurrentCardTypeCondition : TriggerCondition
 
     public List<CardType> requiredTypes;
 
-    public override bool IsConditionMet(IStatusReceiver caster, IStatusReceiver target)
+    public override bool IsConditionMet(IStatusReceiver caster, List<IStatusReceiver> target)
     {
         var currentTypes = BattleLogManager.Instance.GetCurrentTurnCardTypes();
 

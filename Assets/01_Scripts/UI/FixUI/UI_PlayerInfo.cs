@@ -11,7 +11,7 @@ public class UI_PlayerInfo : MonoBehaviour
     [SerializeField] TextMeshProUGUI sophiaInfo;
     [SerializeField] TextMeshProUGUI kaylaInfo;
     [SerializeField] TextMeshProUGUI leonInfo;
-    [SerializeField] TextMeshProUGUI currentIndfo;
+    [SerializeField] TextMeshProUGUI currentExp;
 
     [Header("EliteClearInfo")]
     [SerializeField] GameObject courageBadge;
@@ -35,7 +35,7 @@ public class UI_PlayerInfo : MonoBehaviour
         };
 
         SetEndingBadge();
-        UPdatePlayerInfoUI();
+        UpdatePlayerInfoUI();
 
         RegisterHpUpdateEvent();
     }
@@ -75,6 +75,7 @@ public class UI_PlayerInfo : MonoBehaviour
     /// </summary>
     public void ShowCards(CharacterClass characterClass)
     {
+        OnClickButtonSound();
         currentDeck.SetActive(true);
 
         ClearCards();
@@ -113,9 +114,10 @@ public class UI_PlayerInfo : MonoBehaviour
             Destroy(child.gameObject);
     }
 
-    public void UPdatePlayerInfoUI()
+    public void UpdatePlayerInfoUI()
     {
         var players = PlayerManager.Instance.activePlayers;
+        var exp = ProgressDataManager.Instance.CurrentExp;
 
         foreach (var text in charInfoText)
         {
@@ -132,6 +134,8 @@ public class UI_PlayerInfo : MonoBehaviour
                 textObj.text = $"{playerData.currentHP}/{playerData.MaxHP}";
             }
         }
+
+        currentExp.text = exp.ToString();
     }
 
     private void SetEndingBadge()
@@ -141,5 +145,9 @@ public class UI_PlayerInfo : MonoBehaviour
         courageBadge.SetActive(stageSetting.IsEliteClear(StageTheme.Courage));
         loveBadge.SetActive(stageSetting.IsEliteClear(StageTheme.Love));
         wisdomBadge.SetActive(stageSetting.IsEliteClear(StageTheme.Wisdom));
+    }
+    public void OnClickButtonSound()
+    {
+        SoundManager.Instance.PlaySFX(SoundCategory.Button, 0); // 기본 버튼 사운드
     }
 }

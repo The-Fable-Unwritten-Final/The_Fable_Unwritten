@@ -41,6 +41,8 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     public int SavedEnemySetIndex { get; set; }           // 진행 에너미 세트 저장용
     public int SavedRandomEvent { get; set; }             // 저장용 랜던이밴트 인덱스
 
+    public int CurrentExp { get; set; }                 //현재까지 얻은 Exp;
+
     protected override void Awake()
     {
         base.Awake();
@@ -111,7 +113,6 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         string json = JsonUtility.ToJson(data, true);
         PlayerPrefs.SetString("ProgressSaveData", json);
         PlayerPrefs.Save();
-        Debug.Log($"[ProgressSaveData]\n{json}");
     }
 
     public void LoadProgress()

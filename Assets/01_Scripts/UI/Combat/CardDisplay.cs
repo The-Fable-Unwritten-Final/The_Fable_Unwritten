@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 using DG.Tweening;
+using System.Linq;
+using static CardInHand;
 
 // 핸드에 소지하고 있는 카드들 전체를 관리하는 스크립트.
 public class CardDisplay : MonoBehaviour
@@ -192,8 +194,6 @@ public class CardDisplay : MonoBehaviour
     {
         if (card == null) return;
         GameManager.Instance.combatUIController.ThrowCard(card.cardData);// 카드 버리기.
-        cardsInHand.Remove(card);// 카드 리스트에서 제거.
-        Destroy(card.gameObject);// 카드 삭제.
         CardArrange();
     }
     /// <summary>
@@ -216,6 +216,8 @@ public class CardDisplay : MonoBehaviour
     }
     public void SetCardCanDrag()
     {
+        if(cardsInHand.All(card => card.GetCardState() == CardState.CanDiscard)) return;
+
         if (GameManager.Instance == null || GameManager.Instance.turnController == null || GameManager.Instance.turnController.battleFlow == null)
         {
         Debug.LogWarning("GameManager or its components are not ready.");
@@ -232,10 +234,12 @@ public class CardDisplay : MonoBehaviour
         {
             if (cardsInHand[i].cardData.IsUsable(GameManager.Instance.turnController.battleFlow.currentMana))// 현재 보유 마나를 가져와, 사용 가능한지 확인. (사용 가능시 CanDrag, 불가능시 CanMouseOver)
             {
+                if (cardsInHand[i].GetCardState() == CardState.CanDiscard) return;
                 cardsInHand[i].SetCardState(CardInHand.CardState.CanDrag);// 카드 상태를 CanDrag로 변경
             }
             else
             {
+                if (cardsInHand[i].GetCardState() == CardState.CanDiscard) return;
                 cardsInHand[i].SetCardState(CardInHand.CardState.CanMouseOver);// 카드 상태를 CanMouseOver로 변경
             }
         }
@@ -259,7 +263,6 @@ public class CardDisplay : MonoBehaviour
     }
     public void OnMousepoint(PointerEventData eventData)
     {
-        Debug.Log("OnMousePoint");
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
@@ -332,8 +335,6 @@ public class CardDisplay : MonoBehaviour
             if (caster == null || !caster.IsAlive())
             {
                 GameManager.Instance.combatUIController.ThrowCard(card.cardData);
-                cardsInHand.Remove(card);
-                Destroy(card.gameObject);
             }
         }
         CardArrange();

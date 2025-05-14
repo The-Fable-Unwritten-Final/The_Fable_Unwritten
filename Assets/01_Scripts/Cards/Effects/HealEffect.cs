@@ -9,7 +9,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Cards/Effects/HealEffect")]
 public class HealEffect : CardEffectBase
 {
-
     public float amount;    //힐량
 
     /// <summary>
@@ -17,27 +16,14 @@ public class HealEffect : CardEffectBase
     /// </summary>
     /// <param name="caster">시전자</param>
     /// <param name="target">타겟</param>
-    public override void Apply(IStatusReceiver caster, IStatusReceiver target)
+    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets)
     {
         //스탯 변경 적용 후
         float finalHeal = caster.ModifyStat(BuffStatType.Attack, amount);
-        caster.Heal(finalHeal); //힐 적용
-    }
-
-    /// <summary>
-    /// 광역힐에 사용
-    /// </summary>
-    /// <param name="caster">시전자</param>
-    /// <param name="targets">타겟 리스트</param>
-    public override void ApplyAOE(IStatusReceiver caster, List<IStatusReceiver> targets)
-    {
-        foreach (var target in targets)
+        foreach(var target in targets)
         {
             if (target.IsAlive())
-            {
-                float finalHeal = caster.ModifyStat(BuffStatType.Attack, amount);
-                caster.Heal(finalHeal);
-            }
+                target.Heal(finalHeal);
         }
     }
 

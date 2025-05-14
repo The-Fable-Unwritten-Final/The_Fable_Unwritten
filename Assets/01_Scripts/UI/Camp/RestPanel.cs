@@ -12,6 +12,6 @@ public class RestPanel : BaseCampPanel
         Debug.Log("휴식을 취했다. 보유중인 캐릭터 현재체력 10 증가");
 
         EventEffectManager.Instance.AddEventEffect(0); // 야영 휴식 현재 체력 10 증가
-        StartCoroutine(FadeExit());
+        UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
     }
 }

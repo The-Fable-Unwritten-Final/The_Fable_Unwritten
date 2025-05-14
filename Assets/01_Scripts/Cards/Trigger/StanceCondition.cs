@@ -7,7 +7,7 @@ public class StanceCondition : TriggerCondition
 {
     public EStancType requiredStance;
 
-    public override bool IsConditionMet(IStatusReceiver caster, IStatusReceiver target)
+    public override bool IsConditionMet(IStatusReceiver caster, List<IStatusReceiver> target)
     {
         return caster.CurrentStance.Equals(requiredStance.ToString());
     }

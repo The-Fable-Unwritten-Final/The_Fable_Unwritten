@@ -13,6 +13,21 @@ public static class CardDatabaseLoader
             var card = CardModelFactory.Create(data, effects);
             cards.Add(card);
         }
-        return cards;
+
+        
+        var cards1 = new List<CardModel>();
+        var cardDatas1 = CardJsonLoader.Load("ExternalFiles/CardsJson");
+
+        foreach(var data in cardDatas1)
+        {
+            var effects = NewCardEffectBuilder.Build(data);
+            var card = CardModelFactory.Create(data, effects);
+            cards1.Add(card);
+        }
+        
+
+
+        
+        return cards1;
     }
 }

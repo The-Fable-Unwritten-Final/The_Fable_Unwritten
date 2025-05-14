@@ -19,7 +19,8 @@ public class DiscardCardEffect : CardEffectBase
     {
         var deck = caster.Deck;
 
-        if (deck.hand.Count > discardCount)     //버리는 카드가 핸드의 카드보다 많을 경우
+
+        /*if (deck.hand.Count > discardCount)     //버리는 카드가 핸드의 카드보다 많을 경우
         {
             deck.DiscardHand();
             Debug.Log("[카드 버리기] 패 전부 버리기");
@@ -38,16 +39,13 @@ public class DiscardCardEffect : CardEffectBase
             }
 
             Debug.Log($"[카드 버리기] {selectedCards.Count}장 선택적으로 버림");
-        }
+        }*/
     }
 
-    public override void Apply(IStatusReceiver caster, IStatusReceiver target)
+    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets)
     {
-        Debug.LogWarning("[DiscardCardEffect] 선택된 카드 리스트를 넘겨주세요. 자동 버리기는 ApplyAuto()를 사용하세요.");
+        GameManager.Instance.cardDiscardController.DiscardCard(discardCount);
     }
 
     public override string GetDescription() => $"카드를 선택하여 최대 {discardCount}장 버립니다.";
-
-    public override void ApplyAOE(IStatusReceiver caster, List<IStatusReceiver> targets) { }
-    public override bool isAOE() => false;
 }

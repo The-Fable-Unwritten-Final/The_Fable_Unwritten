@@ -196,6 +196,10 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     {
         cardState = state; // 카드 상태 설정
     }
+    public CardState GetCardState()
+    {
+        return cardState; // 카드 상태 가져오기
+    }
     public void OnCardMoveCouroutine()
     {
         StartCoroutine(OnCardMove());// 카드 이동 애니메이션을 위한 코루틴 시작.
@@ -203,6 +207,8 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     IEnumerator OnCardMove()// 카드 위치 재설정
     {
         // 카드 이동 애니메이션을 위한 상호작용 제한 코루틴
+        if(cardState == CardState.CanDiscard) yield break;
+
         SetCardState(CardInHand.CardState.None);// 카드가 움직이는 도중에는 상호작용 제한.
         yield return new WaitForSeconds(0.2f);
 

@@ -9,7 +9,7 @@ public class PopupUI_ReturnTitle : BasePopupUI
     public void OnClickToTitle()
     {
         CloseAll();
-        SceneManager.LoadScene(SceneNameData.SubTitleScene);
+        UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.SubTitleScene);
     }
 
     void CloseAll()

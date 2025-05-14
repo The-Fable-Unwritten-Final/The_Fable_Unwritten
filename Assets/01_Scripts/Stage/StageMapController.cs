@@ -140,15 +140,15 @@ public class StageMapController : MonoBehaviour
             case NodeType.NormalBattle:
             case NodeType.EliteBattle:
             case NodeType.Boss:
-                SceneManager.LoadScene(SceneNameData.CombatScene);
+                UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.CombatScene);
                 return;
 
             case NodeType.Camp:
-                SceneManager.LoadScene(SceneNameData.CampScene);
+                UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.CampScene);
                 return;
 
             case NodeType.RandomEvent:
-                SceneManager.LoadScene(SceneNameData.RandomEventScene);
+                UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.RandomEventScene);
                 return;
         }
    

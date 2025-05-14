@@ -407,6 +407,7 @@ namespace HisaGames.Cutscene
 
         public void OnSkipPanelClicked()
         {
+            SoundManager.Instance.PlaySFX(SoundCategory.Button, 0); // 기본 버튼음 재생
             EcCutsceneManager.instance.closeCutscenes();
         }
     }

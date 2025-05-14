@@ -182,7 +182,7 @@ public class UI_RandomEvent : MonoBehaviour
 
             if (resultIndex != 14)
             {
-                SceneManager.LoadScene(SceneNameData.StageScene);
+                UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
             }
         }  
     }

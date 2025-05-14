@@ -14,7 +14,7 @@ public class DataManager : MonoSingleton<DataManager>
     [Header("Data Loaded")]
     // 다이어리 데이터
     private List<DiaryData>[] diaryGroups = new List<DiaryData>[5]; // tag_num 0~4 (스테이지 1~5까지)
-    private List<CardModel> allCards = new();
+    public List<CardModel> allCards = new();
     //카드 통합
     private Dictionary<int, CardModel> cardLookup = new();
     // 카드북 카드 데이터
@@ -40,7 +40,7 @@ public class DataManager : MonoSingleton<DataManager>
     // 백그라운드 이미지 데이터
     private Dictionary<int, Sprite> stageBackgrounds;
     // 카드 해금 레시피 가져오기
-    public List<UnlockRecipe> LoadedRecipes;
+    public List<UnlockRecipe> LoadedRecipes { get; set; }
 
     public IReadOnlyList<DiaryData>[] DiaryGroups => diaryGroups; // 외부에서 읽기 전용으로 접근 가능
     public IReadOnlyDictionary<int, CardModel> CardLookup => cardLookup;
@@ -263,8 +263,6 @@ public class DataManager : MonoSingleton<DataManager>
 
         foreach (var card in allCards)
             card.isUnlocked = unlocked.Contains(card.index);
-
-        Debug.Log($"[DataManager] 카드 해금 상태 갱신 완료: {allCards.Count(c => c.isUnlocked)}개 해금됨");
     }
 
     private void InitializeUnlockRecipes()
@@ -281,7 +279,6 @@ public class DataManager : MonoSingleton<DataManager>
         {
             var wrapper = JsonUtility.FromJson<Wrapper>("{\"recipes\":" + recipeJson.text + "}");
             LoadedRecipes = wrapper.recipes ?? new();
-            Debug.Log($"[DataManager] 총 {LoadedRecipes.Count}개의 조합식 로드됨");
         }
         catch (System.Exception e)
         {

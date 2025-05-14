@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 [System.Serializable]
 public class DeckModel
@@ -9,8 +10,8 @@ public class DeckModel
     public List<CardModel> hand = new();                //들고 있는 카드
 
     public IReadOnlyList<CardModel> Hand => hand;
-    public const int maxSize = 5;
-    public const int startSize = 3;
+    public const int maxSize = 10;
+    public const int startSize = 10;
 
     //덱 삽입하기
     public void Initialize(List<CardModel> cards)
@@ -39,8 +40,8 @@ public class DeckModel
             unusedDeck.RemoveAt(0);
             hand.Add(card);                     //핸드에 넣기
             GameManager.Instance.combatUIController.DrawCard(card);
+            BattleLogManager.Instance.RegisterDrawnCard(card);
         }
-        
     }
 
     /// <summary>
@@ -49,8 +50,18 @@ public class DeckModel
     /// <param name="card">버릴 카드</param>
     public void Discard(CardModel card)
     {
-        if (hand.Remove(card))                  //핸드에 특정 카드 버리고
-            usedDeck.Add(card);                 //사용한 카드 쪽에 버린 카드 넣기
+        if (hand.Remove(card))
+        {
+            if (card.isOneUse)
+            {
+                GameObject.Destroy(card); // 파괴
+                Debug.Log($"[Deck] 일회용 카드 {card.cardName} 파괴됨");
+            }
+            else
+            {
+                usedDeck.Add(card); // 일반적인 카드만 사용 덱에 추가
+            }
+        }
     }
 
     /// <summary>
@@ -173,6 +184,8 @@ public class DeckModel
             card.ClearTemporaryDiscount();
     }
 
+    
+
     /// <summary>
     /// 게임 시작 시 전체 덱 상태 초기화
     /// (핸드와 사용 덱 모두 미사용 덱으로 병합 후 셔플)
@@ -199,6 +212,42 @@ public class DeckModel
             card.ApplyPersistentDiscount(amount);
         foreach (var card in usedDeck)
             card.ApplyPersistentDiscount(amount);
+    }
+
+    public void DiscardUnmaintainedCardsAtTurnEnd()
+    {
+        List<CardModel> toRemove = new();
+
+        // 핸드 검사
+        foreach (var card in hand)
+        {
+            if (!card.isMaintain)
+            {
+                toRemove.Add(card);
+            }
+        }
+
+        foreach (var card in toRemove)
+        {
+            GameManager.Instance.combatUIController.ThrowCard(card);
+            Debug.Log($"[Deck] 유지되지 않는 카드 {card.cardName} 핸드에서 제거");
+        }
+
+        // 사용 덱 검사
+        toRemove.Clear();
+        foreach (var card in usedDeck)
+        {
+            if (!card.isMaintain)
+                toRemove.Add(card);
+        }
+
+        foreach (var card in toRemove)
+        {
+            usedDeck.Remove(card);
+            GameObject.Destroy(card);
+            Debug.Log($"[Deck] 유지되지 않는 카드 {card.cardName} 사용 덱에서 제거");
+        }
+
     }
 
 }
