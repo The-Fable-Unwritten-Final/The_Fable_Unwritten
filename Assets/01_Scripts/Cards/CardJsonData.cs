@@ -27,7 +27,7 @@ public class CardEffect
     public string type;
     public int value;
     public int duration;
-    public int? target;
+    public int target;
     public EffectCondition condition;
     public ResultEffect result;
 }

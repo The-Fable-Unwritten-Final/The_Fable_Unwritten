@@ -32,21 +32,25 @@ public class ApplyStatusEffect : CardEffectBase
                 break;
 
             case 1: // 카일라
-                foreach (var t in targets)
+                foreach (var t in GameManager.Instance.turnController.battleFlow.playerParty)
                 {
                     if (t.ChClass == CharacterClass.Kayla) filteredTargets.Add(t);
                 }
                 break;
 
             case 2: // 레온
-                foreach (var t in targets)
+                foreach (var t in GameManager.Instance.turnController.battleFlow.playerParty)
                 {
                     if (t.ChClass == CharacterClass.Leon) filteredTargets.Add(t);
                 }
                 break;
 
-            case 3: // 모든 대상
-                filteredTargets.AddRange(targets); break;
+            case 3: // all
+                foreach (var t in GameManager.Instance.turnController.battleFlow.playerParty)
+                {
+                    filteredTargets.Add(t);
+                }
+                break;
 
             case 4:
             case null:
@@ -65,8 +69,6 @@ public class ApplyStatusEffect : CardEffectBase
                 duration = duration
             });
         }
-
-        GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
     }
 
     public override string GetDescription() => $"{statType} 스탯에 {value}만큼 {duration}턴 동안 적용";
