@@ -74,6 +74,9 @@ public class CombatUIController : MonoBehaviour
 
         // 핸드에서 제거하고 사용 덱에 추가
         caster.Deck.Discard(card);
-        //CardStatusUpdate?.Invoke(); // 상태 갱신
+
+        CardInHand cardHand = cardDisplay.cardsInHand.Find(c => c.cardData == card);
+        cardDisplay.cardsInHand.Remove(cardHand); // 핸드에서 카드 제거
+        Destroy(cardHand.gameObject);
     }
 }

@@ -194,8 +194,6 @@ public class CardDisplay : MonoBehaviour
     {
         if (card == null) return;
         GameManager.Instance.combatUIController.ThrowCard(card.cardData);// 카드 버리기.
-        cardsInHand.Remove(card);// 카드 리스트에서 제거.
-        Destroy(card.gameObject);// 카드 삭제.
         CardArrange();
     }
     /// <summary>
@@ -337,8 +335,6 @@ public class CardDisplay : MonoBehaviour
             if (caster == null || !caster.IsAlive())
             {
                 GameManager.Instance.combatUIController.ThrowCard(card.cardData);
-                cardsInHand.Remove(card);
-                Destroy(card.gameObject);
             }
         }
         CardArrange();
