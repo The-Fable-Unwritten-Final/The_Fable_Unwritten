@@ -10,7 +10,6 @@ using Random = UnityEngine.Random;
 /// </summary>
 public static class EnemyPattern
 {
-
     // StanceType 개수 (한 번만 계산)
     private static readonly int stanceCount =
         System.Enum.GetValues(typeof(PlayerData.StancType)).Length;
@@ -179,22 +178,39 @@ public static class EnemyPattern
         float midP = enemyData.MiddleStance;   // Middle 확률
         float botP = enemyData.BottomStance;   // Low 확률
 
-        // 3) 랜덤 값으로 분포 적용
-        float r = Random.value;  // 0.0 ~ 1.0
-        if (r < topP)
+        // 차단된 스탠스를 제외한 확률만 고려
+        List<(StancValue.EStancType stance, float prob)> candidates = new();
+
+        if (!enemy.IsAttackBlockedByStance(StancValue.EStancType.High) && topP > 0)
+            candidates.Add((StancValue.EStancType.High, topP));
+        if (!enemy.IsAttackBlockedByStance(StancValue.EStancType.Middle) && midP > 0)
+            candidates.Add((StancValue.EStancType.Middle, midP));
+        if (!enemy.IsAttackBlockedByStance(StancValue.EStancType.Low) && botP > 0)
+            candidates.Add((StancValue.EStancType.Low, botP));
+
+        if (candidates.Count == 0)
         {
-            enemy.enemyData.currentStance = StancValue.EStancType.High;
-            Debug.Log($"[EnemyPattern] {enemy.enemyData.EnemyName} 자세 → High (r={r:F2})");
-        }
-        else if (r < topP + midP)
-        {
+            Debug.LogWarning("[EnemyPattern] 모든 스탠스가 차단되어 기본값 사용");
             enemy.enemyData.currentStance = StancValue.EStancType.Middle;
-            Debug.Log($"[EnemyPattern] {enemy.enemyData.EnemyName} 자세 → Middle (r={r:F2})");
+            return;
         }
-        else
+
+        float total = 0f;
+        foreach (var (stance, prob) in candidates)
+            total += prob;
+
+        // 3) 랜덤 값으로 분포 적용
+        float r = Random.Range(0f, total);
+        float cumulative = 0f;
+        foreach (var (stance, prob) in candidates)
         {
-            enemy.enemyData.currentStance = StancValue.EStancType.Low;
-            Debug.Log($"[EnemyPattern] {enemy.enemyData.EnemyName} 자세 → Low (r={r:F2})");
+            cumulative += prob;
+            if (r <= cumulative)
+            {
+                enemy.enemyData.currentStance = stance;
+                Debug.Log($"[EnemyPattern] {enemy.enemyData.EnemyName} 자세 → {stance} (r={r:F2})");
+                return;
+            }
         }
     }
 
@@ -205,14 +221,39 @@ public static class EnemyPattern
         if (skills == null || skills.Count == 0)
             return null;        // 스킬 없으면 기본 공격
 
-        float total = 0;                 
-        foreach (var s in skills) // 스킬 공격 확률에 따라 스킬 선택
-            total += s.percentage;
+        int currentStage = ProgressDataManager.Instance.StageIndex;
+        float total = 0f;
+        var validSkills = new List<EnemySkill>();
 
-        float rand = Random.Range(0f, 1);
-        float cumulative = 0;
+        //스킬 사용 조건 확인
+        for (int i = 0; i < skills.Count; i++)
+        {
+            var skill = skills[i];
+            // 스테이지 조건 제한
+            bool isLocked = (skills.Count == 3 && i == 2 && currentStage < 3)
+                         || (skills.Count == 4 && i == 2 && currentStage < 3)
+                         || (skills.Count == 4 && i == 3 && currentStage < 4)
+                         || (skills.Count == 5 && i == 3 && currentStage < 3)
+                         || (skills.Count == 5 && i == 4 && currentStage < 4);
 
-        foreach (var skill in skills)
+            if (isLocked)
+                continue;
+
+            var actData = DataManager.Instance.EnemyActDict.GetValueOrDefault(skill.skillIndex);
+            if (actData == null)
+                continue;
+
+            validSkills.Add(skill);
+            total += skill.percentage;
+        }
+
+        if (validSkills.Count == 0)
+            return null;
+        //스킬 뽑기
+        float rand = Random.Range(0f, total);
+        float cumulative = 0f;
+
+        foreach (var skill in validSkills)
         {
             cumulative += skill.percentage;
             if (rand <= cumulative)
