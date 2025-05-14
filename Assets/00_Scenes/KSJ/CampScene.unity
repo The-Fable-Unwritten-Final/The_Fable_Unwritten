@@ -3998,11 +3998,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1086308640}
     m_Modifications:
-    - target: {fileID: 6160092484357416919, guid: 6a8a8b7577625024db1742592b6ef6a5,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6658074611719272411, guid: 6a8a8b7577625024db1742592b6ef6a5,
         type: 3}
       propertyPath: m_Name
@@ -6380,6 +6375,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 157859357}
+        m_TargetAssemblyTypeName: UI_PlayerInfo, Assembly-CSharp
+        m_MethodName: UpdatePlayerInfoUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &352389263728249031
 GameObject:
   m_ObjectHideFlags: 0
@@ -6672,6 +6679,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 3819189707206117515}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 157859357}
+        m_TargetAssemblyTypeName: UI_PlayerInfo, Assembly-CSharp
+        m_MethodName: UpdatePlayerInfoUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -7489,6 +7508,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 5521005000324874342}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 157859357}
+        m_TargetAssemblyTypeName: UI_PlayerInfo, Assembly-CSharp
+        m_MethodName: UpdatePlayerInfoUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -9187,6 +9218,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 5225780450225898010}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 157859357}
+        m_TargetAssemblyTypeName: UI_PlayerInfo, Assembly-CSharp
+        m_MethodName: UpdatePlayerInfoUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -12946,6 +12989,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 157859357}
+        m_TargetAssemblyTypeName: UI_PlayerInfo, Assembly-CSharp
+        m_MethodName: UpdatePlayerInfoUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &4185765989622474888
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15186,6 +15241,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 3024017559391693708}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 157859357}
+        m_TargetAssemblyTypeName: UI_PlayerInfo, Assembly-CSharp
+        m_MethodName: UpdatePlayerInfoUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -18837,6 +18904,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 157859357}
+        m_TargetAssemblyTypeName: UI_PlayerInfo, Assembly-CSharp
+        m_MethodName: UpdatePlayerInfoUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &7661700756657659234
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20035,6 +20114,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 695143651588996617}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 157859357}
+        m_TargetAssemblyTypeName: UI_PlayerInfo, Assembly-CSharp
+        m_MethodName: UpdatePlayerInfoUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

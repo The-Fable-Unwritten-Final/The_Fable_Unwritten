@@ -11,7 +11,7 @@ public class UI_PlayerInfo : MonoBehaviour
     [SerializeField] TextMeshProUGUI sophiaInfo;
     [SerializeField] TextMeshProUGUI kaylaInfo;
     [SerializeField] TextMeshProUGUI leonInfo;
-    [SerializeField] TextMeshProUGUI currentIndfo;
+    [SerializeField] TextMeshProUGUI currentExp;
 
     [Header("EliteClearInfo")]
     [SerializeField] GameObject courageBadge;
@@ -35,7 +35,7 @@ public class UI_PlayerInfo : MonoBehaviour
         };
 
         SetEndingBadge();
-        UPdatePlayerInfoUI();
+        UpdatePlayerInfoUI();
 
         RegisterHpUpdateEvent();
     }
@@ -114,9 +114,10 @@ public class UI_PlayerInfo : MonoBehaviour
             Destroy(child.gameObject);
     }
 
-    public void UPdatePlayerInfoUI()
+    public void UpdatePlayerInfoUI()
     {
         var players = PlayerManager.Instance.activePlayers;
+        var exp = ProgressDataManager.Instance.CurrentExp;
 
         foreach (var text in charInfoText)
         {
@@ -133,6 +134,8 @@ public class UI_PlayerInfo : MonoBehaviour
                 textObj.text = $"{playerData.currentHP}/{playerData.MaxHP}";
             }
         }
+
+        currentExp.text = exp.ToString();
     }
 
     private void SetEndingBadge()

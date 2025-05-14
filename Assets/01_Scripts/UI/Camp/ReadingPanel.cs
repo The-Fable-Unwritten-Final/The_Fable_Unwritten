@@ -13,6 +13,7 @@ public class ReadingPanel : BaseCampPanel
     [SerializeField] GameObject campCardPrefap;
     [SerializeField] GameObject cardBook;
     [SerializeField] Transform cardsRoot;
+    [SerializeField] int chageCardExp = 10;
 
     public int currentCardIndex;
     public int chageCardIndex;
@@ -112,11 +113,12 @@ public class ReadingPanel : BaseCampPanel
 
     public void SetChangeCardIndex(Transform selectCard)
     {
-        SoundManager.Instance.PlaySFX(SoundCategory.Player, (int)selectClass);
-
         if (selectCard.TryGetComponent<BookCards>(out var bookCard))
         {
             chageCardIndex = bookCard.cardIndex;
+
+            // 변경 카드 두개가 같거나 사용 경험치가 부족하다면 실행x
+            if (chageCardIndex == currentCardIndex || ProgressDataManager.Instance.CurrentExp < chageCardExp) return;            
 
             var player = ProgressDataManager.Instance.PlayerDatas
           .FirstOrDefault(p => p.CharacterClass == cardBook.GetComponent<CampCardBook>().Character);
@@ -131,6 +133,8 @@ public class ReadingPanel : BaseCampPanel
                 changeCardPanel.SetActive(false);
                 cardBook.SetActive(false);
             }
+            SoundManager.Instance.PlaySFX(SoundCategory.Player, (int)selectClass);
+            ProgressDataManager.Instance.CurrentExp -= chageCardExp;
         }
     }
 
