@@ -104,6 +104,8 @@ public class CardModel : ScriptableObject
         // 4. 효과 적용
         foreach (var effect in effects)
             effect.Apply(caster, targets);
+
+        GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
     }
 
     // ==== 타겟 유효성 ====
