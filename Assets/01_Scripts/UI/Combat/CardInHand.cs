@@ -207,11 +207,14 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     IEnumerator OnCardMove()// 카드 위치 재설정
     {
         // 카드 이동 애니메이션을 위한 상호작용 제한 코루틴
+        if(cardState == CardState.CanDiscard) yield break; // 카드 상태가 OnDrag인 경우 코루틴 종료
+
         SetCardState(CardInHand.CardState.None);// 카드가 움직이는 도중에는 상호작용 제한.
         yield return new WaitForSeconds(0.2f);
 
         if (cardData.IsUsable(GameManager.Instance.turnController.battleFlow.currentMana))
         {
+            Debug.Log($"[CardInHand] 카드 사용 가능 상태로 변경. 카드 이름: {cardData.cardName}");
             SetCardState(CardInHand.CardState.CanDrag);
         }
         else

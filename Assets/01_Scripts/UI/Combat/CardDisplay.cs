@@ -236,10 +236,12 @@ public class CardDisplay : MonoBehaviour
         {
             if (cardsInHand[i].cardData.IsUsable(GameManager.Instance.turnController.battleFlow.currentMana))// 현재 보유 마나를 가져와, 사용 가능한지 확인. (사용 가능시 CanDrag, 불가능시 CanMouseOver)
             {
+                if (cardsInHand[i].GetCardState() == CardState.CanDiscard) return;
                 cardsInHand[i].SetCardState(CardInHand.CardState.CanDrag);// 카드 상태를 CanDrag로 변경
             }
             else
             {
+                if (cardsInHand[i].GetCardState() == CardState.CanDiscard) return;
                 cardsInHand[i].SetCardState(CardInHand.CardState.CanMouseOver);// 카드 상태를 CanMouseOver로 변경
             }
         }
