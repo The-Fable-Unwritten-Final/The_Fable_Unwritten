@@ -31,6 +31,7 @@ public class BattleFlowController : MonoBehaviour
     public Dictionary<CharacterClass, IStatusReceiver> characterMap = new();   //캐릭터클래스에 대한 정보
     public Dictionary<IStatusReceiver, CardModel> enemyPlannedSkill = new();   //적의 스킬 예측 정보
     public List<int> recentLoots { get; private set; } = new();     //현재 전리품 정보
+    public int totalExp = 0;                      //현재 층 총 exp 정보
 
     private bool isBattleEnded = true;      //배틀 끝났는지 확인용
 
@@ -318,7 +319,10 @@ public class BattleFlowController : MonoBehaviour
                 if(enemy is Enemy enemyComponent)
                 {
                     var enemyData = enemyComponent.enemyData;
-                    if( enemyData != null && enemyData.loot != null)
+                    ProgressDataManager.Instance.CurrentExp += enemyData.exp;
+                    totalExp += enemyData.exp;
+
+                    if (enemyData != null && enemyData.loot != null)
                     {
                         foreach (int lootIndex in enemyData.loot)
                         {
@@ -326,6 +330,7 @@ public class BattleFlowController : MonoBehaviour
                             if (lootIndex >= 0 && lootIndex < ProgressDataManager.MAX_ITEM_COUNT)
                             {
                                 ProgressDataManager.Instance.itemCounts[lootIndex]++;
+                                
                             }
                             else
                             {

@@ -63,6 +63,12 @@ public class NewCardEffectBuilder : MonoBehaviour
                 effect = applyDmg;
                 break;
 
+            case "CantAtkinParticularStance":
+                var pstance = ScriptableObject.CreateInstance<CantAttackInStance>();
+                pstance.blockStance = (StancValue.EStancType)effectData.value;
+                effect = pstance;
+                break;
+
             case "redraw":
                 var redraw = Load<RecycleCardEffect>("recycleCardEffect");
                 redraw.amount = effectData.value;
