@@ -241,7 +241,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         }
         //──────── K.T.H 변경 ────────
         var sv = playerData.allStances.Find(s => s.stencType == newStance); // newStance 에 맞는 StancValue 찾아서 currentStance 에 할당
-        if (sv == null) return;
+        if (sv == null) { Debug.LogError("allStances에 해당 Stance가 없습니다."); return; }
 
         playerData.currentStance = sv;
         //──────── K.T.H 변경 ────────

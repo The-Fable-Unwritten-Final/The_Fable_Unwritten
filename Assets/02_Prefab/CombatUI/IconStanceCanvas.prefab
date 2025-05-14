@@ -135,6 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stanceSlot: {fileID: 518221310495574982}
+  owner: {fileID: 0}
 --- !u!1 &2079874050196298133
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,6 +271,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stanceSlot: {fileID: 1013092538685107924}
+  owner: {fileID: 0}
 --- !u!1 &3604495956579860683
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,6 +407,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stanceSlot: {fileID: 1516769630095686556}
+  owner: {fileID: 0}
 --- !u!1 &8766541299586457489
 GameObject:
   m_ObjectHideFlags: 0
@@ -755,6 +758,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8262027817006732001}
     m_Modifications:
+    - target: {fileID: 15018148586720737, guid: cb7b23896d4ff0e4a9c0c44c22a80eb6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2578520984183085487, guid: cb7b23896d4ff0e4a9c0c44c22a80eb6,
         type: 3}
       propertyPath: m_Name
