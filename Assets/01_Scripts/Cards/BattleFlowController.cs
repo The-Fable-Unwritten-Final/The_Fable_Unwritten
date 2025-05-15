@@ -103,7 +103,24 @@ public class BattleFlowController : MonoBehaviour
 
         foreach (var player in playerParty)
         {
-            if(player.IsAlive())            //모두 덱 초기화 후 3장 뽑기
+            //──────── K.T.H 변경 ────────
+            isBattleEnded = false;
+            currentMana = startMana;
+            currentTurn = TurnState.PlayerTurn;
+
+            // → 여기에 추가: 모든 캐릭터 자세를 Middle로 초기화
+            foreach (var receiver in playerParty)
+            {
+                if (receiver is PlayerController pc)
+                {
+                    pc.ChangeStance(PlayerData.StancType.Middle);
+                }
+            }
+
+            UpdateManaUI();
+            //──────── K.T.H 변경 ────────
+
+            if (player.IsAlive())            //모두 덱 초기화 후 3장 뽑기
             {
                 if (!player.IsAlive()) continue;
                 player.Deck.ResetDeckState();
