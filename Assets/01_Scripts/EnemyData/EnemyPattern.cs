@@ -26,6 +26,13 @@ public static class EnemyPattern
             Debug.LogError("[EnemyPattern] 전달된 IStatusReceiver는 Enemy가 아닙니다.");
             yield break;
         }
+
+        if (enemyComponent.IsStunned())
+        {
+            Debug.Log($"[Stun] {enemyComponent.enemyData.EnemyName}은 스턴 상태로 행동 불가");
+            yield break;
+        }
+
         // 1. 자세 변경
         SetRandomStance(enemyComponent);
         yield return new WaitForSeconds(0.3f); // 자세 변경 연출 대기
