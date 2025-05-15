@@ -7,6 +7,8 @@ using UnityEngine;
 
 public enum TurnState { PlayerTurn, EnemyTurn } //적 턴인지 아군 턴인지 판별자
 
+
+
 public class BattleFlowController : MonoBehaviour
 {
     [Header("Character Setup")]
@@ -127,7 +129,6 @@ public class BattleFlowController : MonoBehaviour
                 player.Deck.Draw(DeckModel.startSize);
             }
         }
-
         PlanEnemySkills();      //적 스킬 목록 설정
     }
 
@@ -186,9 +187,14 @@ public class BattleFlowController : MonoBehaviour
 
         card.Play(caster, targets); // 카드 효과 실행
         // 임시 카메라 줌 인 아웃 효과 추가 (이후 캐릭터의 모션이 추가되면, 해당 모션의 시작과 끝에 맞춰 줌 인 아웃 재설정)
+
+        RefreshAllDeckEnhanced();
+
         caster.CameraActionPlay(); // 시전 캐릭터 카메라 줌 인 아웃 액션 코루틴
 
         caster.Deck.Discard(card); // 핸드에서 사용 덱으로
+
+        
 
         UpdateManaUI();
 
@@ -507,5 +513,23 @@ public class BattleFlowController : MonoBehaviour
         }
 
         return result;
+    }
+
+    void RefreshAllDeckEnhanced()
+    {
+        foreach(var player in playerParty)
+        {
+            if(player is PlayerController pc && pc.IsAlive())
+            {
+                foreach (var card in pc.Deck.hand)
+                    card.UpdateEnhancedState();
+
+                foreach (var card in pc.Deck.unusedDeck)
+                    card.UpdateEnhancedState();
+
+                foreach (var card in pc.Deck.usedDeck)
+                    card.UpdateEnhancedState();
+            }
+        }
     }
 }

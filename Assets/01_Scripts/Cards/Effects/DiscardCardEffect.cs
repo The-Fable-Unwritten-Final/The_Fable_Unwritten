@@ -42,7 +42,7 @@ public class DiscardCardEffect : CardEffectBase
         }*/
     }
 
-    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets)
+    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
         GameManager.Instance.cardDiscardController.DiscardCard(discardCount);
     }

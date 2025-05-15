@@ -25,7 +25,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         }
         else
         {
-            Debug.LogWarning($"[{name}] PlayerData 또는 AnimationController가 누락되었습니다.");
+            Debug.LogWarning($"[{name}] enemyData 또는 AnimationController가 누락되었습니다.");
         }
     }
     void Start()

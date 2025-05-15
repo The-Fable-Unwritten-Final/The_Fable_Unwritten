@@ -13,7 +13,7 @@ public abstract class CardEffectBase : ScriptableObject
     /// </summary>
     /// <param name="caster">시전자</param>
     /// <param name="target">타겟</param>
-    public abstract void Apply(IStatusReceiver caster, List<IStatusReceiver> targets);       //타겟(적, 플레이어)에게 어떤 효과를 주는 지
+    public abstract void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null);       //타겟(적, 플레이어)에게 어떤 효과를 주는 지
 
     /// <summary>
     /// 카드 효과 설명 반환

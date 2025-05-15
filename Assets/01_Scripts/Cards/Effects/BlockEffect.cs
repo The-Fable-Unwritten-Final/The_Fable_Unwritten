@@ -8,7 +8,7 @@ public class BlockEffect : CardEffectBase
 {
     ///추후 특정 캐릭터 대상 지정 block이 나오면 이 변수를 이용하자
     public CharacterClass? blockTargetClass;
-    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets)
+    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
         
         foreach(var target in targets)

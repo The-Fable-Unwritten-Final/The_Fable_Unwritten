@@ -16,10 +16,11 @@ public class HealEffect : CardEffectBase
     /// </summary>
     /// <param name="caster">시전자</param>
     /// <param name="target">타겟</param>
-    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets)
+    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
         //스탯 변경 적용 후
-        float finalHeal = caster.ModifyStat(BuffStatType.Attack, amount);
+        float finalHeal = caster.ModifyStat(BuffStatType.Defense, amount);
+        finalHeal = (isEnhanced == null) ? finalHeal * 1.5f : finalHeal;
         foreach(var target in targets)
         {
             if (target.IsAlive())

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -401,8 +401,8 @@ MonoBehaviour:
     hand: []
   hasBlock: 0
   hpBarDisplay: {fileID: 2017042513}
-  stanceSlotPrefab: {fileID: 0}
-  stanceToggleButton: {fileID: 0}
+  stanceSlotPrefab: {fileID: 370894837}
+  stanceToggleButton: {fileID: 777138475}
   activeEffects: []
 --- !u!65 &106890149
 BoxCollider:
@@ -982,6 +982,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 279291399}
+--- !u!1 &370894837 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1516769630095686556, guid: 2ae221dc0f448b946a8444ad1e39b903,
+    type: 3}
+  m_PrefabInstance: {fileID: 6868058219730831983}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &395483990
 GameObject:
   m_ObjectHideFlags: 0
@@ -1488,8 +1494,8 @@ MonoBehaviour:
     hand: []
   hasBlock: 0
   hpBarDisplay: {fileID: 1515297823862666476}
-  stanceSlotPrefab: {fileID: 0}
-  stanceToggleButton: {fileID: 0}
+  stanceSlotPrefab: {fileID: 1597933195}
+  stanceToggleButton: {fileID: 6868058219730831986}
   activeEffects: []
 --- !u!95 &557679516
 Animator:
@@ -2664,6 +2670,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 757057484}
   m_CullTransparentMesh: 1
+--- !u!114 &777138475 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6475700872752529926, guid: 2ae221dc0f448b946a8444ad1e39b903,
+    type: 3}
+  m_PrefabInstance: {fileID: 6868058219730831983}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6868058219730831985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &782057930
 GameObject:
   m_ObjectHideFlags: 0
@@ -2990,6 +3008,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 950629640}
   m_CullTransparentMesh: 1
+--- !u!1 &966620892 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1013092538685107924, guid: 2ae221dc0f448b946a8444ad1e39b903,
+    type: 3}
+  m_PrefabInstance: {fileID: 6868058219730831983}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1016949499
 GameObject:
   m_ObjectHideFlags: 0
@@ -3501,6 +3525,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1211074086}
   m_CullTransparentMesh: 1
+--- !u!114 &1221120027 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4534972575191200850, guid: 2ae221dc0f448b946a8444ad1e39b903,
+    type: 3}
+  m_PrefabInstance: {fileID: 6868058219730831983}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1225328226
 GameObject:
   m_ObjectHideFlags: 0
@@ -4540,6 +4576,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1586737891}
   m_CullTransparentMesh: 1
+--- !u!1 &1597933195 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 518221310495574982, guid: 2ae221dc0f448b946a8444ad1e39b903,
+    type: 3}
+  m_PrefabInstance: {fileID: 6868058219730831983}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1661200918
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5283,8 +5325,8 @@ MonoBehaviour:
     hand: []
   hasBlock: 0
   hpBarDisplay: {fileID: 1340192385}
-  stanceSlotPrefab: {fileID: 0}
-  stanceToggleButton: {fileID: 0}
+  stanceSlotPrefab: {fileID: 966620892}
+  stanceToggleButton: {fileID: 1221120027}
   activeEffects: []
 --- !u!65 &1920819809
 BoxCollider:
@@ -6431,6 +6473,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6868058219730831983}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6868058219730831986 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7379407711479859306, guid: 2ae221dc0f448b946a8444ad1e39b903,
+    type: 3}
+  m_PrefabInstance: {fileID: 6868058219730831983}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6868058219730831984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!23 &7057901730019758053
 MeshRenderer:
   m_ObjectHideFlags: 0

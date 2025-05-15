@@ -47,6 +47,7 @@ public class CardModel : ScriptableObject
 
     public bool isUnlocked = true;              //카드가 해금 되었는지
 
+    public bool isEnhanced = false;                 //카드가 연계효과로 강화 되었는지
 
     // ==== 사용 조건 및 비용 ====
 
@@ -103,7 +104,7 @@ public class CardModel : ScriptableObject
 
         // 4. 효과 적용
         foreach (var effect in effects)
-            effect.Apply(caster, targets);
+            effect.Apply(caster, targets, isEnhanced);
 
         GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
     }
@@ -197,11 +198,24 @@ public class CardModel : ScriptableObject
                         : baseDamage;
 
                     // 3. "피해 숫자"만 교체
-                    result = Regex.Replace(result, @"(\d+)(?=의 피해)", ((int)predicted).ToString());
+                    if (isEnhanced)
+                    {
+                        predicted *= 1.5f;      //소수점 남기나?
+                        result = Regex.Replace(result, @"(\d+)(?=의 피해)", $"‘{(int)predicted}’");
+                    }
+                    else
+                    {
+                        result = Regex.Replace(result, @"(\d+)(?=의 피해)", ((int)predicted).ToString());
+                    }
                 }
             }
             // 필요한 경우 atk_buff, def_buff 별도 처리 가능
         }
         return result;
+    }
+
+    public void UpdateEnhancedState()
+    {
+        isEnhanced = BattleLogManager.Instance.isEnhanced(this);
     }
 }

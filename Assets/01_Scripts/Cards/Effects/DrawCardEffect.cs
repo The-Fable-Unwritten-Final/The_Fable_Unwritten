@@ -16,7 +16,7 @@ public class DrawCardEffect : CardEffectBase
     /// </summary>
     /// <param name="caster">사용자</param>
     /// <param name="target">적일 수도?</param>
-    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets)
+    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
         foreach (var target in targets)
         {

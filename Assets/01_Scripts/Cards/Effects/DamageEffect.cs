@@ -17,12 +17,14 @@ public class DamageEffect : CardEffectBase
     /// </summary>
     /// <param name="caster">시전자</param>
     /// <param name="target">타겟</param>
-    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets)
+    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
         if (targets == null || targets.Count == 0) return;
 
         // 공격자는 자신의 공격력만 고려
         float attackerAtk = caster.ModifyStat(BuffStatType.Attack, amount);
+
+        attackerAtk = (isEnhanced == true) ? attackerAtk * 1.5f : attackerAtk;
 
         // target은 받은 amount에서 방어력을 적용해서 처리
         foreach (var target in targets)
