@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8253525947952000709}
   - component: {fileID: 6458214164449784344}
   - component: {fileID: 7104334890019791776}
+  - component: {fileID: -534573039632865352}
   m_Layer: 5
   m_Name: StageNode
   m_TagString: Untagged
@@ -134,3 +135,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iconImage: {fileID: 8253525947952000709}
+--- !u!114 &-534573039632865352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5334812594238698168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

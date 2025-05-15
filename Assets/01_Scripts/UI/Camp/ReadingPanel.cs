@@ -51,6 +51,7 @@ public class ReadingPanel : BaseCampPanel
         foreach (var card in deck)
         {
             var go = Instantiate(campCardPrefap, cardsRoot);
+            go.AddComponent<CursorHoverHandler>();
             var cardUI = go.GetComponent<CampCard>();
             var onclick = go.GetComponent<Button>();
 
