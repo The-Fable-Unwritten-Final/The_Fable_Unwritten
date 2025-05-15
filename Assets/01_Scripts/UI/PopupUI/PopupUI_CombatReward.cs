@@ -50,6 +50,16 @@ public class PopupUI_CombatReward : BasePopupUI
                     }
                 }
 
+                if (setting.CurrentBattleNode.type == NodeType.Boss || 
+                    (setting.StageIndex == 1 && setting.CurrentBattleNode.columnIndex == 3))
+                {
+                    setting.IsNewStage = true;
+                }
+                else
+                {
+                    setting.IsNewStage = false;
+                }
+
                 if (setting.CurrentBattleNode.type == NodeType.EliteBattle)
                 {
                     setting.EliteClear(setting.CurrentTheme);
