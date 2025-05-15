@@ -14,7 +14,7 @@ public class EffectManager : MonoBehaviour
     public void PlayEffect(string effectName, Vector3 position, bool flipX = false)
     {
         // DataManager에서 가져오기
-        if (!DataManager.Instance.CardEffects.TryGetValue(effectName, out var frames) || frames.Count == 0)
+        if (!DataManager.Instance.CardEffects.TryGetValue(effectName, out var frames) || frames == null)
         {
             Debug.LogWarning($"[EffectManager] 이펙트 {effectName}를 찾지 못했거나 스프라이트 없음.");
             return;

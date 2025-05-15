@@ -93,7 +93,7 @@ public class NewCardEffectBuilder : MonoBehaviour
 
             case "block":
                 var block = Load<BlockEffect>("BlockEffect");
-                block.blockTargetClass = effectData.target == null ? null : (CharacterClass)effectData.target;
+                block.blockTargetClass = (CharacterClass)effectData.target;
                 effect = block;
                 break;
 

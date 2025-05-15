@@ -22,7 +22,7 @@ public class DataManager : MonoSingleton<DataManager>
     private Dictionary<int, CardModel> cardForKayla = new();
     private Dictionary<int, CardModel> cardForLeon = new();
     //효과 스프라이트
-    private Dictionary<string, List<Sprite>> cardEffects = new();
+    private Dictionary<string, EffectAnimation> cardEffects = new();
     //적 행동
     private Dictionary<int, EnemyAct> enemyActDict = new();
     //대화 트리거
@@ -47,7 +47,7 @@ public class DataManager : MonoSingleton<DataManager>
     public IReadOnlyDictionary<int, CardModel> CardForShopia => cardForShopia; // 외부에서 읽기 전용으로 접근 가능
     public IReadOnlyDictionary<int, CardModel> CardForKayla => cardForKayla; // 외부에서 읽기 전용으로 접근 가능
     public IReadOnlyDictionary<int, CardModel> CardForLeon => cardForLeon; // 외부에서 읽기 전용으로 접근 가능
-    public IReadOnlyDictionary<string, List<Sprite>> CardEffects => cardEffects;        //카드 애니메이션 스프라이트
+    public IReadOnlyDictionary<string, EffectAnimation> CardEffects => cardEffects;        //카드 애니메이션 스프라이트
     public IReadOnlyDictionary<int, EnemyAct> EnemyActDict => enemyActDict;        //적 스킬 유형
     public IReadOnlyDictionary<string, string> DialogueTriggers => dialogueTriggers;    //대화 트리거
     public IReadOnlyDictionary<string, List<JsonCutsceneData>> DialogueDatabase => dialogueDatabase;
@@ -225,31 +225,33 @@ public class DataManager : MonoSingleton<DataManager>
 
     private void InitCardEffectSprites()
     {
-        string basePath = "CardSkillEffects";
-
-        TextAsset folderListAsset = Resources.Load<TextAsset>($"{basePath}/SkillEffectFolders");
-        if (folderListAsset == null)
+        var db = Resources.Load<EffectAnimationDatabase>("EffectAnimationDatabase");
+        if (db == null)
         {
-            Debug.LogError("[DataManager] SkillEffectFolders.txt 파일을 찾을 수 없습니다.");
+            Debug.LogError("[DataManager] EffectAnimationDatabase.asset 로드 실패");
             return;
         }
+        cardEffects.Clear();
 
-        string[] folderNames = folderListAsset.text.Split('\n');
-
-        foreach (var folderNameRaw in folderNames)
+        foreach(var effect in db.allAnimations)
         {
-            string folderName = folderNameRaw.Trim();
-            if (string.IsNullOrEmpty(folderName)) continue;
-
-            Sprite[] sprites = Resources.LoadAll<Sprite>($"{basePath}/{folderName}");
-            if (sprites == null || sprites.Length == 0)
+            if(string.IsNullOrEmpty(effect.animationName))
             {
-                Debug.LogWarning($"[DataManager] {folderName} 폴더에 스프라이트 없음.");
+                Debug.LogWarning("[DataManager] animationName이 비어 있는 EffectAnimation이 있습니다.");
                 continue;
             }
 
-            cardEffects[folderName] = new List<Sprite>(sprites);
+            if (!cardEffects.ContainsKey(effect.animationName))
+            {
+                cardEffects.Add(effect.animationName, effect);
+            }
+
+            else
+            {
+                Debug.LogWarning($"[DataManager] 중복된 animationName: {effect.animationName}");
+            }
         }
+        Debug.Log($"[DataManager] 총 {cardEffects.Count}개의 애니메이션 로딩 완료");
     }
 
     /// <summary>
