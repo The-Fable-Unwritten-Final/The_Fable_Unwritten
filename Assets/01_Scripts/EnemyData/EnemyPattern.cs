@@ -52,10 +52,10 @@ public static class EnemyPattern
         yield return new WaitForSeconds(0.3f);
 
         // 5. 타겟에게 데미지 및 추가 효과 적용
-
         enemyComponent.PlayAttackAnimation();
         yield return new WaitForSeconds(0.3f);
 
+        // 6. 스킬 효과 적용
         foreach (var t in targets)
         {
             // 1. 피격 애니메이션 재생
@@ -90,12 +90,14 @@ public static class EnemyPattern
                     // 그 외(적 등) 일반 데미지
                     t.TakeDamage(skill.damage);
                 }
-                // ───────────────────────
+                
 
             }
-            // 3. 피격 데미지 적용
-            t.TakeDamage(skill.damage);
+            // 3. 상태효과
             ApplyStatusEffect(t, actData);
+            //t.TakeDamage(skill.damage);
+            //ApplyStatusEffect(t, actData);
+            // ───────────────────────
 
             Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (데미지 {skill.damage})");
 
