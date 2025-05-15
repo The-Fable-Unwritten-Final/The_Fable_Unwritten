@@ -29,6 +29,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     HashSet<StageTheme> eliteClearThemes = new(); // Theme 별 Elite Clear 리스트
 
     // 스테이지 방문 & 현재 노드
+    public HashSet<int> ProgressTutorial = new();
     public int StageIndex { get; set; }                // 현재 스테이지
     public int MinStageIndex { get; set; }             // 재시작 스테이지 (2스테이지 클리어시 2)
     public bool RetryFromStart { get; set; }           // 스테이지 실패시 재시작여부
@@ -86,11 +87,12 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
 
         data.currentTheme = (int)CurrentTheme;
-
+       
         data.untilNextCombatEffects = untillNextCombat.Select(e => e.index).ToList();
         data.untilNextStageEffects = untillNextStage.Select(e => e.index).ToList();
         data.untilEndAdventureEffects = untillEndAdventure.Select(e => e.index).ToList();
 
+        data.progressTutorial = ProgressTutorial.ToList();
         data.usedRandomEventIds = usedRandomEvnent.ToList();
         data.savedRandomEvent = SavedRandomEvent;
         data.stageThemePairs = stageThemes
@@ -166,7 +168,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
         SavedRandomEvent = data.savedRandomEvent;
         usedRandomEvnent = data.usedRandomEventIds.ToHashSet();
-        
+        ProgressTutorial = data.progressTutorial.ToHashSet();
         eliteClearThemes = data.eliteClearThemes.Select(i => (StageTheme)i).ToHashSet();
 
 
@@ -222,7 +224,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         stageThemes.Clear();
         eliteClearThemes.Clear();
 
-        //이걸로 설정 예정
+        //이걸로 설정 예정(유저테스트 이후) 변경
         //StageIndex = Mathf.Max(1, StageIndex);
         //MinStageIndex = Mathf.Max(1, MinStageIndex);
         AssignTemesToStages();
@@ -241,6 +243,10 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         SavedStageData = null;
         VisitedNodes.Clear();
         CurrentTheme = default;
+
+#if UNITY_EDITOR
+        ProgressTutorial.Clear();
+#endif
 
         PlayerPrefs.DeleteKey("ProgressSaveData");
 
@@ -276,6 +282,11 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         }
     }
 
+    // 진행한 튜터리얼 추가 시키기
+    public void AddProgressTutorial(int index)
+    {
+        ProgressTutorial.Add(index);
+    }
 
     public void UpdateEventEffectsData(List<EventEffects> com, List<EventEffects> stage, List<EventEffects> adv)
     {
@@ -395,6 +406,7 @@ public class ProgressSaveData
     public string stageDataJson;
     public int currentTheme;
 
+    public List<int> progressTutorial = new();
     public List<int> untilNextCombatEffects = new();
     public List<int> untilNextStageEffects = new();
     public List<int> untilEndAdventureEffects = new();
@@ -403,7 +415,6 @@ public class ProgressSaveData
     public List<int> usedRandomEventIds = new();
     public List<StageThemePair> stageThemePairs = new();
     public List<int> eliteClearThemes = new();
-
 
     public List<PlayerSaveData> playerSaves= new();
     public List<int> unlockedCardIndexes = new();

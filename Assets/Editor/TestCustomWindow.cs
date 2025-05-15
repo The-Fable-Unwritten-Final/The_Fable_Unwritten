@@ -84,6 +84,13 @@ public class TestCustomWindow : EditorWindow
             }
             ProgressDataManager.Instance.SavedEnemySetIndex = -1; // 랜덤 에너미 셋 초기화
 
+            // 앤딩일시 표시(*유저 테스트용*)
+            if (setting.CurrentBattleNode.type == NodeType.Boss
+                && setting.StageIndex == 3)
+            {
+                GameObject.Find("TutorialController").GetComponent<TutorialController>().ShowTutorial(9);
+            }
+
             UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
         }
         if (GUILayout.Button("스테이지 실패"))

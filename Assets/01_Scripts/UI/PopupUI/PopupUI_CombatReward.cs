@@ -69,6 +69,12 @@ public class PopupUI_CombatReward : BasePopupUI
                 UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
                 gameObject.SetActive(false);
 
+                // 앤딩일시 표시(*유저 테스트용*)
+                if (setting.CurrentBattleNode.type == NodeType.Boss 
+                    && setting.StageIndex == 3)
+                {
+                    GameObject.Find("TutorialController").GetComponent<TutorialController>().ShowTutorial(9);
+                }
                 // StageMoveTest.cs 를 임시로 가져만 왔음. 추후 전투 승리/패배시 기능 재 구현
             });
         }

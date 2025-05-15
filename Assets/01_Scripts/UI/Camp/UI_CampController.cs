@@ -19,6 +19,7 @@ public class UI_CampController : MonoBehaviour
     private void Start()
     {
         SetBackGround();
+        ProgressDataManager.Instance.IsNewStage = false;
     }
 
     // 스테이지에 따른 백그라운드 설정

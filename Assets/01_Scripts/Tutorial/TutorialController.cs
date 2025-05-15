@@ -18,32 +18,35 @@ public class TutorialController : MonoBehaviour
     private void StartTutorial()
     {
         var pmd = ProgressDataManager.Instance;
-
         if (pmd.CurrentBattleNode == null) return;
 
-        if (pmd.StageIndex == 1 && pmd.IsNewStage && SceneManager.GetActiveScene().name == SceneNameData.CombatScene)
+        string scene = SceneManager.GetActiveScene().name;
+        int stage = pmd.StageIndex;
+        int col = pmd.CurrentBattleNode.columnIndex;
+
+        if (stage == 1 && pmd.IsNewStage && scene == SceneNameData.CombatScene)
         {
             ShowTutorial(0);
             ShowTutorial(1);
         }
-        else if(pmd.StageIndex == 1 && pmd.CurrentBattleNode.columnIndex == 1 && SceneManager.GetActiveScene().name == SceneNameData.StageScene)
+        else if (stage == 1 && col == 1 && scene == SceneNameData.StageScene)
         {
             ShowTutorial(2);
         }
-        else if(pmd.StageIndex == 1 && pmd.CurrentBattleNode.columnIndex == 2 && SceneManager.GetActiveScene().name == SceneNameData.CombatScene)
+        else if (stage == 1 && col == 2 && scene == SceneNameData.CombatScene)
         {
             ShowTutorial(3);
             ShowTutorial(4);
         }
-        else if (pmd.StageIndex == 1 && pmd.CurrentBattleNode.columnIndex == 3 && SceneManager.GetActiveScene().name == SceneNameData.CombatScene)
+        else if (stage == 1 && col == 3 && scene == SceneNameData.CombatScene)
         {
             ShowTutorial(5);
         }
-        else if(pmd.StageIndex == 2 && pmd.IsNewStage && SceneManager.GetActiveScene().name == SceneNameData.StageScene)
+        else if (stage == 2 && pmd.IsNewStage && scene == SceneNameData.StageScene)
         {
             ShowTutorial(6);
         }
-        else if(pmd.IsNewCamp && SceneManager.GetActiveScene().name == SceneNameData.CampScene)
+        else if (pmd.IsNewCamp && scene == SceneNameData.CampScene)
         {
             ShowTutorial(7);
         }
@@ -51,6 +54,9 @@ public class TutorialController : MonoBehaviour
 
     public void ShowTutorial(int index)
     {
+        if (ProgressDataManager.Instance.ProgressTutorial.Contains(index)) return;
+        
+        ProgressDataManager.Instance.AddProgressTutorial(index);
         brulImg.SetActive(true);
         var obj = tutorials[index];
 

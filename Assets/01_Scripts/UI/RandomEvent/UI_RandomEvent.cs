@@ -26,12 +26,14 @@ public class UI_RandomEvent : MonoBehaviour
 
     private RandomEventData currentData;
     private List<int> results;
+    private bool isSelectOption = false;
 
     private void Start()
     {
         backGround.sprite = DataManager.Instance.GetBackground(ProgressDataManager.Instance.StageIndex);
+        ProgressDataManager.Instance.IsNewStage = false;
 
-        if(ProgressDataManager.Instance.SavedRandomEvent <= 0) // 저장 된 현재 랜덤이밴트 없을 경우
+        if (ProgressDataManager.Instance.SavedRandomEvent <= 0) // 저장 된 현재 랜덤이밴트 없을 경우
         {
             GetCurrentEvent();
         }
@@ -114,6 +116,8 @@ public class UI_RandomEvent : MonoBehaviour
 
     public void SelectOption(int index)
     {
+        if (isSelectOption == true) return;
+        
         optionButton_0.gameObject.SetActive(false);
         optionButton_1.interactable = false;
 
@@ -170,6 +174,7 @@ public class UI_RandomEvent : MonoBehaviour
         optionButton_1.onClick.RemoveAllListeners();
         optionButton_1.onClick.AddListener(ApplyEffectsAndGoToStage);
         optionButton_1.interactable = true;
+        isSelectOption = true;
     }
 
     private void ApplyEffectsAndGoToStage()
