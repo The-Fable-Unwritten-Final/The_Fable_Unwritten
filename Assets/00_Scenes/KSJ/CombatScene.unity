@@ -320,6 +320,8 @@ MonoBehaviour:
     hand: []
   hasBlock: 0
   hpBarDisplay: {fileID: 2017042513}
+  stanceSlotPrefab: {fileID: 0}
+  stanceToggleButton: {fileID: 0}
   activeEffects: []
 --- !u!65 &106890149
 BoxCollider:
@@ -1180,6 +1182,8 @@ MonoBehaviour:
     hand: []
   hasBlock: 0
   hpBarDisplay: {fileID: 1515297823862666476}
+  stanceSlotPrefab: {fileID: 0}
+  stanceToggleButton: {fileID: 0}
   activeEffects: []
 --- !u!95 &557679516
 Animator:
@@ -2929,6 +2933,8 @@ MonoBehaviour:
     hand: []
   hasBlock: 0
   hpBarDisplay: {fileID: 1340192385}
+  stanceSlotPrefab: {fileID: 0}
+  stanceToggleButton: {fileID: 0}
   activeEffects: []
 --- !u!65 &1920819809
 BoxCollider:
@@ -3337,6 +3343,7 @@ MonoBehaviour:
   Mana: {fileID: 753105239}
   startMana: 3
   currentMana: 0
+  totalExp: 0
   isWin: 0
   currentTurn: 0
   turn: 1
