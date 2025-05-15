@@ -59,8 +59,8 @@ public class SoundManager : MonoSingleton<SoundManager>
 
         SceneManager.sceneLoaded += OnSceneLoaded;
 
-        SetBGMVolume(0);
-        SetSFXVolume(0);
+        SetBGMVolume(0.25f);
+        SetSFXVolume(0.25f);
     }
 
 
