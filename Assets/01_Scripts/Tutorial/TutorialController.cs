@@ -28,7 +28,7 @@ public class TutorialController : MonoBehaviour
         //    ShowTutorial(0);
         //    ShowTutorial(1);
         //}
-        else if(pmd.StageIndex == 1 && pmd.CurrentBattleNode.columnIndex == 1 && SceneManager.GetActiveScene().name == SceneNameData.StageScene)
+        else if(pmd.StageIndex == 2 && pmd.IsNewStage && SceneManager.GetActiveScene().name == SceneNameData.StageScene)
         {
             ShowTutorial(2);
         }

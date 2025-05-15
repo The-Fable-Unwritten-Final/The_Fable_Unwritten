@@ -229,6 +229,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
         SavedEnemySetIndex = -1;
         SavedRandomEvent = -1;
+        IsNewStage = true;
         RetryFromStart = false;
         StageCleared = false;
         IsStageScene = true;
