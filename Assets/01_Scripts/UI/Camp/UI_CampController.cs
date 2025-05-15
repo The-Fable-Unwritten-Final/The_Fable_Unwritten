@@ -44,6 +44,7 @@ public class UI_CampController : MonoBehaviour
 
     private void ShowPanel(BaseCampPanel panel)
     {
+        ProgressDataManager.Instance.IsNewCamp = false;
         currentPanel?.Close();
         currentPanel = panel;
         currentPanel.Open();

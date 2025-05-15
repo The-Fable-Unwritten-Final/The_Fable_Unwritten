@@ -33,7 +33,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     public int MinStageIndex { get; set; }             // 재시작 스테이지 (2스테이지 클리어시 2)
     public bool RetryFromStart { get; set; }           // 스테이지 실패시 재시작여부
     public bool StageCleared { get; set; }             // 전투 승리 여부
-    public bool IsNewStage { get; set; }
+    public bool IsNewStage { get; set; }               // 새 스테이지 여부
     public bool IsStageScene { get; set; }             // 마지막 컨텐츠 스테이지씬 여부
     public GraphNode CurrentBattleNode { get; set; }   // 현재 선택한 노드
     public StageData SavedStageData { get; private set; }               // 현재 진행 중인 스테이지 데이터
@@ -42,6 +42,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     public int SavedEnemySetIndex { get; set; }           // 진행 에너미 세트 저장용
     public int SavedRandomEvent { get; set; }             // 저장용 랜던이밴트 인덱스
     public int CurrentExp { get; set; }                 //현재까지 얻은 Exp;
+    public bool IsNewCamp { get; set; }
 
     protected override void Awake()
     {
@@ -75,6 +76,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         data.stageCleared = StageCleared;
         data.isStageScene = IsStageScene;
         data.savedEnemySetIndex = SavedEnemySetIndex;
+        data.isNewCamp = IsNewCamp;
 
         if (SavedStageData != null && VisitedNodes != null)
         {
@@ -134,6 +136,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         StageCleared = data.stageCleared;
         IsStageScene = data.isStageScene;
         SavedEnemySetIndex = data.savedEnemySetIndex;
+        IsNewCamp = data.isNewCamp;
 
         //stageThemes = data.stageThemes.ToDictionary(pair => pair.Key, pair => (StageTheme)pair.Value);
 
@@ -229,6 +232,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
         SavedEnemySetIndex = -1;
         SavedRandomEvent = -1;
+        IsNewCamp = true;
         IsNewStage = true;
         RetryFromStart = false;
         StageCleared = false;
@@ -386,6 +390,7 @@ public class ProgressSaveData
     public bool stageCleared;
     public bool isStageScene;
     public int savedEnemySetIndex;
+    public bool isNewCamp;
 
     public string stageDataJson;
     public int currentTheme;

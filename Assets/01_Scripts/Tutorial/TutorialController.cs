@@ -43,6 +43,10 @@ public class TutorialController : MonoBehaviour
         {
             ShowTutorial(6);
         }
+        else if(pmd.IsNewCamp && SceneManager.GetActiveScene().name == SceneNameData.CampScene)
+        {
+            ShowTutorial(7);
+        }
     }
 
     public void ShowTutorial(int index)
@@ -61,11 +65,6 @@ public class TutorialController : MonoBehaviour
         }
 
         if (!obj.firstTutorial)
-            obj.gameObject.SetActive(false);        
-    }
-
-    public static void LastTutorial(int index)
-    {
-
+            obj.gameObject.SetActive(false);
     }
 }
