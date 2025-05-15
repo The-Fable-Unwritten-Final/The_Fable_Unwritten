@@ -33,6 +33,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     public int MinStageIndex { get; set; }             // 재시작 스테이지 (2스테이지 클리어시 2)
     public bool RetryFromStart { get; set; }           // 스테이지 실패시 재시작여부
     public bool StageCleared { get; set; }             // 전투 승리 여부
+    public bool IsNewStage { get; set; }
     public bool IsStageScene { get; set; }             // 마지막 컨텐츠 스테이지씬 여부
     public GraphNode CurrentBattleNode { get; set; }   // 현재 선택한 노드
     public StageData SavedStageData { get; private set; }               // 현재 진행 중인 스테이지 데이터
@@ -40,7 +41,6 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     public StageTheme CurrentTheme { get; private set; }  // 진행 테마 저장용
     public int SavedEnemySetIndex { get; set; }           // 진행 에너미 세트 저장용
     public int SavedRandomEvent { get; set; }             // 저장용 랜던이밴트 인덱스
-
     public int CurrentExp { get; set; }                 //현재까지 얻은 Exp;
 
     protected override void Awake()
@@ -70,6 +70,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
         data.stageIndex = StageIndex;
         data.minStageIndex = MinStageIndex;
+        data.isNewStage= IsNewStage;
         data.retryFromStart = RetryFromStart;
         data.stageCleared = StageCleared;
         data.isStageScene = IsStageScene;
@@ -128,6 +129,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
         StageIndex = data.stageIndex;
         MinStageIndex = data.minStageIndex;
+        IsNewStage = data.isNewStage;
         RetryFromStart = data.retryFromStart;
         StageCleared = data.stageCleared;
         IsStageScene = data.isStageScene;
@@ -378,6 +380,7 @@ public class ProgressSaveData
 {
     public int stageIndex;
     public int minStageIndex;
+    public bool isNewStage;
     public bool retryFromStart;
     public bool stageCleared;
     public bool isStageScene;
