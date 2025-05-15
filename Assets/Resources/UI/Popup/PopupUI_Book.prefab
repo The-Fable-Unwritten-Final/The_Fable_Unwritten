@@ -139,6 +139,7 @@ GameObject:
   - component: {fileID: 6298903319188343100}
   - component: {fileID: 4177184121185904917}
   - component: {fileID: 5912422211692221703}
+  - component: {fileID: 3906874091130098639}
   m_Layer: 6
   m_Name: Book Card Sample
   m_TagString: Untagged
@@ -302,6 +303,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3906874091130098639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 267839167496330111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &293463171877993355
 GameObject:
   m_ObjectHideFlags: 0
@@ -585,6 +598,7 @@ GameObject:
   - component: {fileID: 1918933289150486977}
   - component: {fileID: 34965296666662890}
   - component: {fileID: 5167357631489603602}
+  - component: {fileID: 6368776654438404844}
   m_Layer: 6
   m_Name: Book Card Sample
   m_TagString: Untagged
@@ -748,6 +762,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6368776654438404844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445432825557200208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &539067259060276779
 GameObject:
   m_ObjectHideFlags: 0
@@ -761,6 +787,7 @@ GameObject:
   - component: {fileID: 137056852848523539}
   - component: {fileID: 4679700133385116322}
   - component: {fileID: 4394797017625530591}
+  - component: {fileID: 4600495689935506495}
   m_Layer: 6
   m_Name: Book Card Sample
   m_TagString: Untagged
@@ -924,6 +951,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4600495689935506495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 539067259060276779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &730918862663363514
 GameObject:
   m_ObjectHideFlags: 0
@@ -1256,6 +1295,7 @@ GameObject:
   - component: {fileID: 2240038252671254270}
   - component: {fileID: 6559980028948865385}
   - component: {fileID: 5884121376570141618}
+  - component: {fileID: 8741753330676011529}
   m_Layer: 5
   m_Name: CharImage
   m_TagString: Untagged
@@ -1364,6 +1404,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8741753330676011529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1027466755935931918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1165482145607096187
 GameObject:
   m_ObjectHideFlags: 0
@@ -1907,6 +1959,7 @@ GameObject:
   - component: {fileID: 5878162445651035163}
   - component: {fileID: 9119587988640584243}
   - component: {fileID: 748160578852990942}
+  - component: {fileID: 6992937246000560402}
   m_Layer: 5
   m_Name: CharImage
   m_TagString: Untagged
@@ -2015,6 +2068,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6992937246000560402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1464275906242185834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1474140028010931711
 GameObject:
   m_ObjectHideFlags: 0
@@ -3406,6 +3471,7 @@ GameObject:
   - component: {fileID: 6777340541262863729}
   - component: {fileID: 6179449958292543468}
   - component: {fileID: 500661682887825567}
+  - component: {fileID: 7355405715700671634}
   m_Layer: 5
   m_Name: CharImage
   m_TagString: Untagged
@@ -3514,6 +3580,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7355405715700671634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2297261657686568574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2303361228244239641
 GameObject:
   m_ObjectHideFlags: 0
@@ -3561,6 +3639,7 @@ GameObject:
   - component: {fileID: 524557354317486093}
   - component: {fileID: 5038107446339739010}
   - component: {fileID: 4393703167450996642}
+  - component: {fileID: 1840948340351139120}
   m_Layer: 5
   m_Name: DiaryClip4
   m_TagString: Untagged
@@ -3694,6 +3773,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1840948340351139120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2304281777235409820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2446969699244499585
 GameObject:
   m_ObjectHideFlags: 0
@@ -3706,6 +3797,7 @@ GameObject:
   - component: {fileID: 4695704659192841420}
   - component: {fileID: 5385027102269439815}
   - component: {fileID: 4814987609382537546}
+  - component: {fileID: 229768659711685306}
   m_Layer: 5
   m_Name: Arrow Left(For Card)
   m_TagString: Untagged
@@ -3838,6 +3930,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &229768659711685306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2446969699244499585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2584762984517848190
 GameObject:
   m_ObjectHideFlags: 0
@@ -4095,6 +4199,7 @@ GameObject:
   - component: {fileID: 5451377739741620197}
   - component: {fileID: 8866332124317949646}
   - component: {fileID: 2897992426412510317}
+  - component: {fileID: 7348505744335821524}
   m_Layer: 5
   m_Name: Sort_Type
   m_TagString: Untagged
@@ -4229,6 +4334,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7348505744335821524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2741620304770072867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2829849869447976502
 GameObject:
   m_ObjectHideFlags: 0
@@ -4613,6 +4730,7 @@ GameObject:
   - component: {fileID: 2246704041885380949}
   - component: {fileID: 8539463275644707618}
   - component: {fileID: 2106978063366585865}
+  - component: {fileID: 618029662178625091}
   m_Layer: 5
   m_Name: BookClip4
   m_TagString: Untagged
@@ -4758,6 +4876,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &618029662178625091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3199180120787278748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3250349845924278989
 GameObject:
   m_ObjectHideFlags: 0
@@ -5313,6 +5443,7 @@ GameObject:
   - component: {fileID: 1641562872927258377}
   - component: {fileID: 6774401926329733089}
   - component: {fileID: 1806273698905511246}
+  - component: {fileID: 5029102803725216104}
   m_Layer: 6
   m_Name: Book Card Sample
   m_TagString: Untagged
@@ -5476,6 +5607,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &5029102803725216104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3674862577793774513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3678449427092542010
 GameObject:
   m_ObjectHideFlags: 0
@@ -5489,6 +5632,7 @@ GameObject:
   - component: {fileID: 3464709481037152792}
   - component: {fileID: 1573456527577023568}
   - component: {fileID: 5541506756739603736}
+  - component: {fileID: 8932518431267163597}
   m_Layer: 6
   m_Name: Book Card Sample
   m_TagString: Untagged
@@ -5652,6 +5796,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8932518431267163597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3678449427092542010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3689661950661940216
 GameObject:
   m_ObjectHideFlags: 0
@@ -5934,6 +6090,7 @@ GameObject:
   - component: {fileID: 3280045251858924533}
   - component: {fileID: 5951025087893921787}
   - component: {fileID: 1739516044279412218}
+  - component: {fileID: 9084632527640725816}
   m_Layer: 5
   m_Name: DiaryClip0
   m_TagString: Untagged
@@ -6067,6 +6224,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &9084632527640725816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4113763289792540613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4162957263914654143
 GameObject:
   m_ObjectHideFlags: 0
@@ -6504,7 +6673,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3477607134885223430
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6704,6 +6873,7 @@ GameObject:
   - component: {fileID: 1085860715005770596}
   - component: {fileID: 4348864261960173913}
   - component: {fileID: 2443118617808591030}
+  - component: {fileID: 6268783643886310595}
   m_Layer: 6
   m_Name: Book Card Sample
   m_TagString: Untagged
@@ -6867,6 +7037,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6268783643886310595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4375288325663892732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4382455306553869565
 GameObject:
   m_ObjectHideFlags: 0
@@ -7688,6 +7870,7 @@ GameObject:
   - component: {fileID: 3357547634336867599}
   - component: {fileID: 8621585219333220950}
   - component: {fileID: 168592902991681858}
+  - component: {fileID: 1288271466103879490}
   m_Layer: 5
   m_Name: BookClip2
   m_TagString: Untagged
@@ -7833,6 +8016,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1288271466103879490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4805888128995183548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4905684508345895553
 GameObject:
   m_ObjectHideFlags: 0
@@ -7846,6 +8041,7 @@ GameObject:
   - component: {fileID: 6671258943404870726}
   - component: {fileID: 2533620126712951912}
   - component: {fileID: 8251869683510065999}
+  - component: {fileID: 7325705769982249903}
   m_Layer: 6
   m_Name: Book Card Sample
   m_TagString: Untagged
@@ -8009,6 +8205,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7325705769982249903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4905684508345895553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5036873450903259381
 GameObject:
   m_ObjectHideFlags: 0
@@ -8868,6 +9076,7 @@ GameObject:
   - component: {fileID: 2719656461498352676}
   - component: {fileID: 2164139027580846767}
   - component: {fileID: 7757427761213659014}
+  - component: {fileID: 3609686670037243892}
   m_Layer: 5
   m_Name: Arrow Right
   m_TagString: Untagged
@@ -8988,6 +9197,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3609686670037243892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5419260308076096579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5490720926226818196
 GameObject:
   m_ObjectHideFlags: 0
@@ -9271,6 +9492,7 @@ GameObject:
   - component: {fileID: 2157450900964247094}
   - component: {fileID: 5434789447473812443}
   - component: {fileID: 3940035883573580439}
+  - component: {fileID: 3865166778685186871}
   m_Layer: 5
   m_Name: BookClip0
   m_TagString: Untagged
@@ -9416,6 +9638,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3865166778685186871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5538899704075797714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5630827496383435169
 GameObject:
   m_ObjectHideFlags: 0
@@ -9908,6 +10142,7 @@ GameObject:
   - component: {fileID: 1000535876670580159}
   - component: {fileID: 3181796862392086632}
   - component: {fileID: 7772669832960328913}
+  - component: {fileID: 3117276286690986422}
   m_Layer: 5
   m_Name: Sort_Cost
   m_TagString: Untagged
@@ -10042,6 +10277,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3117276286690986422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5934618278944298944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5951378488612360861
 GameObject:
   m_ObjectHideFlags: 0
@@ -12333,6 +12580,7 @@ GameObject:
   - component: {fileID: 5746560424001625668}
   - component: {fileID: 7562691997074522776}
   - component: {fileID: 6866952330105530385}
+  - component: {fileID: 7508960537449142577}
   m_Layer: 5
   m_Name: DiaryClip1
   m_TagString: Untagged
@@ -12466,6 +12714,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7508960537449142577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7204727481568305675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7396656027343399948
 GameObject:
   m_ObjectHideFlags: 0
@@ -12613,6 +12873,7 @@ GameObject:
   - component: {fileID: 5970457668992564389}
   - component: {fileID: 707291745691289674}
   - component: {fileID: 7940189894580095508}
+  - component: {fileID: 1743576246230262781}
   m_Layer: 5
   m_Name: DiaryClip3
   m_TagString: Untagged
@@ -12746,6 +13007,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1743576246230262781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7407254835230855403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7435741504213088435
 GameObject:
   m_ObjectHideFlags: 0
@@ -12758,6 +13031,7 @@ GameObject:
   - component: {fileID: 6374456231704862710}
   - component: {fileID: 5228290158659976151}
   - component: {fileID: 3851247325632605438}
+  - component: {fileID: 1081732107240333903}
   m_Layer: 5
   m_Name: Arrow Left
   m_TagString: Untagged
@@ -12878,6 +13152,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1081732107240333903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7435741504213088435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7456042928428885541
 GameObject:
   m_ObjectHideFlags: 0
@@ -13025,6 +13311,7 @@ GameObject:
   - component: {fileID: 1200279075875151830}
   - component: {fileID: 7761079649564178600}
   - component: {fileID: 1210329700289493075}
+  - component: {fileID: 9018996313785141768}
   m_Layer: 5
   m_Name: DiaryClip2
   m_TagString: Untagged
@@ -13158,6 +13445,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &9018996313785141768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7569909768767156607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7574188934433493408
 GameObject:
   m_ObjectHideFlags: 0
@@ -13606,6 +13905,7 @@ GameObject:
   - component: {fileID: 833823581834264798}
   - component: {fileID: 4884106971344189755}
   - component: {fileID: 5720966560363784619}
+  - component: {fileID: 6168518961651721597}
   m_Layer: 6
   m_Name: Book Card Sample
   m_TagString: Untagged
@@ -13769,6 +14069,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6168518961651721597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7754514393921475373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7798115179313807653
 GameObject:
   m_ObjectHideFlags: 0
@@ -13917,6 +14229,7 @@ GameObject:
   - component: {fileID: 6276302040218359984}
   - component: {fileID: 4867982227324180054}
   - component: {fileID: 5776080137272656677}
+  - component: {fileID: 5247283980537229594}
   m_Layer: 5
   m_Name: BookClip3
   m_TagString: Untagged
@@ -14062,6 +14375,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &5247283980537229594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7845599669627465055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7902990509935442784
 GameObject:
   m_ObjectHideFlags: 0
@@ -15437,6 +15762,7 @@ GameObject:
   - component: {fileID: 4589190403830728165}
   - component: {fileID: 5550019689790666404}
   - component: {fileID: 1569712824189520718}
+  - component: {fileID: 994260562505218459}
   m_Layer: 5
   m_Name: BookClip1
   m_TagString: Untagged
@@ -15582,6 +15908,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &994260562505218459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9095808046286435057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9141920944284373673
 GameObject:
   m_ObjectHideFlags: 0
@@ -15670,6 +16008,7 @@ GameObject:
   - component: {fileID: 6990475193220816225}
   - component: {fileID: 7647550085546316953}
   - component: {fileID: 3622398199156765828}
+  - component: {fileID: 2428457754634751107}
   m_Layer: 5
   m_Name: Arrow Right(For Card)
   m_TagString: Untagged
@@ -15802,3 +16141,15 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2428457754634751107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9143124881480417112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
