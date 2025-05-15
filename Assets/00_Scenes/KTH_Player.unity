@@ -604,6 +604,8 @@ MonoBehaviour:
     hand: []
   hasBlock: 0
   hpBarDisplay: {fileID: 1411513667}
+  stanceSlotPrefab: {fileID: 0}
+  stanceToggleButton: {fileID: 0}
   activeEffects: []
 --- !u!65 &550457369
 BoxCollider:
@@ -686,46 +688,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 405980362404917481, guid: 2ae221dc0f448b946a8444ad1e39b903,
-        type: 3}
-      propertyPath: owner
-      value: 
-      objectReference: {fileID: 680139001}
-    - target: {fileID: 908734538679653883, guid: 2ae221dc0f448b946a8444ad1e39b903,
-        type: 3}
-      propertyPath: owner
-      value: 
-      objectReference: {fileID: 1931096918}
-    - target: {fileID: 2207268802317870497, guid: 2ae221dc0f448b946a8444ad1e39b903,
-        type: 3}
-      propertyPath: owner
-      value: 
-      objectReference: {fileID: 550457368}
-    - target: {fileID: 5160905957720700359, guid: 2ae221dc0f448b946a8444ad1e39b903,
-        type: 3}
-      propertyPath: owner
-      value: 
-      objectReference: {fileID: 550457368}
-    - target: {fileID: 6170647166373578141, guid: 2ae221dc0f448b946a8444ad1e39b903,
-        type: 3}
-      propertyPath: owner
-      value: 
-      objectReference: {fileID: 1931096918}
-    - target: {fileID: 6673392525651943567, guid: 2ae221dc0f448b946a8444ad1e39b903,
-        type: 3}
-      propertyPath: owner
-      value: 
-      objectReference: {fileID: 680139001}
-    - target: {fileID: 7448116105639881159, guid: 2ae221dc0f448b946a8444ad1e39b903,
-        type: 3}
-      propertyPath: owner
-      value: 
-      objectReference: {fileID: 1931096918}
-    - target: {fileID: 7954249609974058197, guid: 2ae221dc0f448b946a8444ad1e39b903,
-        type: 3}
-      propertyPath: owner
-      value: 
-      objectReference: {fileID: 680139001}
     - target: {fileID: 8428517933431492622, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
       propertyPath: m_Pivot.x
@@ -826,11 +788,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8457958401431017885, guid: 2ae221dc0f448b946a8444ad1e39b903,
-        type: 3}
-      propertyPath: owner
-      value: 
-      objectReference: {fileID: 550457368}
     - target: {fileID: 8766541299586457489, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
       propertyPath: m_Name
@@ -917,6 +874,8 @@ MonoBehaviour:
     hand: []
   hasBlock: 0
   hpBarDisplay: {fileID: 45081455}
+  stanceSlotPrefab: {fileID: 0}
+  stanceToggleButton: {fileID: 0}
   activeEffects: []
 --- !u!65 &680139002
 BoxCollider:
@@ -991,6 +950,90 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &916304466
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 916304468}
+  - component: {fileID: 916304467}
+  m_Layer: 0
+  m_Name: StanceButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!212 &916304467
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 916304466}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: ebfb957a5b4add14a942f62c61365bda, type: 3}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 5.12, y: 5.12}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!4 &916304468
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 916304466}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 832.8273, y: 442.44547, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &977761664
 GameObject:
   m_ObjectHideFlags: 0
@@ -1524,6 +1567,8 @@ MonoBehaviour:
     hand: []
   hasBlock: 0
   hpBarDisplay: {fileID: 191477387}
+  stanceSlotPrefab: {fileID: 0}
+  stanceToggleButton: {fileID: 0}
   activeEffects: []
 --- !u!65 &1931096919
 BoxCollider:
@@ -1608,3 +1653,4 @@ SceneRoots:
   - {fileID: 1846617668}
   - {fileID: 977761666}
   - {fileID: 647834542}
+  - {fileID: 916304468}

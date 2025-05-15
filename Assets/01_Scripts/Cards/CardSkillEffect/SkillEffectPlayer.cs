@@ -17,16 +17,16 @@ public class SkillEffectPlayer : MonoBehaviour
     /// </summary>
     /// <param name="animationFrames">재생할 스프라이트 리스트</param>
     /// <param name="fps">초당 프레임 수</param>
-    public void Play(List<Sprite> animationFrames, float fps, bool flipX = false)
+    public void Play(EffectAnimation animInfo, float fps, bool flipX = false)
     {
-        if (animationFrames == null || animationFrames.Count == 0)
+        if (animInfo == null || animInfo.frames.Count == 0)
         {
             Debug.LogWarning("[SkillEffectPlayer] 재생할 스프라이트가 없습니다.");
             Destroy(gameObject);
             return;
         }
 
-        frames = animationFrames;
+        frames = animInfo.frames;
         spriteRenderer.flipX = flipX; // ← 방향 반영
         StartCoroutine(PlayCoroutine(fps));
     }

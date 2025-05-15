@@ -21,9 +21,13 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public bool IsIgnited => false;  // 점화 여부 - 추후 확장
     public string CurrentStance => playerData.currentStance.stencType.ToString();       //현재의 자세를 가져옴
     public CharacterClass ChClass{get; set;}
-    //현재 캐릭터의 클래스를 가져옴.
 
     //---
+    [Header("Stance UI")]
+    [SerializeField] private GameObject stanceSlotPrefab;  
+    [SerializeField] private Button stanceToggleButton;
+    private GameObject stancePopup;                        
+    private BattleFlowController flow;               
 
     //---
 
@@ -31,9 +35,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     private void Awake()
     {
-        //---
-
-        //---
         animator = GetComponent<Animator>();
 
         if (playerData != null && playerData.animationController != null)
@@ -44,6 +45,11 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         {
             Debug.LogWarning($"[{name}] PlayerData 또는 AnimationController가 누락되었습니다.");
         }
+
+        //---
+        flow = FindObjectOfType<BattleFlowController>();
+        stanceToggleButton.onClick.AddListener(OnCharacterIconClicked);
+        //---
     }
 
     public void BindHpBar(HpBarDisplay bar)
@@ -226,7 +232,23 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// </summary>
     public void OnCharacterIconClicked()
     {
+          if (flow == null || !flow.IsPlayerTurn())
+            return;
 
+        // 이미 열려 있으면 닫기
+        if (stancePopup != null)
+        {
+            Destroy(stancePopup);
+            stancePopup = null;
+            return;
+        }
+
+        // 팝업 띄우기
+        stancePopup = Instantiate(stanceSlotPrefab, transform);
+
+        // 옵션 버튼들 초기화 → highlight 로직이 돌아갑니다
+        foreach (var opt in stancePopup.GetComponentsInChildren<StanceOptionButton>(true))
+            opt.Initialize(this);
     }
     //---
     public void ChangeStance(PlayerData.StancType newStance) //StancUI 함수
