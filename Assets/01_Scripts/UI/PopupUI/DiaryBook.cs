@@ -20,28 +20,34 @@ public class DiaryBook : MonoBehaviour, IBookControl
     void OnEnable()
     {
         // 처음 다이어리 페이지를 열었을때 최초 페이지 == 0번 인덱스의 카드페이지
-        OnClickClip(diaryClip[0],0);
+        //OnClickClip(diaryClip[0],0);
+        TempBookClip(diaryClip[0],0);
     }
 
     public void OnClick0()
     {
-        OnClickClip(diaryClip[0],0);
+        //OnClickClip(diaryClip[0],0);
+        TempBookClip(diaryClip[0],0);
     }
     public void OnClick1()
     {
-        OnClickClip(diaryClip[1],1);
+        //OnClickClip(diaryClip[1],1);
+        TempBookClip(diaryClip[1],1);
     }
     public void OnClick2()
     {
-        OnClickClip(diaryClip[2],2);
+        //OnClickClip(diaryClip[2],2);
+        TempBookClip(diaryClip[2],2);
     }
     public void OnClick3()
     {
-        OnClickClip(diaryClip[3],3);
+        //OnClickClip(diaryClip[3],3);
+        TempBookClip(diaryClip[3],3);
     }
     public void OnClick4()
     {
-        OnClickClip(diaryClip[4],4);
+        //OnClickClip(diaryClip[4],4);
+        TempBookClip(diaryClip[4],4);
     }
 
     public void OnclickPageBefore()
@@ -81,6 +87,29 @@ public class DiaryBook : MonoBehaviour, IBookControl
         UpdatePage(0,selection); // 다이어리 내용 업데이트
         UpdateArrow(); // 화살표 업데이트
         SetLastSibling(t); // 클릭한 책갈피를 가장 위로 올림
+    }
+    // 배포까지만 사용할 첫번째 스토리만 표시할 임시 메서드
+    private void TempBookClip(Transform t, int selection)
+    {
+        if(selection == 0)
+        {
+            SetAllToFirst(); // 모든 책갈피를 가장 아래로 내림
+            currentPage = 0; // 페이지 초기화
+            diarySelection = selection;
+            UpdatePage(0, selection); // 다이어리 내용 업데이트
+            leftArrow.gameObject.SetActive(false); // 왼쪽 화살표 비활성화
+            rightArrow.gameObject.SetActive(false); // 오른쪽 화살표 비활성화
+            SetLastSibling(t); // 클릭한 책갈피를 가장 위로 올림
+        }
+        else
+        {
+            SetAllToFirst(); // 모든 책갈피를 가장 아래로 내림
+            diaryTitle.text = ""; // 다이어리 제목 초기화
+            diaryContents.text = ""; // 다이어리 내용 초기화
+            leftArrow.gameObject.SetActive(false); // 왼쪽 화살표 비활성화
+            rightArrow.gameObject.SetActive(false); // 오른쪽 화살표 비활성화
+            SetLastSibling(t); // 클릭한 책갈피를 가장 위로 올림
+        }
     }
     void UpdatePage(int pagenum,int selection)// 다이어리 내용 업데이트
     {
