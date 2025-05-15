@@ -18,17 +18,15 @@ public class TutorialController : MonoBehaviour
     private void StartTutorial()
     {
         var pmd = ProgressDataManager.Instance;
-        Debug.Log(pmd.StageIndex);
-        Debug.Log(pmd.IsNewStage);
 
         if (pmd.CurrentBattleNode == null) return;
 
-        //if (pmd.StageIndex == 1 && pmd.CurrentBattleNode.columnIndex == 1 && SceneManager.GetActiveScene().name == SceneNameData.CombatScene)
-        //{
-        //    ShowTutorial(0);
-        //    ShowTutorial(1);
-        //}
-        else if(pmd.StageIndex == 2 && pmd.IsNewStage && SceneManager.GetActiveScene().name == SceneNameData.StageScene)
+        if (pmd.StageIndex == 1 && pmd.IsNewStage && SceneManager.GetActiveScene().name == SceneNameData.CombatScene)
+        {
+            ShowTutorial(0);
+            ShowTutorial(1);
+        }
+        else if(pmd.StageIndex == 1 && pmd.CurrentBattleNode.columnIndex == 1 && SceneManager.GetActiveScene().name == SceneNameData.StageScene)
         {
             ShowTutorial(2);
         }
