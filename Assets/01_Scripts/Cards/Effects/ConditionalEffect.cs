@@ -9,7 +9,7 @@ public class ConditionalEffect : CardEffectBase
     public TriggerCondition condition;      //효과 만족을 검사할 코드
     public CardEffectBase effectIfTrue;     //효과 만족시 실행할 다른 효과.
 
-    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets)
+    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
         if (condition != null && condition.IsConditionMet(caster, targets))
         {

@@ -8,7 +8,7 @@ using UnityEngine;
 public class DuplicateCardEffect : CardEffectBase
 {
     public int duplicateNum = 1;
-    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets)
+    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
         if (caster is not PlayerController player) return;
 

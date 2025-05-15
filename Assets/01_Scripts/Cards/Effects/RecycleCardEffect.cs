@@ -12,7 +12,7 @@ public class RecycleCardEffect : CardEffectBase
     /// <summary>
     /// apply는 경고 문구 출력
     /// </summary>
-    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets)
+    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
         Debug.LogWarning("[DiscardCardEffect] 선택된 카드 리스트를 넘겨주세요.");
     }

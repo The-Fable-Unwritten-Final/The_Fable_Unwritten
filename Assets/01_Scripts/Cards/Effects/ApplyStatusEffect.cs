@@ -18,7 +18,7 @@ public class ApplyStatusEffect : CardEffectBase
     /// </summary>
     /// <param name="caster">시전자</param>
     /// <param name="target">타겟</param>
-    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets)
+    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
         List<IStatusReceiver> filteredTargets = new();
 

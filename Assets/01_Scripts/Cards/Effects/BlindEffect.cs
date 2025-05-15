@@ -5,7 +5,7 @@ using UnityEngine;
 public class BlindEffect : CardEffectBase
 {
     public PlayerData.StancType blockedStance;
-    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets)
+    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
         foreach(var target in targets)
         {

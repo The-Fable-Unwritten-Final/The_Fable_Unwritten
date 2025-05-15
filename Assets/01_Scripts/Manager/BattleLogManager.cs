@@ -5,6 +5,17 @@ using UnityEngine;
 
 public class BattleLogManager : MonoSingleton<BattleLogManager>
 {
+
+    public static readonly Dictionary<CardType, List<CardType>> comboTable = new()   //연계 Dictionary
+    {
+        { CardType.Ice,      new List<CardType>{CardType.Strike } }, // 빙결 → 타격
+        { CardType.Nature,   new List < CardType > { CardType.Holy } },  // 자연 → 성력
+        { CardType.Buff,     new List < CardType > { CardType.Electric } }, // 버프 → 전격
+        { CardType.Heal,     new List < CardType > { CardType.Defense } },   // 힐 → 방어
+        { CardType.Slash,    new List < CardType > { CardType.Fire } },    // 참격 → 화염
+        { CardType.Pierce,   new List < CardType > { CardType.Debuff } },   // 관통 → 디버프
+    };      //추후 연계효과 추가 대비
+
     /// <summary>
     /// 카드 로그 확인을 위한 CardUseLog 클래스
     /// </summary>
@@ -86,7 +97,7 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
         }
         return -1;
     }
-
+    
     /// <summary>
     /// 스테이지 사용 정보 초기화
     /// </summary>
@@ -137,6 +148,21 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
         foreach (var log in UsedCardsForCurrent)
             set.Add(log.type);
         return new List<CardType>(set);
+    }
+    public CardType? GetPreviousCardType()
+    {
+        var lastLog = UsedCardsForCurrent.Reverse().FirstOrDefault();
+        return lastLog != null ? lastLog.type : (CardType?)null;
+    }
+
+    public bool isEnhanced(CardModel card)
+    {
+        var lastType = GetPreviousCardType();
+
+        if (lastType.HasValue && comboTable.TryGetValue(lastType.Value, out var comboList))
+            return comboList.Contains(card.type);
+
+        return false;
     }
 }
 

@@ -9,7 +9,7 @@ public class ApplyDamageEffect : CardEffectBase
     public int value;
     public int index;
 
-    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets)
+    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
         // 현재 턴 중 이 카드가 몇 번 사용되었는지 확인
         int useCount = 0;
@@ -20,6 +20,8 @@ public class ApplyDamageEffect : CardEffectBase
         }
 
         float totalDamage = value * (useCount-1);
+
+        totalDamage = (isEnhanced == true) ? totalDamage * 1.5f : totalDamage;
 
         foreach (var target in targets)
         {

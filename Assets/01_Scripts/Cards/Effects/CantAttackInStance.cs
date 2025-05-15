@@ -9,7 +9,7 @@ public class CantAttackInStance : CardEffectBase
     public StancValue.EStancType blockStance;
     public int duration = 1;
 
-    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets)
+    public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
         foreach(var target in targets)
         {
