@@ -27,15 +27,16 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     [SerializeField] private GameObject stanceSlotPrefab;  
     [SerializeField] private Button stanceToggleButton;
     private GameObject stancePopup;                        
-    private BattleFlowController flow;               
-
+    private BattleFlowController flow;
+    private StatusDisplay statusDisplay;
     //---
 
-    [SerializeField]private List<StatusEffect> activeEffects = new List<StatusEffect>();        //현재 가지고 있는 상태이상 및 버프
+    [SerializeField]public List<StatusEffect> activeEffects = new List<StatusEffect>();        //현재 가지고 있는 상태이상 및 버프
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        statusDisplay = GetComponentInChildren<StatusDisplay>();
 
         if (playerData != null && playerData.animationController != null)
         {
@@ -72,6 +73,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             value = effect.value,
             duration = effect.duration
         });
+
+        statusDisplay?.PlayerUpdateUI();
     }
 
     /// <summary>
@@ -170,6 +173,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
                 activeEffects.RemoveAt(i);
             }
         }
+        statusDisplay?.PlayerUpdateUI();
     }
 
     /// <summary>
@@ -192,6 +196,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public void GrantBlock()
     {
         hasBlock = true;
+        statusDisplay?.PlayerUpdateUI();
         Debug.Log($"{playerData.CharacterName}에게 block 부여 (1턴 1회 무효화)");
     }
 
@@ -202,6 +207,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         {
             Debug.Log($"{playerData.CharacterName}의 block 효과 만료");
             hasBlock = false;
+            statusDisplay?.PlayerUpdateUI();
         }
     }
 

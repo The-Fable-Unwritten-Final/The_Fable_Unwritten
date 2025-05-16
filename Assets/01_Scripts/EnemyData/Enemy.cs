@@ -11,13 +11,15 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     [SerializeField] private HpBarDisplay hpBarDisplay;
 
     private Animator animator;
+    private StatusDisplay statusDisplay;
 
-    [SerializeField]private List<StatusEffect> activeEffects = new List<StatusEffect>();  //현재 가지고 있는 상태이상 및 버프
+    [SerializeField]public List<StatusEffect> activeEffects = new List<StatusEffect>();  //현재 가지고 있는 상태이상 및 버프
 
     private void Awake()
     {
 
         animator = GetComponent<Animator>();
+        statusDisplay = GetComponentInChildren<StatusDisplay>();
 
         if (enemyData != null && enemyData.animationController != null)
         {
@@ -64,6 +66,8 @@ public class Enemy : MonoBehaviour, IStatusReceiver
             value = effect.value,
             duration = effect.duration
         });
+
+        statusDisplay?.EnemyUpdateUI();
     }
 
     /// <summary>
@@ -80,7 +84,18 @@ public class Enemy : MonoBehaviour, IStatusReceiver
                 activeEffects.RemoveAt(i);
             }
         }
+        statusDisplay?.EnemyUpdateUI();
     }
+    /// <summary>
+    /// 특정 타입의 버프/디버프가 있는지 확인
+    /// </summary>
+    /// <param name="type">스탯 타입</param>
+    /// <returns>존재 여부</returns>
+    public bool HasEffect(BuffStatType type)
+    {
+        return activeEffects.Exists(e => e.statType == type && e.duration > 0);
+    }
+
 
     public void BindHpBar(HpBarDisplay bar)
     {
