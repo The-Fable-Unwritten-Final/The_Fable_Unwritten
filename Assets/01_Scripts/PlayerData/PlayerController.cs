@@ -225,8 +225,21 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             hpBarDisplay.BindPlayerData(playerData);
     }
 
+    //──────── K.T.H 변경 ────────
+    private void OnEnable()
+    {
+        // 캐릭터가 활성화될 때 버튼도 활성화
+        if (stanceToggleButton != null)
+            stanceToggleButton.gameObject.SetActive(true);
+    }
 
-    //---
+    private void OnDisable()
+    {
+        // 캐릭터가 비활성화될 때 버튼도 비활성화
+        if (stanceToggleButton != null)
+            stanceToggleButton.gameObject.SetActive(false);
+    }
+
     /// <summary>
     /// Sophia/Kayla/Leon 아이콘 버튼에 연결할 메서드
     /// </summary>
@@ -250,7 +263,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         foreach (var opt in stancePopup.GetComponentsInChildren<StanceOptionButton>(true))
             opt.Initialize(this);
     }
-    //---
+    //──────── K.T.H 변경 ────────
     public void ChangeStance(PlayerData.StancType newStance) //StancUI 함수
     {
         PlayerData.StancValue stance = playerData.allStances.Find(s => s.stencType == newStance);
