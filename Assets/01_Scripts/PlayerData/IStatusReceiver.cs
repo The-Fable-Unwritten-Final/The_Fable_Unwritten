@@ -40,6 +40,7 @@ public interface IStatusReceiver
     void ApplyStatusEffect(StatusEffect effect);     // 버프, 디버프 적용
     float ModifyStat(BuffStatType statType, float baseValue); // 버프 기반 수치 계산
     void TakeDamage(float amount);                     // 데미지 적용
+    void TakeTrueDamage(float amount);                  //방무뎀 적용
     void Heal(float amount);                           // 힐 적용
     bool IsAlive();                                  // 생존 여부 체크
     bool IsIgnited { get; }                         //각성 상태 확인
