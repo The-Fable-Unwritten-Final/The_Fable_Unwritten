@@ -7,6 +7,7 @@ using UnityEngine.UI.Extensions;
 using DG.Tweening;
 using System.Linq;
 using static CardInHand;
+using static CardEffectVisualizer;
 
 // 핸드에 소지하고 있는 카드들 전체를 관리하는 스크립트.
 public class CardDisplay : MonoBehaviour
@@ -91,7 +92,7 @@ public class CardDisplay : MonoBehaviour
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;// UI에서 사용하기 위해 방향 벡터를 회전 각도로 변환.
         arrowImage.localRotation = Quaternion.Euler(0, 0, angle);
     }
-    void CardArrange()// 카드 정렬 (수량에 따른 각도, 거리)
+    public void CardArrange()// 카드 정렬 (수량에 따른 각도, 거리)
     {
         if(cardsInHand.Count == 0) return;
 
@@ -187,8 +188,9 @@ public class CardDisplay : MonoBehaviour
             return;
         }
         cardsInHand.Remove(currentCard);// 카드 사용.
-        Destroy(currentCard.gameObject);// 카드 삭제.
-        CardArrange();
+        currentCard.FXOnUse();// 카드 사용 이펙트 재생.(destroy + cardArrange 보유)
+        //Destroy(currentCard.gameObject);// 카드 삭제.
+        //CardArrange();
     }
     public void ThrowAwayCard(CardInHand card)// 카드 버리기
     {
@@ -338,5 +340,21 @@ public class CardDisplay : MonoBehaviour
             }
         }
         CardArrange();
+    }
+    public void CheckChainCard()
+    {
+        foreach (var card in cardsInHand)
+        {
+            if (card.effectVisualizer.currentState == CardVisualState.Use) return; // 카드의 상태가 Use인 경우 이펙트 변경 취소 (사용되는 효과 재생 유지)
+
+            if (card.cardData.isEnhanced) // 연계된 상태일때
+            {
+               card.effectVisualizer.ApplyVisualState(CardVisualState.Chain); // 카드의 상태를 Chain으로 변경 (빨간색 테두리)
+            }
+            else
+            {
+                card.effectVisualizer.ApplyVisualState(CardVisualState.None); // 카드의 상태를 None으로 변경 (이펙트 제거)
+            }
+        }
     }
 }

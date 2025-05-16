@@ -6,12 +6,14 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
+using static CardEffectVisualizer;
 
 // 핸드에 소지하고 있는 개별 카드의 스크립트.
 public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IPointerDownHandler
 {
     public CardModel cardData; // 카드 정보
     public CardDisplay cardDisplay; // 핸드내의 모든 카드들을 관리하는 중앙 스크립트. ( + UI LineRenderer가 이곳에 존재.) 
+    public CardEffectVisualizer effectVisualizer; // 카드 효과 비주얼을 위한 스크립트 
     RectTransform rect; // RectTransform 컴포넌트
     public Vector2 originalPos; // 원래 위치
     Vector3 targetPos; // 목표 위치
@@ -24,6 +26,9 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     [SerializeField] TextMeshProUGUI cardCost; // 카드 코스트
     [SerializeField] TextMeshProUGUI cardName; // 카드 이름
     [SerializeField] TextMeshProUGUI cardDescription; // 카드 설명
+    [Header("UI For FX")]
+    [SerializeField] Image frameCover;
+    [SerializeField] Image illustCover;
 
     public enum CardState// 추후 턴 상태와 연계해서 카드의 상태관리. (카드의 상태에 따른 상호작용 가능 여부 설정.)
     {
@@ -55,10 +60,6 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             if(con.isAll )// 전체 카드 버리기인 경우, 카드 버리기 카운트가 0 이하인 경우 리턴
             {
                 if(con.ReqTotalCount <= 0) return;
-                else
-                {
-
-                }
             }
             else
             {
@@ -93,19 +94,62 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
+        // 카드의 시각적 효과 (이펙트 제외)
         if(cardState == CardState.None) return; // 상태가 None인 경우 상호작용 불가능
 
         cardDisplay.currentCard = this;// 현재 카드 설정.
         transform.SetAsLastSibling();// 카드가 가장 위에 오도록 설정
 
         rect.DOAnchorPos(targetPos, 0.4f).SetEase(Ease.OutSine);
+
+        // 카드의 이펙트 시각 효과
+        if (effectVisualizer.currentState == CardVisualState.Chain) return; // 카드의 상태가 Chain인 경우 이펙트 변경 취소 (빨간색 유지)
+
+        effectVisualizer.ApplyVisualState(CardVisualState.Ready); // 카드의 상태를 Ready로 변경 (노란색 테두리)
     }
     public void OnPointerExit(PointerEventData eventData)
     {
+        // 카드의 시각적 효과 (이펙트 제외)
         if(cardState == CardState.OnDrag) return; // 카드 상태가 OnDrag인 경우에는 원래 위치로 돌아가지 않음.
         cardDisplay.currentCard = null;// 현재 카드 설정 해제.
         ResetSiblingIndex();// List의 순서에 맞게 원래 위치로 돌아가기.
         rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine);
+
+        // 카드의 이펙트 시각 효과
+        if (effectVisualizer.currentState == CardVisualState.Chain) return; // 카드의 상태가 Chain인 경우 이펙트 변경 취소 (빨간색 유지)
+
+        effectVisualizer.ApplyVisualState(CardVisualState.None); // 카드의 상태를 None으로 변경 (이펙트 제거)
+    }
+    public void FXOnUse()
+    {
+        DG.Tweening.Sequence seq = DOTween.Sequence();
+
+        // 첫 단계: frameCover, illustCover 반투명하게
+        seq.Append(frameCover.DOFade(0.5f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(illustCover.DOFade(0.5f, 0.3f).SetEase(Ease.OutSine));
+
+        // 두 번째 단계: 전체 fade out + FX 적용
+        seq.AppendCallback(() =>
+        {
+            effectVisualizer.ApplyVisualState(CardVisualState.Use);
+        });
+
+        seq.Append(frameCover.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(illustCover.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(cardFrame.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(cardImage.DOFade(0f, 0.4f).SetEase(Ease.OutSine));
+        seq.Join(cardTypeImage.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(cardCharImage.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(cardName.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(cardCost.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(cardDescription.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+
+        // 마지막 단계: 오브젝트 제거 및 정렬
+        seq.OnComplete(() =>
+        {
+            Destroy(this.gameObject);
+            cardDisplay.CardArrange();
+        });
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -128,6 +172,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     }
     public void OnEndDrag(PointerEventData eventData)
     {
+        // 카드의 시작적 효과 (이펙트 제외)
         if (cardState != CardState.OnDrag) return; // 카드 상태가 OnDrag가 아닌 경우 해당 메서드 실행하지 않음
 
         cardDisplay.isOnDrag = false;
@@ -136,7 +181,15 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         cardDisplay.arrowImage.gameObject.SetActive(false); // 드래그 종료 시 화살표 이미지 비활성화
         // 드래그 위치 종료의 정보을 통해 사용 성공시 상태 OnUse로 변경
         cardDisplay.OnMousepoint(eventData); // 드래그 종료 시의 해당 위치를 확인해 상호작용 여부 확인
+
+        if(cardState == CardState.OnUse) return; // 카드 사용에 성공한 경우 해당 메서드 종료
+
         rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine); // 원래 위치로 돌아가기.
+
+        // 카드의 이펙트 시각 효과
+        if (effectVisualizer.currentState == CardVisualState.Chain) return; // 카드의 상태가 Chain인 경우 이펙트 변경 취소 (빨간색 유지)
+
+        effectVisualizer.ApplyVisualState(CardVisualState.None); // 카드의 상태를 None으로 변경 (이펙트 제거)
     }
 
     public void SetCardData(CardModel card)// 카드 데이터 설정
@@ -151,6 +204,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             Debug.LogError($"[CardInHand] 카드 일러스트가 설정되지 않았습니다. 카드 이름: {cardData.cardName}");// 카드 데이터 SO쪽에서 resources 파일을 통해 이미지 업데이트를 하지 못했을때.
 
         cardImage.sprite = cardData.illustration; // 카드 이미지 설정
+        illustCover.sprite = cardData.illustration; // 카드 일러스트 설정
         cardTypeImage.sprite = cardData.cardType; // 카드 타입 이미지 설정
         cardCharImage.sprite = cardData.chClass; // 카드 캐릭터 이미지 설정
     }
