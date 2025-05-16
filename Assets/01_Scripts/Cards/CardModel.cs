@@ -1,3 +1,4 @@
+using DG.Tweening.Core.Easing;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -91,7 +92,6 @@ public class CardModel : ScriptableObject
         caster.PlayAttackAnimation(); //시전자의 공격 애니메이션 적용
         SoundManager.Instance.PlaySFX(SoundCategory.Card, (int)type);
 
-        // 3. 이펙트 + 피격 애니메이션 동시 실행
         yield return new WaitForSeconds(0.2f); // 애니메이션 길이에 맞게 조정
 
         // 3. 이펙트 재생 + 피격 애니메이션 동시에 진행
@@ -99,14 +99,35 @@ public class CardModel : ScriptableObject
         {
             foreach (var t in targets)
             {
-                Vector3 spawnPos = t.CachedTransform.position;
-
                 float scaleFactor = DetermineEffectScale(GetEffectiveCost());
-                GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(skillEffectName, spawnPos, false, scaleFactor);
 
+                var effectAnim = DataManager.Instance.CardEffects.TryGetValue(skillEffectName, out var animInfo) ? animInfo : null;
 
-                if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
-                    t.PlayHitAnimation();
+                if (effectAnim == null)
+                    continue;
+
+                if (effectAnim.animationType == AnimationType.Projectile)
+                {
+                    //  Projectile → 이펙트 끝나고 Hit 처리
+                    GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
+                        skillEffectName, caster.CachedTransform, t.CachedTransform, scaleFactor,
+                        () =>
+                        {
+                            if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
+                                t.PlayHitAnimation();
+                        }
+                    );
+                }
+                else
+                {
+                    // 일반 이펙트 → 즉시 재생 + Hit
+                    GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(
+                        skillEffectName, caster.CachedTransform, t.CachedTransform, false, scaleFactor
+                    );
+
+                    if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
+                        t.PlayHitAnimation();
+                }
             }
         }
         yield return new WaitForSeconds(0.9f); // 이펙트와 피격 연출 대기

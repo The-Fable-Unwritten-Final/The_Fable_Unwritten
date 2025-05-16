@@ -84,21 +84,69 @@ public static class EnemyPattern
                 }
 
                 Vector3 spawnPos = (t != null) ? t.CachedTransform.position : t.CachedTransform.position;
-                float scalerFactpr = DetermineEffectScale(enemyComponent.enemyData.type);
-                GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(effectname, spawnPos, true);
+
+                float scaleFactor = DetermineEffectScale(enemyComponent.enemyData.type);   //애니메이션 타입 및 크기 탐색
+                EffectAnimation animInfo = null;
+                DataManager.Instance.CardEffects.TryGetValue(effectname, out animInfo);
+
+
                 // ──────── K.T.H 변경 ────────
-                if (t is PlayerController pc)
+                if (animInfo != null && animInfo.animationType == AnimationType.Projectile)
                 {
-                    // 스탠스 상성 로직 적용
-                    var enemyStance = (PlayerData.StancType)enemyComponent.enemyData.currentStance;
-                    pc.ReceiveAttack(enemyStance, skill.damage);
+                    // 🔵 Projectile → 도착 후 Hit
+                    GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
+                        effectname,
+                        enemyComponent.CachedTransform,
+                        t.CachedTransform,
+                        scaleFactor,
+                        () =>
+                        {
+                            t.PlayHitAnimation();
+
+                            if (t is PlayerController pc)
+                            {
+                                var stance = (PlayerData.StancType)enemyComponent.enemyData.currentStance;
+                                pc.ReceiveAttack(stance, skill.damage);
+                            }
+                            else
+                            {
+                                t.TakeDamage(skill.damage);
+                            }
+
+                            ApplyStatusEffect(t, actData);
+                            Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (Projectile, 데미지 {skill.damage})");
+                        }
+                    );
                 }
                 else
                 {
-                    // 그 외(적 등) 일반 데미지
-                    t.TakeDamage(skill.damage);
+                    // 🟢 일반 이펙트 → 바로 적용
+                    GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(
+                        effectname,
+                        enemyComponent.CachedTransform,
+                        t.CachedTransform,
+                        true,
+                        scaleFactor
+                    );
+
+                    t.PlayHitAnimation();
+
+                    if (t is PlayerController pc)
+                    {
+                        var stance = (PlayerData.StancType)enemyComponent.enemyData.currentStance;
+                        pc.ReceiveAttack(stance, skill.damage);
+                    }
+                    else
+                    {
+                        t.TakeDamage(skill.damage);
+                    }
+
+                    ApplyStatusEffect(t, actData);
+                    Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (즉시Hit, 데미지 {skill.damage})");
+
+                    yield return new WaitForSeconds(0.3f); // 이펙트 딜레이
                 }
-                
+
 
             }
             // 3. 상태효과
