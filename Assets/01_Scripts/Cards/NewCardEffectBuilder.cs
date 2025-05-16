@@ -41,6 +41,7 @@ public class NewCardEffectBuilder : MonoBehaviour
             case "draw":
                 var draw = Load<DrawCardEffect>("DrawCardEffect");
                 draw.amount = effectData.value;
+                draw.target = effectData.target;
                 effect = draw;
                 break;
 

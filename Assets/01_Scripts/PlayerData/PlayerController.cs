@@ -97,6 +97,13 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// <param name="amount">데미지 량</param>
     public void TakeDamage(float amount)
     {
+        if (hasBlock)
+        {
+            hasBlock = false;
+            Debug.Log($"[Block] {playerData.CharacterClass.ToString()}의 블록으로 피해 {amount} 무효화");
+            return;
+        }
+
         float reduced = amount - ModifyStat(BuffStatType.Defense, 0f);
         reduced = Mathf.Max(reduced, 1f);
 
@@ -402,6 +409,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             GameManager.Instance.StartCoroutine(ResetBool("Attack", 1f));
         }
     }
+
     //피격 애니메이션 호출 시
     public void PlayHitAnimation()
     {

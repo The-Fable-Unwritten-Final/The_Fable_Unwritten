@@ -10,6 +10,7 @@ using UnityEngine;
 public class DrawCardEffect : CardEffectBase
 {
     public int amount;       //드로우 횟수
+    public int target;
 
     /// <summary>
     /// 사용 시 해당자 카드 드로우
@@ -18,9 +19,16 @@ public class DrawCardEffect : CardEffectBase
     /// <param name="target">적일 수도?</param>
     public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
-        foreach (var target in targets)
+        if(target == 0)
         {
-            target.Deck?.Draw(amount);
+            caster.Deck.Draw(amount);
+        }
+        else if(target == 1)
+        {
+            foreach (var target in targets)
+            {
+                target.Deck?.Draw(amount);
+            }
         }
     }
 

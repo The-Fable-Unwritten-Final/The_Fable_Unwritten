@@ -5,7 +5,7 @@
       "cost": 1,
       "illustration": "illust_0",
       "name": "나비불",
-      "text": "적에게 8의 피해를 줍니다.",
+      "text": "적 하나 8의 피해",
       "type": 0,
       "class": 0,
       "cardframe": "frame_0",
@@ -26,7 +26,7 @@
       "cost": 1,
       "illustration": "illust_18",
       "name": "정화의 불꽃",
-      "text": "카드를 2장 버리고 1턴 동안 모든 아군의 공격력이 1증가합니다.",
+      "text": "카드 2장 버리기\n1턴 간 아군 전체 공격력 1 증가",
       "type": 0,
       "class": 0,
       "cardframe": "frame_0",
@@ -53,7 +53,7 @@
       "cost": 2,
       "illustration": "illust_29",
       "name": "불꽃 주먹",
-      "text": "소피아의 체력이 3 감소하고 적에게 12의 피해를 줍니다.",
+      "text": "소피아 체력 3 감소\n적 하나 12의 피해",
       "type": 0,
       "class": 0,
       "cardframe": "frame_0",
@@ -78,7 +78,7 @@
       "cost": 1,
       "illustration": "illust_10",
       "name": "얼음 파편",
-      "text": "적 둘에게 4의 피해를 주고 일시적인 복사본을 생성합니다. 카드를 사용할 때마다 강화됩니다.",
+      "text": "적 둘 4의 피해\n일시적인 복사본 생성\n사용할 때마다 강화",
       "type": 1,
       "class": 0,
       "cardframe": "frame_1",
@@ -100,7 +100,7 @@
           "type": "conditional",
           "condition": {
             "trigger": "isUsedParticularCard",
-            "value": [1003]
+            "value": [ 1003 ]
           },
           "result": {
             "type": "applyDamage",
@@ -114,7 +114,7 @@
       "cost": 2,
       "illustration": "illust_30",
       "name": "서리대지",
-      "text": "소피아의 체력이 3 감소하고 적 전체에게 8의 피해를 줍니다. '상단'일 때 강화됩니다.",
+      "text": "소피아 체력 3 감소\n적 전체 8의 피해\n'상'일 때 강화",
       "type": 1,
       "class": 0,
       "cardframe": "frame_1",
@@ -136,7 +136,7 @@
           "type": "conditional",
           "condition": {
             "trigger": "isStance",
-            "value": [0]
+            "value": [ 0 ]
           },
           "result": {
             "type": "heal",
@@ -150,7 +150,7 @@
       "cost": 2,
       "illustration": "illust_27",
       "name": "서리방벽",
-      "text": "1턴 동안 모든 아군의 방어력이 4 증가합니다.",
+      "text": "1턴 간 아군 전체 방어력 4 증가",
       "type": 1,
       "class": 0,
       "cardframe": "frame_1",
@@ -173,7 +173,7 @@
       "cost": 1,
       "illustration": "illust_22",
       "name": "역전류",
-      "text": "사용한 소피아 카드 1장을 가져옵니다.",
+      "text": "사용한 소피아 카드 1장 가져오기",
       "type": 2,
       "class": 0,
       "cardframe": "frame_2",
@@ -194,7 +194,7 @@
       "cost": 2,
       "illustration": "illust_11",
       "name": "전자 지류",
-      "text": "적에게 6의 피해를 주고 기절시킵니다.",
+      "text": "적 하나 6의 피해\n대상 기절",
       "type": 2,
       "class": 0,
       "cardframe": "frame_2",
@@ -219,7 +219,7 @@
       "cost": 2,
       "illustration": "illust_16",
       "name": "직렬 연결",
-      "text": "소피아 카드를 뽑습니다. 전격 카드라면 비용이 1 감소합니다.",
+      "text": "소피아 카드 뽑기\n전격 카드라면 비용 1 감소",
       "type": 2,
       "class": 0,
       "cardframe": "frame_2",
@@ -231,13 +231,14 @@
       "effects": [
         {
           "type": "draw",
-          "value": 1
+          "value": 1,
+          "target": 0
         },
         {
           "type": "conditional",
           "condition": {
             "trigger": "isDrawCard",
-            "value": [2]
+            "value": [ 2 ]
           },
           "result": {
             "type": "reduceCost",
@@ -252,7 +253,7 @@
       "cost": 0,
       "illustration": "illust_6",
       "name": "가벼운 한 모금",
-      "text": "대상의 다음 카드의 비용이 1 감소하고 1턴 동안 공격력이 1 감소합니다.",
+      "text": "다음 카드 비용이 1 감소\n1턴 간 공격력 1 감소",
       "type": 3,
       "class": 0,
       "cardframe": "frame_3",
@@ -280,7 +281,7 @@
       "cost": 1,
       "illustration": "illust_15",
       "name": "자연의 숨결",
-      "text": "아군의 체력을 6 회복합니다.",
+      "text": "아군 체력 6 회복",
       "type": 3,
       "class": 0,
       "cardframe": "frame_3",
@@ -301,7 +302,7 @@
       "cost": 3,
       "illustration": "illust_9",
       "name": "원소 반응",
-      "text": "모든 적에게 10의 피해를 줍니다. '화염' & '빙결' 카드를 모두 사용한 턴 동안 강화됩니다.",
+      "text": "적 전체 10의 피해\n'화염', '빙결' 카드 사용 시 1턴 간 강화",
       "type": 3,
       "class": 0,
       "cardframe": "frame_3",
@@ -333,7 +334,7 @@
       "cost": 1,
       "illustration": "illust_12",
       "name": "축성",
-      "text": "2턴 동안 아군의 공격력이 2 증가합니다.",
+      "text": "2턴 간 아군 공격력 2 증가",
       "type": 4,
       "class": 1,
       "cardframe": "frame_4",
@@ -355,7 +356,7 @@
       "cost": 2,
       "illustration": "illust_21",
       "name": "정신 집중",
-      "text": "1턴 동안 카일라의 공격력이 2 증가하고 다음 카일라 카드의 비용이 1 감소합니다.",
+      "text": "1턴 간 카일라 공격력 2 증가\n다음 카일라 카드 비용 1 감소",
       "type": 4,
       "class": 1,
       "cardframe": "frame_4",
@@ -383,7 +384,7 @@
       "cost": 1,
       "illustration": "illust_13",
       "name": "고통의 속박",
-      "text": "카일라의 체력이 2 감소하고 한 턴동안 적의 공격력이 4 감소합니다.",
+      "text": "카일라 체력 2 감소\n1 턴간 적 공격력 4 감소",
       "type": 5,
       "class": 1,
       "cardframe": "frame_5",
@@ -409,7 +410,7 @@
       "cost": 1,
       "illustration": "illust_19",
       "name": "기억 소각",
-      "text": "카드 1장을 버리고 적이 기절합니다.",
+      "text": "카드 1장 버리기\n적 기절",
       "type": 5,
       "class": 1,
       "cardframe": "frame_5",
@@ -434,7 +435,7 @@
       "cost": 3,
       "illustration": "illust_26",
       "name": "정지 명령",
-      "text": "모든 적이 기절합니다.",
+      "text": "적 전체 기절",
       "type": 5,
       "class": 1,
       "cardframe": "frame_5",
@@ -455,7 +456,7 @@
       "cost": 1,
       "illustration": "illust_1",
       "name": "생츄어리",
-      "text": "모든 적에게 3의 피해를 줍니다. 1턴 동안 적이 '하단' 공격을 할 수 없습니다.",
+      "text": "적 전체 3의 피해\n1턴 간 적 전체 '하' 공격 불가",
       "type": 6,
       "class": 1,
       "cardframe": "frame_6",
@@ -481,7 +482,7 @@
       "cost": 2,
       "illustration": "illust_8",
       "name": "응보의 빛",
-      "text": "적에게 8의 피해를 줍니다. 이번 턴에 '힐' 타입 카드를 사용했다면 강화됩니다.",
+      "text": "적 하나 8의 피해\n'힐' 카드 사용 시 1턴 간  강화",
       "type": 6,
       "class": 1,
       "cardframe": "frame_6",
@@ -513,7 +514,7 @@
       "cost": 1,
       "illustration": "illust_3",
       "name": "성스러운 회복",
-      "text": "아군의 체력을 6 회복합니다.",
+      "text": "아군 체력 6 회복",
       "type": 7,
       "class": 1,
       "cardframe": "frame_7",
@@ -534,7 +535,7 @@
       "cost": 1,
       "illustration": "illust_31",
       "name": "간절한 기도",
-      "text": "아군의 체력을 6 회복합니다. '하단'일 때 강화됩니다.",
+      "text": "아군 체력 6 회복\n'하'일 때 강화",
       "type": 7,
       "class": 1,
       "cardframe": "frame_7",
@@ -552,7 +553,7 @@
           "type": "conditional",
           "condition": {
             "trigger": "isStance",
-            "value": [2]
+            "value": [ 2 ]
           },
           "result": {
             "type": "heal",
@@ -566,7 +567,7 @@
       "cost": 2,
       "illustration": "illust_17",
       "name": "따스한 손길",
-      "text": "아군의 체력을 6 회복하고 해당 캐릭터의 카드를 뽑습니다.",
+      "text": "아군 체력 6 회복\n대상 카드 뽑기",
       "type": 7,
       "class": 1,
       "cardframe": "frame_7",
@@ -579,6 +580,11 @@
         {
           "type": "heal",
           "value": 6
+        },
+        {
+          "type": "draw",
+          "value": 1,
+          "target": 1
         }
       ]
     },
@@ -587,7 +593,7 @@
       "cost": 1,
       "illustration": "illust_2",
       "name": "서툰 일격",
-      "text": "적에게 6의 피해를 줍니다.",
+      "text": "적 하나 6의 피해",
       "type": 8,
       "class": 2,
       "cardframe": "frame_8",
@@ -608,7 +614,7 @@
       "cost": 2,
       "illustration": "illust_24",
       "name": "칼날비",
-      "text": "모든 적에게 4의 피해를 주고 일시적인 복사본을 생성합니다. 카드를 사용할 때마다 강화됩니다.",
+      "text": "적 전체 4의 피해\n일시적인 복사본 생성\n사용할 때마다 강화",
       "type": 8,
       "class": 2,
       "cardframe": "frame_8",
@@ -630,7 +636,7 @@
           "type": "conditional",
           "condition": {
             "trigger": "isUsedParticularCard",
-            "value": [3001]
+            "value": [ 3001 ]
           },
           "result": {
             "type": "applyDamage",
@@ -644,7 +650,7 @@
       "cost": 1,
       "illustration": "illust_20",
       "name": "기선 제압",
-      "text": "적에게 5의 피해를 주고 다음 레온 카드의 비용이 1 감소합니다.",
+      "text": "적 하나 5의 피해\n다음 레온 카드 비용 1 감소",
       "type": 9,
       "class": 2,
       "cardframe": "frame_9",
@@ -670,7 +676,7 @@
       "cost": 1,
       "illustration": "illust_4",
       "name": "통괘한 타격",
-      "text": "적에게 4의 피해를 주고 레온 카드를 뽑습니다.",
+      "text": "적 하나 4의 피해\n레온 카드 뽑기",
       "type": 9,
       "class": 2,
       "cardframe": "frame_9",
@@ -686,7 +692,8 @@
         },
         {
           "type": "draw",
-          "value": 1
+          "value": 1,
+          "target": 0 
         }
       ]
     },
@@ -695,7 +702,7 @@
       "cost": 1,
       "illustration": "illust_25",
       "name": "충격 강타",
-      "text": "적에게 4의 피해를 주고 기절시킵니다.",
+      "text": "적 하나 4의 피해\n대상 기절",
       "type": 9,
       "class": 2,
       "cardframe": "frame_9",
@@ -720,7 +727,7 @@
       "cost": 1,
       "illustration": "illust_5",
       "name": "꿰뚫기",
-      "text": "레온 카드를 1장 버리고 적에게 8의 피해를 줍니다.",
+      "text": "레온 카드 1장 버리기\n적 하나 8의 피해",
       "type": 10,
       "class": 2,
       "cardframe": "frame_10",
@@ -745,7 +752,7 @@
       "cost": 2,
       "illustration": "illust_23",
       "name": "꿰뚫는 섬광",
-      "text": "이번 턴에 '방어' 카드를 사용하지 않았다면 강화됩니다.",
+      "text": "적 하나 6의 피해\n'방어' 카드 미사용 시 1턴 간 강화",
       "type": 10,
       "class": 2,
       "cardframe": "frame_10",
@@ -759,7 +766,7 @@
           "type": "conditional",
           "condition": {
             "trigger": "isUnusedCard",
-            "value": [11]
+            "value": [ 11 ]
           },
           "result": {
             "type": "damage",
@@ -773,7 +780,7 @@
       "cost": 1,
       "illustration": "illust_7",
       "name": "숨 고르기",
-      "text": "1턴 동안 레온의 방어력이 2 증가하고 사용한 레온 카드 1장을 가져옵니다.",
+      "text": "1턴 간 레온 방어력 2 증가\n사용한 레온 카드 1장을 가져오기",
       "type": 11,
       "class": 2,
       "cardframe": "frame_11",
@@ -800,7 +807,7 @@
       "cost": 1,
       "illustration": "illust_14",
       "name": "중무장",
-      "text": "1턴 동안 레온의 방어력이 2 증가하고 아군을 보호합니다. '하단'일 때 강화됩니다.",
+      "text": "1턴 간 레온 방어력 2 증가\n아군 보호\n'하'일 때 강화",
       "type": 11,
       "class": 2,
       "cardframe": "frame_11",
@@ -824,7 +831,7 @@
           "type": "conditional",
           "condition": {
             "trigger": "isStance",
-            "value": [2]
+            "value": [ 2 ]
           },
           "result": {
             "type": "def_buff",
@@ -840,7 +847,7 @@
       "cost": 2,
       "illustration": "illust_28",
       "name": "견고한 기세",
-      "text": "1턴 동안 레온의 방어력이 4 증가하고 아군의 공격력이 3 증가합니다.",
+      "text": "1턴 간 레온 방어력 4 증가\n아군 공격력 3 증가",
       "type": 11,
       "class": 2,
       "cardframe": "frame_11",
@@ -868,7 +875,7 @@
       "cost": 1,
       "illustration": "illust_32",
       "name": "불안정한 혼합물",
-      "text": "소피아의 체력이 2 감소하고 적에게 5의 피해를 줍니다.",
+      "text": "소피아 체력 2 감소\n적 하나 5의 피해",
       "type": 0,
       "class": 0,
       "cardframe": "frame_0",
@@ -900,7 +907,7 @@
       "target_type": 1,
       "target_num": 1,
       "note": "",
-      "flavortext": "간절한 마음은 시간이 지나도 연해지지 않는다고 합니다.",
+      "flavortext": "아군 체력 3 회복\n1턴 간 대상 공격력 1 증가",
       "skilleffect": "fanfx1_spellcast_B_large_green",
       "effects": [
         {

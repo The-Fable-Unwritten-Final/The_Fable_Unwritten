@@ -6325,6 +6325,28 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8674434885319364374, guid: e80e55e4d7839ad4a97cd864c52efb28,
+        type: 3}
+      propertyPath: m_text
+      value: "\uD134 \uC885\uB8CC"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674434885319364374, guid: e80e55e4d7839ad4a97cd864c52efb28,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: ee7dfd5aa68108a4cae7a9c288dfbdce,
+        type: 2}
+    - target: {fileID: 8674434885319364374, guid: e80e55e4d7839ad4a97cd864c52efb28,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -8146178071228311197, guid: ee7dfd5aa68108a4cae7a9c288dfbdce,
+        type: 2}
+    - target: {fileID: 8674434885319364374, guid: e80e55e4d7839ad4a97cd864c52efb28,
+        type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6897,6 +6919,6 @@ SceneRoots:
   - {fileID: 1939298571}
   - {fileID: 8916162457186377366}
   - {fileID: 2077516052}
-  - {fileID: 931124442}
   - {fileID: 782057932}
   - {fileID: 6868058219730831983}
+  - {fileID: 931124442}

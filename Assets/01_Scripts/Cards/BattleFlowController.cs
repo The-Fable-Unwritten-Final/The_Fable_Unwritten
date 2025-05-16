@@ -344,8 +344,6 @@ public class BattleFlowController : MonoBehaviour
                 if(enemy is Enemy enemyComponent)
                 {
                     var enemyData = enemyComponent.enemyData;
-                    ProgressDataManager.Instance.CurrentExp += enemyData.exp;
-                    totalExp += enemyData.exp;
 
                     if (enemyData != null && enemyData.loot != null)
                     {
@@ -501,8 +499,15 @@ public class BattleFlowController : MonoBehaviour
             TargetType.Enemy => enemyParty,
             _ => new List<IStatusReceiver>()
         };
+
+        List<IStatusReceiver> result = new();
+
+        if (type != TargetType.None)
+        {
+             result.Add(originTarget);
+        }
+
         List<IStatusReceiver> candidates = pool.FindAll(p => p != null && p.IsAlive() && p != originTarget);
-        List<IStatusReceiver> result = new() { originTarget };
 
 
         while (result.Count < targetNum && candidates.Count > 0)
