@@ -69,7 +69,9 @@ public static class EnemyPattern
             t.PlayHitAnimation();
             yield return new WaitForSeconds(0.2f);
 
-            string effectname = enemyComponent.enemyData.AttackSkillEffect;
+            // 대상이 플레이어면 공격 이펙트 사용
+            string effectname = (t.ChClass == CharacterClass.Enemy) ? enemyComponent.enemyData.AllySkillEffect : enemyComponent.enemyData.AttackSkillEffect; 
+            
             // 2. 스킬 이펙트 재생
             if (!string.IsNullOrEmpty(effectname))
             {
@@ -93,7 +95,7 @@ public static class EnemyPattern
                 // ──────── K.T.H 변경 ────────
                 if (animInfo != null && animInfo.animationType == AnimationType.Projectile)
                 {
-                    // 🔵 Projectile → 도착 후 Hit
+                    // Projectile → 도착 후 Hit
                     GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
                         effectname,
                         enemyComponent.CachedTransform,
@@ -120,7 +122,7 @@ public static class EnemyPattern
                 }
                 else
                 {
-                    // 🟢 일반 이펙트 → 바로 적용
+                    // 일반 이펙트 → 바로 적용
                     GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(
                         effectname,
                         enemyComponent.CachedTransform,

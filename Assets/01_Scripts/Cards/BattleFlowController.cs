@@ -326,6 +326,8 @@ public class BattleFlowController : MonoBehaviour
         if (allPlayersDead)
         {
             isBattleEnded = true;
+            ClearAllDeckEnhanced();
+            ClearAllPlayerCardDiscounts();
             Debug.Log("▶ 전투 패배");
             isWin = -1;
             enemyParty.Clear();
@@ -335,9 +337,10 @@ public class BattleFlowController : MonoBehaviour
         else if (allEnemiesDead)
         {
             isBattleEnded = true;
+            ClearAllDeckEnhanced();
+            ClearAllPlayerCardDiscounts();
             Debug.Log("▶ 전투 승리");
             isWin = 1;
-
             foreach(var enemy in enemyParty)
             {
                 if(enemy is Enemy enemyComponent)
@@ -525,6 +528,9 @@ public class BattleFlowController : MonoBehaviour
         return result;
     }
 
+    /// <summary>
+    /// 강화 조건 확인
+    /// </summary>
     void RefreshAllDeckEnhanced()
     {
         foreach(var player in playerParty)
@@ -540,6 +546,43 @@ public class BattleFlowController : MonoBehaviour
                 foreach (var card in pc.Deck.usedDeck)
                     card.UpdateEnhancedState();
             }
+        }
+    }
+
+    /// <summary>
+    /// 할인 제거
+    /// </summary>
+    private void ClearAllPlayerCardDiscounts()
+    {
+        foreach (var player in playerParty)
+        {
+            if (!player.IsAlive()) continue;
+
+            foreach (var card in player.Deck.unusedDeck)
+                card.ClearAllDiscount();
+
+            foreach (var card in player.Deck.usedDeck)
+                card.ClearAllDiscount();
+
+            foreach (var card in player.Deck.Hand)
+                card.ClearAllDiscount();
+        }
+    }
+
+    private void ClearAllDeckEnhanced()
+    {
+        foreach (var player in playerParty)
+        {
+            if (!player.IsAlive()) continue;
+
+            foreach (var card in player.Deck.unusedDeck)
+                card.isEnhanced = false;
+
+            foreach (var card in player.Deck.usedDeck)
+                card.isEnhanced = false;
+
+            foreach (var card in player.Deck.Hand)
+                card.isEnhanced = false;
         }
     }
 }
