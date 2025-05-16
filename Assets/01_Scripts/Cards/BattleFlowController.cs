@@ -520,11 +520,29 @@ public class BattleFlowController : MonoBehaviour
             candidates.Remove(pick);
         }
         
-        if(targetNum == 0)
+        if(type == TargetType.None)
         {
-            result = candidates;
-        }
+            result.Clear(); // 이전 값 제거
 
+            switch (targetNum)
+            {
+                case 0:
+                    result = candidates;
+                    break;
+                case 1:
+                    result.Add(middleSlot); 
+                    break;
+                case 2:
+                    result.Add(backSlot);
+                    break;
+                case 3:
+                    result.Add(frontSlot);
+                    break;
+                default:
+                    result = enemyParty;
+                    break;
+            }
+        }
         return result;
     }
 
