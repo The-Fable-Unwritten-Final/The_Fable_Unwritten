@@ -141,8 +141,11 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         return enemyData.CurrentHP > 0;
     }
 
-    
-    public bool IsStunned() => false;           //스턴 상태 확인
+
+    public bool IsStunned()
+    {
+        return activeEffects.Exists(e => e.statType == BuffStatType.stun && e.duration > 0);
+    }
 
     private CharacterClass characterClass = CharacterClass.Enemy;
     public CharacterClass ChClass
@@ -161,6 +164,13 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public void TakeDamage(float amount)
     {
+        if (hasBlock)
+        {
+            hasBlock = false;
+            Debug.Log($"[Block] {enemyData.EnemyName}의 블록으로 피해 {amount} 무효화");
+            return;
+        }
+
         float reduced = amount - ModifyStat(BuffStatType.Defense, 0f); // 방어력으로 피해 감소
         reduced = Mathf.Max(reduced, 0);
 
@@ -172,6 +182,9 @@ public class Enemy : MonoBehaviour, IStatusReceiver
             Debug.Log($"{enemyData.EnemyName} 사망");
 
             gameObject.SetActive(false); // ▶ 사망 시 비활성화
+
+            ProgressDataManager.Instance.CurrentExp += enemyData.exp;
+            GameManager.Instance.turnController.battleFlow.totalExp += enemyData.exp;
 
             // 💡 전투 종료 체크
             if (GameManager.Instance != null && GameManager.Instance.turnController.battleFlow != null)
