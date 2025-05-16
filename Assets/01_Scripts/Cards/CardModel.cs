@@ -76,10 +76,12 @@ public class CardModel : ScriptableObject
 
     public void Play(IStatusReceiver caster, List<IStatusReceiver> targets)
     {
-        GameManager.Instance.StartCoroutine(PlayWithAnimation(caster, targets));
+        bool originalEnhanced = isEnhanced; // 현재 강화 상태 백업
+
+        GameManager.Instance.StartCoroutine(PlayWithAnimation(caster, targets, originalEnhanced));
     }
 
-    private IEnumerator PlayWithAnimation(IStatusReceiver caster, List<IStatusReceiver> targets)
+    private IEnumerator PlayWithAnimation(IStatusReceiver caster, List<IStatusReceiver> targets, bool fixedIsEnhanced)
     {
         float totalDuration = 2f;  // 카메라 줌인 + 줌아웃 포함 총 연출 시간
 
@@ -101,12 +103,10 @@ public class CardModel : ScriptableObject
             {
                 float scaleFactor = DetermineEffectScale(GetEffectiveCost());
 
-                var effectAnim = DataManager.Instance.CardEffects.TryGetValue(skillEffectName, out var animInfo) ? animInfo : null;
-
-                if (effectAnim == null)
+                if (!DataManager.Instance.CardEffects.TryGetValue(skillEffectName, out var animInfo))
                     continue;
 
-                if (effectAnim.animationType == AnimationType.Projectile)
+                if (animInfo.animationType == AnimationType.Projectile)
                 {
                     //  Projectile → 이펙트 끝나고 Hit 처리
                     GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
@@ -135,7 +135,7 @@ public class CardModel : ScriptableObject
 
         // 4. 효과 적용
         foreach (var effect in effects)
-            effect.Apply(caster, targets, isEnhanced);
+            effect.Apply(caster, targets, fixedIsEnhanced);
 
         yield return new WaitForSeconds(0.2f); // 효과 적용 후 약간 대기
         GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
