@@ -76,6 +76,7 @@ public class PopupUI_CombatReward : BasePopupUI
                     && setting.StageIndex == 3)
                 {
                     GameObject.Find("TutorialController").GetComponent<TutorialController>().ShowTutorial(9);
+                    ProgressDataManager.Instance.ResetProgress();
                     return;
                 }
 
