@@ -18,7 +18,7 @@ public class CantAttackInStance : CardEffectBase
             target.ApplyStatusEffect(new StatusEffect
             {
                 statType = BuffStatType.CantAttackInStance,
-                value = (float)blockStance,
+                value = (int)blockStance,
                 duration = duration
             });
 
