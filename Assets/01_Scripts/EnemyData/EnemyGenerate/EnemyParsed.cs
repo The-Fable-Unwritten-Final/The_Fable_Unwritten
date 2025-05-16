@@ -31,5 +31,5 @@ public class EnemyParsed
     public bool stun;
 
     public string note;
-
+    public int type;
 }

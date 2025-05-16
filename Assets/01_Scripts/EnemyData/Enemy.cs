@@ -70,6 +70,12 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         statusDisplay?.EnemyUpdateUI();
     }
 
+    public void TakeTrueDamage(float damage)
+    {
+        Debug.Log($"{enemyData.EnemyName}가 {damage}의 트루데미지를 받음! 현재 체력: {enemyData.CurrentHP}");
+        currentHP -= damage;
+    }
+
     /// <summary>
     /// 턴 종료 시 버프 감소 용
     /// </summary>

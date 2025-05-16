@@ -53,6 +53,12 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         //---
     }
 
+    public void TakeTrueDamage(float damage)
+    {
+        Debug.Log($"{playerData.CharacterName}가 {damage}의 트루데미지를 받음! 현재 체력: {playerData.currentHP}");
+        currentHP -= damage;
+    }
+
     public void BindHpBar(HpBarDisplay bar)
     {
         hpBarDisplay = bar;

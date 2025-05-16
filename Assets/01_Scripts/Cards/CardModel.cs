@@ -80,14 +80,19 @@ public class CardModel : ScriptableObject
 
     private IEnumerator PlayWithAnimation(IStatusReceiver caster, List<IStatusReceiver> targets)
     {
-        // 1. 카메라 연출 (zoom-in 시작)
-        GameManager.Instance.combatCameraController.PlayCombatCamera(caster, targets, 2f);
+        float totalDuration = 2f;  // 카메라 줌인 + 줌아웃 포함 총 연출 시간
+
+        // 1. 카메라 연출
+        GameManager.Instance.combatCameraController.PlayCombatCamera(caster, targets, totalDuration);
+
 
         // 2. 공격 애니메이션
         yield return new WaitForSeconds(0.2f); // 애니메이션 길이에 맞게 조정
         caster.PlayAttackAnimation(); //시전자의 공격 애니메이션 적용
         SoundManager.Instance.PlaySFX(SoundCategory.Card, (int)type);
-        yield return new WaitForSeconds(0.5f); // 애니메이션 길이에 맞게 조정
+
+        // 3. 이펙트 + 피격 애니메이션 동시 실행
+        yield return new WaitForSeconds(0.2f); // 애니메이션 길이에 맞게 조정
 
         // 3. 이펙트 재생 + 피격 애니메이션 동시에 진행
         if (!string.IsNullOrEmpty(skillEffectName) && targets.Count > 0)
@@ -95,15 +100,16 @@ public class CardModel : ScriptableObject
             foreach (var t in targets)
             {
                 Vector3 spawnPos = t.CachedTransform.position;
-                GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(skillEffectName, spawnPos);
+
+                float scaleFactor = DetermineEffectScale(GetEffectiveCost());
+                GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(skillEffectName, spawnPos, false, scaleFactor);
+
 
                 if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
-                {
                     t.PlayHitAnimation();
-                }
             }
         }
-        yield return new WaitForSeconds(0.5f); // 이펙트와 피격 연출 대기
+        yield return new WaitForSeconds(0.9f); // 이펙트와 피격 연출 대기
 
 
         // 4. 효과 적용
@@ -111,9 +117,17 @@ public class CardModel : ScriptableObject
             effect.Apply(caster, targets, isEnhanced);
 
         yield return new WaitForSeconds(0.2f); // 효과 적용 후 약간 대기
-
-
         GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
+    }
+
+    private float DetermineEffectScale(int cost)
+    {
+        float baseScale = 1f;
+
+        // 일반 + 카드 코스트 기준
+        if (cost <= 1) return baseScale * 0.5f;
+        if (cost <= 3) return baseScale;
+        return baseScale * 1.5f;
     }
 
     // ==== 타겟 유효성 ====

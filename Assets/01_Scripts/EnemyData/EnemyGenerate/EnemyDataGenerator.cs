@@ -80,6 +80,7 @@ public static class EnemyDataGenerator
                 data.block = parsed.block;
 
                 data.note = parsed.note;
+                data.type = (EnemyType)parsed.type;
 
                 data.currentStance = StancValue.EStancType.Middle;
                 data.animationController = FindAnimatorController(parsed.art);

@@ -84,6 +84,7 @@ public static class EnemyPattern
                 }
 
                 Vector3 spawnPos = (t != null) ? t.CachedTransform.position : t.CachedTransform.position;
+                float scalerFactpr = DetermineEffectScale(enemyComponent.enemyData.type);
                 GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(effectname, spawnPos, true);
                 // ──────── K.T.H 변경 ────────
                 if (t is PlayerController pc)
@@ -110,6 +111,18 @@ public static class EnemyPattern
 
             yield return new WaitForSeconds(0.3f); // 타격 연출용 대기
         }
+    }
+
+    private static float DetermineEffectScale(EnemyType type)
+    {
+        float baseScale = 1f;
+        return type switch
+        {
+            EnemyType.normal => baseScale * 0.5f,
+            EnemyType.elite => baseScale * 1f,
+            EnemyType.boss => baseScale * 1.5f,
+            _ => baseScale
+        };
     }
 
 

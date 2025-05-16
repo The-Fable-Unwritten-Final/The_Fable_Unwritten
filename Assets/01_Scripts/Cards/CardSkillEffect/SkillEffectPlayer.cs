@@ -15,9 +15,9 @@ public class SkillEffectPlayer : MonoBehaviour
     /// <summary>
     /// 이펙트를 설정하고 재생 시작
     /// </summary>
-    /// <param name="animationFrames">재생할 스프라이트 리스트</param>
-    /// <param name="fps">초당 프레임 수</param>
-    public void Play(EffectAnimation animInfo, float fps, bool flipX = false)
+    /// <param name="animationFrames">애니메이션 정보 (스프라이트 리스트 포함)</param>
+    /// <param name="fps">전체 재생 시간 (초)</param>
+    public void Play(EffectAnimation animInfo, float totalDuration, bool flipX = false)
     {
         if (animInfo == null || animInfo.frames.Count == 0)
         {
@@ -28,17 +28,20 @@ public class SkillEffectPlayer : MonoBehaviour
 
         frames = animInfo.frames;
         spriteRenderer.flipX = flipX; // ← 방향 반영
-        StartCoroutine(PlayCoroutine(fps));
+
+        StartCoroutine(PlayCoroutine(totalDuration));
     }
 
     /// <summary>
     /// 코루틴으로 프레임마다 자연스럽게 스프라이트 교체
     /// </summary>
-    private IEnumerator PlayCoroutine(float fps)
+    private IEnumerator PlayCoroutine(float totalDuration)
     {
-        float frameDelay = 1f / fps; // 프레임당 대기시간
+        int frameCount = frames.Count;
+        float frameDelay = totalDuration / frameCount;
 
-        for (int i = 0; i < frames.Count; i++)
+
+        for (int i = 0; i < frameCount; i++)
         {
             spriteRenderer.sprite = frames[i];
             yield return new WaitForSeconds(frameDelay);
