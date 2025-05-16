@@ -11,7 +11,7 @@ public class EffectManager : MonoBehaviour
     /// <summary>
     /// 특정 이펙트를 위치에 재생
     /// </summary>
-    public void PlayEffect(string effectName, Vector3 position, bool flipX = false)
+    public void PlayEffect(string effectName, Vector3 position, bool flipX = false, float scaleFactor = 1f)
     {
         // DataManager에서 가져오기
         if (!DataManager.Instance.CardEffects.TryGetValue(effectName, out var frames) || frames == null)
@@ -22,13 +22,15 @@ public class EffectManager : MonoBehaviour
 
         var effectInstance = Instantiate(effectPrefab, effectRoot);
         effectInstance.transform.position = position;
+        effectInstance.transform.localScale = effectInstance.transform.localScale * scaleFactor;
+
         var sr = effectInstance.GetComponent<SpriteRenderer>();
         if (sr != null)
         {
-            sr.sortingLayerName = "Effect"; // 🔷 반드시 프로젝트 내에 이 Sorting Layer가 존재해야 함
+            sr.sortingLayerName = "Effect"; // 반드시 프로젝트 내에 이 Sorting Layer가 존재해야 함
             sr.sortingOrder = 100;          // 일반 캐릭터보다 높은 값 (0~10 이상이면 충분)
         }
 
-        effectInstance.Play(frames, 15f, flipX);
+        effectInstance.Play(frames, 0.7f, flipX);
     }
 }

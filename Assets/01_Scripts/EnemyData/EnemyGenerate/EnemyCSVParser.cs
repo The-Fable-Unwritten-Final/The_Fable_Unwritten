@@ -75,6 +75,8 @@ public static class EnemyCSVParser
 
                 data.note = ParseString(t, 33);
 
+                data.type = ParseInt(t, 34);
+
                 list.Add(data);
             }
             catch (System.Exception e)

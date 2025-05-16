@@ -17,6 +17,7 @@ public class EnemyData : ScriptableObject
     public int exp;
 
     [SerializeField] private float maxHP;
+
     public float MaxHP
     {
         get => maxHP;
@@ -52,6 +53,8 @@ public class EnemyData : ScriptableObject
 
     public string note;
 
+    public EnemyType type;
+
     [Header("스킬 목록")]
     [SerializeField] private List<EnemySkill> skillList = new();
     public List<EnemySkill> SkillList
@@ -63,6 +66,7 @@ public class EnemyData : ScriptableObject
     public string illust;       //캐릭터 이미지 이름
 
     public StancValue.EStancType currentStance;
+
 
     public RuntimeAnimatorController animationController;
 
@@ -113,3 +117,9 @@ public class StancValue
     public float attackBonus;
 }
 
+public enum EnemyType
+{
+    normal,
+    elite,
+    boss
+}
