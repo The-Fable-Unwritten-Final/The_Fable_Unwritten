@@ -29,12 +29,15 @@ public class PopupUI_CombatReward : BasePopupUI
             SoundManager.Instance.PlaySFX(SoundCategory.UI, 5); // 승리 시 효과음 적용
             resultText.text = "전투 승리";
             rewardText.text = GenerateText(GameManager.Instance.turnController.battleFlow);
+            var setting = ProgressDataManager.Instance;
+
+
             // 리워드 로드 + 텍스트 표시
             confirmButton.onClick.RemoveAllListeners();
             confirmButton.onClick.AddListener(() =>
             {
                 SoundManager.Instance.PlaySFX(SoundCategory.Button, 0); // 기본 버튼 사운드
-                var setting = ProgressDataManager.Instance;
+                
                 setting.RetryFromStart = false;
                 setting.StageCleared = true;
 
@@ -66,15 +69,18 @@ public class PopupUI_CombatReward : BasePopupUI
                 }
                 ProgressDataManager.Instance.SavedEnemySetIndex = -1; // 랜덤 에너미 셋 초기화
 
-                UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
                 gameObject.SetActive(false);
 
                 // 앤딩일시 표시(*유저 테스트용*)
-                if (setting.CurrentBattleNode.type == NodeType.Boss 
+                if (setting.CurrentBattleNode.type == NodeType.Boss
                     && setting.StageIndex == 3)
                 {
                     GameObject.Find("TutorialController").GetComponent<TutorialController>().ShowTutorial(9);
+                    return;
                 }
+
+                UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
+
                 // StageMoveTest.cs 를 임시로 가져만 왔음. 추후 전투 승리/패배시 기능 재 구현
             });
         }

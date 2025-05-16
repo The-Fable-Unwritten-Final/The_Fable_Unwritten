@@ -73,4 +73,9 @@ public class TutorialController : MonoBehaviour
         if (!obj.firstTutorial)
             obj.gameObject.SetActive(false);
     }
+
+    public void GoStageScene()
+    {
+        UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.SubTitleScene);
+    }
 }
