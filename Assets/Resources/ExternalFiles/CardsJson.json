@@ -231,7 +231,8 @@
       "effects": [
         {
           "type": "draw",
-          "value": 1
+          "value": 1,
+          "target": 0
         },
         {
           "type": "conditional",
@@ -579,6 +580,11 @@
         {
           "type": "heal",
           "value": 6
+        },
+        {
+          "type": "draw",
+          "value": 1,
+          "target": 1
         }
       ]
     },
@@ -686,7 +692,8 @@
         },
         {
           "type": "draw",
-          "value": 1
+          "value": 1,
+          "target": 0 
         }
       ]
     },
