@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System.IO;
 
 public class EventEffectManager : MonoSingleton<EventEffectManager>
 {
@@ -27,10 +28,17 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
 
     private List<EventEffects> LoadDatas(string csvPath)
     {
-        string fullPath = $"{Application.dataPath}/Resources/{csvPath}";
+        string resourcePath = Path.ChangeExtension(csvPath, null);
+
+        TextAsset csvFile = Resources.Load<TextAsset>(resourcePath);
+        if (csvFile == null)
+        {
+            Debug.LogError($"[EventEffectManager] Resources/{resourcePath} 에서 CSV 파일을 찾을 수 없습니다.");
+            return new List<EventEffects>();
+        }
 
         var eventEffectList = new List<EventEffects>();
-        var eventEffectDatas = EventEffectCSVParser.Parse(fullPath);
+        var eventEffectDatas = EventEffectCSVParser.Parse(csvFile.text); // 경로 대신 텍스트 전달
 
         foreach (var data in eventEffectDatas)
         {
@@ -53,7 +61,6 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
                         atk = data.atk,
                         def = data.def
                     };
-
                     eventEffectList.Add(statEffect);
                     break;
 
@@ -73,7 +80,6 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
                         cardType = data.cardType,
                         cost = data.cost
                     };
-
                     eventEffectList.Add(cardEventEffect);
                     break;
 
@@ -86,14 +92,13 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
                         duration = data.duration,
                         battle = data.battle,
                     };
-
                     eventEffectList.Add(enemyEventEffect);
                     break;
 
-
-                // 추후 다른 이벤트 타입에 대한 처리 추가
+                    // TODO: 다른 타입 추가 예정
             }
         }
+
         return eventEffectList;
     }
 

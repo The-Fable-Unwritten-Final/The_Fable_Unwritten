@@ -2,22 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System;
 
 public class EventEffectCSVParser : MonoBehaviour
 {
-    public static List<EventEffectData> Parse(string path)
+    public static List<EventEffectData> Parse(string csvText)
     {
         var list = new List<EventEffectData>();
 
-        if(!File.Exists(path))
-        {
-            Debug.LogError($"[EventEffectCSVParser] 경로에 CSV 파일이 없습니다: {path}");
-            return list;
-        }
+        var lines = csvText.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
 
-        var lines = File.ReadAllLines(path);
-
-        for(int i = 1; i < lines.Length; i++)
+        for (int i = 1; i < lines.Length; i++)
         {
             if (string.IsNullOrWhiteSpace(lines[i])) continue;
 
@@ -49,7 +44,7 @@ public class EventEffectCSVParser : MonoBehaviour
 
                 list.Add(data);
             }
-            catch(System.Exception e)
+            catch (System.Exception e)
             {
                 Debug.LogWarning($"[EventEffectCSVParser] {i + 1}번째 줄 파싱 오류: {e.Message}");
             }
