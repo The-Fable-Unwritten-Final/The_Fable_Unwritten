@@ -80,35 +80,38 @@ public class CardModel : ScriptableObject
 
     private IEnumerator PlayWithAnimation(IStatusReceiver caster, List<IStatusReceiver> targets)
     {
+        // 1. 카메라 연출 (zoom-in 시작)
         GameManager.Instance.combatCameraController.PlayCombatCamera(caster, targets, 2f);
-        // 1. 공격 애니메이션
+
+        // 2. 공격 애니메이션
+        yield return new WaitForSeconds(0.2f); // 애니메이션 길이에 맞게 조정
         caster.PlayAttackAnimation(); //시전자의 공격 애니메이션 적용
         SoundManager.Instance.PlaySFX(SoundCategory.Card, (int)type);
         yield return new WaitForSeconds(0.5f); // 애니메이션 길이에 맞게 조정
 
-        // 2. 이펙트 재생: 대표 타겟(첫 번째) 위치 기준
+        // 3. 이펙트 재생 + 피격 애니메이션 동시에 진행
         if (!string.IsNullOrEmpty(skillEffectName) && targets.Count > 0)
-        {
-            foreach(var target in targets)
-            {
-                Vector3 spawnPos = target.CachedTransform.position;
-                GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(skillEffectName, spawnPos);
-            }
-        }
-
-        // 3. 피격 애니메이션: 효과 중 하나라도 HitTrigger면 전원 재생
-        if (effects.Exists(e => e.isTriggerHitAnim))
         {
             foreach (var t in targets)
             {
-                if (t.IsAlive()) t.PlayHitAnimation();
+                Vector3 spawnPos = t.CachedTransform.position;
+                GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(skillEffectName, spawnPos);
+
+                if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
+                {
+                    t.PlayHitAnimation();
+                }
             }
-            yield return new WaitForSeconds(0.3f);
         }
+        yield return new WaitForSeconds(0.5f); // 이펙트와 피격 연출 대기
+
 
         // 4. 효과 적용
         foreach (var effect in effects)
             effect.Apply(caster, targets, isEnhanced);
+
+        yield return new WaitForSeconds(0.2f); // 효과 적용 후 약간 대기
+
 
         GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
     }
