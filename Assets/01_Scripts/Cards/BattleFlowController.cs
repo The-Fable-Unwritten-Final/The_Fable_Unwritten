@@ -516,6 +516,11 @@ public class BattleFlowController : MonoBehaviour
             result.Add(pick);
             candidates.Remove(pick);
         }
+        
+        if(targetNum == 0)
+        {
+            result = candidates;
+        }
 
         return result;
     }

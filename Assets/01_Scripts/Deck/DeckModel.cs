@@ -35,7 +35,7 @@ public class DeckModel
 
             if (unusedDeck.Count == 0)          //모든 카드 사용 시
                 ReshuffleDiscardIntoDraw();
-
+                
             var card = unusedDeck[0];           //미사용 덱의 가장 앞의 카드를
             unusedDeck.RemoveAt(0);
             hand.Add(card);                     //핸드에 넣기

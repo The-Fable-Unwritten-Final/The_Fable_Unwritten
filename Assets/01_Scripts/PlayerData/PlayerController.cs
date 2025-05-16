@@ -441,4 +441,31 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// </summary>
     public Transform CachedTransform => transform;
 
+    /// <summary>
+    /// 현재 적용 중인 공격력 버프 총합 반환
+    /// </summary>
+    public float GetBuffAtk()
+    {
+        float atkTotal = 0;
+        foreach (var effect in activeEffects)
+        {
+            if (effect.statType == BuffStatType.Attack)
+                atkTotal += effect.value;
+        }
+        return atkTotal;
+    }
+
+    /// <summary>
+    /// 현재 적용 중인 방어력 버프 총합 반환
+    /// </summary>
+    public float GetBuffDef()
+    {
+        float defTotal = 0;
+        foreach (var effect in activeEffects)
+        {
+            if (effect.statType == BuffStatType.Attack)
+                defTotal += effect.value;
+        }
+        return defTotal;
+    }
 }
