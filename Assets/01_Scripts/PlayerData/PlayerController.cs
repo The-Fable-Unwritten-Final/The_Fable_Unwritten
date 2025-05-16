@@ -320,11 +320,13 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         // 1) 플레이어 Middle이면 항상 기본 데미지
         if (playerStance == PlayerData.StancType.Middle)
         {
+            GameManager.Instance.combatCameraController.CameraPunch();
             finalDamage = baseDamage;
         }
         // 2) 적·플레이어 스탠스가 같으면 1.5배
         else if (playerStance == enemyStance)
         {
+            GameManager.Instance.combatCameraController.CameraPunchHard();
             finalDamage = baseDamage * 1.5f;
         }
         // 3) 적 Low→플레이어 High, 또는 적 High→플레이어 Low 면 회피
