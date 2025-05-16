@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         if (hasBlock)
         {
             hasBlock = false;
-            Debug.Log($"[Block] {enemyData.EnemyName}의 블록으로 피해 {amount} 무효화");
+            Debug.Log($"[Block] {playerData.CharacterClass.ToString()}의 블록으로 피해 {amount} 무효화");
             return;
         }
 
