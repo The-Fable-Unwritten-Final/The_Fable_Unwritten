@@ -57,21 +57,29 @@ public class StatusDisplay : MonoBehaviour
         var atkEffect = effects.Find(e => e.statType == BuffStatType.Attack && e.duration > 0);
         if (atkEffect != null)
         {
-            float angleZ = atkEffect.value >= 0 ? 0f : 180f;
+            float value = 0f;
+            if (player != null) value = player.GetBuffAtk();
+            else if (enemy != null) value = enemy.GetBuffAtk();
+
+            float angleZ = value >= 0 ? 0f : 180f;
             atk_Img.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, angleZ);
 
             if (atk_txt != null)
-                atk_txt.text = Mathf.Abs(atkEffect.value).ToString();
+                atk_txt.text = Mathf.Abs(value).ToString();
         }
 
         var defEffect = effects.Find(e => e.statType == BuffStatType.Defense && e.duration > 0);
         if (defEffect != null)
         {
-            float angleZ = defEffect.value >= 0 ? 0f : 180f;
+            float value = 0f;
+            if (player != null) value = player.GetBuffDef();
+            else if (enemy != null) value = enemy.GetBuffDef();
+
+            float angleZ = value >= 0 ? 0f : 180f;
             def_Img.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, angleZ);
 
             if (def_txt != null)
-                def_txt.text = Mathf.Abs(defEffect.value).ToString();
+                def_txt.text = Mathf.Abs(value).ToString();
         }
     }
 }

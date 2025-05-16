@@ -463,7 +463,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         float defTotal = 0;
         foreach (var effect in activeEffects)
         {
-            if (effect.statType == BuffStatType.Attack)
+            if (effect.statType == BuffStatType.Defense)
                 defTotal += effect.value;
         }
         return defTotal;
