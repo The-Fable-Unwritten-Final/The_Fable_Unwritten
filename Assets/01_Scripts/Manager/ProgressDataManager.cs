@@ -232,6 +232,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         StageIndex = 1;
         MinStageIndex = 1;
 
+        CurrentExp = 0;
         SavedEnemySetIndex = -1;
         SavedRandomEvent = -1;
         IsNewCamp = true;

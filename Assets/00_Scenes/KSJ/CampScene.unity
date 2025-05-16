@@ -1225,7 +1225,6 @@ GameObject:
   - component: {fileID: 371812468}
   - component: {fileID: 371812467}
   - component: {fileID: 371812466}
-  - component: {fileID: 371812470}
   m_Layer: 5
   m_Name: Canvas-MainUI
   m_TagString: Untagged
@@ -1316,24 +1315,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &371812470
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 371812465}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22cd73c6303402c46b6ac1227eb3695e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  background: {fileID: 0}
-  campBackgrounds: []
-  restPanel: {fileID: 0}
-  trainingPanel: {fileID: 0}
-  readingPanel: {fileID: 0}
-  conversationPanel: {fileID: 0}
 --- !u!1 &420355778
 GameObject:
   m_ObjectHideFlags: 0

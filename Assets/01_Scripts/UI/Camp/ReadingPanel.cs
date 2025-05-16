@@ -13,7 +13,7 @@ public class ReadingPanel : BaseCampPanel
     [SerializeField] GameObject campCardPrefap;
     [SerializeField] GameObject cardBook;
     [SerializeField] Transform cardsRoot;
-    [SerializeField] int chageCardExp = 10;
+    [SerializeField] int chageCardExp = 5;
 
     public int currentCardIndex;
     public int chageCardIndex;
