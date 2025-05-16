@@ -14,6 +14,7 @@ public class PopupUI_Setting : BasePopupUI
 
     [Header("Resoolution")]
     [SerializeField] TMP_Dropdown resolutionDropdown;
+    [SerializeField] Transform resolutionTransform;
 
     private readonly Vector2Int[] resolutions = new Vector2Int[]
     {
@@ -37,12 +38,23 @@ public class PopupUI_Setting : BasePopupUI
         resolutionDropdown.ClearOptions();
 
         var options = new List<TMP_Dropdown.OptionData>();
-        foreach (var res in resolutions)
+
+        int currentResolutionIndex = 0;
+        for (int i = 0; i < resolutions.Length; i++)
         {
+            var res = resolutions[i];
             options.Add(new TMP_Dropdown.OptionData($"{res.x}X{res.y}"));
+
+            // 현재 해상도와 일치하는 항목 찾기
+            if (Screen.width == res.x && Screen.height == res.y)
+            {
+                currentResolutionIndex = i;
+            }
         }
 
         resolutionDropdown.AddOptions(options);
+        resolutionDropdown.value = currentResolutionIndex; 
+        resolutionDropdown.RefreshShownValue(); 
         resolutionDropdown.onValueChanged.AddListener(OnResolutionChanged);
     }
 
@@ -92,5 +104,22 @@ public class PopupUI_Setting : BasePopupUI
     public void OnClickButtonSound()
     {
         SoundManager.Instance.PlaySFX(SoundCategory.Button, 0); // 기본 버튼 사운드
+    }
+
+    public void OnDropdownClicked()
+    {
+        StartCoroutine(MoveBlockerToResolution());
+    }
+
+    IEnumerator MoveBlockerToResolution()
+    {
+        
+        GameObject blocker = GameObject.Find("Blocker");
+        if (blocker != null)
+        {
+            blocker.transform.SetParent(resolutionTransform, false);
+            blocker.transform.SetAsFirstSibling();
+        }
+        yield return null;
     }
 }
