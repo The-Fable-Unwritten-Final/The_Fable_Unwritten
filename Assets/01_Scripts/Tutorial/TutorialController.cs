@@ -12,7 +12,7 @@ public class TutorialController : MonoBehaviour
 
     private void Start()
     {
-        Invoke(nameof(StartTutorial), 0.5f);
+        Invoke(nameof(StartTutorial), 1f);
     }
 
     private void StartTutorial()
