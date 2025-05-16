@@ -168,6 +168,9 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
             gameObject.SetActive(false); // ▶ 사망 시 비활성화
 
+            ProgressDataManager.Instance.CurrentExp += enemyData.exp;
+            GameManager.Instance.turnController.battleFlow.totalExp += enemyData.exp;
+
             // 💡 전투 종료 체크
             if (GameManager.Instance != null && GameManager.Instance.turnController.battleFlow != null)
             {

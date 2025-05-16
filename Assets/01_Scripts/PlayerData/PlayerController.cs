@@ -396,6 +396,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             GameManager.Instance.StartCoroutine(ResetBool("Attack", 1f));
         }
     }
+
     //피격 애니메이션 호출 시
     public void PlayHitAnimation()
     {

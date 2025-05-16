@@ -22,6 +22,13 @@ public class EffectManager : MonoBehaviour
 
         var effectInstance = Instantiate(effectPrefab, effectRoot);
         effectInstance.transform.position = position;
+        var sr = effectInstance.GetComponent<SpriteRenderer>();
+        if (sr != null)
+        {
+            sr.sortingLayerName = "Effect"; // 🔷 반드시 프로젝트 내에 이 Sorting Layer가 존재해야 함
+            sr.sortingOrder = 100;          // 일반 캐릭터보다 높은 값 (0~10 이상이면 충분)
+        }
+
         effectInstance.Play(frames, 15f, flipX);
     }
 }
