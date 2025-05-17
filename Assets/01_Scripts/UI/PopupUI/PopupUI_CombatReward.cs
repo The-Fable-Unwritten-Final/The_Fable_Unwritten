@@ -9,7 +9,9 @@ using UnityEngine.UI;
 public class PopupUI_CombatReward : BasePopupUI
 {
     [SerializeField] TextMeshProUGUI resultText; // 결과 텍스트
-    [SerializeField] TextMeshProUGUI rewardText; // 리워드 텍스트
+    [SerializeField] private GameObject itemPrefab;
+    [SerializeField] private Transform rewardContentParent;
+    [SerializeField] private Sprite[] lootIcons; // 0 ~ 3 아이템 아이콘 순서대로 지정
     [SerializeField] Button confirmButton;
 
     private static readonly Dictionary<int, string> lootNames = new()
@@ -28,7 +30,7 @@ public class PopupUI_CombatReward : BasePopupUI
         {
             SoundManager.Instance.PlaySFX(SoundCategory.UI, 5); // 승리 시 효과음 적용
             resultText.text = "전투 승리";
-            rewardText.text = GenerateText(GameManager.Instance.turnController.battleFlow);
+            GenerateRewardUI(GameManager.Instance.turnController.battleFlow);
             var setting = ProgressDataManager.Instance;
 
 
@@ -109,22 +111,27 @@ public class PopupUI_CombatReward : BasePopupUI
     }
     
 
-    private string GenerateText(BattleFlowController battleFlow)
+    private void GenerateRewardUI(BattleFlowController battleFlow)
     {
-        if (battleFlow.recentLoots == null || battleFlow.recentLoots.Count == 0)
-            return "획득한 전리품이 없습니다.";
+        foreach(Transform child in rewardContentParent)
+        {
+            Destroy(child.gameObject);
+        }
 
+        if (battleFlow.recentLoots == null || battleFlow.recentLoots.Count == 0) return;
 
         var countMap = battleFlow.recentLoots.GroupBy(x => x).ToDictionary(g => g.Key, g => g.Count());
 
-        List<string> lines = new();
-        lines.Add($"Exp {battleFlow.totalExp}");
         foreach (var pair in countMap)
         {
-            string name = lootNames.TryGetValue(pair.Key, out var result) ? result : $"알 수 없는 전리품({pair.Key})";
-            lines.Add($"{name} x{pair.Value}");
-        }
+            int lootIndex = pair.Key;
+            int count = pair.Value;
+            string name = lootNames.TryGetValue(lootIndex, out var result) ? result : $"알 수 없는 전리품 : {lootIndex}";
+            Sprite icon = lootIndex < lootIcons.Length ? lootIcons[lootIndex] : null;
 
-        return string.Join("\n", lines);
+            var itemGo = Instantiate(itemPrefab, rewardContentParent);
+            var rewardItem = itemGo.GetComponent<RewardItemPrefab>();
+            rewardItem.SetItem(icon, name, count);
+        }
     }
 }
