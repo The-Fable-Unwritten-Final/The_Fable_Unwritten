@@ -12,9 +12,9 @@ public enum TurnState { PlayerTurn, EnemyTurn } //적 턴인지 아군 턴인지
 public class BattleFlowController : MonoBehaviour
 {
     [Header("Character Setup")]
-    [SerializeField] private PlayerController frontSlot;
-    [SerializeField] private PlayerController middleSlot;
-    [SerializeField] private PlayerController backSlot;
+    [SerializeField] public PlayerController frontSlot;
+    [SerializeField] public PlayerController middleSlot;
+    [SerializeField] public PlayerController backSlot;
     [SerializeField] private List<Enemy> enemyObjects;
     [SerializeField] private GameObject playerPrefab; // 사용하지 않지만 호환성을 위해 유지
     [SerializeField] public EffectManager effectManage;

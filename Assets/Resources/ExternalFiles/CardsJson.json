@@ -140,7 +140,8 @@
           },
           "result": {
             "type": "heal",
-            "value": 3
+            "value": 3,
+            "target": 0
           }
         }
       ]
@@ -293,7 +294,8 @@
       "effects": [
         {
           "type": "heal",
-          "value": 6
+          "value": 6,
+          "target": 3
         }
       ]
     },
@@ -504,7 +506,8 @@
           },
           "result": {
             "type": "heal",
-            "value": 3
+            "value": 3,
+            "target": 1
           }
         }
       ]
@@ -526,7 +529,9 @@
       "effects": [
         {
           "type": "heal",
-          "value": 6
+          "value": 6,
+          "target": 3
+            
         }
       ]
     },
@@ -547,7 +552,8 @@
       "effects": [
         {
           "type": "heal",
-          "value": 6
+          "value": 6,
+          "target": 3
         },
         {
           "type": "conditional",
@@ -557,7 +563,9 @@
           },
           "result": {
             "type": "heal",
-            "value": 3
+            "value": 3,
+            "target": 3
+
           }
         }
       ]
@@ -579,7 +587,8 @@
       "effects": [
         {
           "type": "heal",
-          "value": 6
+          "value": 6,
+          "target": 3
         },
         {
           "type": "draw",
@@ -762,6 +771,10 @@
       "flavortext": "한 점을 노리는 공격은 적이 반응하기도 힘들 것입니다.",
       "skilleffect": "fx1_impact_hit_large_yellow",
       "effects": [
+        {
+          "type": "damage",
+          "value": 6
+        },
         {
           "type": "conditional",
           "condition": {
