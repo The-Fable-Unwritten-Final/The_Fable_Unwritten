@@ -192,7 +192,7 @@ public class CardBook : MonoBehaviour,IBookControl
             card.gameObject.SetActive(false);
         }
 
-        // 3. 페이지 오프셋 및 실제로 표시할 카드 수 계산
+        // 페이지 오프셋 및 실제로 표시할 카드 수 계산
         int offset = i * 8;
         int endCardIndex = Mathf.Min(sortedCards.Count - offset, 8);
 
