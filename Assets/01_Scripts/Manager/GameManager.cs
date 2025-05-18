@@ -1,14 +1,19 @@
 using System.Collections.Generic;
+using Unity.Services.Analytics;
+using Unity.Services.Core;
 using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
 {
- /*   public List<PlayerData> playerDatas = new();  //  보유중인 케릭터 데이터
+    /*   public List<PlayerData> playerDatas = new();  //  보유중인 케릭터 데이터
 
-    public GameStartType gameStartType = GameStartType.New;
+       public GameStartType gameStartType = GameStartType.New;
 
 
-    private PlayerPartySO playerParty;*/
+       private PlayerPartySO playerParty;*/
+
+    [Header("Analytics")]
+    public AnalyticsLogger analyticsLogger; // 애널리틱스 로거
 
     [Header("Controller")]
     public CombatUIController combatUIController; // 전투 UI 컨트롤러
@@ -52,15 +57,21 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }*/
 
-  /*  private void LoadPlayerPartyIfNull()
+    /*  private void LoadPlayerPartyIfNull()
+      {
+          if (playerParty == null)
+          {
+              playerParty = Resources.Load<PlayerPartySO>("PlayerPartyData");
+              if (playerParty == null)
+                  Debug.LogError("[GameManager] PlayerPartySO 리소스를 찾을 수 없습니다.");
+          }
+      }*/
+
+    async void Start()
     {
-        if (playerParty == null)
-        {
-            playerParty = Resources.Load<PlayerPartySO>("PlayerPartyData");
-            if (playerParty == null)
-                Debug.LogError("[GameManager] PlayerPartySO 리소스를 찾을 수 없습니다.");
-        }
-    }*/
+        await UnityServices.InitializeAsync();
+        AnalyticsService.Instance.StartDataCollection();
+    }
 
 
     public void RegisterCombatUI(CombatUIController cont)

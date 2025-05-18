@@ -106,6 +106,9 @@ public class PopupUI_Setting : BasePopupUI
         SoundManager.Instance.PlaySFX(SoundCategory.Button, 0); // 기본 버튼 사운드
     }
 
+
+    //.Find 를 활용하는 코드이고, 쓰고있는곳이 없어 보여서 일단은 주석 처리했어요.
+    /*
     public void OnDropdownClicked()
     {
         StartCoroutine(MoveBlockerToResolution());
@@ -121,5 +124,5 @@ public class PopupUI_Setting : BasePopupUI
             blocker.transform.SetAsFirstSibling();
         }
         yield return null;
-    }
+    }*/
 }

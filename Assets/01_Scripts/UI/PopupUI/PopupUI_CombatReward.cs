@@ -14,7 +14,7 @@ public class PopupUI_CombatReward : BasePopupUI
     [SerializeField] private Sprite[] lootIcons; // 0 ~ 3 아이템 아이콘 순서대로 지정
     [SerializeField] Button confirmButton;
 
-    private static readonly Dictionary<int, string> lootNames = new()
+    private readonly Dictionary<int, string> lootNames = new()
     {
         { 0, "백색의 결정" },
         { 1, "지혜의 잎사귀" },
