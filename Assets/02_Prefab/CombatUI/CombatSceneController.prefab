@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6036770042426981051}
   - component: {fileID: 9019229718022954933}
   - component: {fileID: 1294180902310897565}
+  - component: {fileID: 8727272137645985109}
   m_Layer: 0
   m_Name: CombatSceneController
   m_TagString: Untagged
@@ -91,7 +92,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCam: {fileID: 0}
-  zoomCam: {fileID: 0}
+  combatCam: {fileID: 0}
+  combatCamPos: {x: 1.5, y: 0, z: -10}
+  combatTransitionTime: 0.3
+  players: []
+  enemies: []
+  combatBackgroundMaterial: {fileID: 0}
 --- !u!114 &9019229718022954933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,5 +124,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c18013bca6471e548b8c66204e651b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainLight: {fileID: 0}
+--- !u!114 &8727272137645985109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146143868957835463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf3f9a36c9daa84d914f1d84242d350, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

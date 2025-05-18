@@ -37,8 +37,9 @@ public class DataManager : MonoSingleton<DataManager>
     public List<EnemyStageSpawnData> enemySpawnData;
     // 랜덤 이벤트 데이터
     public List<RandomEventData> allRandomEvents { get; set;}
-    // 백그라운드 이미지 데이터
-    private Dictionary<int, Sprite> stageBackgrounds;
+    // 백그라운드 이미지 데이터 + 전투용 배경
+    Dictionary<int, Sprite> stageBackgrounds;
+    Dictionary<int, Sprite> battleCamImages;
     // 카드 해금 레시피 가져오기
     public List<UnlockRecipe> LoadedRecipes { get; set; }
 
@@ -64,7 +65,8 @@ public class DataManager : MonoSingleton<DataManager>
         InitDiaryDictionary();
         enemySpawnData = StageSpawnSetCSVParser.LoadEnemySpawnSet() ?? new();
         allRandomEvents = RandomEventJsonLoader.LoadAllEvents() ?? new();
-        stageBackgrounds = BackgoundLoader.LoadBackgrounds() ?? new();
+        stageBackgrounds = LoadBackgrounds() ?? new();
+        battleCamImages = LoadCombatCamImg() ?? new();
         InitEnemySkillDictionary();
         InitDialogueTriggers();
         InitDialogueDatabase();
@@ -152,7 +154,10 @@ public class DataManager : MonoSingleton<DataManager>
     {
         return stageBackgrounds.TryGetValue(stageIndex, out var sprite) ? sprite : null;
     }
-
+    public Sprite GetBattleCamImage(int stageIndex)
+    {
+        return battleCamImages.TryGetValue(stageIndex, out var sprite) ? sprite : null;
+    }
     /// <summary>
     /// 적 스킬 로딩
     /// </summary>
@@ -287,6 +292,38 @@ public class DataManager : MonoSingleton<DataManager>
             Debug.LogError($"[DataManager] 조합식 로딩 실패: {e.Message}");
             LoadedRecipes = new();
         }
+    }
+    // 백그라운드 이미지 로드
+    Dictionary<int, Sprite> LoadBackgrounds()
+    {
+        var sprites = Resources.LoadAll<Sprite>("BackGround");
+        var dic = new Dictionary<int, Sprite>();
+
+        foreach (var sprite in sprites)
+        {
+            string[] parts = sprite.name.Split('_');
+            if (parts.Length > 1 && int.TryParse(parts[1], out int stage))
+            {
+                dic[stage] = sprite;
+            }
+        }
+        return dic;
+    }
+    // 전투씬에서, 플레이어 행동시 등장할, 전투 배경 이미지
+    Dictionary<int, Sprite> LoadCombatCamImg()
+    {
+        var sprites = Resources.LoadAll<Sprite>("CombatCam");
+        var dic = new Dictionary<int, Sprite>();
+
+        foreach (var sprite in sprites)
+        {
+            string[] parts = sprite.name.Split('_');
+            if (parts.Length > 1 && int.TryParse(parts[1], out int stage))
+            {
+                dic[stage] = sprite;
+            }
+        }
+        return dic;
     }
 
     [System.Serializable]
