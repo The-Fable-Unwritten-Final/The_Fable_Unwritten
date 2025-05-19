@@ -68,6 +68,7 @@ public class EffectManager : MonoBehaviour
             return;
         }
 
+
         StartCoroutine(PlayProjectileCoroutine(caster, target, animInfo, scaleFactor, onArrive));
     }
 
@@ -93,7 +94,9 @@ public class EffectManager : MonoBehaviour
         float duration = 0.5f;
         float elapsed = 0f;
 
-        projectile.Play(animInfo, duration, flipX: false);
+        bool flipX = target.position.x < caster.position.x;
+
+        projectile.Play(animInfo, duration, flipX);
 
         while (elapsed < duration)
         {
