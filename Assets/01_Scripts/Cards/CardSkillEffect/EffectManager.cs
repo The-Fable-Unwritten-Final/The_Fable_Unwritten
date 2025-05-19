@@ -42,10 +42,11 @@ public class EffectManager : MonoBehaviour
         effectInstance.transform.localScale *= scaleFactor;
 
         // 하단 정렬 (pivot 보정)
-        if (alignToBottom && animInfo.frames != null && animInfo.frames.Count > 0)
+        if (alignToBottom)
         {
-            float spriteHeight = animInfo.frames[0].bounds.size.y;
-            effectInstance.transform.position = new Vector3(0, spriteHeight / 2f * scaleFactor, 0);
+            float baseHeight = animInfo.frames[0].bounds.size.y;
+            float spriteHeight = baseHeight * effectInstance.transform.localScale.y * scaleFactor / 2f;
+            effectInstance.transform.position += new Vector3(0, spriteHeight, 0);
         }
 
         // 레이어 및 정렬 순서 설정
