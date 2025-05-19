@@ -166,4 +166,12 @@ public class AnalyticsLogger : MonoBehaviour
 
         AnalyticsService.Instance.RecordEvent(eventData);
     }
+    public void LogStageClearInfo(int stageInfo, int columnIndex)
+    {
+        CustomEvent eventData = new CustomEvent("StageClearInfo");
+        eventData.Add("ClearStage", stageInfo);
+        eventData.Add("ClearColumn", columnIndex);
+
+        AnalyticsService.Instance.RecordEvent(eventData);
+    }
 }
