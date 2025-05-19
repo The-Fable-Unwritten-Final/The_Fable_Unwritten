@@ -75,7 +75,7 @@ public class PopupUI_CombatReward : BasePopupUI
                 if (setting.CurrentBattleNode.type == NodeType.Boss
                     && setting.StageIndex == 3)
                 {
-                    GameObject.Find("TutorialController").GetComponent<TutorialController>().ShowTutorial(9);
+                    GameManager.Instance.tutorialController.ShowTutorial(9);
                     ProgressDataManager.Instance.ResetProgress();
                     return;
                 }

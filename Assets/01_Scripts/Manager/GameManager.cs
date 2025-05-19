@@ -16,7 +16,7 @@ public class GameManager : MonoSingleton<GameManager>
     public CombatLightingController CombatLightingController; // 전투 조명 컨트롤러
     public TurnController turnController; // 턴 컨트롤러
     public CardDiscardController cardDiscardController; // 카드 버리기 컨트롤러
-   
+    public TutorialController tutorialController; // 튜토리얼 컨트롤러 
 
     protected override void Awake()
     {
@@ -102,5 +102,13 @@ public class GameManager : MonoSingleton<GameManager>
     public void UnregisterCombatLightingController()
     {
         CombatLightingController = null;
+    }
+    public void RegisterTutorialController(TutorialController cont)
+    {
+        tutorialController = cont;
+    }
+    public void UnRegisterTutorialController()
+    {
+        tutorialController = null;
     }
 }

@@ -34,7 +34,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     public int MinStageIndex { get; set; }             // 재시작 스테이지 (2스테이지 클리어시 2)
     public bool RetryFromStart { get; set; }           // 스테이지 실패시 재시작여부
     public bool StageCleared { get; set; }             // 전투 승리 여부
-    public bool IsNewStage { get; set; }               // 새 스테이지 여부
+    public bool IsNewStage { get; set; }               // 새 스테이지 여부 (튜토리얼 용)
     public bool IsStageScene { get; set; }             // 마지막 컨텐츠 스테이지씬 여부
     public GraphNode CurrentBattleNode { get; set; }   // 현재 선택한 노드
     public StageData SavedStageData { get; private set; }               // 현재 진행 중인 스테이지 데이터
@@ -43,7 +43,8 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     public int SavedEnemySetIndex { get; set; }           // 진행 에너미 세트 저장용
     public int SavedRandomEvent { get; set; }             // 저장용 랜던이밴트 인덱스
     public int CurrentExp { get; set; }                 //현재까지 얻은 Exp;
-    public bool IsNewCamp { get; set; }
+    public bool IsNewCamp { get; set; }                 // 첫 야영지 확인용 (첫 캠프에만 튜토리얼)
+    public bool IsSecondGame { get; set; }                  // 새로하기 확인용 (완전 처음 일때 false / 이후 새로하기 일때 true)
 
     protected override void Awake()
     {
@@ -78,6 +79,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         data.isStageScene = IsStageScene;
         data.savedEnemySetIndex = SavedEnemySetIndex;
         data.isNewCamp = IsNewCamp;
+        data.isSecondGame = IsSecondGame;
 
         if (SavedStageData != null && VisitedNodes != null)
         {
@@ -139,6 +141,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         IsStageScene = data.isStageScene;
         SavedEnemySetIndex = data.savedEnemySetIndex;
         IsNewCamp = data.isNewCamp;
+        IsSecondGame = data.isSecondGame;
 
         //stageThemes = data.stageThemes.ToDictionary(pair => pair.Key, pair => (StageTheme)pair.Value);
 
@@ -244,10 +247,6 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         SavedStageData = null;
         VisitedNodes.Clear();
         CurrentTheme = default;
-
-#if UNITY_EDITOR
-        ProgressTutorial.Clear();
-#endif
 
         PlayerPrefs.DeleteKey("ProgressSaveData");
 
@@ -403,6 +402,7 @@ public class ProgressSaveData
     public bool isStageScene;
     public int savedEnemySetIndex;
     public bool isNewCamp;
+    public bool isSecondGame;
 
     public string stageDataJson;
     public int currentTheme;

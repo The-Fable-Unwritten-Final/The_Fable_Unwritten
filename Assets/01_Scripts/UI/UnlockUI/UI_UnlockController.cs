@@ -143,10 +143,27 @@ public class UI_UnlockController : BasePopupUI
         OnTabSelected(0); //기존 창으로 이동
     }
 
-    //팝업 끄기
+    //팝업 끄기(모험 새로하기)
     public void CloseUnlockPopup()
     {
         popupPanel.SetActive(false);
+
+        // 초기화 하고 새로 시작
+
+        // 플레이어 덱 초기화
+        foreach (var player in PlayerManager.Instance.activePlayers.Values)
+        {
+            player.currentDeckIndexes.Clear();
+        }
+
+        // 보유 플레이어 초기화
+        PlayerManager.Instance.activePlayers.Clear();
+
+        // 데이터 초기화
+        ProgressDataManager.Instance.ResetProgress();
+        ProgressDataManager.Instance.IsSecondGame = true;
+        UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
+
     }
 }
 

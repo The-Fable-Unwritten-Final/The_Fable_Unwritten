@@ -44,7 +44,18 @@ public class UI_MainTitle : MonoBehaviour
         // 데이터 초기화
         ProgressDataManager.Instance.ResetProgress();
 
-        // 게임 데이터 초기화 로직 추가 (DataManager 나 GameManager에 로직추가?)
+        if (ProgressDataManager.Instance.IsSecondGame)
+        {
+            UIManager.Instance.PopupUnlockUI();          
+            GameManager.Instance.tutorialController.ShowTutorial(8);
+
+#if UNITY_EDITOR
+            ProgressDataManager.Instance.IsSecondGame = false;
+#endif
+            return;
+        }
+
+        ProgressDataManager.Instance.IsSecondGame = true; // 인게임에서만 적용
         UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
     }
     public void OnClickSaveGame()

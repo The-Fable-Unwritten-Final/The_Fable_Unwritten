@@ -12,7 +12,20 @@ public class TutorialController : MonoBehaviour
 
     private void Start()
     {
+        GameManager.Instance.RegisterTutorialController(this);
         Invoke(nameof(StartTutorial), 1f);
+    }
+    private void OnEnable()
+    {
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
+    }
+    private void OnDisable()
+    {
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
+    }
+    void OnSceneUnloaded(Scene scene)
+    {
+        GameManager.Instance.UnRegisterTutorialController();
     }
 
     private void StartTutorial()
@@ -54,8 +67,11 @@ public class TutorialController : MonoBehaviour
 
     public void ShowTutorial(int index)
     {
+
+#if !UNITY_EDITOR
         if (ProgressDataManager.Instance.ProgressTutorial.Contains(index)) return;
-        
+#endif
+
         ProgressDataManager.Instance.AddProgressTutorial(index);
         brulImg.SetActive(true);
         var obj = tutorials[index];

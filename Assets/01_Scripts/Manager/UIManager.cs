@@ -84,6 +84,14 @@ public class UIManager : MonoSingleton<UIManager>
     }
 
     /// <summary>
+    /// 전투 보상을 띄워주는 팝업 UI 호출
+    /// </summary>
+    public void PopupUnlockUI()
+    {
+        ShowPopupByName("UI_UnlockController");
+    }
+
+    /// <summary>
     /// 팝업 Open 매서드(컴포넌트 기준)
     /// </summary>
     public T ShowPopup<T>() where T : BasePopupUI
