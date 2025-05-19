@@ -21,6 +21,9 @@ public class PopupUI_Book : BasePopupUI
         // 처음 책을 열었을때 최초 페이지 == 0번 인덱스의 카드페이지
         OnClick0();
         currentPageType = 0; // 패이지 초기화.
+
+        // 애널리틱스
+        GameManager.Instance.analyticsLogger.LogBookButtonClick();
     }
 
     private void OnDisable()

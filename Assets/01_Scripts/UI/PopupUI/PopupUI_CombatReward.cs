@@ -89,6 +89,11 @@ public class PopupUI_CombatReward : BasePopupUI
         }
         else
         {
+            var setting = ProgressDataManager.Instance;
+            var lasVisitde = setting.VisitedNodes.Last();
+            // 애널리틱스
+            GameManager.Instance.analyticsLogger.LogStageFailInfo(setting.SavedStageData.stageIndex, lasVisitde.columnIndex); // 전투 패배 시 애널리틱스 기록
+
             resultText.text = "전투 패배";
             // 리워드 로드 + 텍스트 표시
             confirmButton.onClick.RemoveAllListeners();

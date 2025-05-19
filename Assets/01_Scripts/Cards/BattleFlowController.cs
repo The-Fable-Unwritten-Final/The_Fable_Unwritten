@@ -203,6 +203,9 @@ public class BattleFlowController : MonoBehaviour
         // 덱 상태 출력
         if (caster is PlayerController pc)
             pc.PrintDeckState();
+
+
+        GameManager.Instance.analyticsLogger.LogUseCardInfo(card.index); // 카드 사용 정보 기록
     }
 
 

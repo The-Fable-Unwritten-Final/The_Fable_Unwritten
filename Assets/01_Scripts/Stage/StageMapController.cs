@@ -99,6 +99,7 @@ public class StageMapController : MonoBehaviour
     // 노드 클릭 시 스테이지 호출 및 저장
     private void OnNodeClicked(GraphNode clicked)
     {
+        GameManager.Instance.analyticsLogger.LogNodeInfo(stageData.stageIndex, (int)clicked.type);
         visitedNodes.Add(clicked);
 
         var pdm = ProgressDataManager.Instance;

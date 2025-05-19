@@ -49,6 +49,9 @@ public class CardUnlocker : MonoBehaviour
         var selected = candidates[UnityEngine.Random.Range(0, candidates.Count)];
 
         selected.isUnlocked = true;
+        // 애널리틱스 (해금된 카드 타입)
+        GameManager.Instance.analyticsLogger.LogUnlockTypeInfo((int)selected.type);
+
         ProgressDataManager.Instance.unlockedCards.Add(selected.index);
 
         OnRecipeUnlocked?.Invoke(recipe.character);

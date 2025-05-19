@@ -56,6 +56,10 @@ public class UI_MainTitle : MonoBehaviour
         }
 
         ProgressDataManager.Instance.IsSecondGame = true; // 인게임에서만 적용
+
+        // 애널리틱스
+        GameManager.Instance.analyticsLogger.LogReplayInfo();
+        // 씬 전환
         UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
     }
     public void OnClickSaveGame()
