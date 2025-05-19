@@ -58,6 +58,9 @@ public class ReadingPanel : BaseCampPanel
             cardUI.SetCard(card);
             onclick.onClick.AddListener(() => ShowBook(characterClass, card));
         }
+
+        // 애널리틱스
+        GameManager.Instance.analyticsLogger.LogCampActInfo((int)characterClass + 1);
     }
 
     // 현재 캐릭터의 보유 카드 확인
@@ -136,6 +139,9 @@ public class ReadingPanel : BaseCampPanel
             }
             SoundManager.Instance.PlaySFX(SoundCategory.Player, (int)selectClass);
             ProgressDataManager.Instance.CurrentExp -= chageCardExp;
+
+            // 애널리틱스
+            GameManager.Instance.analyticsLogger.LogAddedCardInfo(chageCardIndex);
         }
     }
 

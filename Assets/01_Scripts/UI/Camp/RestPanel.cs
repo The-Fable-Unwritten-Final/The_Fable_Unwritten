@@ -8,6 +8,8 @@ public class RestPanel : BaseCampPanel
 {
     public void OnClickConfirm()
     {
+        GameManager.Instance.analyticsLogger.LogCampActInfo(0);
+
         // 보유중인 캐릭터 현채체력 10 증가 매서드 추가
 
         EventEffectManager.Instance.AddEventEffect(0); // 야영 휴식 현재 체력 10 증가

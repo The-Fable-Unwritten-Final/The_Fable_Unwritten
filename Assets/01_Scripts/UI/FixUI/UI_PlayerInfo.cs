@@ -90,6 +90,9 @@ public class UI_PlayerInfo : MonoBehaviour
 
             cardUI.SetCard(card);
         }
+
+        // 애널리틱스
+        GameManager.Instance.analyticsLogger.LogDeckButtonClick((int)characterClass + 1);
     }
 
     // 현재 캐릭터의 보유 카드 확인

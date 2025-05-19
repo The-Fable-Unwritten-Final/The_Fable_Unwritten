@@ -14,6 +14,7 @@ public class CardDiscardController : MonoBehaviour
 
     // 카드 버리기 카운트
     public bool isAll; // 전체 카드 버리기인지 확인하는 변수
+    int totalCount; // 전체 카드 버리기 카운트
     int reqTotalCount; // 전체 카드 버리기 카운트
 
     int reqSophiaCount; // 소피아 카드 버리기 카운트
@@ -30,14 +31,14 @@ public class CardDiscardController : MonoBehaviour
     public int ReqLeonCount => reqLeonCount;
 
     List<CardInHand> cardInHands = new List<CardInHand>(); // 버리기에 선택된 손안의 카드들
-
+    /*
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.O))
             DiscardCard(3); // 테스트용 카드 버리기 호출
         if(Input.GetKeyDown(KeyCode.P))
             DiscardCard(1, 1, 0); // 테스트용 카드 버리기 호출
-    }
+    }*/
     private void Awake()
     {
         GameManager.Instance.RegisterCardDiscardController(this);
@@ -60,22 +61,24 @@ public class CardDiscardController : MonoBehaviour
 
         if (isAll)
         {
-            text = $"카드를 {reqTotalCount}장 버려야 합니다.";
+            text = $"카드를 {totalCount}장 버려야 합니다.\n\n";
+            text += $" {totalCount-reqTotalCount}/{totalCount}";
+
         }
         else
         {
             text = "버릴 카드를 선택하세요.\n\n";
             if(totalSophiaCount > 0)
             {
-                text += $"<sprite=0> {reqSophiaCount}/{totalSophiaCount} \n";
+                text += $"<sprite=0> {totalSophiaCount-reqSophiaCount}/{totalSophiaCount} \n";
             }
             if(totalKylaCount > 0 )
             {
-                text += $"\n<sprite=1> {reqKylaCount}/{totalKylaCount} \n";
+                text += $"\n<sprite=1> {totalKylaCount-reqKylaCount}/{totalKylaCount} \n";
             }
             if(totalLeonCount > 0)
             {
-                text += $"\n<sprite=2> {reqLeonCount}/{totalLeonCount} ";
+                text += $"\n<sprite=2> {totalLeonCount-reqLeonCount}/{totalLeonCount} ";
             }
         }
 
@@ -137,7 +140,8 @@ public class CardDiscardController : MonoBehaviour
     {
         isAll = true; // 전체 카드 버리기 설정
         ResetCount(); // 카운트 초기화
-        reqTotalCount = req; // 요구 버리기 카운트 설정
+        totalCount = req; // 요구 버리기 카운트 설정
+        reqTotalCount = req; // 변동하는 요구 버리기 카운트
         discardDisplay.SetActive(true); // 카드 버리기 UI 활성화
         UpdateText(); // 카드 버리기 UI 텍스트 업데이트
 

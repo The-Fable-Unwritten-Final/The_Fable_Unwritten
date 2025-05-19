@@ -122,6 +122,9 @@ public class UI_RandomEvent : MonoBehaviour
         optionButton_1.interactable = false;
 
         StartCoroutine(ProessResult(index));
+
+        // 애널리틱스
+        GameManager.Instance.analyticsLogger.LogRandomEventInfo(currentData.index, index);
     }
 
     private IEnumerator ProessResult(int optionIndex)
