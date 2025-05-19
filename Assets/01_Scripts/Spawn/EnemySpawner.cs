@@ -4,7 +4,6 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using static CombatLightingController;
 
 /// <summary>
 /// EnemySpawn 관리자
@@ -12,7 +11,6 @@ using static CombatLightingController;
 public class EnemySpawner : MonoBehaviour
 {
     //[SerializeField] Image backGround; // stage별 백그라운드 설정
-    [SerializeField] GameObject background;
     [SerializeField] private Transform[] enemySlots;                    // 몬스터 생성 위치
     [SerializeField] private List<EnemyStageSpawnData> stageSpawnDatas; // 각스테이지 스폰데이터 저장 공간
 
@@ -23,12 +21,6 @@ public class EnemySpawner : MonoBehaviour
         stageIndex = ProgressDataManager.Instance.StageIndex;
         var theme = ProgressDataManager.Instance.CurrentTheme;
         var node = ProgressDataManager.Instance.CurrentBattleNode;
-
-        //backGround.sprite = GameManager.Instance.GetBackgroundForStage(stageIndex);
-
-        // 백그라운드 & 조명 설정
-        background.GetComponent<MeshRenderer>().material.SetTexture("_BaseMap", DataManager.Instance.GetBackground(stageIndex).texture);
-        GameManager.Instance.CombatLightingController.SetLighting((LightingState)(stageIndex - 1));
 
         stageSpawnDatas = DataManager.Instance.GetEnemySpawnData(theme, node.type);      
 

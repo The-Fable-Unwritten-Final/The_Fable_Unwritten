@@ -35,6 +35,7 @@ public class NewCardEffectBuilder : MonoBehaviour
             case "heal":
                 var heal = Load<HealEffect>("HealEffect");
                 heal.amount = effectData.value;
+                heal.target = effectData.target;
                 effect = heal;
                 break;
 

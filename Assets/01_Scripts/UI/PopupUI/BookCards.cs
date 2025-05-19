@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class BookCards : MonoBehaviour
 {
     [SerializeField] Sprite emptySprite;
+    [SerializeField] Image cardBack; // 카드 뒷면
     [SerializeField] Image cardIllust;
     [SerializeField] Image cardType;
     [SerializeField] Image cardChar;
@@ -22,6 +23,7 @@ public class BookCards : MonoBehaviour
     {
         if (c == null)
         {
+            cardBack.gameObject.SetActive(true);
             cardIllust.sprite = emptySprite;
             cardType.sprite = emptySprite;
             cardChar.sprite = emptySprite;
@@ -33,6 +35,7 @@ public class BookCards : MonoBehaviour
             isEmpty = true; // 카드가 비어있음
             return;
         }
+        cardBack.gameObject.SetActive(false); // 카드 뒷면 비활성화
         cardIllust.sprite = c.illustration;
         cardType.sprite = c.cardType;
         cardChar.sprite = c.chClass;

@@ -10,6 +10,7 @@ using UnityEngine;
 public class HealEffect : CardEffectBase
 {
     public float amount;    //힐량
+    public float target;
 
     /// <summary>
     /// 실제로 힐이 진행될 코드
@@ -20,11 +21,31 @@ public class HealEffect : CardEffectBase
     {
         //스탯 변경 적용 후
         float finalHeal = caster.ModifyStat(BuffStatType.Defense, amount);
-        finalHeal = (isEnhanced == null) ? finalHeal * 1.5f : finalHeal;
-        foreach(var target in targets)
+        finalHeal = (isEnhanced == true) ? finalHeal * 1.5f : finalHeal;
+        var slot = GameManager.Instance.turnController.battleFlow;
+
+        switch (target)
         {
-            if (target.IsAlive())
-                target.Heal(finalHeal);
+            case 0:
+                if(slot.middleSlot.IsAlive())
+                    slot.middleSlot.Heal(finalHeal);
+                break;
+            case 1:
+                if (slot.backSlot.IsAlive())
+                    slot.backSlot.Heal(finalHeal);
+                break;
+            case 2:
+                if (slot.frontSlot.IsAlive())
+                    slot.frontSlot.Heal(finalHeal);
+                break;
+            case 3:
+            default:
+                foreach(var target in targets)
+                {
+                    if (target.IsAlive())
+                        target.Heal(finalHeal);
+                }
+                break;
         }
     }
 

@@ -410,5 +410,53 @@ namespace HisaGames.Cutscene
             SoundManager.Instance.PlaySFX(SoundCategory.Button, 0); // 기본 버튼음 재생
             EcCutsceneManager.instance.closeCutscenes();
         }
+
+        /// <summary>
+        /// 현재 진행 중인 컷씬을 강제로 종료하고 리소스를 정리함.
+        /// </summary>
+        public void ForceEndCutscene()
+        {
+            Debug.Log("[EcCutscene] 컷씬 강제 종료");
+
+            // 타이핑 중이면 중지
+            startTyping = false;
+
+            // 후처리 이벤트 강제 호출 (원하면 제거 가능)
+            InvokePostEvent();
+
+            // 캐릭터 및 Prop 비활성화
+            ClearPreviousProps();
+
+            foreach (var data in cutsceneData)
+            {
+                if (data.charactersData != null)
+                {
+                    foreach (var chara in data.charactersData)
+                    {
+                        EcCharacter character = EcCutsceneManager.instance.getCharacterObject(chara.name);
+                        if (character != null)
+                            character.gameObject.SetActive(false);
+                    }
+                }
+
+                if (data.propsData != null)
+                {
+                    foreach (var prop in data.propsData)
+                    {
+                        EcProps propObj = EcCutsceneManager.instance.getPropObject(prop.name);
+                        if (propObj != null)
+                            propObj.gameObject.SetActive(false);
+                    }
+                }
+            }
+
+            // 텍스트 초기화
+            chatText.text = "";
+            charaNameText.text = "";
+            charaNameText.transform.parent.gameObject.SetActive(false);
+
+            // GameObject 비활성화
+            gameObject.SetActive(false);
+        }
     }
 }

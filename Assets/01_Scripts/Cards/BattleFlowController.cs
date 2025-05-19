@@ -12,9 +12,9 @@ public enum TurnState { PlayerTurn, EnemyTurn } //적 턴인지 아군 턴인지
 public class BattleFlowController : MonoBehaviour
 {
     [Header("Character Setup")]
-    [SerializeField] private PlayerController frontSlot;
-    [SerializeField] private PlayerController middleSlot;
-    [SerializeField] private PlayerController backSlot;
+    [SerializeField] public PlayerController frontSlot;
+    [SerializeField] public PlayerController middleSlot;
+    [SerializeField] public PlayerController backSlot;
     [SerializeField] private List<Enemy> enemyObjects;
     [SerializeField] private GameObject playerPrefab; // 사용하지 않지만 호환성을 위해 유지
     [SerializeField] public EffectManager effectManage;
@@ -257,7 +257,7 @@ public class BattleFlowController : MonoBehaviour
                 (player as PlayerController)?.TickStatusEffects();
 
             player.Deck.DiscardUnmaintainedCardsAtTurnEnd();
-
+            ClearAllDeckEnhanced();
         }
 
         foreach (var enemy in enemyParty)
@@ -326,6 +326,8 @@ public class BattleFlowController : MonoBehaviour
         if (allPlayersDead)
         {
             isBattleEnded = true;
+            ClearAllDeckEnhanced();
+            ClearAllPlayerCardDiscounts();
             Debug.Log("▶ 전투 패배");
             isWin = -1;
             enemyParty.Clear();
@@ -335,9 +337,10 @@ public class BattleFlowController : MonoBehaviour
         else if (allEnemiesDead)
         {
             isBattleEnded = true;
+            ClearAllDeckEnhanced();
+            ClearAllPlayerCardDiscounts();
             Debug.Log("▶ 전투 승리");
             isWin = 1;
-
             foreach(var enemy in enemyParty)
             {
                 if(enemy is Enemy enemyComponent)
@@ -517,14 +520,35 @@ public class BattleFlowController : MonoBehaviour
             candidates.Remove(pick);
         }
         
-        if(targetNum == 0)
+        if(type == TargetType.None)
         {
-            result = candidates;
-        }
+            result.Clear(); // 이전 값 제거
 
+            switch (targetNum)
+            {
+                case 0:
+                    result = candidates;
+                    break;
+                case 1:
+                    result.Add(middleSlot); 
+                    break;
+                case 2:
+                    result.Add(backSlot);
+                    break;
+                case 3:
+                    result.Add(frontSlot);
+                    break;
+                default:
+                    result = enemyParty;
+                    break;
+            }
+        }
         return result;
     }
 
+    /// <summary>
+    /// 강화 조건 확인
+    /// </summary>
     void RefreshAllDeckEnhanced()
     {
         foreach(var player in playerParty)
@@ -540,6 +564,43 @@ public class BattleFlowController : MonoBehaviour
                 foreach (var card in pc.Deck.usedDeck)
                     card.UpdateEnhancedState();
             }
+        }
+    }
+
+    /// <summary>
+    /// 할인 제거
+    /// </summary>
+    private void ClearAllPlayerCardDiscounts()
+    {
+        foreach (var player in playerParty)
+        {
+            if (!player.IsAlive()) continue;
+
+            foreach (var card in player.Deck.unusedDeck)
+                card.ClearAllDiscount();
+
+            foreach (var card in player.Deck.usedDeck)
+                card.ClearAllDiscount();
+
+            foreach (var card in player.Deck.Hand)
+                card.ClearAllDiscount();
+        }
+    }
+
+    private void ClearAllDeckEnhanced()
+    {
+        foreach (var player in playerParty)
+        {
+            if (!player.IsAlive()) continue;
+
+            foreach (var card in player.Deck.unusedDeck)
+                card.isEnhanced = false;
+
+            foreach (var card in player.Deck.usedDeck)
+                card.isEnhanced = false;
+
+            foreach (var card in player.Deck.Hand)
+                card.isEnhanced = false;
         }
     }
 }

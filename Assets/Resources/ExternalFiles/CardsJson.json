@@ -140,7 +140,8 @@
           },
           "result": {
             "type": "heal",
-            "value": 3
+            "value": 3,
+            "target": 0
           }
         }
       ]
@@ -170,10 +171,10 @@
     },
     {
       "index": 1006,
-      "cost": 1,
+      "cost": 0,
       "illustration": "illust_22",
       "name": "역전류",
-      "text": "사용한 소피아 카드 1장 가져오기",
+      "text": "소피아 카드 1장 뽑기",
       "type": 2,
       "class": 0,
       "cardframe": "frame_2",
@@ -184,8 +185,9 @@
       "skilleffect": "fx3_lightning_aura_large_yellow",
       "effects": [
         {
-          "type": "redraw",
-          "value": 1
+          "type": "draw",
+          "value": 1,
+          "target": 0
         }
       ]
     },
@@ -243,7 +245,7 @@
           "result": {
             "type": "reduceCost",
             "value": 1,
-            "target": 5
+            "target": 4
           }
         }
       ]
@@ -293,7 +295,8 @@
       "effects": [
         {
           "type": "heal",
-          "value": 6
+          "value": 6,
+          "target": 3
         }
       ]
     },
@@ -361,7 +364,7 @@
       "class": 1,
       "cardframe": "frame_4",
       "target_type": 0,
-      "target_num": 0,
+      "target_num": 2,
       "note": "",
       "flavortext": "신앙심은 일격을 위한 준비에도 도움이 됩니다.",
       "skilleffect": "fx2_magic_swirl_large_yellow",
@@ -482,7 +485,7 @@
       "cost": 2,
       "illustration": "illust_8",
       "name": "응보의 빛",
-      "text": "적 하나 8의 피해\n'힐' 카드 사용 시 1턴 간  강화",
+      "text": "적 하나 8의 피해\n'힐' 카드 사용 시 1턴 간 피해 4 증가",
       "type": 6,
       "class": 1,
       "cardframe": "frame_6",
@@ -503,8 +506,8 @@
             "value": [ 7 ]
           },
           "result": {
-            "type": "heal",
-            "value": 3
+            "type": "damage",
+            "value": 4
           }
         }
       ]
@@ -526,7 +529,9 @@
       "effects": [
         {
           "type": "heal",
-          "value": 6
+          "value": 6,
+          "target": 3
+            
         }
       ]
     },
@@ -547,7 +552,8 @@
       "effects": [
         {
           "type": "heal",
-          "value": 6
+          "value": 6,
+          "target": 3
         },
         {
           "type": "conditional",
@@ -557,7 +563,9 @@
           },
           "result": {
             "type": "heal",
-            "value": 3
+            "value": 3,
+            "target": 3
+
           }
         }
       ]
@@ -579,7 +587,8 @@
       "effects": [
         {
           "type": "heal",
-          "value": 6
+          "value": 6,
+          "target": 3
         },
         {
           "type": "draw",
@@ -763,6 +772,10 @@
       "skilleffect": "fx1_impact_hit_large_yellow",
       "effects": [
         {
+          "type": "damage",
+          "value": 6
+        },
+        {
           "type": "conditional",
           "condition": {
             "trigger": "isUnusedCard",
@@ -780,7 +793,7 @@
       "cost": 1,
       "illustration": "illust_7",
       "name": "숨 고르기",
-      "text": "1턴 간 레온 방어력 2 증가\n사용한 레온 카드 1장을 가져오기",
+      "text": "1턴 간 레온 방어력 2 증가\n레온 카드 1장 뽑기",
       "type": 11,
       "class": 2,
       "cardframe": "frame_11",
@@ -797,8 +810,9 @@
           "target": 2
         },
         {
-          "type": "redraw",
-          "value": 1
+          "type": "draw",
+          "value": 1,
+          "target": 2
         }
       ]
     },
@@ -902,7 +916,7 @@
       "name": "남겨진 마음",
       "text": "아군의 체력을 3 회복하고 1턴 동안 해당 캐릭터의 공격력이 1 증가합니다.",
       "type": 4,
-      "class": 1,
+      "class": 0,
       "cardframe": "frame_4",
       "target_type": 1,
       "target_num": 1,

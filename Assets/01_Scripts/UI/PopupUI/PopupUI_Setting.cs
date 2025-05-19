@@ -90,8 +90,13 @@ public class PopupUI_Setting : BasePopupUI
     }
     public void GoToTitle()
     {
+        if(DialogueManager.Instance.IsPlaying)
+        {
+            DialogueManager.Instance.ForceStopDialogue();
+        }
         if (SceneManager.GetActiveScene().name == SceneNameData.CombatScene) //전투씬 에서의 타이틀로 돌아가기.
         {
+            
             UIManager.Instance.ShowPopupByName("PopupUI_ReturnTitle");
         }
         else // 다른 씬에서의 타이틀로 돌아가기.
@@ -106,6 +111,9 @@ public class PopupUI_Setting : BasePopupUI
         SoundManager.Instance.PlaySFX(SoundCategory.Button, 0); // 기본 버튼 사운드
     }
 
+
+    //.Find 를 활용하는 코드이고, 쓰고있는곳이 없어 보여서 일단은 주석 처리했어요.
+    /*
     public void OnDropdownClicked()
     {
         StartCoroutine(MoveBlockerToResolution());
@@ -121,5 +129,5 @@ public class PopupUI_Setting : BasePopupUI
             blocker.transform.SetAsFirstSibling();
         }
         yield return null;
-    }
+    }*/
 }

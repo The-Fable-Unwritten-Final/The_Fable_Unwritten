@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -181,6 +182,9 @@ public class CardBook : MonoBehaviour,IBookControl
     {
         if (cards == null) return;
 
+        // 카드 1차 정렬 (해금 여부에 따라 정렬)
+        var sortedCards = cards.OrderByDescending(card => card.isUnlocked).ToList();
+
         // 전체 카드 한번 데이터 리셋
         foreach (var card in bookCards)
         {
@@ -188,24 +192,24 @@ public class CardBook : MonoBehaviour,IBookControl
             card.gameObject.SetActive(false);
         }
 
-   
-        int offset = i * 8; // 페이지 오프셋
-        int endCardIndex = Mathf.Min(cards.Count - offset, 8); // 이번 페이지에 실제로 표시할 카드 수
+        // 페이지 오프셋 및 실제로 표시할 카드 수 계산
+        int offset = i * 8;
+        int endCardIndex = Mathf.Min(sortedCards.Count - offset, 8);
 
         for (int j = 0; j < endCardIndex; j++)
         {
             int cardIndex = offset + j;
-            var cardData = cards[cardIndex];
+            var cardData = sortedCards[cardIndex];
 
             bookCards[j].gameObject.SetActive(true);
 
             if (!cardData.isUnlocked)
             {
-                bookCards[j].SetCardInfo(null); // 잠금 카드
+                bookCards[j].SetCardInfo(null); // 잠김 카드
             }
             else
             {
-                bookCards[j].SetCardInfo(cardData); // 정상 카드
+                bookCards[j].SetCardInfo(cardData); // 해금된 카드
             }
         }
     }

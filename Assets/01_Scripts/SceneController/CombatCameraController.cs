@@ -26,25 +26,6 @@ public class CombatCameraController : MonoBehaviour
 
     Coroutine combatCameraCoroutine;
 
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.V)) // 테스트용 카메라 액션
-        {
-            List<IStatusReceiver> enemies = new List<IStatusReceiver>();
-            enemies.Add(this.enemies[0]);
-            enemies.Add(this.enemies[1]);
-
-            PlayCombatCamera(players[0], enemies, 1.5f);
-        }
-        if(Input.GetKeyDown(KeyCode.B)) // 테스트용 카메라 액션
-        {
-            List<IStatusReceiver> players = new List<IStatusReceiver>();
-            players.Add(this.players[0]);
-            players.Add(this.players[1]);
-
-            PlayCombatCamera(players[0], players, 1.5f);
-        }
-    }
 
     private void Awake()
     {

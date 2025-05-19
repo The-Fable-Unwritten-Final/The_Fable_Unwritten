@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2771,6 +2771,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7a84a1b78703b047b0328bd00db9691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  analyticsLogger: {fileID: 0}
   combatUIController: {fileID: 0}
   combatCameraController: {fileID: 0}
   CombatLightingController: {fileID: 0}
@@ -3849,7 +3850,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbf28cbfacfcbdf44a032a4773388330, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  background: {fileID: 1528550792}
   enemySlots:
   - {fileID: 1016949503}
   - {fileID: 1739155344}
@@ -7311,7 +7311,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 18.6624, y: 10.786869, z: 1}
+  m_LocalScale: {x: 20.52864, y: 11.865557, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -7783,6 +7783,21 @@ PrefabInstance:
       propertyPath: cardDisplay
       value: 
       objectReference: {fileID: 1347043274587969634}
+    - target: {fileID: 8727272137645985109, guid: e21a97a85c31a3e43a6ba1ca58e3dd77,
+        type: 3}
+      propertyPath: combatCamMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 9731ac0bb5c4c34418d9a0fe4a464a97, type: 2}
+    - target: {fileID: 8727272137645985109, guid: e21a97a85c31a3e43a6ba1ca58e3dd77,
+        type: 3}
+      propertyPath: backgroundMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: e4ec598c8e68d7a4589b2e3c49fa0458, type: 2}
+    - target: {fileID: 8727272137645985109, guid: e21a97a85c31a3e43a6ba1ca58e3dd77,
+        type: 3}
+      propertyPath: combatLightingController
+      value: 
+      objectReference: {fileID: 8916162457186377368}
     - target: {fileID: 9019229718022954933, guid: e21a97a85c31a3e43a6ba1ca58e3dd77,
         type: 3}
       propertyPath: cardDisplay
@@ -7813,6 +7828,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9e6d2da73cd4f1d43b61c196cc2b0043, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8916162457186377368 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1294180902310897565, guid: e21a97a85c31a3e43a6ba1ca58e3dd77,
+    type: 3}
+  m_PrefabInstance: {fileID: 8916162457186377366}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18013bca6471e548b8c66204e651b3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &9040797361033051309
