@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,7 @@ public class HpBarDisplay : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Image hpBar;
+    [SerializeField] private TextMeshProUGUI hpText;
 
     [Header("Follow Settings")]
     [SerializeField] private Vector3 offset = new Vector3(0, -0.6f, 0); // 스프라이트 아래 위치
@@ -60,6 +62,9 @@ public class HpBarDisplay : MonoBehaviour
     {
         if (hpBar == null) return;
         hpBar.fillAmount = hp / maxHp;
+
+        if (hpText != null)
+            hpText.text = Mathf.FloorToInt(hp).ToString();
     }
 
     public void ChangeHpBar(float hp, float maxHp)
@@ -67,6 +72,8 @@ public class HpBarDisplay : MonoBehaviour
         if (hpBar == null) return;
 
         float targetFill = hp / maxHp;
+
+        hpText.text = hp.ToString();
 
         if (changeHpCoroutine != null)
             StopCoroutine(changeHpCoroutine);
