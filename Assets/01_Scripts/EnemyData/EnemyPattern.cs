@@ -301,12 +301,21 @@ public static class EnemyPattern
         for (int i = 0; i < skills.Count; i++)
         {
             var skill = skills[i];
+            
+            bool isLocked = false;
             // 스테이지 조건 제한
-            bool isLocked = (skills.Count == 3 && i == 2 && currentStage < 3)
-                         || (skills.Count == 4 && i == 2 && currentStage < 3)
-                         || (skills.Count == 4 && i == 3 && currentStage < 4)
-                         || (skills.Count == 5 && i == 3 && currentStage < 3)
-                         || (skills.Count == 5 && i == 4 && currentStage < 4);
+            switch (skills.Count)
+            {
+                case 3:
+                    isLocked = (i == 1 && currentStage < 3) || (i == 2 && currentStage < 4);
+                    break;
+                case 4:
+                    isLocked = (i == 2 && currentStage < 3) || (i == 3 && currentStage < 4);
+                    break;
+                case 5:
+                    isLocked = (i == 3 && currentStage < 3) || (i == 4 && currentStage < 4);
+                    break;
+            }
 
             if (isLocked)
                 continue;
