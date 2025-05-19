@@ -257,7 +257,7 @@ public class BattleFlowController : MonoBehaviour
                 (player as PlayerController)?.TickStatusEffects();
 
             player.Deck.DiscardUnmaintainedCardsAtTurnEnd();
-
+            ClearAllDeckEnhanced();
         }
 
         foreach (var enemy in enemyParty)
