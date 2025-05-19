@@ -234,6 +234,9 @@ public class CardDisplay : MonoBehaviour
         // 코스트가 충분한 경우 카드의 상태를 CanDrag로 변경
         for(int i = 0; i < cardsInHand.Count; i++)
         {
+            // 만약 update 호출전 새로운 카드를 드래그 하였을 때의 예외처리.
+            if (cardsInHand[i].GetCardState() == CardState.OnDrag) return;
+
             if (cardsInHand[i].cardData.IsUsable(GameManager.Instance.turnController.battleFlow.currentMana))// 현재 보유 마나를 가져와, 사용 가능한지 확인. (사용 가능시 CanDrag, 불가능시 CanMouseOver)
             {
                 if (cardsInHand[i].GetCardState() == CardState.CanDiscard) return;
@@ -263,8 +266,13 @@ public class CardDisplay : MonoBehaviour
             cardsInHand[i].SetCardState(CardInHand.CardState.CanDiscard);// 카드 상태를 CanDiscard로 변경
         }
     }
+
+    // 마우스 포인트의 위치에, 카드의 효과 적용 시도.
     public void OnMousepoint(PointerEventData eventData)
     {
+        // 액션 중일때는 카드 사용 불가능.
+        if(GameManager.Instance.turnController.onAction) return;
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))

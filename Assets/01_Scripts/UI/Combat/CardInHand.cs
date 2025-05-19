@@ -266,6 +266,13 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         SetCardState(CardInHand.CardState.None);// 카드가 움직이는 도중에는 상호작용 제한.
         yield return new WaitForSeconds(0.2f);
 
+        // 카드가 움직이기 전에 새로운 카드를 잡았을 경우, 상태 원상복구. (사용 가능하게)
+        if(cardDisplay.currentCard == this)
+        {
+            SetCardState(CardInHand.CardState.OnDrag);
+            yield break;
+        }
+
         if (cardData.IsUsable(GameManager.Instance.turnController.battleFlow.currentMana))
         {
             SetCardState(CardInHand.CardState.CanDrag);
