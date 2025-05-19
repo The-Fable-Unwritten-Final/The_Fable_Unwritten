@@ -83,6 +83,8 @@ public class CardModel : ScriptableObject
 
     private IEnumerator PlayWithAnimation(IStatusReceiver caster, List<IStatusReceiver> targets, bool fixedIsEnhanced)
     {
+        GameManager.Instance.turnController.Onaction();
+
         float totalDuration = 2f;  // 카메라 줌인 + 줌아웃 포함 총 연출 시간
 
         // 1. 카메라 연출
@@ -139,6 +141,8 @@ public class CardModel : ScriptableObject
 
         yield return new WaitForSeconds(0.2f); // 효과 적용 후 약간 대기
         GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
+
+        GameManager.Instance.turnController.OffAction();
     }
 
     private float DetermineEffectScale(int cost)

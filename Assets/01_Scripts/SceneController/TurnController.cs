@@ -45,6 +45,8 @@ public class TurnController : MonoBehaviour
     /// </summary>
     public event Action OnGameEnd;
 
+    public bool onAction = false;
+
     private void Awake()
     {
         GameManager.Instance.RegisterTurnController(this);
@@ -165,4 +167,7 @@ public class TurnController : MonoBehaviour
         EventEffectManager.Instance.EndNextCombat();
         SetTurnState(TurnState.GameEnd); // 전투 종료
     }
+
+    public void Onaction() { if (!onAction) onAction = true; }
+    public void OffAction() { if (onAction) onAction = false; }
 }
