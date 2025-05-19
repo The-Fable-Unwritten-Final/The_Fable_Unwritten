@@ -348,7 +348,7 @@ public class BattleFlowController : MonoBehaviour
             isBattleEnded = true;
             ClearAllDeckEnhanced();
             ClearAllPlayerCardDiscounts();
-            BattleLogManager.Instance.OnTurnEnd();
+            BattleLogManager.Instance.ResetBattleLog();
             Debug.Log("▶ 전투 승리");
             isWin = 1;
             foreach(var enemy in enemyParty)
