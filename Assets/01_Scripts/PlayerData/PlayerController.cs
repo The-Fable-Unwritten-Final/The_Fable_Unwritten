@@ -421,7 +421,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         if (animator != null)
         {
             animator.SetBool("Attack", true);
-            GameManager.Instance.StartCoroutine(ResetBool("Attack", 1f));
+            GameManager.Instance.StartCoroutine(ResetBool("Attack", 1.5f));
         }
     }
 
@@ -431,7 +431,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         if (animator != null)
         {
             animator.SetBool("Hit", true);
-            GameManager.Instance.StartCoroutine(ResetBool("Hit", 1f));
+            GameManager.Instance.StartCoroutine(ResetBool("Hit", 1.2f));
         }
     }
 
