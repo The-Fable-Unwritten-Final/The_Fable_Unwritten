@@ -90,8 +90,13 @@ public class PopupUI_Setting : BasePopupUI
     }
     public void GoToTitle()
     {
+        if(DialogueManager.Instance.IsPlaying)
+        {
+            DialogueManager.Instance.ForceStopDialogue();
+        }
         if (SceneManager.GetActiveScene().name == SceneNameData.CombatScene) //전투씬 에서의 타이틀로 돌아가기.
         {
+            
             UIManager.Instance.ShowPopupByName("PopupUI_ReturnTitle");
         }
         else // 다른 씬에서의 타이틀로 돌아가기.

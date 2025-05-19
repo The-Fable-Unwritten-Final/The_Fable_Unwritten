@@ -210,6 +210,34 @@ public class DialogueManager : MonoSingleton<DialogueManager>
         backgroundImage.gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// 현재 재생 중인 컷씬을 강제로 종료하고 UI를 닫는다
+    /// </summary>
+    public void ForceStopDialogue()
+    {
+        if (!isPlaying) return;
+
+        Debug.LogWarning("[DialogueManager] 강제 종료 호출");
+
+        isPlaying = false;
+
+        if (targetCutscene != null)
+        {
+            targetCutscene.ForceEndCutscene(); // <-- 여기 연결
+        }
+
+        if (backgroundImage != null)
+        {
+            backgroundImage.enabled = false;
+            backgroundImage.gameObject.SetActive(false);
+        }
+
+        if (EcCutsceneManager.instance != null && EcCutsceneManager.instance.guiPanel != null)
+            EcCutsceneManager.instance.guiPanel.SetActive(false);
+
+        CutsceneEffectPlayer.Instance?.ClearAll();
+        SoundManager.Instance.PlayBGMForCurrentScene();
+    }
 }
 
 [System.Serializable]
