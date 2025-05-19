@@ -46,6 +46,9 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     public bool IsNewCamp { get; set; }                 // 첫 야영지 확인용 (첫 캠프에만 튜토리얼)
     public bool IsSecondGame { get; set; }                  // 새로하기 확인용 (완전 처음 일때 false / 이후 새로하기 일때 true)
 
+    // 설정 데이터
+    public Vector2Int[] resolutions = new Vector2Int[1];
+
     protected override void Awake()
     {
         base.Awake();
@@ -72,6 +75,8 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         data.savedEnemySetIndex = SavedEnemySetIndex;
         data.isNewCamp = IsNewCamp;
         data.isSecondGame = IsSecondGame;
+        data.resolutions = resolutions;
+
 
         if (SavedStageData != null && VisitedNodes != null)
         {
@@ -381,6 +386,23 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         PlayerManager.Instance.RegisterAndSetupPlayers(PlayerDatas, allCards);
     }
 
+    public void LoadResolution()
+    {
+        string json = PlayerPrefs.GetString("ProgressSaveData");
+        ProgressSaveData data = JsonUtility.FromJson<ProgressSaveData>(json);
+
+        if (data.resolutions != null && data.resolutions.Length > 0)
+        {
+            resolutions = data.resolutions;
+            Screen.SetResolution(resolutions[0].x, resolutions[0].y, false);
+        }
+        else
+        {
+            // 저장된 해상도 데이터가 없을경우 FHD 적용
+            resolutions[0] = new Vector2Int(1920, 1080);
+            Screen.SetResolution(resolutions[0].x, resolutions[0].y, false);
+        }
+    }
 }
 
 [System.Serializable]
@@ -413,6 +435,8 @@ public class ProgressSaveData
     public List<int> unlockedCardIndexes = new();
     public int[] itemCounts = new int[ProgressDataManager.MAX_ITEM_COUNT];
     public List<int> unlockedCharacterIDs = new();
+
+    public Vector2Int[] resolutions;
 }
 
 //
