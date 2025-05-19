@@ -50,7 +50,7 @@ public class EffectManager : MonoBehaviour
             sr.flipX = flipX;
         }
 
-        effectInstance.Play(animInfo, 0.7f, flipX);
+        effectInstance.Play(animInfo, 1.2f, flipX);
     }
 
     public void PlayProjectileEffect(string effectName, Transform caster, Transform target, float scaleFactor, System.Action onArrive)
