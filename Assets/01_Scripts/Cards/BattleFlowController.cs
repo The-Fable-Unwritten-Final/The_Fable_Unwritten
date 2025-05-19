@@ -90,6 +90,9 @@ public class BattleFlowController : MonoBehaviour
             characterMap[player.ChClass] = player;
             decksByCharacter[player.ChClass] = player.Deck;
         }
+
+        //카드 드로우 사운드 출력
+        SoundManager.Instance.PlaySFX(SoundCategory.UI, 3);
     }
 
     /// <summary>
@@ -271,6 +274,8 @@ public class BattleFlowController : MonoBehaviour
         Debug.Log($"턴 종료 → 새로운 턴 시작: {turn}턴");
 
         // 3. 플레이어 턴 시작
+        //카드 드로우 사운드 출력
+        SoundManager.Instance.PlaySFX(SoundCategory.UI, 3);
         ExecutePlayerTurn();
     }
 
@@ -305,9 +310,7 @@ public class BattleFlowController : MonoBehaviour
     }
 
     private void DrawMissingHands()
-    {
-        //카드 드로우 사운드 출력
-        SoundManager.Instance.PlaySFX(SoundCategory.UI, 3);
+    {        
         foreach (var player in playerParty)
         {
             if (!player.IsAlive()) continue;
