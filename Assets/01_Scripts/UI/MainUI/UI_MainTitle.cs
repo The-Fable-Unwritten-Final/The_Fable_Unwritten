@@ -93,10 +93,11 @@ public class UI_MainTitle : MonoBehaviour
         //해금팝업 열기
     }
 
-    private void OnClickExit()
+    public void OnClickExit()
     {
-        //게임 데이터 저장
-        //게임 종료 로직 추가
+        // 저장하고 나가기
+        ProgressDataManager.Instance.SaveProgress();
+        Application.Quit();
     }
 
     public void OnClickButtonSound()

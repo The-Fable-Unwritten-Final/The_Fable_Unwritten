@@ -72,10 +72,7 @@ public class PopupUI_Setting : BasePopupUI
     private void OnResolutionChanged(int index)
     {
         var selectedResolution = resolutions[index];
-        Screen.SetResolution(selectedResolution.x, selectedResolution.y, false);
-
-        Debug.Log($"Requested resolution: {selectedResolution.x}x{selectedResolution.y}");
-        Debug.Log($"Actual resolution: {Screen.width}x{Screen.height}");
+        Screen.SetResolution(selectedResolution.x, selectedResolution.y, false);       
     }
 
 
