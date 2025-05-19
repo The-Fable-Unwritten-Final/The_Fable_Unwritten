@@ -28,10 +28,15 @@ public class PopupUI_CombatReward : BasePopupUI
         short iswin = GameManager.Instance.turnController.battleFlow.isWin;
         if(iswin == 1)
         {
+            var setting = ProgressDataManager.Instance;
+            var lasVisitde = setting.VisitedNodes.Last();
+
+            // 애널리틱스
+            GameManager.Instance.analyticsLogger.LogStageClearInfo(setting.SavedStageData.stageIndex, lasVisitde.columnIndex); // 전투 승리시 시 애널리틱스 기록
+
             SoundManager.Instance.PlaySFX(SoundCategory.UI, 5); // 승리 시 효과음 적용
             resultText.text = "전투 승리";
             GenerateRewardUI(GameManager.Instance.turnController.battleFlow);
-            var setting = ProgressDataManager.Instance;
 
 
             // 리워드 로드 + 텍스트 표시
@@ -46,7 +51,6 @@ public class PopupUI_CombatReward : BasePopupUI
                 // 1 스테이지 클리어 후, 실패 시 2스테이지부터 시작하게 설정
                 if (setting.StageIndex == 1)
                 {
-                    var lasVisitde = setting.VisitedNodes.Last();
                     var lasColum = setting.SavedStageData.columns[^1];
 
                     if (lasColum.Contains(lasVisitde))
