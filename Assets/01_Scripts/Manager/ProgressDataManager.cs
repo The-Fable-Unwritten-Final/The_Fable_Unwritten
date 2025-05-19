@@ -217,6 +217,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
     public void ResetProgress() // 초기화 및 저장
     {
+        BattleLogManager.Instance.ResetGameLog();
         untillNextCombat.Clear();
         untillNextStage.Clear();
         untillEndAdventure.Clear();
