@@ -26,7 +26,6 @@ public class GameManager : MonoSingleton<GameManager>
     protected override void Awake()
     {
         base.Awake();
-        ProgressDataManager.Instance.LoadResolution();// 해상도 불러오기
 #if UNITY_EDITOR
         EnemyInitializer.ImportAndGenerate();
 //       EffectAnimationGenerator.Generate();

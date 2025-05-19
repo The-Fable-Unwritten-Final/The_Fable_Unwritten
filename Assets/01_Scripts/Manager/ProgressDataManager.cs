@@ -52,6 +52,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     protected override void Awake()
     {
         base.Awake();
+        LoadResolution();// 해상도 불러오기
     }
 
     private void Start()
