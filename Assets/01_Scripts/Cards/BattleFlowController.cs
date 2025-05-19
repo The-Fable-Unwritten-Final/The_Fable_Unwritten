@@ -341,12 +341,14 @@ public class BattleFlowController : MonoBehaviour
             enemyParty.Clear();
             StopAllCoroutines();
             GameManager.Instance.turnController.ToGameEnd();
+            BattleLogManager.Instance.ResetGameLog();
         }
         else if (allEnemiesDead)
         {
             isBattleEnded = true;
             ClearAllDeckEnhanced();
             ClearAllPlayerCardDiscounts();
+            BattleLogManager.Instance.OnTurnEnd();
             Debug.Log("▶ 전투 승리");
             isWin = 1;
             foreach(var enemy in enemyParty)
