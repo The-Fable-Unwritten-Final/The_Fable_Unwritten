@@ -8,7 +8,6 @@ public class EffectManager : MonoBehaviour
     [SerializeField] private SkillEffectPlayer effectPrefab;
     [SerializeField] private Transform effectRoot;
 
-
     /// <summary>
     /// 특정 이펙트를 위치에 재생
     /// </summary>
@@ -28,7 +27,7 @@ public class EffectManager : MonoBehaviour
                 break;
             case AnimationType.OnBottomTarget:
                 Vector3 bottomPos = GetBottomPosition(target);
-                PlayOneShotEffect(animInfo, bottomPos, flipX, scaleFactor);
+                PlayOneShotEffect(animInfo, bottomPos, flipX, scaleFactor, alignToBottom: true);
                 break;
             case AnimationType.OnTarget:
             default:
@@ -37,19 +36,26 @@ public class EffectManager : MonoBehaviour
         }
     }
 
-    public void PlayOneShotEffect(EffectAnimation animInfo, Vector3 position, bool flipX, float scaleFactor)
+    public void PlayOneShotEffect(EffectAnimation animInfo, Vector3 position, bool flipX, float scaleFactor, bool alignToBottom = false)
     {
         var effectInstance = Instantiate(effectPrefab, position, Quaternion.identity, effectRoot);
         effectInstance.transform.localScale *= scaleFactor;
 
+        // 하단 정렬 (pivot 보정)
+        if (alignToBottom && animInfo.frames != null && animInfo.frames.Count > 0)
+        {
+            float spriteHeight = animInfo.frames[0].bounds.size.y;
+            effectInstance.transform.position = new Vector3(0, spriteHeight / 2f * scaleFactor, 0);
+        }
+
+        // 레이어 및 정렬 순서 설정
         var sr = effectInstance.GetComponent<SpriteRenderer>();
         if (sr != null)
         {
-            sr.sortingLayerName = "Effect";
-            sr.sortingOrder = 100;
+            sr.sortingLayerName = "Effect"; // 원하는 레이어 이름 (예: "Effect", "FX", "UI")
+            sr.sortingOrder = 100;          // 다른 오브젝트보다 확실히 위에 뜨도록
             sr.flipX = flipX;
         }
-
         effectInstance.Play(animInfo, 1.2f, flipX);
     }
 
@@ -100,13 +106,19 @@ public class EffectManager : MonoBehaviour
         // 도착 후 Hit 처리
         onArrive?.Invoke();
     }
+
     public Vector3 GetBottomPosition(Transform target)
     {
+        Transform ground = target.Find("GroundPoint");
+        if (ground != null)
+            return ground.position;
+
+        // fallback - SpriteRenderer 기준 (하단 여백 포함)
         if (target.TryGetComponent<SpriteRenderer>(out var sr))
         {
-            var bounds = sr.bounds;
-            return new Vector3(bounds.center.x, bounds.min.y, target.position.z);
+            return new Vector3(sr.bounds.center.x, sr.bounds.min.y, target.position.z);
         }
+
         return target.position;
     }
 }
