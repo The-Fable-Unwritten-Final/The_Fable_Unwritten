@@ -69,7 +69,7 @@ public class AnalyticsLogger : MonoBehaviour
         };
 
         CustomEvent eventData = new CustomEvent("CampActInfo");
-        eventData.Add("CampAction", actionLabel);
+        eventData.Add("CampActionType", actionLabel);
 
         AnalyticsService.Instance.RecordEvent(eventData);
     }
@@ -110,7 +110,7 @@ public class AnalyticsLogger : MonoBehaviour
         };
 
         CustomEvent eventData = new CustomEvent("UnlockTypeInfo");
-        eventData.Add("TypeSelected", cardTypeLabel);
+        eventData.Add("SelectedType", cardTypeLabel);
 
         AnalyticsService.Instance.RecordEvent(eventData);
     }
@@ -139,7 +139,7 @@ public class AnalyticsLogger : MonoBehaviour
         };
 
         CustomEvent eventData = new CustomEvent("DeckButtonInfo");
-        eventData.Add("DeckClicked", deckLabel);
+        eventData.Add("ClickedDeck", deckLabel);
 
         AnalyticsService.Instance.RecordEvent(eventData);
     }
