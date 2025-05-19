@@ -45,16 +45,16 @@ public class PopupUI_Setting : BasePopupUI
             var res = resolutions[i];
             options.Add(new TMP_Dropdown.OptionData($"{res.x}X{res.y}"));
 
-            // 현재 해상도와 일치하는 항목 찾기
-            if (Screen.width == res.x && Screen.height == res.y)
+            // 현재 해상도와 일치하는 항목 찾기 (주의: 전체화면 모드일 경우 Screen.width/height가 바뀔 수 있음)
+            if (Mathf.Abs(Screen.width - res.x) <= 10 && Mathf.Abs(Screen.height - res.y) <= 10) // 근사 비교
             {
                 currentResolutionIndex = i;
             }
         }
 
         resolutionDropdown.AddOptions(options);
-        resolutionDropdown.value = currentResolutionIndex; 
-        resolutionDropdown.RefreshShownValue(); 
+        resolutionDropdown.value = currentResolutionIndex;
+        resolutionDropdown.RefreshShownValue();
         resolutionDropdown.onValueChanged.AddListener(OnResolutionChanged);
     }
 
@@ -72,7 +72,9 @@ public class PopupUI_Setting : BasePopupUI
     private void OnResolutionChanged(int index)
     {
         var selectedResolution = resolutions[index];
-        Screen.SetResolution(selectedResolution.x, selectedResolution.y, false);       
+        Screen.SetResolution(selectedResolution.x, selectedResolution.y, false);   
+        ProgressDataManager.Instance.resolutions = new Vector2Int[] { new Vector2Int(selectedResolution.x, selectedResolution.y) };
+        ProgressDataManager.Instance.SaveProgress(); // 해상도 변경 시 저장
     }
 
 

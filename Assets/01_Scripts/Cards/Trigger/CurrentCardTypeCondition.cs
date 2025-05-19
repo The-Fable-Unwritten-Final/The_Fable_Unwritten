@@ -16,6 +16,12 @@ public class CurrentCardTypeCondition : TriggerCondition
     {
         var currentTypes = BattleLogManager.Instance.GetCurrentTurnCardTypes();
 
+        if (currentTypes == null || currentTypes.Count == 0)
+            return false;
+
+        if (requiredTypes == null || requiredTypes.Count == 0)
+            return true;
+
         if (isAnd)
         {
             return requiredTypes.TrueForAll(type => currentTypes.Contains(type));

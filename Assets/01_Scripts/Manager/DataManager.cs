@@ -73,7 +73,6 @@ public class DataManager : MonoSingleton<DataManager>
         InitCardEffectSprites();
         InitCardBookDictionary();
         InitializeUnlockRecipes();
-
     }
 
     /// <summary>

@@ -26,7 +26,6 @@ public class GameManager : MonoSingleton<GameManager>
     protected override void Awake()
     {
         base.Awake();
-        SetInitialResolution();
 #if UNITY_EDITOR
         EnemyInitializer.ImportAndGenerate();
 //       EffectAnimationGenerator.Generate();
@@ -121,10 +120,5 @@ public class GameManager : MonoSingleton<GameManager>
     public void UnRegisterTutorialController()
     {
         tutorialController = null;
-    }
-
-    private void SetInitialResolution()
-    {
-        Screen.SetResolution(1920, 1080, false); // false는 창모드, true면 전체화면
     }
 }

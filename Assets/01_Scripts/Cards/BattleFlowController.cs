@@ -512,12 +512,12 @@ public class BattleFlowController : MonoBehaviour
         };
 
         List<IStatusReceiver> result = new();
-        List<IStatusReceiver> candidates = pool.FindAll(p => p != null && p.IsAlive());
 
 
         if (type == TargetType.None)
         {
-            if(classNum == CharacterClass.Sophia)
+            List<IStatusReceiver> candidates = pool.FindAll(p => p != null && p.IsAlive());
+            if (classNum == CharacterClass.Sophia)
             {
                 switch (targetNum)
                 {
@@ -568,6 +568,8 @@ public class BattleFlowController : MonoBehaviour
         }
         else
         {
+            List<IStatusReceiver> candidates = pool.FindAll(p => p != null && p.IsAlive()&& p != originTarget);
+
             result.Add(originTarget);
 
             while (result.Count < targetNum && candidates.Count > 0)
