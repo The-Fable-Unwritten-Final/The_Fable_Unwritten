@@ -175,7 +175,7 @@ public class BattleFlowController : MonoBehaviour
         if (targets == null || targets.Count == 0)
         {
             int count = Mathf.Max(1, card.targetCount);
-            targets = AutoChooseTargets(card.targetType, count, targets[0]);
+            targets = AutoChooseTargets(card.targetType, card.characterClass,count, targets[0]);
         }
 
         Debug.Log($"{caster.ChClass} 가 {card.cardName} 사용 → {string.Join(", ", targets.ConvertAll(t => t.ChClass.ToString()))}, cost : {actualCost}");
@@ -268,6 +268,8 @@ public class BattleFlowController : MonoBehaviour
             if (enemy != null && enemy.IsAlive())
                 (enemy as Enemy)?.TickStatusEffects();
         }
+
+        BattleLogManager.Instance.OnTurnEnd();
 
         // 2. 턴 수 증가
         turn++;
@@ -431,7 +433,7 @@ public class BattleFlowController : MonoBehaviour
 
         if (characterMap.TryGetValue(caster, out var casterController))
         {
-            List<IStatusReceiver> targets = AutoChooseTargets(card.targetType, card.targetCount, target);
+            List<IStatusReceiver> targets = AutoChooseTargets(card.targetType, card.characterClass, card.targetCount, target);
 
             if (targets.Count > 0)
             {
@@ -496,7 +498,7 @@ public class BattleFlowController : MonoBehaviour
     /// <param name="type"></param>
     /// <param name="targetNum"></param>
     /// <returns></returns>
-    public List<IStatusReceiver> AutoChooseTargets(TargetType type, int targetNum, IStatusReceiver originTarget)
+    public List<IStatusReceiver> AutoChooseTargets(TargetType type, CharacterClass classNum,int targetNum, IStatusReceiver originTarget)
     {
         var pool = type switch
         {
@@ -507,43 +509,69 @@ public class BattleFlowController : MonoBehaviour
         };
 
         List<IStatusReceiver> result = new();
+        List<IStatusReceiver> candidates = pool.FindAll(p => p != null && p.IsAlive());
 
-        if (type != TargetType.None)
+
+        if (type == TargetType.None)
         {
-             result.Add(originTarget);
-        }
-
-        List<IStatusReceiver> candidates = pool.FindAll(p => p != null && p.IsAlive() && p != originTarget);
-
-
-        while (result.Count < targetNum && candidates.Count > 0)
-        {
-            var pick = candidates[UnityEngine.Random.Range(0, candidates.Count)];
-            result.Add(pick);
-            candidates.Remove(pick);
-        }
-        
-        if(type == TargetType.None)
-        {
-            result.Clear(); // 이전 값 제거
-
-            switch (targetNum)
+            if(classNum == CharacterClass.Sophia)
             {
-                case 0:
-                    result = candidates;
-                    break;
-                case 1:
-                    result.Add(middleSlot); 
-                    break;
-                case 2:
-                    result.Add(backSlot);
-                    break;
-                case 3:
-                    result.Add(frontSlot);
-                    break;
-                default:
-                    result = enemyParty;
-                    break;
+                switch (targetNum)
+                {
+                    case 0:
+                        result.Add(middleSlot);
+                        break;
+                    case 3:
+                        result = candidates;
+                        break;
+                    default:
+                        result.Add(originTarget);
+                        break;
+
+                }
+            }
+            else if(classNum == CharacterClass.Kayla)
+            {
+                switch (targetNum)
+                {
+                    case 0:
+                        result.Add(backSlot);
+                        break;
+                    case 3:
+                        result = candidates;
+                        break;
+                    default:
+                        result.Add(originTarget);
+                        break;
+
+                }
+            }
+            else if(classNum == CharacterClass.Leon)
+            {
+                switch (targetNum)
+                {
+                    case 0:
+                        result.Add(frontSlot);
+                        break;
+                    case 3:
+                        result = candidates;
+                        break;
+                    default:
+                        result.Add(originTarget);
+                        break;
+
+                }
+            }
+        }
+        else
+        {
+            result.Add(originTarget);
+
+            while (result.Count < targetNum && candidates.Count > 0)
+            {
+                var pick = candidates[UnityEngine.Random.Range(0, candidates.Count)];
+                result.Add(pick);
+                candidates.Remove(pick);
             }
         }
         return result;
