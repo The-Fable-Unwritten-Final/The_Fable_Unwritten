@@ -32,6 +32,8 @@ public class UI_MainTitle : MonoBehaviour
 
     public void OnClickNewGame()
     {
+        ProgressDataManager.Instance.GameStartType = GameStartType.New;
+
         // 플레이어 덱 초기화
         foreach (var player in PlayerManager.Instance.activePlayers.Values)
         {
@@ -62,6 +64,7 @@ public class UI_MainTitle : MonoBehaviour
         // 씬 전환
         UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
     }
+
     public void OnClickSaveGame()
     {
         var currentNode = ProgressDataManager.Instance.CurrentBattleNode;

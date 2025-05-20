@@ -27,8 +27,8 @@ public class GameManager : MonoSingleton<GameManager>
     {
         base.Awake();
 #if UNITY_EDITOR
-//        EnemyInitializer.ImportAndGenerate();
-//       EffectAnimationGenerator.Generate();
+        //EnemyInitializer.ImportAndGenerate();
+        //EffectAnimationGenerator.Generate();
 #endif
 
 //        LoadPlayerPartyIfNull(); // <- 플레이어 데이터 가져오기
