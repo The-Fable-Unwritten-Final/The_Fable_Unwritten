@@ -54,8 +54,7 @@ public class TurnController : MonoBehaviour
     private void Start()
     {
         OnStartPlayerTurn += battleFlow.ExecutePlayerTurn;
-        //OnEndPlayerTurn += battleFlow.EndPlayerTurn; // 카드 자동 버리기 제거.
-        //OnGameEnd += () => battleFlow.ForceEndBattle(true); // 기본 처리, 필요시 수정
+        OnStartPlayerTurn += cardDisplay.CardArrange; // 카드 배치 초기화
 
         StartCoroutine(AtStartGame()); // 게임 시작 후 1초 후에 플레이어 턴으로
     }
@@ -92,6 +91,7 @@ public class TurnController : MonoBehaviour
 
             case TurnState.PlayerTurn:
                 OnPlayerTurn?.Invoke(); // 플레이어가 수동으로 EndTurn 하기 전까지 대기
+                cardDisplay.StartPlayerTurn(); // 플레이어 턴 카드 디스플레이 업데이트
                 break;
 
             case TurnState.EndPlayerTurn:
@@ -101,6 +101,7 @@ public class TurnController : MonoBehaviour
 
             case TurnState.EnemyTurn:
                 OnEnemyTurn?.Invoke();
+                cardDisplay.EndPlayerTurn(); // 카드 디스플레이 업데이트
                 StartCoroutine(WaitForEnemyTurn());
                 break;
 
