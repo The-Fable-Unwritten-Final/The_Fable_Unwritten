@@ -111,13 +111,13 @@ public class EnemySpawner : MonoBehaviour
                     slot.gameObject.SetActive(true);
 
 
-                    enemyParty.Add(enemy as IStatusReceiver);
+                    enemyParty[i] = enemy as IStatusReceiver;
                     continue;
                 }
             }
             
             // enemy가 없거나 데이터가 없으면 null 삽입
-            enemyParty.Add(null);         
+            enemyParty[i] = null;         
         }
 
         for (int i = 0; i < enemyParty.Count; i++)

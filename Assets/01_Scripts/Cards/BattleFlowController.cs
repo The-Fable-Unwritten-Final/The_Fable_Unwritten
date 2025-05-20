@@ -23,7 +23,8 @@ public class BattleFlowController : MonoBehaviour
     public TextMeshProUGUI Mana;
 
     public List<IStatusReceiver> playerParty { get; private set; } = new();
-    public List<IStatusReceiver> enemyParty { get; private set; } = new();
+
+    public List<IStatusReceiver> enemyParty = new List<IStatusReceiver> { null, null, null };
 
     public int startMana = 3; //시작 마나
     public int currentMana;   //현재 마나
@@ -298,11 +299,13 @@ public class BattleFlowController : MonoBehaviour
         }
 
         // 사망자 제거 (원본 리스트 정리)
-        for (int i = enemyParty.Count - 1; i >= 0; i--)
+        for (int i = 0; i < enemyParty.Count; i++)
         {
             var enemy = enemyParty[i];
-            if (enemy == null || !enemy.IsAlive())
-                enemyParty.RemoveAt(i);
+            if (enemy != null && !enemy.IsAlive())
+            {
+                enemyParty[i] = null; // 위치 유지하면서 null 처리
+            }
         }
 
         onEnemyTurnComplete?.Invoke();
@@ -338,7 +341,10 @@ public class BattleFlowController : MonoBehaviour
             ClearAllPlayerCardDiscounts();
             Debug.Log("▶ 전투 패배");
             isWin = -1;
-            enemyParty.Clear();
+
+            for (int i = 0; i < enemyParty.Count; i++)  //파티 초기화
+                enemyParty[i] = null;
+            
             StopAllCoroutines();
             GameManager.Instance.turnController.ToGameEnd();
             BattleLogManager.Instance.ResetGameLog();
@@ -353,7 +359,8 @@ public class BattleFlowController : MonoBehaviour
             isWin = 1;
             foreach(var enemy in enemyParty)
             {
-                if(enemy is Enemy enemyComponent)
+                if (enemy == null || !enemy.IsAlive()) continue;
+                if (enemy is Enemy enemyComponent)
                 {
                     var enemyData = enemyComponent.enemyData;
 
@@ -365,7 +372,6 @@ public class BattleFlowController : MonoBehaviour
                             if (lootIndex >= 0 && lootIndex < ProgressDataManager.MAX_ITEM_COUNT)
                             {
                                 ProgressDataManager.Instance.itemCounts[lootIndex]++;
-                                
                             }
                             else
                             {
@@ -376,7 +382,8 @@ public class BattleFlowController : MonoBehaviour
                 }
             }
 
-            enemyParty.Clear();
+            for (int i = 0; i < enemyParty.Count; i++)
+                enemyParty[i] = null;
             StopAllCoroutines();
             GameManager.Instance.turnController.ToGameEnd();
         }
@@ -395,7 +402,10 @@ public class BattleFlowController : MonoBehaviour
     public void ForceEndBattle(bool playerGaveUp)
     {
         isBattleEnded = true;
-        enemyParty.Clear();
+
+        for (int i = 0; i < enemyParty.Count; i++)
+            enemyParty[i] = null;
+
         if (playerGaveUp)
         {
             Debug.Log("▶ 플레이어 전투 포기 → 타이틀로 이동");
@@ -474,7 +484,7 @@ public class BattleFlowController : MonoBehaviour
         {
             if (effect is DiscardCardEffect discard)
             {
-                if (caster.Deck.Hand.Count < discard.discardCount)
+                if (caster.Deck.Hand.Count <= discard.discardCount)
                 {
                     return false;
                 }

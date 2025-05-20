@@ -161,6 +161,7 @@ public class StatEventEffects : EventEffects
             {
                 foreach (var enemyData in GameManager.Instance.turnController.battleFlow.enemyParty)
                 {
+                    if (enemyData == null) continue;
                     enemyData.currentHP = enemyData.maxHP * hpPercent;
                 }
             }

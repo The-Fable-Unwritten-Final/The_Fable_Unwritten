@@ -198,6 +198,7 @@ public static class EnemyPattern
             // 플레이어 중에서 위치 조건에 맞는 대상만 후보로 추가
             foreach (var target in targetGroup)
             {
+                if (target == null) continue;
                 if (!target.IsAlive()) continue;
 
                 if ((target.ChClass == CharacterClass.Leon && actData.target_front) ||
@@ -211,12 +212,14 @@ public static class EnemyPattern
         else
         {
             // 아군일 경우 enemyParty 순서대로 (0: front, 1: center, 2: back)
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < targetGroup.Count; i++)
             {
                 if ((i == 0 && actData.target_front)||
                     (i == 1 && actData.target_center)||
                     (i == 2 && actData.target_back))
                 {
+                    if (targetGroup[i] == null) continue;
+
                     if (targetGroup[i].IsAlive())
                         candidates.Add(targetGroup[i]);
                 }
