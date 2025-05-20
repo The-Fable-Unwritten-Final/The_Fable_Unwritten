@@ -270,6 +270,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         if(cardDisplay.currentCard == this)
         {
             SetCardState(CardInHand.CardState.OnDrag);
+            cardDisplay.isOnDrag = true; // 드래그 상태로 설정
             yield break;
         }
 
