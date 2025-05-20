@@ -27,7 +27,7 @@ public class GameManager : MonoSingleton<GameManager>
     {
         base.Awake();
 #if UNITY_EDITOR
-        EnemyInitializer.ImportAndGenerate();
+        //EnemyInitializer.ImportAndGenerate();
 //       EffectAnimationGenerator.Generate();
 #endif
 
