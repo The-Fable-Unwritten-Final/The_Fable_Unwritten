@@ -56,7 +56,7 @@ public class DataManager : MonoSingleton<DataManager>
     /// <summary>
     /// 기본 해금 카드 덱
     /// </summary>
-    private static readonly HashSet<int> DefaultUnlockedCards = new() { 1000, 1001, 2006,2007, 3000,3007 };
+    private static readonly HashSet<int> DefaultUnlockedCards = new() { 1000, 2007, 3000 };
 
 
     protected override void Awake()
