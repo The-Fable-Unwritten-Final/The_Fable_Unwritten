@@ -11,7 +11,7 @@ public class DeckModel
 
     public IReadOnlyList<CardModel> Hand => hand;
     public const int maxSize = 10;
-    public const int startSize = 4;
+    public const int startSize = 3;
 
     //덱 삽입하기
     public void Initialize(List<CardModel> cards)
