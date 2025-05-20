@@ -426,11 +426,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7a84a1b78703b047b0328bd00db9691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  analyticsLogger: {fileID: 0}
   combatUIController: {fileID: 0}
   combatCameraController: {fileID: 0}
   CombatLightingController: {fileID: 0}
   turnController: {fileID: 0}
   cardDiscardController: {fileID: 0}
+  tutorialController: {fileID: 0}
 --- !u!1 &870690589
 GameObject:
   m_ObjectHideFlags: 0
@@ -1613,9 +1615,12 @@ PrefabInstance:
     - target: {fileID: 5354770399206639182, guid: 79312473a988b464b95d3efd6e017624,
         type: 3}
       propertyPath: m_text
-      value: "\uC9C0\uAE08\uBD80\uD130\uB294 \uC6D0\uD558\uB294 \uAE38\uC744 \uC120\uD0DD\uD558\uC5EC
-        \uC790\uC720\uB86D\uAC8C \uBAA8\uD5D8\uD574\uC8FC\uC138\uC694.\\n\uC9C4\uD589\uB3C4\uB294
-        \uB178\uB4DC \uC120\uD0DD \uC2DC \uC790\uB3D9 \uC800\uC7A5\uB429\uB2C8\uB2E4."
+      value: "\uC801\uC744 \uC4F0\uB7EC\uB728\uB9AC\uACE0 \uC5BB\uC740 \uC804\uB9AC\uD488\uC740
+        \uC0C8\uB85C\uC6B4 \uBAA8\uD5D8\uC744 \uC2DC\uC791\uD560 \uB54C \uCE74\uB4DC\uB97C
+        \uD574\uAE08\uD558\uB294 \uC7AC\uB8CC\uB85C \uC0AC\uC6A9\uB429\uB2C8\uB2E4.\\n\uC9C0\uAE08\uBD80\uD130\uB294
+        \uC6D0\uD558\uB294 \uAE38\uC744 \uC120\uD0DD\uD558\uC5EC \uC790\uC720\uB86D\uAC8C
+        \uBAA8\uD5D8\uD574\uC8FC\uC138\uC694.\\n\uC9C4\uD589\uB3C4\uB294 \uB178\uB4DC
+        \uC120\uD0DD \uC2DC \uC790\uB3D9 \uC800\uC7A5\uB429\uB2C8\uB2E4."
       objectReference: {fileID: 0}
     - target: {fileID: 6562793441516033271, guid: 79312473a988b464b95d3efd6e017624,
         type: 3}
