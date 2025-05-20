@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d99085e4860989e40ba273fad6060564, type: 3}
-  m_Name: "33_\uC5D8\uB8E8\uC544"
+  m_Name: 11_BossWolf
   m_EditorClassIdentifier: 
-  idNum: 33
-  enemyName: "\uC5D8\uB8E8\uC544"
+  idNum: 11
+  enemyName: "\uC6B0\uB450\uBA38\uB9AC \uB291\uB300"
   exp: 10
-  maxHP: 50
-  currentHP: 50
+  maxHP: 30
+  currentHP: 30
   aTKValue: 0
   dEFValue: 0
   stun: 0
@@ -27,22 +27,16 @@ MonoBehaviour:
   skillList:
   - skillIndex: 100
     damage: 10
-    percentage: 30
-  - skillIndex: 101
+    percentage: 75
+  - skillIndex: 104
     damage: 6
-    percentage: 50
-  - skillIndex: 114
-    damage: -10
-    percentage: 80
-  - skillIndex: 116
-    damage: 0
     percentage: 100
-  illust: illust3_3
+  illust: illust1_1
   currentStance: 1
-  animationController: {fileID: 9100000, guid: aab4e345029bbfe4db01d2daff742f32, type: 2}
-  AttackSkillEffect: fanfx1_spellcast_C_large_yellow
-  AllySkillEffect: fanfx2_cure_large_yellow
-  TopStance: 0.5
-  MiddleStance: 0.3
-  BottomStance: 0.2
-  loot: 0200000000000000
+  animationController: {fileID: 9100000, guid: 3d1bade974575ad4fbcbaf98fd78a5fd, type: 2}
+  AttackSkillEffect: fx3_bite_large_red
+  AllySkillEffect: 
+  TopStance: 0.3
+  MiddleStance: 0.4
+  BottomStance: 0.3
+  loot: 00000000
