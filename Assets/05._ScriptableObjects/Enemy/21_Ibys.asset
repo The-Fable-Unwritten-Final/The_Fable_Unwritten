@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d99085e4860989e40ba273fad6060564, type: 3}
-  m_Name: "10_\uB291\uB300"
+  m_Name: 21_Ibys
   m_EditorClassIdentifier: 
-  idNum: 10
-  enemyName: "\uB291\uB300"
+  idNum: 21
+  enemyName: "\uC774\uBC14\uC774\uC2A4"
   exp: 5
-  maxHP: 15
-  currentHP: 15
+  maxHP: 25
+  currentHP: 25
   aTKValue: 0
   dEFValue: 0
   stun: 0
@@ -26,14 +26,20 @@ MonoBehaviour:
   type: 0
   skillList:
   - skillIndex: 100
-    damage: 5
-    percentage: 1
-  illust: illust1_0
+    damage: 6
+    percentage: 65
+  - skillIndex: 108
+    damage: 0
+    percentage: 80
+  - skillIndex: 112
+    damage: 0
+    percentage: 100
+  illust: illust2_1
   currentStance: 1
-  animationController: {fileID: 9100000, guid: 74d331f4eb162fa41a300fd5bcdcc0fb, type: 2}
-  AttackSkillEffect: fx3_bite_large_yellow
+  animationController: {fileID: 9100000, guid: 5ef73eb61ff208f43955ab8c759ff8d1, type: 2}
+  AttackSkillEffect: fanfx2_claw_large_blue
   AllySkillEffect: 
-  TopStance: 0.3
-  MiddleStance: 0.4
-  BottomStance: 0.3
-  loot: 00000000
+  TopStance: 0.6
+  MiddleStance: 0.2
+  BottomStance: 0.2
+  loot: 01000000

@@ -10,42 +10,36 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d99085e4860989e40ba273fad6060564, type: 3}
-  m_Name: "25_\uC774\uC988\uCE7C"
+  m_Name: 20_WizCat
   m_EditorClassIdentifier: 
-  idNum: 25
-  enemyName: "\uC774\uC988\uCE7C"
-  exp: 15
-  maxHP: 120
-  currentHP: 120
+  idNum: 20
+  enemyName: "\uC704\uC988\uCEA3"
+  exp: 5
+  maxHP: 30
+  currentHP: 30
   aTKValue: 0
   dEFValue: 0
   stun: 0
   blind: 0
   block: 0
   note: 
-  type: 2
+  type: 0
   skillList:
   - skillIndex: 100
-    damage: 15
-    percentage: 15
-  - skillIndex: 104
-    damage: 8
-    percentage: 35
-  - skillIndex: 105
-    damage: 6
+    damage: 5
     percentage: 55
-  - skillIndex: 111
-    damage: 10
+  - skillIndex: 106
+    damage: 0
     percentage: 80
   - skillIndex: 112
-    damage: 5
+    damage: 0
     percentage: 100
-  illust: illust2_5
+  illust: illust2_0
   currentStance: 1
-  animationController: {fileID: 9100000, guid: 168ef65833d7ea2468bb054f4a512bb0, type: 2}
-  AttackSkillEffect: pj1_fireball_large_red
+  animationController: {fileID: 9100000, guid: d534dfa6d074f864ea9cc5060479bf8e, type: 2}
+  AttackSkillEffect: pj1_fireball_large_blue
   AllySkillEffect: 
-  TopStance: 0.3
-  MiddleStance: 0.4
-  BottomStance: 0.3
-  loot: 010000000200000003000000
+  TopStance: 0.2
+  MiddleStance: 0.2
+  BottomStance: 0.6
+  loot: 01000000

@@ -8,6 +8,12 @@ public class PopupUI_ReturnTitle : BasePopupUI
 {
     public void OnClickToTitle()
     {
+        var setting = ProgressDataManager.Instance;
+        var lasVisitde = setting.VisitedNodes.Last();
+
+        // 애널리틱스
+        GameManager.Instance.analyticsLogger.LogStageFailInfo(setting.SavedStageData.stageIndex, lasVisitde.columnIndex); // 전투 패배 시 애널리틱스 기록
+
         CloseAll();
         UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.SubTitleScene);
     }

@@ -10,33 +10,42 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d99085e4860989e40ba273fad6060564, type: 3}
-  m_Name: "11_\uC6B0\uB450\uBA38\uB9AC \uB291\uB300"
+  m_Name: 35_Luciel
   m_EditorClassIdentifier: 
-  idNum: 11
-  enemyName: "\uC6B0\uB450\uBA38\uB9AC \uB291\uB300"
-  exp: 10
-  maxHP: 30
-  currentHP: 30
+  idNum: 35
+  enemyName: "\uB8E8\uC2DC\uC5D8"
+  exp: 15
+  maxHP: 80
+  currentHP: 80
   aTKValue: 0
   dEFValue: 0
   stun: 0
   blind: 0
   block: 0
   note: 
-  type: 1
+  type: 2
   skillList:
   - skillIndex: 100
-    damage: 10
-    percentage: 75
+    damage: 15
+    percentage: 20
   - skillIndex: 104
+    damage: 8
+    percentage: 35
+  - skillIndex: 105
     damage: 6
+    percentage: 60
+  - skillIndex: 115
+    damage: -15
+    percentage: 80
+  - skillIndex: 116
+    damage: -5
     percentage: 100
-  illust: illust1_1
+  illust: illust3_5
   currentStance: 1
-  animationController: {fileID: 9100000, guid: 3d1bade974575ad4fbcbaf98fd78a5fd, type: 2}
-  AttackSkillEffect: fx3_bite_large_red
-  AllySkillEffect: 
+  animationController: {fileID: 9100000, guid: f03a74ddb8f43ce498b203497ad3ec0c, type: 2}
+  AttackSkillEffect: fx3_lightning_aura_large_yellow
+  AllySkillEffect: fanfx2_cure_large_yellow
   TopStance: 0.3
   MiddleStance: 0.4
   BottomStance: 0.3
-  loot: 00000000
+  loot: 020000000100000003000000
