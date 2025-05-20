@@ -298,16 +298,6 @@ public class BattleFlowController : MonoBehaviour
             CheckBattleEnd();
         }
 
-        // 사망자 제거 (원본 리스트 정리)
-        for (int i = 0; i < enemyParty.Count; i++)
-        {
-            var enemy = enemyParty[i];
-            if (enemy != null && !enemy.IsAlive())
-            {
-                enemyParty[i] = null; // 위치 유지하면서 null 처리
-            }
-        }
-
         onEnemyTurnComplete?.Invoke();
     }
 
@@ -359,7 +349,7 @@ public class BattleFlowController : MonoBehaviour
             isWin = 1;
             foreach(var enemy in enemyParty)
             {
-                if (enemy == null || !enemy.IsAlive()) continue;
+                if (enemy == null || enemy.IsAlive()) continue;
                 if (enemy is Enemy enemyComponent)
                 {
                     var enemyData = enemyComponent.enemyData;
