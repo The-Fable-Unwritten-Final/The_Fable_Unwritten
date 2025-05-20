@@ -195,7 +195,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
                 PlayerManager.Instance.AddPlayerDuringGame(character, DataManager.Instance.AllCards);
             }
         }
-        itemCounts[3] += 100;
+        itemCounts[3] = 100;
     }
 
     public void ApplySaveToPlayerDatas(List<PlayerSaveData> saves)
