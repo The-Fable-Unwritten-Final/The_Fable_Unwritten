@@ -32,6 +32,9 @@ public class CardDisplay : MonoBehaviour
     public bool isOnDrag = false; // 드래그 중인지 여부
     public CardInHand currentCard; // 현재 드래그 중인 카드
 
+
+    Coroutine cardDragCoroutine;
+
     private void Awake()
     {
         for(int i = 0; i < cardsInHand.Count; i++)
@@ -114,7 +117,7 @@ public class CardDisplay : MonoBehaviour
                 targetPos.x =(oddeven * -100) + (i * 100);
                 targetPos.y = (- yOffset * distance * (distance + 1) / 2f) - cardMidPosY;
                 cardsInHand[i].GetComponent<RectTransform>()
-                    .DOAnchorPos(targetPos, 0.5f)
+                    .DOAnchorPos(targetPos, 0.1f)
                     .OnStart(() =>
                     {
                         cardsInHand[cash].originalPos = targetPos;
@@ -234,8 +237,8 @@ public class CardDisplay : MonoBehaviour
         // 코스트가 충분한 경우 카드의 상태를 CanDrag로 변경
         for(int i = 0; i < cardsInHand.Count; i++)
         {
-            // 만약 update 호출전 새로운 카드를 드래그 하였을 때의 예외처리.
-            if (cardsInHand[i].GetCardState() == CardState.OnDrag) return;
+            // 만약 update 호출전 새로운 카드를 드래그 하였을 때의 예외처리. + 여기에 실제로 드래그 중이 아닌데 이전 값이 남아있을 경우의 && 예외처리
+            if (cardsInHand[i].GetCardState() == CardState.OnDrag && Input.GetMouseButtonDown(0)) return;
 
             if (cardsInHand[i].cardData.IsUsable(GameManager.Instance.turnController.battleFlow.currentMana))// 현재 보유 마나를 가져와, 사용 가능한지 확인. (사용 가능시 CanDrag, 불가능시 CanMouseOver)
             {
@@ -364,5 +367,29 @@ public class CardDisplay : MonoBehaviour
                 card.effectVisualizer.ApplyVisualState(CardVisualState.None); // 카드의 상태를 None으로 변경 (이펙트 제거)
             }
         }
+    }
+
+    // 카드 상태 일정 주기마다 업데이트 로직
+    public void StartPlayerTurn()
+    {
+        // 기존 코루틴이 돌고 있다면 멈추고 다시 시작
+        if (cardDragCoroutine != null)
+            StopCoroutine(cardDragCoroutine);
+
+        cardDragCoroutine = StartCoroutine(RepeatSetCardCanDrag());
+    }
+    public void EndPlayerTurn()
+    {
+        if (cardDragCoroutine != null)
+        {
+            StopCoroutine(cardDragCoroutine);
+            cardDragCoroutine = null;
+        }
+    }
+    private IEnumerator RepeatSetCardCanDrag()
+    {
+        SetCardCanDrag();
+        CardArrange();
+            yield return new WaitForSeconds(0.2f);
     }
 }

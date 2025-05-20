@@ -95,6 +95,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public void OnPointerEnter(PointerEventData eventData)
     {
         // 카드의 시각적 효과 (이펙트 제외)
+        if(GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 상호작용 불가능
         if(cardState == CardState.None) return; // 상태가 None인 경우 상호작용 불가능
 
         cardDisplay.currentCard = this;// 현재 카드 설정.
@@ -110,7 +111,8 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public void OnPointerExit(PointerEventData eventData)
     {
         // 카드의 시각적 효과 (이펙트 제외)
-        if(cardState == CardState.OnDrag) return; // 카드 상태가 OnDrag인 경우에는 원래 위치로 돌아가지 않음.
+        if (GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 상호작용 불가능
+        if (cardState == CardState.OnDrag) return; // 카드 상태가 OnDrag인 경우에는 원래 위치로 돌아가지 않음.
         cardDisplay.currentCard = null;// 현재 카드 설정 해제.
         ResetSiblingIndex();// List의 순서에 맞게 원래 위치로 돌아가기.
         rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine);
@@ -148,11 +150,13 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         seq.OnComplete(() =>
         {
             Destroy(this.gameObject);
+            cardDisplay.isOnDrag = false; // 드래그 상태 해제
             cardDisplay.CardArrange();
         });
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if(GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 드래그 불가능
         if (cardState != CardState.CanDrag) return; // 카드 상태가 CanDrag가 아닌 경우 드래그 불가능
 
         cardDisplay.isOnDrag = true; // 드래그 시작 시 카드 드래그 상태를 true로 설정
@@ -166,6 +170,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     }
     public void OnDrag(PointerEventData eventData)
     {
+        if(GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 드래그 불가능
         //this.transform.position = eventData.position;
         if(this.rect.anchoredPosition == originalPos)
             rect.DOAnchorPos(targetPos, 0.4f).SetEase(Ease.OutSine);// 드래그 할때 카드가 위로 안올라올 경우의 후처리.
@@ -173,6 +178,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public void OnEndDrag(PointerEventData eventData)
     {
         // 카드의 시작적 효과 (이펙트 제외)
+        if(GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 드래그 불가능
         if (cardState != CardState.OnDrag) return; // 카드 상태가 OnDrag가 아닌 경우 해당 메서드 실행하지 않음
 
         cardDisplay.isOnDrag = false;
@@ -264,6 +270,9 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         if(cardState == CardState.CanDiscard) yield break;
 
         SetCardState(CardInHand.CardState.None);// 카드가 움직이는 도중에는 상호작용 제한.
+        //cardDisplay.isOnDrag = false; // 드래그 상태 해제
+        //cardDisplay.currentCard = null; // 현재 카드 설정 해제
+
         yield return new WaitForSeconds(0.2f);
 
         // 카드가 움직이기 전에 새로운 카드를 잡았을 경우, 상태 원상복구. (사용 가능하게)
