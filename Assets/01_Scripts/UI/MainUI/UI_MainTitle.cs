@@ -46,7 +46,8 @@ public class UI_MainTitle : MonoBehaviour
         // 데이터 초기화
         ProgressDataManager.Instance.ResetProgress();
 
-        if (ProgressDataManager.Instance.IsSecondGame)
+        // 튜토리얼 6(1스테이지 클리어 후 2스테이지 시작 )
+        if (ProgressDataManager.Instance.IsSecondGame && ProgressDataManager.Instance.ProgressTutorial.Contains(6))
         {
             UIManager.Instance.PopupUnlockUI();          
             GameManager.Instance.tutorialController.ShowTutorial(8);
