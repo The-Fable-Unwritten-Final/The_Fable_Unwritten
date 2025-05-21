@@ -30,6 +30,8 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     [SerializeField] Image frameCover;
     [SerializeField] Image illustCover;
 
+    bool isPointerOver = false; // 마우스 포인터가 카드 위에 있는지 여부
+
     public enum CardState// 추후 턴 상태와 연계해서 카드의 상태관리. (카드의 상태에 따른 상호작용 가능 여부 설정.)
     {
         None,// 아무런 상호 작용이 불가능한 상태. (각종 상태들의 중간 거쳐가는 단계)
@@ -49,6 +51,28 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     private void OnDestroy()
     {
         StopAllCoroutines(); // 카드가 파괴될 때 모든 코루틴 정지
+    }
+
+    private void Update()
+    {
+        if (isPointerOver)
+        {
+            if(cardDisplay.currentCard != this)
+            {
+                if (GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 상호작용 불가능
+                if (cardState == CardState.None) return; // 상태가 None인 경우 상호작용 불가능
+
+                cardDisplay.currentCard = this;// 현재 카드 설정.
+                transform.SetAsLastSibling();// 카드가 가장 위에 오도록 설정
+
+                rect.DOAnchorPos(targetPos, 0.4f).SetEase(Ease.OutSine);
+
+                // 카드의 이펙트 시각 효과
+                if (effectVisualizer.currentState == CardVisualState.Chain) return; // 카드의 상태가 Chain인 경우 이펙트 변경 취소 (빨간색 유지)
+
+                effectVisualizer.ApplyVisualState(CardVisualState.Ready); // 카드의 상태를 Ready로 변경 (노란색 테두리)
+            }
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData)// 카드 버리기 관련 상호작용 클릭
@@ -94,6 +118,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
+        isPointerOver = true; // 마우스 포인터가 카드 위에 있는 상태로 설정
         // 카드의 시각적 효과 (이펙트 제외)
         if(GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 상호작용 불가능
         if(cardState == CardState.None) return; // 상태가 None인 경우 상호작용 불가능
@@ -110,6 +135,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     }
     public void OnPointerExit(PointerEventData eventData)
     {
+        isPointerOver = false; // 마우스 포인터가 카드 위에 있지 않은 상태로 설정
         // 카드의 시각적 효과 (이펙트 제외)
         if (GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 상호작용 불가능
         if (cardState == CardState.OnDrag) return; // 카드 상태가 OnDrag인 경우에는 원래 위치로 돌아가지 않음.
