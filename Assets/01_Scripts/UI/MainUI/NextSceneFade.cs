@@ -15,6 +15,7 @@ public class NextSceneFade : MonoBehaviour
     /// <param name="nextSceneName">해당 씬 이름 string</param>
     public void StartSceneTransition(string nextSceneName)
     {
+        fadeImage.raycastTarget = true;
         StartCoroutine(Transition(nextSceneName));
     }
 
@@ -46,6 +47,8 @@ public class NextSceneFade : MonoBehaviour
 
         // 페이드 인
         yield return StartCoroutine(Fade(1f, 0f));
+
+        fadeImage.raycastTarget = false;
     }
 
     IEnumerator Fade(float from, float to)
