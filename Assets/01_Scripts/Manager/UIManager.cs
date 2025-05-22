@@ -49,14 +49,17 @@ public class UIManager : MonoSingleton<UIManager>
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (popupStack.Count == 0) return;
-        foreach(var popup in popupStack) popup.Close();
-
         if (popupRoot == null)
         {
             Debug.Log("PopupUI 의 캔버스가 없습니다.");
             GameObject popupRootObj = GameObject.Find("Canvas/PopupUI");
             popupRoot = popupRootObj.transform;
+        }
+
+        while (popupStack.Count > 0)
+        {
+            var popup = popupStack.Peek();
+            popup.Close(); // 열려있는 팝업 닫기.
         }
     }
 

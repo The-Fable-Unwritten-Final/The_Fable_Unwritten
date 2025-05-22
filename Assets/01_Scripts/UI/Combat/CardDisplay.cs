@@ -389,8 +389,14 @@ public class CardDisplay : MonoBehaviour
     }
     private IEnumerator RepeatSetCardCanDrag()
     {
-        SetCardCanDrag();
-        CardArrange();
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0) || cardsInHand.Any(x => x.isPointerOver)) yield break;
+
+            SetCardCanDrag();
+            CardArrange();
+            Debug.Log("카드 상태 업데이트");
             yield return new WaitForSeconds(0.2f);
+        }
     }
 }

@@ -30,7 +30,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     [SerializeField] Image frameCover;
     [SerializeField] Image illustCover;
 
-    bool isPointerOver = false; // 마우스 포인터가 카드 위에 있는지 여부
+    public bool isPointerOver = false; // 마우스 포인터가 카드 위에 있는지 여부
 
     public enum CardState// 추후 턴 상태와 연계해서 카드의 상태관리. (카드의 상태에 따른 상호작용 가능 여부 설정.)
     {
