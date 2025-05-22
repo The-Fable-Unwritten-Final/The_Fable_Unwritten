@@ -306,6 +306,7 @@ public class CardDisplay : MonoBehaviour
     }
     private void ResetCardState()
     {
+        if(currentCard == null) return;// 현재 카드가 없으면 사용 불가.
         currentCard.SetCardState(CardInHand.CardState.CanDrag);
         currentCard.transform.SetSiblingIndex(cardsInHand.IndexOf(currentCard));
         currentCard = null;

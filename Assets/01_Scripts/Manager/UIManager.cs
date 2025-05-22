@@ -49,8 +49,8 @@ public class UIManager : MonoSingleton<UIManager>
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        //popupInstances.Clear();// 씬이 바뀔 때 팝업 인스턴스 초기화 << 초기화가 안되는게 맞을듯. 팝업 UI는 Dontdestroy 캔버스에 보관중.
-        popupStack.Clear();// 팝업 스택 초기화
+        if (popupStack.Count == 0) return;
+        foreach(var popup in popupStack) popup.Close();
 
         if (popupRoot == null)
         {
