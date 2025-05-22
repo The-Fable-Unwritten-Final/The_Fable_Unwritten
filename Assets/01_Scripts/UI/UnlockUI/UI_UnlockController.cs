@@ -146,8 +146,6 @@ public class UI_UnlockController : BasePopupUI
     //팝업 끄기(모험 새로하기)
     public void CloseUnlockPopup()
     {
-        popupPanel.SetActive(false);
-
         // 초기화 하고 새로 시작
 
         // 플레이어 덱 초기화
@@ -164,6 +162,7 @@ public class UI_UnlockController : BasePopupUI
         ProgressDataManager.Instance.IsSecondGame = true;
         UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
 
+        Close(); // 팝업 닫기
     }
 }
 

@@ -26,7 +26,13 @@ public abstract class BasePopupUI : MonoBehaviour
     /// </summary>
     public virtual void Close()
     {
-        UIManager.Instance.popupStack.Pop();
+        var popStack = UIManager.Instance.popupStack;
+
+        if (popStack.Count > 0 && popStack.Peek() == this)
+        {
+            popStack.Pop();
+        }
+
         gameObject.SetActive(false);
     }
 }

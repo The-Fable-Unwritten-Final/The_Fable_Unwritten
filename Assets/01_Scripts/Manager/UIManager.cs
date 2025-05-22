@@ -58,8 +58,11 @@ public class UIManager : MonoSingleton<UIManager>
 
         while (popupStack.Count > 0)
         {
-            var popup = popupStack.Peek();
-            popup.Close(); // 열려있는 팝업 닫기.
+            var popup = popupStack.Pop();
+            if (popup != null)
+            {
+                popup.gameObject.SetActive(false);
+            }
         }
     }
 

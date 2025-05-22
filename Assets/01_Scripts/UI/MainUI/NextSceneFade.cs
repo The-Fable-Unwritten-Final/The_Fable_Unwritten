@@ -37,6 +37,13 @@ public class NextSceneFade : MonoBehaviour
         while (!async.isDone)
             yield return null;
 
+        // 열려있는 팝업 닫기
+        while (UIManager.Instance.popupStack.Count > 0)
+        {
+            var popup = UIManager.Instance.popupStack.Peek();
+            popup.Close(); // 열려있는 팝업 닫기.
+        } 
+
         // 페이드 인
         yield return StartCoroutine(Fade(1f, 0f));
     }
