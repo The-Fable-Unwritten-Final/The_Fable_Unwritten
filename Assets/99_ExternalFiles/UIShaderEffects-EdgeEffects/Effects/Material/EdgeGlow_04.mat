@@ -11,8 +11,7 @@ Material:
   m_Shader: {fileID: 4800000, guid: 7fb54d616e120ad499ed8c63472a6b9b, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _IsCircular
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -115,7 +114,7 @@ Material:
     - _GlossyReflections: 0
     - _HueShift: -133
     - _InitialRotation: 0
-    - _IsCircular: 1
+    - _IsCircular: 0
     - _Mask2_Intensity: 1
     - _Mask2_Power: 1
     - _MaskTex2_ScrollSpeed_X: 0
@@ -129,7 +128,7 @@ Material:
     - _Offset: -0.03
     - _Parallax: 0.005
     - _QueueOffset: 0
-    - _RadialUV_Power: 4.34
+    - _RadialUV_Power: 1.09
     - _ReceiveShadows: 1
     - _RotationSpeed: 0
     - _ScrollSpeed_X: 0
@@ -150,7 +149,7 @@ Material:
     - _Use_Mask: 0
     - _Use_Mask2: 0
     - _WorkflowMode: 1
-    - _XThicknessScaleFactor: 1
+    - _XThicknessScaleFactor: 1.38
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}

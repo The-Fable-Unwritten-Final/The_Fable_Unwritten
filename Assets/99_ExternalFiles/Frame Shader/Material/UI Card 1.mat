@@ -9,6 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: UI Card 1
   m_Shader: {fileID: 4800000, guid: d7e11608110de5b45a0ea6138524999e, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - UNITY_UI_ALPHACLIP
   m_InvalidKeywords:
@@ -21,6 +23,7 @@ Material:
   stringTagMap:
     RenderType: Transparent
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -261,7 +264,7 @@ Material:
     - _BaseColor: {r: 0.53999996, g: 0.95, b: 0.98999995, a: 0.5}
     - _BumpDirection: {r: 1, g: 1, b: -1, a: 1}
     - _BumpTiling: {r: 1, g: 1, b: -2, a: 3}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 0, b: 0, a: 1}
     - _Color0: {r: 2, g: 0.72671366, b: 0, a: 0}
     - _ColorBottom: {r: 1, g: 0.36666667, b: 0, a: 0}
     - _ColorFrame: {r: 1, g: 0, b: 0.02352953, a: 0}
@@ -293,7 +296,7 @@ Material:
     - _SpeedTexture1: {r: 0, g: -0.1, b: 0, a: 0}
     - _SpeedTexture2: {r: 0, g: -0.1, b: 0, a: 0}
     - _SpeedTexture3: {r: 0, g: 0, b: 0, a: 0}
-    - _StrokeColor: {r: 1, g: 0.5151776, b: 0.18396229, a: 0}
+    - _StrokeColor: {r: 1, g: 0.5151776, b: 0.18396226, a: 0}
     - _TextureOffset1: {r: 0, g: 0, b: 0, a: 0}
     - _TextureOffset2: {r: 0, g: 0, b: 0, a: 0}
     - _TextureOffset3: {r: 0, g: 0, b: 0, a: 0}

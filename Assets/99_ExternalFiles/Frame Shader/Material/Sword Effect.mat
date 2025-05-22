@@ -9,6 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Sword Effect
   m_Shader: {fileID: 4800000, guid: 48b9dc1088be78c429fa5460950d34e3, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - PIXELSNAP_ON
   m_InvalidKeywords:
@@ -20,6 +22,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -277,7 +280,7 @@ Material:
     - _DistortionMaskScale: {r: 1, g: 1, b: 0, a: 0}
     - _DistortionMask_Scale: {r: 1, g: 1, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FillColor: {r: 1, g: 0.4650944, b: 0.10849059, a: 1}
+    - _FillColor: {r: 1, g: 0.21376117, b: 0.109803915, a: 1}
     - _GAmplitude: {r: 0.3, g: 0.35, b: 0.25, a: 0.25}
     - _GDirectionAB: {r: 0.3, g: 0.85, b: 0.85, a: 0.25}
     - _GDirectionCD: {r: 0.1, g: 0.9, b: 0.5, a: 0.5}
@@ -300,7 +303,7 @@ Material:
     - _SpeedTexture2: {r: 0, g: -0.1, b: 0, a: 0}
     - _SpeedTexture3: {r: 0, g: 0.5, b: 0, a: 0}
     - _SpeedTexture4: {r: 0, g: 0.2, b: 0, a: 0}
-    - _StrokeColor: {r: 1, g: 0.07212778, b: 0, a: 0}
+    - _StrokeColor: {r: 1, g: 0.3667643, b: 0, a: 0}
     - _StrokeColor1: {r: 1, g: 0, b: 0, a: 1}
     - _TextureOffset1: {r: 0, g: 0, b: 0, a: 0}
     - _TextureOffset2: {r: 0, g: 0, b: 0, a: 0}

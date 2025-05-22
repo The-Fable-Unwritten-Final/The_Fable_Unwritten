@@ -12,7 +12,6 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _IsCircular
   - _Use_Chromatic_Aberration
   - _Use_Mask
   - _Use_Mask2
@@ -113,7 +112,7 @@ Material:
     - _GlossyReflections: 0
     - _HueShift: -34
     - _InitialRotation: 0
-    - _IsCircular: 1
+    - _IsCircular: 0
     - _IsRadial: 0
     - _Mask2_HueShift: 0
     - _Mask2_Intensity: 1
@@ -129,7 +128,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueOffset: 0
-    - _RadialUV_Power: 0.65
+    - _RadialUV_Power: 0
     - _ReceiveShadows: 1
     - _RotationSpeed: 0
     - _ScrollSpeed_X: 0
