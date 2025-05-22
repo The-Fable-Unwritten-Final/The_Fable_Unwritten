@@ -35,6 +35,8 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
         }
     }
 
+    public CardModel card;
+
     public LinkedList<CardUseLog> UsedCardsForGame = new();         //단일 게임 전체 카드 사용 정보
     public LinkedList<CardUseLog> UsedCardsForStage = new();        //단일 스테이지 카드 사용 정보
     public LinkedList<CardUseLog> UsedCardsForBattle = new();       //단일 전투 카드 사용 정보
@@ -69,6 +71,8 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
         UsedCardsForBattle.AddLast(log);
         UsedCardsForCurrent.AddLast(log);
     }
+
+
 
     /// <summary>
     /// 턴 종료시 current리스트를 previous 리스트로 이동

@@ -22,6 +22,7 @@ public class BattleFlowController : MonoBehaviour
     [Header("UI")]
     public TextMeshProUGUI Mana;
 
+
     public List<IStatusReceiver> playerParty { get; private set; } = new();
 
     public List<IStatusReceiver> enemyParty = new List<IStatusReceiver> { null, null, null };
@@ -109,17 +110,22 @@ public class BattleFlowController : MonoBehaviour
 
         foreach (var player in playerParty)
         {
-            //──────── K.T.H 변경 ────────
-            isBattleEnded = false;
-            currentMana = startMana;
-            currentTurn = TurnState.PlayerTurn;
-
-            // → 여기에 추가: 모든 캐릭터 자세를 Middle로 초기화
-            foreach (var receiver in playerParty)
+            if (player is PlayerController pc)
             {
-                if (receiver is PlayerController pc)
+                switch(pc.playerData.IDNum)
                 {
-                    pc.ChangeStance(PlayerData.StancType.Middle);
+                    case 0:
+                        pc.playerData.currentStance = PlayerData.StancType.refine;
+                        break;
+                    case 1:
+                        pc.playerData.currentStance = PlayerData.StancType.grace;
+                        break;
+                    case 2:
+                        pc.playerData.currentStance = PlayerData.StancType.guard;
+                        break;
+                    default:
+                        break;
+
                 }
             }
 
@@ -163,7 +169,6 @@ public class BattleFlowController : MonoBehaviour
     /// <param name="target">타겟</param>
     public void UseCard(CardModel card, IStatusReceiver caster, List<IStatusReceiver> targets)
     {
-
         if (!card.IsUsable(currentMana) || !caster.IsAlive())      //사용 가능하지 않거나 적 또는 사용자가 죽어 있다면 생략하기
         {
             return;
@@ -261,7 +266,14 @@ public class BattleFlowController : MonoBehaviour
         foreach (var player in playerParty)
         {
             if (player.IsAlive())
+            {
                 (player as PlayerController)?.TickStatusEffects();
+                if(player is PlayerController p)
+                {
+                    p.playerData.ResetCurCard();
+                }
+            }
+
 
             player.Deck.DiscardUnmaintainedCardsAtTurnEnd();
             ClearAllDeckEnhanced();
@@ -272,7 +284,7 @@ public class BattleFlowController : MonoBehaviour
             if (enemy != null && enemy.IsAlive())
                 (enemy as Enemy)?.TickStatusEffects();
         }
-
+        
         BattleLogManager.Instance.OnTurnEnd();
 
         // 2. 턴 수 증가
@@ -294,9 +306,9 @@ public class BattleFlowController : MonoBehaviour
             if (enemy == null || !enemy.IsAlive()) continue;
 
             yield return EnemyPattern.ExecutePattern(enemy);
-            yield return new WaitForSeconds(0.5f);
-            CheckBattleEnd();
+            yield return new WaitForSeconds(0.2f);
         }
+        CheckBattleEnd();
 
         onEnemyTurnComplete?.Invoke();
     }
@@ -442,6 +454,7 @@ public class BattleFlowController : MonoBehaviour
 
             if (targets.Count > 0)
             {
+                BattleLogManager.Instance.card = card;
                 UseCard(card, casterController, targets);
                 BattleLogManager.Instance.RegisterCardUse(casterController, card);
                 RefreshAllDeckEnhanced();

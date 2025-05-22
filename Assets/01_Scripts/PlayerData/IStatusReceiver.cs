@@ -39,7 +39,7 @@ public interface IStatusReceiver
     void CameraActionPlay();                   //행동시 카메라의 줌인 액션 연출.
     void ApplyStatusEffect(StatusEffect effect);     // 버프, 디버프 적용
     float ModifyStat(BuffStatType statType, float baseValue); // 버프 기반 수치 계산
-    void TakeDamage(float amount);                     // 데미지 적용
+    float TakeDamage(float amount);                     // 데미지 적용
     void TakeTrueDamage(float amount);                  //방무뎀 적용
     void Heal(float amount);                           // 힐 적용
     bool IsAlive();                                  // 생존 여부 체크
@@ -51,5 +51,5 @@ public interface IStatusReceiver
     void PlayAttackAnimation();
     void PlayHitAnimation();
     Transform CachedTransform { get; }
-
+    DmgBarDisplay dmgBar { get; }
 }

@@ -58,7 +58,7 @@ public class StanceOptionButton : MonoBehaviour
     private void UpdateHighlight()//+
     {
         if (backgroundImage == null) return;
-        bool isSelected = owner.playerData.currentStance.stencType == stanceType;
+        bool isSelected = owner.playerData.currentStance == stanceType;
         backgroundImage.color = isSelected ? highlightColor : normalColor;
     }
 }

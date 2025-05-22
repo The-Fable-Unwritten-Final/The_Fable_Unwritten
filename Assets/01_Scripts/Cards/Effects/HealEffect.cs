@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 
 /// <summary>
@@ -22,32 +23,59 @@ public class HealEffect : CardEffectBase
         //스탯 변경 적용 후
         float finalHeal = caster.ModifyStat(BuffStatType.Defense, amount);
         finalHeal = (isEnhanced == true) ? finalHeal * 1.5f : finalHeal;
+
+        bool stanceBoosted = false;
+        bool stanceWeakened = false;
+
+        if (caster is PlayerController pc)
+            (finalHeal, stanceBoosted, stanceWeakened) = StanceHelper.ApplyStanceToHeal(pc, finalHeal);
+
         var slot = GameManager.Instance.turnController.battleFlow;
 
         switch (target)
         {
             case 0:
                 if(slot.middleSlot.IsAlive())
-                    slot.middleSlot.Heal(finalHeal);
+                    HealAndDisplay(slot.middleSlot);
                 break;
             case 1:
                 if (slot.backSlot.IsAlive())
-                    slot.backSlot.Heal(finalHeal);
+                    HealAndDisplay(slot.backSlot);
                 break;
             case 2:
                 if (slot.frontSlot.IsAlive())
-                    slot.frontSlot.Heal(finalHeal);
+                    HealAndDisplay(slot.frontSlot);
                 break;
             case 3:
             default:
                 foreach(var target in targets)
                 {
                     if (target.IsAlive())
-                        target.Heal(finalHeal);
+                        HealAndDisplay(target);
                 }
                 break;
         }
+
+
+
+        void HealAndDisplay(IStatusReceiver target)
+        {
+            if (!target.IsAlive()) return;
+
+            target.Heal(finalHeal);
+
+            var healText = new DmgTextData
+            {
+                Text = $"+{Mathf.RoundToInt(finalHeal)}",
+                type = DmgTextType.Heal,
+                isCardEnhanced = isEnhanced == true,
+                isStanceEnhanced = stanceBoosted,
+                isWeakened = stanceWeakened
+            };
+            target.dmgBar.Initialize(healText, target.CachedTransform.position);
+        }
     }
+
 
 
     public override string GetDescription() => $"대상을 {amount}만큼 회복합니다.";

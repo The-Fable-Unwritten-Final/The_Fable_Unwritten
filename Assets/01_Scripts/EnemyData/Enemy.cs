@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     public bool hasBlock = false;
 
     [SerializeField] private HpBarDisplay hpBarDisplay;
+    [SerializeField] private DmgBarDisplay dmgBarDisplay;
 
     private Animator animator;
     private StatusDisplay statusDisplay;
@@ -168,13 +169,13 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public Transform CachedTransform => transform;
 
-    public void TakeDamage(float amount)
+    public float TakeDamage(float amount)
     {
         if (hasBlock)
         {
             hasBlock = false;
             Debug.Log($"[Block] {enemyData.EnemyName}의 블록으로 피해 {amount} 무효화");
-            return;
+            return 0;
         }
 
         float reduced = amount - ModifyStat(BuffStatType.Defense, 0f); // 방어력으로 피해 감소
@@ -183,21 +184,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         enemyData.CurrentHP -= reduced;
         Debug.Log($"{enemyData.EnemyName}가 {reduced}의 피해를 받음! 현재 체력: {enemyData.CurrentHP}");
 
-        if (enemyData.CurrentHP <= 0)
-        {
-            Debug.Log($"{enemyData.EnemyName} 사망");
-
-            gameObject.SetActive(false); // ▶ 사망 시 비활성화
-
-            ProgressDataManager.Instance.CurrentExp += enemyData.exp;
-            GameManager.Instance.turnController.battleFlow.totalExp += enemyData.exp;
-
-            // 💡 전투 종료 체크
-            if (GameManager.Instance != null && GameManager.Instance.turnController.battleFlow != null)
-            {
-                GameManager.Instance.turnController.battleFlow.CheckBattleEnd();
-            }
-        }
+        return reduced;
     }
 
     public void CameraActionPlay()
@@ -212,6 +199,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         set => enemyData.MaxHP = value;
     }
     //현재 체력
+
     public float currentHP
     {
         get => enemyData.CurrentHP;
@@ -309,4 +297,6 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         }
         return defTotal;
     }
+
+    public DmgBarDisplay dmgBar => dmgBarDisplay;
 }

@@ -43,6 +43,8 @@ public class PlayerData : ScriptableObject
     public float DEF; //방어력
     public CharacterClass CharacterClass => (CharacterClass)IDNum;
 
+
+
     public RuntimeAnimatorController animationController;
 
 
@@ -52,22 +54,16 @@ public class PlayerData : ScriptableObject
 
     public enum StancType
     {
-        High,
-        Middle,
-        Low
+        refine,
+        mix,
+        grace,
+        judge,
+        guard,
+        rush
     }
 
-    [System.Serializable]
-    public class StancValue
-    {
-        public float defenseBonus; //방어력 보너스
-        public float attackBonus; //공격력 보너스
-        public StancType stencType; //StencType 표시
-        public Sprite stanceIcon; //자세 움직임 Sprite
-    }
-
-    public List<StancValue> allStances; //임시 작성
-    public StancValue currentStance;
+    public StancType currentStance;//현재 자세
+    public CardType? FirstTimeUsedType;  //소피아 처음 사용 카드 확인 용
 
     public List<int> defaultDeckIndexes;// 시작 덱 카드 인덱스 저장 (CSV 기준 index)
     public List<int> currentDeckIndexes;// 현재 덱 카드 인덱스 저장 (CSV 기준 index, 세이브 로드 용)
@@ -117,5 +113,10 @@ public class PlayerData : ScriptableObject
     {
         if (currentHP <= 0)
             currentHP = 1;
+    }
+
+    public void ResetCurCard()
+    {
+        FirstTimeUsedType = null;
     }
 }

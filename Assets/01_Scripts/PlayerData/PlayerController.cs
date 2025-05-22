@@ -10,16 +10,21 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public DeckModel deckModel;         //플레이어가 들고 있는 덱
     public bool hasBlock = false;           //방어막 획득 여부
     [SerializeField] private HpBarDisplay hpBarDisplay;
+    [SerializeField] private DmgBarDisplay dmgBarDisplay;
 
     private Animator animator;
 
-    public void OnClickHighStance() => ChangeStance(PlayerData.StancType.High);
-    public void OnClickMidStance() => ChangeStance(PlayerData.StancType.Middle);
-    public void OnClickLowStance() => ChangeStance(PlayerData.StancType.Low);
+    public void OnClickRefineStance() => ChangeStance(PlayerData.StancType.refine);
+    public void OnClickMixStance() => ChangeStance(PlayerData.StancType.mix);
+    public void OnClickGraceStance() => ChangeStance(PlayerData.StancType.grace);
+    public void OnClickJudgeStance() => ChangeStance(PlayerData.StancType.judge);
+    public void OnClickGuardStance() => ChangeStance(PlayerData.StancType.guard);
+    public void OnClickRushStance() => ChangeStance(PlayerData.StancType.rush);
+
 
     public DeckModel Deck => deckModel;     //덱 변환 함수
     public bool IsIgnited => false;  // 점화 여부 - 추후 확장
-    public string CurrentStance => playerData.currentStance.stencType.ToString();       //현재의 자세를 가져옴
+    public string CurrentStance => playerData.currentStance.ToString();       //현재의 자세를 가져옴
     public CharacterClass ChClass{get; set;}
 
     //---
@@ -104,32 +109,42 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// 데미지를 받아 처리하는 함수
     /// </summary>
     /// <param name="amount">데미지 량</param>
-    public void TakeDamage(float amount)
+    public float TakeDamage(float amount)
     {
         if (hasBlock)
         {
             hasBlock = false;
             Debug.Log($"[Block] {playerData.CharacterClass.ToString()}의 블록으로 피해 {amount} 무효화");
-            return;
+            return 0;
         }
 
         float reduced = amount - ModifyStat(BuffStatType.Defense, 0f);
         reduced = Mathf.Max(reduced, 1f);
 
+        if(playerData.currentStance == PlayerData.StancType.guard)
+        {
+            reduced = reduced / 2;
+        }
+        else if (playerData.currentStance == PlayerData.StancType.rush)
+        {
+            reduced = reduced * 2;
+        }
+
+        var dmg = new DmgTextData
+        {
+            Text = $"-{Mathf.RoundToInt(reduced)}",
+            type = DmgTextType.Normal,
+            isCardEnhanced = false,
+            isStanceEnhanced = false,
+            isWeakened = false
+        };
+
+        dmgBar?.Initialize(dmg, CachedTransform.position);
+
         playerData.currentHP = Mathf.Max(0, playerData.currentHP - reduced);
         Debug.Log($"{playerData.CharacterName} 피해: {reduced}, 현재 체력: {playerData.currentHP}");
 
-        if (playerData.currentHP <= 0)
-        {
-            Debug.Log($"{playerData.CharacterName} 사망");
-
-            gameObject.SetActive(false); // ▶ 사망 시 비활성화
-            GameManager.Instance.combatUIController?.CardStatusUpdate();
-            if (GameManager.Instance != null && GameManager.Instance.turnController.battleFlow != null)
-            {
-                GameManager.Instance.turnController.battleFlow.CheckBattleEnd();
-            }
-        }
+        return reduced;
     }
 
     /// <summary>
@@ -285,8 +300,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     //──────── K.T.H 변경 ────────
     public void ChangeStance(PlayerData.StancType newStance) //StancUI 함수
     {
-        PlayerData.StancValue stance = playerData.allStances.Find(s => s.stencType == newStance);
-        if (stance != null)
+        PlayerData.StancType stance = newStance;
+        /*if (stance != null)
         {
             playerData.currentStance = stance;
             float finalAtk = playerData.ATK + stance.attackBonus; //스텐스 공격력 계산
@@ -295,16 +310,15 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         }
         //──────── K.T.H 변경 ────────
         var sv = playerData.allStances.Find(s => s.stencType == newStance); // newStance 에 맞는 StancValue 찾아서 currentStance 에 할당
-        if (sv == null) { Debug.LogError("allStances에 해당 Stance가 없습니다."); return; }
+        if (sv == null) { Debug.LogError("allStances에 해당 Stance가 없습니다."); return; }*/
 
-        playerData.currentStance = sv;
+        playerData.currentStance = stance;
         //──────── K.T.H 변경 ────────
 
         // (선택) 화면에 스프라이트를 바꿔주거나, UI 텍스트를 갱신하려면 여기에 추가
-
     }
 
-
+    /*
     /// <summary>
     /// 적이 공격해올 때 호출
     /// enemyStance에 따라 baseDamage를 배율로 처리
@@ -313,7 +327,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public void ReceiveAttack(PlayerData.StancType enemyStance, float baseDamage)
     {
         // 플레이어의 현재 스탠스
-        var playerStance = playerData.currentStance.stencType;
+        var playerStance = playerData.currentStance;
 
         float finalDamage;
 
@@ -352,7 +366,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         {
             Debug.Log($"[회피] enemy:{enemyStance} → player:{playerStance}");
         }
-    }
+    }*/
 
 
     //public void ReceiveAttack(PlayerData.StancType enemyAttackStance, float damage)
@@ -477,4 +491,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         }
         return defTotal;
     }
+
+    public DmgBarDisplay dmgBar => dmgBarDisplay;
 }

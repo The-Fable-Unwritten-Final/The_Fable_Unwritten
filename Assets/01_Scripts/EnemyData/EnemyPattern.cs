@@ -108,7 +108,7 @@ public static class EnemyPattern
                             if (t is PlayerController pc)
                             {
                                 var stance = (PlayerData.StancType)enemyComponent.enemyData.currentStance;
-                                pc.ReceiveAttack(stance, skill.damage);
+                                pc.TakeDamage(skill.damage);//todo 수정 필요
                             }
                             else
                             {
@@ -136,11 +136,11 @@ public static class EnemyPattern
                     if (t is PlayerController pc)
                     {
                         var stance = (PlayerData.StancType)enemyComponent.enemyData.currentStance;
-                        pc.ReceiveAttack(stance, skill.damage);
+                        float dmg = pc.TakeDamage(skill.damage);
                     }
                     else
                     {
-                        t.TakeDamage(skill.damage);
+                        float dmg = t.TakeDamage(skill.damage);
                     }
 
                     ApplyStatusEffect(t, actData);
@@ -159,8 +159,20 @@ public static class EnemyPattern
 
             Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (데미지 {skill.damage})");
 
-            yield return new WaitForSeconds(0.3f); // 타격 연출용 대기
+            yield return new WaitForSeconds(0.1f); // 타격 연출용 대기
+            if(!t.IsAlive()&& t is MonoBehaviour mb && mb.gameObject.activeSelf)
+            {
+                mb.gameObject.SetActive(false);
+
+                // 적일 경우 경험치 지급
+                if (t is Enemy e)
+                {
+                    ProgressDataManager.Instance.CurrentExp += e.enemyData.exp;
+                    GameManager.Instance.turnController.battleFlow.totalExp += e.enemyData.exp;
+                }
+            }
         }
+
     }
 
     private static float DetermineEffectScale(EnemyType type)

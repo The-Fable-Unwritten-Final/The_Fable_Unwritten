@@ -22,12 +22,30 @@ public class ApplyDamageEffect : CardEffectBase
         float totalDamage = value * (useCount-1);
 
         totalDamage = (isEnhanced == true) ? totalDamage * 1.5f : totalDamage;
+        bool stanceBoosted = false;
+        bool stanceWeakened = false;
+
+        if (caster is PlayerController pc)
+        {
+            var cardType = BattleLogManager.Instance.card.type;
+            (totalDamage, stanceBoosted, stanceWeakened) = StanceHelper.ApplyStanceToDamage(pc, totalDamage, cardType);
+        }
 
         foreach (var target in targets)
         {
             if (!target.IsAlive()) continue;
 
             target.TakeDamage(totalDamage);
+
+            var dmgData = new DmgTextData
+            {
+                Text = Mathf.RoundToInt(totalDamage).ToString(),
+                type = DmgTextType.Normal,
+                isCardEnhanced = false,
+                isStanceEnhanced = stanceBoosted,
+                isWeakened = stanceWeakened
+            };
+            target.dmgBar.Initialize(dmgData, target.CachedTransform.position);
 
             Debug.Log($"[ApplyDamageEffect] {index}번 카드를 {useCount}회 사용하여 {totalDamage} 추가 피해");
         }

@@ -68,8 +68,43 @@ public class ApplyStatusEffect : CardEffectBase
                 value = value,
                 duration = duration
             });
+
+            string statusText = GetStatusEffectText(statType, value);
+
+            var Text = new DmgTextData
+            {
+                Text = statusText,
+                type = value < 0 ? DmgTextType.Debuff : DmgTextType.Buff,
+                isCardEnhanced = isEnhanced == true,
+                isStanceEnhanced = caster is PlayerController pc &&
+                           (pc.playerData.currentStance == PlayerData.StancType.grace ||
+                            pc.playerData.currentStance == PlayerData.StancType.judge),
+                isWeakened = false
+            };
+
+            t.dmgBar.Initialize(Text, t.CachedTransform.position);
         }
     }
 
     public override string GetDescription() => $"{statType} 스탯에 {value}만큼 {duration}턴 동안 적용";
+
+    string GetStatusEffectText(BuffStatType statType, float value)
+    {
+        string direction = value switch
+        {
+            > 0 => "증가",
+            < 0 => "감소",
+            _ => ""
+        };
+
+        return statType switch
+        {
+            BuffStatType.Attack => $"공격력 {direction}",
+            BuffStatType.Defense => $"방어력 {direction}",
+            BuffStatType.ManaRegen => $"마나 회복량 {direction}",
+            BuffStatType.stun => "기절",
+            BuffStatType.CantAttackInStance => "실명",
+            _ => "상태이상"
+        };
+    }
 }

@@ -139,10 +139,21 @@ public class CardModel : ScriptableObject
         foreach (var effect in effects)
             effect.Apply(caster, targets, fixedIsEnhanced);
 
-        yield return new WaitForSeconds(0.2f); // 효과 적용 후 약간 대기
+        yield return new WaitForSeconds(0.1f); // 효과 적용 후 약간 대기
+
+        foreach (var target in targets)
+        {
+            if (!target.IsAlive() && target is MonoBehaviour mb && mb.gameObject.activeSelf)
+            {
+                Debug.Log($"[CardModel] {target.ChClass} 연출 종료 후 사망 처리");
+                mb.gameObject.SetActive(false);
+            }
+        }
+
         GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
 
         GameManager.Instance.turnController.OffAction();
+        GameManager.Instance.turnController.battleFlow.CheckBattleEnd();
     }
 
     private float DetermineEffectScale(int cost)

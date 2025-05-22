@@ -23,15 +23,35 @@ public class DamageEffect : CardEffectBase
 
         // 공격자는 자신의 공격력만 고려
         float attackerAtk = caster.ModifyStat(BuffStatType.Attack, amount);
+        bool stanceBoosted = false;
+        bool stanceWeakened = false;
+
 
         attackerAtk = (isEnhanced == true) ? attackerAtk * 1.5f : attackerAtk;
+        if (caster is PlayerController pc)
+        {
+            var cardType = BattleLogManager.Instance.card.type;
+            (attackerAtk, stanceBoosted, stanceWeakened) = StanceHelper.ApplyStanceToDamage(pc, attackerAtk, cardType);
+        }
 
         // target은 받은 amount에서 방어력을 적용해서 처리
         foreach (var target in targets)
         {
             if (target == null || !target.IsAlive()) continue;
 
-            target.TakeDamage(attackerAtk);
+            float result = target.TakeDamage(attackerAtk);
+
+            var dmgData =  new DmgTextData
+            {
+                Text = $"-{Mathf.RoundToInt(result)}",
+                type = DmgTextType.Normal,
+                isStanceEnhanced = stanceBoosted,
+                isCardEnhanced = isEnhanced == true,
+                isWeakened = stanceWeakened
+            };
+            target.dmgBar.Initialize(dmgData, target.CachedTransform.position);
+
+
             Debug.Log($"[피해 처리] {caster.ChClass} -> {target.ChClass} : {attackerAtk} 공격력으로 타격");
         }
     }
