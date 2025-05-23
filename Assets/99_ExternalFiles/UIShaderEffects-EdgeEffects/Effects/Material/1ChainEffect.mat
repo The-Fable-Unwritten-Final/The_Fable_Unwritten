@@ -7,12 +7,11 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Check2
+  m_Name: 1ChainEffect
   m_Shader: {fileID: 4800000, guid: 2e16627037a815949b3318655fe57aa4, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _Use_Chromatic_Aberration
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -98,7 +97,7 @@ Material:
     - _ClearCoatSmoothness: 0
     - _ColorIntensity: 10
     - _ColorMask: 15
-    - _ColorPower: 1.52
+    - _ColorPower: 1.24
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
@@ -109,7 +108,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _HorizontalThicknessScaleFactor: 1
-    - _HueShift: 138
+    - _HueShift: -39
     - _InitialRotation: 0
     - _IsCircular: 0
     - _Mask2_HueShift: 0
@@ -126,7 +125,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueOffset: 0
-    - _RadialUV_Power: 1
+    - _RadialUV_Power: 3.05
     - _ReceiveShadows: 1
     - _RotationSpeed: 0
     - _ScrollSpeed_X: 0
@@ -143,7 +142,7 @@ Material:
     - _Surface: 0
     - _UV_X_ScaleFix: 1
     - _UseMask: 0
-    - _Use_Chromatic_Aberration: 1
+    - _Use_Chromatic_Aberration: 0
     - _Use_Mask: 0
     - _Use_Mask2: 0
     - _WorkflowMode: 1
