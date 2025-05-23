@@ -54,7 +54,7 @@ public class TurnController : MonoBehaviour
     private void Start()
     {
         OnStartPlayerTurn += battleFlow.ExecutePlayerTurn;
-        OnStartPlayerTurn += cardDisplay.CardArrange; // 카드 배치 초기화
+        //OnStartPlayerTurn += cardDisplay.CardArrange; // 카드 배치 초기화
 
         StartCoroutine(AtStartGame()); // 게임 시작 후 1초 후에 플레이어 턴으로
     }
@@ -94,9 +94,9 @@ public class TurnController : MonoBehaviour
                 cardDisplay.StartPlayerTurn(); // 플레이어 턴 카드 디스플레이 업데이트
                 break;
 
-            case TurnState.EndPlayerTurn:
+            case TurnState.EndPlayerTurn: // 플레이어 턴 종료시 필요한 데이터 처리 상태
                 OnEndPlayerTurn?.Invoke();
-                StartCoroutine(AtEndPlayerTurn()); // 대기 후 다음 상태로 넘기기 << 임시로 자동 진행
+                StartCoroutine(AtEndPlayerTurn()); // 프레임 대기 후 다음 상태로 넘기기
                 break;
 
             case TurnState.EnemyTurn:
@@ -155,7 +155,7 @@ public class TurnController : MonoBehaviour
     }
     IEnumerator AtEndPlayerTurn()
     {
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForEndOfFrame(); // 프레임 대기
         SetTurnState(TurnState.EnemyTurn); // 적 턴으로
     }
     public void AtEnemyTurn()// 몬스터의 행동을 진행하고(몬스터 클라스 쪽에서), 이후 행동이 끝나면 호출. 

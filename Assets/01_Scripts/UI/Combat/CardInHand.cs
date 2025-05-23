@@ -16,7 +16,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public CardEffectVisualizer effectVisualizer; // 카드 효과 비주얼을 위한 스크립트 
     RectTransform rect; // RectTransform 컴포넌트
     public Vector2 originalPos; // 원래 위치
-    Vector3 targetPos; // 목표 위치
+    public Vector2 targetPos; // 목표 위치
     [SerializeField] CardState cardState;
     [Header("UI Info")]
     [SerializeField] Image cardFrame;
@@ -31,6 +31,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     [SerializeField] Image illustCover;
 
     public bool isPointerOver = false; // 마우스 포인터가 카드 위에 있는지 여부
+    bool cancelDrag = false; // 포인터 이벤트의 OnDrag를 조건에 맞춰 직접 끊어주기 위한 변수.
 
     public enum CardState// 추후 턴 상태와 연계해서 카드의 상태관리. (카드의 상태에 따른 상호작용 가능 여부 설정.)
     {
@@ -55,7 +56,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     private void Update()
     {
-        if (isPointerOver)
+        if (isPointerOver||CardState.OnDrag == cardState)
         {
             if(cardDisplay.currentCard != this)
             {
@@ -182,6 +183,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if(GameManager.Instance.turnController.turnState == TurnController.TurnState.EnemyTurn) return; // 적 턴일 경우 드래그 불가능
         if(GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 드래그 불가능
         if (cardState != CardState.CanDrag) return; // 카드 상태가 CanDrag가 아닌 경우 드래그 불가능
 
@@ -196,6 +198,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     }
     public void OnDrag(PointerEventData eventData)
     {
+        if(cancelDrag || CardState.CanMouseOver == cardState) return; // 드래그 취소 상태 시 드래그 불가능
         if(GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 드래그 불가능
         //this.transform.position = eventData.position;
         if(this.rect.anchoredPosition == originalPos)
@@ -205,9 +208,17 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     {
         // 카드의 시작적 효과 (이펙트 제외)
         if(GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 드래그 불가능
-        if (cardState != CardState.OnDrag) return; // 카드 상태가 OnDrag가 아닌 경우 해당 메서드 실행하지 않음
+        if (cardState != CardState.OnDrag)
+        {
+            // 드래그 관련 잘못된 상호 작용 예외처리.
+            if (this.rect.anchoredPosition == targetPos)
+                rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine);
+
+            return; // 카드 상태가 OnDrag가 아닌 경우 해당 메서드 실행하지 않음
+        }
 
         cardDisplay.isOnDrag = false;
+
         cardState = CardState.None; // 카드 상태를 None으로 초기화
         cardDisplay.lineRenderer.gameObject.SetActive(false); // 드래그 종료 시 라인 렌더러 비활성화
         cardDisplay.arrowImage.gameObject.SetActive(false); // 드래그 종료 시 화살표 이미지 비활성화
@@ -274,6 +285,12 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
         targetPos = tPos + localUpDir * distance;
     }
+    // 바로 위와 같은 값 설정이 아닌, 값 리턴 형식의 메서드
+    public Vector2 GetElevatedPos(Vector2 basePos)
+    {
+        float elevateAmount = 40f;
+        return new Vector2(basePos.x, basePos.y + elevateAmount);
+    }
     public void ResetSiblingIndex()// 카드 사용이 실패 했을때 등 원래 위치로 돌아가야 할때 호출.
     {
         transform.SetSiblingIndex(cardDisplay.GetCardIndex(this));
@@ -286,29 +303,8 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     {
         return cardState; // 카드 상태 가져오기
     }
-    public void OnCardMoveCouroutine()
+    public void UpdateStateMoveEnd()
     {
-        StartCoroutine(OnCardMove());// 카드 이동 애니메이션을 위한 코루틴 시작.
-    }
-    IEnumerator OnCardMove()// 카드 위치 재설정
-    {
-        // 카드 이동 애니메이션을 위한 상호작용 제한 코루틴
-        if(cardState == CardState.CanDiscard) yield break;
-
-        SetCardState(CardInHand.CardState.None);// 카드가 움직이는 도중에는 상호작용 제한.
-        //cardDisplay.isOnDrag = false; // 드래그 상태 해제
-        //cardDisplay.currentCard = null; // 현재 카드 설정 해제
-
-        yield return new WaitForSeconds(0.2f);
-
-        // 카드가 움직이기 전에 새로운 카드를 잡았을 경우, 상태 원상복구. (사용 가능하게)
-        if(cardDisplay.currentCard == this)
-        {
-            SetCardState(CardInHand.CardState.OnDrag);
-            cardDisplay.isOnDrag = true; // 드래그 상태로 설정
-            yield break;
-        }
-
         if (cardData.IsUsable(GameManager.Instance.turnController.battleFlow.currentMana))
         {
             SetCardState(CardInHand.CardState.CanDrag);
@@ -318,6 +314,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             SetCardState(CardInHand.CardState.CanMouseOver);
         }
     }
+
 
     // 핸드 카드 선택 시 출력 사운드
     public void OnPointerDown(PointerEventData eventData)

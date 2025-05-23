@@ -100,7 +100,9 @@ public class CardDisplay : MonoBehaviour
     public void CardArrange()// 카드 정렬 (수량에 따른 각도, 거리)
     {
         if(cardsInHand.Count == 0) return;
+        Debug.Log("CardArrange() 호출됨");
 
+        isOnDrag = false;
         int oddeven = cardsInHand.Count / 2;
 
         if(oddeven !=0)// 핸드의 카드 개수가 홀수인 경우
@@ -118,16 +120,39 @@ public class CardDisplay : MonoBehaviour
                 int distance = Mathf.Abs(i - oddeven);
                 targetPos.x =(oddeven * -cardSpacing) + (i * cardSpacing); // 카드간의 폭 (cardSpacing)
                 targetPos.y = (- yOffset * distance * (distance + 1) / 2f) - cardMidPosY;
-                cardsInHand[i].GetComponent<RectTransform>()
+                if (cardsInHand[cash].isPointerOver)
+                {
+                    Vector2 elevatedPos = cardsInHand[cash].GetElevatedPos(targetPos);
+
+                    cardsInHand[i].GetComponent<RectTransform>()
+                    .DOAnchorPos(elevatedPos, 0.1f)
+                    .OnStart(() =>
+                    {
+                        cardsInHand[cash].originalPos = targetPos; // 여전히 기준점은 바닥 위치
+                        cardsInHand[cash].SetTargetPos(targetPos, angle);
+                    })
+                    .OnComplete(() =>
+                    {
+                        cardsInHand[cash].UpdateStateMoveEnd();
+                    })
+                    .SetEase(Ease.OutSine);
+                }
+                else
+                {
+                    cardsInHand[i].GetComponent<RectTransform>()
                     .DOAnchorPos(targetPos, 0.1f)
                     .OnStart(() =>
                     {
+                        cardsInHand[cash].SetCardState(CardInHand.CardState.None);// 이동하는 동안에는 none
                         cardsInHand[cash].originalPos = targetPos;
                         cardsInHand[cash].SetTargetPos(targetPos, angle);// 카드의 원래 위치 설정.
                     })
+                    .OnComplete(() =>
+                    {
+                        cardsInHand[cash].UpdateStateMoveEnd();// 카드 이동 완료 후 상태 업데이트.
+                    })
                     .SetEase(Ease.OutSine);
-
-                cardsInHand[cash].OnCardMoveCouroutine();// 카드 이동중에는 상호작용 불가능 설정.
+                }
             }
         }
         else
@@ -145,19 +170,43 @@ public class CardDisplay : MonoBehaviour
                 int distance = Mathf.Abs(i - oddeven);
                 targetPos.x = (oddeven * -cardSpacing) + (i * cardSpacing); // 카드간의 폭 (cardSpacing)
                 targetPos.y = (- yOffset * distance * (distance + 1) / 2f) - cardMidPosY;
-                cardsInHand[i].GetComponent<RectTransform>()
-                    .DOAnchorPos(targetPos, 0.1f)
-                    .OnStart(() => 
+                if (cardsInHand[cash].isPointerOver)
+                {
+                    Vector2 elevatedPos = cardsInHand[cash].GetElevatedPos(targetPos);
+
+                    cardsInHand[i].GetComponent<RectTransform>()
+                    .DOAnchorPos(elevatedPos, 0.1f)
+                    .OnStart(() =>
                     {
+                        cardsInHand[cash].originalPos = targetPos; // 여전히 기준점은 바닥 위치
+                        cardsInHand[cash].SetTargetPos(targetPos, angle);
+                    })
+                    .OnComplete(() =>
+                    {
+                        cardsInHand[cash].UpdateStateMoveEnd();
+                    })
+                    .SetEase(Ease.OutSine);
+                }
+                else
+                {
+                    cardsInHand[i].GetComponent<RectTransform>()
+                    .DOAnchorPos(targetPos, 0.1f)
+                    .OnStart(() =>
+                    {
+                        cardsInHand[cash].SetCardState(CardInHand.CardState.None);// 이동하는 동안에는 none
                         cardsInHand[cash].originalPos = targetPos;
                         cardsInHand[cash].SetTargetPos(targetPos, angle);// 카드의 원래 위치 설정.
                     })
+                    .OnComplete(() =>
+                    {
+                        cardsInHand[cash].UpdateStateMoveEnd();// 카드 이동 완료 후 상태 업데이트.
+                    })
                     .SetEase(Ease.OutSine);
-
-                cardsInHand[cash].OnCardMoveCouroutine();// 카드 이동중에는 상호작용 불가능 설정.
+                }
             }
         }
     }
+
     /// <summary>
     /// AddCard의 플로우 :
     /// 빈카드 이미지 생성 >> 카드 데이터 넣어주기 >> 해당 카드를 핸드에 배치
@@ -218,6 +267,7 @@ public class CardDisplay : MonoBehaviour
         // 플레이어 턴 시작 때 CanMouseOver 실행
         for (int i = 0; i < cardsInHand.Count; i++)
         {
+            if (cardsInHand[i].isPointerOver) return; // 마우스를 위에 올리고 있는 상태라면 별도의 리셋 작업 x
             cardsInHand[i].SetCardState(CardInHand.CardState.CanMouseOver);// 카드 상태를 CanMouseOver로 변경
         }
     }
@@ -351,9 +401,9 @@ public class CardDisplay : MonoBehaviour
             if (caster == null || !caster.IsAlive())
             {
                 GameManager.Instance.combatUIController.ThrowCard(card.cardData);
+                CardArrange();
             }
         }
-        CardArrange();
     }
     public void CheckChainCard()
     {
@@ -372,7 +422,7 @@ public class CardDisplay : MonoBehaviour
         }
     }
 
-    // 카드 상태 일정 주기마다 업데이트 로직
+    // 카드 상태 일정 주기마다 업데이트 로직 + 플레이어 턴이 시작할떄 호출
     public void StartPlayerTurn()
     {
         // 기존 코루틴이 돌고 있다면 멈추고 다시 시작
@@ -381,6 +431,7 @@ public class CardDisplay : MonoBehaviour
 
         cardDragCoroutine = StartCoroutine(RepeatSetCardCanDrag());
     }
+    // 플레이어 턴 종료를 누르면 호출
     public void EndPlayerTurn()
     {
         if (cardDragCoroutine != null)
@@ -391,14 +442,34 @@ public class CardDisplay : MonoBehaviour
     }
     private IEnumerator RepeatSetCardCanDrag()
     {
+        bool isreset = false;
+
         while (true)
         {
-            if (Input.GetMouseButtonDown(0) || cardsInHand.Any(x => x.isPointerOver)) yield break;
+            // 현재 드래그 중일 경우 continue;
+            if(currentCard != null)
+            {
+                if (currentCard.GetCardState() == CardState.OnDrag)
+                {
+                    yield return new WaitForEndOfFrame();
+                    continue;
+                }
+            }           
 
-            SetCardCanDrag();
-            CardArrange();
-            Debug.Log("카드 상태 업데이트");
-            yield return new WaitForSeconds(0.2f);
+            // 간단한 상호작용 시의 경우, 최초 1회만 상태 업데이트
+            if (Input.GetMouseButtonDown(0) || cardsInHand.Any(x => x.isPointerOver))
+            {
+                isreset = false; // 카드의 상태가 한번 변경되면 다시 리셋 트리거 세팅.
+                yield return new WaitForEndOfFrame();
+                continue; // 조건에 해당될시 아래 내용 스킵.
+            }
+            if (!isreset)
+            {
+                isreset = true;
+                SetCardCanDrag();
+                //CardArrange();
+            }
+            yield return new WaitForEndOfFrame();
         }
     }
 }
