@@ -260,7 +260,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         originalPos = rect.anchoredPosition;
 
         // 카드의 회전에 따른 위로 올라갔을때의 위치 설정.
-        float distance = 150f;// 150 만큼 위로 올라감.
+        float distance = 135f;// 135 만큼 위로 올라감.
         float angle = rect.localEulerAngles.z * Mathf.Deg2Rad;
         Vector2 localUpDir = new Vector2(-Mathf.Sin(angle), Mathf.Cos(angle));// 로컬 좌표계에서의 각도 변환을 위해 라디안을 통해 삼각함수 사용. (tranform.up 등의 방식은 월드 좌표계 기준의 단위 벡터이기 때문에 로컬 기준의 값을 계산해야 함.)
 
@@ -268,7 +268,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     }
     public void SetTargetPos(Vector2 tPos ,float tAngle)// 핸드의 카드에 변동사항이 생겨 움직이는 도중, 핸드의 카드에 접근시 정상적인 동작을 위해 필요한 메서드.
     {
-        float distance = 150f;// 150 만큼 위로 올라감.
+        float distance = 135f;// 135 만큼 위로 올라감.
         float angle = tAngle * Mathf.Deg2Rad;
         Vector2 localUpDir = new Vector2(-Mathf.Sin(angle), Mathf.Cos(angle));
 

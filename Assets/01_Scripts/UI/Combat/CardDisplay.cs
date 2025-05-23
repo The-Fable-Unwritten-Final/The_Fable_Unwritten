@@ -23,6 +23,8 @@ public class CardDisplay : MonoBehaviour
     [Header("CardsInHand")]
     [SerializeField] float cardMidPosY = 470f; // 중간에 위치할 카드의 Recttransform Y 좌표.
     [SerializeField] float yOffset = 5f; // 카드의 Y 좌표 오프셋. (카드가 겹치지 않도록 하기 위함.)
+    [SerializeField] float cardSpacing = 120f; // 카드 간의 x 폭.
+    [SerializeField] float cardAngle = 1.2f; // 카드 각도 (카드가 겹치지 않도록 하기 위함.)
 
     [Header("Drag with Arrow")]
     [SerializeField] private GraphicRaycaster uiRaycaster; // Canvas에 있는 GraphicRaycaster
@@ -106,15 +108,15 @@ public class CardDisplay : MonoBehaviour
             for(int i = 0; i < cardsInHand.Count; i++)
             {
                 int cash = i;// 카드의 인덱스를 캐싱해서 OnComplete에서 사용
-                // 각도 설정(1.2)
+                // 각도 설정(cardAngle)
                 float angle = 0f;
-                angle = (oddeven * 1.2f) + (i * - 1.2f);
+                angle = (oddeven * cardAngle) + (i * -cardAngle);
                 cardsInHand[i].GetComponent<RectTransform>().DORotate(new Vector3(0, 0, angle), 0.5f).SetEase(Ease.OutSine);
 
                 // 카드의 좌표 설정
                 Vector2 targetPos = new Vector2(0, 0);
                 int distance = Mathf.Abs(i - oddeven);
-                targetPos.x =(oddeven * -100) + (i * 100);
+                targetPos.x =(oddeven * -cardSpacing) + (i * cardSpacing); // 카드간의 폭 (cardSpacing)
                 targetPos.y = (- yOffset * distance * (distance + 1) / 2f) - cardMidPosY;
                 cardsInHand[i].GetComponent<RectTransform>()
                     .DOAnchorPos(targetPos, 0.1f)
@@ -133,15 +135,15 @@ public class CardDisplay : MonoBehaviour
             for(int i = 0; i < cardsInHand.Count; i++)
             {
                 int cash = i;// 카드의 인덱스를 캐싱해서 OnComplete에서 사용
-                // 각도 설정(1.2)
+                // 각도 설정(cardAngle)
                 float angle = 0f;
-                angle = (oddeven * 1.2f - 1.25f) + (i * - 1.2f);
+                angle = (oddeven * cardAngle - 1.25f) + (i * -cardAngle);
                 cardsInHand[i].GetComponent<RectTransform>().DORotate(new Vector3(0, 0, angle), 0.5f).SetEase(Ease.OutSine);
 
                 // 카드의 좌표 설정
                 Vector2 targetPos = new Vector2(0, 0);
                 int distance = Mathf.Abs(i - oddeven);
-                targetPos.x = (oddeven * -100) + (i * 100);
+                targetPos.x = (oddeven * -cardSpacing) + (i * cardSpacing); // 카드간의 폭 (cardSpacing)
                 targetPos.y = (- yOffset * distance * (distance + 1) / 2f) - cardMidPosY;
                 cardsInHand[i].GetComponent<RectTransform>()
                     .DOAnchorPos(targetPos, 0.1f)
