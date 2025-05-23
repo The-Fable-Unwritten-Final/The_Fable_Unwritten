@@ -1501,10 +1501,10 @@ PrefabInstance:
         type: 3}
       propertyPath: m_text
       value: "\uBAA8\uD5D8\uC744 \uC0C8\uB85C \uC2DC\uC791\uD560 \uB54C\uB9C8\uB2E4
-        \uC0AC\uC6A9\uD560 \uC218 \uC788\uB294 \uCE74\uB4DC\uB97C \uB298\uB9B4 \uC218
-        \uC788\uC2B5\uB2C8\uB2E4.\\n\uC804\uD22C\uC5D0\uC11C \uD68D\uB4DD\uD55C \uC18C\uC7AC\uB97C
-        \uC0AC\uC6A9\uD558\uC5EC \uC6D0\uD558\uB294 \uD0C0\uC785\uC758 \uCE74\uB4DC\uB97C
-        \uD574\uAE08\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
+        \uC0C8\uB85C\uC6B4 \uCE74\uB4DC\uB97C \uD574\uAE08\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.\\n\uC804\uD22C\uC5D0\uC11C
+        \uD68D\uB4DD\uD55C \uC804\uB9AC\uD488\uC744 \uC18C\uBE44\uD558\uC5EC \uC6D0\uD558\uB294
+        \uD0C0\uC785\uC758 \uCE74\uB4DC\uB97C \uD574\uAE08\uD574\uBCF4\uC138\uC694.\\n\uD574\uAE08\uD560
+        \uC218 \uC5C6\uB294 \uD0C0\uC785\uC758 \uBC84\uD2BC\uC740 \uAC80\uAC8C \uD45C\uC2DC\uB429\uB2C8\uB2E4."
       objectReference: {fileID: 0}
     - target: {fileID: 8113033632113629762, guid: 79312473a988b464b95d3efd6e017624,
         type: 3}
@@ -2621,6 +2621,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultPlayerParty: {fileID: 11400000, guid: 1b186ef57e341354c9e4977557ce3e3e, type: 2}
   itemCounts: 00000000000000000000000000000000
+  resolutions:
+  - {x: 0, y: 0}
 --- !u!1 &1794682181
 GameObject:
   m_ObjectHideFlags: 0
