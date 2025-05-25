@@ -55,7 +55,7 @@ public class RecipeSlotPool : MonoBehaviour
             button.image.sprite = GetResultIcon(recipe.result);
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => {
-                Debug.Log("합성 시도: " + recipe.result);
+                //Debug.Log("합성 시도: " + recipe.result);
                 CardUnlocker.TryUnlock(recipe);
             });
 

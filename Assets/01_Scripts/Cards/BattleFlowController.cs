@@ -184,7 +184,7 @@ public class BattleFlowController : MonoBehaviour
             targets = AutoChooseTargets(card.targetType, card.characterClass,count, targets[0]);
         }
 
-        Debug.Log($"{caster.ChClass} 가 {card.cardName} 사용 → {string.Join(", ", targets.ConvertAll(t => t.ChClass.ToString()))}, cost : {actualCost}");
+        //Debug.Log($"{caster.ChClass} 가 {card.cardName} 사용 → {string.Join(", ", targets.ConvertAll(t => t.ChClass.ToString()))}, cost : {actualCost}");
 
         if (card.ConsumesDiscountOnce)
         {
@@ -289,7 +289,7 @@ public class BattleFlowController : MonoBehaviour
 
         // 2. 턴 수 증가
         turn++;
-        Debug.Log($"턴 종료 → 새로운 턴 시작: {turn}턴");
+        //Debug.Log($"턴 종료 → 새로운 턴 시작: {turn}턴");
 
         // 3. 플레이어 턴 시작
         //카드 드로우 사운드 출력
@@ -341,7 +341,7 @@ public class BattleFlowController : MonoBehaviour
             isBattleEnded = true;
             ClearAllDeckEnhanced();
             ClearAllPlayerCardDiscounts();
-            Debug.Log("▶ 전투 패배");
+            //Debug.Log("▶ 전투 패배");
             isWin = -1;
 
             for (int i = 0; i < enemyParty.Count; i++)  //파티 초기화
@@ -357,7 +357,7 @@ public class BattleFlowController : MonoBehaviour
             ClearAllDeckEnhanced();
             ClearAllPlayerCardDiscounts();
             BattleLogManager.Instance.ResetBattleLog();
-            Debug.Log("▶ 전투 승리");
+            //Debug.Log("▶ 전투 승리");
             isWin = 1;
             foreach(var enemy in enemyParty)
             {

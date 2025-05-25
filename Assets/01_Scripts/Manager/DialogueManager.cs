@@ -56,7 +56,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
     {        
         if (isPlaying)
         {
-            Debug.LogWarning("[DialogueManager] 대화 재생 중!");
+            //Debug.LogWarning("[DialogueManager] 대화 재생 중!");
             return;
         }
 

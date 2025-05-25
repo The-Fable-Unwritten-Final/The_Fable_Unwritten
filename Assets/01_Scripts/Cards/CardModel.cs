@@ -145,7 +145,7 @@ public class CardModel : ScriptableObject
         {
             if (!target.IsAlive() && target is MonoBehaviour mb && mb.gameObject.activeSelf)
             {
-                Debug.Log($"[CardModel] {target.ChClass} 연출 종료 후 사망 처리");
+                //Debug.Log($"[CardModel] {target.ChClass} 연출 종료 후 사망 처리");
                 mb.gameObject.SetActive(false);
             }
         }

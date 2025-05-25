@@ -64,7 +64,7 @@ public class EffectManager : MonoBehaviour
     {
         if (!DataManager.Instance.CardEffects.TryGetValue(effectName, out var animInfo) || animInfo == null)
         {
-            Debug.LogWarning($"[EffectManager] 이펙트 {effectName} 없음");
+            //Debug.LogWarning($"[EffectManager] 이펙트 {effectName} 없음");
             return;
         }
 

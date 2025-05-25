@@ -22,7 +22,7 @@ public class CantAttackInStance : CardEffectBase
                 duration = duration
             });
 
-            Debug.Log($"[CantAttackInStanceEffect] {target} -> {blockStance} 공격 불가 {duration}턴");
+            //Debug.Log($"[CantAttackInStanceEffect] {target} -> {blockStance} 공격 불가 {duration}턴");
         }
     }
 

@@ -41,7 +41,7 @@ public class RecycleCardEffect : CardEffectBase
                 if (added >= allowedCount) break;
             }
         }
-        Debug.Log($"[Recycle] {added}장 손패로 되돌림");
+        //Debug.Log($"[Recycle] {added}장 손패로 되돌림");
     }
 
     public override string GetDescription() => $"사용한 카드 중 {amount}장까지 선택하여 손패로 되돌립니다.";

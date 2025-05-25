@@ -8,7 +8,7 @@ public class EncounterEventEffects : EventEffects
     public int battle;
     public override void Apply()
     {
-        Debug.Log("EncounterEvent");
+        //Debug.Log("EncounterEvent");
 
         string targetSetName = battle.ToString();
         int foundIndex = -1;

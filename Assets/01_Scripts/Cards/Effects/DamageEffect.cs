@@ -52,7 +52,7 @@ public class DamageEffect : CardEffectBase
             target.dmgBar.Initialize(dmgData, target.CachedTransform.position);
 
 
-            Debug.Log($"[피해 처리] {caster.ChClass} -> {target.ChClass} : {attackerAtk} 공격력으로 타격");
+            //Debug.Log($"[피해 처리] {caster.ChClass} -> {target.ChClass} : {attackerAtk} 공격력으로 타격");
         }
     }
 

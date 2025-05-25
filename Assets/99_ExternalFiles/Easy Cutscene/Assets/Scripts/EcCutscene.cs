@@ -371,7 +371,7 @@ namespace HisaGames.Cutscene
                 }
                 else
                 {
-                    Debug.Log("Cutscene finished");
+                    //Debug.Log("Cutscene finished");
                     EcCutsceneManager.instance.closeCutscenes();
                 }
             }
@@ -416,7 +416,7 @@ namespace HisaGames.Cutscene
         /// </summary>
         public void ForceEndCutscene()
         {
-            Debug.Log("[EcCutscene] 컷씬 강제 종료");
+            //Debug.Log("[EcCutscene] 컷씬 강제 종료");
 
             // 타이핑 중이면 중지
             startTyping = false;

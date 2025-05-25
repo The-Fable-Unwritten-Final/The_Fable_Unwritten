@@ -126,11 +126,11 @@ public class EnemySpawner : MonoBehaviour
 
             if (enemy is Enemy e && e.enemyData != null)
             {
-                Debug.Log($"[EnemyParty] Index {i}: {e.enemyData.EnemyName} (ID: {e.enemyData.IDNum})");
+                //Debug.Log($"[EnemyParty] Index {i}: {e.enemyData.EnemyName} (ID: {e.enemyData.IDNum})");
             }
             else
             {
-                Debug.Log($"[EnemyParty] Index {i}: null");
+               // Debug.Log($"[EnemyParty] Index {i}: null");
             }
         }
     }

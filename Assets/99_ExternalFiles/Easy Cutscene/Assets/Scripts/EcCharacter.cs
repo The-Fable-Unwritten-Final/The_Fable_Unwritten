@@ -104,7 +104,7 @@ namespace HisaGames.Character
             if (transform.position != targetMovePosition)
             {
                 characterState = CharacterState.Moving;
-                Debug.Log("Play Moving");
+                //Debug.Log("Play Moving");
             }
         }
     }

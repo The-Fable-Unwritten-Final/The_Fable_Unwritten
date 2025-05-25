@@ -45,11 +45,9 @@ public class CardBook : MonoBehaviour,IBookControl
         if (currentPage > 0)
         {
             currentPage--;
-            Debug.Log("이전 페이지로 이동: " + currentPage);
         }
         else
         {
-            Debug.Log("첫 페이지입니다.");
         }
         UpdateCard(currentPage);// 페이지에 맞는 카드 정보 세팅.
         UpdateArrow(); // 화살표 업데이트
@@ -59,11 +57,6 @@ public class CardBook : MonoBehaviour,IBookControl
         if (currentPage < maxPageCount - 1)
         {
             currentPage++;
-            Debug.Log("다음 페이지로 이동: " + currentPage);
-        }
-        else
-        {
-            Debug.Log("마지막 페이지입니다.");
         }
         UpdateCard(currentPage);// 페이지에 맞는 카드 정보 세팅.
         UpdateArrow(); // 화살표 업데이트

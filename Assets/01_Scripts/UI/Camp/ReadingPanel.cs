@@ -132,7 +132,7 @@ public class ReadingPanel : BaseCampPanel
             if (targetIndex != -1)
             {
                 player.currentDeckIndexes[targetIndex] = chageCardIndex;
-                Debug.Log($"[Card Swap] {currentCardIndex} → {chageCardIndex}로 교체 완료");
+                //Debug.Log($"[Card Swap] {currentCardIndex} → {chageCardIndex}로 교체 완료");
 
                 changeCardPanel.SetActive(false);
                 cardBook.SetActive(false);

@@ -200,7 +200,7 @@ public class DeckModel
 
         Shuffle(unusedDeck);
 
-        Debug.Log($"[DeckModel] 덱 초기화 완료. 카드 수: {unusedDeck.Count}");
+        //Debug.Log($"[DeckModel] 덱 초기화 완료. 카드 수: {unusedDeck.Count}");
     }
 
 

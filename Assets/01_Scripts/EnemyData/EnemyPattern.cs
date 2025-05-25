@@ -29,7 +29,7 @@ public static class EnemyPattern
 
         if (enemyComponent.IsStunned())
         {
-            Debug.Log($"[Stun] {enemyComponent.enemyData.EnemyName}은 스턴 상태로 행동 불가");
+            //Debug.Log($"[Stun] {enemyComponent.enemyData.EnemyName}은 스턴 상태로 행동 불가");
             yield break;
         }
 
@@ -38,7 +38,7 @@ public static class EnemyPattern
 
         if (skill == null)
         {
-            Debug.LogWarning($"[EnemyPattern] {enemyComponent.enemyData.EnemyName}의 스킬 데이터 없음.");
+           Debug.LogWarning($"[EnemyPattern] {enemyComponent.enemyData.EnemyName}의 스킬 데이터 없음.");
             yield break;
         }
 
@@ -112,7 +112,7 @@ public static class EnemyPattern
                             }
 
                             ApplyStatusEffect(t, actData);
-                            Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (Projectile, 데미지 {skill.damage})");
+                            //Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (Projectile, 데미지 {skill.damage})");
                         }
                     );
                 }
@@ -140,7 +140,7 @@ public static class EnemyPattern
                     }
 
                     ApplyStatusEffect(t, actData);
-                    Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (즉시Hit, 데미지 {skill.damage})");
+                    //Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (즉시Hit, 데미지 {skill.damage})");
 
                     yield return new WaitForSeconds(0.3f); // 이펙트 딜레이
                 }
@@ -153,7 +153,7 @@ public static class EnemyPattern
             //ApplyStatusEffect(t, actData);
             // ───────────────────────
 
-            Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (데미지 {skill.damage})");
+            //Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (데미지 {skill.damage})");
 
             yield return new WaitForSeconds(0.1f); // 타격 연출용 대기
             if(!t.IsAlive()&& t is MonoBehaviour mb && mb.gameObject.activeSelf)
@@ -369,7 +369,7 @@ public static class EnemyPattern
                 value = act.atk_buff,
                 duration = act.buff_time
             });
-            Debug.Log($"[EnemyPattern] {target.ChClass} 추가 공격력 {act.atk_buff} 효과 적용");
+            //Debug.Log($"[EnemyPattern] {target.ChClass} 추가 공격력 {act.atk_buff} 효과 적용");
         }
 
         if (act.def_buff != 0)
@@ -380,13 +380,13 @@ public static class EnemyPattern
                 value = act.def_buff,
                 duration = act.buff_time
             });
-            Debug.Log($"[EnemyPattern] {target.ChClass} 추가 방어력 {act.def_buff} 효과 적용");
+            //Debug.Log($"[EnemyPattern] {target.ChClass} 추가 방어력 {act.def_buff} 효과 적용");
         }
 
         if (act.block)
         {
             //target.hasBlock = true;
-            Debug.Log($"[EnemyPattern] {target.ChClass} 블록 효과 적용");
+            //Debug.Log($"[EnemyPattern] {target.ChClass} 블록 효과 적용");
         }
 
         if (act.stun > 0)
@@ -397,7 +397,7 @@ public static class EnemyPattern
                 value = -999,
                 duration = act.buff_time
             }); 
-            Debug.Log($"[EnemyPattern] {target.ChClass} 스턴 적용 ({act.stun}턴)");
+            //Debug.Log($"[EnemyPattern] {target.ChClass} 스턴 적용 ({act.stun}턴)");
         }
     }
 }

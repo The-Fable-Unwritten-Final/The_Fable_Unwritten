@@ -42,7 +42,7 @@ public class StanceOptionButton : MonoBehaviour
         // 1) 스탠스 변경
         owner.ChangeStance(stanceType);
         // 2) 변경된 스탠스를 로그로 확인
-        Debug.Log($"[Stance] {owner.playerData.CharacterName} 자세 변경 → {owner.CurrentStance}");
+        //Debug.Log($"[Stance] {owner.playerData.CharacterName} 자세 변경 → {owner.CurrentStance}");
 
         // 다시 highlight
         UpdateHighlight();

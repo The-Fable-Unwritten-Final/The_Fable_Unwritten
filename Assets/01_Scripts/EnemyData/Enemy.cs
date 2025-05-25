@@ -60,7 +60,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     /// <param name="effect">적용할 효과</param>
     public void ApplyStatusEffect(StatusEffect effect)
     {
-        Debug.Log($"[버프 적용] {enemyData.EnemyName} 에게 {effect.statType} +{effect.value} ({effect.duration}턴)");
+        //Debug.Log($"[버프 적용] {enemyData.EnemyName} 에게 {effect.statType} +{effect.value} ({effect.duration}턴)");
         activeEffects.Add(new StatusEffect
         {
             statType = effect.statType,
@@ -73,7 +73,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public void TakeTrueDamage(float damage)
     {
-        Debug.Log($"{enemyData.EnemyName}가 {damage}의 트루데미지를 받음! 현재 체력: {enemyData.CurrentHP}");
+        //Debug.Log($"{enemyData.EnemyName}가 {damage}의 트루데미지를 받음! 현재 체력: {enemyData.CurrentHP}");
         currentHP -= damage;
     }
 
@@ -87,7 +87,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
             activeEffects[i].duration--;
             if (activeEffects[i].duration <= 0)
             {
-                Debug.Log($"[버프 종료] {enemyData.EnemyName} 의 {activeEffects[i].statType} 효과 종료");
+                //Debug.Log($"[버프 종료] {enemyData.EnemyName} 의 {activeEffects[i].statType} 효과 종료");
                 activeEffects.RemoveAt(i);
             }
         }
@@ -174,7 +174,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         if (hasBlock)
         {
             hasBlock = false;
-            Debug.Log($"[Block] {enemyData.EnemyName}의 블록으로 피해 {amount} 무효화");
+            //Debug.Log($"[Block] {enemyData.EnemyName}의 블록으로 피해 {amount} 무효화");
             return 0;
         }
 
@@ -182,7 +182,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         reduced = Mathf.Max(reduced, 0);
 
         enemyData.CurrentHP -= reduced;
-        Debug.Log($"{enemyData.EnemyName}가 {reduced}의 피해를 받음! 현재 체력: {enemyData.CurrentHP}");
+        //Debug.Log($"{enemyData.EnemyName}가 {reduced}의 피해를 받음! 현재 체력: {enemyData.CurrentHP}");
 
         return reduced;
     }

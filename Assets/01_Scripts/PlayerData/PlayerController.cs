@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     public void TakeTrueDamage(float damage)
     {
-        Debug.Log($"{playerData.CharacterName}가 {damage}의 트루데미지를 받음! 현재 체력: {playerData.currentHP}");
+        //Debug.Log($"{playerData.CharacterName}가 {damage}의 트루데미지를 받음! 현재 체력: {playerData.currentHP}");
         currentHP -= damage;
     }
 
@@ -77,7 +77,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// <param name="effect">적용할 효과</param>
     public void ApplyStatusEffect(StatusEffect effect)
     {
-        Debug.Log($"[버프 적용] {playerData.CharacterName} 에게 {effect.statType} +{effect.value} ({effect.duration}턴)");
+        //Debug.Log($"[버프 적용] {playerData.CharacterName} 에게 {effect.statType} +{effect.value} ({effect.duration}턴)");
         activeEffects.Add(new StatusEffect
         {
             statType = effect.statType,
@@ -114,7 +114,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         if (hasBlock)
         {
             hasBlock = false;
-            Debug.Log($"[Block] {playerData.CharacterClass.ToString()}의 블록으로 피해 {amount} 무효화");
+            //Debug.Log($"[Block] {playerData.CharacterClass.ToString()}의 블록으로 피해 {amount} 무효화");
             return 0;
         }
 
@@ -142,7 +142,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         dmgBar?.Initialize(dmg, CachedTransform.position);
 
         playerData.currentHP = Mathf.Max(0, playerData.currentHP - reduced);
-        Debug.Log($"{playerData.CharacterName} 피해: {reduced}, 현재 체력: {playerData.currentHP}");
+        //Debug.Log($"{playerData.CharacterName} 피해: {reduced}, 현재 체력: {playerData.currentHP}");
 
         return reduced;
     }
@@ -154,7 +154,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public void Heal(float amount)
     {
         playerData.currentHP = Mathf.Min(playerData.MaxHP, playerData.currentHP +amount);
-        Debug.Log($"{playerData.CharacterName} 회복: {amount}, 현재 체력: {playerData.currentHP}");
+        //Debug.Log($"{playerData.CharacterName} 회복: {amount}, 현재 체력: {playerData.currentHP}");
     }
 
     /// <summary>
@@ -183,7 +183,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// </summary>
     public void PrintDeckState()
     {
-        Debug.Log($"[{playerData.CharacterName}] Hand: {Deck.Hand.Count}, Used: {Deck.UsedCount()}");
+        //Debug.Log($"[{playerData.CharacterName}] Hand: {Deck.Hand.Count}, Used: {Deck.UsedCount()}");
     }
 
 
@@ -197,7 +197,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             activeEffects[i].duration--;
             if (activeEffects[i].duration <= 0)
             {
-                Debug.Log($"[버프 종료] {playerData.CharacterName} 의 {activeEffects[i].statType} 효과 종료");
+                //Debug.Log($"[버프 종료] {playerData.CharacterName} 의 {activeEffects[i].statType} 효과 종료");
                 activeEffects.RemoveAt(i);
             }
         }
@@ -225,7 +225,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     {
         hasBlock = true;
         statusDisplay?.PlayerUpdateUI();
-        Debug.Log($"{playerData.CharacterName}에게 block 부여 (1턴 1회 무효화)");
+        //Debug.Log($"{playerData.CharacterName}에게 block 부여 (1턴 1회 무효화)");
     }
 
     // block 제거
@@ -396,7 +396,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     public void CameraActionPlay()
     {
-        Debug.Log($"[카메라 액션] {playerData.CharacterName}의 카메라 액션 실행");
         if(GameManager.Instance == null || GameManager.Instance.combatCameraController == null)
         {
             Debug.LogError("CameraController is not initialized.");
