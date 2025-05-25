@@ -149,6 +149,7 @@ public class TurnController : MonoBehaviour
     {
         //playerturn일 떄만 다음 턴 진행 가능
         if (turnState != TurnState.PlayerTurn) return;
+        SoundManager.Instance.PlaySFX(SoundCategory.Button, 0); // 기본 버튼 사운드
         // 카드 초과 체크하고 초과시 카드 버리기 요청.
         if (!GameManager.Instance.cardDiscardController.CheckCountOk()) return; // 만약 카드수량이 초과시 return.
         SetTurnState(TurnState.EndPlayerTurn); // 플레이어 턴 종료
