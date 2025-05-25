@@ -33,11 +33,7 @@ public static class EnemyPattern
             yield break;
         }
 
-        // 1. 자세 변경
-        SetRandomStance(enemyComponent);
-        yield return new WaitForSeconds(0.3f); // 자세 변경 연출 대기
-
-        // 2. 사용할 스킬 선택
+        // 1. 사용할 스킬 선택
         var skill = ChooseSkill(enemyComponent);
 
         if (skill == null)
@@ -46,7 +42,7 @@ public static class EnemyPattern
             yield break;
         }
 
-        // 3. 스킬 데이터 가져오기 
+        // 2. 스킬 데이터 가져오기 
         var actData = DataManager.Instance.EnemyActDict[skill.skillIndex];
         if (actData == null)
         {
@@ -54,15 +50,15 @@ public static class EnemyPattern
             yield break;
         }
 
-        // 4. 타겟 선택
+        // 3. 타겟 선택
         var targets = ChooseTargetsFromActData(actData, enemyComponent);
         yield return new WaitForSeconds(0.3f);
 
-        // 5. 타겟에게 데미지 및 추가 효과 적용
+        // 4. 타겟에게 데미지 및 추가 효과 적용
         enemyComponent.PlayAttackAnimation();
         yield return new WaitForSeconds(0.3f);
 
-        // 6. 스킬 효과 적용
+        // 5. 스킬 효과 적용
         foreach (var t in targets)
         {
             // 1. 피격 애니메이션 재생
@@ -151,7 +147,7 @@ public static class EnemyPattern
 
 
             }
-            // 3. 상태효과
+            // 6. 상태효과
             ApplyStatusEffect(t, actData);
             //t.TakeDamage(skill.damage);
             //ApplyStatusEffect(t, actData);
@@ -355,7 +351,6 @@ public static class EnemyPattern
             if (rand <= cumulative)
                 return skill;
         }
-
         return null;
     }
 

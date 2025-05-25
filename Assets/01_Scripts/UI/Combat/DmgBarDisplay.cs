@@ -23,25 +23,25 @@ public struct DmgTextData
 
 public static class DmgTextColors
 {
-    // 데미지
-    public static readonly Color Normal = Color.white;
-    public static readonly Color StanceDamage = new Color(1f, 0.65f, 0f);       // #FFA500
-    public static readonly Color EnhanceDamage = new Color(1f, 0f, 0f);         // #FF0000
-    public static readonly Color FullEnhanceDamage = new Color(0.6f, 0f, 0f);   // #990000
+    // Damage
+    public static readonly Color Damage = Color.white;
+    public static readonly Color StanceDamage = new Color(1f, 0.42f, 0.42f);      // #FF6B6B
+    public static readonly Color EnhanceDamage = new Color(1f, 0.118f, 0.118f);   // #FF1E1E
+    public static readonly Color FullEnhanceDamage = new Color(0.698f, 0f, 0f);   // #B20000
 
-    // 힐
-    public static readonly Color Heal = new Color(0.66f, 0.9f, 0.64f);          // #A8E6A3
-    public static readonly Color StanceHeal = new Color(0.4f, 0.8f, 0.4f);      // #66CC66
-    public static readonly Color EnhanceHeal = new Color(0.13f, 0.55f, 0.13f);  // #228B22
-    public static readonly Color FullEnhanceHeal = new Color(0.08f, 0.36f, 0.08f); // #145C14
+    // Heal
+    public static readonly Color Heal = Color.white;
+    public static readonly Color StanceHeal = new Color(0.643f, 1f, 0.69f);       // #A4FFB0
+    public static readonly Color EnhanceHeal = new Color(0.365f, 1f, 0.533f);     // #5DFF88
+    public static readonly Color FullEnhanceHeal = new Color(0.122f, 0.651f, 0.298f); // #1FA64C
 
-    // 버프
-    public static readonly Color Buff = new Color(0.4f, 0.7f, 1f);              // #66CCFF
-    public static readonly Color EnhanceBuff = new Color(0f, 0.4f, 1f);         // #0066FF
+    // Buff
+    public static readonly Color Buff = Color.white;
+    public static readonly Color StanceBuff = new Color(1f, 0.878f, 0.4f);        // #FFE066
 
-    // 디버프
-    public static readonly Color Debuff = new Color(1f, 0.87f, 0.4f);           // #FFDD66
-    public static readonly Color EnhanceDebuff = new Color(1f, 0.67f, 0f);      // #FFAA00
+    // Debuff
+    public static readonly Color Debuff = Color.white;
+    public static readonly Color StanceDebuff = new Color(0.71f, 0.6f, 1f);       // #B599FF
 }
 
 
@@ -63,7 +63,7 @@ public class DmgBarDisplay : MonoBehaviour
 
     public void Initialize(DmgTextData data, Vector3 worldPos)
     {
-        transform.position = worldPos;
+        transform.position = new Vector3(worldPos.x, worldPos.y - 1, worldPos.z);
 
         damageText.text = (data.isStanceEnhanced || data.isCardEnhanced) ? $"<b>{data.Text}</b>" : data.Text;
         damageText.color = GetFinalColor(ResolveColor(data), data.isWeakened);
@@ -104,8 +104,8 @@ public class DmgBarDisplay : MonoBehaviour
         return data.type switch
         {
             DmgTextType.Heal => ResolveHealColor(data),
-            DmgTextType.Buff => data.isStanceEnhanced ? DmgTextColors.EnhanceBuff : DmgTextColors.Buff,
-            DmgTextType.Debuff => data.isStanceEnhanced ? DmgTextColors.EnhanceDebuff : DmgTextColors.Debuff,
+            DmgTextType.Buff => data.isStanceEnhanced ? DmgTextColors.StanceBuff : DmgTextColors.Buff,
+            DmgTextType.Debuff => data.isStanceEnhanced ? DmgTextColors.StanceDebuff : DmgTextColors.Debuff,
             _ => ResolveDamageColor(data),
         };
     }
@@ -115,7 +115,7 @@ public class DmgBarDisplay : MonoBehaviour
         if (data.isStanceEnhanced && data.isCardEnhanced) return DmgTextColors.FullEnhanceDamage;
         if (data.isCardEnhanced) return DmgTextColors.EnhanceDamage;
         if (data.isStanceEnhanced) return DmgTextColors.StanceDamage;
-        return DmgTextColors.Normal;
+        return DmgTextColors.Damage;
     }
 
     private Color ResolveHealColor(DmgTextData data)
