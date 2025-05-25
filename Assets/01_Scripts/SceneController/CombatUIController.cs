@@ -19,7 +19,7 @@ public class CombatUIController : MonoBehaviour
         CardStatusUpdate += cardDisplay.SetCardCanDrag; // 카드 상태 업데이트(CanDrag 체킹을 위함)
         CardStatusUpdate += cardDisplay.AllCardInfoUpdate; // 카드 상태 업데이트(코스트, 설명(효과 수치) 업데이트)
         CardStatusUpdate += cardDisplay.RemoveDeadCharacterCards;   //사망자 카드 상태 업데이트
-        CardStatusUpdate += cardDisplay.CheckChainCard; // 카드 이펙트 업데이트(연계상태 업데이트)
+        //CardStatusUpdate += cardDisplay.CheckChainCard; // 카드 이펙트 업데이트(연계상태 업데이트) => 호출 순서 때문에 CardEffectVisualizer에서 처리함.
 
         GameManager.Instance.turnController.OnPlayerTurn += CardStatusUpdate;// 카드 상태 업데이트(CanDrag 체킹을 위함)
         GameManager.Instance.turnController.OnEnemyTurn += CardStatusUpdate;// 카드 상태 업데이트(CanDrag 체킹을 위함)

@@ -129,8 +129,18 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
         rect.DOAnchorPos(targetPos, 0.4f).SetEase(Ease.OutSine);
 
+
+
         // 카드의 이펙트 시각 효과
-        if (effectVisualizer.currentState == CardVisualState.Chain) return; // 카드의 상태가 Chain인 경우 이펙트 변경 취소 (빨간색 유지)
+
+        // 연계 가능한 카드들을 canchain으로
+        cardDisplay.CheckCanChain();
+
+        if (effectVisualizer.currentState == CardVisualState.Chain)// 카드의 상태가 Chain인 경우 이펙트 변경 취소 (빨간색 유지)
+        {
+            effectVisualizer.ApplyVisualState(CardVisualState.ReadyOnChain); // 카드의 상태를 ReadyOnChain으로 변경 (노란색 테두리 + 연계 가능 상태 >> ReadyOnChain상태)
+            return;
+        }
 
         effectVisualizer.ApplyVisualState(CardVisualState.Ready); // 카드의 상태를 Ready로 변경 (노란색 테두리)
     }
@@ -144,10 +154,11 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         ResetSiblingIndex();// List의 순서에 맞게 원래 위치로 돌아가기.
         rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine);
 
-        // 카드의 이펙트 시각 효과
-        if (effectVisualizer.currentState == CardVisualState.Chain) return; // 카드의 상태가 Chain인 경우 이펙트 변경 취소 (빨간색 유지)
+        // 예외처리 + 이펙트 초기화
+        effectVisualizer.SetStateToNone(); // 카드의 상태를 None으로 변경
 
-        effectVisualizer.ApplyVisualState(CardVisualState.None); // 카드의 상태를 None으로 변경 (이펙트 제거)
+        // canchain 상태의 카드들을 원상태로(enhanced에 따라서 다르게 설정)
+        cardDisplay.ResetCanChain();
     }
     public void FXOnUse()
     {
@@ -156,10 +167,13 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         // 첫 단계: frameCover, illustCover 반투명하게
         seq.Append(frameCover.DOFade(0.5f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(illustCover.DOFade(0.5f, 0.3f).SetEase(Ease.OutSine));
-
+        
         // 두 번째 단계: 전체 fade out + FX 적용
         seq.AppendCallback(() =>
         {
+            if (effectVisualizer.currentState == CardVisualState.ReadyOnChain || effectVisualizer.currentState == CardVisualState.Chain)
+                effectVisualizer.enhanceTriggered = true; // 강화 사용 효과 트리거
+
             effectVisualizer.ApplyVisualState(CardVisualState.Use);
         });
 
@@ -229,10 +243,8 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
         rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine); // 원래 위치로 돌아가기.
 
-        // 카드의 이펙트 시각 효과
-        if (effectVisualizer.currentState == CardVisualState.Chain) return; // 카드의 상태가 Chain인 경우 이펙트 변경 취소 (빨간색 유지)
-
-        effectVisualizer.ApplyVisualState(CardVisualState.None); // 카드의 상태를 None으로 변경 (이펙트 제거)
+        // 예외처리 + 이펙트 초기화
+        effectVisualizer.SetStateToNone(); // 카드의 상태를 None으로 변경
     }
 
     public void SetCardData(CardModel card)// 카드 데이터 설정

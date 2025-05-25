@@ -100,7 +100,6 @@ public class CardDisplay : MonoBehaviour
     public void CardArrange()// 카드 정렬 (수량에 따른 각도, 거리)
     {
         if(cardsInHand.Count == 0) return;
-        Debug.Log("CardArrange() 호출됨");
 
         isOnDrag = false;
         int oddeven = cardsInHand.Count / 2;
@@ -405,6 +404,9 @@ public class CardDisplay : MonoBehaviour
             }
         }
     }
+    /// <summary>
+    /// 카드의 연계 상태 업데이트
+    /// </summary>
     public void CheckChainCard()
     {
         foreach (var card in cardsInHand)
@@ -414,6 +416,45 @@ public class CardDisplay : MonoBehaviour
             if (card.cardData.isEnhanced) // 연계된 상태일때
             {
                card.effectVisualizer.ApplyVisualState(CardVisualState.Chain); // 카드의 상태를 Chain으로 변경 (빨간색 테두리)
+            }
+            else
+            {
+                card.effectVisualizer.ApplyVisualState(CardVisualState.None); // 카드의 상태를 None으로 변경 (이펙트 제거)
+            }
+        }
+    }
+    public void CheckCanChain()
+    {
+        foreach (var card in cardsInHand)
+        {
+            if (card.effectVisualizer.currentState == CardVisualState.Use ||
+                card.effectVisualizer.currentState == CardVisualState.Ready) return; // 카드의 상태가 Use,Ready인 경우 이펙트 변경 취소 (사용되는 효과 재생 유지)
+
+            if (currentCard == null) return;
+
+            if(BattleLogManager.comboTable.TryGetValue(currentCard.cardData.type, out var cardTypes))
+            {
+                if( cardTypes.Contains(card.cardData.type)) // 현재 카드 타입이 연계 가능한 카드 타입에 포함되어 있다면
+                {
+                    card.effectVisualizer.ApplyVisualState(CardVisualState.CanChain); // 카드의 상태를 CanChain으로 변경 (얇은 노란 테두리)
+                }
+            }
+        }
+    }
+    /// <summary>
+    /// CanChain 상태에서, currentCard에서 마우스를 해제한 경우, 원래 상태로 돌리기
+    /// </summary>
+    public void ResetCanChain()
+    {
+        foreach (var card in cardsInHand)
+        {
+            if (card.effectVisualizer.currentState == CardVisualState.Use ||
+                               card.effectVisualizer.currentState == CardVisualState.Ready) return; // 카드의 상태가 Use,Ready인 경우 이펙트 변경 취소 (사용되는 효과 재생 유지)
+
+            // 상태 복구.
+            if(card.cardData.isEnhanced)
+            {
+                card.effectVisualizer.ApplyVisualState(CardVisualState.Chain); // 카드의 상태를 Chain으로 변경 (빨간색 테두리)
             }
             else
             {
