@@ -27,7 +27,7 @@ public class BattleFlowController : MonoBehaviour
 
     public List<IStatusReceiver> enemyParty = new List<IStatusReceiver> { null, null, null };
 
-    public int startMana = 3; //시작 마나
+    public int startMana = 4; //시작 마나
     public int currentMana;   //현재 마나
 
     public Dictionary<CharacterClass, DeckModel> decksByCharacter = new();     //캐릭터 마다의 사용, 미사용, 핸드 덱
