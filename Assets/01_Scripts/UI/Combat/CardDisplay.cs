@@ -132,6 +132,13 @@ public class CardDisplay : MonoBehaviour
                     })
                     .OnComplete(() =>
                     {
+                        // 잘못된 위치에 있는 카드들을 원래 위치로 보내기
+                        RectTransform cardRect = cardsInHand[i].GetComponent<RectTransform>();
+                        if (!cardsInHand[i].isPointerOver && cardRect.position != (Vector3)cardsInHand[i].originalPos) // 마우스를 올린 카드가 아님 + 잘못된 위치에 있을경우
+                        {
+                            cardRect.DOAnchorPos(cardsInHand[i].originalPos, 0.1f); // 원래 위치로 보내기
+                        }
+                        
                         cardsInHand[cash].UpdateStateMoveEnd();
                     })
                     .SetEase(Ease.OutSine);
@@ -148,6 +155,13 @@ public class CardDisplay : MonoBehaviour
                     })
                     .OnComplete(() =>
                     {
+                        // 잘못된 위치에 있는 카드들을 원래 위치로 보내기
+                        RectTransform cardRect = cardsInHand[i].GetComponent<RectTransform>();
+                        if (!cardsInHand[i].isPointerOver && cardRect.position != (Vector3)cardsInHand[i].originalPos) // 마우스를 올린 카드가 아님 + 잘못된 위치에 있을경우
+                        {
+                            cardRect.DOAnchorPos(cardsInHand[i].originalPos, 0.1f); // 원래 위치로 보내기
+                        }
+
                         cardsInHand[cash].UpdateStateMoveEnd();// 카드 이동 완료 후 상태 업데이트.
                     })
                     .SetEase(Ease.OutSine);
@@ -182,6 +196,13 @@ public class CardDisplay : MonoBehaviour
                     })
                     .OnComplete(() =>
                     {
+                        // 잘못된 위치에 있는 카드들을 원래 위치로 보내기
+                        RectTransform cardRect = cardsInHand[i].GetComponent<RectTransform>();
+                        if (!cardsInHand[i].isPointerOver && cardRect.position != (Vector3)cardsInHand[i].originalPos) // 마우스를 올린 카드가 아님 + 잘못된 위치에 있을경우
+                        {
+                            cardRect.DOAnchorPos(cardsInHand[i].originalPos, 0.1f); // 원래 위치로 보내기
+                        }
+
                         cardsInHand[cash].UpdateStateMoveEnd();
                     })
                     .SetEase(Ease.OutSine);
@@ -198,6 +219,13 @@ public class CardDisplay : MonoBehaviour
                     })
                     .OnComplete(() =>
                     {
+                        // 잘못된 위치에 있는 카드들을 원래 위치로 보내기                     
+                        RectTransform cardRect = cardsInHand[i].GetComponent<RectTransform>();
+                        if (!cardsInHand[i].isPointerOver && cardRect.position != (Vector3)cardsInHand[i].originalPos) // 마우스를 올린 카드가 아님 + 잘못된 위치에 있을경우
+                        {
+                            cardRect.DOAnchorPos(cardsInHand[i].originalPos, 0.1f); // 원래 위치로 보내기
+                        }
+
                         cardsInHand[cash].UpdateStateMoveEnd();// 카드 이동 완료 후 상태 업데이트.
                     })
                     .SetEase(Ease.OutSine);

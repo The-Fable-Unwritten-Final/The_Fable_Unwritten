@@ -44,7 +44,6 @@ public class StatusDisplay : MonoBehaviour
 
     private void UpdateUI(List<StatusEffect> effects, bool hasBlock)
     {
-        Debug.Log("실행됨");
         atk.SetActive(effects.Exists(e => e.statType == BuffStatType.Attack && e.duration > 0));
         def.SetActive(effects.Exists(e => e.statType == BuffStatType.Defense && e.duration > 0));
         stun_Img.SetActive(effects.Exists(e => e.statType == BuffStatType.stun && e.duration > 0));

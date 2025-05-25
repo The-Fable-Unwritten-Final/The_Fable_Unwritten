@@ -60,7 +60,7 @@ public class CardEffectVisualizer : MonoBehaviour
         switch (newState)
         {
             case CardVisualState.Ready:
-                SetEdgeGlow("#FFED34"); // 노란색 테두리
+                //SetEdgeGlow("#FFED34"); // 노란색 테두리
                 cardReadyFX.SetActive(true); // 노란색 테두리
                 break;
 
@@ -73,7 +73,7 @@ public class CardEffectVisualizer : MonoBehaviour
                 break;
 
             case CardVisualState.Chain:
-                SetEdgeGlow("#FF2523"); // 빨간색 테두리
+                //SetEdgeGlow("#FF2523"); // 빨간색 테두리
                 cardChainFX.SetActive(true); // 파란색 테두리
                 break;
 
@@ -97,6 +97,7 @@ public class CardEffectVisualizer : MonoBehaviour
         else
             useCardFXParticle.Play();
     }
+    // 테두리 발광효과, 더이상 사용 안함. 쉐이더로 대체.
     void SetEdgeGlow(string hex)
     {
         innerEdge.color = ColorUtility.TryParseHtmlString(hex, out Color c) ? c : Color.white;

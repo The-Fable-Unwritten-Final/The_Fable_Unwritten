@@ -255,7 +255,6 @@ public class DataManager : MonoSingleton<DataManager>
                 Debug.LogWarning($"[DataManager] 중복된 animationName: {effect.animationName}");
             }
         }
-        Debug.Log($"[DataManager] 총 {cardEffects.Count}개의 애니메이션 로딩 완료");
     }
 
     /// <summary>

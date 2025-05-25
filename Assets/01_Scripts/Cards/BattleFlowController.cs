@@ -156,7 +156,6 @@ public class BattleFlowController : MonoBehaviour
         UpdateManaUI(); // << 추가
         DrawMissingHands();             //각각 패가 3장이 되도록(살아 있을 경우에만) 드로우
 
-        Debug.Log("플레이어 턴 시작");
 
         // 이후 카드 사용 → 외부에서 UseCard 호출
     }
@@ -251,7 +250,6 @@ public class BattleFlowController : MonoBehaviour
     public void ExecuteEnemyTurn(Action onEnemyTurnComplete)
     {
         if (isBattleEnded) return;
-        Debug.Log("적 턴 시작");
         StartCoroutine(EnemyTurnCoroutine(() =>
         {
             onEnemyTurnComplete?.Invoke();
