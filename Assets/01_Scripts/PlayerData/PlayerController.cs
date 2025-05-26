@@ -130,6 +130,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             reduced = reduced * 2;
         }
 
+        reduced = Mathf.Round(reduced);
+
         var dmg = new DmgTextData
         {
             Text = $"-{Mathf.RoundToInt(reduced)}",

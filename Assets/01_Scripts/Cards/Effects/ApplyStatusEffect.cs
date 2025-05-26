@@ -92,16 +92,23 @@ public class ApplyStatusEffect : CardEffectBase
     {
         string direction = value switch
         {
-            > 0 => "증가",
-            < 0 => "감소",
+            > 0 => $"+{value}",
+            < 0 => $"{value}",
+            _ => ""
+        };
+
+        string iconTag = statType switch
+        {
+            BuffStatType.Attack => "<sprite name=\"atk\">",
+            BuffStatType.Defense => "<sprite name=\"def\">",
             _ => ""
         };
 
         return statType switch
         {
-            BuffStatType.Attack => $"공격력 {direction}",
-            BuffStatType.Defense => $"방어력 {direction}",
-            BuffStatType.ManaRegen => $"마나 회복량 {direction}",
+            BuffStatType.Attack => $"{iconTag} {direction}",
+            BuffStatType.Defense => $"{iconTag} {direction}",
+            BuffStatType.ManaRegen => $"{iconTag}  {direction}",
             BuffStatType.stun => "기절",
             BuffStatType.CantAttackInStance => "실명",
             _ => "상태이상"

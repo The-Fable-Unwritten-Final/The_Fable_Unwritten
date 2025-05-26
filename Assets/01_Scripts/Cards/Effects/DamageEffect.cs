@@ -34,7 +34,7 @@ public class DamageEffect : CardEffectBase
             (attackerAtk, stanceBoosted, stanceWeakened) = StanceHelper.ApplyStanceToDamage(pc, attackerAtk, cardType);
         }
 
-        attackerAtk = Mathf.Ceil(attackerAtk);
+        attackerAtk = Mathf.Round(attackerAtk);
 
         // target은 받은 amount에서 방어력을 적용해서 처리
         foreach (var target in targets)
