@@ -32,6 +32,8 @@ public class HealEffect : CardEffectBase
 
         var slot = GameManager.Instance.turnController.battleFlow;
 
+        finalHeal = Mathf.Round(finalHeal);
+
         switch (target)
         {
             case 0:
