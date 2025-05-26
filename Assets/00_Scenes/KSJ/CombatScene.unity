@@ -8590,7 +8590,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &1920819811
@@ -9019,7 +9019,7 @@ MonoBehaviour:
     type: 3}
   effectManage: {fileID: 2101769382}
   Mana: {fileID: 753105239}
-  startMana: 3
+  startMana: 4
   currentMana: 0
   totalExp: 0
   isWin: 0
@@ -9647,7 +9647,7 @@ PrefabInstance:
     - target: {fileID: 518221310495574982, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 604291689499498224, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
@@ -9702,7 +9702,7 @@ PrefabInstance:
     - target: {fileID: 1013092538685107924, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1031542528581106927, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
@@ -9722,7 +9722,7 @@ PrefabInstance:
     - target: {fileID: 1516769630095686556, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1760421482876515356, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
