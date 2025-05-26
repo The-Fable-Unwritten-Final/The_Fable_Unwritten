@@ -7,9 +7,26 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     public EnemyData enemyData;
 
     public bool hasBlock = false;
+    private bool isTargetable;
+
+    public bool IsTargetable
+    {
+        get => isTargetable;
+        set
+        {
+            if (isTargetable != value)
+            {
+                isTargetable = value;
+                OnTargetableChanged?.Invoke();
+            }
+        }
+    }
+
+    public event System.Action OnTargetableChanged;
 
     [SerializeField] private HpBarDisplay hpBarDisplay;
     [SerializeField] private DmgBarDisplay dmgBarDisplay;
+    [SerializeField] private TargetArrowDisplay targetArrow; 
 
     private Animator animator;
     private StatusDisplay statusDisplay;
@@ -33,8 +50,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     }
     void Start()
     {
-        
-        //enemyData.CurrentHP = enemyData.MaxHP; //전투 시작시 EnemyHP 풀로 채우기  //예외 처리를 해주면 된다.
+        targetArrow.Init(this); // 옵저버 연결
     }
 
     public void SetData(EnemyData data)
@@ -299,4 +315,6 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     }
 
     public DmgBarDisplay dmgBar => dmgBarDisplay;
+    public TargetArrowDisplay tarArrow => targetArrow;
+
 }

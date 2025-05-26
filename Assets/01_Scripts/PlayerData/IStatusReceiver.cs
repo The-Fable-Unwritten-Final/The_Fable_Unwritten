@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using System;
 
 /// <summary>
 /// 공통 enum(효과 타입, 캐릭터, 스킬 타입, 버프) 
@@ -47,9 +48,12 @@ public interface IStatusReceiver
     string CurrentStance { get; }                   //현재 자세 확인
     bool IsStunned();                          //스턴 상태 여부 확인
 
-    // 💥 애니메이션 관련 추가
+    // 💥 애니메이션 및 GUI 관련 추가
     void PlayAttackAnimation();
     void PlayHitAnimation();
     Transform CachedTransform { get; }
     DmgBarDisplay dmgBar { get; }
+    TargetArrowDisplay tarArrow { get; }          // 카드 사용시의 시전 대상 타겟 화살표
+    bool IsTargetable { get; set; }                     // 타겟 가능 여부
+    event Action OnTargetableChanged;       // 타겟 가능 여부 변경 이벤트
 }

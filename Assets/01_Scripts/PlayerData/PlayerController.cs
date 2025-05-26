@@ -9,8 +9,28 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public PlayerData playerData;       //플레이어의 데이타
     public DeckModel deckModel;         //플레이어가 들고 있는 덱
     public bool hasBlock = false;           //방어막 획득 여부
+    private bool isTargetable;              //타겟 가능 여부
+
+    public bool IsTargetable
+    {
+        get => isTargetable;
+        set
+        {
+            if (isTargetable != value)
+            {
+                isTargetable = value;
+                OnTargetableChanged?.Invoke();
+            }
+        }
+    }
+
+    public event System.Action OnTargetableChanged; // 타겟 가능 여부 변경 이벤트
+
+
+
     [SerializeField] private HpBarDisplay hpBarDisplay;
     [SerializeField] private DmgBarDisplay dmgBarDisplay;
+    [SerializeField] private TargetArrowDisplay targetArrow; 
 
     private Animator animator;
 
@@ -56,6 +76,11 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         flow = FindObjectOfType<BattleFlowController>();
         stanceToggleButton.onClick.AddListener(OnCharacterIconClicked);
         //---
+    }
+
+    void Start()
+    {
+        targetArrow.Init(this); // 옵저버 연결
     }
 
     public void TakeTrueDamage(float damage)
@@ -494,4 +519,5 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     }
 
     public DmgBarDisplay dmgBar => dmgBarDisplay;
+    public TargetArrowDisplay tarArrow => targetArrow; 
 }

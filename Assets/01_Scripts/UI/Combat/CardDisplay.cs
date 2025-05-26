@@ -490,6 +490,52 @@ public class CardDisplay : MonoBehaviour
             }
         }
     }
+    /// <summary>
+    /// cardInHand 중에서 선택중인 카드의 적용 가능 대상에 화살표 표시
+    /// </summary>
+    public void TargetArrowDisplay()
+    {
+        if (currentCard == null) return;
+
+        CardModel model = currentCard.cardData;
+        BattleFlowController btc = GameManager.Instance.turnController.battleFlow;
+
+        if (model.effects != null && model.effects.Count > 0)
+        {
+            // model의 target type에 따라 화살표 표시
+            switch (model.targetType)
+            {
+                // 자기 자신에게만 적용되는 효과
+                case TargetType.None:
+                    var self = btc.playerParty.FirstOrDefault(x => x.ChClass == model.characterClass);
+                    if (self != null) self.IsTargetable = true; // 자기 자신 에게만 화살표 표시
+                    break;
+
+                // 아군을 대상으로 적용 가능한 효과
+                case TargetType.Ally:
+                    btc.playerParty.ForEach(x => x.IsTargetable = true); // 모든 캐릭터의 화살표 활성화
+                    break;
+
+                // 적을 대상으로 적용 가능한 효과
+                case TargetType.Enemy:
+                    btc.enemyParty.ForEach(x => { if (x != null) x.IsTargetable = true; }); // 모든 몬스터의 화살표 활성화 (null 예외 처리)
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 대상 화살표 비활성화
+    /// </summary>
+    public void TargetArrowReset()
+    {
+        BattleFlowController btc = GameManager.Instance.turnController.battleFlow;
+        btc.playerParty.ForEach(x => x.IsTargetable = false); // 모든 캐릭터의 화살표 비활성화
+        btc.enemyParty.ForEach(x => { if (x != null) x.IsTargetable = false; }); // 모든 몬스터의 화살표 비활성화 (null 예외 처리)
+    }
 
     // 카드 상태 일정 주기마다 업데이트 로직 + 플레이어 턴이 시작할떄 호출
     public void StartPlayerTurn()
@@ -537,6 +583,15 @@ public class CardDisplay : MonoBehaviour
                 isreset = true;
                 SetCardCanDrag();
                 //CardArrange();
+                yield return new WaitForEndOfFrame();
+                for(int i = 0; i < cardsInHand.Count; i++)
+                {
+                    RectTransform cardRect = cardsInHand[i].GetComponent<RectTransform>();
+                    if (!cardsInHand[i].isPointerOver && cardRect.position != (Vector3)cardsInHand[i].originalPos) // 마우스를 올린 카드가 아님 + 잘못된 위치에 있을경우
+                    {
+                        cardRect.DOAnchorPos(cardsInHand[i].originalPos, 0.1f); // 원래 위치로 보내기
+                    }
+                }
             }
             yield return new WaitForEndOfFrame();
         }
