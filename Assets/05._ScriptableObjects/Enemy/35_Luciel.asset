@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: 35_Luciel
   m_EditorClassIdentifier: 
   idNum: 35
-  enemyName: "\uB8E8\uC2DC\uC5D8"
+  enemyName: Luciel
   exp: 15
-  maxHP: 80
-  currentHP: 80
+  maxHP: 280
+  currentHP: 280
   aTKValue: 0
   dEFValue: 0
   stun: 0
@@ -27,18 +27,18 @@ MonoBehaviour:
   skillList:
   - skillIndex: 100
     damage: 15
-    percentage: 20
+    percentage: 15
   - skillIndex: 104
-    damage: 8
-    percentage: 35
-  - skillIndex: 105
     damage: 6
-    percentage: 60
+    percentage: 30
+  - skillIndex: 105
+    damage: 4
+    percentage: 50
   - skillIndex: 115
-    damage: -15
+    damage: -10
     percentage: 80
   - skillIndex: 116
-    damage: -5
+    damage: -6
     percentage: 100
   illust: illust3_5
   currentStance: 1

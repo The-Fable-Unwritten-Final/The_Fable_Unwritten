@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: 33_Elua
   m_EditorClassIdentifier: 
   idNum: 33
-  enemyName: "\uC5D8\uB8E8\uC544"
+  enemyName: Elua
   exp: 10
-  maxHP: 50
-  currentHP: 50
+  maxHP: 70
+  currentHP: 70
   aTKValue: 0
   dEFValue: 0
   stun: 0
@@ -26,14 +26,14 @@ MonoBehaviour:
   type: 1
   skillList:
   - skillIndex: 100
-    damage: 10
-    percentage: 30
+    damage: 12
+    percentage: 35
   - skillIndex: 101
-    damage: 6
-    percentage: 50
+    damage: 7
+    percentage: 65
   - skillIndex: 114
-    damage: -10
-    percentage: 80
+    damage: -15
+    percentage: 85
   - skillIndex: 116
     damage: 0
     percentage: 100

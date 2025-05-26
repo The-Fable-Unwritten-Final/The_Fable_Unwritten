@@ -10,39 +10,36 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d99085e4860989e40ba273fad6060564, type: 3}
-  m_Name: 23_Marnaz
+  m_Name: 32_Pixie
   m_EditorClassIdentifier: 
-  idNum: 23
-  enemyName: "\uB9C8\uB974\uB098\uC2A4"
-  exp: 10
-  maxHP: 90
-  currentHP: 90
+  idNum: 32
+  enemyName: Pixie
+  exp: 5
+  maxHP: 25
+  currentHP: 25
   aTKValue: 0
   dEFValue: 0
   stun: 0
   blind: 0
   block: 0
   note: 
-  type: 1
+  type: 0
   skillList:
   - skillIndex: 100
-    damage: 10
-    percentage: 25
-  - skillIndex: 102
     damage: 6
-    percentage: 45
-  - skillIndex: 107
-    damage: 5
-    percentage: 80
-  - skillIndex: 112
+    percentage: 60
+  - skillIndex: 113
+    damage: -6
+    percentage: 90
+  - skillIndex: 116
     damage: 0
     percentage: 100
-  illust: illust2_3
+  illust: illust3_2
   currentStance: 1
-  animationController: {fileID: 9100000, guid: 80863e53f866cb04e866ca9a958e4fc8, type: 2}
-  AttackSkillEffect: fx1_splash_large_light_blue
-  AllySkillEffect: 
-  TopStance: 0.2
-  MiddleStance: 0.3
-  BottomStance: 0.5
-  loot: 0100000000000000
+  animationController: {fileID: 9100000, guid: b8f34755a55061c4596ec7eabc6b325b, type: 2}
+  AttackSkillEffect: fanfx1_magic_burst_A_large_yellow
+  AllySkillEffect: fanfx2_cure_large_yellow
+  TopStance: 0.6
+  MiddleStance: 0.2
+  BottomStance: 0.2
+  loot: 02000000

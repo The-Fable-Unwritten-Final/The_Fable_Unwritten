@@ -1,15 +1,15 @@
-﻿index,name,art,hp,exp,loot0,loot1,loot2,attack_effect,ally_effect,skill_0,damage_0,percent_0,skill_1,damage_1,percent_1,skill_2,damage_2,percent_2,skill_3,damage_3,percent_3,skill_4,damage_4,percent_4,top_percentage,middle_percent,bottom_percent,atk buff,def buff,block,blind,stun,note,enemyType
-10,늑대,illust1_0,15,5,0,,,fx3_bite_large_yellow,,100,5,1,,,,,,,,,,,,,0.3,0.4,0.3,,,,,,,0
-11,우두머리 늑대,illust1_1,30,10,0,,,fx3_bite_large_red,,100,10,75,104,6,100,,,,,,,,,,0.3,0.4,0.3,,,,,,,1
-20,위즈캣,illust2_0,30,5,1,,,pj1_fireball_large_blue,,100,5,55,106,0,80,112,0,100,,,,,,,0.2,0.2,0.6,,,,,,,0
-21,이바이스,illust2_1,25,5,1,,,fanfx2_claw_large_blue,,100,6,65,108,0,80,112,0,100,,,,,,,0.6,0.2,0.2,,,,,,,0
-22,플립,illust2_2,20,5,1,,,fanfx1_magic_puff_A_large_blue,,100,5,70,110,0,90,112,0,100,,,,,,,0.2,0.6,0.2,,,,,,,0
-23,마르나스,illust2_3,90,10,1,0,,fx1_splash_large_light_blue,,100,10,25,102,6,45,107,5,80,112,0,100,,,,0.2,0.3,0.5,,,,,,,1
-24,파르마노,illust2_4,50,10,1,0,,pj2_lightning_orb_large_blue,,100,10,25,102,6,40,109,5,80,112,0,100,,,,0.5,0.3,0.2,,,,,,,1
-25,이즈칼,illust2_5,120,15,1,2,3,pj1_fireball_large_red,,100,15,15,104,8,35,105,6,55,111,10,80,112,5,100,0.3,0.4,0.3,,,,,,,2
-30,테디하트,illust3_0,60,5,2,,,fanfx1_magic_puff_B_large_violet,fanfx2_cure_large_yellow,100,5,75,113,-5,80,116,0,100,,,,,,,0.2,0.6,0.2,,,,,,,0
-31,멜리젤,illust3_1,25,5,2,,,fx1_impact_hit_large_violet,fanfx2_cure_large_yellow,100,5,60,113,-5,90,116,0,100,,,,,,,0.2,0.2,0.6,,,,,,,0
-32,픽시,illust3_2,20,5,2,,,fanfx1_magic_burst_A_large_yellow,fanfx2_cure_large_yellow,100,5,70,113,-5,90,116,0,100,,,,,,,0.6,0.2,0.2,,,,,,,0
-33,엘루아,illust3_3,50,10,2,0,,fanfx1_spellcast_C_large_yellow,fanfx2_cure_large_yellow,100,10,30,101,6,50,114,-10,80,116,0,100,,,,0.5,0.3,0.2,,,,,,,1
-34,그롤리,illust3_4,65,10,2,0,,fx3_bite_large_violet,fanfx2_cure_large_yellow,100,10,35,101,6,65,114,-10,80,116,0,100,,,,0.2,0.3,0.5,,,,,,,1
-35,루시엘,illust3_5,80,15,2,1,3,fx3_lightning_aura_large_yellow,fanfx2_cure_large_yellow,100,15,20,104,8,35,105,6,60,115,-15,80,116,-5,100,0.3,0.4,0.3,,,,,,,2
+﻿index,name,art,hp,exp,loot0,loot1,loot2,attack_effect,ally_effect,skill_0,damage_0,percent_0,skill_1,damage_1,percent_1,skill_2,damage_2,percent_2,skill_3,damage_3,percent_3,skill_4,damage_4,percent_4,top_percentage,middle_percent,bottom_percent,atk buff,def buff,block,blind,stun,note,type
+10,Wolf,illust1_0,10,5,0,,,fx3_bite_large_yellow,,100,4,1,,,,,,,,,,,,,0.3,0.4,0.3,,,,,,,0
+11,Alphawolf,illust1_1,15,10,0,,,fx3_bite_large_red,,100,8,65,104,5,100,,,,,,,,,,0.3,0.4,0.3,,,,,,,1
+20,WizCat,illust2_0,20,5,1,,,pj1_fireball_large_blue,,100,10,60,106,6,90,112,2,100,,,,,,,0.2,0.2,0.6,,,,,,,0
+21,Ivais,illust2_1,20,5,1,,,fanfx2_claw_large_blue,,100,10,60,108,6,90,112,2,100,,,,,,,0.6,0.2,0.2,,,,,,,0
+22,Flip,illust2_2,15,5,1,,,fanfx1_magic_puff_A_large_blue,,100,8,40,110,6,90,112,0,100,,,,,,,0.2,0.6,0.2,,,,,,,0
+23,Marnas,illust2_3,100,10,1,0,,fx1_splash_large_light_blue,,100,15,35,102,6,60,107,9,85,112,0,100,,,,0.2,0.3,0.5,,,,,,,1
+24,Parmano,illust2_4,70,10,1,0,,pj2_lightning_orb_large_blue,,100,10,35,102,6,60,109,6,85,112,0,100,,,,0.5,0.3,0.2,,,,,,,1
+25,Izcal,illust2_5,200,15,1,2,3,pj1_fireball_large_red,,100,16,15,104,6,35,105,6,50,111,14,80,112,0,100,0.3,0.4,0.3,,,,,,,2
+30,Teddyheart,illust3_0,70,5,2,,,fanfx1_magic_puff_B_large_violet,fanfx2_cure_large_yellow,100,10,60,113,-10,90,116,0,100,,,,,,,0.2,0.6,0.2,,,,,,,0
+31,Melizel,illust3_1,30,5,2,,,fx1_impact_hit_large_violet,fanfx2_cure_large_yellow,100,10,60,113,-6,90,116,0,100,,,,,,,0.2,0.2,0.6,,,,,,,0
+32,Pixie,illust3_2,25,5,2,,,fanfx1_magic_burst_A_large_yellow,fanfx2_cure_large_yellow,100,6,60,113,-6,90,116,0,100,,,,,,,0.6,0.2,0.2,,,,,,,0
+33,Elua,illust3_3,70,10,2,0,,fanfx1_spellcast_C_large_yellow,fanfx2_cure_large_yellow,100,12,35,101,7,65,114,-15,85,116,0,100,,,,0.5,0.3,0.2,,,,,,,1
+34,Grolly,illust3_4,100,10,2,0,,fx3_bite_large_violet,fanfx2_cure_large_yellow,100,15,35,101,7,65,114,-12,85,116,0,100,,,,0.2,0.3,0.5,,,,,,,1
+35,Luciel,illust3_5,280,15,2,1,3,fx3_lightning_aura_large_yellow,fanfx2_cure_large_yellow,100,15,15,104,6,30,105,4,50,115,-10,80,116,-6,100,0.3,0.4,0.3,,,,,,,2

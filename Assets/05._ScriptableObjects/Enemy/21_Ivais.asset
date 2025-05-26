@@ -10,42 +10,36 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d99085e4860989e40ba273fad6060564, type: 3}
-  m_Name: 25_Izkal
+  m_Name: 21_Ivais
   m_EditorClassIdentifier: 
-  idNum: 25
-  enemyName: "\uC774\uC988\uCE7C"
-  exp: 15
-  maxHP: 120
-  currentHP: 120
+  idNum: 21
+  enemyName: Ivais
+  exp: 5
+  maxHP: 20
+  currentHP: 20
   aTKValue: 0
   dEFValue: 0
   stun: 0
   blind: 0
   block: 0
   note: 
-  type: 2
+  type: 0
   skillList:
   - skillIndex: 100
-    damage: 15
-    percentage: 15
-  - skillIndex: 104
-    damage: 8
-    percentage: 35
-  - skillIndex: 105
-    damage: 6
-    percentage: 55
-  - skillIndex: 111
     damage: 10
-    percentage: 80
+    percentage: 60
+  - skillIndex: 108
+    damage: 6
+    percentage: 90
   - skillIndex: 112
-    damage: 5
+    damage: 2
     percentage: 100
-  illust: illust2_5
+  illust: illust2_1
   currentStance: 1
-  animationController: {fileID: 9100000, guid: 168ef65833d7ea2468bb054f4a512bb0, type: 2}
-  AttackSkillEffect: pj1_fireball_large_red
+  animationController: {fileID: 9100000, guid: 5ef73eb61ff208f43955ab8c759ff8d1, type: 2}
+  AttackSkillEffect: fanfx2_claw_large_blue
   AllySkillEffect: 
-  TopStance: 0.3
-  MiddleStance: 0.4
-  BottomStance: 0.3
-  loot: 010000000200000003000000
+  TopStance: 0.6
+  MiddleStance: 0.2
+  BottomStance: 0.2
+  loot: 01000000

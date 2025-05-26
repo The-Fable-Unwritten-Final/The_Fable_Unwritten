@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: 10_Wolf
   m_EditorClassIdentifier: 
   idNum: 10
-  enemyName: "\uB291\uB300"
+  enemyName: Wolf
   exp: 5
-  maxHP: 15
-  currentHP: 15
+  maxHP: 10
+  currentHP: 10
   aTKValue: 0
   dEFValue: 0
   stun: 0
@@ -26,7 +26,7 @@ MonoBehaviour:
   type: 0
   skillList:
   - skillIndex: 100
-    damage: 5
+    damage: 4
     percentage: 1
   illust: illust1_0
   currentStance: 1

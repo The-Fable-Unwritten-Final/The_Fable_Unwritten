@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: 24_Parmano
   m_EditorClassIdentifier: 
   idNum: 24
-  enemyName: "\uD30C\uB974\uB9C8\uB178"
+  enemyName: Parmano
   exp: 10
-  maxHP: 50
-  currentHP: 50
+  maxHP: 70
+  currentHP: 70
   aTKValue: 0
   dEFValue: 0
   stun: 0
@@ -27,13 +27,13 @@ MonoBehaviour:
   skillList:
   - skillIndex: 100
     damage: 10
-    percentage: 25
+    percentage: 35
   - skillIndex: 102
     damage: 6
-    percentage: 40
+    percentage: 60
   - skillIndex: 109
-    damage: 5
-    percentage: 80
+    damage: 6
+    percentage: 85
   - skillIndex: 112
     damage: 0
     percentage: 100
