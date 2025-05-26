@@ -53,7 +53,7 @@
       "cost": 2,
       "illustration": "illust_29",
       "name": "불꽃 주먹",
-      "text": "소피아 체력 3 감소\n적 하나 12의 피해",
+      "text": "소피아 체력 3 감소\n적 하나 15의 피해",
       "type": 0,
       "class": 0,
       "cardframe": "frame_0",
@@ -65,7 +65,7 @@
       "effects": [
         {
           "type": "damage",
-          "value": 12
+          "value": 15
         },
         {
           "type": "self_damage",
@@ -78,7 +78,7 @@
       "cost": 1,
       "illustration": "illust_10",
       "name": "얼음 파편",
-      "text": "적 둘 4의 피해\n일시적인 복사본 생성\n사용할 때마다 강화",
+      "text": "적 둘 3의 피해\n일시적인 복사본 생성\n사용할 때마다 피해 2 증가",
       "type": 1,
       "class": 0,
       "cardframe": "frame_1",
@@ -90,7 +90,7 @@
       "effects": [
         {
           "type": "damage",
-          "value": 4
+          "value": 3
         },
         {
           "type": "duplicate",
@@ -114,7 +114,7 @@
       "cost": 2,
       "illustration": "illust_30",
       "name": "서리대지",
-      "text": "소피아 체력 3 감소\n적 전체 8의 피해\n'상'일 때 강화",
+      "text": "소피아 체력 2 감소\n적 전체 11의 피해",
       "type": 1,
       "class": 0,
       "cardframe": "frame_1",
@@ -126,23 +126,11 @@
       "effects": [
         {
           "type": "damage",
-          "value": 8
+          "value": 11
         },
         {
           "type": "self_damage",
-          "value": 3
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "trigger": "isStance",
-            "value": [ 0 ]
-          },
-          "result": {
-            "type": "heal",
-            "value": 3,
-            "target": 0
-          }
+          "value": 2
         }
       ]
     },
@@ -151,7 +139,7 @@
       "cost": 2,
       "illustration": "illust_27",
       "name": "서리방벽",
-      "text": "1턴 간 아군 전체 방어력 4 증가",
+      "text": "1턴 간 아군 전체 방어력 5 증가",
       "type": 1,
       "class": 0,
       "cardframe": "frame_1",
@@ -163,7 +151,7 @@
       "effects": [
         {
           "type": "def_buff",
-          "value": 4,
+          "value": 5,
           "duration": 1,
           "target": 3
         }
@@ -196,7 +184,7 @@
       "cost": 2,
       "illustration": "illust_11",
       "name": "전자 지류",
-      "text": "적 하나 6의 피해\n대상 기절",
+      "text": "적 하나 9의 피해\n대상 기절",
       "type": 2,
       "class": 0,
       "cardframe": "frame_2",
@@ -208,7 +196,7 @@
       "effects": [
         {
           "type": "damage",
-          "value": 6
+          "value": 9
         },
         {
           "type": "stun",
@@ -244,7 +232,7 @@
           },
           "result": {
             "type": "reduceCost",
-            "value": 1,
+            "value": 2,
             "target": 4
           }
         }
@@ -461,7 +449,7 @@
       "cost": 1,
       "illustration": "illust_1",
       "name": "생츄어리",
-      "text": "적 전체 3의 피해\n1턴 간 적 전체 '하' 공격 불가",
+      "text": "적 전체 5의 피해",
       "type": 6,
       "class": 1,
       "cardframe": "frame_6",
@@ -473,12 +461,7 @@
       "effects": [
         {
           "type": "damage",
-          "value": 3
-        },
-        {
-          "type": "CantAtkinParticularStance",
-          "value": 2,
-          "duration": 1
+          "value": 5
         }
       ]
     },
@@ -542,33 +525,20 @@
       "cost": 1,
       "illustration": "illust_31",
       "name": "간절한 기도",
-      "text": "아군 체력 6 회복\n'하'일 때 강화",
+      "text": "아군 체력 8 회복",
       "type": 7,
       "class": 1,
       "cardframe": "frame_7",
       "target_type": 1,
       "target_num": 1,
-      "note": "강화 시 회복량이 3 더 증가합니다.",
+      "note": "",
       "flavortext": "간절한 기도는 다시 일어날 힘을 줍니다.",
       "skilleffect": "fx2_magic_swirl_large_yellow",
       "effects": [
         {
           "type": "heal",
-          "value": 6,
+          "value": 8,
           "target": 3
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "trigger": "isStance",
-            "value": [ 2 ]
-          },
-          "result": {
-            "type": "heal",
-            "value": 3,
-            "target": 3
-
-          }
         }
       ]
     },
@@ -763,7 +733,7 @@
       "cost": 2,
       "illustration": "illust_23",
       "name": "꿰뚫는 섬광",
-      "text": "적 하나 6의 피해\n'방어' 카드 미사용 시 1턴 간 강화",
+      "text": "적 하나 6의 피해\n'방어' 카드 미사용 시 1턴 간 피해 6 증가",
       "type": 10,
       "class": 2,
       "cardframe": "frame_10",
@@ -814,7 +784,7 @@
         {
           "type": "draw",
           "value": 1,
-          "target": 2
+          "target": 0
         }
       ]
     },
@@ -823,38 +793,25 @@
       "cost": 1,
       "illustration": "illust_14",
       "name": "중무장",
-      "text": "1턴 간 레온 방어력 2 증가\n아군 보호\n'하'일 때 강화",
+      "text": "1턴 간 레온 방어력 4 증가\n아군 보호",
       "type": 11,
       "class": 2,
       "cardframe": "frame_11",
       "target_type": 1,
       "target_num": 1,
-      "note": "강화 시 방어력이 4 더 증가합니다.",
+      "note": "",
       "flavortext": "단단하게 움츠린 몸은 동료를 지켜냅니다.",
       "skilleffect": "fanfx1_spellcast_B_large_blue",
       "effects": [
         {
           "type": "def_buff",
-          "value": 2,
+          "value": 4,
           "duration": 1,
           "target": 2
         },
         {
           "type": "block",
           "value": 1
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "trigger": "isStance",
-            "value": [ 2 ]
-          },
-          "result": {
-            "type": "def_buff",
-            "value": 4,
-            "duration": 1,
-            "target": 2
-          }
         }
       ]
     },
