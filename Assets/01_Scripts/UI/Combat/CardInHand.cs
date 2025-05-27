@@ -155,6 +155,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         if (cardState == CardState.OnDrag) return; // 카드 상태가 OnDrag인 경우에는 원래 위치로 돌아가지 않음.
         cardDisplay.currentCard = null;// 현재 카드 설정 해제.
         ResetSiblingIndex();// List의 순서에 맞게 원래 위치로 돌아가기.
+
         rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine);
 
         // 예외처리 + 이펙트 초기화

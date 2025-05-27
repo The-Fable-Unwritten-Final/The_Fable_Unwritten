@@ -587,6 +587,9 @@ public class CardDisplay : MonoBehaviour
                 for(int i = 0; i < cardsInHand.Count; i++)
                 {
                     RectTransform cardRect = cardsInHand[i].GetComponent<RectTransform>();
+
+                    if(DOTween.IsTweening(cardRect)) continue; // 현재 카드가 이동 중이라면 아래의 재정렬 무시.
+
                     if (!cardsInHand[i].isPointerOver && cardRect.position != (Vector3)cardsInHand[i].originalPos) // 마우스를 올린 카드가 아님 + 잘못된 위치에 있을경우
                     {
                         cardRect.DOAnchorPos(cardsInHand[i].originalPos, 0.1f); // 원래 위치로 보내기
