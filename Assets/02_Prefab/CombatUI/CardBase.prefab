@@ -451,6 +451,7 @@ MonoBehaviour:
   innerEdge: {fileID: 3620687317550608845}
   useCardFXParticle: {fileID: 6742697485716022824}
   useEnhancedCardFXParticle: {fileID: 127265416573987914}
+  enhanceTriggered: 0
   cardReadyFX: {fileID: 3417628244388163884}
   cardReadyOnChainFX: {fileID: 8819359861463196568}
   cardCanChainFX: {fileID: 90805184663452827}
@@ -41366,9 +41367,29 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6488639504295626142, guid: 547c17359111a0245ac0af9c61de5bc3,
         type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6488639504295626142, guid: 547c17359111a0245ac0af9c61de5bc3,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.950006
+      objectReference: {fileID: 0}
+    - target: {fileID: 6488639504295626142, guid: 547c17359111a0245ac0af9c61de5bc3,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6488639504295626142, guid: 547c17359111a0245ac0af9c61de5bc3,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6488639504295626142, guid: 547c17359111a0245ac0af9c61de5bc3,
+        type: 3}
       propertyPath: m_Material
       value: 
-      objectReference: {fileID: 2100000, guid: 993a915d550f2fe4ab5dea0a78c6289a, type: 2}
+      objectReference: {fileID: 2100000, guid: 2128cd2538ba0a149bc6fac4ea5c0a1b, type: 2}
     - target: {fileID: 8075747612028371294, guid: 547c17359111a0245ac0af9c61de5bc3,
         type: 3}
       propertyPath: m_Name
