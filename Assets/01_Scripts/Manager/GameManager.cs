@@ -5,13 +5,6 @@ using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    /*   public List<PlayerData> playerDatas = new();  //  보유중인 케릭터 데이터
-
-       public GameStartType gameStartType = GameStartType.New;
-
-
-       private PlayerPartySO playerParty;*/
-
     [Header("Analytics")]
     public AnalyticsLogger analyticsLogger; // 애널리틱스 로거
 
@@ -26,45 +19,7 @@ public class GameManager : MonoSingleton<GameManager>
     protected override void Awake()
     {
         base.Awake();
-#if UNITY_EDITOR
-        //EnemyInitializer.ImportAndGenerate();
-        //EffectAnimationGenerator.Generate();
-#endif
-
-//        LoadPlayerPartyIfNull(); // <- 플레이어 데이터 가져오기
-//        playerDatas = new List<PlayerData>(playerParty.allPlayers);
     }
-
-    /*public void InitializePlayerHPByGameType()
-    {
-        switch (gameStartType)
-        {
-            case GameStartType.New:
-                foreach (var data in playerDatas)
-                    data.ResetHPToMax();
-                gameStartType = GameStartType.Respawn;
-                break;
-
-            case GameStartType.Respawn:
-                foreach (var data in playerDatas)
-                {
-                    if (data.currentHP <= 0)
-                        data.currentHP = 1;
-                    // 살아있다면 유지
-                }
-                break;
-        }
-    }*/
-
-    /*  private void LoadPlayerPartyIfNull()
-      {
-          if (playerParty == null)
-          {
-              playerParty = Resources.Load<PlayerPartySO>("PlayerPartyData");
-              if (playerParty == null)
-                  Debug.LogError("[GameManager] PlayerPartySO 리소스를 찾을 수 없습니다.");
-          }
-      }*/
 
     async void Start()
     {
