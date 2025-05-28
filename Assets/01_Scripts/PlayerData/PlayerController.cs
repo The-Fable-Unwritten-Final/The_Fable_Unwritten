@@ -49,10 +49,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     //---
     [Header("Stance UI")]
-    [SerializeField] private GameObject stanceSlotPrefab;  
     [SerializeField] private Button stanceToggleButton;
-    private GameObject stancePopup;                        
-    private BattleFlowController flow;
     private StatusDisplay statusDisplay;
     //---
 
@@ -71,11 +68,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         {
             Debug.LogWarning($"[{name}] PlayerData 또는 AnimationController가 누락되었습니다.");
         }
-
-        //---
-        flow = FindObjectOfType<BattleFlowController>();
-        stanceToggleButton.onClick.AddListener(OnCharacterIconClicked);
-        //---
     }
 
     void Start()
@@ -301,48 +293,11 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             stanceToggleButton.gameObject.SetActive(false);
     }
 
-    /// <summary>
-    /// Sophia/Kayla/Leon 아이콘 버튼에 연결할 메서드
-    /// </summary>
-    public void OnCharacterIconClicked()
-    {
-          if (flow == null || !flow.IsPlayerTurn())
-            return;
-
-        // 이미 열려 있으면 닫기
-        if (stancePopup != null)
-        {
-            Destroy(stancePopup);
-            stancePopup = null;
-            return;
-        }
-
-        // 팝업 띄우기
-        stancePopup = Instantiate(stanceSlotPrefab, transform);
-
-        // 옵션 버튼들 초기화 → highlight 로직이 돌아갑니다
-        foreach (var opt in stancePopup.GetComponentsInChildren<StanceOptionButton>(true))
-            opt.Initialize(this);
-    }
-    //──────── K.T.H 변경 ────────
+    
     public void ChangeStance(PlayerData.StancType newStance) //StancUI 함수
     {
         PlayerData.StancType stance = newStance;
-        /*if (stance != null)
-        {
-            playerData.currentStance = stance;
-            float finalAtk = playerData.ATK + stance.attackBonus; //스텐스 공격력 계산
-            float finalDef = playerData.DEF + stance.defenseBonus;
-
-        }
-        //──────── K.T.H 변경 ────────
-        var sv = playerData.allStances.Find(s => s.stencType == newStance); // newStance 에 맞는 StancValue 찾아서 currentStance 에 할당
-        if (sv == null) { Debug.LogError("allStances에 해당 Stance가 없습니다."); return; }*/
-
         playerData.currentStance = stance;
-        //──────── K.T.H 변경 ────────
-
-        // (선택) 화면에 스프라이트를 바꿔주거나, UI 텍스트를 갱신하려면 여기에 추가
     }
 
     /*
