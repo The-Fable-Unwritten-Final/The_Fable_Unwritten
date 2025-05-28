@@ -474,5 +474,17 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     }
 
     public DmgBarDisplay dmgBar => dmgBarDisplay;
-    public TargetArrowDisplay tarArrow => targetArrow; 
+    public TargetArrowDisplay tarArrow => targetArrow;
+
+    public void HideStatusUI()
+    {
+        if (statusDisplay != null)
+            statusDisplay.gameObject.SetActive(false);
+    }
+
+    public void ShowStatusUI()
+    {
+        if (statusDisplay != null)
+            statusDisplay.gameObject.SetActive(true);
+    }
 }

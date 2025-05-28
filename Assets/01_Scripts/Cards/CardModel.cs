@@ -90,6 +90,15 @@ public class CardModel : ScriptableObject
         // 1. 카메라 연출
         GameManager.Instance.combatCameraController.PlayCombatCamera(caster, targets, totalDuration);
 
+        List<IStatusReceiver> allCharacters = new List<IStatusReceiver>();
+        allCharacters.AddRange(GameManager.Instance.turnController.battleFlow.playerParty);
+        allCharacters.AddRange(GameManager.Instance.turnController.battleFlow.enemyParty);
+
+        foreach (var ch in allCharacters)
+        {
+            if (ch is PlayerController pc && !targets.Contains(pc) && pc != caster)
+                pc.HideStatusUI(); // 구현 필요
+        }
 
         // 2. 공격 애니메이션
         yield return new WaitForSeconds(0.2f); // 애니메이션 길이에 맞게 조정
@@ -149,11 +158,16 @@ public class CardModel : ScriptableObject
                 mb.gameObject.SetActive(false);
             }
         }
-
         GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
 
         GameManager.Instance.turnController.OffAction();
         GameManager.Instance.turnController.battleFlow.CheckBattleEnd();
+        yield return new WaitForSeconds(0.7f); // 이펙트와 피격 연출 대기
+        foreach (var ch in allCharacters)
+        {
+            if (ch is PlayerController pc && !targets.Contains(pc) && pc != caster)
+                pc.ShowStatusUI(); // 구현 필요
+        }
     }
 
     private float DetermineEffectScale(int cost)
