@@ -10,13 +10,17 @@ public class CursorHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerE
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        UIManager.Instance.customMouseCursor.SetCursorState(CursorState.Hover);
-        //Tooltip.Instance.Show(stanceButton.GetDescription());
+        //UIManager.Instance.customMouseCursor.SetCursorState(CursorState.Hover);
+        if (stanceButton != null)
+        {
+            string desc = stanceButton.GetDescription();
+            ToolTip.Show(desc, Input.mousePosition);
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        UIManager.Instance.customMouseCursor.SetCursorState(CursorState.Idle);
-        //Tooltip.Instance.Hide();
+        //UIManager.Instance.customMouseCursor.SetCursorState(CursorState.Idle);
+        ToolTip.Hide();
     }
 }
