@@ -46,6 +46,7 @@ public class BattleFlowController : MonoBehaviour
     //임시 inspector 확인용
     private void Start()
     {
+        totalExp = 0;
         isWin = 0;
         SetupPredefinedPlayerSlots();
         Initialize();
@@ -364,6 +365,8 @@ public class BattleFlowController : MonoBehaviour
                 {
                     var enemyData = enemyComponent.enemyData;
 
+                    totalExp += enemyData.exp;
+
                     if (enemyData != null && enemyData.loot != null)
                     {
                         foreach (int lootIndex in enemyData.loot)
@@ -381,6 +384,7 @@ public class BattleFlowController : MonoBehaviour
                     }
                 }
             }
+            ProgressDataManager.Instance.CurrentExp += totalExp;
 
             for (int i = 0; i < enemyParty.Count; i++)
                 enemyParty[i] = null;
