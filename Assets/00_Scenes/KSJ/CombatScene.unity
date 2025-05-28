@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -10848,6 +10848,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 458948298158748767, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 518221310495574982, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
       propertyPath: m_IsActive
@@ -10953,6 +10958,11 @@ PrefabInstance:
       propertyPath: playerController
       value: 
       objectReference: {fileID: 1920819808}
+    - target: {fileID: 1108077687480078669, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1247615571007033614, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -11012,6 +11022,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2115878947695436055, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2491447534696352307, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
@@ -11314,6 +11329,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4474525523735157093, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4474525523735157093, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 274d4eaa1ce3d16419beb74e6ca75a08,
@@ -11458,6 +11478,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 7453807072887758973, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7612951460602176902, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
@@ -11632,6 +11657,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8452285022107373607, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8725938261146743957, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
       propertyPath: m_Sprite
@@ -11647,6 +11677,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_text
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8967407587764761909, guid: 2ae221dc0f448b946a8444ad1e39b903,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9053713017800995805, guid: 2ae221dc0f448b946a8444ad1e39b903,
         type: 3}
@@ -12319,6 +12354,7 @@ SceneRoots:
   - {fileID: 505206785}
   - {fileID: 1700917356}
   - {fileID: 110885138}
+  - {fileID: 6868058219730831983}
   - {fileID: 5396969691877943150}
   - {fileID: 569066860}
   - {fileID: 1970820077}
@@ -12332,5 +12368,4 @@ SceneRoots:
   - {fileID: 8916162457186377366}
   - {fileID: 2077516052}
   - {fileID: 782057932}
-  - {fileID: 6868058219730831983}
   - {fileID: 931124442}
