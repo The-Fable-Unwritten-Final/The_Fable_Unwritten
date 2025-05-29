@@ -18,6 +18,7 @@ public class CombatCameraController : MonoBehaviour
     [SerializeField] CinemachineVirtualCamera mainCam;
     [SerializeField] CinemachineVirtualCamera combatCam;
     [SerializeField] Vector3 combatCamPos = new Vector3 (1.5f,0,-10f); // 전투 카메라 초기 위치(적 위치 줌)
+    [SerializeField] Vector3 playerGoPos = new Vector3(-1.75f,-0.25f,0);
     [SerializeField] float combatTransitionTime = 0.3f; // 전투 관련 효과 전환 텀.
 
     public List<PlayerController> players;
@@ -83,7 +84,7 @@ public class CombatCameraController : MonoBehaviour
         if (caster is PlayerController player) // 시전자가 플레이어 진영
         {
             Vector3 playerPos = player.transform.position; // 플레이어 위치 저장
-            Vector3 targetPos = new Vector3(-1.75f,-0.25f,0); // 플레이어를 이동시킬 위치
+            Vector3 targetPos = playerGoPos; // 플레이어를 이동시킬 위치
 
             // 객체 이동 + 카메라 줌인 액션 조정
             if (target[0] is Enemy)// 몬스터 대상 행동

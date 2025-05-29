@@ -120,20 +120,18 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public void OnPointerEnter(PointerEventData eventData)
     {
         isPointerOver = true; // 마우스 포인터가 카드 위에 있는 상태로 설정
-        // 카드의 시각적 효과 (이펙트 제외)
+        
         if(GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 상호작용 불가능
         if(cardState == CardState.None) return; // 상태가 None인 경우 상호작용 불가능
 
         cardDisplay.currentCard = this;// 현재 카드 설정.
         transform.SetAsLastSibling();// 카드가 가장 위에 오도록 설정
-
         rect.DOAnchorPos(targetPos, 0.4f).SetEase(Ease.OutSine);
 
 
 
         // 카드의 사용 가능 타겟 표시
         cardDisplay.TargetArrowDisplay();
-
         // 연계 가능한 카드들을 canchain으로
         cardDisplay.CheckCanChain();
 

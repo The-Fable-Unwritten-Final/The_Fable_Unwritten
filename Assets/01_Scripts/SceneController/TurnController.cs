@@ -133,6 +133,7 @@ public class TurnController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.3f);
         // 데이터 처리
+        cardDisplay.CardArrange(); // 카드 배치 초기화
         EventEffectManager.Instance.PlayNextCombat();
         EventEffectManager.Instance.PlayNextStage();
         EventEffectManager.Instance.PlayEndAdventure();
