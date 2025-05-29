@@ -131,12 +131,13 @@ public class TurnController : MonoBehaviour
     }
     IEnumerator AtStartGame()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.5f);
         // 데이터 처리
         cardDisplay.CardArrange(); // 카드 배치 초기화
         EventEffectManager.Instance.PlayNextCombat();
         EventEffectManager.Instance.PlayNextStage();
         EventEffectManager.Instance.PlayEndAdventure();
+        yield return new WaitForSeconds(0.2f);
 
         battleFlow.StartBattle();
         SetTurnState(TurnState.StartPlayerTurn); // 게임 시작 후 플레이어 턴으로

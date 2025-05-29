@@ -129,7 +129,6 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         rect.DOAnchorPos(targetPos, 0.4f).SetEase(Ease.OutSine);
 
 
-
         // 카드의 사용 가능 타겟 표시
         cardDisplay.TargetArrowDisplay();
         // 연계 가능한 카드들을 canchain으로
@@ -140,7 +139,6 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             effectVisualizer.ApplyVisualState(CardVisualState.ReadyOnChain); // 카드의 상태를 ReadyOnChain으로 변경 (노란색 테두리 + 연계 가능 상태 >> ReadyOnChain상태)
             return;
         }
-
         effectVisualizer.ApplyVisualState(CardVisualState.Ready); // 카드의 상태를 Ready로 변경 (노란색 테두리)
     }
     public void OnPointerExit(PointerEventData eventData)
