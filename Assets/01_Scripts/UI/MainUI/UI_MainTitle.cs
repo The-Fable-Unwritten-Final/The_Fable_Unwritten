@@ -11,10 +11,12 @@ public class UI_MainTitle : MonoBehaviour
     [Header("TitleSetting")]
     [SerializeField] Image title;
     [SerializeField] float titleSpeed;
+    [SerializeField] GameObject saveGame;
 
     private void Start()
     {
-        StartCoroutine(ShowTitle());   
+        StartCoroutine(ShowTitle());
+        SetSaveGameButton();
     }
 
     private IEnumerator ShowTitle()
@@ -96,6 +98,18 @@ public class UI_MainTitle : MonoBehaviour
         }
     }
 
+    private void SetSaveGameButton()
+    {
+        if (ProgressDataManager.Instance.StageIndex == 0 ||
+            !ProgressDataManager.Instance.RetryFromStart) return;
+
+        // 버튼 비활성화 및 글자 선명도 조정
+        saveGame.GetComponent<Button>().interactable = false;
+        TextMeshProUGUI tmp = saveGame.GetComponentInChildren<TextMeshProUGUI>();
+        Color c = tmp.color;
+        c.a = 140f / 255f;
+        tmp.color = c;
+    }
     private void OnClickUnlockCard()
     {
         //해금팝업 열기

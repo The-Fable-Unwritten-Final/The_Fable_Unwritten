@@ -240,7 +240,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         SavedRandomEvent = -1;
         IsNewCamp = true;
         IsNewStage = true;
-        RetryFromStart = false;
+        RetryFromStart = true;
         StageCleared = false;
         IsStageScene = true;
         CurrentBattleNode = null;
