@@ -580,7 +580,6 @@ public class CardDisplay : MonoBehaviour
             }
             if (!isreset)
             {
-                isreset = true;
                 SetCardCanDrag();
                 //CardArrange();
                 yield return new WaitForEndOfFrame();
@@ -593,6 +592,7 @@ public class CardDisplay : MonoBehaviour
                     if (!cardsInHand[i].isPointerOver && cardRect.position != (Vector3)cardsInHand[i].originalPos) // 마우스를 올린 카드가 아님 + 잘못된 위치에 있을경우
                     {
                         cardRect.DOAnchorPos(cardsInHand[i].originalPos, 0.1f); // 원래 위치로 보내기
+                        isreset = true;
                     }
                 }
             }

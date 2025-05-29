@@ -54,27 +54,6 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         StopAllCoroutines(); // 카드가 파괴될 때 모든 코루틴 정지
     }
 
-    private void Update()
-    {
-        if (isPointerOver||CardState.OnDrag == cardState)
-        {
-            if(cardDisplay.currentCard != this)
-            {
-                if (GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 상호작용 불가능
-                if (cardState == CardState.None) return; // 상태가 None인 경우 상호작용 불가능
-
-                cardDisplay.currentCard = this;// 현재 카드 설정.
-                transform.SetAsLastSibling();// 카드가 가장 위에 오도록 설정
-
-                rect.DOAnchorPos(targetPos, 0.4f).SetEase(Ease.OutSine);
-
-                // 카드의 이펙트 시각 효과
-                if (effectVisualizer.currentState == CardVisualState.Chain) return; // 카드의 상태가 Chain인 경우 이펙트 변경 취소 (빨간색 유지)
-
-                effectVisualizer.ApplyVisualState(CardVisualState.Ready); // 카드의 상태를 Ready로 변경 (노란색 테두리)
-            }
-        }
-    }
 
     public void OnPointerClick(PointerEventData eventData)// 카드 버리기 관련 상호작용 클릭
     {
@@ -126,6 +105,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
         cardDisplay.currentCard = this;// 현재 카드 설정.
         transform.SetAsLastSibling();// 카드가 가장 위에 오도록 설정
+
         rect.DOAnchorPos(targetPos, 0.4f).SetEase(Ease.OutSine);
 
 
@@ -337,3 +317,24 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     }
 }
 
+
+/*
+ * if (isPointerOver||CardState.OnDrag == cardState)
+        {
+            if(cardDisplay.currentCard != this)
+            {
+                if (GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 상호작용 불가능
+                if (cardState == CardState.None) return; // 상태가 None인 경우 상호작용 불가능
+
+                cardDisplay.currentCard = this;// 현재 카드 설정.
+                transform.SetAsLastSibling();// 카드가 가장 위에 오도록 설정
+
+                rect.DOAnchorPos(targetPos, 0.4f).SetEase(Ease.OutSine);
+
+                // 카드의 이펙트 시각 효과
+                if (effectVisualizer.currentState == CardVisualState.Chain) return; // 카드의 상태가 Chain인 경우 이펙트 변경 취소 (빨간색 유지)
+
+                effectVisualizer.ApplyVisualState(CardVisualState.Ready); // 카드의 상태를 Ready로 변경 (노란색 테두리)
+            }
+        }
+*/ // update에서 일정 주기마다 초기화 해주던 방식 제거.
