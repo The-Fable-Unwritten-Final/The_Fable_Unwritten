@@ -60,6 +60,7 @@ public class StageMapController : MonoBehaviour
                 // 보스 노드 클리어면 다음 스테이지
                 if (wasLastColumnNode)
                 {
+                    EventEffectManager.Instance.EndNextStage();
                     BattleLogManager.Instance.ResetStageLog();
                     stageSetting.StageIndex++;
 
