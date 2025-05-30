@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2616,9 +2616,9 @@ PrefabInstance:
       propertyPath: m_text
       value: ": \uC18C\uD53C\uC544             : \uD654\uC5FC             : \uBE59\uACB0           
         : \uC804\uACA9          : \uC790\uC5F0\\n: \uCE74\uC77C\uB77C            
-        : \uBC84\uD504             : \uB514\uBC84\uD504          : \uC131\uB825         
-        : \uD790\\n: \uB808\uC628                : \uCC38\uACA9             : \uD0C0\uACA9           
-        : \uAD00\uD1B5          : \uBC29\uC5B4"
+        : \uC740\uCD1D             : \uC18D\uC8C4            : \uC131\uB825         
+        : \uC138\uB840\\n: \uB808\uC628                : \uCC38\uACA9            
+        : \uD0C0\uACA9            : \uAD00\uD1B5          : \uBC29\uC5B4"
       objectReference: {fileID: 0}
     - target: {fileID: 669981992079278898, guid: 79312473a988b464b95d3efd6e017624,
         type: 3}
@@ -2695,6 +2695,11 @@ PrefabInstance:
       propertyPath: emphasizeObject.Array.data[0]
       value: 
       objectReference: {fileID: 5396969691877943151}
+    - target: {fileID: 1776756053600059612, guid: 79312473a988b464b95d3efd6e017624,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1882754840873597907, guid: 79312473a988b464b95d3efd6e017624,
         type: 3}
       propertyPath: m_text
@@ -2713,6 +2718,11 @@ PrefabInstance:
         \uD14C\uB450\uB9AC\uAC00 \uD2B9\uBCC4\uD55C \uC774\uD399\uD2B8\uB85C \uD45C\uC2DC\uB429\uB2C8\uB2E4."
       objectReference: {fileID: 0}
     - target: {fileID: 2273423255749992473, guid: 79312473a988b464b95d3efd6e017624,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2359300037241933137, guid: 79312473a988b464b95d3efd6e017624,
         type: 3}
       propertyPath: m_IsActive
       value: 0
