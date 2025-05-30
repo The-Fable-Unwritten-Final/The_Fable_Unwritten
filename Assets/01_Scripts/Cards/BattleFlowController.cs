@@ -365,7 +365,6 @@ public class BattleFlowController : MonoBehaviour
                 {
                     var enemyData = enemyComponent.enemyData;
 
-                    totalExp += enemyData.exp;
 
                     if (enemyData != null && enemyData.loot != null)
                     {
@@ -375,6 +374,7 @@ public class BattleFlowController : MonoBehaviour
                             if (lootIndex >= 0 && lootIndex < ProgressDataManager.MAX_ITEM_COUNT)
                             {
                                 ProgressDataManager.Instance.itemCounts[lootIndex]++;
+                                ProgressDataManager.Instance.CurrentExp += enemyData.exp;
                             }
                             else
                             {
@@ -384,7 +384,6 @@ public class BattleFlowController : MonoBehaviour
                     }
                 }
             }
-            ProgressDataManager.Instance.CurrentExp += totalExp;
 
             for (int i = 0; i < enemyParty.Count; i++)
                 enemyParty[i] = null;
