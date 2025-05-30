@@ -13,6 +13,7 @@ public class PopupUI_CombatReward : BasePopupUI
     [SerializeField] private Transform rewardContentParent;
     [SerializeField] private Sprite[] lootIcons; // 0 ~ 3 아이템 아이콘 순서대로 지정
     [SerializeField] Button confirmButton;
+    [SerializeField] Sprite expSprite;
 
     private readonly Dictionary<int, string> lootNames = new()
     {
@@ -81,9 +82,19 @@ public class PopupUI_CombatReward : BasePopupUI
                 if (setting.CurrentBattleNode.type == NodeType.Boss
                     && setting.StageIndex == 3)
                 {
-                    GameManager.Instance.tutorialController.ShowTutorial(9);
-                    ProgressDataManager.Instance.ResetProgress();
-                    return;
+                    // 앤딩 처음인경우
+                    if (!ProgressDataManager.Instance.ProgressTutorial.Contains(9))
+                    {
+                        GameManager.Instance.tutorialController.ShowTutorial(9);
+                        ProgressDataManager.Instance.ResetProgress();
+                        return;
+                    }
+                    // 앤딩 두번째 이후
+                    else
+                    {
+                        UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.SubTitleScene);
+                        return;
+                    }
                 }
 
                 UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
@@ -142,5 +153,9 @@ public class PopupUI_CombatReward : BasePopupUI
             var rewardItem = itemGo.GetComponent<RewardItemPrefab>();
             rewardItem.SetItem(icon, name, count);
         }
+
+        var expGo = Instantiate(itemPrefab, rewardContentParent);
+        var rewardExp = expGo.GetComponent<RewardItemPrefab>();
+        rewardExp.SetItem(expSprite, "경험치", battleFlow.totalExp);
     }
 }
