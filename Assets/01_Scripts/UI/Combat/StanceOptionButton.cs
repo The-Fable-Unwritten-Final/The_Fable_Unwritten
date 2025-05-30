@@ -62,12 +62,24 @@ public class StanceOptionButton : MonoBehaviour
     {
         return (characterClass, stanceType) switch
         {
-            (CharacterClass.Sophia, PlayerData.StancType.refine) => "정제\n처음 사용한 타입 피해 50% 증가\n이외 타입 피해 50% 감소",
-            (CharacterClass.Sophia, PlayerData.StancType.mix) => "혼합\n타입마다 첫 카드 피해 50% 증가\n이후 카드 피해 50% 감소",
-            (CharacterClass.Kayla, PlayerData.StancType.grace) => "축복\n회복량 50% 증가, 버프 수치 1 증가\n피해량 50% 감소, 디버프 수치 1 감소",
-            (CharacterClass.Kayla, PlayerData.StancType.judge) => "심판\n회복량 50% 감소, 버프 수치 1 감소\n피해량 50% 증가, 디버프 수치 1 증가",
-            (CharacterClass.Leon, PlayerData.StancType.guard) => "방어\n주는 피해 50% 감소\n받는 피해 50% 감소",
-            (CharacterClass.Leon, PlayerData.StancType.rush) => "돌진\n주는 피해 50% 증가\n받는 피해 50% 증가",
+            (CharacterClass.Sophia, PlayerData.StancType.refine) =>
+                "<b><color=#FFD700>정제</color></b>\n<color=#ff5757>처음 사용한 타입 피해 50% 증가</color>\n<color=#518bff>이외 타입 피해 50% 감소</color>",
+
+            (CharacterClass.Sophia, PlayerData.StancType.mix) =>
+                "<b><color=#FFD700>혼합</color></b>\n<color=#ff5757>타입마다 첫 카드 피해 50% 증가</color>\n<color=#518bff>이후 카드 피해 50% 감소</color>",
+
+            (CharacterClass.Kayla, PlayerData.StancType.grace) =>
+                "<b><color=#FFD700>축복</color></b>\n<color=#ff5757>회복량 50% 증가, 버프 수치 1 증가</color>\n<color=#518bff>피해량 50% 감소, 디버프 수치 1 감소</color>",
+
+            (CharacterClass.Kayla, PlayerData.StancType.judge) =>
+                "<b><color=#FFD700>심판</color></b>\n<color=#ff5757>회복량 50% 감소, 버프 수치 1 감소</color>\n<color=#518bff>피해량 50% 증가, 디버프 수치 1 증가</color>",
+
+            (CharacterClass.Leon, PlayerData.StancType.guard) =>
+                "<b><color=#FFD700>방어</color></b>\n<color=#ff5757>주는 피해 50% 감소</color>\n<color=#518bff>받는 피해 50% 감소</color>",
+
+            (CharacterClass.Leon, PlayerData.StancType.rush) =>
+                "<b><color=#FFD700>돌진</color></b>\n<color=#ff5757>주는 피해 50% 증가</color>\n<color=#518bff>받는 피해 50% 증가</color>",
+
             _ => "알 수 없는 태세"
         };
     }
