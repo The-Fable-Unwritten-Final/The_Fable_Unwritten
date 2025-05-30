@@ -365,6 +365,7 @@ public class BattleFlowController : MonoBehaviour
                 {
                     var enemyData = enemyComponent.enemyData;
 
+                    totalExp += enemyData.exp;
 
                     if (enemyData != null && enemyData.loot != null)
                     {
