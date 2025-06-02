@@ -162,7 +162,7 @@ public class StatEventEffects : EventEffects
                 foreach (var enemyData in GameManager.Instance.turnController.battleFlow.enemyParty)
                 {
                     if (enemyData == null) continue;
-                    enemyData.currentHP = enemyData.maxHP * hpPercent;
+                    enemyData.currentHP = Mathf.Round(enemyData.maxHP * hpPercent);
                 }
             }
             if (atk != 0)
