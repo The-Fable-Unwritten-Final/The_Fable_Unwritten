@@ -155,7 +155,7 @@ public static class EnemyPattern
 
             //Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (데미지 {skill.damage})");
 
-            yield return new WaitForSeconds(0.1f); // 타격 연출용 대기
+            yield return new WaitForSeconds(0.3f); // 타격 연출용 대기
             if(!t.IsAlive()&& t is MonoBehaviour mb && mb.gameObject.activeSelf)
             {
                 mb.gameObject.SetActive(false);

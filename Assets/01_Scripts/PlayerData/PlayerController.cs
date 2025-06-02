@@ -79,6 +79,19 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     {
         //Debug.Log($"{playerData.CharacterName}가 {damage}의 트루데미지를 받음! 현재 체력: {playerData.currentHP}");
         currentHP -= damage;
+
+        var dmg = new DmgTextData
+        {
+            Text = $"-{Mathf.RoundToInt(damage)}",
+            type = DmgTextType.Normal,
+            isCardEnhanced = false,
+            isStanceEnhanced = false,
+            isWeakened = false
+        };
+
+        dmgBar?.Initialize(dmg, CachedTransform.position);
+
+        playerData.currentHP = Mathf.Max(0, playerData.currentHP - damage);
     }
 
     public void BindHpBar(HpBarDisplay bar)
