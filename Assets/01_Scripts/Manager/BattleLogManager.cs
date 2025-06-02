@@ -153,10 +153,17 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
             set.Add(log.type);
         return new List<CardType>(set);
     }
+
     public CardType? GetPreviousCardType()
     {
         var lastLog = UsedCardsForCurrent.Reverse().FirstOrDefault();
         return lastLog != null ? lastLog.type : (CardType?)null;
+    }
+
+    public CardType? GetFirstCardTypeInCurrentTurn()
+    {
+        var firstLog = UsedCardsForCurrent.FirstOrDefault();
+        return firstLog != null ? firstLog.type : (CardType?)null;
     }
 
     public bool isEnhanced(CardModel card)

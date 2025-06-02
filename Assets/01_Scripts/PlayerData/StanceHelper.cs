@@ -10,16 +10,19 @@ public static class StanceHelper
         bool weakened = false;
         float result = baseDamage;
 
+        var logManager = BattleLogManager.Instance;
+        var currentTypes = logManager.GetCurrentTurnCardTypes();
+        var firstCardType = logManager.GetFirstCardTypeInCurrentTurn();
+
         switch (caster.playerData.currentStance)
         {
             case PlayerData.StancType.refine:
-                if (caster.playerData.FirstTimeUsedType == null || caster.playerData.FirstTimeUsedType == cardType)
+                if (!firstCardType.HasValue || firstCardType.Value == cardType)
                 {
-                    caster.playerData.FirstTimeUsedType = cardType;
                     result *= 1.5f;
                     boosted = true;
                 }
-                else if (caster.playerData.FirstTimeUsedType != cardType)
+                else
                 {
                     result *= 0.5f;
                     weakened = true;
@@ -27,9 +30,8 @@ public static class StanceHelper
                 break;
 
             case PlayerData.StancType.mix:
-                if (caster.playerData.FirstTimeUsedType != cardType)
+                if (!firstCardType.HasValue || firstCardType.Value != cardType)
                 {
-                    caster.playerData.FirstTimeUsedType = cardType;
                     result *= 1.5f;
                     boosted = true;
                 }
