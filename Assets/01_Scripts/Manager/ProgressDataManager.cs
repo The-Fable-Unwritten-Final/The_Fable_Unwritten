@@ -45,7 +45,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     public int CurrentExp { get; set; }                 //현재까지 얻은 Exp;
     public bool IsNewCamp { get; set; }                 // 첫 야영지 확인용 (첫 캠프에만 튜토리얼)
     public bool IsSecondGame { get; set; }                  // 새로하기 확인용 (완전 처음 일때 false / 이후 새로하기 일때 true)
-
+    public bool IsEndingClear { get; set; }                 // 앤딩봤을 경우
     // 설정 데이터
     public Vector2Int[] resolutions = new Vector2Int[1];
 
@@ -77,7 +77,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         data.isNewCamp = IsNewCamp;
         data.isSecondGame = IsSecondGame;
         data.resolutions = resolutions;
-
+        data.isEndingClear = IsEndingClear;
 
         if (SavedStageData != null && VisitedNodes != null)
         {
@@ -140,6 +140,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         SavedEnemySetIndex = data.savedEnemySetIndex;
         IsNewCamp = data.isNewCamp;
         IsSecondGame = data.isSecondGame;
+        IsEndingClear = data.isEndingClear;
 
         //stageThemes = data.stageThemes.ToDictionary(pair => pair.Key, pair => (StageTheme)pair.Value);
 
@@ -420,6 +421,7 @@ public class ProgressSaveData
     public int savedEnemySetIndex;
     public bool isNewCamp;
     public bool isSecondGame;
+    public bool isEndingClear
 
     public string stageDataJson;
     public int currentTheme;

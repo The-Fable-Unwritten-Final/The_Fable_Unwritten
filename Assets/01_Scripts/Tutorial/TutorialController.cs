@@ -69,7 +69,8 @@ public class TutorialController : MonoBehaviour
     {
 
 #if !UNITY_EDITOR
-        if (ProgressDataManager.Instance.ProgressTutorial.Contains(index)) return;
+        if (ProgressDataManager.Instance.ProgressTutorial.Contains(index) ||
+        ProgressDataManager.Instance.IsEndingClear) return;
 #endif
 
         ProgressDataManager.Instance.AddProgressTutorial(index);

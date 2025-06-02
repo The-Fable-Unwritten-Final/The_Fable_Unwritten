@@ -82,6 +82,8 @@ public class PopupUI_CombatReward : BasePopupUI
                 if (setting.CurrentBattleNode.type == NodeType.Boss
                     && setting.StageIndex == 3)
                 {
+                    ProgressDataManager.Instance.IsEndingClear = true;
+
                     // 앤딩 처음인경우
                     if (!ProgressDataManager.Instance.ProgressTutorial.Contains(9))
                     {
