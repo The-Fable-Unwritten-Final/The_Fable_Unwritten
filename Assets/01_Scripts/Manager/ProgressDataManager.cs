@@ -421,7 +421,7 @@ public class ProgressSaveData
     public int savedEnemySetIndex;
     public bool isNewCamp;
     public bool isSecondGame;
-    public bool isEndingClear
+    public bool isEndingClear;
 
     public string stageDataJson;
     public int currentTheme;
