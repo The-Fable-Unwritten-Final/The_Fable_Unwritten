@@ -56,6 +56,12 @@ public class CardDisplay : MonoBehaviour
     {
         if(isOnDrag)
         {
+            if(currentCard == null)
+            {
+                isOnDrag = false; // 드래그 중이 아니라고 설정.
+                return;
+            }
+
             UpdateLineRenderer();
             UpdateArrowHead();
         }
@@ -439,7 +445,7 @@ public class CardDisplay : MonoBehaviour
     {
         foreach (var card in cardsInHand)
         {
-            if (card.effectVisualizer.currentState == CardVisualState.Use) return; // 카드의 상태가 Use인 경우 이펙트 변경 취소 (사용되는 효과 재생 유지)
+            if (card.effectVisualizer.currentState == CardVisualState.Use) continue; // 카드의 상태가 Use인 경우 이펙트 변경 취소 (사용되는 효과 재생 유지)
 
             if (card.cardData.isEnhanced) // 연계된 상태일때
             {
@@ -456,7 +462,7 @@ public class CardDisplay : MonoBehaviour
         foreach (var card in cardsInHand)
         {
             if (card.effectVisualizer.currentState == CardVisualState.Use ||
-                card.effectVisualizer.currentState == CardVisualState.Ready) return; // 카드의 상태가 Use,Ready인 경우 이펙트 변경 취소 (사용되는 효과 재생 유지)
+                card.effectVisualizer.currentState == CardVisualState.Ready) continue; // 카드의 상태가 Use,Ready인 경우 이펙트 변경 취소 (사용되는 효과 재생 유지)
 
             if (currentCard == null) return;
 
@@ -477,10 +483,13 @@ public class CardDisplay : MonoBehaviour
         foreach (var card in cardsInHand)
         {
             if (card.effectVisualizer.currentState == CardVisualState.Use ||
-                               card.effectVisualizer.currentState == CardVisualState.Ready) return; // 카드의 상태가 Use,Ready인 경우 이펙트 변경 취소 (사용되는 효과 재생 유지)
+                card.effectVisualizer.currentState == CardVisualState.Ready) 
+                continue; // 카드의 상태가 Use,Ready인 경우 이펙트 변경 취소 (사용되는 효과 재생 유지)
+
+
 
             // 상태 복구.
-            if(card.cardData.isEnhanced)
+            if (card.cardData.isEnhanced)
             {
                 card.effectVisualizer.ApplyVisualState(CardVisualState.Chain); // 카드의 상태를 Chain으로 변경 (빨간색 테두리)
             }

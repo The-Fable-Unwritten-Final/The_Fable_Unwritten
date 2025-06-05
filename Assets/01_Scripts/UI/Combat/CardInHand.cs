@@ -204,6 +204,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         if(GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 드래그 불가능
         if(!cardDisplay.isOnDrag) return; // 카드 드래그 상태가 false인 경우 드래그 종료 처리하지 않음 (드래그 중이 아닐 때 드래그 종료 이벤트가 발생할 수 있음
         cardDisplay.TargetArrowReset(); // 드래그 종료 시 타겟 화살표 초기화
+        cardDisplay.ResetCanChain(); // 드래그 종료시, 체인 가능 이펙트 리셋
 
         if (cardState != CardState.OnDrag)
         {
