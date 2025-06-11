@@ -131,7 +131,6 @@ public class BattleFlowController : MonoBehaviour
             }
 
             UpdateManaUI();
-            //──────── K.T.H 변경 ────────
 
             if (player.IsAlive())            //모두 덱 초기화 후 3장 뽑기
             {
