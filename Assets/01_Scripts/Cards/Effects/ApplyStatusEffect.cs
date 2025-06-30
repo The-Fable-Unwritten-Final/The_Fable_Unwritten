@@ -82,7 +82,7 @@ public class ApplyStatusEffect : CardEffectBase
                 isWeakened = false
             };
 
-            t.dmgBar.Initialize(Text, t.CachedTransform.position);
+            t.dmgTextQueue.Enqueue(Text);
         }
     }
 

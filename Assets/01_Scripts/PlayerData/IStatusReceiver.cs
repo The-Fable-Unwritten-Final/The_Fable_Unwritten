@@ -56,4 +56,6 @@ public interface IStatusReceiver
     TargetArrowDisplay tarArrow { get; }          // 카드 사용시의 시전 대상 타겟 화살표
     bool IsTargetable { get; set; }                     // 타겟 가능 여부
     event Action OnTargetableChanged;       // 타겟 가능 여부 변경 이벤트
+    public DmgBarQueueHandler dmgTextQueue { get; }
+
 }

@@ -185,6 +185,9 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public Transform CachedTransform => transform;
 
+    [SerializeField] private DmgBarQueueHandler queue;
+    public DmgBarQueueHandler dmgTextQueue => queue;
+
     public float TakeDamage(float amount)
     {
         if (hasBlock)

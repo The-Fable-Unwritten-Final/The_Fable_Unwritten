@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -624,6 +624,7 @@ GameObject:
   - component: {fileID: 106890149}
   - component: {fileID: 106890148}
   - component: {fileID: 106890152}
+  - component: {fileID: 106890153}
   m_Layer: 7
   m_Name: CharcterSlotTest
   m_TagString: Untagged
@@ -654,6 +655,7 @@ MonoBehaviour:
   targetArrow: {fileID: 4322107113203982984}
   stanceToggleButton: {fileID: 472439451756791913}
   activeEffects: []
+  queue: {fileID: 106890153}
 --- !u!65 &106890149
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -768,6 +770,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &106890153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 106890147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02f55c696f9215248a18f46604aa695a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sameCardDelay: 0.25
+  diffCardDelay: 0.6
+  verticalOffset: 1
 --- !u!1 &110885134
 GameObject:
   m_ObjectHideFlags: 0
@@ -1213,6 +1230,7 @@ GameObject:
   - component: {fileID: 259473995}
   - component: {fileID: 259473994}
   - component: {fileID: 259473997}
+  - component: {fileID: 259473998}
   m_Layer: 7
   m_Name: MonsterSlotTest
   m_TagString: Untagged
@@ -1258,6 +1276,7 @@ MonoBehaviour:
   dmgBarDisplay: {fileID: 326686467}
   targetArrow: {fileID: 469035930}
   activeEffects: []
+  queue: {fileID: 259473998}
 --- !u!65 &259473995
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1353,6 +1372,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &259473998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259473992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02f55c696f9215248a18f46604aa695a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sameCardDelay: 0.25
+  diffCardDelay: 0.6
+  verticalOffset: 1
 --- !u!114 &260082002 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5149937877872546870, guid: e21a97a85c31a3e43a6ba1ca58e3dd77,
@@ -2460,6 +2494,7 @@ GameObject:
   - component: {fileID: 557679514}
   - component: {fileID: 557679515}
   - component: {fileID: 557679516}
+  - component: {fileID: 557679517}
   m_Layer: 7
   m_Name: CharcterSlotTest
   m_TagString: Untagged
@@ -2583,6 +2618,7 @@ MonoBehaviour:
   targetArrow: {fileID: 1242386048}
   stanceToggleButton: {fileID: 4123277150000972293}
   activeEffects: []
+  queue: {fileID: 557679517}
 --- !u!95 &557679516
 Animator:
   serializedVersion: 5
@@ -2604,6 +2640,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &557679517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 557679511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02f55c696f9215248a18f46604aa695a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sameCardDelay: 0.25
+  diffCardDelay: 0.6
+  verticalOffset: 1
 --- !u!1001 &569066860
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5692,6 +5743,7 @@ GameObject:
   - component: {fileID: 1016949501}
   - component: {fileID: 1016949504}
   - component: {fileID: 1016949505}
+  - component: {fileID: 1016949506}
   m_Layer: 7
   m_Name: MonsterSlotTest
   m_TagString: Untagged
@@ -5811,6 +5863,7 @@ MonoBehaviour:
   dmgBarDisplay: {fileID: 1560934504}
   targetArrow: {fileID: 959486187}
   activeEffects: []
+  queue: {fileID: 1016949506}
 --- !u!95 &1016949505
 Animator:
   serializedVersion: 5
@@ -5832,6 +5885,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1016949506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1016949499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02f55c696f9215248a18f46604aa695a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sameCardDelay: 0.25
+  diffCardDelay: 0.6
+  verticalOffset: 1
 --- !u!1 &1145303237
 GameObject:
   m_ObjectHideFlags: 0
@@ -9108,6 +9176,7 @@ GameObject:
   - component: {fileID: 1739155346}
   - component: {fileID: 1739155345}
   - component: {fileID: 1739155348}
+  - component: {fileID: 1739155349}
   m_Layer: 7
   m_Name: MonsterSlotTest
   m_TagString: Untagged
@@ -9153,6 +9222,7 @@ MonoBehaviour:
   dmgBarDisplay: {fileID: 46784155}
   targetArrow: {fileID: 1267231373}
   activeEffects: []
+  queue: {fileID: 1739155349}
 --- !u!65 &1739155346
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9248,6 +9318,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1739155349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1739155343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02f55c696f9215248a18f46604aa695a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sameCardDelay: 0.25
+  diffCardDelay: 0.6
+  verticalOffset: 1
 --- !u!1 &1844980557 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6678242273989612040, guid: 79312473a988b464b95d3efd6e017624,
@@ -9423,6 +9508,7 @@ GameObject:
   - component: {fileID: 1920819809}
   - component: {fileID: 1920819808}
   - component: {fileID: 1920819812}
+  - component: {fileID: 1920819813}
   m_Layer: 7
   m_Name: CharcterSlotTest
   m_TagString: Untagged
@@ -9453,6 +9539,7 @@ MonoBehaviour:
   targetArrow: {fileID: 125084246}
   stanceToggleButton: {fileID: 7043430841332727357}
   activeEffects: []
+  queue: {fileID: 1920819813}
 --- !u!65 &1920819809
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9567,6 +9654,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1920819813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1920819807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02f55c696f9215248a18f46604aa695a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sameCardDelay: 0.25
+  diffCardDelay: 0.6
+  verticalOffset: 1
 --- !u!1 &1922202995
 GameObject:
   m_ObjectHideFlags: 0

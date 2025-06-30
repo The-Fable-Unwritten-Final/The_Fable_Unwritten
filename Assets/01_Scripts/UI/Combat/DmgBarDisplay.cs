@@ -61,9 +61,9 @@ public class DmgBarDisplay : MonoBehaviour
     }
 
 
-    public void Initialize(DmgTextData data, Vector3 worldPos)
+    public void Initialize(DmgTextData data, Transform target, float offsetY = 1f)
     {
-        transform.position = new Vector3(worldPos.x, worldPos.y - 1, worldPos.z);
+        transform.position = target.position + Vector3.up * offsetY;
 
         damageText.text = (data.isStanceEnhanced || data.isCardEnhanced) ? $"<b>{data.Text}</b>" : data.Text;
         damageText.color = GetFinalColor(ResolveColor(data), data.isWeakened);
@@ -71,7 +71,7 @@ public class DmgBarDisplay : MonoBehaviour
 
         canvasGroup.alpha = 1f;
 
-        StopAllCoroutines(); // 이전 연출 중단
+        StopAllCoroutines();
         StartCoroutine(FadeAndFloat());
     }
 
@@ -92,6 +92,8 @@ public class DmgBarDisplay : MonoBehaviour
 
         canvasGroup.alpha = 0f;
         damageText.text = ""; // 다음 표시를 위해 초기화
+
+        DmgPoolManager.Instance.Return(this);
     }
 
     private Color GetFinalColor(Color baseColor, bool isWeakened)

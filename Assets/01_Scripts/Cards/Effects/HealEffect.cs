@@ -73,7 +73,7 @@ public class HealEffect : CardEffectBase
                 isStanceEnhanced = stanceBoosted,
                 isWeakened = stanceWeakened
             };
-            target.dmgBar.Initialize(healText, target.CachedTransform.position);
+            target.dmgTextQueue.Enqueue(healText);
         }
     }
 

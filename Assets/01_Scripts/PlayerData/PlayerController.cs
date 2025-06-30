@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             isWeakened = false
         };
 
-        dmgBar?.Initialize(dmg, CachedTransform.position);
+        this.dmgTextQueue.Enqueue(dmg);
 
         playerData.currentHP = Mathf.Max(0, playerData.currentHP - damage);
     }
@@ -171,7 +171,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             isWeakened = false
         };
 
-        dmgBar?.Initialize(dmg, CachedTransform.position);
+        this.dmgTextQueue.Enqueue(dmg);
 
         playerData.currentHP = Mathf.Max(0, playerData.currentHP - reduced);
         //Debug.Log($"{playerData.CharacterName} 피해: {reduced}, 현재 체력: {playerData.currentHP}");
@@ -457,6 +457,11 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// 자신의 위치 돌려주기
     /// </summary>
     public Transform CachedTransform => transform;
+
+    [SerializeField] private DmgBarQueueHandler queue;
+
+    public DmgBarQueueHandler dmgTextQueue => queue;
+
 
     /// <summary>
     /// 현재 적용 중인 공격력 버프 총합 반환
