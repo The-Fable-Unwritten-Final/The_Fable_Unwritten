@@ -75,6 +75,14 @@ public class DataManager : MonoSingleton<DataManager>
     }
 
     /// <summary>
+    /// 언어 변경 이후, 각 텍스트 데이터를 초기화.
+    /// </summary>
+    public void InitLocaleText()
+    {
+        InitCardBookDictionary();
+    }
+
+    /// <summary>
     /// 다이어리의 데이터를 JSON 파일에서 로드합니다.
     /// </summary>
     private void InitDiaryDictionary()
@@ -110,6 +118,7 @@ public class DataManager : MonoSingleton<DataManager>
     /// </summary>
     private void InitCardBookDictionary()
     {
+        // allCards 로 이쪽의 데이터를 플레이어의 덱과 공유중.
         allCards = CardDatabaseLoader.LoadAll("ExternalFiles/Cards");
         cardLookup.Clear();
         foreach (var card in allCards)
@@ -119,15 +128,36 @@ public class DataManager : MonoSingleton<DataManager>
             ///이부분은 나중에 최적화 위해 이야기 필요할 것 같습니다. 분류가 필수라면 이쪽을 남기는게 좋을 수도 있겠네요.
             if (card.characterClass == CharacterClass.Sophia)
             {
-                cardForShopia.Add(card.index, card);
+                if(cardForShopia.ContainsKey(card.index))
+                {
+                    Debug.LogWarning($"[DataManager] 중복된 카드 인덱스: {card.index} (Sophia)");
+                }
+                else
+                {
+                    cardForShopia.Add(card.index, card);
+                }
             }
             else if (card.characterClass == CharacterClass.Kayla)
             {
-                cardForKayla.Add(card.index, card);
+                if(cardForKayla.ContainsKey(card.index))
+                {
+                    Debug.LogWarning($"[DataManager] 중복된 카드 인덱스: {card.index} (Kayla)");
+                }
+                else
+                {
+                    cardForKayla.Add(card.index, card);
+                }
             }
             else if (card.characterClass == CharacterClass.Leon)
             {
-                cardForLeon.Add(card.index, card);
+                if(cardForLeon.ContainsKey(card.index))
+                {
+                    Debug.LogWarning($"[DataManager] 중복된 카드 인덱스: {card.index} (Leon)");
+                }
+                else
+                {
+                    cardForLeon.Add(card.index, card);
+                }
             }
         }
     }
