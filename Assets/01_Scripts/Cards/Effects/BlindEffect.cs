@@ -10,9 +10,9 @@ public class BlindEffect : CardEffectBase
         foreach(var target in targets)
         {
             // 상태 이상으로 처리
-            target.ApplyStatusEffect(new StatusEffect
+            target.ApplyStatusEffect(new TickEffect
             {
-                statType = BuffStatType.blind,
+                statType = BuffStatType.Blind,
                 value = -1, // 블라인드 효과
                 duration = 1
             });

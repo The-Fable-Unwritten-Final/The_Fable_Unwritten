@@ -8,7 +8,29 @@ using System;
 public enum CardEffectType { Damage, Heal, Buff, Debuff, Conditional, Chain }
 public enum CharacterClass { Sophia, Kayla, Leon, Enemy }
 public enum SkillType { Fire, Ice, Electric, Nature, Buff, Debuff, Holy, Heal, Slash, Strike, Pierce, Defense }
-public enum BuffStatType { None, Attack, Defense, ManaRegen, blind, stun, CantAttackInStance }
+public enum BuffStatType
+{
+    None,                   // 기본값
+
+    Attack,                 // 공격력 증가, 감소
+    Defense,                // 방어력 증가, 감소
+
+    Bless,                  // 축복 (이로운 효과 증폭)
+    Grace,                  // 은총 (회복량 증가)
+    Purify,                 // 정화 (상대 상태이상 감소)
+
+    Burn,                   // 화상 (턴 시작 시 피해)
+    Freeze,                 // 빙결 (공격력 % 감소)
+    Activate,              // 활성 (속성 상태이상 증폭)
+
+    Bleed,                  // 출혈 (공격받을 때 추가 피해)
+    Stun,                   // 기절 (행동 불가)
+    GuardRedirect,          // 수호 (공격 유도)
+
+    CantAttackInStance,     // 특정 자세에서 공격 불가
+    Blind                   // 실명 (명중률 저하 등, 필요 시)
+}
+
 public enum TargetType { None = 0, Ally = 1, Enemy = 2 }
 
 public enum CardType

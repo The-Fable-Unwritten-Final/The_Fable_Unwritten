@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Json;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour, IStatusReceiver
@@ -31,7 +32,8 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     private Animator animator;
     private StatusDisplay statusDisplay;
 
-    [SerializeField]public List<StatusEffect> activeEffects = new List<StatusEffect>();  //현재 가지고 있는 상태이상 및 버프
+    [SerializeField] public List<TickEffect> tickEffects = new();       // 턴마다 지속되는 효과
+    [SerializeField] public List<InstanceEffect> instantEffects = new(); // 즉시 적용 효과
 
     private void Awake()
     {
@@ -76,16 +78,46 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     /// <param name="effect">적용할 효과</param>
     public void ApplyStatusEffect(StatusEffect effect)
     {
-        //Debug.Log($"[버프 적용] {enemyData.EnemyName} 에게 {effect.statType} +{effect.value} ({effect.duration}턴)");
-        activeEffects.Add(new StatusEffect
+        //Debug.Log($"[버프 적용] {playerData.CharacterName} 에게 {effect.statType} +{effect.value} ({effect.duration}턴)");
+        switch (effect)
         {
-            statType = effect.statType,
-            value = effect.value,
-            duration = effect.duration
-        });
+            case TickEffect tick:   //턴 이펙트일 경우
+                tickEffects.Add(new TickEffect
+                {
+                    statType = tick.statType,
+                    value = tick.value,
+                    duration = tick.duration
+                });
+                break;
 
-        statusDisplay?.EnemyUpdateUI();
+            case InstanceEffect inst:       // 단일 적용인 경우
+                var existing = instantEffects.Find(e => e.statType == inst.statType);
+                if (existing != null)
+                {
+                    // 기존 수치에 누적
+                    existing.value = Mathf.Clamp(existing.value + inst.value, 0, 50);
+                    existing.isMaintain = existing.isMaintain || inst.isMaintain; // 유지되는 버프가 들어오면 유지로 전환
+                }
+                else
+                {
+                    // 새로 추가
+                    instantEffects.Add(new InstanceEffect
+                    {
+                        statType = inst.statType,
+                        value = Mathf.Clamp(inst.value, 0, 50),
+                        isMaintain = inst.isMaintain
+                    });
+                }
+                break;
+
+            default:
+                Debug.LogWarning($"[ApplyStatusEffect] 알 수 없는 타입: {effect.GetType()}");
+                break;
+        }
+
+        statusDisplay?.PlayerUpdateUI();
     }
+
 
     public void TakeTrueDamage(float damage)
     {
@@ -98,15 +130,25 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     /// </summary>
     public void TickStatusEffects()
     {
-        for (int i = activeEffects.Count - 1; i >= 0; i--)
+        for (int i = tickEffects.Count - 1; i >= 0; i--)
         {
-            activeEffects[i].duration--;
-            if (activeEffects[i].duration <= 0)
+            tickEffects[i].duration--;
+            if (tickEffects[i].duration <= 0)
             {
-                //Debug.Log($"[버프 종료] {enemyData.EnemyName} 의 {activeEffects[i].statType} 효과 종료");
-                activeEffects.RemoveAt(i);
+                Debug.Log($"[TickEffect 만료] {tickEffects[i].statType}");
+                tickEffects.RemoveAt(i);
             }
         }
+
+        /*for (int i = instantEffects.Count - 1; i >= 0; i--)
+        {
+            if (!instantEffects[i].isMaintain)
+            {
+                Debug.Log($"[InstanceEffect 제거] {instantEffects[i].statType}");
+                instantEffects.RemoveAt(i);
+            }
+        }*/ //턴 종료 시 자동으로 사라지는 메서드이기 때문에 필요할 시 살리기
+
         statusDisplay?.EnemyUpdateUI();
     }
     /// <summary>
@@ -116,7 +158,8 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     /// <returns>존재 여부</returns>
     public bool HasEffect(BuffStatType type)
     {
-        return activeEffects.Exists(e => e.statType == type && e.duration > 0);
+        return tickEffects.Exists(e => e.statType == type)
+                || instantEffects.Exists(e => e.statType == type);
     }
 
 
@@ -134,13 +177,17 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     /// <returns>버프 적용 후 최종 값</returns>
     public float ModifyStat(BuffStatType statType, float baseValue)
     {
-        float modifiedValue = baseValue;
-        foreach (var effect in activeEffects)
-        {
-            if (effect.statType == statType)
-                modifiedValue += effect.value;
-        }
-        return modifiedValue;
+        float result = baseValue;
+
+        foreach (var e in tickEffects)
+            if (e.statType == statType)
+                result += e.value;
+
+        foreach (var e in instantEffects)
+            if (e.statType == statType)
+                result += e.value;
+
+        return result;
     }
 
 
@@ -167,7 +214,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public bool IsStunned()
     {
-        return activeEffects.Exists(e => e.statType == BuffStatType.stun && e.duration > 0);
+        return HasEffect(BuffStatType.Stun);
     }
 
     private CharacterClass characterClass = CharacterClass.Enemy;
@@ -273,34 +320,11 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     }
 
     /// <summary>
-    /// 해당 자세로 공격 가능한지 확인
-    /// </summary>
-    /// <param name="stance">공격 가능한지 확인하는 함수</param>
-    /// <returns></returns>
-    public bool IsAttackBlockedByStance(StancValue.EStancType stance)
-    {
-        var blockEffects = activeEffects.FindAll(e => e.statType == BuffStatType.CantAttackInStance);
-
-        foreach (var effect in blockEffects)
-        {
-            if ((int)stance == (int)effect.value)
-                return true;
-        }
-        return false;
-    }
-
-    /// <summary>
     /// 현재 적용 중인 공격력 버프 총합 반환
     /// </summary>
     public float GetBuffAtk()
     {
-        float atkTotal = 0;
-        foreach (var effect in activeEffects)
-        {
-            if (effect.statType == BuffStatType.Attack)
-                atkTotal += effect.value;
-        }
-        return atkTotal;
+        return ModifyStat(BuffStatType.Attack, 0f);
     }
 
     /// <summary>
@@ -308,13 +332,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     /// </summary>
     public float GetBuffDef()
     {
-        float defTotal = 0;
-        foreach (var effect in activeEffects)
-        {
-            if (effect.statType == BuffStatType.Defense)
-                defTotal += effect.value;
-        }
-        return defTotal;
+        return ModifyStat(BuffStatType.Defense, 0f);
     }
 
     public DmgBarDisplay dmgBar => dmgBarDisplay;

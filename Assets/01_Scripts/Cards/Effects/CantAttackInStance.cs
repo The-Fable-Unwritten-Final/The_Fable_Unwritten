@@ -15,7 +15,7 @@ public class CantAttackInStance : CardEffectBase
         {
             if (!target.IsAlive()) continue;
 
-            target.ApplyStatusEffect(new StatusEffect
+            target.ApplyStatusEffect(new TickEffect
             {
                 statType = BuffStatType.CantAttackInStance,
                 value = (int)blockStance,

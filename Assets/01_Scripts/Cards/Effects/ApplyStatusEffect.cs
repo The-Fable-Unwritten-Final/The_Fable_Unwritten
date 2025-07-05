@@ -45,7 +45,7 @@ public class ApplyStatusEffect : CardEffectBase
                 }
                 break;
 
-            case 3: // all
+            case 3: // 아군 전체
                 foreach (var t in GameManager.Instance.turnController.battleFlow.playerParty)
                 {
                     filteredTargets.Add(t);
@@ -62,19 +62,16 @@ public class ApplyStatusEffect : CardEffectBase
         {
             if (!t.IsAlive()) continue;
 
-            t.ApplyStatusEffect(new StatusEffect
-            {
-                statType = statType,
-                value = value,
-                duration = duration
-            });
+            StatusEffect effect = CreateEffect(statType, value, duration);
+
+            t.ApplyStatusEffect(effect);
 
             string statusText = GetStatusEffectText(statType, value);
 
             var Text = new DmgTextData
             {
                 Text = statusText,
-                type = value < 0 ? DmgTextType.Debuff : DmgTextType.Buff,
+                type = IsDebuff(statType, value) ? DmgTextType.Debuff : DmgTextType.Buff,
                 isCardEnhanced = isEnhanced == true,
                 isStanceEnhanced = caster is PlayerController pc &&
                            (pc.playerData.currentStance == PlayerData.StancType.grace ||
@@ -86,9 +83,49 @@ public class ApplyStatusEffect : CardEffectBase
         }
     }
 
-    public override string GetDescription() => $"{statType} 스탯에 {value}만큼 {duration}턴 동안 적용";
+    private StatusEffect CreateEffect(BuffStatType type, float val, int dur)
+    {
+        val = Mathf.Clamp(val, -50, 50);
 
-    string GetStatusEffectText(BuffStatType statType, float value)
+        if (IsTickEffect(type))
+        {
+            return new TickEffect
+            {
+                statType = type,
+                value = val,
+                duration = dur,
+            };
+        }
+        else
+        {
+            return new InstanceEffect
+            {
+                statType = type,
+                value = val,
+                isMaintain = false
+            };
+        }
+    }
+
+    private bool IsTickEffect(BuffStatType type)
+    {
+        return type switch
+        {
+            BuffStatType.CantAttackInStance => true,
+            BuffStatType.Blind => true,                   // 실명 (명중률 저하 등, 필요 시)
+            _ => false
+        };
+    }
+
+    public override string GetDescription()
+    {
+        string baseText = $"{statType} {(value > 0 ? "+" : "")}{value}";
+        if (IsTickEffect(statType))
+            baseText += $" ({duration}턴)";
+        return baseText;
+    }
+
+    private string GetStatusEffectText(BuffStatType statType, float value)
     {
         string direction = value switch
         {
@@ -97,21 +134,35 @@ public class ApplyStatusEffect : CardEffectBase
             _ => ""
         };
 
-        string iconTag = statType switch
-        {
-            BuffStatType.Attack => "<sprite name=\"atk\">",
-            BuffStatType.Defense => "<sprite name=\"def\">",
-            _ => ""
-        };
 
         return statType switch
         {
-            BuffStatType.Attack => $"{iconTag} {direction}",
-            BuffStatType.Defense => $"{iconTag} {direction}",
-            BuffStatType.ManaRegen => $"{iconTag}  {direction}",
-            BuffStatType.stun => "기절",
-            BuffStatType.CantAttackInStance => "실명",
+            BuffStatType.Attack => $"공격력 {direction}",
+            BuffStatType.Defense => $"방어력 {direction}",
+            BuffStatType.Bless => $"축복 {direction}",
+            BuffStatType.Grace => $"은총 {direction}",
+            BuffStatType.Purify => $"정화 {direction}",
+            BuffStatType.Burn => $"화상 {direction}",
+            BuffStatType.Freeze => $"빙결 {direction}%",
+            BuffStatType.Activate => $"활성화 {direction}",
+            BuffStatType.Bleed => $"출혈 {direction}",
+            BuffStatType.Stun => $"기절 {direction}",
+            BuffStatType.GuardRedirect => $"수호 발동률 {direction}%",
+            BuffStatType.CantAttackInStance => $"자세 제한",
+            BuffStatType.Blind => $"실명",
             _ => "상태이상"
         };
     }
+
+    public static bool IsDebuff(BuffStatType type, float value)
+    {
+        return type switch
+        {
+            BuffStatType.Attack => value >= 0,
+            BuffStatType.Defense => value >= 0,
+            BuffStatType.GuardRedirect or BuffStatType.Bless or BuffStatType.Grace => false,
+            _ => true
+        };
+    }
 }
+

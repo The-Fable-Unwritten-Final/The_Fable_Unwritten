@@ -53,7 +53,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     private StatusDisplay statusDisplay;
     //---
 
-    [SerializeField]public List<StatusEffect> activeEffects = new List<StatusEffect>();        //현재 가지고 있는 상태이상 및 버프
+    [SerializeField] public List<TickEffect> tickEffects = new();       // 턴마다 지속되는 효과
+    [SerializeField] public List<InstanceEffect> instantEffects = new(); // 즉시 적용 효과
 
     private void Awake()
     {
@@ -108,12 +109,41 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public void ApplyStatusEffect(StatusEffect effect)
     {
         //Debug.Log($"[버프 적용] {playerData.CharacterName} 에게 {effect.statType} +{effect.value} ({effect.duration}턴)");
-        activeEffects.Add(new StatusEffect
+        switch (effect)     
         {
-            statType = effect.statType,
-            value = effect.value,
-            duration = effect.duration
-        });
+            case TickEffect tick:   //턴 이펙트일 경우
+                tickEffects.Add(new TickEffect
+                {
+                    statType = tick.statType,
+                    value = tick.value,
+                    duration = tick.duration
+                });
+                break;
+
+            case InstanceEffect inst:       // 단일 적용인 경우
+                var existing = instantEffects.Find(e => e.statType == inst.statType);
+                if (existing != null)       
+                {
+                    // 기존 수치에 누적
+                    existing.value = Mathf.Clamp(existing.value + inst.value, 0, 50);
+                    existing.isMaintain = existing.isMaintain || inst.isMaintain; // 유지되는 버프가 들어오면 유지로 전환
+                }
+                else
+                {
+                    // 새로 추가
+                    instantEffects.Add(new InstanceEffect
+                    {
+                        statType = inst.statType,
+                        value = Mathf.Clamp(inst.value, 0, 50),
+                        isMaintain = inst.isMaintain
+                    });
+                }
+                break;
+
+            default:
+                Debug.LogWarning($"[ApplyStatusEffect] 알 수 없는 타입: {effect.GetType()}");
+                break;
+        }
 
         statusDisplay?.PlayerUpdateUI();
     }
@@ -126,13 +156,17 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// <returns>버프 적용 후 최종 값</returns>
     public float ModifyStat(BuffStatType statType, float baseValue)
     {
-        float modifiedValue = baseValue;
-        foreach (var effect in activeEffects)
-        {
-            if (effect.statType == statType)
-                modifiedValue += effect.value;
-        }
-        return modifiedValue;
+        float result = baseValue;
+
+        foreach (var e in tickEffects)
+            if (e.statType == statType)
+                result += e.value;
+
+        foreach (var e in instantEffects)
+            if (e.statType == statType)
+                result += e.value;
+
+        return result;
     }
 
     /// <summary>
@@ -224,15 +258,25 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// </summary>
     public void TickStatusEffects()
     {
-        for (int i = activeEffects.Count - 1; i >= 0; i--)
+        for (int i = tickEffects.Count - 1; i >= 0; i--)
         {
-            activeEffects[i].duration--;
-            if (activeEffects[i].duration <= 0)
+            tickEffects[i].duration--;
+            if (tickEffects[i].duration <= 0)
             {
-                //Debug.Log($"[버프 종료] {playerData.CharacterName} 의 {activeEffects[i].statType} 효과 종료");
-                activeEffects.RemoveAt(i);
+                Debug.Log($"[TickEffect 만료] {tickEffects[i].statType}");
+                tickEffects.RemoveAt(i);
             }
         }
+        /*
+        for (int i = instantEffects.Count - 1; i >= 0; i--)
+        {
+            if (!instantEffects[i].isMaintain)
+            {
+                Debug.Log($"[InstanceEffect 제거] {instantEffects[i].statType}");
+                instantEffects.RemoveAt(i);
+            }
+        }*/     //이 부분은 턴 종료시 상태이상 자동 처리이기 떄문에 후에 필요할 시 살릴 것
+
         statusDisplay?.PlayerUpdateUI();
     }
 
@@ -243,14 +287,15 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// <returns>존재 여부</returns>
     public bool HasEffect(BuffStatType type)
     {
-        return activeEffects.Exists(e => e.statType == type && e.duration > 0);
+        return tickEffects.Exists(e => e.statType == type)
+                || instantEffects.Exists(e => e.statType == type);
     }
 
     /// <summary>
     /// 스턴 상태인지 확인
     /// </summary>
     /// <returns>스턴 여부</returns>
-    public bool IsStunned() => HasEffect(BuffStatType.stun);
+    public bool IsStunned() => HasEffect(BuffStatType.Stun);
 
     // block 부여
     public void GrantBlock()
@@ -469,7 +514,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public float GetBuffAtk()
     {
         float atkTotal = 0;
-        foreach (var effect in activeEffects)
+        foreach (var effect in tickEffects)
         {
             if (effect.statType == BuffStatType.Attack)
                 atkTotal += effect.value;
@@ -483,7 +528,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public float GetBuffDef()
     {
         float defTotal = 0;
-        foreach (var effect in activeEffects)
+        foreach (var effect in tickEffects)
         {
             if (effect.statType == BuffStatType.Defense)
                 defTotal += effect.value;
@@ -504,5 +549,18 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     {
         if (statusDisplay != null)
             statusDisplay.gameObject.SetActive(true);
+    }
+
+    //발동 시 사라져야 하는 경우
+    public void TriggerEffectOnce(BuffStatType type)
+    {
+        for (int i = instantEffects.Count - 1; i >= 0; i--)
+        {
+            if (instantEffects[i].statType == type)
+            {
+                if (!instantEffects[i].isMaintain)
+                    instantEffects.RemoveAt(i);
+            }
+        }
     }
 }
