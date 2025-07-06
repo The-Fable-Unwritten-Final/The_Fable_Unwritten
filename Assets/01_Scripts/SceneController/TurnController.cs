@@ -17,7 +17,7 @@ public class TurnController : MonoBehaviour
     }
     public TurnState turnState = TurnState.GameStart; // 현재 턴 상태
     [SerializeField] CardDisplay cardDisplay; // 카드 디스플레이
-    public BattleFlowController battleFlow;   //배틀 컨트롤러를 넣기
+    public BattleFlowController battleFlow;
 
     // 턴의 각 상태 진입시 호출되는 이벤트
     /// <summary>
