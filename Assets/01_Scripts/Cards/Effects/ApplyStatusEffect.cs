@@ -71,7 +71,7 @@ public class ApplyStatusEffect : CardEffectBase
             var Text = new DmgTextData
             {
                 Text = statusText,
-                type = IsDebuff(statType, value) ? DmgTextType.Debuff : DmgTextType.Buff,
+                type = Debuff.IsDebuff(statType, value) ? DmgTextType.Debuff : DmgTextType.Buff,
                 isCardEnhanced = isEnhanced == true,
                 isStanceEnhanced = caster is PlayerController pc &&
                            (pc.playerData.currentStance == PlayerData.StancType.grace ||
@@ -153,13 +153,16 @@ public class ApplyStatusEffect : CardEffectBase
             _ => "상태이상"
         };
     }
+}
 
+public static class Debuff
+{
     public static bool IsDebuff(BuffStatType type, float value)
     {
         return type switch
         {
-            BuffStatType.Attack => value >= 0,
-            BuffStatType.Defense => value >= 0,
+            BuffStatType.Attack => value < 0,
+            BuffStatType.Defense => value < 0,
             BuffStatType.GuardRedirect or BuffStatType.Bless or BuffStatType.Grace => false,
             _ => true
         };

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using static ReduceNextCardCostEffect;
@@ -214,13 +215,20 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     }
 
     /// <summary>
-    /// 체력 회복
+    /// 체력 회복 (grace 수치 만큼 추가)
     /// </summary>
     /// <param name="amount">회복량</param>
     public void Heal(float amount)
     {
-        playerData.currentHP = Mathf.Min(playerData.MaxHP, playerData.currentHP +amount);
-        //Debug.Log($"{playerData.CharacterName} 회복: {amount}, 현재 체력: {playerData.currentHP}");
+        var grace = instantEffects.Find(e => e.statType == BuffStatType.Grace);
+        if (grace != null && grace.value > 0)
+        {
+            amount += grace.value;
+            Debug.Log($"[Grace] 회복량 증가 +{grace.value} → {amount}");
+            grace.value = 0;
+        }
+
+        playerData.currentHP = Mathf.Min(playerData.MaxHP, playerData.currentHP + amount);
     }
 
     /// <summary>
@@ -267,15 +275,12 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
                 tickEffects.RemoveAt(i);
             }
         }
-        /*
-        for (int i = instantEffects.Count - 1; i >= 0; i--)
+
+        // 모든 InstantEffect의 유지 여부 해제
+        foreach (var effect in instantEffects)
         {
-            if (!instantEffects[i].isMaintain)
-            {
-                Debug.Log($"[InstanceEffect 제거] {instantEffects[i].statType}");
-                instantEffects.RemoveAt(i);
-            }
-        }*/     //이 부분은 턴 종료시 상태이상 자동 처리이기 떄문에 후에 필요할 시 살릴 것
+            effect.isMaintain = false;  // 다음 턴부터는 제거 대상이 됨
+        }
 
         statusDisplay?.PlayerUpdateUI();
     }
@@ -563,4 +568,232 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             }
         }
     }
+
+    /// <summary>
+    /// 화상 데미지 처리
+    /// </summary>
+    public void ApplyBurnEffect()
+    {
+        var burn = instantEffects.Find(e => e.statType == BuffStatType.Burn);
+        if (burn != null && burn.value > 0)
+        {
+            Debug.Log($"[Burn] {playerData.CharacterName} 화상 피해 {burn.value}");
+            TakeTrueDamage(burn.value);
+
+            // isMaintain 상태가 아닌 경우 초기화
+            if(!burn.isMaintain)
+            {
+                burn.value = 0;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 빙결 처리
+    /// </summary>
+    /// <param name="baseDamage"></param>
+    /// <returns></returns>
+    public float ApplyFreezePenalty(float baseDamage)
+    {
+        var freeze = instantEffects.Find(e => e.statType == BuffStatType.Freeze);
+        if (freeze != null && freeze.value > 0)
+        {
+            float multiplier = Mathf.Clamp01(1f - freeze.value / 100f);
+            float reduced = baseDamage * multiplier;
+
+            Debug.Log($"[Freeze] {playerData.CharacterName} 공격력 {freeze.value}% 감소 → {reduced}");
+
+            // 빙결 효과는 발동 시 수치 초기화
+            freeze.value = 0;
+
+            return reduced;
+        }
+
+        return baseDamage;
+    }
+
+    public void ApplyActivateBonus(BuffStatType incoming)
+    {
+        var activate = instantEffects.Find(e => e.statType == BuffStatType.Activate);
+        if (activate == null || activate.value <= 0) return;
+
+        if (incoming == BuffStatType.Burn || incoming == BuffStatType.Freeze)
+        {
+            var target = instantEffects.Find(e => e.statType == incoming);
+            if (target != null)
+            {
+                target.value = Mathf.Min(50, target.value + activate.value);
+                Debug.Log($"[Activate] {playerData.CharacterName} {incoming} 상태 강화됨: +{activate.value}");
+            }
+        }
+
+        // 활성도는 발동 후 초기화
+        activate.value = 0;
+    }
+
+    /// <summary>
+    /// 축복 버프 처리
+    /// </summary>
+    /// <param name="blessValue"></param>
+    public void TryApplyBlessBonus(float blessValue)
+    {
+        var targetBuff = instantEffects
+            .Where(e => Debuff.IsDebuff(e.statType, e.value) == false &&
+                        e.statType != BuffStatType.Bless &&
+                        e.value > 0)
+            .OrderByDescending(e => e.value)
+            .FirstOrDefault();
+
+        if (targetBuff != null)
+        {
+            targetBuff.value = Mathf.Min(50, targetBuff.value + blessValue);
+            Debug.Log($"[Bless] {targetBuff.statType} → +{blessValue} 증가됨");
+        }
+        else
+        {
+            // 적용할 버프가 없으면 Bless 수치만 저장
+            ApplyStatusEffect(new InstanceEffect
+            {
+                statType = BuffStatType.Bless,
+                value = blessValue,
+                isMaintain = false
+            });
+        }
+    }
+    /// <summary>
+    /// 정화 디버프 처리
+    /// </summary>
+    /// <param name="purifyValue"></param>
+    public void TryApplyPurifyBonus(float purifyValue)
+    {
+        var targetDebuff = instantEffects
+            .Where(e => Debuff.IsDebuff(e.statType, e.value) &&
+                        e.statType != BuffStatType.Purify &&
+                        e.value > 0)
+            .OrderByDescending(e => e.value)
+            .FirstOrDefault();
+
+        if (targetDebuff != null)
+        {
+            float reduction = Mathf.Min(targetDebuff.value, purifyValue);
+            targetDebuff.value -= reduction;
+            Debug.Log($"[Purify] {targetDebuff.statType} → -{reduction} 감소됨");
+        }
+        else
+        {
+            // 적용할 디버프가 없으면 Purify 수치만 저장
+            ApplyStatusEffect(new InstanceEffect
+            {
+                statType = BuffStatType.Purify,
+                value = purifyValue,
+                isMaintain = false
+            });
+        }
+    }
+
+
+    /// <summary>
+    /// 존재하는 축복 수치 적용
+    /// </summary>
+    private void TryApplyStoredBlessIfExists(InstanceEffect incoming)
+    {
+        var bless = instantEffects.Find(e => e.statType == BuffStatType.Bless && !e.isMaintain);
+        if (bless != null)
+        {
+            incoming.value = Mathf.Min(50, incoming.value + bless.value);
+            Debug.Log($"[Bless Triggered] {incoming.statType} 수치 증가 +{bless.value}");
+            instantEffects.Remove(bless); // 일회성
+        }
+    }
+
+    /// <summary>
+    /// 존재하는 정화 수치 적용
+    /// </summary>
+    /// <param name="incoming"></param>
+    private void TryApplyStoredPurifyIfExists(InstanceEffect incoming)
+    {
+        var purify = instantEffects.Find(e => e.statType == BuffStatType.Purify && !e.isMaintain);
+        if (purify != null)
+        {
+            incoming.value = Mathf.Max(0, incoming.value - purify.value);
+            Debug.Log($"[Purify Triggered] {incoming.statType} 수치 감소 -{purify.value}");
+            instantEffects.Remove(purify); // 일회성
+        }
+    }
+
+    /// <summary>
+    /// 출혈 수치 적용
+    /// </summary>
+    /// <param name="baseDamage"></param>
+    /// <returns></returns>
+    public float ApplyBleedBonus(float baseDamage)
+    {
+        var bleed = instantEffects.Find(e => e.statType == BuffStatType.Bleed);
+        if (bleed != null && bleed.value > 0)
+        {
+            Debug.Log($"[Bleed] {playerData.CharacterName} 추가 피해 {bleed.value}");
+            baseDamage += bleed.value;
+
+            if (!bleed.isMaintain)
+            {
+                bleed.value = 0;
+            }
+        }
+
+        return baseDamage;
+    }
+
+    /// <summary>
+    /// 스턴 적용
+    /// </summary>
+    /// <returns></returns>
+    public bool TryTriggerStun()
+    {
+        var stun = instantEffects.Find(e => e.statType == BuffStatType.Stun);
+        if (stun != null && stun.value > 0)
+        {
+            float roll = Random.Range(0f, 100f);
+            if (roll <= stun.value)
+            {
+                Debug.Log($"[Stun] {playerData.CharacterName} 기절 발동 → 1턴 행동 불가");
+                ApplyStatusEffect(new TickEffect
+                {
+                    statType = BuffStatType.Stun,
+                    value = 1,
+                    duration = 1
+                });
+                stun.value = 0;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool TryTriggerGuardRedirect(out PlayerController redirectTarget)
+    {
+        redirectTarget = null;
+
+        var guard = instantEffects.Find(e => e.statType == BuffStatType.GuardRedirect);
+        if (guard != null && guard.value > 0)
+        {
+            float roll = Random.Range(0f, 100f);
+            if (roll <= guard.value)
+            {
+                var leon = GameManager.Instance.turnController.battleFlow.playerParty
+                    .Find(p => p is PlayerController pc && pc.ChClass == CharacterClass.Leon) as PlayerController;
+
+                if (leon != null)
+                {
+                    Debug.Log($"[Guard] {playerData.CharacterName} 대신 레온이 공격받음!");
+                    redirectTarget = leon;
+
+                    guard.value = 0;
+
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }
