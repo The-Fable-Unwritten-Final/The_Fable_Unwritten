@@ -158,8 +158,11 @@ public static class LocaleDataManager
         if (input.Length >= 2 && input.StartsWith("\"") && input.EndsWith("\""))
         {
             // 양끝 큰따옴표 제거 + 내부 "" → "
-            return input.Substring(1, input.Length - 2).Replace("\"\"", "\"");
+            input.Substring(1, input.Length - 2).Replace("\"\"", "\"");
         }
+
+        // \n을 실제 줄바꿈 처리가 가능하도록 \\n으로 변환.
+        input = input.Replace("\\n", "\n");
         return input;
     }
 }

@@ -40358,6 +40358,7 @@ GameObject:
   - component: {fileID: 1895487012537161350}
   - component: {fileID: 8241083641680693132}
   - component: {fileID: 6410473346242866933}
+  - component: {fileID: 808398625261205136}
   m_Layer: 0
   m_Name: CardDesc
   m_TagString: Untagged
@@ -40381,8 +40382,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.397, y: -34.945}
-  m_SizeDelta: {x: 56.2505, y: 24.511}
+  m_AnchoredPosition: {x: 0.397, y: -36.345}
+  m_SizeDelta: {x: 56.2505, y: 27.311}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8241083641680693132
 CanvasRenderer:
@@ -40482,6 +40483,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &808398625261205136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8180002564006886324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ab81e3570277ac45945094064355275, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fontSize_EN: 5.5
+  fontSize_KO: 6
+  fontSize_JA: 5.5
 --- !u!1 &8592481122278794245
 GameObject:
   m_ObjectHideFlags: 0
