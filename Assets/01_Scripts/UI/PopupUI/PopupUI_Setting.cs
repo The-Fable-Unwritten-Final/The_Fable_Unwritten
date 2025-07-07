@@ -162,6 +162,7 @@ public class PopupUI_Setting : BasePopupUI
 
         if (isChangingLocale) return;
         StartCoroutine(ChangeLocaleCoroutine(index));
+
     }
 
     IEnumerator ChangeLocaleCoroutine(int index)
@@ -172,7 +173,9 @@ public class PopupUI_Setting : BasePopupUI
         yield return LocalizationSettings.InitializationOperation;
         LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
 
-
         isChangingLocale = false;
+
+        // 로케일 변경후 텍스트 데이터 업데이트
+        DataManager.Instance.InitLocaleText();
     }
 }

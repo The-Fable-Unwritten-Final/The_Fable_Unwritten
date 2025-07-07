@@ -8,8 +8,8 @@ public static class CardModelFactory
     {
         var card = ScriptableObject.CreateInstance<CardModel>();
         card.index = data.index;
-        card.cardName = data.name;
-        card.cardText = data.text;
+        card.cardName = LocaleDataManager.GetLocalizedCard(data.name);
+        card.cardText = LocaleDataManager.GetLocalizedCard(data.text);
         card.manaCost = data.cost;
         card.characterClass = (CharacterClass)data.@class;
 
@@ -17,7 +17,7 @@ public static class CardModelFactory
         card.targetCount = data.target_num;
         card.targetType = (TargetType)data.target_type;
         card.note = data.note;
-        card.FlavorText = data.flavortext;
+        card.FlavorText = LocaleDataManager.GetLocalizedCard(data.flavortext);
 
         // 리소스에서 Sprite 할당
         card.illustration = LoadSprite($"Cards/Illustration/{data.illustration}");

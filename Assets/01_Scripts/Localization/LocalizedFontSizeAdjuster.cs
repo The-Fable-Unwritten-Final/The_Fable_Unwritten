@@ -47,6 +47,9 @@ public class LocalizedFontSizeAdjuster : MonoBehaviour
             case "ja":
                 _text.fontSize = fontSize_JA;
                 break;
+            case "en":
+                _text.fontSize = fontSize_EN;
+                break;
             default:
                 _text.fontSize = fontSize_EN;
                 break;

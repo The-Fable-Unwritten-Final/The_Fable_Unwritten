@@ -252,12 +252,38 @@ public class CardModel : ScriptableObject
     public string GetFormattedCardText(IStatusReceiver caster)
     {
         string result = cardText;
+        string localeCode = LocaleDataManager.CurrentLanguageCode;
 
         foreach (var effect in effects)
         {
             if(effect is DamageEffect damageEffect)
             {
-                Match match = Regex.Match(result, @"(\d+)(?=의 피해)");
+                Match match = null;
+
+                switch (localeCode)
+                {
+                    case "ko":
+                        match = Regex.Match(result, @"\d+(?=의 피해)");
+                        break;
+                    case "ja":
+                        match = Regex.Match(result, @"\d+(?=のダメージ)");
+                        break;
+                    case "en":
+                        match = Regex.Match(result, @"(?<=Deal\s)(\d+)(?=\sdamage)");
+                        break;
+                    default:
+                        match = Regex.Match(result, @"(?<=Deal\s)(\d+)(?=\sdamage)");
+                        break;
+                }
+                
+
+                // 예외 처리
+                if (match == null || !match.Success)
+                {
+                    Debug.LogWarning($"[CardModel] '{cardName}' 카드의 설명에서 피해 숫자를 찾을 수 없습니다: {result}");
+                    return result;
+                }
+
 
                 if (match.Success)
                 {
@@ -271,12 +297,41 @@ public class CardModel : ScriptableObject
                     // 3. "피해 숫자"만 교체
                     if (isEnhanced)
                     {
-                        predicted *= 1.5f;      //소수점 남기나?
-                        result = Regex.Replace(result, @"(\d+)(?=의 피해)", $"‘{(int)predicted}’");
+                        predicted *= 1.5f;
+
+                        switch (localeCode)
+                        {
+                            case "ko":
+                                result = Regex.Replace(result, @"(\d+)(?=의 피해)", $"‘{(int)predicted}’");
+                                break;
+                            case "ja":
+                                result = Regex.Replace(result, @"(\d+)(?=のダメージ)", $"‘{(int)predicted}’");
+                                break;
+                            case "en":
+                                result = Regex.Replace(result, @"(?<=Deal\s)(\d+)(?=\sdamage)", $"‘{(int)predicted}’");
+                                break;
+                            default:
+                                result = Regex.Replace(result, @"(?<=Deal\s)(\d+)(?=\sdamage)", $"‘{(int)predicted}’");
+                                break;
+                        }
                     }
                     else
                     {
-                        result = Regex.Replace(result, @"(\d+)(?=의 피해)", ((int)predicted).ToString());
+                        switch (localeCode)
+                        {
+                            case "ko":
+                                result = Regex.Replace(result, @"(\d+)(?=의 피해)", ((int)predicted).ToString());
+                                break;
+                            case "ja":
+                                result = Regex.Replace(result, @"(\d+)(?=のダメージ)", ((int)predicted).ToString());
+                                break;
+                            case "en":
+                                result = Regex.Replace(result, @"(?<=Deal\s)(\d+)(?=\sdamage)", ((int)predicted).ToString());
+                                break;
+                            default:
+                                result = Regex.Replace(result, @"(?<=Deal\s)(\d+)(?=\sdamage)", ((int)predicted).ToString());
+                                break;
+                        }
                     }
                 }
             }

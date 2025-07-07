@@ -61,6 +61,8 @@ public class DataManager : MonoSingleton<DataManager>
     protected override void Awake()
     {
         base.Awake();
+        // 우선적으로 로케일 데이터 로드 호출.
+        LocaleDatamanagerLoad();
         InitDiaryDictionary();
         enemySpawnData = StageSpawnSetCSVParser.LoadEnemySpawnSet() ?? new();
         allRandomEvents = RandomEventJsonLoader.LoadAllEvents() ?? new();
@@ -80,6 +82,14 @@ public class DataManager : MonoSingleton<DataManager>
     public void InitLocaleText()
     {
         InitCardBookDictionary();
+    }
+    void LocaleDatamanagerLoad()
+    {
+        // 로케일 데이터 매니저 csv => Dictionary 로딩
+        // 스태틱 클래스라서 Execution Order 지정 불가능하기에 이곳에서 호출.
+        LocaleDataManager.LoadCardCsv();
+        //LocaleDataManager.LoadDialogueCsv();
+        //LocaleDataManager.LoadUICsv();
     }
 
     /// <summary>
@@ -114,7 +124,7 @@ public class DataManager : MonoSingleton<DataManager>
     }
 
     /// <summary>
-    /// 카드북 카드 데이터를 초기화 + 분류작업.
+    /// 카드북 카드 데이터를 초기화 + 분류작업. (사실상 이쪽이 카드 데이터 베이스)
     /// </summary>
     private void InitCardBookDictionary()
     {
