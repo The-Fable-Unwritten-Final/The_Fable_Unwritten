@@ -44,9 +44,10 @@ public static class LocaleDataManager
         {
             if (string.IsNullOrWhiteSpace(lines[i])) continue;
 
+            // 큰 따옴표로 싸여진 콤마 무시하는 CSV 파싱, 전처리
             var cols = ParseCsvLine(lines[i]);
 
-            // 각 필드별로 큰따옴표 제거 처리
+            // 각 필드별로 큰따옴표 제거, 후처리
             for (int j = 0; j < cols.Length; j++)
             {
                 cols[j] = TrimQuotes(cols[j]);
@@ -120,7 +121,7 @@ public static class LocaleDataManager
                     if (i + 1 < line.Length && line[i + 1] == '"')  // "" → "
                     {
                         current.Append('"');
-                        i++; // skip second quote
+                        i++; 
                     }
                     else
                     {
