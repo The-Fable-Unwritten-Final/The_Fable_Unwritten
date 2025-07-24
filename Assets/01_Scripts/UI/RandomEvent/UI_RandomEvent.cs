@@ -77,7 +77,7 @@ public class UI_RandomEvent : MonoBehaviour
         illustration_Img.sprite = currentData.illustrationSprite;
         currentData = data;
 
-        titleTxt.text = data.title;
+        titleTxt.text = LocaleDataManager.GetLocalizedRandomEvent(data.title);
 
         optionButton_0.interactable = false;
         optionButton_1.interactable = false;
@@ -91,10 +91,10 @@ public class UI_RandomEvent : MonoBehaviour
 
    private IEnumerator StartTyping()
     {
-        yield return StartCoroutine(TypeText(descriptionTxt, currentData.description));
+        yield return StartCoroutine(TypeText(descriptionTxt, LocaleDataManager.GetLocalizedRandomEvent(currentData.description)));
         yield return new WaitForSeconds(0.5f);
-        Coroutine op_0 = StartCoroutine(TypeText(optionTxt_0, currentData.option_0));
-        Coroutine op_1 = StartCoroutine(TypeText(optionTxt_1, currentData.option_1));
+        Coroutine op_0 = StartCoroutine(TypeText(optionTxt_0, LocaleDataManager.GetLocalizedRandomEvent(currentData.option_0)));
+        Coroutine op_1 = StartCoroutine(TypeText(optionTxt_1, LocaleDataManager.GetLocalizedRandomEvent(currentData.option_1)));
 
         yield return op_0;
         yield return op_1;
@@ -144,12 +144,12 @@ public class UI_RandomEvent : MonoBehaviour
         {
             if (randomValue < currentData.percentage_0)
             {
-                resultDescription = currentData.description_01;
+                resultDescription = LocaleDataManager.GetLocalizedRandomEvent(currentData.description_01);
                 results = currentData.parsed_result_01;
             }
             else
             {
-                resultDescription = currentData.description_02;
+                resultDescription = LocaleDataManager.GetLocalizedRandomEvent(currentData.description_02);
                 results = currentData.parsed_result_02;
             }
         }
@@ -157,12 +157,12 @@ public class UI_RandomEvent : MonoBehaviour
         {
             if (randomValue < currentData.percentage_1)
             {
-                resultDescription = currentData.description_11;
+                resultDescription = LocaleDataManager.GetLocalizedRandomEvent(currentData.description_11);
                 results = currentData.parsed_result_11;
             }
             else
             {
-                resultDescription = currentData.description_12;
+                resultDescription = LocaleDataManager.GetLocalizedRandomEvent(currentData.description_12);
                 results = currentData.parsed_result_12;
             }
         }

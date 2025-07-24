@@ -15,15 +15,19 @@ public class RandomEventData
 
     public string option_0;
     public float percentage_0;
+    // 선택지를 선택했을때 출력되는 설명
     public string description_01;
     public string description_02;
+    // 선택지별 결과(적용될 효과)값 index
     public string result_01;
     public string result_02;
 
     public string option_1;
     public float percentage_1;
+    // 선택지를 선택했을때 출력되는 설명
     public string description_11;
     public string description_12;
+    // 선택지별 결과(적용될 효과)값 index
     public string result_11;
     public string result_12;
 

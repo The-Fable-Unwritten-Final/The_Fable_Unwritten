@@ -9,6 +9,7 @@ using System.Text;
 public static class LocaleDataManager
 {
     private static Dictionary<string, string[]> _cardTable = new Dictionary<string, string[]>();
+    private static Dictionary<string, string[]> _randomEventTable = new Dictionary<string, string[]>();
     private static Dictionary<string, string[]> _dialogueTable = new Dictionary<string, string[]>();
     private static Dictionary<string, string[]> _uiTable = new Dictionary<string, string[]>();
 
@@ -25,6 +26,11 @@ public static class LocaleDataManager
         _cardTable = LoadCsvToDictionary(csv);
     }
 
+    public static void LoadRandomEventCsv()
+    {
+        TextAsset csv = Resources.Load<TextAsset>("ExternalFiles/RandomEventLocaleData");
+        _randomEventTable = LoadCsvToDictionary(csv);
+    }
     public static void LoadDialogueCsv(TextAsset csv)
     {
         _dialogueTable = LoadCsvToDictionary(csv);
@@ -65,6 +71,11 @@ public static class LocaleDataManager
         return GetLocalizedStringFromDict(_cardTable, key);
     }
 
+    public static string GetLocalizedRandomEvent(string key)
+    {
+        return GetLocalizedStringFromDict(_randomEventTable, key);
+    }
+
     public static string GetLocalizedDialogue(string key)
     {
         return GetLocalizedStringFromDict(_dialogueTable, key);
@@ -77,15 +88,14 @@ public static class LocaleDataManager
 
     private static string GetLocalizedStringFromDict(Dictionary<string, string[]> dict, string key)
     {
+        // 예외 처리
         if (!dict.TryGetValue(key, out var row))
             return $"#{key}";
 
-        var langCode = CurrentLanguageCode;
+        // 로케일 값 확인 + 기본값 index = 1 (영어)
+        string langCode = CurrentLanguageCode;
         if (!_langColumnMap.TryGetValue(langCode, out int colIndex))
             colIndex = 1;
-
-        if (colIndex >= row.Length)
-            return $"#{key}";
 
         return row[colIndex];
     }
