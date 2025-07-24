@@ -88,6 +88,7 @@ public class DataManager : MonoSingleton<DataManager>
         // 로케일 데이터 매니저 csv => Dictionary 로딩
         // 스태틱 클래스라서 Execution Order 지정 불가능하기에 이곳에서 호출.
         LocaleDataManager.LoadCardCsv();
+        LocaleDataManager.LoadRandomEventCsv();
         //LocaleDataManager.LoadDialogueCsv();
         //LocaleDataManager.LoadUICsv();
     }

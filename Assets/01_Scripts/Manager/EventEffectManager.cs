@@ -9,7 +9,6 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
     [Header("CSV Data path")]
     [SerializeField] string csvPath = "ExternalFiles/EventEffects.csv"; // CSV 파일 경로
 
-    //[Header("Event effect Lists")]
     List<EventEffects> eventEffectList;// 이벤트 효과 리스트.
     public Dictionary<int, EventEffects> eventEffectDict;// 데이터 외부 접근용 딕셔너리.
 
@@ -193,7 +192,8 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
                 break;
         }
 
-        ProgressDataManager.Instance.UpdateEventEffectsData(untillNextCombat,untillNextStage,untillEndAdventure); // 현재 적용중인 효과 리스트들 저장 및 관리.
+        // 현재 적용중인 효과 리스트들 저장 및 관리.
+        ProgressDataManager.Instance.UpdateEventEffectsData(untillNextCombat,untillNextStage,untillEndAdventure);
     }
 
     public void LoadEventEffectsData(List<EventEffects> com, List<EventEffects> stage, List<EventEffects> adv)
