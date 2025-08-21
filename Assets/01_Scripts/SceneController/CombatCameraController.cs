@@ -25,7 +25,7 @@ public class CombatCameraController : MonoBehaviour
     public List<Enemy> enemies;
     [SerializeField] Material combatBackgroundMaterial; // 전투 배경 머티리얼
 
-    Coroutine combatCameraCoroutine;
+    public Coroutine combatCameraCoroutine; // 특수 모션 카메라 줌인 효과시
 
 
     private void Awake()

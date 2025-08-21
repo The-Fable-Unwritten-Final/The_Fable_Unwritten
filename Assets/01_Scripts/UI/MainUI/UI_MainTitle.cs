@@ -52,7 +52,7 @@ public class UI_MainTitle : MonoBehaviour
         if (ProgressDataManager.Instance.IsSecondGame && ProgressDataManager.Instance.ProgressTutorial.Contains(6))
         {
             UIManager.Instance.PopupUnlockUI();          
-            GameManager.Instance.tutorialController.ShowTutorial(8);
+            GameManager.Instance.tutorialController.ShowTutorial(0);
 
 #if UNITY_EDITOR
             ProgressDataManager.Instance.IsSecondGame = false;

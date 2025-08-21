@@ -1,0 +1,135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Tutorial Table_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 67d5df450e6eda644ab2e016cd7ae864, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 45997371392
+    m_Localized: 'Each card contains information such as cost, effect, and type.
+
+      The
+      card''s type is shown at the top right, and each character has three different
+      types.
+
+      You can use a card by dragging it onto a target.
+
+      You can
+      end your turn at any time by pressing the Turn End button.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 168156475392
+    m_Localized: '
+
+
+      Mana and cards are refilled at the start of each turn.
+
+      Click
+      the icon at the top left to check your character''s deck.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 186011627520
+    m_Localized: 'You can view unlocked cards through "Dorothy''s Book" at the top
+      right.
+
+      You can also adjust the volume or return to the title screen
+      from the settings menu during an adventure.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 200611999744
+    m_Localized: "\nEach character has two \"stances\".\nYou can freely switch stances
+      each turn as long as you haven\u2019t used that character's cards yet.\nYou
+      can check each stance's effects by hovering over the button."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4084201959424
+    m_Localized: '
+
+      : Attack and Defense
+
+      : In Guard state,  immune to
+      damage
+
+      : In Stunned state, cannot act'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3748351455232
+    m_Localized: 'Cards have various effects.
+
+      Effects currently applied to
+      a character are shown below their health bar.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 220631412736
+    m_Localized: 'You can view usable cards through "Dorothy''s Book" at the top
+      right.
+
+      You can also adjust the volume and select the resolution from
+      the settings menu.
+
+      You can return to the title screen during an adventure
+      as well.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 232937500672
+    m_Localized: 'You can view usable cards through "Dorothy''s Book" at the top
+      right.
+
+      You can also adjust the volume and select the resolution from
+      the settings menu.
+
+      You can return to the title screen during an adventure
+      as well.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 243196768256
+    m_Localized: 'You can unlock new cards each time you start a new adventure.
+
+      Use
+      the loot you earned in battle to unlock cards of the type you want.
+
+      Buttons
+      for card types that can''t be unlocked will appear blacked out.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 276424044544
+    m_Localized: "Congratulations! You have cleared all currently implemented stages.\nIf
+      you start the adventure again, you can play with new cards.\nThank you for
+      playing \u2014 we hope you had a great time."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 592599068672
+    m_Localized: '<sprite=1>   : Flame          <sprite=2>   : Frost           <sprite=0>  
+      : Nature
+
+      <sprite=4>   : Prayer         <sprite=5>   : Holy Power    
+      <sprite=3>   : Baptism
+
+      <sprite=7>   : Slash          <sprite=8>   :
+      Strike         <sprite=6>   : Guard'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 891279650816
+    m_Localized: 'Each type of card has a corresponding type that enhances its effect
+      when linked.
+
+      Cards that are eligible for combo effects are marked with
+      a special border effect.'
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []
