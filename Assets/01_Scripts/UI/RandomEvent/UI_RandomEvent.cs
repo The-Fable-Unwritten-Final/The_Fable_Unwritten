@@ -2,12 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.VFX;
 
 public class UI_RandomEvent : MonoBehaviour
 {
@@ -16,10 +13,10 @@ public class UI_RandomEvent : MonoBehaviour
     [SerializeField] Image illustration_Img;
     [SerializeField] TextMeshProUGUI titleTxt; 
     [SerializeField] TextMeshProUGUI descriptionTxt;
-    [SerializeField] Button optionButton_0;
-    [SerializeField] Button optionButton_1;
-    [SerializeField] TextMeshProUGUI optionTxt_0;
-    [SerializeField] TextMeshProUGUI optionTxt_1;
+    [SerializeField] Button optionButton_a;
+    [SerializeField] Button optionButton_b;
+    [SerializeField] TextMeshProUGUI optionTxt_a;
+    [SerializeField] TextMeshProUGUI optionTxt_b;
 
     [Header("Value")]
     [SerializeField] float typingSpeed;
@@ -74,16 +71,16 @@ public class UI_RandomEvent : MonoBehaviour
 
     private void InitUI(RandomEventData data)
     {
-        illustration_Img.sprite = currentData.illustrationSprite;
+        illustration_Img.sprite = data.illustrationSprite;
         currentData = data;
 
         titleTxt.text = LocaleDataManager.GetLocalizedRandomEvent(data.title);
 
-        optionButton_0.interactable = false;
-        optionButton_1.interactable = false;
+        optionButton_a.interactable = false;
+        optionButton_b.interactable = false;
 
-        optionTxt_0.text = "";
-        optionTxt_1.text = "";
+        optionTxt_a.text = "";
+        optionTxt_b.text = "";
 
         StartCoroutine(StartTyping());
     }
@@ -93,14 +90,14 @@ public class UI_RandomEvent : MonoBehaviour
     {
         yield return StartCoroutine(TypeText(descriptionTxt, LocaleDataManager.GetLocalizedRandomEvent(currentData.description)));
         yield return new WaitForSeconds(0.5f);
-        Coroutine op_0 = StartCoroutine(TypeText(optionTxt_0, LocaleDataManager.GetLocalizedRandomEvent(currentData.option_0)));
-        Coroutine op_1 = StartCoroutine(TypeText(optionTxt_1, LocaleDataManager.GetLocalizedRandomEvent(currentData.option_1)));
+        Coroutine op_0 = StartCoroutine(TypeText(optionTxt_a, LocaleDataManager.GetLocalizedRandomEvent(currentData.option_a)));
+        Coroutine op_1 = StartCoroutine(TypeText(optionTxt_b, LocaleDataManager.GetLocalizedRandomEvent(currentData.option_b)));
 
         yield return op_0;
         yield return op_1;
 
-        optionButton_0.interactable = true;
-        optionButton_1.interactable = true;
+        optionButton_a.interactable = true;
+        optionButton_b.interactable = true;
     }
 
 
@@ -117,21 +114,25 @@ public class UI_RandomEvent : MonoBehaviour
     public void SelectOption(int index)
     {
         if (isSelectOption == true) return;
-        
-        optionButton_0.gameObject.SetActive(false);
-        optionButton_1.interactable = false;
 
-        StartCoroutine(ProessResult(index));
+        // 반복 이벤트가 아닐 경우 연속 선택지 종료
+        if (currentData.repeatIndex == 0)
+        {
+            optionButton_a.gameObject.SetActive(false);
+            optionButton_b.interactable = false;
+        }
+
+        StartCoroutine(ProcessResult(index));
 
         // 애널리틱스
         GameManager.Instance.analyticsLogger.LogRandomEventInfo(currentData.index, index);
     }
 
-    private IEnumerator ProessResult(int optionIndex)
+    private IEnumerator ProcessResult(int optionIndex)
     {
         descriptionTxt.text = "";
-        optionTxt_0.text = "";
-        optionTxt_1.text = "";
+        optionTxt_a.text = "";
+        optionTxt_b.text = "";
 
 
         yield return new WaitForSeconds(0.5f);
@@ -142,56 +143,83 @@ public class UI_RandomEvent : MonoBehaviour
 
         if (optionIndex == 0)
         {
-            if (randomValue < currentData.percentage_0)
+            if (randomValue < currentData.percentage_a)
             {
-                resultDescription = LocaleDataManager.GetLocalizedRandomEvent(currentData.description_01);
-                results = currentData.parsed_result_01;
+                resultDescription = LocaleDataManager.GetLocalizedRandomEvent(currentData.description_a1);
+                results = currentData.parsed_result_a1;
             }
             else
             {
-                resultDescription = LocaleDataManager.GetLocalizedRandomEvent(currentData.description_02);
-                results = currentData.parsed_result_02;
+                resultDescription = LocaleDataManager.GetLocalizedRandomEvent(currentData.description_a2);
+                results = currentData.parsed_result_a2;
             }
         }
         else if (optionIndex == 1)
         {
-            if (randomValue < currentData.percentage_1)
+            if (randomValue < currentData.percentage_b)
             {
-                resultDescription = LocaleDataManager.GetLocalizedRandomEvent(currentData.description_11);
-                results = currentData.parsed_result_11;
+                resultDescription = LocaleDataManager.GetLocalizedRandomEvent(currentData.description_b1);
+                results = currentData.parsed_result_b1;
             }
             else
             {
-                resultDescription = LocaleDataManager.GetLocalizedRandomEvent(currentData.description_12);
-                results = currentData.parsed_result_12;
+                resultDescription = LocaleDataManager.GetLocalizedRandomEvent(currentData.description_b2);
+                results = currentData.parsed_result_b2;
             }
         }
 
+        // 반복 이벤트 처리 (결과값이 100000 하나만 있을 경우)
+        if (results.Count == 1 && results[0] == 100000)
+        {
+            int repeatIndex = currentData.repeatIndex; // 반복 이벤트 인덱스로 데이터 교체
+            var repeatEventData = DataManager.Instance.allRandomEvents.FirstOrDefault(e => e.index == repeatIndex);
+            if (repeatEventData != null)
+            {
+                ProgressDataManager.Instance.SavedRandomEvent = repeatEventData.index;
+                InitUI(repeatEventData);
+                yield break;
+            }
+            else
+            {
+                Debug.LogError($"반복 이벤트 인덱스 {repeatIndex}에 해당하는 이벤트를 찾을 수 없습니다.");
+                ApplyEffectsAndGoToStage();
+                yield break;
+            }
+        }
+        else
+        {
+            optionButton_a.gameObject.SetActive(false);
+            optionButton_b.interactable = false;
+        }
         string resultText = string.Join("\n", results.Select(i => EventEffectManager.Instance.GetEventEffectText(i)));
 
         yield return StartCoroutine(TypeText(descriptionTxt, resultDescription));
         yield return new WaitForSeconds(0.5f);
 
-        yield return StartCoroutine(TypeText(optionTxt_1, resultText));
+        yield return StartCoroutine(TypeText(optionTxt_b, resultText));
 
-        optionButton_1.onClick.RemoveAllListeners();
-        optionButton_1.onClick.AddListener(ApplyEffectsAndGoToStage);
-        optionButton_1.interactable = true;
+        optionButton_b.onClick.RemoveAllListeners();
+        optionButton_b.onClick.AddListener(ApplyEffectsAndGoToStage);
+        optionButton_b.interactable = true;
         isSelectOption = true;
     }
 
+    /// <summary>
+    /// 랜덤이벤트로 얻게된 효과 적용
+    /// 
     private void ApplyEffectsAndGoToStage()
     {
         ProgressDataManager.Instance.SavedRandomEvent = -1;
 
         foreach (int resultIndex in results)
         {
+            //
             EventEffectManager.Instance.AddEventEffect(resultIndex);
 
             if (resultIndex != 14)
             {
                 UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
             }
-        }  
+        }
     }
 }
