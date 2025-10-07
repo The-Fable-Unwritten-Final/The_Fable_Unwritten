@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
 
 public class CardEventEffects : EventEffects
@@ -42,17 +43,24 @@ public class CardEventEffects : EventEffects
         }
         if(newCardIndex != 0)// 카드 추가.
         {
-            if(sophia)
+            // sophia 1000번대, kyla 2000번대, leon 3000번대
+            if (1000 <= newCardIndex && newCardIndex < 2000)
             {
-                ProgressDataManager.Instance.PlayerDatas[1].currentDeckIndexes.Add(newCardIndex);
+                if (DataManager.Instance.CardForShopia.ContainsKey(newCardIndex)) // 유효한 카드 인덱스인지 확인
+                    CardUnlocker.UnlockByEvent(newCardIndex);
+                    //ProgressDataManager.Instance.PlayerDatas[1].currentDeckIndexes.Add(newCardIndex); => 카드의 덱으로 직접 추가 방식이라 수정함.
             }
-            if(kyla)
+            else if (2000 <= newCardIndex && newCardIndex < 3000)
             {
-                ProgressDataManager.Instance.PlayerDatas[0].currentDeckIndexes.Add(newCardIndex);
+                if (DataManager.Instance.CardForKayla.ContainsKey(newCardIndex)) // 유효한 카드 인덱스인지 확인
+                    CardUnlocker.UnlockByEvent(newCardIndex);
+                    //ProgressDataManager.Instance.PlayerDatas[0].currentDeckIndexes.Add(newCardIndex);
             }
-            if(leon)
+            else if (3000 <= newCardIndex && newCardIndex < 4000)
             {
-                ProgressDataManager.Instance.PlayerDatas[2].currentDeckIndexes.Add(newCardIndex);
+                if (DataManager.Instance.CardForLeon.ContainsKey(newCardIndex)) // 유효한 카드 인덱스인지 확인
+                    CardUnlocker.UnlockByEvent(newCardIndex);
+                    //ProgressDataManager.Instance.PlayerDatas[2].currentDeckIndexes.Add(newCardIndex);
             }
         }
     }

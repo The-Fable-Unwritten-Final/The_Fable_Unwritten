@@ -168,14 +168,19 @@ public class UI_RandomEvent : MonoBehaviour
             }
         }
 
-        // 반복 이벤트 처리 (결과값이 100000 하나만 있을 경우)
-        if (results.Count == 1 && results[0] == 100000)
+        // 반복 이벤트 처리 (결과값에 100000가 있을 경우)
+        if (results[0] == 100000)
         {
             int repeatIndex = currentData.repeatIndex; // 반복 이벤트 인덱스로 데이터 교체
             var repeatEventData = DataManager.Instance.allRandomEvents.FirstOrDefault(e => e.index == repeatIndex);
             if (repeatEventData != null)
             {
                 ProgressDataManager.Instance.SavedRandomEvent = repeatEventData.index;
+                foreach (int resultIndex in results)
+                {
+                    if(resultIndex == 100000) continue;
+                    EventEffectManager.Instance.AddEventEffect(resultIndex);// 반복 이벤트 발생 효과 추가 or 적용
+                }
                 InitUI(repeatEventData);
                 yield break;
             }
@@ -191,7 +196,19 @@ public class UI_RandomEvent : MonoBehaviour
             optionButton_a.gameObject.SetActive(false);
             optionButton_b.interactable = false;
         }
-        string resultText = string.Join("\n", results.Select(i => EventEffectManager.Instance.GetEventEffectText(i)));
+        // 적용되는 효과를 텍스트로 나열 및 출력 해주는 효과 (이때 카드 해금은 텍스트 출력하지 않음 => 별도의 팝업 UI로 처리)
+        string resultText = string.Join("\n", results
+            .Where(i => {
+                var effect = EventEffectManager.Instance.eventEffectDict[i];
+                if (effect != null && effect.eventType == 1)
+                {
+                    var cardEffect = effect as CardEventEffects;
+                    if (cardEffect != null && cardEffect.newCardIndex != 0)
+                        return false;
+                }
+                return true;
+            })
+            .Select(i => EventEffectManager.Instance.GetEventEffectText(i)));
 
         yield return StartCoroutine(TypeText(descriptionTxt, resultDescription));
         yield return new WaitForSeconds(0.5f);

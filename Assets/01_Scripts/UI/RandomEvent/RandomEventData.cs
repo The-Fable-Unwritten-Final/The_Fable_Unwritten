@@ -16,18 +16,18 @@ public class RandomEventData
 
     public string option_a;
     public string option_b;
+    // 확률 선택지가 1개의 경우 1 고정.
+    // 선택지가 복수라면, 첫번째 경우의 확률 n/1.0 기준으로 등장 설정.
     public float percentage_a;
+    public float percentage_b;
     // 선택지를 선택했을때 출력되는 설명 (percentage의 확률로 1,2 가 나뉨)
     public string description_a1;
     public string description_a2;
-    // 선택지별 결과(적용될 효과)값 index => 이 값을 토대로 실제 적용될 효과를 하단 버튼에 표시
-    public string result_a1; // 만약 이게 -1 이면 반복 이벤트로 처리
-    public string result_a2;
-    public float percentage_b;
-    // 선택지를 선택했을때 출력되는 설명
     public string description_b1;
     public string description_b2;
-    // 선택지별 결과(적용될 효과)값 index
+    // 선택지별 결과(적용될 효과)값 index => 이 값을 토대로 실제 적용될 효과를 하단 버튼에 표시
+    public string result_a1; // 만약 이게 100000 이면 반복 이벤트로 처리
+    public string result_a2;
     public string result_b1;
     public string result_b2;
 

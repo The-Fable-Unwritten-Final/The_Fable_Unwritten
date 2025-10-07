@@ -24,7 +24,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     List<EventEffects> untillNextStage = new List<EventEffects>(); // 다음 스테이지까지 지속되는 효과 리스트
     List<EventEffects> untillEndAdventure = new List<EventEffects>(); // 모험이 끝날 때까지 지속되는 효과 리스트
 
-    HashSet<int> usedRandomEvnent = new();     // RandomEvent 진행 유무(게임 재시작 및 실패 시 초기화 - ClearUsedEvents())
+    HashSet<int> usedRandomEvent = new();     // RandomEvent 진행 유무(게임 재시작 및 실패 시 초기화 - ClearUsedEvents())
     Dictionary<int, StageTheme> stageThemes = new(); // 2~4 스테이지용 테마
     HashSet<StageTheme> eliteClearThemes = new(); // Theme 별 Elite Clear 리스트
 
@@ -63,13 +63,14 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         DataManager.Instance.InitCardUnlockStatus();
     }
 
+    // 나중에 저장을 세부적으로 쪼개기
     public void SaveProgress()
     {
         ProgressSaveData data = new ProgressSaveData();
 
         data.stageIndex = StageIndex;
         data.minStageIndex = MinStageIndex;
-        data.isNewStage= IsNewStage;
+        data.isNewStage = IsNewStage;
         data.retryFromStart = RetryFromStart;
         data.stageCleared = StageCleared;
         data.isStageScene = IsStageScene;
@@ -87,13 +88,13 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
 
         data.currentTheme = (int)CurrentTheme;
-       
+
         data.untilNextCombatEffects = untillNextCombat.Select(e => e.index).ToList();
         data.untilNextStageEffects = untillNextStage.Select(e => e.index).ToList();
         data.untilEndAdventureEffects = untillEndAdventure.Select(e => e.index).ToList();
 
         data.progressTutorial = ProgressTutorial.ToList();
-        data.usedRandomEventIds = usedRandomEvnent.ToList();
+        data.usedRandomEventIds = usedRandomEvent.ToList();
         data.savedRandomEvent = SavedRandomEvent;
         data.stageThemePairs = stageThemes
             .Select(pair => new StageThemePair { stageIndex = pair.Key, theme = (int)pair.Value })
@@ -169,7 +170,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
             .ToList();
 
         SavedRandomEvent = data.savedRandomEvent;
-        usedRandomEvnent = data.usedRandomEventIds.ToHashSet();
+        usedRandomEvent = data.usedRandomEventIds.ToHashSet();
         ProgressTutorial = data.progressTutorial.ToHashSet();
         eliteClearThemes = data.eliteClearThemes.Select(i => (StageTheme)i).ToHashSet();
 
@@ -224,7 +225,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         untillNextStage.Clear();
         untillEndAdventure.Clear();
 
-        usedRandomEvnent.Clear();
+        usedRandomEvent.Clear();
         stageThemes.Clear();
         eliteClearThemes.Clear();
 
@@ -294,6 +295,8 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         untillNextCombat = com;
         untillNextStage = stage;
         untillEndAdventure = adv;
+
+        SaveProgress();
     }
 
     /// <summary>
@@ -320,7 +323,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     /// </summary>
     public void ClearUsedEvents()
     {
-        usedRandomEvnent.Clear();
+        usedRandomEvent.Clear();
     }
 
     /// <summary>
@@ -371,13 +374,13 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     public RandomEventData GetRandomEvent(StageTheme theme)
     {
         var available = DataManager.Instance.allRandomEvents
-            .Where(x => x.theme == theme && !usedRandomEvnent.Contains(x.index))
+            .Where(x => x.theme == theme && !usedRandomEvent.Contains(x.index))
             .ToList();
 
         if (available.Count == 0) return null;
 
         var selected = available[UnityEngine.Random.Range(0, available.Count)];
-        usedRandomEvnent.Add(selected.index);
+        usedRandomEvent.Add(selected.index);
         return selected;
     }
     public void SaveEnemySetIndex(int index)

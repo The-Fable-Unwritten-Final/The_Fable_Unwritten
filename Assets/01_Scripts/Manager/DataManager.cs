@@ -136,7 +136,9 @@ public class DataManager : MonoSingleton<DataManager>
         {
             cardLookup[card.index] = card;
 
-            ///이부분은 나중에 최적화 위해 이야기 필요할 것 같습니다. 분류가 필수라면 이쪽을 남기는게 좋을 수도 있겠네요.
+            /// 이부분은 나중에 최적화 위해 이야기 필요할 것 같습니다. 분류가 필수라면 이쪽을 남기는게 좋을 수도 있겠네요.
+            /// to 동환님. 이거 카드 도감 때문에 최초 이닛 시에 쪼개서 저장하는게, 도감의 상대적 열람 빈도를 생각했을때 나을것 같았어요.
+
             if (card.characterClass == CharacterClass.Sophia)
             {
                 if(cardForShopia.ContainsKey(card.index))

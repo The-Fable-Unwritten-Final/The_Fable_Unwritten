@@ -59,4 +59,23 @@ public class CardUnlocker : MonoBehaviour
 
         return selected;
     }
+
+    /// <summary>
+    /// 랜덤 이벤트를 통해서 카드 해금 시 호출
+    /// </summary>
+    /// <param name="cardIndex"></param>
+    /// <returns></returns>
+    public static bool UnlockByEvent(int cardIndex)
+    {
+        var allCards = DataManager.Instance.AllCards;
+        var card = allCards.FirstOrDefault(c => c.index == cardIndex);
+        if (card == null || card.isUnlocked)
+            return false;
+
+        card.isUnlocked = true;
+        ProgressDataManager.Instance.unlockedCards.Add(card.index);
+
+        OnCardUnlocked?.Invoke(card); // 해금한 카드 보여주는 팝업 UI 출력
+        return true;
+    }
 }
