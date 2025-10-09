@@ -6,15 +6,13 @@ using static StageDataSaveHelper;
 
 
 
-public class ProgressDataManager : MonoSingleton<ProgressDataManager>
+public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
 {
     public const int MAX_ITEM_COUNT = 4;       //현재 전리품의 최종 개수
 
     [Header("기본 플레이어 파티 데이터")]
-    [SerializeField] private PlayerPartySO defaultPlayerParty;
+    [SerializeField]private PlayerPartySO defaultPlayerParty;
     [SerializeField]public List<PlayerData> PlayerDatas { get; private set; } = new();  //게임에 적용할 플레이어 데이터들.
-
-
     public GameStartType GameStartType { get; set; } = new();           //게임이 새로 시작한 게임인지 계속 진행되는 게임인지를 판별
 
     public HashSet<int> unlockedCards = new();          //unlock된 카드들의 index가 들어있는 hashset
@@ -115,6 +113,10 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
             .Select(p => p.IDNum)
             .ToList();
 
+        data.unlockedIdealIds = _unlockedIdealIds.ToList();
+        data.idealCounters = _idealCounter.Select(kv => new ProgressSaveData.IdealCounterEntry { key =kv.Key, value = kv.Value}).ToList();
+        
+
         string json = JsonUtility.ToJson(data, true);
         PlayerPrefs.SetString("ProgressSaveData", json);
         PlayerPrefs.Save();
@@ -172,6 +174,9 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         usedRandomEvnent = data.usedRandomEventIds.ToHashSet();
         ProgressTutorial = data.progressTutorial.ToHashSet();
         eliteClearThemes = data.eliteClearThemes.Select(i => (StageTheme)i).ToHashSet();
+
+        _unlockedIdealIds = data.unlockedIdealIds?.ToHashSet() ?? new HashSet<int>();
+        _idealCounter = (data.idealCounters ?? new List<ProgressSaveData.IdealCounterEntry>()).ToDictionary(e => e.key, e => e.value);
 
 
         EventEffectManager.Instance.LoadEventEffectsData(untillNextCombat, untillNextStage, untillEndAdventure);
@@ -442,6 +447,11 @@ public class ProgressSaveData
     public List<int> unlockedCharacterIDs = new();
 
     public Vector2Int[] resolutions;
+
+    [System.Serializable]public class IdealCounterEntry { public string key; public int value; }
+
+    public List<int> unlockedIdealIds = new();
+    public List<IdealCounterEntry> idealCounters = new();
 }
 
 //
@@ -550,7 +560,6 @@ public static class StageDataSaveHelper
                 column.Add(node);
                 nodeMap[node.id] = node;
             }
-
             stage.columns.Add(column);
         }
 

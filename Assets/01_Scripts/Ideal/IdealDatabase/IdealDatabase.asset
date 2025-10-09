@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 466c2331e298f1f439dad7e35c15b02f, type: 3}
+  m_Name: IdealDatabase
+  m_EditorClassIdentifier: 
+  entries:
+  - owner: 0
+    idealA: {fileID: 11400000, guid: 9900c7fa091b6c549a41e2c667ddf887, type: 2}
+    idealB: {fileID: 11400000, guid: 56c88c191ff2b0747aa6518077724be2, type: 2}
+  - owner: 1
+    idealA: {fileID: 11400000, guid: d71a07fe448e83545b85587310ebf3bc, type: 2}
+    idealB: {fileID: 11400000, guid: dee1fa85d3bd0e04eac09b42dd8ae144, type: 2}
+  - owner: 2
+    idealA: {fileID: 11400000, guid: 10a97fe804e2e2641b39aa72b8c65ddb, type: 2}
+    idealB: {fileID: 11400000, guid: f8b52405641aaaa45915f5450a4f0c16, type: 2}

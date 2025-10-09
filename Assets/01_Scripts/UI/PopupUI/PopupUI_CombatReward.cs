@@ -153,11 +153,11 @@ public class PopupUI_CombatReward : BasePopupUI
 
             var itemGo = Instantiate(itemPrefab, rewardContentParent);
             var rewardItem = itemGo.GetComponent<RewardItemPrefab>();
-            rewardItem.SetItem(icon, name, count);
+            rewardItem.SetItem(icon, count);
         }
 
         var expGo = Instantiate(itemPrefab, rewardContentParent);
         var rewardExp = expGo.GetComponent<RewardItemPrefab>();
-        rewardExp.SetItem(expSprite, "경험치", battleFlow.totalExp);
+        rewardExp.SetItem(expSprite, battleFlow.totalExp);
     }
 }

@@ -92,6 +92,7 @@ public class BattleFlowController : MonoBehaviour
         {
             characterMap[player.ChClass] = player;
             decksByCharacter[player.ChClass] = player.Deck;
+            if (player is PlayerController pc) pc.ResetIdealForStage();
         }
 
         //카드 드로우 사운드 출력
@@ -106,6 +107,9 @@ public class BattleFlowController : MonoBehaviour
         isBattleEnded = false;
         currentMana = startMana;
         currentTurn = TurnState.PlayerTurn;
+
+        BattleLogManager.Instance.ResetForBattle();
+        BattleLogManager.Instance.ResetBattleLog();
 
         UpdateManaUI();
 
@@ -200,8 +204,6 @@ public class BattleFlowController : MonoBehaviour
         caster.CameraActionPlay(); // 시전 캐릭터 카메라 줌 인 아웃 액션 코루틴
 
         caster.Deck.Discard(card); // 핸드에서 사용 덱으로
-
-        
 
         UpdateManaUI();
 
@@ -339,6 +341,7 @@ public class BattleFlowController : MonoBehaviour
             isBattleEnded = true;
             ClearAllDeckEnhanced();
             ClearAllPlayerCardDiscounts();
+            IdealProgressCheck.Instance.ProcessBattleEnd();
             //Debug.Log("▶ 전투 패배");
             isWin = -1;
 
@@ -347,14 +350,13 @@ public class BattleFlowController : MonoBehaviour
             
             StopAllCoroutines();
             GameManager.Instance.turnController.ToGameEnd();
-            BattleLogManager.Instance.ResetGameLog();
         }
         else if (allEnemiesDead)
         {
             isBattleEnded = true;
             ClearAllDeckEnhanced();
             ClearAllPlayerCardDiscounts();
-            BattleLogManager.Instance.ResetBattleLog();
+            IdealProgressCheck.Instance.ProcessBattleEnd();
             //Debug.Log("▶ 전투 승리");
             isWin = 1;
             foreach(var enemy in enemyParty)
@@ -457,7 +459,8 @@ public class BattleFlowController : MonoBehaviour
             {
                 BattleLogManager.Instance.card = card;
                 UseCard(card, casterController, targets);
-                BattleLogManager.Instance.RegisterCardUse(casterController, card);
+                BattleLogManager.Instance.RegisterCardUse(casterController, card);  //카드 사용 저장
+
                 RefreshAllDeckEnhanced();
             }
         }

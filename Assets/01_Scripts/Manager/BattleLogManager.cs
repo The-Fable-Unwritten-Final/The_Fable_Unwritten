@@ -5,10 +5,9 @@ using UnityEngine;
 
 public class BattleLogManager : MonoSingleton<BattleLogManager>
 {
-
     public static readonly Dictionary<CardType, List<CardType>> comboTable = new()   //연계 Dictionary
     {
-        { CardType.Ice,      new List<CardType>{CardType.Strike } }, // 빙결 → 타격
+        { CardType.Ice,      new List < CardType > { CardType.Strike } }, // 빙결 → 타격
         { CardType.Nature,   new List < CardType > { CardType.Holy } },  // 자연 → 성력
         { CardType.Buff,     new List < CardType > { CardType.Electric } }, // 버프 → 전격
         { CardType.Heal,     new List < CardType > { CardType.Defense } },   // 힐 → 방어
@@ -53,9 +52,9 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
     /// <param name="card"></param>
     public void RegisterDrawnCard(CardModel card)
     {
-        if (card != null)
-            LastDrawnCard = card;
+        if (card != null) LastDrawnCard = card;
     }
+
     /// <summary>
     /// 사용 한 카드를 위 리스트에 저장
     /// </summary>
@@ -64,15 +63,12 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
     public void RegisterCardUse(IStatusReceiver user, CardModel card)
     {
         if (card == null) return;
-
         var log = new CardUseLog(card.index, user.ChClass, card.manaCost, card.type);
         UsedCardsForGame.AddLast(log);
         UsedCardsForStage.AddLast(log);
         UsedCardsForBattle.AddLast(log);
         UsedCardsForCurrent.AddLast(log);
     }
-
-
 
     /// <summary>
     /// 턴 종료시 current리스트를 previous 리스트로 이동
@@ -81,9 +77,7 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
     {
         UsedCardsForPrevious.Clear();
         foreach (var log in UsedCardsForCurrent)
-        {
             UsedCardsForPrevious.AddLast(log);
-        }
         UsedCardsForCurrent.Clear();
     }
 
@@ -95,10 +89,7 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
     public int GetLastCardUsed(IStatusReceiver user)
     {
         foreach (var log in UsedCardsForBattle.Reverse())
-        {
-            if (log.user == user.ChClass)
-                return log.cardID;
-        }
+            if (log.user == user.ChClass) return log.cardID;
         return -1;
     }
     
@@ -169,11 +160,43 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
     public bool isEnhanced(CardModel card)
     {
         var lastType = GetPreviousCardType();
-
         if (lastType.HasValue && comboTable.TryGetValue(lastType.Value, out var comboList))
             return comboList.Contains(card.type);
-
         return false;
     }
+
+    // ── 회차 범위 raw ──
+    public float KaylaDamage = 0;
+    // ── 전투 범위 raw ──
+    public int KaylaKills = 0;
+    public int LeonDebuffs = 0;
+    public int GuardTriggers = 0;
+
+    // 리셋
+    public void ResetForRun()
+    {
+        KaylaDamage = 0f;
+        ResetForBattle();
+    }
+
+    public void ResetForBattle()
+    {
+        KaylaKills = 0;
+        LeonDebuffs = 0;
+        GuardTriggers = 0;
+
+        ResetBattleLog(); // (너의 기존 턴/배틀 로그 초기화)
+    }
+
+    // 리포트(원자료 카운터 갱신)
+    public void ReportDamageTaken(IStatusReceiver target, float applied)
+    {
+        if (target is PlayerController pc && pc.ChClass == CharacterClass.Kayla)
+            KaylaDamage += Mathf.Max(0f, applied);
+    }
+
+    public void ReportKillByKayla() => KaylaKills++;
+    public void ReportDebuffAppliedByLeon() => LeonDebuffs++;
+    public void ReportGuardTriggered() => GuardTriggers++;
 }
 

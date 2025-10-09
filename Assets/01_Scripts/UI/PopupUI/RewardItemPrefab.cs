@@ -9,9 +9,9 @@ public class RewardItemPrefab : MonoBehaviour
     [SerializeField] private Image itemIcon;
     [SerializeField] private TextMeshProUGUI itemText;
 
-    public void SetItem(Sprite icon, string name, int count)
+    public void SetItem(Sprite icon, int count)
     {
         itemIcon.sprite = icon;
-        itemText.text = $"{name} x{count}";
+        itemText.text = $" x{count}";
     }
 }

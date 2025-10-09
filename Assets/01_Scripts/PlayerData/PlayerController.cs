@@ -12,6 +12,13 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public bool hasBlock = false;           //방어막 획득 여부
     private bool isTargetable;              //타겟 가능 여부
 
+    // 스테이지 한 번만 이상실현 사용
+    public bool IsIdealUsed { get; private set; }
+
+    // 스테이지 시작 시점(BattleFlowController.StartBattle 등)에서 호출
+    public void ResetIdealForStage() => IsIdealUsed = false;
+    public void MarkIdealThisStage() => IsIdealUsed = true;
+
     public bool IsTargetable
     {
         get => isTargetable;
