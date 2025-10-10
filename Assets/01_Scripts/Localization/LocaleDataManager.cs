@@ -166,13 +166,16 @@ public static class LocaleDataManager
     }
     private static string TrimQuotes(string input)
     {
+        if (string.IsNullOrEmpty(input))
+            return input;
+
         if (input.Length >= 2 && input.StartsWith("\"") && input.EndsWith("\""))
         {
             // 양끝 큰따옴표 제거 + 내부 "" → "
-            input.Substring(1, input.Length - 2).Replace("\"\"", "\"");
+            input = input.Substring(1, input.Length - 2).Replace("\"\"", "\"");
         }
 
-        // \n을 실제 줄바꿈 처리가 가능하도록 \\n으로 변환.
+        // \n을 실제 줄바꿈 처리가 가능하도록 \\\n+n으로 변환.
         input = input.Replace("\\n", "\n");
         return input;
     }
