@@ -26,6 +26,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     List<EventEffects> untillEndAdventure = new List<EventEffects>(); // 모험이 끝날 때까지 지속되는 효과 리스트
 
     HashSet<int> usedRandomEvent = new();     // RandomEvent 진행 유무(게임 재시작 및 실패 시 초기화 - ClearUsedEvents())
+    HashSet<int> TriggeredRandomEvent = new(); // 인과 형식의 랜덤 이벤트가 활성화 된 경우 저장.
     Dictionary<int, StageTheme> stageThemes = new(); // 2~4 스테이지용 테마
     HashSet<StageTheme> eliteClearThemes = new(); // Theme 별 Elite Clear 리스트
 
@@ -96,6 +97,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
         data.progressTutorial = ProgressTutorial.ToList();
         data.usedRandomEventIds = usedRandomEvent.ToList();
+        data.chainedTriggeredEvents = TriggeredRandomEvent.ToList();
         data.savedRandomEvent = SavedRandomEvent;
         data.stageThemePairs = stageThemes
             .Select(pair => new StageThemePair { stageIndex = pair.Key, theme = (int)pair.Value })
@@ -173,6 +175,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
         SavedRandomEvent = data.savedRandomEvent;
         usedRandomEvent = data.usedRandomEventIds.ToHashSet();
+        TriggeredRandomEvent = data.chainedTriggeredEvents.ToHashSet();
         ProgressTutorial = data.progressTutorial.ToHashSet();
         eliteClearThemes = data.eliteClearThemes.Select(i => (StageTheme)i).ToHashSet();
 
@@ -228,6 +231,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         untillEndAdventure.Clear();
 
         usedRandomEvent.Clear();
+        TriggeredRandomEvent.Clear();
         stageThemes.Clear();
         eliteClearThemes.Clear();
 
@@ -394,6 +398,19 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     {
         PlayerManager.Instance.RegisterAndSetupPlayers(PlayerDatas, allCards);
     }
+    /// <summary>
+    /// 인과형 랜덤 이벤트의 활성화 여부
+    /// </summary>
+    public bool IsChainEventTriggered(int eventIndex)
+    {
+        return TriggeredRandomEvent.Contains(eventIndex);
+    }
+    public void SetChainEventTriggered(int eventIndex)
+    {
+        // 유효한 이벤트 인덱스일 경우 플레그 저장
+        if(DataManager.Instance.allRandomEvents.Any(e => e.index == eventIndex))
+            TriggeredRandomEvent.Add(eventIndex);
+    }
 
     public void LoadResolution()
     {
@@ -463,6 +480,7 @@ public class ProgressSaveData
 
     public int savedRandomEvent;
     public List<int> usedRandomEventIds = new();
+    public List<int> chainedTriggeredEvents = new();
     public List<StageThemePair> stageThemePairs = new();
     public List<int> eliteClearThemes = new();
 

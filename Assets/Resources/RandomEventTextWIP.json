@@ -101,7 +101,7 @@
         "percentage_b": 1,
         "description_b1": "Event_ResultB1_10005",
         "description_b2": "Event_ResultB2_10005",
-        "result_b1": "29",
+        "result_b1": "29&52",
         "result_b2": ""
     },
     {
@@ -128,7 +128,7 @@
     {
         "note" : "투명한 거위 - 연속 이벤트 : 북풍과 태양",
         "index": 20001,
-        "repeatIndex": 0,
+        "repeatIndex": 1,
         "theme": 1,
         "title": "Event_Title_20001",
         "illustration": "illust_20001",
@@ -143,7 +143,7 @@
         "percentage_b": 1,
         "description_b1": "Event_ResultB1_20001",
         "description_b2": "Event_ResultB2_20001",
-        "result_b1": "31",
+        "result_b1": "230001",
         "result_b2": ""
     },
     {
@@ -185,7 +185,7 @@
         "percentage_b": 1,
         "description_b1": "Event_ResultB1_20003",
         "description_b2": "Event_ResultB2_20002",
-        "result_b1": "30",
+        "result_b1": "30&53",
         "result_b2": ""
     },
     {
@@ -273,6 +273,7 @@
         "result_b2": ""
     },
     {
+        "chain값이 0이 아니면 인과 이벤트의 선행 이벤트이며, 이와 연결된 이벤트를 표시하는것" : 1,
         "persentage의 값은 선택지가 1개의 경우 1, 아니라면 첫번째 경우의 확률 n/1.0 기준으로 등장 설정": 1,
         "다 끝나고 랜덤 이벤트 중복 체크 부분의 theme을 {(theme이 0 || theme이 현재 theme)&&!usedRandomEvnent.Contains(x.index)} 의 조건으로 변경, 괄호 주의" : ".Where(x => x.theme == theme && !usedRandomEvnent.Contains(x.index))",
         "최초 1회 카드 해금의 경우, 텍스트로 보여주는것이 아니라 획득한 카드를 알려주는 팝업 UI로 표시하기 (텍스트 박스의 크기 고려)" : 1

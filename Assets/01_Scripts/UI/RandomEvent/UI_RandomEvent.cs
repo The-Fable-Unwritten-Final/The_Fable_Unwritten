@@ -72,6 +72,13 @@ public class UI_RandomEvent : MonoBehaviour
     private void InitUI(RandomEventData data)
     {
         illustration_Img.sprite = data.illustrationSprite;
+        // 연계 이벤트 플레그 확인
+        if (ProgressDataManager.Instance.IsChainEventTriggered(data.index))
+        {
+            // 인과 이벤트가 활성화 된 상태면, 2번째 확률 선택지의 결과로 이어지게 설정 
+            data.percentage_a = 0;
+            data.percentage_b = 0;
+        }
         currentData = data;
 
         titleTxt.text = LocaleDataManager.GetLocalizedRandomEvent(data.title);
@@ -190,12 +197,6 @@ public class UI_RandomEvent : MonoBehaviour
                 yield break;
             }
         }
-        // 인과 이벤트 처리 (결과값이 200000 이상의 값인 경우)
-        else if (results[0] >= 200000)
-        {
-            ApplyEffectsAndGoToStage();
-            yield break;
-        }
         else
         {
             optionButton_a.gameObject.SetActive(false);
@@ -234,16 +235,23 @@ public class UI_RandomEvent : MonoBehaviour
     private void ApplyEffectsAndGoToStage()
     {
         ProgressDataManager.Instance.SavedRandomEvent = -1;
-
         foreach (int resultIndex in results)
         {
-            //
-            EventEffectManager.Instance.AddEventEffect(resultIndex);
-
-            if (resultIndex != 14)
+            // 인과 이벤트 플레그 설정 (결과값에 200000 이상의 값이 존재하는 경우)
+            if (resultIndex >= 200000)
             {
-                UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
+                ProgressDataManager.Instance.SetChainEventTriggered(resultIndex - 200000);
+                continue;
             }
+
+
+            // 효과 적용
+            EventEffectManager.Instance.AddEventEffect(resultIndex);
+        }
+        
+        if (!results.Contains(14)) // 14는 전투 입장
+        {
+            UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
         }
     }
 }
