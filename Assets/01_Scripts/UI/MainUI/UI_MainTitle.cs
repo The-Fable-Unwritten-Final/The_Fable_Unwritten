@@ -118,7 +118,7 @@ public class UI_MainTitle : MonoBehaviour
     public void OnClickExit()
     {
         // 저장하고 나가기
-        ProgressDataManager.Instance.SaveProgress();
+        ProgressDataManager.Instance.SaveProgress(true);
         Application.Quit();
     }
 

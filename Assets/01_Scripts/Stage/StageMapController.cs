@@ -42,7 +42,7 @@ public class StageMapController : MonoBehaviour
         int stageIndex = pd.StageIndex;
         backGround.sprite = DataManager.Instance.GetBackground(stageIndex);
 
-        pd.SaveProgress();
+        pd.SaveProgress(true);
     }
 
     // 저장된 상태가 있다면 복원 시도
@@ -110,7 +110,7 @@ public class StageMapController : MonoBehaviour
 
         // 노드 클릭 시 저장
         pdm.IsStageScene = false;
-        pdm.SaveProgress();
+        pdm.SaveProgress(true);
         SoundManager.Instance.PlaySFX(SoundCategory.Button, 1
             );
 

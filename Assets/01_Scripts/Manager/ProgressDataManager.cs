@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using static StageDataSaveHelper;
+using System;
 
 
 
@@ -64,7 +65,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     }
 
     // 나중에 저장을 세부적으로 쪼개기
-    public void SaveProgress()
+    public void SaveProgress(bool safe)
     {
         ProgressSaveData data = new ProgressSaveData();
 
@@ -103,13 +104,14 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
         data.unlockedCardIndexes = unlockedCards.ToList();
         data.itemCounts = itemCounts.ToArray();
-        data.playerSaves = PlayerDatas.Select(p => new PlayerSaveData
-        {
-            id = p.IDNum,
-            maxHP = p.MaxHP,
-            currentHP = p.currentHP,
-            currentDeckIndexes = new List<int>(p.currentDeckIndexes)
-        }).ToList();
+        if(safe)
+            data.playerSaves = PlayerDatas.Select(p => new PlayerSaveData
+            {
+                id = p.IDNum,
+                maxHP = p.MaxHP,
+                currentHP = p.currentHP,
+                currentDeckIndexes = new List<int>(p.currentDeckIndexes)
+            }).ToList();
 
         data.unlockedCharacterIDs = PlayerDatas
             .Where(p => PlayerManager.Instance.activePlayers.ContainsKey(p.CharacterClass)) // 해금된 캐릭터만 저장
@@ -252,7 +254,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
         PlayerPrefs.DeleteKey("ProgressSaveData");
 
-        SaveProgress();
+        SaveProgress(true);
     }
 
     public void InitializePlayerData()      //아예 초기 데이터로 완전 초기화
@@ -296,7 +298,7 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
         untillNextStage = stage;
         untillEndAdventure = adv;
 
-        SaveProgress();
+        SaveProgress(true);
     }
 
     /// <summary>
@@ -408,6 +410,31 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
             // 저장된 해상도 데이터가 없을경우 FHD 적용
             resolutions[0] = new Vector2Int(1920, 1080);
             Screen.SetResolution(resolutions[0].x, resolutions[0].y, false);
+        }
+    }
+    private void OnApplicationQuit()
+    {
+        try
+        {
+            SaveProgress(false);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Save on quit failed: {ex}");
+        }
+    }
+    private void OnApplicationPause(bool pause)
+    {
+        if (pause)
+        {
+            try
+            {
+                SaveProgress(false);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Save on pause failed: {ex}");
+            }
         }
     }
 }

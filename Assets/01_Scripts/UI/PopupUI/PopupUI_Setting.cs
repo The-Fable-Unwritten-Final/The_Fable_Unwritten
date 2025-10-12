@@ -84,7 +84,7 @@ public class PopupUI_Setting : BasePopupUI
         var selectedResolution = resolutions[index];
         Screen.SetResolution(selectedResolution.x, selectedResolution.y, false);   
         ProgressDataManager.Instance.resolutions = new Vector2Int[] { new Vector2Int(selectedResolution.x, selectedResolution.y) };
-        ProgressDataManager.Instance.SaveProgress(); // 해상도 변경 시 저장
+        ProgressDataManager.Instance.SaveProgress(true); // 해상도 변경 시 저장
     }
 
 

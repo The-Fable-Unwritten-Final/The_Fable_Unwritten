@@ -39,7 +39,7 @@ public class UI_RandomEvent : MonoBehaviour
             GetSavedEvent();
         }
 
-        ProgressDataManager.Instance.SaveProgress();
+        ProgressDataManager.Instance.SaveProgress(true);
 
         if (currentData != null)
         {
@@ -178,7 +178,7 @@ public class UI_RandomEvent : MonoBehaviour
                 ProgressDataManager.Instance.SavedRandomEvent = repeatEventData.index;
                 foreach (int resultIndex in results)
                 {
-                    if(resultIndex == 100000) continue;
+                    if (resultIndex == 100000) continue;
                     EventEffectManager.Instance.AddEventEffect(resultIndex);// 반복 이벤트 발생 효과 추가 or 적용
                 }
                 InitUI(repeatEventData);
@@ -187,15 +187,21 @@ public class UI_RandomEvent : MonoBehaviour
             else
             {
                 Debug.LogError($"반복 이벤트 인덱스 {repeatIndex}에 해당하는 이벤트를 찾을 수 없습니다.");
-                ApplyEffectsAndGoToStage();
                 yield break;
             }
+        }
+        // 인과 이벤트 처리 (결과값이 200000 이상의 값인 경우)
+        else if (results[0] >= 200000)
+        {
+            ApplyEffectsAndGoToStage();
+            yield break;
         }
         else
         {
             optionButton_a.gameObject.SetActive(false);
             optionButton_b.interactable = false;
         }
+
         // 적용되는 효과를 텍스트로 나열 및 출력 해주는 효과 (이때 카드 해금은 텍스트 출력하지 않음 => 별도의 팝업 UI로 처리)
         string resultText = string.Join("\n", results
             .Where(i => {
@@ -216,6 +222,7 @@ public class UI_RandomEvent : MonoBehaviour
         yield return StartCoroutine(TypeText(optionTxt_b, resultText));
 
         optionButton_b.onClick.RemoveAllListeners();
+        // 최종적으로 등장하는 ~~ 효과 적용 버튼을 클릭해야지 다음 스테이지 이동 + 효과 적용이 실행된다
         optionButton_b.onClick.AddListener(ApplyEffectsAndGoToStage);
         optionButton_b.interactable = true;
         isSelectOption = true;
