@@ -202,8 +202,4 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
         untillNextStage = stage;
         untillEndAdventure = adv;
     }
-    public string GetEventEffectText(int index)
-    {
-        return eventEffectList[index].text;
-    }
 }

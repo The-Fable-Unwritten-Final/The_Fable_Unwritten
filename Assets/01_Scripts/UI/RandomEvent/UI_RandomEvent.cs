@@ -213,7 +213,7 @@ public class UI_RandomEvent : MonoBehaviour
                 }
                 return true;
             })
-            .Select(i => EventEffectManager.Instance.GetEventEffectText(i)));
+            .Select(i => LocaleDataManager.GetLocalizedRandomEventEffect("Event_"+i)));
 
         yield return StartCoroutine(TypeText(descriptionTxt, resultDescription));
         yield return new WaitForSeconds(0.5f);
