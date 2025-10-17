@@ -1,0 +1,8 @@
+[
+{
+        "chain값이 0이 아니면 인과 이벤트의 선행 이벤트이며, 이와 연결된 이벤트를 표시하는것" : 1,
+        "persentage의 값은 선택지가 1개의 경우 1, 아니라면 첫번째 경우의 확률 n/1.0 기준으로 등장 설정": 1,
+        "다 끝나고 랜덤 이벤트 중복 체크 부분의 theme을 {(theme이 0 || theme이 현재 theme)&&!usedRandomEvnent.Contains(x.index)} 의 조건으로 변경, 괄호 주의" : ".Where(x => x.theme == theme && !usedRandomEvnent.Contains(x.index))",
+        "최초 1회 카드 해금의 경우, 텍스트로 보여주는것이 아니라 획득한 카드를 알려주는 팝업 UI로 표시하기 (텍스트 박스의 크기 고려)" : 1
+    }
+]

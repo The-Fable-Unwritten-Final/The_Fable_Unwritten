@@ -17,7 +17,7 @@
         "percentage_b": 0.5,
         "description_b1": "Event_ResultB1_10001",
         "description_b2": "Event_ResultB2_10001",
-        "result_b1": "18&24&42",
+        "result_b1": "18&24",
         "result_b2": "25&27&43"
     },
     {
@@ -189,6 +189,27 @@
         "result_b2": ""
     },
     {
+        "note" : "마법적 깨달음 - 확률형 이벤트",
+        "index": 20004,
+        "repeatIndex": 0,
+        "theme": 2,
+        "title": "Event_Title_20004",
+        "illustration": "illust_20004",
+        "description": "Event_Desc_20004",
+        "option_a": "Event_OptionA_20004",
+        "percentage_a": 1,
+        "description_a1": "Event_ResultA1_20004",
+        "description_a2": "Event_ResultA2_20004",
+        "result_a1": "22",
+        "result_a2": "",
+        "option_b": "Event_OptionB_20004",
+        "percentage_b": 0.5,
+        "description_b1": "Event_ResultB1_20004",
+        "description_b2": "Event_ResultB2_20004",
+        "result_b1": "55&42",
+        "result_b2": "56&54"
+    },
+    {
         "note" : "북풍과 태양 - 인과 이벤트 : 투명한 거위",
         "index": 30001,
         "repeatIndex": 0,
@@ -228,6 +249,27 @@
         "description_b1": "Event_ResultB1_30002",
         "description_b2": "Event_ResultB2_30002",
         "result_b1": "18&49",
+        "result_b2": ""
+    },
+    {
+        "note" : "빛의 잔재",
+        "index": 30003,
+        "repeatIndex": 0,
+        "theme": 2,
+        "title": "Event_Title_30003",
+        "illustration": "illust_30003",
+        "description": "Event_Desc_30003",
+        "option_a": "Event_OptionA_30003",
+        "percentage_a": 1,
+        "description_a1": "Event_ResultA1_30003",
+        "description_a2": "Event_ResultA2_30003",
+        "result_a1": "57",
+        "result_a2": "",
+        "option_b": "Event_OptionB_30003",
+        "percentage_b": 1,
+        "description_b1": "Event_ResultB1_30003",
+        "description_b2": "Event_ResultB2_30003",
+        "result_b1": "58",
         "result_b2": ""
     },
     {
@@ -271,11 +313,5 @@
         "description_b2": "Event_ResultB2_40002",
         "result_b1": "41",
         "result_b2": ""
-    },
-    {
-        "chain값이 0이 아니면 인과 이벤트의 선행 이벤트이며, 이와 연결된 이벤트를 표시하는것" : 1,
-        "persentage의 값은 선택지가 1개의 경우 1, 아니라면 첫번째 경우의 확률 n/1.0 기준으로 등장 설정": 1,
-        "다 끝나고 랜덤 이벤트 중복 체크 부분의 theme을 {(theme이 0 || theme이 현재 theme)&&!usedRandomEvnent.Contains(x.index)} 의 조건으로 변경, 괄호 주의" : ".Where(x => x.theme == theme && !usedRandomEvnent.Contains(x.index))",
-        "최초 1회 카드 해금의 경우, 텍스트로 보여주는것이 아니라 획득한 카드를 알려주는 팝업 UI로 표시하기 (텍스트 박스의 크기 고려)" : 1
     }
 ]
