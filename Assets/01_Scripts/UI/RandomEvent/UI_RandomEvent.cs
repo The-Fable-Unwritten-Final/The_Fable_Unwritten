@@ -46,9 +46,7 @@ public class UI_RandomEvent : MonoBehaviour
             InitUI(currentData);
         }
 
-        
     }
-
     private void GetSavedEvent()
     {
         int savedIndex = ProgressDataManager.Instance.SavedRandomEvent;

@@ -3296,7 +3296,7 @@ GameObject:
   - component: {fileID: 5945238024492497224}
   - component: {fileID: 5685282761016151446}
   m_Layer: 0
-  m_Name: PopupUI_CardUnlock
+  m_Name: UI_CardUnlock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3514,11 +3514,31 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7826107977442816662}
     m_Modifications:
+    - target: {fileID: 957672744830381690, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1502935234783077470, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2075048580518298006, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2673795626237749687, guid: 45073b34f4e19b543af3c912c1fc5e50,
         type: 3}
       propertyPath: m_Name
       value: CardBase
       objectReference: {fileID: 0}
+    - target: {fileID: 2930510614092307618, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2930510614092307619, guid: 45073b34f4e19b543af3c912c1fc5e50,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -3532,6 +3552,11 @@ PrefabInstance:
     - target: {fileID: 2930510614092307619, guid: 45073b34f4e19b543af3c912c1fc5e50,
         type: 3}
       propertyPath: m_LocalScale.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2930510614169786056, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2930510614169786062, guid: 45073b34f4e19b543af3c912c1fc5e50,
@@ -3549,6 +3574,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2930510614600804493, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2930510614600804494, guid: 45073b34f4e19b543af3c912c1fc5e50,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -3562,6 +3592,11 @@ PrefabInstance:
     - target: {fileID: 2930510614600804494, guid: 45073b34f4e19b543af3c912c1fc5e50,
         type: 3}
       propertyPath: m_LocalScale.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2930510616060891794, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2930510616060891795, guid: 45073b34f4e19b543af3c912c1fc5e50,
@@ -3622,6 +3657,11 @@ PrefabInstance:
     - target: {fileID: 4896160102986490980, guid: 45073b34f4e19b543af3c912c1fc5e50,
         type: 3}
       propertyPath: m_LocalScale.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487665873035777772, guid: 45073b34f4e19b543af3c912c1fc5e50,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6853969371875176275, guid: 45073b34f4e19b543af3c912c1fc5e50,
