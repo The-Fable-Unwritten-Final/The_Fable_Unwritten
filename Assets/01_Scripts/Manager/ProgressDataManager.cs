@@ -380,7 +380,8 @@ public class ProgressDataManager : MonoSingleton<ProgressDataManager>
     public RandomEventData GetRandomEvent(StageTheme theme)
     {
         var available = DataManager.Instance.allRandomEvents
-            .Where(x => x.theme == theme && !usedRandomEvent.Contains(x.index))
+        // 현재 테마와 일치하거나 공통 이벤트중, 등장하지 않은 이벤트 선정
+            .Where(x => (x.theme == theme || x.theme == 0)&& !usedRandomEvent.Contains(x.index))
             .ToList();
 
         if (available.Count == 0) return null;
