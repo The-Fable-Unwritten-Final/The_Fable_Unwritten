@@ -50,7 +50,19 @@ public class CardDisplay : MonoBehaviour
     }
     private void Start()
     {
-        GameManager.Instance.turnController.OnStartPlayerTurn += SetAllCardCanMouseOver;// 플레이어 턴 시작 시 카드 상태를 CanMouseOver로 변경
+        // subscription moved to OnEnable/OnDisable to ensure proper unsubscription and avoid leaks
+    }
+
+    private void OnEnable()
+    {
+        if (GameManager.Instance != null && GameManager.Instance.turnController != null)
+            GameManager.Instance.turnController.OnStartPlayerTurn += SetAllCardCanMouseOver; // 플레이어 턴 시작 시 카드 상태를 CanMouseOver로 변경
+    }
+
+    private void OnDisable()
+    {
+        if (GameManager.Instance != null && GameManager.Instance.turnController != null)
+            GameManager.Instance.turnController.OnStartPlayerTurn -= SetAllCardCanMouseOver;
     }
     private void Update()
     {
