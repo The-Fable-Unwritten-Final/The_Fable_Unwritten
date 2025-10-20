@@ -84,6 +84,8 @@ public class TutorialController : MonoBehaviour
 
         for (int i = 0; i < obj.EmphasizeObject.Length; i++)
         {
+            if (obj.EmphasizeObject[i] == null) continue;
+            
             var clon =Instantiate(obj.EmphasizeObject[i], tutorials[index].transform);
             clon.transform.SetAsFirstSibling();
             if(clon.TryGetComponent(out CardDisplay deck))
