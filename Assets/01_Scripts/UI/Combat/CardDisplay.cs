@@ -32,7 +32,25 @@ public class CardDisplay : MonoBehaviour
     [SerializeField] private EventSystem eventSystem;
     public RectTransform arrowImage; // 드래그 중에 보일 화살표 이미지.
     public UILineRenderer lineRenderer;
-    public bool isOnDrag = false; // 드래그 중인지 여부
+    // 드래그 중인지 여부를 추적하는 프로퍼티.
+    // 이전 상태에서 true였다가 false로 변할 때 OnDragEnd가 호출됩니다.
+    private bool _isOnDrag = false;
+    public bool isOnDrag
+    {
+        get => _isOnDrag;
+        set
+        {
+            // true -> false 전환을 감지하면 종료 콜백 실행
+            if (_isOnDrag && !value)
+            {
+                // 드래그를 놓았을때 화살표 비활성화
+                // CardInHand의 핸들러에서 처리하던 기존 방식에서, 화살표 비활성화 누락 버그 해결 및 화살표 관리 책임을 CardDisplay로 가져옴.
+                arrowImage.gameObject.SetActive(false);
+                lineRenderer.gameObject.SetActive(false);
+            }
+            _isOnDrag = value;
+        }
+    }
     public CardInHand currentCard; // 현재 드래그 중인 카드
 
 
