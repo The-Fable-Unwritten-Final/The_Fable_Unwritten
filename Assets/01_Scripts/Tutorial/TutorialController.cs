@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class TutorialController : MonoBehaviour
 {
@@ -85,6 +86,13 @@ public class TutorialController : MonoBehaviour
         {
             var clon =Instantiate(obj.EmphasizeObject[i], tutorials[index].transform);
             clon.transform.SetAsFirstSibling();
+            if(clon.TryGetComponent(out CardDisplay deck))
+            {
+                for (int j = 0; j < deck.cardsInHand.Count; j++)
+                {
+                    deck.cardsInHand[j].GetComponent<Image>().raycastTarget = false; // 튜토리얼용 카드는 비활성화
+                }
+            }
         }
 
         if (!obj.firstTutorial)
