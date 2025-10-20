@@ -99,6 +99,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if(!cardDisplay.deckInitComplete) return; // 덱 이닛이 완료되지 않았을 경우 상호작용 불가능
         isPointerOver = true; // 마우스 포인터가 카드 위에 있는 상태로 설정
         
         if(GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 상호작용 불가능

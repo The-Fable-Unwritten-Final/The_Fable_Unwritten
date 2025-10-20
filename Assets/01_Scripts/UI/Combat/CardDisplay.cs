@@ -16,6 +16,7 @@ public class CardDisplay : MonoBehaviour
     // cardsInHand를 SerializeField로 할 경우 에디터 상에서만 경고가 발생하나, 이후 카드 시스템이 완성될때는 cardsInHand를 실제 카드 데이터를 가져와서 하기 때문에 SerializeField를 지울 예정.
     public List<CardInHand> cardsInHand = new List<CardInHand>(); // 핸드에 소지하고 있는 카드들.
     [SerializeField] GameObject cardPrefab; // 카드 프리팹
+    public bool deckInitComplete = false; // 최초 덱 스프레드 완료 체크 (펼쳐질 때 상호작용으로 중간에 멈추는 현상 방지용)
     int layerCharacter;
     int layerMonster;
     int layerTrash;
@@ -156,7 +157,7 @@ public class CardDisplay : MonoBehaviour
                         {
                             cardRect.DOAnchorPos(cardsInHand[i].originalPos, 0.1f); // 원래 위치로 보내기
                         }
-                        
+
                         cardsInHand[cash].UpdateStateMoveEnd();
                     })
                     .SetEase(Ease.OutSine);

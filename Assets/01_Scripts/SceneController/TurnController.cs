@@ -135,6 +135,7 @@ public class TurnController : MonoBehaviour
         EventEffectManager.Instance.PlayEndAdventure();
         yield return new WaitForSeconds(0.2f);
 
+        cardDisplay.deckInitComplete = true; // 덱 이닛 완료
         battleFlow.StartBattle();
         SetTurnState(TurnState.StartPlayerTurn); // 게임 시작 후 플레이어 턴으로
     }
