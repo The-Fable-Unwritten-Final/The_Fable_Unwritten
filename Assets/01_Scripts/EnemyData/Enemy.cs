@@ -67,9 +67,26 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         if (enemyData.animationController != null && animator != null)
             animator.runtimeAnimatorController = enemyData.animationController;
 
-        if (hpBarDisplay != null){
+        if (hpBarDisplay != null)
+        {
             hpBarDisplay.BindEnemyData(enemyData);
         }
+        
+        // 보스 및 엘리트의 HP바 크기 조절
+            if (enemyData.type == EnemyType.elite || enemyData.type == EnemyType.boss)
+            {
+                var rt = hpBarDisplay.GetComponent<RectTransform>();
+                var s = rt.localScale;
+                s.x = 1.8f;
+                rt.localScale = s;
+            }
+            else
+            {
+                var rt = hpBarDisplay.GetComponent<RectTransform>();
+                var s = rt.localScale;
+                s.x = 1.1f;
+                rt.localScale = s;
+            }
     }
 
     /// <summary>

@@ -7,10 +7,14 @@ using UnityEngine.UI;
 
 public class UI_PlayerInfo : MonoBehaviour
 {
-    [Header("UIInfo")]
-    [SerializeField] TextMeshProUGUI sophiaInfo;
-    [SerializeField] TextMeshProUGUI kaylaInfo;
-    [SerializeField] TextMeshProUGUI leonInfo;
+    [Header("Info")]
+
+    [SerializeField] Image shopiaHpBar;
+    [SerializeField] TextMeshProUGUI sophiaHp;
+    [SerializeField] Image kylaHpBar;
+    [SerializeField] TextMeshProUGUI kylaHp;
+    [SerializeField] Image leonHpBar;
+    [SerializeField] TextMeshProUGUI leonHp;
     [SerializeField] TextMeshProUGUI currentExp;
 
     [Header("EliteClearInfo")]
@@ -24,14 +28,23 @@ public class UI_PlayerInfo : MonoBehaviour
     [SerializeField] Transform cardsRoot;
 
     private Dictionary<CharacterClass, TextMeshProUGUI> charInfoText;
+    private Dictionary<CharacterClass, Image> charhpBar;
+    private Coroutine changeHpCoroutine;
 
     private void Start()
     {
         charInfoText = new Dictionary<CharacterClass, TextMeshProUGUI>
         {
-            { CharacterClass.Sophia, sophiaInfo },
-            { CharacterClass.Kayla, kaylaInfo },
-            { CharacterClass.Leon, leonInfo }
+            { CharacterClass.Sophia, sophiaHp },
+            { CharacterClass.Kayla, kylaHp },
+            { CharacterClass.Leon, leonHp }
+        };
+
+        charhpBar = new Dictionary<CharacterClass, Image>
+        {
+            { CharacterClass.Sophia, shopiaHpBar },
+            { CharacterClass.Kayla, kylaHpBar },
+            { CharacterClass.Leon, leonHpBar }
         };
 
         SetEndingBadge();
@@ -40,6 +53,25 @@ public class UI_PlayerInfo : MonoBehaviour
         RegisterHpUpdateEvent();
     }
 
+    void OnDisable()
+    {
+        foreach (var kvp in PlayerManager.Instance.activePlayers)
+        {
+            CharacterClass character = kvp.Key;
+            PlayerData playerData = kvp.Value;
+
+            if (charInfoText.ContainsKey(character))
+            {
+                // 체력 변경 이벤트 해제
+                if(playerData != null)
+                playerData.OnHpChanged -= (currentHp, maxHp) =>
+                {
+                    charInfoText[character].text = $"{currentHp}/{maxHp}";
+                    ChangeHpBar(charhpBar[character], currentHp, maxHp);
+                };
+            }
+        }
+    }
     private void RegisterHpUpdateEvent()
     {
         var players = PlayerManager.Instance.activePlayers;
@@ -51,10 +83,17 @@ public class UI_PlayerInfo : MonoBehaviour
 
             if (charInfoText.TryGetValue(character, out var textObj))
             {
+                // 초기 체력 설정
+                if (charhpBar.TryGetValue(character, out var hpBar))
+                {
+                    ChangeHpBar(hpBar, playerData.currentHP, playerData.MaxHP);
+                }
+
                 // 체력 변경 이벤트 등록
                 playerData.OnHpChanged += (currentHp, maxHp) =>
                 {
                     textObj.text = $"{currentHp}/{maxHp}";
+                    ChangeHpBar(charhpBar[character], currentHp, maxHp);
                 };
             }
         }
@@ -140,6 +179,35 @@ public class UI_PlayerInfo : MonoBehaviour
 
         currentExp.text = exp.ToString();
     }
+
+    public void ChangeHpBar(Image hpBar,float hp, float maxHp)
+    {
+        if (hpBar == null) return;
+
+        float targetFill = hp / maxHp;
+
+        if (changeHpCoroutine != null)
+            StopCoroutine(changeHpCoroutine);
+
+        changeHpCoroutine = StartCoroutine(AnimateHpBarChange(hpBar,targetFill, 0.4f));
+    }
+
+    private IEnumerator AnimateHpBarChange(Image hpBar,float targetFill, float duration)
+    {
+        float startFill = hpBar.fillAmount;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            hpBar.fillAmount = Mathf.Lerp(startFill, targetFill, t);
+            yield return null;
+        }
+
+        hpBar.fillAmount = targetFill;
+    }
+
 
     private void SetEndingBadge()
     {
