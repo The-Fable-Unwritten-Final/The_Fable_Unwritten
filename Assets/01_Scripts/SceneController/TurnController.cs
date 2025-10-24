@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class TurnController : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class TurnController : MonoBehaviour
     public TurnState turnState = TurnState.GameStart; // 현재 턴 상태
     [SerializeField] CardDisplay cardDisplay; // 카드 디스플레이
     public BattleFlowController battleFlow;
+    [SerializeField] Animator TurnButtonAnimator; // 턴 종료 버튼 애니메이터
 
     // 턴의 각 상태 진입시 호출되는 이벤트
     /// <summary>
@@ -143,6 +145,9 @@ public class TurnController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.4f);
         SetTurnState(TurnState.PlayerTurn); // 플레이어 턴으로
+        // 턴 종료 버튼 활성화
+        if (TurnButtonAnimator != null)
+            TurnButtonAnimator.SetBool("isActive", true);
     }
     public void AtPlayerTurn()// 턴 종료 버튼을 눌러서 EndPlayerTurn으로 진입
     {
@@ -152,6 +157,9 @@ public class TurnController : MonoBehaviour
         // 카드 초과 체크하고 초과시 카드 버리기 요청.
         if (!GameManager.Instance.cardDiscardController.CheckCountOk()) return; // 만약 카드수량이 초과시 return.
         SetTurnState(TurnState.EndPlayerTurn); // 플레이어 턴 종료
+        // 턴 종료 버튼 비활성화
+        if (TurnButtonAnimator != null)
+            TurnButtonAnimator.SetBool("isActive", false);
     }
     IEnumerator AtEndPlayerTurn()
     {
