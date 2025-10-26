@@ -12,6 +12,13 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public bool hasBlock = false;           //방어막 획득 여부
     private bool isTargetable;              //타겟 가능 여부
 
+    // 스테이지 한 번만 이상실현 사용
+    public bool IsIdealUsed { get; private set; }
+
+    // 스테이지 시작 시점(BattleFlowController.StartBattle 등)에서 호출
+    public void ResetIdealForStage() => IsIdealUsed = false;
+    public void MarkIdealThisStage() => IsIdealUsed = true;
+
     public bool IsTargetable
     {
         get => isTargetable;
@@ -362,82 +369,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         PlayerData.StancType stance = newStance;
         playerData.currentStance = stance;
     }
-
-    /*
-    /// <summary>
-    /// 적이 공격해올 때 호출
-    /// enemyStance에 따라 baseDamage를 배율로 처리
-    /// 스탠스 간 상성에 맞춰 1배·1.5배·0배(회피)를 적용
-    /// </summary>
-    public void ReceiveAttack(PlayerData.StancType enemyStance, float baseDamage)
-    {
-        // 플레이어의 현재 스탠스
-        var playerStance = playerData.currentStance;
-
-        float finalDamage;
-
-        // 1) 플레이어 Middle이면 항상 기본 데미지
-        if (playerStance == PlayerData.StancType.Middle)
-        {
-            finalDamage = baseDamage;
-            GameManager.Instance.combatCameraController.CameraPunch();
-        }
-        // 2) 적·플레이어 스탠스가 같으면 1.5배
-        else if (playerStance == enemyStance)
-        {
-            GameManager.Instance.combatCameraController.CameraPunchHard();
-            finalDamage = baseDamage * 1.5f;
-        }
-        // 3) 적 Low→플레이어 High, 또는 적 High→플레이어 Low 면 회피
-        else if ((enemyStance == PlayerData.StancType.Low && playerStance == PlayerData.StancType.High) ||
-                 (enemyStance == PlayerData.StancType.High && playerStance == PlayerData.StancType.Low))
-        {
-            finalDamage = 0f;
-        }
-        // 4) 그 외(적 Middle vs High/Low)는 기본 데미지
-        else
-        {
-            finalDamage = baseDamage;
-            GameManager.Instance.combatCameraController.CameraPunch();
-        }
-
-        // 데미지 적용 또는 회피 로그
-        if (finalDamage > 0f)
-        {
-            TakeDamage(finalDamage);
-            Debug.Log($"[피해] {baseDamage} → {finalDamage} (enemy:{enemyStance}, player:{playerStance})");
-        }
-        else
-        {
-            Debug.Log($"[회피] enemy:{enemyStance} → player:{playerStance}");
-        }
-    }*/
-
-
-    //public void ReceiveAttack(PlayerData.StancType enemyAttackStance, float damage)
-    //{
-    //    var playerStance = playerData.currentStance.stencType;
-
-    //    if (playerStance == enemyAttackStance)
-    //    {
-    //        // 같은 위치 공격 -> 1.5배 피해
-    //        float finalDamage = damage * 1.5f;
-    //        TakeDamage(finalDamage);
-    //        Debug.Log($"[타격] 같은 자세 공격! 피해 {finalDamage} 적용");
-    //    }
-    //    else if ((playerStance == PlayerData.StancType.High && enemyAttackStance == PlayerData.StancType.Low) ||
-    //             (playerStance == PlayerData.StancType.Low && enemyAttackStance == PlayerData.StancType.High))
-    //    {
-    //        // 반대 위치 -> 회피
-    //        Debug.Log("[회피] 반대 자세 공격을 회피함!");
-    //    }
-    //    else
-    //    {
-    //        // 기본 피해
-    //        TakeDamage(damage);
-    //        Debug.Log($"[피해] 일반 공격 피해 {damage} 적용");
-    //    }
-    //}
 
     public void CameraActionPlay()
     {

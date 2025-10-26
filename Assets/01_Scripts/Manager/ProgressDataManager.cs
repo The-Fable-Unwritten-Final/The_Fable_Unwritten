@@ -5,9 +5,7 @@ using System.Linq;
 using static StageDataSaveHelper;
 using System;
 
-
-
-public class ProgressDataManager : MonoSingleton<ProgressDataManager>
+public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
 {
     public const int MAX_ITEM_COUNT = 4;       //현재 전리품의 최종 개수
 
@@ -491,6 +489,11 @@ public class ProgressSaveData
     public List<int> unlockedCharacterIDs = new();
 
     public Vector2Int[] resolutions;
+
+    [System.Serializable] public class IdealCounterEntry { public string key; public int value; }
+
+    public List<int> unlockedIdealIds = new();
+    public List<IdealCounterEntry> idealCounters = new();
 }
 
 //

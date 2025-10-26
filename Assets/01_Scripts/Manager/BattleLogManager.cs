@@ -175,5 +175,39 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
 
         return false;
     }
+
+    // ── 회차 범위 raw ──
+    public float KaylaDamage = 0;
+    // ── 전투 범위 raw ──
+    public int KaylaKills = 0;
+    public int LeonDebuffs = 0;
+    public int GuardTriggers = 0;
+
+    // 리셋
+    public void ResetForRun()
+    {
+        KaylaDamage = 0f;
+        ResetForBattle();
+    }
+
+    public void ResetForBattle()
+    {
+        KaylaKills = 0;
+        LeonDebuffs = 0;
+        GuardTriggers = 0;
+
+        ResetBattleLog(); // (너의 기존 턴/배틀 로그 초기화)
+    }
+
+    // 리포트(원자료 카운터 갱신)
+    public void ReportDamageTaken(IStatusReceiver target, float applied)
+    {
+        if (target is PlayerController pc && pc.ChClass == CharacterClass.Kayla)
+            KaylaDamage += Mathf.Max(0f, applied);
+    }
+
+    public void ReportKillByKayla() => KaylaKills++;
+    public void ReportDebuffAppliedByLeon() => LeonDebuffs++;
+    public void ReportGuardTriggered() => GuardTriggers++;
 }
 

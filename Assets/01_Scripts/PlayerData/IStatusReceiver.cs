@@ -28,7 +28,11 @@ public enum BuffStatType
     GuardRedirect,          // 수호 (공격 유도)
 
     CantAttackInStance,     // 특정 자세에서 공격 불가
-    Blind                   // 실명 (명중률 저하 등, 필요 시)
+    Blind,                   // 실명 (명중률 저하 등, 필요 시)
+
+    SustainRegen,           //지속 회복
+    IronBlood,              //철혈 (레온 이상실현)(피해 전가, 받는 피해 반)
+    Exposed                 //노출 (레온 이상실현)(받피증 2배)
 }
 
 public enum TargetType { None = 0, Ally = 1, Enemy = 2 }
