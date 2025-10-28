@@ -10,10 +10,11 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
     {
         { CardType.Ice,      new List<CardType>{CardType.Strike } }, // 빙결 → 타격
         { CardType.Nature,   new List < CardType > { CardType.Holy } },  // 자연 → 성력
-        { CardType.Buff,     new List < CardType > { CardType.Electric } }, // 버프 → 전격
-        { CardType.Heal,     new List < CardType > { CardType.Defense } },   // 힐 → 방어
-        { CardType.Slash,    new List < CardType > { CardType.Fire } },    // 참격 → 화염
-        { CardType.Pierce,   new List < CardType > { CardType.Debuff } },   // 관통 → 디버프
+        { CardType.baptism,     new List < CardType > { CardType.Defense } }, // 세례 → 방어
+        { CardType.Pray,    new List < CardType > { CardType.Nature} },    // 기도 → 자연
+        { CardType.Slash,   new List < CardType > { CardType.Fire } },   // 참격 → 화염
+        { CardType.Defense,   new List < CardType > { CardType.Pray } },   // 방어 → 기도
+
     };      //추후 연계효과 추가 대비
 
     /// <summary>

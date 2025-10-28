@@ -41,16 +41,13 @@ public enum CardType
 {
     Fire = 0,
     Ice = 1,
-    Electric = 2,
-    Nature = 3,
-    Buff = 4,
-    Debuff = 5,
-    Holy = 6,
-    Heal = 7,
-    Slash = 8,
-    Strike = 9,
-    Pierce = 10,
-    Defense = 11
+    Nature = 2,
+    Pray = 3,
+    Holy = 4,
+    baptism = 5,
+    Slash = 6,
+    Strike = 7,
+    Defense = 8
 }
 
 /// <summary>
@@ -75,7 +72,7 @@ public interface IStatusReceiver
     bool IsStunned();                          //스턴 상태 여부 확인
 
     // 💥 애니메이션 및 GUI 관련 추가
-    void PlayAttackAnimation();
+    void PlayAttackAnimation(int input);
     void PlayHitAnimation();
     Transform CachedTransform { get; }
     DmgBarDisplay dmgBar { get; }

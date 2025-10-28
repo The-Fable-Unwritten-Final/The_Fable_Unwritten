@@ -307,13 +307,20 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         }
     }
 
-    public void PlayAttackAnimation()
+    public void PlayAttackAnimation(int attackType)
     {
         if (animator != null)
         {
-            animator.SetBool("Attack", true);
-            GameManager.Instance.StartCoroutine(ResetBool("Attack", 1f));
+            animator.SetInteger("Attack", attackType);
+            GameManager.Instance.StartCoroutine(ResetAttackParam(1.5f));
         }
+    }
+
+    // 일정 시간 후 Attack 파라미터를 기본값으로 되돌림
+    private IEnumerator ResetAttackParam(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        animator.SetInteger("Attack", -1);
     }
 
     public void PlayHitAnimation()

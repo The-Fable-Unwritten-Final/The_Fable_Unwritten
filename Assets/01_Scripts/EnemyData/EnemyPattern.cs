@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -54,8 +55,12 @@ public static class EnemyPattern
         var targets = ChooseTargetsFromActData(actData, enemyComponent);
         yield return new WaitForSeconds(0.3f);
 
-        // 4. 타겟에게 데미지 및 추가 효과 적용
-        enemyComponent.PlayAttackAnimation();
+        var lowestSkill = enemyComponent.enemyData.SkillList
+            .OrderBy(s => s.skillIndex)
+            .FirstOrDefault();        // 4. 타겟에게 데미지 및 추가 효과 적용
+
+        int attackType = skill.skillIndex % lowestSkill.skillIndex;
+        enemyComponent.PlayAttackAnimation(attackType);
         yield return new WaitForSeconds(0.3f);
 
         // 5. 스킬 효과 적용

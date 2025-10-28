@@ -74,14 +74,14 @@ public class CardModel : ScriptableObject
 
     // ==== 카드 사용 ====
 
-    public void Play(IStatusReceiver caster, List<IStatusReceiver> targets)
+    public void Play(IStatusReceiver caster, List<IStatusReceiver> targets, int attackType)
     {
         bool originalEnhanced = isEnhanced; // 현재 강화 상태 백업
 
-        GameManager.Instance.StartCoroutine(PlayWithAnimation(caster, targets, originalEnhanced));
+        GameManager.Instance.StartCoroutine(PlayWithAnimation(caster, targets, originalEnhanced, attackType));
     }
 
-    private IEnumerator PlayWithAnimation(IStatusReceiver caster, List<IStatusReceiver> targets, bool fixedIsEnhanced)
+    private IEnumerator PlayWithAnimation(IStatusReceiver caster, List<IStatusReceiver> targets, bool fixedIsEnhanced, int attackType)
     {
         GameManager.Instance.turnController.Onaction();
 
@@ -102,7 +102,8 @@ public class CardModel : ScriptableObject
 
         // 2. 공격 애니메이션
         yield return new WaitForSeconds(0.2f); // 애니메이션 길이에 맞게 조정
-        caster.PlayAttackAnimation(); //시전자의 공격 애니메이션 적용
+
+        caster.PlayAttackAnimation(attackType); //시전자의 공격 애니메이션 적용
         SoundManager.Instance.PlaySFX(SoundCategory.Card, (int)type);
 
         yield return new WaitForSeconds(0.2f); // 애니메이션 길이에 맞게 조정

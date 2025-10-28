@@ -40,7 +40,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     [SerializeField] private DmgBarDisplay dmgBarDisplay;
     [SerializeField] private TargetArrowDisplay targetArrow; 
 
-    private Animator animator;
+    public Animator animator;
+    public SpriteRenderer spriteRenderer;
 
     public void OnClickRefineStance() => ChangeStance(PlayerData.StancType.refine);
     public void OnClickMixStance() => ChangeStance(PlayerData.StancType.mix);
@@ -66,8 +67,9 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
         statusDisplay = GetComponentInChildren<StatusDisplay>();
+        animator = transform.Find("Visual")?.GetComponent<Animator>();
+        spriteRenderer = transform.Find("Visual")?.GetComponent<SpriteRenderer>();
 
         if (playerData != null && playerData.animationController != null)
         {
@@ -405,13 +407,20 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     }
 
     //공격 애니메이션 호출 시
-    public void PlayAttackAnimation()
+    public void PlayAttackAnimation(int attackType)
     {
         if (animator != null)
         {
-            animator.SetBool("Attack", true);
-            GameManager.Instance.StartCoroutine(ResetBool("Attack", 1.5f));
+            animator.SetInteger("Attack", attackType);
+            GameManager.Instance.StartCoroutine(ResetAttackParam(1.5f));
         }
+    }
+
+    // 일정 시간 후 Attack 파라미터를 기본값으로 되돌림
+    private IEnumerator ResetAttackParam(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        animator.SetInteger("Attack", -1);
     }
 
     //피격 애니메이션 호출 시

@@ -193,7 +193,9 @@ public class BattleFlowController : MonoBehaviour
             }
         }
 
-        card.Play(caster, targets); // 카드 효과 실행
+        //todo : 이후 카드에 따라 attack type 다르게 만들기
+        int attackType = (int)card.type%3;
+        card.Play(caster, targets, attackType); // 카드 효과 실행
         // 임시 카메라 줌 인 아웃 효과 추가 (이후 캐릭터의 모션이 추가되면, 해당 모션의 시작과 끝에 맞춰 줌 인 아웃 재설정)
 
 
