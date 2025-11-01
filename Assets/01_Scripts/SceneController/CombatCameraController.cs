@@ -65,11 +65,11 @@ public class CombatCameraController : MonoBehaviour
                 {
                     player.spriteRenderer.sortingOrder = -1;
                     if(caster is Enemy e)
-                        e.GetComponent<SpriteRenderer>().sortingOrder = -1;
+                        e.spriteRenderer.sortingOrder = -1;
                 }
                 else if (t is Enemy enemy)
                 {
-                    enemy.GetComponent<SpriteRenderer>().sortingOrder = -1;
+                    enemy.spriteRenderer.sortingOrder = -1;
                     if (caster is PlayerController p)
                         p.spriteRenderer.sortingOrder = -1;
                 }
@@ -134,7 +134,7 @@ public class CombatCameraController : MonoBehaviour
         {
             //0.3초동안 전투배경 alpha값 페이드인
             combatBackgroundMaterial.DOFade(1f, combatTransitionTime); // 알파 1로
-            enemy.GetComponent<SpriteRenderer>().sortingOrder = 1;
+            enemy.spriteRenderer.sortingOrder = 1;
             foreach (var t in target)
             {
                 if (t is PlayerController p)
@@ -152,10 +152,10 @@ public class CombatCameraController : MonoBehaviour
                 {
                     foreach (var t in target)
                     {
-                        enemy.GetComponent<SpriteRenderer>().sortingOrder = -1;
+                        enemy.spriteRenderer.sortingOrder = -1;
                         if (t is PlayerController p)
                         {
-                            p.GetComponent<SpriteRenderer>().sortingOrder = -1;
+                            p.spriteRenderer.sortingOrder = -1;
                         }
                     }
                 };

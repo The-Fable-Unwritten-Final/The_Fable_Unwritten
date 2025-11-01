@@ -27,9 +27,10 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     [SerializeField] private HpBarDisplay hpBarDisplay;
     [SerializeField] private DmgBarDisplay dmgBarDisplay;
-    [SerializeField] private TargetArrowDisplay targetArrow; 
+    [SerializeField] private TargetArrowDisplay targetArrow;
 
-    private Animator animator;
+    public SpriteRenderer spriteRenderer;
+    public Animator animator;
     private StatusDisplay statusDisplay;
 
     [SerializeField] public List<TickEffect> tickEffects = new();       // 턴마다 지속되는 효과
@@ -38,7 +39,6 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     private void Awake()
     {
 
-        animator = GetComponent<Animator>();
         statusDisplay = GetComponentInChildren<StatusDisplay>();
 
         if (enemyData != null && enemyData.animationController != null)
