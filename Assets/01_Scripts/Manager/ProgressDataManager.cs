@@ -236,7 +236,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         //이걸로 설정 예정(유저테스트 이후) 변경
         //StageIndex = Mathf.Max(1, StageIndex);
         //MinStageIndex = Mathf.Max(1, MinStageIndex);
-        AssignTemesToStages();
+        AssignThemesToStages();
 
         StageIndex = 1;
         MinStageIndex = 1;
@@ -338,7 +338,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         CurrentBattleNode = node;
     }
 
-    public void AssignTemesToStages()
+    public void AssignThemesToStages()
     {
         stageThemes[2] = StageTheme.Wisdom;
         stageThemes[3] = StageTheme.Love;
