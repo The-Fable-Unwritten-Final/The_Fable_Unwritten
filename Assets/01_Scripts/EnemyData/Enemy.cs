@@ -58,9 +58,10 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     public void SetData(EnemyData data)
     {
         enemyData = data;
+        // 문체 효과 적용
+        enemyData.MaxHP = StyleManager.Instance.ModifyEnemyMaxHp(this, (int)enemyData.MaxHP);
 
         enemyData.CurrentHP = enemyData.MaxHP;
-
         if (animator == null)
             animator = GetComponent<Animator>();
 
@@ -99,20 +100,24 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         switch (effect)
         {
             case TickEffect tick:   //턴 이펙트일 경우
+
+                var v = StyleManager.Instance.ModifyBuffDebuffAmount(this, tick.statType, (int)tick.value);
                 tickEffects.Add(new TickEffect
                 {
                     statType = tick.statType,
-                    value = tick.value,
+                    value = v,
                     duration = tick.duration
                 });
                 break;
 
             case InstanceEffect inst:       // 단일 적용인 경우
+
+                var v2 = StyleManager.Instance.ModifyBuffDebuffAmount(this, inst.statType, (int)inst.value);
                 var existing = instantEffects.Find(e => e.statType == inst.statType);
                 if (existing != null)
                 {
                     // 기존 수치에 누적
-                    existing.value = Mathf.Clamp(existing.value + inst.value, 0, 50);
+                    existing.value = Mathf.Clamp(existing.value + v2, 0, 50);
                     existing.isMaintain = existing.isMaintain || inst.isMaintain; // 유지되는 버프가 들어오면 유지로 전환
                 }
                 else
@@ -121,7 +126,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
                     instantEffects.Add(new InstanceEffect
                     {
                         statType = inst.statType,
-                        value = Mathf.Clamp(inst.value, 0, 50),
+                        value = Mathf.Clamp(v2, 0, 50),
                         isMaintain = inst.isMaintain
                     });
                 }
@@ -139,6 +144,8 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     public void TakeTrueDamage(float damage)
     {
         //Debug.Log($"{enemyData.EnemyName}가 {damage}의 트루데미지를 받음! 현재 체력: {enemyData.CurrentHP}");
+        // 문체 효과 적용
+        damage = StyleManager.Instance.GetDamageGiveModify(this, this,BattleLogManager.Instance.card ,damage);
         currentHP -= damage;
     }
 

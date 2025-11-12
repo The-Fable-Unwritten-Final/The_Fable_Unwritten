@@ -176,11 +176,27 @@ public class BattleFlowController : MonoBehaviour
 
         int actualCost = card.GetEffectiveCost();
         currentMana -= actualCost; // 할인된 코스트 차감
+        // 문체 효과 적용 //
+        var styleManager = StyleManager.Instance;
+        if (styleManager.isFirstTurnCard)
+        {
+            styleManager.isFirstTurnCard = false;
+        }
+        else if (styleManager.isStartOfTurnCard)
+        {
+            styleManager.isStartOfTurnCard = false;
+            currentMana += styleManager.GetStartTurnModifiedCardCost(card, 0); // default 값 0
+        }
+        else
+        {
+            currentMana += styleManager.GetModifiedCardCost(card, 0); // default 값 0
+        }
+        // 문체 효과 적용 끝 //
 
         if (targets == null || targets.Count == 0)
         {
             int count = Mathf.Max(1, card.targetCount);
-            targets = AutoChooseTargets(card.targetType, card.characterClass,count, targets[0]);
+            targets = AutoChooseTargets(card.targetType, card.characterClass, count, targets[0]);
         }
 
         //Debug.Log($"{caster.ChClass} 가 {card.cardName} 사용 → {string.Join(", ", targets.ConvertAll(t => t.ChClass.ToString()))}, cost : {actualCost}");

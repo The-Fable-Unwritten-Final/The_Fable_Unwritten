@@ -33,6 +33,9 @@ public class HealEffect : CardEffectBase
 
         finalHeal = Mathf.Round(finalHeal);
 
+        // 문체 효과 적용
+        finalHeal = StyleManager.Instance.GetHealOnCardUse(caster, finalHeal);
+
         switch (target)
         {
             case 0:

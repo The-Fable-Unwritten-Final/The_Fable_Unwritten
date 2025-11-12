@@ -89,6 +89,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public void TakeTrueDamage(float damage)
     {
         //Debug.Log($"{playerData.CharacterName}가 {damage}의 트루데미지를 받음! 현재 체력: {playerData.currentHP}");
+        // 문체 효과 적용
+        damage = StyleManager.Instance.GetOnComingDamageModify(this, this, damage);
         currentHP -= damage;
 
         var dmg = new DmgTextData
@@ -191,6 +193,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             //Debug.Log($"[Block] {playerData.CharacterClass.ToString()}의 블록으로 피해 {amount} 무효화");
             return 0;
         }
+        // 문체 효과 적용
+        amount = StyleManager.Instance.GetOnComingDamageModify(this, this, amount);
 
         float reduced = amount - ModifyStat(BuffStatType.Defense, 0f);
         reduced = Mathf.Max(reduced, 1f);

@@ -118,18 +118,6 @@ public class PlayerManager : MonoSingleton<PlayerManager>
     }
 
     /// <summary>
-    /// 전투 시작 시 실제 캐릭터에게 덱을 넘겨줄 때 사용
-    /// </summary>
-    public void AssignDeckToPlayer(IStatusReceiver receiver)
-    {
-        var data = GetPlayerData(receiver.ChClass);
-        if (data != null)
-        {
-            receiver.Deck.Initialize(data.currentDeck);
-        }
-    }
-
-    /// <summary>
     /// 덱 저장 전, currentDeckIndexes 최신화
     /// </summary>
     public void SyncDeckIndexes()

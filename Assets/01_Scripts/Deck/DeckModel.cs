@@ -20,6 +20,13 @@ public class DeckModel
         Shuffle(unusedDeck);
         usedDeck.Clear();
         hand.Clear();
+
+        // 문체 효과 적용 => 첫 카드 코스트 변환
+        foreach (var card in unusedDeck)
+        {
+            int modifiedCost = StyleManager.Instance.GetFirstCardCostModifier(card, 0); // 디폴트 값 0
+            card.ApplyTemporaryDiscount(modifiedCost);
+        }
     }
 
 

@@ -139,12 +139,14 @@ public class TurnController : MonoBehaviour
 
         cardDisplay.deckInitComplete = true; // 덱 이닛 완료
         battleFlow.StartBattle();
+        StyleManager.Instance.isFirstTurnCard = true; // 전투 시작 후 첫 턴 플래그 설정
         SetTurnState(TurnState.StartPlayerTurn); // 게임 시작 후 플레이어 턴으로
     }
     IEnumerator AtStartPlayerTurn()
     {
         yield return new WaitForSeconds(0.4f);
         SetTurnState(TurnState.PlayerTurn); // 플레이어 턴으로
+        StyleManager.Instance.isStartOfTurnCard = true; // 턴 시작후 첫 행동 플래그 설정
         // 턴 종료 버튼 활성화
         if (TurnButtonAnimator != null)
             TurnButtonAnimator.SetBool("isActive", true);

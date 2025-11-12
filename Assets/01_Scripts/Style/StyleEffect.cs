@@ -3,35 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public enum EffectTarget {
-    FirstCardCost,
-    CardCost,            
+public enum EffectTarget
+{
+    FirstCardCost, // 전투의 첫 카드 코스트 변환
+    CardCost, // 나머지 카드 코스트 관련 변환
     EnemyMaxHP,
-    IncomingDamageFlat,
-    IncomingDamagePercent,
-    OutgoingDamageFlat,
-    OutgoingDamagePercent,
+    IncomingDamage,
+    DamageGive,
     HealAmount,
-    RandomDamageOffset,
-    ApplyRandomDebuffToAlly,
+    InComingDamageRandomOffset,
     OnApplyBuffValue,
     OnApplyDebuffValue,
-    // ... 추가 가능
+
+    // value 변환 없이 바로 호출 효과
+    ApplyRandomDebuffToSingleAlly,
+    ApplyStunToAllAllies,
 }
 
-public enum EffectOperation {
+public enum EffectOperation
+{
     Add,        // 추가
-    MulPercent, // 배율
+    MulPercent, // 배율 증가 (예: +20% 면 1.2f 입력)
     Set,        // ~ 값 으로 설정
-    RandomRange // 랜덤한 범위 내 값 설정
+    RandomRange, // 랜덤한 범위 내 값 설정
+    Instant // 즉시 효과 발동
 }
 
-public enum EffectScope {
+public enum EffectCallTime
+{
     OnStartOfBattle,
     OnStartOfTurn,
-    OnEnterCombat,
     OnCardUse,
-    OnFirstCardInBattle,
+    OnFirstCardUseInBattle,
+    OnGettingDamage,
     OnApplyBuff,
     OnApplyDebuff
 }
@@ -43,7 +47,5 @@ public class StyleEffect {
     public EffectOperation operation; // 연산 방식
     public float value;       // (배율 시 +20% 면 1.2f 입력)
     public Vector2 valueRange; // 랜덤한 범위 사용 시 쓰는 value 값
-    public EffectScope scope; // 효과 발동 지점 (전투 시작시... 턴 시작시... 등..)
-    public string effectDescription; // 효과 설명 텍스트 (로컬라이제이션을 적용 시 사용하는 key 값 설명 => ~~~ n 만큼 증가 같은 포멧 대응 가능하도록, 로컬라이제이션 쪽 별도 처리 필요)
-    public int rank = 1;  // 등급 (1 == 상급, 2 == 중급, 3 == 하급 문체)
+    public EffectCallTime callTime; // 효과 발동 지점 (전투 시작시... 턴 시작시... 등..)
 }

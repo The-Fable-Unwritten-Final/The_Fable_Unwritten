@@ -6,27 +6,41 @@ using System;
 [CreateAssetMenu(menuName = "Styles/StyleDefinition")]
 public class StyleDefinition : ScriptableObject
 {
+    public enum StyleRank
+    {
+        High = 1,
+        Medium = 2,
+        Low = 3
+    }
+
     [Header("Meta")]
     public string styleId;                  // 스타일 고유 ID
     public string displayName;              // 스타일 이름
     public string description;              // 스타일 설명 (플레이버 텍스트)
-    public int maxPlusTier = 3;             // 최대 +강화 단계 (고정 or 3)
-    public int maxMinusTier = 3;            // 최대 -강화 단계 (고정 or 3)
-
-    [Header("1단계 기본 효과")]
-    public List<StyleEffect> basePlusEffects = new();
-    public List<StyleEffect> baseMinusEffects = new();
+    public string effectDescription;        // 효과 설명 텍스트 (로컬라이제이션을 적용 시 사용하는 key 값 설명 => ~~~ n 만큼 증가 같은 포멧 대응 가능하도록, 로컬라이제이션 쪽 별도 처리 필요)
+    [Tooltip("문체 등급 => 1: 상급, 2: 중급, 3: 하급")]
+    public StyleRank rank = StyleRank.High; // 등급 (1 == 상급, 2 == 중급, 3 == 하급 문체)
+    public int maxPlusTier = 2;             // 최대 +강화 단계 (고정 or 3)
+    public int currentPlus = 0;             // 현재 +강화 단계
+    public int maxMinusTier = 2;            // 최대 -강화 단계 (고정 or 3)
+    public int currentMinus = 0;            // 현재 -강화 단계
 
     [Header("+ 효과 단계별 목록")]
-    public List<TierEntry> plusTiers = new();  // length <= maxPlusTier
+    public List<TierEntry> plusTiers = new();  
 
     [Header("- 효과 단계별 목록")]
-    public List<TierEntry> minusTiers = new(); // length <= maxMinusTier
+    public List<TierEntry> minusTiers = new();
 
     [Serializable]
-    public class TierEntry {
+    public class TierEntry
+    {
         public int tier; // 강화 단계
         public int cost; // 잉크 소모 비용
         public List<StyleEffect> effects = new();
+    }
+    public void ResetProgress()
+    {
+        currentPlus = 0;
+        currentMinus = 0;
     }
 }

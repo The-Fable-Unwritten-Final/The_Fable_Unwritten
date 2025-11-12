@@ -64,6 +64,9 @@ public class ApplyStatusEffect : CardEffectBase
 
             StatusEffect effect = CreateEffect(statType, value, duration);
 
+            // 문체에 따른 버프/디버프 수치 변환 => 이를 위해 value값은 최대한 int형으로 관리 요망
+            effect.value = StyleManager.Instance.ModifyBuffDebuffAmount(t, statType, (int)effect.value);
+
             t.ApplyStatusEffect(effect);
 
             string statusText = GetStatusEffectText(statType, value);
@@ -151,6 +154,21 @@ public class ApplyStatusEffect : CardEffectBase
             BuffStatType.CantAttackInStance => $"자세 제한",
             BuffStatType.Blind => $"실명",
             _ => "상태이상"
+        };
+    }
+}
+
+// 이거 문체 시스템에서 버프 디버프 체킹용으로 추가 했어요, 아래쪽에 purify는 없어서 혹시 몰라서 새로 만들었습니다 -민준-
+public static class Buff
+{
+    public static bool IsBuff(BuffStatType type, float value)
+    {
+        return type switch
+        {
+            BuffStatType.Attack => value > 0,
+            BuffStatType.Defense => value > 0,
+            BuffStatType.GuardRedirect or BuffStatType.Bless or BuffStatType.Grace or BuffStatType.Purify => true,
+            _ => false
         };
     }
 }
