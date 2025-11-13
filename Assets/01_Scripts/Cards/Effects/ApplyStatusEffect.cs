@@ -185,5 +185,74 @@ public static class Debuff
             _ => true
         };
     }
+    public static ApplyStatusEffect GetRandomDebuffEffect()
+    {
+        // 후보 효과들: Burn, Freeze, Activate, Bleed, Stun, GuardRedirect, Blind
+        BuffStatType[] candidates = new BuffStatType[]
+        {
+            BuffStatType.Attack,
+            BuffStatType.Defense,
+            BuffStatType.Burn,
+            BuffStatType.Freeze,
+            BuffStatType.Bleed,
+            BuffStatType.Stun,
+            BuffStatType.Blind
+        };
+    
+        int idx = Random.Range(0, candidates.Length);
+        BuffStatType chosen = candidates[idx];
+
+        var result = ScriptableObject.CreateInstance<ApplyStatusEffect>();
+        result.statType = chosen;
+
+        // 기본값들을 효과 종류에 따라 설정합니다. 필요하면 조정하세요.
+        switch (chosen)
+        {
+            case BuffStatType.Attack:
+                result.value = -1;
+                result.duration = 1;
+                break;
+            case BuffStatType.Defense:
+                result.value = -1;
+                result.duration = 1;
+                break;
+            case BuffStatType.Burn:
+                result.value = 3; // 화상 피해량
+                result.duration = 1;
+                break;
+            case BuffStatType.Freeze:
+                result.value = 100; // 빙결 확률/비율(%)
+                result.duration = 1;
+                break;
+            case BuffStatType.Bleed:
+                result.value = 3;
+                result.duration = 1;
+                break;
+            case BuffStatType.Stun:
+                result.value = 1; // 기절 지속(턴)
+                result.duration = 1;
+                break;
+            case BuffStatType.Blind:
+                result.value = -1; // 실명 지속(턴)
+                result.duration = 1;
+                break;
+            default:
+                result.value = 1;
+                result.duration = 1;
+                break;
+        }
+
+        return result;
+    }
+
+    public static ApplyStatusEffect GetStunEffect(int dur)
+    {
+        var result = ScriptableObject.CreateInstance<ApplyStatusEffect>();
+        result.statType = BuffStatType.Stun;
+        result.value =1;
+        result.duration = dur;
+
+        return result;
+    }
 }
 

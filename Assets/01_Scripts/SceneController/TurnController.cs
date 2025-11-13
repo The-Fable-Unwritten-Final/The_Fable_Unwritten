@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Linq;
 using UnityEngine.UI;
 
 public class TurnController : MonoBehaviour
@@ -140,13 +141,21 @@ public class TurnController : MonoBehaviour
         cardDisplay.deckInitComplete = true; // 덱 이닛 완료
         battleFlow.StartBattle();
         StyleManager.Instance.isFirstTurnCard = true; // 전투 시작 후 첫 턴 플래그 설정
+        // 전투 시작 직후 관련 문체 효과 호출 //
+        StyleManager.Instance.ApplyRandomDebuffToSingleAlly(battleFlow.GetRandomAliveParty()); // 살아있는 랜덤한 팀원 한명에게 랜덤 디버프 부여 문체
+        // 문체 효과 호출 종료 //
+
         SetTurnState(TurnState.StartPlayerTurn); // 게임 시작 후 플레이어 턴으로
     }
-    IEnumerator AtStartPlayerTurn()
+    IEnumerator AtStartPlayerTurn() // 턴 시작시 제일 먼저 호출
     {
         yield return new WaitForSeconds(0.4f);
         SetTurnState(TurnState.PlayerTurn); // 플레이어 턴으로
         StyleManager.Instance.isStartOfTurnCard = true; // 턴 시작후 첫 행동 플래그 설정
+        // 매 턴 시작 시 호출될 문체 효과들
+        StyleManager.Instance.ApplyStunToAllAllies(battleFlow.playerParty);
+        // 문체 효과 호출 종료 //
+
         // 턴 종료 버튼 활성화
         if (TurnButtonAnimator != null)
             TurnButtonAnimator.SetBool("isActive", true);

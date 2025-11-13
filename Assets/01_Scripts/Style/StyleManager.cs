@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Unity.Mathematics;
+using Unity.VisualScripting;
+using UnityEditor.Localization.Plugins.XLIFF.V20;
 
 [System.Serializable]
 public class PlayerStyleState {
@@ -31,10 +33,11 @@ public class StyleManager : MonoSingleton<StyleManager>
     public delegate float HealAmountModifier(IStatusReceiver caster, float baseHeal);
     public delegate int BuffDebuffAmountModifier(IStatusReceiver target, BuffStatType statType, int baseAmount);
     public delegate int EnemyHpModifier(Enemy enemy, int baseHp);
+    public delegate int SupplyManaAtStartOfTurn(int baseMana);
 
     /// 밸류 변환형이 아닌 효과 델리게이트
-    public delegate bool RandomDebuffSingleAlly(IStatusReceiver target); // 이때 외부 호출 함수 시점에서 target의 생존 여부 후 호출할 것.
-    public delegate bool StunAllAllies(IStatusReceiver target); // 이때 외부 호출 함수 시점에서 target의 생존 여부 후 호출할 것.
+    public delegate void RandomDebuffSingleAlly(IStatusReceiver target); // 이때 외부 호출 함수 시점에서 target의 생존 여부 후 호출할 것.
+    public delegate void StunAllAllies(List<IStatusReceiver> target); // 이때 외부 호출 함수 시점에서 target의 생존 여부 후 호출할 것.
     private class CompiledEntry
     {
         // 각 문체 효과들이 사용될 때 호출되는 델리게이트 모음
@@ -46,6 +49,7 @@ public class StyleManager : MonoSingleton<StyleManager>
         public HealAmountModifier HealFunc;                // 힐량 변경
         public BuffDebuffAmountModifier BuffDebuffFunc;    // 버프/디버프 수치 변경
         public EnemyHpModifier EnemyHpFunc;                // 적 체력 변경
+        public SupplyManaAtStartOfTurn SupplyManaAtStartOfTurnFunc; // 턴 시작시 마나 공급량 변동
 
         // 특수한 방식의 효과 적용 시 사용 (호출 조건 또는 일부 수정이 있을 경우, 컴파일 시점의 enum 조건 체크 필요)
         public RandomDebuffSingleAlly randomDebuffSingleFunc; // 아군 단일 대상 랜덤 디버프 적용
@@ -332,8 +336,30 @@ public class StyleManager : MonoSingleton<StyleManager>
             return Mathf.Max(1, hp);
         };
 
+        SupplyManaAtStartOfTurn supplyManaAtStartOfTurnFunc = (baseMana) =>
+        {
+            int mana = baseMana;
+            foreach (var eff in effects)
+            {
+                if (eff.callTime != EffectCallTime.OnStartOfTurn) continue;
+                if (eff.target == EffectTarget.Mana)
+                {
+                    switch (eff.operation)
+                    {
+                        case EffectOperation.Add:
+                            mana += Mathf.RoundToInt(eff.value);
+                            break;
+                        case EffectOperation.Set:
+                            mana = Mathf.RoundToInt(eff.value);
+                            break;
+                    }
+                }
+            }
+            return Mathf.Max(0, mana);
+        };
+
         // 밸류 변환 형식이 아닌 효과들 직접 처리 델리게이트 컴파일
-        RandomDebuffSingleAlly randomDebuffFunc = (target) =>
+        RandomDebuffSingleAlly randomDebuffFunc = (player) =>
         {
             bool applied = false;
             foreach (var eff in effects)
@@ -344,10 +370,17 @@ public class StyleManager : MonoSingleton<StyleManager>
                     applied = true;
                 }
             }
-            return applied;
+
+            if(applied)
+            {
+                ApplyStatusEffect stef = Debuff.GetRandomDebuffEffect();
+                stef.target = (int)player.ChClass;
+                var p = new List<IStatusReceiver> { player }; // list 형으로 변환
+                stef.Apply(player,p);
+            }
         };
 
-        StunAllAllies stunAllFunc = (target) =>
+        StunAllAllies stunAllFunc = (players) =>
         {
             bool applied = false;
             foreach (var eff in effects)
@@ -358,7 +391,17 @@ public class StyleManager : MonoSingleton<StyleManager>
                     applied = true;
                 }
             }
-            return applied;
+            
+            if(applied)
+            {
+                foreach (var pc in players)
+                {
+                    ApplyStatusEffect stef = Debuff.GetStunEffect(1);
+                    stef.target = (int)pc.ChClass;
+                    var p = new List<IStatusReceiver> { pc }; // list 형으로 변환
+                    stef.Apply(pc,p); // 각각의 player 들에게 효과 부여
+                }
+            }
         };
 
         // 컴파일 된 델리게이트들 EffectCallTime 별로 저장
@@ -366,7 +409,7 @@ public class StyleManager : MonoSingleton<StyleManager>
         var entryGettingDamage = new CompiledEntry { DmgFunc = dmgFunc };
         var entryBuffDebuff = new CompiledEntry { BuffDebuffFunc = buffDebuffFunc };
 
-        var entryStartOfTurn = new CompiledEntry { randomDebuffSingleFunc = randomDebuffFunc, TempCostModFunc = startTurnCostFunc };
+        var entryStartOfTurn = new CompiledEntry { randomDebuffSingleFunc = randomDebuffFunc, TempCostModFunc = startTurnCostFunc, SupplyManaAtStartOfTurnFunc = supplyManaAtStartOfTurnFunc };
         var entryStartOfBattle = new CompiledEntry { stunAllAlliesFunc = stunAllFunc, EnemyHpFunc = enemyHpFunc, FirstCardCostModFunc = firstCardCostFunc, CostModFunc = costFunc };
 
         // compiledEntries 딕셔너리를 통해 호출 가능한 형태로 등록
@@ -383,9 +426,9 @@ public class StyleManager : MonoSingleton<StyleManager>
 
 
     // 외부 호출용 함수 (value 변환 효과들 적용 위치에서 호출)
+    // 문체에 관련 효과가 없을 시 기본 비용 반환
     public int GetFirstCardCostModifier(CardModel card, int baseCost)
     {
-        // 문체에 관련 효과가 없을 시 기본 비용 반환
         if (compiledEntries.TryGetValue(EffectCallTime.OnStartOfBattle, out var e) && e.FirstCardCostModFunc != null)
             return e.FirstCardCostModFunc(card, baseCost);
         return baseCost;
@@ -395,7 +438,6 @@ public class StyleManager : MonoSingleton<StyleManager>
     /// </summary>
     public int GetModifiedCardCost(CardModel card, int baseCost)
     {
-        // 문체에 관련 효과가 없을 시 기본 비용 반환
         if (compiledEntries.TryGetValue(EffectCallTime.OnStartOfBattle, out var e) && e.CostModFunc != null)
             return e.CostModFunc(card, baseCost);
         return baseCost;
@@ -405,7 +447,6 @@ public class StyleManager : MonoSingleton<StyleManager>
     /// </summary>
     public int GetStartTurnModifiedCardCost(CardModel card, int baseCost)
     {
-        // 문체에 관련 효과가 없을 시 기본 비용 반환
         if (compiledEntries.TryGetValue(EffectCallTime.OnStartOfTurn, out var e) && e.TempCostModFunc != null)
             return e.TempCostModFunc(card, baseCost);
         return baseCost;
@@ -415,7 +456,6 @@ public class StyleManager : MonoSingleton<StyleManager>
     /// </summary>
     public float GetOnComingDamageModify(IStatusReceiver caster, IStatusReceiver target, float baseDamage)
     {
-        // 문체에 관련 효과가 없을 시 기본 배율 반환
         if (compiledEntries.TryGetValue(EffectCallTime.OnGettingDamage, out var e) && e.DmgFunc != null)
             return e.DmgFunc(caster, target, baseDamage);
         return baseDamage;
@@ -425,14 +465,12 @@ public class StyleManager : MonoSingleton<StyleManager>
     /// </summary>
     public float GetDamageGiveModify(IStatusReceiver caster, IStatusReceiver target, CardModel card, float baseDamage)
     {
-        // 문체에 관련 효과가 없을 시 기본 배율 반환
         if (compiledEntries.TryGetValue(EffectCallTime.OnCardUse, out var e) && e.DmgGiveFunc != null)
             return e.DmgGiveFunc(caster, target, card, baseDamage);
         return baseDamage;
     }
     public float GetHealOnCardUse(IStatusReceiver caster, float baseHeal)
     {
-        // 문체에 관련 효과가 없을 시 기본 힐량 반환
         if (compiledEntries.TryGetValue(EffectCallTime.OnCardUse, out var e) && e.HealFunc != null)
             return e.HealFunc(caster, baseHeal);
         return baseHeal;
@@ -442,7 +480,6 @@ public class StyleManager : MonoSingleton<StyleManager>
     /// </summary>
     public int ModifyBuffDebuffAmount(IStatusReceiver target, BuffStatType statType, int baseAmount)
     {
-        // 문체에 관련 효과가 없을 시 기본 수치 반환
         if (compiledEntries.TryGetValue(EffectCallTime.OnApplyBuff, out var e) && e.BuffDebuffFunc != null)
             return e.BuffDebuffFunc(target, statType, baseAmount);
         if (compiledEntries.TryGetValue(EffectCallTime.OnApplyDebuff, out var e2) && e2.BuffDebuffFunc != null)
@@ -454,25 +491,30 @@ public class StyleManager : MonoSingleton<StyleManager>
     /// </summary>
     public int ModifyEnemyMaxHp(Enemy enemy, int baseHp)
     {
-        // 문체에 관련 효과가 없을 시 기본 수치 반환
         if (compiledEntries.TryGetValue(EffectCallTime.OnStartOfBattle, out var e) && e.EnemyHpFunc != null)
             return e.EnemyHpFunc(enemy, baseHp);
         return baseHp;
     }
-
+    /// <summary>
+    /// 턴 시작시 마나 공급량 변환 적용 문체
+    /// </summary>
+    public int ModifySupplyManaAtStartOfTurn(int baseMana)
+    {
+        if (compiledEntries.TryGetValue(EffectCallTime.OnStartOfTurn, out var e) && e.SupplyManaAtStartOfTurnFunc != null)
+            return e.SupplyManaAtStartOfTurnFunc(baseMana);
+        return baseMana;
+    }
 
     // 일부 value 변환 형식이 아닌 효과들 직접 처리 (호출 시점에서 bool 체킹만 하고 효과 구현 or 실행을 해당 위치에서 할 것)
-    public bool ApplyRandomDebuffToSingleAlly(IStatusReceiver target)
+    public void ApplyRandomDebuffToSingleAlly(IStatusReceiver player)
     {
         if (compiledEntries.TryGetValue(EffectCallTime.OnStartOfTurn, out var e) && e.randomDebuffSingleFunc != null)
-            return e.randomDebuffSingleFunc(target);
-        return false;
+            e.randomDebuffSingleFunc(player);
     }
-    public bool ApplyStunToAllAllies(IStatusReceiver target)
+    public void ApplyStunToAllAllies(List<IStatusReceiver> players)
     {
         if (compiledEntries.TryGetValue(EffectCallTime.OnStartOfBattle, out var e) && e.stunAllAlliesFunc != null)
-            return e.stunAllAlliesFunc(target);
-        return false;
+            e.stunAllAlliesFunc(players);
     }
 }
 

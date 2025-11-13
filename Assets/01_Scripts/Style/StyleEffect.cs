@@ -8,6 +8,7 @@ public enum EffectTarget
     FirstCardCost, // 전투의 첫 카드 코스트 변환
     CardCost, // 나머지 카드 코스트 관련 변환
     EnemyMaxHP,
+    Mana, // 보유 마나 관련 변환
     IncomingDamage,
     DamageGive,
     HealAmount,

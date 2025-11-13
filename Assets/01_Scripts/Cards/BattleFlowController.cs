@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Linq;
 
 public enum TurnState { PlayerTurn, EnemyTurn } //적 턴인지 아군 턴인지 판별자
 
@@ -145,13 +146,16 @@ public class BattleFlowController : MonoBehaviour
     /// <summary>
     /// 플레이어 턴 행동
     /// </summary>
-    public void ExecutePlayerTurn()
+    public void ExecutePlayerTurn() // turnController의 플레이어 턴 시작 부분에서도 호출됨 => 효과 적용 시 이중 호출에 유의할 것
     {
         if (isBattleEnded) return;      //전투 종료 명령 확인 시 전투 종료
         currentTurn = TurnState.PlayerTurn;
 
         if (currentMana < startMana)    //마나가 시작 마나보다 적을 시 시작 마나로 초기화
             currentMana = startMana;
+
+        // 문체 효과 적용 => 턴 시작시 마나 보유량 변환
+        currentMana = StyleManager.Instance.ModifySupplyManaAtStartOfTurn(currentMana);
 
         UpdateManaUI(); // << 추가
         DrawMissingHands();             //각각 패가 3장이 되도록(살아 있을 경우에만) 드로우
@@ -528,6 +532,17 @@ public class BattleFlowController : MonoBehaviour
             decksByCharacter[player.ChClass] = player.Deck;
         }
     }
+    // 살아있는 랜덤한 파티원 한명 리턴
+    public IStatusReceiver GetRandomAliveParty()
+    {
+        IStatusReceiver ranplayer = playerParty[0];
+            var alive = playerParty.Where(p => p != null && p.IsAlive()).ToList();
+            if (alive.Count > 0)
+                ranplayer = alive[UnityEngine.Random.Range(0, alive.Count)];
+
+        return ranplayer;
+    }
+
 
     /// <summary>
     /// 자동 타겟 설정
