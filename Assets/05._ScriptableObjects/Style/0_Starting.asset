@@ -10,17 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 183bc419c704a3641825f81869e25870, type: 3}
-  m_Name: Starting
+  m_Name: 0_Starting
   m_EditorClassIdentifier: 
   styleId: 0
-  displayName: Style_Starting
+  displayName: Name_Starting
   description: Desc_Starting
-  effectDescription: StyleEffect_Starting
+  effectDescription: EffectDesc_Starting
   rank: 3
-  maxPlusTier: 3
-  maxMinusTier: 3
+  maxPlusLevel: 3
+  currentPlus: 1
+  maxMinusLevel: 3
+  currentMinus: 1
   plusTiers:
-  - tier: 1
+  - level: 1
     cost: 0
     effects:
     - target: 0
@@ -28,7 +30,7 @@ MonoBehaviour:
       value: -1
       valueRange: {x: 0, y: 0}
       callTime: 0
-  - tier: 2
+  - level: 2
     cost: 2
     effects:
     - target: 0
@@ -36,7 +38,7 @@ MonoBehaviour:
       value: -2
       valueRange: {x: 0, y: 0}
       callTime: 0
-  - tier: 3
+  - level: 3
     cost: 4
     effects:
     - target: 0
@@ -45,7 +47,7 @@ MonoBehaviour:
       valueRange: {x: 0, y: 0}
       callTime: 0
   minusTiers:
-  - tier: 1
+  - level: 1
     cost: 0
     effects:
     - target: 2
@@ -53,7 +55,7 @@ MonoBehaviour:
       value: 1.2
       valueRange: {x: 0, y: 0}
       callTime: 0
-  - tier: 2
+  - level: 2
     cost: 2
     effects:
     - target: 2
@@ -61,7 +63,7 @@ MonoBehaviour:
       value: 1.1
       valueRange: {x: 0, y: 0}
       callTime: 0
-  - tier: 3
+  - level: 3
     cost: 4
     effects:
     - target: 2

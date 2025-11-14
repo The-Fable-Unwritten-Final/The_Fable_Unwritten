@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 183bc419c704a3641825f81869e25870, type: 3}
+  m_Name: 1_Lyrical
+  m_EditorClassIdentifier: 
+  styleId: 1
+  displayName: Name_Lyrical
+  description: Desc_Lyrical
+  effectDescription: EffectDesc_Lyrical
+  rank: 3
+  maxPlusLevel: 1
+  currentPlus: 1
+  maxMinusLevel: 1
+  currentMinus: 1
+  plusTiers:
+  - level: 1
+    cost: 0
+    effects:
+    - target: 6
+      operation: 0
+      value: 1
+      valueRange: {x: 0, y: 0}
+      callTime: 2
+  minusTiers:
+  - level: 1
+    cost: 0
+    effects:
+    - target: 4
+      operation: 0
+      value: 1
+      valueRange: {x: 0, y: 0}
+      callTime: 4

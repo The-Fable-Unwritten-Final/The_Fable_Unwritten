@@ -9,8 +9,8 @@ using UnityEditor.Localization.Plugins.XLIFF.V20;
 [System.Serializable]
 public class PlayerStyleState {
     public int styleId;
-    public int plusTier; // +강화 단계 (0,1,2 or 0 만)
-    public int minusTier; // -강화 단계 (0,1,2 or 0 만)
+    public int plusTier; // +강화 단계 (1,2,3 or 1 만)
+    public int minusTier; // -강화 단계 (1,2,3 or 1 만)
 }
 
 // StyleManager.cs (skeleton)
@@ -93,7 +93,7 @@ public class StyleManager : MonoSingleton<StyleManager>
     public bool UpgradePlus()
     {
         var def = StyleDic[CurrentState.styleId];
-        if (CurrentState.plusTier >= def.maxPlusTier) return false;
+        if (CurrentState.plusTier >= def.maxPlusLevel) return false;
         CurrentState.plusTier++;
         def.currentPlus++;
 
@@ -105,7 +105,7 @@ public class StyleManager : MonoSingleton<StyleManager>
     public bool UpgradeMinus()
     {
         var def = StyleDic[CurrentState.styleId];
-        if (CurrentState.minusTier >= def.maxMinusTier) return false;
+        if (CurrentState.minusTier >= def.maxMinusLevel) return false;
         CurrentState.minusTier++;
         def.currentMinus++;
 
@@ -172,12 +172,11 @@ public class StyleManager : MonoSingleton<StyleManager>
                 if (eff.callTime != EffectCallTime.OnStartOfBattle) continue;
                 if (eff.target == EffectTarget.FirstCardCost)
                 {
-                    cost = card.GetEffectiveCost(); // 첫 카드 코스트 만큼 할인
+                    cost = (int)eff.value; // value 값 만큼 할인
                 }
             }
             return Mathf.Max(0, cost);
         };
-
         CardCostModifier costFunc = (card, baseCost) =>
         {
             int cost = 0;
@@ -192,7 +191,6 @@ public class StyleManager : MonoSingleton<StyleManager>
             }
             return Mathf.Max(0, cost);
         };
-
         StartTurnCardCostModifier startTurnCostFunc = (card, baseCost) =>
         {
             int cost = baseCost;
@@ -207,9 +205,7 @@ public class StyleManager : MonoSingleton<StyleManager>
             }
             return Mathf.Max(0, cost);
         };
-
-        // 받는 데미지 관련 연산
-        DamageIncomeModifier dmgFunc = (caster, target, baseDamage) =>
+        DamageIncomeModifier dmgFunc = (caster, target, baseDamage) => // 받는 데미지 관련 연산
         {
             float dmg = baseDamage;
             foreach (var eff in effects)
@@ -234,8 +230,7 @@ public class StyleManager : MonoSingleton<StyleManager>
             }
             return dmg;
         };
-
-        DamageGiveModifier dmgGiveFunc = (caster, target, card, baseDamage) =>
+        DamageGiveModifier dmgGiveFunc = (caster, target, card, baseDamage) => // 주는 데미지
         {
             float dmg = baseDamage;
             foreach (var eff in effects)
@@ -245,8 +240,8 @@ public class StyleManager : MonoSingleton<StyleManager>
                 {
                     switch (eff.operation)
                     {
-                        case EffectOperation.MulPercent:
-                            dmg = Mathf.RoundToInt(dmg * eff.value);
+                        case EffectOperation.MulPercent: // 최소 1 이상은 오르도록 올림 형식 int 변환
+                            dmg = Mathf.CeilToInt(dmg * eff.value);
                             break;
                         case EffectOperation.Add:
                             dmg += Mathf.RoundToInt(eff.value);
@@ -260,9 +255,7 @@ public class StyleManager : MonoSingleton<StyleManager>
             }
             return Mathf.Max(0, dmg);
         };
-
-        // 힐 관련 연산
-        HealAmountModifier healFunc = (caster, baseHeal) =>
+        HealAmountModifier healFunc = (caster, baseHeal) => // 힐 관련 연산
         {
             float heal = baseHeal;
             foreach (var eff in effects)
@@ -275,8 +268,8 @@ public class StyleManager : MonoSingleton<StyleManager>
                         case EffectOperation.Add:
                             heal += Mathf.RoundToInt(eff.value);
                             break;
-                        case EffectOperation.MulPercent:
-                            heal = Mathf.RoundToInt(heal * eff.value);
+                        case EffectOperation.MulPercent: // 데미지와는 다르게 올림이 아니라 내림 형식으로 (힐 관련 수치는 보수적으로 잡기)
+                            heal = Mathf.FloorToInt(heal * eff.value);
                             break;
                         case EffectOperation.Set:
                             heal = Mathf.RoundToInt(eff.value);
@@ -286,7 +279,6 @@ public class StyleManager : MonoSingleton<StyleManager>
             }
             return Mathf.Max(0, heal);
         };
-
         BuffDebuffAmountModifier buffDebuffFunc = (target, statType, baseAmount) =>
         {
             int amount = baseAmount;
@@ -310,7 +302,6 @@ public class StyleManager : MonoSingleton<StyleManager>
             }
             return Mathf.Max(0, amount);
         };
-
         EnemyHpModifier enemyHpFunc = (enemy, baseHp) =>
         {
             int hp = baseHp;
@@ -335,7 +326,6 @@ public class StyleManager : MonoSingleton<StyleManager>
             }
             return Mathf.Max(1, hp);
         };
-
         SupplyManaAtStartOfTurn supplyManaAtStartOfTurnFunc = (baseMana) =>
         {
             int mana = baseMana;
@@ -379,7 +369,6 @@ public class StyleManager : MonoSingleton<StyleManager>
                 stef.Apply(player,p);
             }
         };
-
         StunAllAllies stunAllFunc = (players) =>
         {
             bool applied = false;

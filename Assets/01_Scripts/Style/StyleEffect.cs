@@ -27,7 +27,8 @@ public enum EffectOperation
     MulPercent, // 배율 증가 (예: +20% 면 1.2f 입력)
     Set,        // ~ 값 으로 설정
     RandomRange, // 랜덤한 범위 내 값 설정
-    Instant // 즉시 효과 발동
+    Instant, // 즉시 효과 발동
+    none // 수치의 의미가 없는 효과 적용 방식인 경우
 }
 
 public enum EffectCallTime
