@@ -205,7 +205,7 @@ public static class Debuff
         var result = ScriptableObject.CreateInstance<ApplyStatusEffect>();
         result.statType = chosen;
 
-        // 기본값들을 효과 종류에 따라 설정합니다. 필요하면 조정하세요.
+        // 각 디버프 효과별 1턴 값 수치 적용
         switch (chosen)
         {
             case BuffStatType.Attack:

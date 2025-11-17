@@ -363,7 +363,7 @@ public class StyleManager : MonoSingleton<StyleManager>
 
             if(applied)
             {
-                ApplyStatusEffect stef = Debuff.GetRandomDebuffEffect();
+                ApplyStatusEffect stef = Debuff.GetRandomDebuffEffect(); // 랜덤한 디버프 1개를 선정해 player에게 적용
                 stef.target = (int)player.ChClass;
                 var p = new List<IStatusReceiver> { player }; // list 형으로 변환
                 stef.Apply(player,p);
