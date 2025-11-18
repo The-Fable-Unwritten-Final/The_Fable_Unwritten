@@ -35,6 +35,8 @@ public class DataManager : MonoSingleton<DataManager>
     public EnemyDataContainer enemyDataContainer;
     // 스테이지 데이터
     public List<EnemyStageSpawnData> enemySpawnData;
+    // 문체 시스템 데이터
+    public List<StyleDefinition> styleDefs;
     // 랜덤 이벤트 데이터
     public List<RandomEventData> allRandomEvents { get; set;}
     // 백그라운드 이미지 데이터 + 전투용 배경

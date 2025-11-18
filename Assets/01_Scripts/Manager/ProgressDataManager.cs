@@ -23,6 +23,11 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     List<EventEffects> untillNextStage = new List<EventEffects>(); // 다음 스테이지까지 지속되는 효과 리스트
     List<EventEffects> untillEndAdventure = new List<EventEffects>(); // 모험이 끝날 때까지 지속되는 효과 리스트
 
+    // 문체 시스템
+    public int currentDefID = 1;                     // 현재 적용 중인 문체 ID
+    public int inkAmount = 0;                        // 보유 잉크
+
+    // 랜덤 이벤트
     HashSet<int> usedRandomEvent = new();     // RandomEvent 진행 유무(게임 재시작 및 실패 시 초기화 - ClearUsedEvents())
     HashSet<int> TriggeredRandomEvent = new(); // 인과 형식의 랜덤 이벤트가 활성화 된 경우 저장.
     Dictionary<int, StageTheme> stageThemes = new(); // 2~4 스테이지용 테마
@@ -101,6 +106,8 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
             .Select(pair => new StageThemePair { stageIndex = pair.Key, theme = (int)pair.Value })
             .ToList();
         data.eliteClearThemes = eliteClearThemes.Select(e => (int)e).ToList();
+
+        SaveStyleData(data); // 문체 데이터 저장
 
         data.unlockedCardIndexes = unlockedCards.ToList();
         data.itemCounts = itemCounts.ToArray();
@@ -188,6 +195,8 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         ApplySaveToPlayerDatas(data.playerSaves);
         InitializePlayerManagerWithLoadedData(DataManager.Instance.AllCards);
 
+        LoadStyleData(data); //문체 데이터 로드
+
         // 모든 플레이어 초기화
         PlayerManager.Instance.RegisterAndSetupPlayers(PlayerDatas, DataManager.Instance.AllCards);
 
@@ -254,6 +263,30 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         VisitedNodes.Clear();
         CurrentTheme = default;
 
+        foreach (StyleDefinition st in StyleManager.Instance.StyleDic.Values)
+        {
+            st.ResetProgress(); // 진행도 1로 초기화
+        }
+        if(StyleManager.Instance.StyleDic.TryGetValue(0, out var chaos))
+        {
+            // 혼돈 문체 초기화
+            chaos.plusTiers.Clear();
+            chaos.minusTiers.Clear();
+            //
+            if(StageIndex >= 3)
+            {
+                // 스테이지 진행도가 2번째 스테이지 진입 상태 시 새로운 혼돈 문체로 설정
+                int styleCount = DataManager.Instance.styleDefs.Count;
+                var plus = DataManager.Instance.styleDefs[UnityEngine.Random.Range(1, styleCount)].plusTiers;
+                var minus = DataManager.Instance.styleDefs[UnityEngine.Random.Range(1, styleCount)].minusTiers;
+
+                DataManager.Instance.styleDefs[0].plusTiers = plus;
+                DataManager.Instance.styleDefs[0].minusTiers = minus;
+            }
+        }
+        currentDefID = 1;
+        inkAmount = 0;
+
         PlayerPrefs.DeleteKey("ProgressSaveData");
 
         SaveProgress(true);
@@ -263,7 +296,6 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     {
         PlayerDatas = new List<PlayerData>(defaultPlayerParty.allPlayers);
     }
-
     public void InitializePlayerHPByGameType()
     {
         switch (GameStartType)
@@ -287,13 +319,11 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
                 break;
         }
     }
-
-    // 진행한 튜터리얼 추가 시키기
+    // 진행한 튜토리얼 추가 시키기
     public void AddProgressTutorial(int index)
     {
         ProgressTutorial.Add(index);
     }
-
     public void UpdateEventEffectsData(List<EventEffects> com, List<EventEffects> stage, List<EventEffects> adv)
     {
         untillNextCombat = com;
@@ -302,7 +332,6 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
         SaveProgress(true);
     }
-
     /// <summary>
     /// 스테이지 상태 저장 (맵 데이터 및 방문 노드)
     /// </summary>
@@ -311,7 +340,6 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         SavedStageData = data;
         VisitedNodes = new List<GraphNode>(visited);
     }
-
     /// <summary>
     /// 스테이지 상태 초기화 (새 시작 등)
     /// </summary>
@@ -321,7 +349,6 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         SavedStageData = null;
         VisitedNodes.Clear();
     }
-
     /// <summary>
     /// 사용된 랜덤 이벤트 인덱스 초기화
     /// </summary>
@@ -329,7 +356,6 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     {
         usedRandomEvent.Clear();
     }
-
     /// <summary>
     /// 현재 전투 노드 설정
     /// </summary>
@@ -337,7 +363,6 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     {
         CurrentBattleNode = node;
     }
-
     public void AssignThemesToStages()
     {
         stageThemes[2] = StageTheme.Wisdom;
@@ -357,24 +382,18 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     {
         return stageThemes.TryGetValue(stageIndex, out var theme) ? theme : StageTheme.Tutorial;
     }
-
     public void SetTheme(StageTheme theme)
     {
         CurrentTheme = theme;
     }
-
-    //data
     public void EliteClear(StageTheme theme)
     {
         eliteClearThemes.Add(theme);
     }
-
-    //data
     public bool IsEliteClear(StageTheme theme)
     {
         return eliteClearThemes.Contains(theme);
     }
-
     public RandomEventData GetRandomEvent(StageTheme theme)
     {
         var available = DataManager.Instance.allRandomEvents
@@ -392,7 +411,6 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     {
         SavedEnemySetIndex = index;
     }
-
     public void InitializePlayerManagerWithLoadedData(List<CardModel> allCards)
     {
         PlayerManager.Instance.RegisterAndSetupPlayers(PlayerDatas, allCards);
@@ -410,7 +428,6 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         if(DataManager.Instance.allRandomEvents.Any(e => e.index == eventIndex))
             TriggeredRandomEvent.Add(eventIndex);
     }
-
     public void LoadResolution()
     {
         string json = PlayerPrefs.GetString("ProgressSaveData");
@@ -428,6 +445,27 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
             Screen.SetResolution(resolutions[0].x, resolutions[0].y, false);
         }
     }
+    // 각 시스템 별 세이브 로드 분리
+
+    /// <summary>
+    /// 문체 시스템의 정보를 ProgressData 매니저 쪽에 저장
+    /// </summary>
+    public void SetStyleData(int CurrentID)
+    {
+        currentDefID = CurrentID;
+    }
+    private void SaveStyleData(ProgressSaveData data)
+    {
+        data.currentdefid = currentDefID;
+        data.inkamount = inkAmount;
+    }
+    private void LoadStyleData(ProgressSaveData data)
+    {
+        currentDefID = data.currentdefid;
+        inkAmount = data.inkamount;
+    }
+
+
     private void OnApplicationQuit()
     {
         try
@@ -477,6 +515,12 @@ public class ProgressSaveData
     public List<int> untilNextStageEffects = new();
     public List<int> untilEndAdventureEffects = new();
 
+
+    // 문체 시스템
+    public int currentdefid;
+    public int inkamount;
+
+    // 랜덤 이벤트
     public int savedRandomEvent;
     public List<int> usedRandomEventIds = new();
     public List<int> chainedTriggeredEvents = new();

@@ -3013,6 +3013,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allCards: []
   enemyDataContainer: {fileID: 11400000, guid: 10fc3748c6a6ee344bc3139c9f9ce31c, type: 2}
+  styleDefs:
+  - {fileID: 11400000, guid: b2971508bea34d34492b0f7b9e45c7d6, type: 2}
+  - {fileID: 11400000, guid: 63dfb08f34d976b49bb85336eae46b12, type: 2}
+  - {fileID: 11400000, guid: f0a676ab37bc365429c6b6394df28782, type: 2}
+  - {fileID: 11400000, guid: eef8df289032d4549930b4cf2cbdc75c, type: 2}
+  - {fileID: 11400000, guid: 3d6a0556e305fcf44958220455c733d1, type: 2}
+  - {fileID: 11400000, guid: 290526da292c9c84a93df8a139c73dd7, type: 2}
+  - {fileID: 11400000, guid: 07832614bbddc7042a2b51755eef2e92, type: 2}
+  - {fileID: 11400000, guid: c316a50fb9bae2c4db93678d8dc6cb1f, type: 2}
+  - {fileID: 11400000, guid: b581968f2aad4bf4c9803b021ba60973, type: 2}
 --- !u!4 &1656118352
 Transform:
   m_ObjectHideFlags: 0
@@ -3042,6 +3052,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultPlayerParty: {fileID: 11400000, guid: 1b186ef57e341354c9e4977557ce3e3e, type: 2}
   itemCounts: 00000000000000000000000000000000
+  currentDefID: 0
+  inkAmount: 0
   resolutions:
   - {x: 0, y: 0}
 --- !u!1 &1794682181

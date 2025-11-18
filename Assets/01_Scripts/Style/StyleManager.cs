@@ -5,10 +5,11 @@ using System;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor.Localization.Plugins.XLIFF.V20;
+using System.Linq;
 
 [System.Serializable]
 public class PlayerStyleState {
-    public int styleId;
+    public int styleId =1;
     public int plusTier; // +강화 단계 (1,2,3 or 1 만)
     public int minusTier; // -강화 단계 (1,2,3 or 1 만)
 }
@@ -19,8 +20,7 @@ public class StyleManager : MonoSingleton<StyleManager>
     public bool isFirstTurnCard = false; // 전투 입장 후 첫번째 턴 카드, 행동을 하게되면 false로 변경
     public bool isStartOfTurnCard = false; // 턴 시작 후 첫번째 턴 카드, 행동을 하게되면 false로 변경
     public PlayerStyleState CurrentState { get; private set; } = new PlayerStyleState();
-
-    private Dictionary<int, StyleDefinition> StyleDic = new(); // 문체 딕셔너리
+    public Dictionary<int, StyleDefinition> StyleDic = new(); // 문체 딕셔너리
     private Dictionary<EffectCallTime, CompiledEntry> compiledEntries = new(); // 효과별 컴파일된 델리게이트 모음
     public Dictionary<int, CardModel> costDiscountCards = new(); // 코스트 할인 적용된 카드들 (CardCostModifier, TempCardCostModifier의 경우 사용)
 
@@ -59,12 +59,20 @@ public class StyleManager : MonoSingleton<StyleManager>
     public event Action<PlayerStyleState> OnStyleChanged;
     public event Action<PlayerStyleState> OnStyleUpgraded;
 
+    private void Start()
+    {
+        Initialize();
+    }
     public void Initialize() //호출순위 나머지 데이터가 로드가 끝난 이후
     {
-        // 모든 문체 정보 로드 및 딕셔너리에 저장
-        // 저장되어 있는, 종료 전의 문체 정보 로드
         OnStyleChanged += RegisCardOnChange;
-        // 아래에서, 기존에 저장된 문체가 있으면 setstate 호출
+        // 모든 문체 정보 딕셔너리에 등록
+        StyleDic = DataManager.Instance.styleDefs
+        .Select((value, index) => new { index, value })
+        .ToDictionary(x => x.index, y => y.value);
+        // 저장되어 있는, 종료 전의 문체 정보 로드
+        StyleDefinition curStyle = StyleDic[ProgressDataManager.Instance.currentDefID];
+        SetState(curStyle.styleId, curStyle.currentPlus, curStyle.currentMinus);
     }
 
     public void SetState(int styleId, int plusTier, int minusTier)
@@ -76,6 +84,7 @@ public class StyleManager : MonoSingleton<StyleManager>
             minusTier = minusTier
         };
         CurrentState = state;
+        ProgressDataManager.Instance.SetStyleData(CurrentState.styleId); // 현재 데이터 동기화
         OnStyleChanged?.Invoke(CurrentState);
         RebuildCompiledFuncs();
     }
@@ -86,6 +95,7 @@ public class StyleManager : MonoSingleton<StyleManager>
         CurrentState.plusTier = StyleDic[id].currentPlus;
         CurrentState.minusTier = StyleDic[id].currentMinus;
 
+        ProgressDataManager.Instance.SetStyleData(CurrentState.styleId); // 현재 데이터 동기화
         OnStyleChanged?.Invoke(CurrentState);
         RebuildCompiledFuncs();
     }
@@ -97,6 +107,7 @@ public class StyleManager : MonoSingleton<StyleManager>
         CurrentState.plusTier++;
         def.currentPlus++;
 
+        ProgressDataManager.Instance.SetStyleData(CurrentState.styleId); // 현재 데이터 동기화
         OnStyleUpgraded?.Invoke(CurrentState);
         ProgressDataManager.Instance.SaveProgress(true);
         RebuildCompiledFuncs();
@@ -109,6 +120,7 @@ public class StyleManager : MonoSingleton<StyleManager>
         CurrentState.minusTier++;
         def.currentMinus++;
 
+        ProgressDataManager.Instance.SetStyleData(CurrentState.styleId); // 현재 데이터 동기화
         OnStyleUpgraded?.Invoke(CurrentState);
         ProgressDataManager.Instance.SaveProgress(true);
         RebuildCompiledFuncs();

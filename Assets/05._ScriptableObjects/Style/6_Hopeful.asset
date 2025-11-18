@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 183bc419c704a3641825f81869e25870, type: 3}
-  m_Name: 2_Narrative
+  m_Name: 6_Hopeful
   m_EditorClassIdentifier: 
-  styleId: 2
-  displayName: Name_Narrative
-  description: Desc_Narrative
-  plusEffectDescription: Plus_Narrative
-  minusEffectEffectDesc: Minus_Narrative
-  rank: 2
-  maxPlusLevel: 3
+  styleId: 7
+  displayName: Name_Hopeful
+  description: Desc_Hopeful
+  plusEffectDescription: Plus_Hopeful
+  minusEffectEffectDesc: Minus_Hopeful
+  rank: 1
+  maxPlusLevel: 1
   currentPlus: 1
   maxMinusLevel: 3
   currentMinus: 1
@@ -26,49 +26,33 @@ MonoBehaviour:
   - level: 1
     cost: 0
     effects:
-    - target: 8
+    - target: 3
       operation: 0
       value: 1
       valueRange: {x: 0, y: 0}
-      callTime: 5
-  - level: 2
-    cost: 3
-    effects:
-    - target: 8
-      operation: 0
-      value: 2
-      valueRange: {x: 0, y: 0}
-      callTime: 5
-  - level: 3
-    cost: 5
-    effects:
-    - target: 8
-      operation: 0
-      value: 3
-      valueRange: {x: 0, y: 0}
-      callTime: 5
+      callTime: 1
   minusTiers:
   - level: 1
     cost: 0
     effects:
-    - target: 9
+    - target: 4
       operation: 0
-      value: 1
+      value: 4
       valueRange: {x: 0, y: 0}
-      callTime: 6
+      callTime: 4
   - level: 2
-    cost: 3
+    cost: 4
     effects:
-    - target: 9
-      operation: 0
-      value: 2
-      valueRange: {x: 0, y: 0}
-      callTime: 6
-  - level: 3
-    cost: 5
-    effects:
-    - target: 9
+    - target: 4
       operation: 0
       value: 3
       valueRange: {x: 0, y: 0}
-      callTime: 6
+      callTime: 4
+  - level: 3
+    cost: 6
+    effects:
+    - target: 4
+      operation: 0
+      value: 2
+      valueRange: {x: 0, y: 0}
+      callTime: 4

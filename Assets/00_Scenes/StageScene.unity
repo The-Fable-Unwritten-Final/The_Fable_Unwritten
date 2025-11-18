@@ -433,6 +433,52 @@ MonoBehaviour:
   turnController: {fileID: 0}
   cardDiscardController: {fileID: 0}
   tutorialController: {fileID: 0}
+--- !u!1 &841574258
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 841574260}
+  - component: {fileID: 841574259}
+  m_Layer: 0
+  m_Name: StyleManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &841574259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 841574258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06ea679a1b1f4104d99be7af00f9e361, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isFirstTurnCard: 0
+  isStartOfTurnCard: 0
+--- !u!4 &841574260
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 841574258}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -16.712498, y: 17.384272, z: -0.04151462}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &870690589
 GameObject:
   m_ObjectHideFlags: 0
@@ -2046,5 +2092,6 @@ SceneRoots:
   - {fileID: 1757249924}
   - {fileID: 1421031693}
   - {fileID: 599462875}
+  - {fileID: 841574260}
   - {fileID: 870690590}
   - {fileID: 1742649696}
