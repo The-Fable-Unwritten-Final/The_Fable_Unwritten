@@ -272,6 +272,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
             // 혼돈 문체 초기화
             chaos.plusTiers.Clear();
             chaos.minusTiers.Clear();
+            chaos.isUnlocked = false;
             //
             if(StageIndex >= 3)
             {
@@ -282,6 +283,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
                 DataManager.Instance.styleDefs[0].plusTiers = plus;
                 DataManager.Instance.styleDefs[0].minusTiers = minus;
+                chaos.isUnlocked = true;
             }
         }
         currentDefID = 1;

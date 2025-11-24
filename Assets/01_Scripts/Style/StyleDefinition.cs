@@ -27,10 +27,12 @@ public class StyleDefinition : ScriptableObject
     public int currentMinus = 1;            // 현재 -강화 단계
 
     [Header("+ 효과 단계별 목록")]
-    public List<TierEntry> plusTiers = new();  
+    public List<TierEntry> plusTiers = new();
 
     [Header("- 효과 단계별 목록")]
     public List<TierEntry> minusTiers = new();
+
+    public bool isUnlocked;
 
     [Serializable]
     public class TierEntry

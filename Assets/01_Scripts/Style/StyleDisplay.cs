@@ -2,21 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
-public class StyleDisplay : MonoBehaviour
+public class StyleDisplay : BasePopupUI
 {
     // 문체의 UI를 담당하는 스크립트 (ui 적인 조작을 메인으로 사용 => 노드 선택 씬에서만 존재)
-    string t ="string";
-    [SerializeField] StyleDefinition currentStyle; // starting 문체 디폴트 값으로 넣어두기
+    [SerializeField] Image[] inkGauge;
+
+    // 하단 문체 선택 부분
+    public Button prevButton;
+    public Button nextButton;
+    public Sprite lockedButtonImage;
+    public RectTransform buttonContainer;
+    public GameObject buttonPrefab;
+    public int buttonsPerPage = 4;
+    public float spacingBetweenButton = 4;
+    private List<StyleButton> allButtons = new List<StyleButton>();
+    private int currentPage = 0;
+    private int totalPages = 0;
+    private float buttonWidth;
     void Start()
     {
-        // 일반 텍스트의 로컬라이제이션 데이터를 받아오는 경우 GetValueFullText 가 아니라 LocaleDataManager.GetLocalizedStyleEffect("key") 형식으로 가져올 것
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        // 일반 텍스트의 로컬라이제이션 데이터를 받아오는 경우 GetValueFullTextEff 가 아니라 LocaleDataManager.GetLocalizedStyleEffect("key") 형식으로 가져올 것
+        CreateButtons(DataManager.Instance.styleDefs.Count);
     }
 
     void OnEnable()
@@ -26,26 +34,29 @@ public class StyleDisplay : MonoBehaviour
         // 스테이지 번호 확인 후, 기본 문체 적용 + UI 활성화 조정
     }
 
+
+
     /// <summary>
     /// '문체 효과'가 고정 효과(등급 상승x)가 아닐 경우, 받아온 string 값의 ## << 부분에 value값을 변환해서 대입 후 출력
     /// </summary>
-    private string GetValueFullText(string key, bool isPlus)
+    private string GetValueFullTextEff(StyleDefinition sty ,string key, bool isPlus)
     {
-        if(currentStyle == null) return "";
-        string txt = LocaleDataManager.GetLocalizedStyleEffect("key");
+        if (sty == null) return "";
+        string txt = LocaleDataManager.GetLocalizedStyleEffect(key);
         string valueStr;
         StyleEffect eff;
 
-        if(isPlus)
-            eff = currentStyle.plusTiers[currentStyle.currentPlus-1].effects[0];
+        if (isPlus)
+            eff = sty.plusTiers[sty.currentPlus - 1].effects[0];
         else
-            eff = currentStyle.minusTiers[currentStyle.currentMinus-1].effects[0];
+            eff = sty.minusTiers[sty.currentMinus - 1].effects[0];
 
         switch (eff.operation)
         {
             case EffectOperation.MulPercent:
                 // (eff.value - 1) * 100 을 백분율로 표기
                 float rawPercent = (eff.value - 1f) * 100f;
+                rawPercent = Mathf.Round(rawPercent * 1000f) / 1000f; // 소수점 오차 정리
                 // 양수/음수 부호 유지, 크기는 올림 처리(예: 1.1 -> 10 -> +10%)
                 int pct = Mathf.CeilToInt(Mathf.Abs(rawPercent));
                 valueStr = (rawPercent >= 0 ? "+" : "-") + pct.ToString() + "%";
@@ -64,7 +75,7 @@ public class StyleDisplay : MonoBehaviour
             case EffectOperation.RandomRange:
                 int min = Mathf.CeilToInt(eff.valueRange.x);
                 int max = Mathf.CeilToInt(eff.valueRange.y);
-                valueStr = $"{min}~{max}";
+                valueStr = $"{min} ~ {max}";
                 break;
 
             default:
@@ -77,5 +88,90 @@ public class StyleDisplay : MonoBehaviour
             txt = txt.Replace("##", valueStr); // value 값이 변하는 경우 csv의 텍스트 중간에 '##' 가 존재.
 
         return txt;
+    }
+
+    // 하단 버튼 구간 //
+    public void CreateButtons(int totalCount)
+    {
+        // 버튼 초기화 (만약 기존의 데이터가 남아 있을 경우 대비)
+        foreach (var btn in allButtons)
+            Destroy(btn);
+        allButtons.Clear();
+
+        // 버튼 생성
+        for (int i = 0; i < totalCount -1; i++)
+        {
+            GameObject newBtn = Instantiate(buttonPrefab, buttonContainer);
+            allButtons.Add(newBtn.GetComponent<StyleButton>());
+        }
+
+        // 버튼 크기 가져오기
+        LayoutElement le = buttonPrefab.GetComponent<LayoutElement>();
+        buttonWidth = le != null ? le.preferredWidth : 23f;
+
+        // Spacing 가져오기
+        spacingBetweenButton = buttonContainer.GetComponent<HorizontalLayoutGroup>().spacing;
+
+        totalPages = Mathf.CeilToInt((float)(totalCount -1 )/ buttonsPerPage);
+        currentPage = 0;
+
+        // 버튼들에 문체 정보 입력
+        List<StyleDefinition> unlocked = new();
+        var defs = DataManager.Instance.styleDefs;
+
+        for (int i = 0; i < totalCount; i++)
+        {
+            if (!defs[i].isUnlocked) continue; // 잠긴 문체 스킵
+            if (defs[i].styleId == StyleManager.Instance.CurrentState.styleId) continue; // 현재 적용 문체 스킵
+
+            for (int j = 0;  j< allButtons.Count; j++)
+            {
+                if (allButtons[j].definition == null)
+                {
+                    StyleDefinition sty = defs[i];
+                    allButtons[j].SetDefinition(sty, GetValueFullTextEff(sty,sty.plusEffectDescription, true), GetValueFullTextEff(sty,sty.minusEffectEffectDesc, false)); // 문체 설정 및 텍스트 입력
+                    break;
+                }
+            }
+        }
+            // 문체가 들어있지 않은 버튼들은 잠김 상태 적용 (상호작용 off + 이미지 변경)
+        foreach(var buttons in allButtons)
+        {
+            if(buttons.definition == null)
+            {
+                buttons.GetComponent<Button>().interactable = false;
+                buttons.GetComponent<Image>().sprite = lockedButtonImage;
+                buttons.TurnOffAll();
+            }
+        }
+        UpdatePage();
+    }
+    public void NextPage()
+    {
+        if (currentPage < totalPages - 1)
+        {
+            currentPage++;
+            UpdatePage();
+        }
+    }
+
+    public void PrevPage()
+    {
+        if (currentPage > 0)
+        {
+            currentPage--;
+            UpdatePage();
+        }
+    }
+    private void UpdatePage()
+    {
+        float pageWidth = 4 * (buttonWidth + spacingBetweenButton);
+        float targetX = -currentPage * pageWidth;
+
+        buttonContainer.DOAnchorPosX(targetX, 0.25f).SetEase(Ease.OutCubic);
+
+        // 페이지 끝 여부에 따라 버튼 활성/비활성 처리
+        prevButton.interactable = currentPage > 0;
+        nextButton.interactable = currentPage < totalPages - 1;
     }
 }
