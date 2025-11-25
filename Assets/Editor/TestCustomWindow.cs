@@ -21,6 +21,7 @@ public class TestCustomWindow : EditorWindow
 
     private void OnGUI()
     {
+        /* 테스트 유닛 추가 코드
         GUILayout.Label("테스트 유닛 추가", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
         if (GUILayout.Button("전체 추가"))
@@ -43,7 +44,14 @@ public class TestCustomWindow : EditorWindow
             TryAddPlayer(CharacterClass.Kayla, "KaylaPlayer");
         }
         EditorGUILayout.EndVertical();
-
+        */
+        GUILayout.Label("잉크 추가", EditorStyles.boldLabel);
+        EditorGUILayout.BeginVertical("box");
+        if (GUILayout.Button("잉크 1 추가"))
+        {
+            StyleManager.Instance.GetInk(1);
+        }
+        EditorGUILayout.EndVertical();
 
         GUILayout.Space(20);
 

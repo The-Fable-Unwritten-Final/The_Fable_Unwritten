@@ -58,6 +58,7 @@ public class StyleManager : MonoSingleton<StyleManager>
 
     public event Action<PlayerStyleState> OnStyleChanged;
     public event Action<PlayerStyleState> OnStyleUpgraded;
+    public event Action<int> OnInkChange;
 
     private void Start()
     {
@@ -126,6 +127,28 @@ public class StyleManager : MonoSingleton<StyleManager>
         RebuildCompiledFuncs();
         return true;
     }
+    public bool TryInkUse(int cost) // 잉크 사용 시도
+    {
+        var pdm = ProgressDataManager.Instance;
+
+        if (pdm.inkAmount >= cost)
+        {
+            pdm.inkAmount -= cost;
+            OnInkChange?.Invoke(pdm.inkAmount);
+            return true;
+        }
+        else
+            return false;
+    }
+    public void GetInk(int amount) // 잉크 획득
+    {
+        int total = amount + ProgressDataManager.Instance.inkAmount;
+        total = Mathf.Min(total, 10);
+
+        ProgressDataManager.Instance.inkAmount = total;
+        OnInkChange?.Invoke(ProgressDataManager.Instance.inkAmount);
+    }
+
     private void RegisCardOnChange(PlayerStyleState state) // 카드 코스트 관련 효과 존재시 costDiscountCards에 등록
     {
         costDiscountCards.Clear();

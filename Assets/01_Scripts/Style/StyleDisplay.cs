@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 public class StyleDisplay : BasePopupUI
 {
     // 문체의 UI를 담당하는 스크립트 (ui 적인 조작을 메인으로 사용 => 노드 선택 씬에서만 존재)
-    [SerializeField] Image[] inkGauge;
 
+    // 상단 잉크 표시
+    [SerializeField] Image[] inkGauge;
+    public TextMeshProUGUI inkText;
     // 하단 문체 선택 부분
     public Button prevButton;
     public Button nextButton;
@@ -29,9 +32,13 @@ public class StyleDisplay : BasePopupUI
 
     void OnEnable()
     {
-        // 노드 씬으로 온 경우 활성화.
-        // 기본적으로 빈 오브젝트 안에 넣고, 내부의 자식 오브젝트에 UI 배치
+        StyleManager.Instance.OnInkChange += InkChange;
         // 스테이지 번호 확인 후, 기본 문체 적용 + UI 활성화 조정
+        InkChange(ProgressDataManager.Instance.inkAmount);
+    }
+    void Oisable()
+    {
+        StyleManager.Instance.OnInkChange -= InkChange;        
     }
 
 
@@ -174,4 +181,13 @@ public class StyleDisplay : BasePopupUI
         prevButton.interactable = currentPage > 0;
         nextButton.interactable = currentPage < totalPages - 1;
     }
+    public void InkChange(int amount)
+    {
+        inkText.text = $"{amount}/{10}";
+        foreach (var gauge in inkGauge)
+            gauge.gameObject.SetActive(false);
+
+        for(int i =0; i<amount; i++) 
+            inkGauge[i].gameObject.SetActive(true);
+    } 
 }

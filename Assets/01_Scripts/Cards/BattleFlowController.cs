@@ -368,7 +368,7 @@ public class BattleFlowController : MonoBehaviour
                 enemyParty[i] = null;
             
             StopAllCoroutines();
-            GameManager.Instance.turnController.ToGameEnd();
+            GameManager.Instance.turnController.ToGameEnd(false);
             BattleLogManager.Instance.ResetGameLog();
         }
         else if (allEnemiesDead)
@@ -410,7 +410,7 @@ public class BattleFlowController : MonoBehaviour
             for (int i = 0; i < enemyParty.Count; i++)
                 enemyParty[i] = null;
             StopAllCoroutines();
-            GameManager.Instance.turnController.ToGameEnd();
+            GameManager.Instance.turnController.ToGameEnd(true);
         }
     }
 
