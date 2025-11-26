@@ -138,7 +138,7 @@ public class StyleDisplay : BasePopupUI
                 {
                     StyleDefinition sty = defs[i];
                     allButtons[j].SetDefinition(sty, GetValueFullTextEff(sty, sty.plusEffectDescription, true), GetValueFullTextEff(sty, sty.minusEffectEffectDesc, false)); // 문체 설정 및 텍스트 입력
-                    allButtons[j].GetComponent<UIButtonHoverScale>().SetStyle(sty);
+                    allButtons[j].GetComponent<StyleButtonHoverScale>().SetStyle(sty);
                     break;
                 }
             }
