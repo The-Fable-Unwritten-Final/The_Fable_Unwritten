@@ -20,6 +20,7 @@ public class StyleDisplay : BasePopupUI
     public GameObject buttonPrefab;
     public int buttonsPerPage = 4;
     public float spacingBetweenButton = 4;
+
     private List<StyleButton> allButtons = new List<StyleButton>();
     private int currentPage = 0;
     private int totalPages = 0;
@@ -136,15 +137,16 @@ public class StyleDisplay : BasePopupUI
                 if (allButtons[j].definition == null)
                 {
                     StyleDefinition sty = defs[i];
-                    allButtons[j].SetDefinition(sty, GetValueFullTextEff(sty,sty.plusEffectDescription, true), GetValueFullTextEff(sty,sty.minusEffectEffectDesc, false)); // 문체 설정 및 텍스트 입력
+                    allButtons[j].SetDefinition(sty, GetValueFullTextEff(sty, sty.plusEffectDescription, true), GetValueFullTextEff(sty, sty.minusEffectEffectDesc, false)); // 문체 설정 및 텍스트 입력
+                    allButtons[j].GetComponent<UIButtonHoverScale>().SetStyle(sty);
                     break;
                 }
             }
         }
-            // 문체가 들어있지 않은 버튼들은 잠김 상태 적용 (상호작용 off + 이미지 변경)
-        foreach(var buttons in allButtons)
+        // 문체가 들어있지 않은 버튼들은 잠김 상태 적용 (상호작용 off + 이미지 변경)
+        foreach (var buttons in allButtons)
         {
-            if(buttons.definition == null)
+            if (buttons.definition == null)
             {
                 buttons.GetComponent<Button>().interactable = false;
                 buttons.GetComponent<Image>().sprite = lockedButtonImage;
