@@ -26,16 +26,16 @@ MonoBehaviour:
   - level: 1
     cost: 0
     effects:
-    - target: 1
-      operation: 5
+    - target: 0
+      operation: 6
       value: 0
       valueRange: {x: 0, y: 0}
-      callTime: 1
+      callTime: 0
   minusTiers:
   - level: 1
     cost: 0
     effects:
-    - target: 11
+    - target: 0
       operation: 0
       value: 0
       valueRange: {x: 0, y: 0}

@@ -26,22 +26,22 @@ MonoBehaviour:
   - level: 1
     cost: 0
     effects:
-    - target: 3
+    - target: 0
       operation: 0
       value: 1
       valueRange: {x: 0, y: 0}
-      callTime: 1
+      callTime: 0
   minusTiers:
   - level: 1
-    cost: 0
+    cost: 4
     effects:
-    - target: 4
+    - target: 0
       operation: 0
       value: 4
       valueRange: {x: 0, y: 0}
-      callTime: 4
+      callTime: 0
   - level: 2
-    cost: 4
+    cost: 6
     effects:
     - target: 4
       operation: 0
@@ -49,7 +49,7 @@ MonoBehaviour:
       valueRange: {x: 0, y: 0}
       callTime: 4
   - level: 3
-    cost: 6
+    cost: 0
     effects:
     - target: 4
       operation: 0

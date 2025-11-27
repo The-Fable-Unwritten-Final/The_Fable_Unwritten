@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Desc_Lyrical
   plusEffectDescription: Plus_Lyrical
   minusEffectEffectDesc: Minus_Lyrical
-  rank: 3
+  rank: 1
   maxPlusLevel: 1
   currentPlus: 1
   maxMinusLevel: 1
@@ -26,18 +26,18 @@ MonoBehaviour:
   - level: 1
     cost: 0
     effects:
-    - target: 6
+    - target: 0
       operation: 0
       value: 1
       valueRange: {x: 0, y: 0}
-      callTime: 2
+      callTime: 0
   minusTiers:
   - level: 1
     cost: 0
     effects:
-    - target: 4
+    - target: 0
       operation: 0
       value: 1
       valueRange: {x: 0, y: 0}
-      callTime: 4
+      callTime: 0
   isUnlocked: 1

@@ -10,9 +10,23 @@ public class StyleDisplay : BasePopupUI
     // 문체의 UI를 담당하는 스크립트 (ui 적인 조작을 메인으로 사용 => 노드 선택 씬에서만 존재)
 
     // 상단 잉크 표시
+    [Header("Upper UI")]
     [SerializeField] Image[] inkGauge;
     public TextMeshProUGUI inkText;
+
+    // 중단 현재 문체 부분
+    [Header("Main UI")]
+    [SerializeField] TextMeshProUGUI curName;
+    [SerializeField] TextMeshProUGUI curFlav;
+    [SerializeField] TextMeshProUGUI curEff1;
+    [SerializeField] TextMeshProUGUI curEff2;
+    [SerializeField] TextMeshProUGUI upgrEff1;
+    [SerializeField] TextMeshProUGUI upgrEff2;
+    [SerializeField] TextMeshProUGUI Eff1Ink;
+    [SerializeField] TextMeshProUGUI Eff2Ink;
+    
     // 하단 문체 선택 부분
+    [Header("Bottom UI")]
     public Button prevButton;
     public Button nextButton;
     public Sprite lockedButtonImage;
@@ -34,12 +48,14 @@ public class StyleDisplay : BasePopupUI
     void OnEnable()
     {
         StyleManager.Instance.OnInkChange += InkChange;
+        StyleManager.Instance.display = this;
         // 스테이지 번호 확인 후, 기본 문체 적용 + UI 활성화 조정
         InkChange(ProgressDataManager.Instance.inkAmount);
     }
     void Oisable()
     {
-        StyleManager.Instance.OnInkChange -= InkChange;        
+        StyleManager.Instance.OnInkChange -= InkChange;
+        StyleManager.Instance.display = null;     
     }
 
 
@@ -47,7 +63,7 @@ public class StyleDisplay : BasePopupUI
     /// <summary>
     /// '문체 효과'가 고정 효과(등급 상승x)가 아닐 경우, 받아온 string 값의 ## << 부분에 value값을 변환해서 대입 후 출력
     /// </summary>
-    private string GetValueFullTextEff(StyleDefinition sty ,string key, bool isPlus)
+    private string GetValueFullTextEff(StyleDefinition sty, string key, bool isPlus)
     {
         if (sty == null) return "";
         string txt = LocaleDataManager.GetLocalizedStyleEffect(key);
@@ -75,6 +91,11 @@ public class StyleDisplay : BasePopupUI
                 valueStr = AddVal.ToString();
                 break;
 
+            case EffectOperation.Minus:
+                int MinusVal = Mathf.CeilToInt(eff.value);
+                valueStr = "-" + MinusVal.ToString();
+                break;
+
             case EffectOperation.Set:
                 int setVal = Mathf.CeilToInt(eff.value);
                 valueStr = setVal.ToString();
@@ -97,6 +118,83 @@ public class StyleDisplay : BasePopupUI
 
         return txt;
     }
+    /// <summary>
+    /// '문체 효과 강화' 부분에서 다음 강화 단계 효과를 표시 (최대 강화가 아닐 시 초록/빨강 으로 강조 표시 추가)
+    /// </summary>
+    private string GetValueFullTextUpgraded(StyleDefinition sty ,string key, bool isPlus)
+    {
+        if (sty == null) return "";
+        string txt = LocaleDataManager.GetLocalizedStyleEffect(key);
+        string valueStr;
+        bool isFullUpgrade = true;
+        StyleEffect eff;
+
+        if (isPlus)
+        {
+            eff = sty.plusTiers[sty.currentPlus - 1].effects[0];
+            if (sty.plusTiers.Count > sty.currentPlus) // 최대 강화가 아닌 경우 다음 강화 단계 표시
+            {
+                isFullUpgrade = false;
+                eff = sty.plusTiers[sty.currentPlus].effects[0];
+            }
+        }
+        else
+        {
+            eff = sty.minusTiers[sty.currentMinus - 1].effects[0];
+            if (sty.minusTiers.Count > sty.currentMinus) // 최대 강화가 아닌 경우 다음 강화 단계 표시
+            {
+                isFullUpgrade = false;
+                eff = sty.minusTiers[sty.currentMinus].effects[0];
+            }
+        }
+
+        switch (eff.operation)
+        {
+            case EffectOperation.MulPercent:
+                // (eff.value - 1) * 100 을 백분율로 표기
+                float rawPercent = (eff.value - 1f) * 100f;
+                rawPercent = Mathf.Round(rawPercent * 1000f) / 1000f; // 소수점 오차 정리
+                // 양수/음수 부호 유지, 크기는 올림 처리(예: 1.1 -> 10 -> +10%)
+                int pct = Mathf.CeilToInt(Mathf.Abs(rawPercent));
+                valueStr = (rawPercent >= 0 ? "+" : "-") + pct.ToString() + "%";
+                break;
+
+            case EffectOperation.Add:
+                int AddVal = Mathf.CeilToInt(eff.value);
+                valueStr = "+"+ AddVal.ToString();
+                break;
+
+            case EffectOperation.Minus:
+                int MinusVal = Mathf.CeilToInt(eff.value);
+                valueStr =  "-"+ MinusVal.ToString();
+                break;
+
+            case EffectOperation.Set:
+                int setVal = Mathf.CeilToInt(eff.value);
+                valueStr = setVal.ToString();
+                break;
+
+            case EffectOperation.RandomRange:
+                int min = Mathf.CeilToInt(eff.valueRange.x);
+                int max = Mathf.CeilToInt(eff.valueRange.y);
+                valueStr = $"{min} ~ {max}";
+                break;
+
+            default:
+                // 안전한 기본 포맷
+                valueStr = eff.value.ToString();
+                break;
+        }
+
+        if (!isFullUpgrade) // 최대 강화가 아닐 경우, 강화 될 수치를 초록/빨간색으로 표시
+        {
+            string color = isPlus ? "green" : "red";
+            valueStr = $"<color={color}>{valueStr}</color>";   
+        }
+        if (txt.Contains("##"))
+            txt = txt.Replace("##", valueStr); // value 값이 변하는 경우 csv의 텍스트 중간에 '##' 가 존재.
+        return txt;
+    }
 
     // 하단 버튼 구간 //
     public void CreateButtons(int totalCount)
@@ -107,7 +205,7 @@ public class StyleDisplay : BasePopupUI
         allButtons.Clear();
 
         // 버튼 생성
-        for (int i = 0; i < totalCount -1; i++)
+        for (int i = 0; i < totalCount - 1; i++)
         {
             GameObject newBtn = Instantiate(buttonPrefab, buttonContainer);
             allButtons.Add(newBtn.GetComponent<StyleButton>());
@@ -120,19 +218,64 @@ public class StyleDisplay : BasePopupUI
         // Spacing 가져오기
         spacingBetweenButton = buttonContainer.GetComponent<HorizontalLayoutGroup>().spacing;
 
-        totalPages = Mathf.CeilToInt((float)(totalCount -1 )/ buttonsPerPage);
+        totalPages = Mathf.CeilToInt((float)(totalCount - 1) / buttonsPerPage);
         currentPage = 0;
 
         // 버튼들에 문체 정보 입력
-        List<StyleDefinition> unlocked = new();
         var defs = DataManager.Instance.styleDefs;
 
         for (int i = 0; i < totalCount; i++)
         {
             if (!defs[i].isUnlocked) continue; // 잠긴 문체 스킵
-            if (defs[i].styleId == StyleManager.Instance.CurrentState.styleId) continue; // 현재 적용 문체 스킵
+            if (defs[i].styleId == StyleManager.Instance.CurrentState.styleId)
+            {
+                // 현재 적용 문체
+                UpdateCurrentStyle(defs[i]);
+                continue;
+            }
 
-            for (int j = 0;  j< allButtons.Count; j++)
+            for (int j = 0; j < allButtons.Count; j++)
+            {
+                if (allButtons[j].definition == null)
+                {
+                    StyleDefinition sty = defs[i];
+                    allButtons[j].SetDefinition(sty, GetValueFullTextEff(sty, sty.plusEffectDescription, true), GetValueFullTextEff(sty, sty.minusEffectEffectDesc, false)); // 문체 설정 및 텍스트 입력
+                    allButtons[j].GetComponent<StyleButtonHoverScale>().SetStyle(sty);
+                    break;
+                }
+            }
+        }
+        // 문체가 들어있지 않은 버튼들은 잠김 상태 적용 (상호작용 off + 이미지 변경)
+        foreach (var buttons in allButtons)
+        {
+            if (buttons.definition == null)
+            {
+                buttons.GetComponent<Button>().interactable = false;
+                buttons.GetComponent<Image>().sprite = lockedButtonImage;
+                buttons.TurnOffAll();
+            }
+        }
+        UpdatePage();
+    }
+    public void UpdateButton(int totalCount)
+    {
+        // 전체 버튼 내용 초기화
+        for(int i =0; i<totalCount-1; i++)
+            allButtons[i].definition = null;
+
+        var defs = DataManager.Instance.styleDefs;
+
+        for (int i = 0; i < totalCount; i++)
+        {
+            if (!defs[i].isUnlocked) continue; // 잠긴 문체 스킵
+            if (defs[i].styleId == StyleManager.Instance.CurrentState.styleId)
+            {
+                // 현재 적용 문체
+                UpdateCurrentStyle(defs[i]);
+                continue;
+            }
+
+            for (int j = 0; j < allButtons.Count; j++)
             {
                 if (allButtons[j].definition == null)
                 {
@@ -189,7 +332,20 @@ public class StyleDisplay : BasePopupUI
         foreach (var gauge in inkGauge)
             gauge.gameObject.SetActive(false);
 
-        for(int i =0; i<amount; i++) 
+        for (int i = 0; i < amount; i++)
             inkGauge[i].gameObject.SetActive(true);
     } 
+    private void UpdateCurrentStyle(StyleDefinition sty) // 현재 문체 표시 부분의 정보 업데이트
+    {
+        curName.text = LocaleDataManager.GetLocalizedStyleEffect(sty.displayName);
+        curFlav.text = LocaleDataManager.GetLocalizedStyleEffect(sty.description);
+
+        curEff1.text = GetValueFullTextEff(sty, sty.plusEffectDescription, true);
+        upgrEff1.text = GetValueFullTextUpgraded(sty, sty.plusEffectDescription, true);
+        Eff1Ink.text = sty.plusTiers[sty.currentPlus - 1].cost.ToString();
+
+        curEff2.text = GetValueFullTextEff(sty, sty.plusEffectDescription, false);
+        upgrEff2.text = GetValueFullTextUpgraded(sty, sty.plusEffectDescription, false);
+        Eff2Ink.text = sty.minusTiers[sty.currentMinus - 1].cost.ToString();
+    }
 }

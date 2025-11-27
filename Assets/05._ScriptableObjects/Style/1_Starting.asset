@@ -17,58 +17,58 @@ MonoBehaviour:
   description: Desc_Starting
   plusEffectDescription: Plus_Starting
   minusEffectEffectDesc: Minus_Starting
-  rank: 3
+  rank: 1
   maxPlusLevel: 3
   currentPlus: 1
   maxMinusLevel: 3
   currentMinus: 1
   plusTiers:
   - level: 1
-    cost: 0
+    cost: 2
     effects:
     - target: 0
-      operation: 0
+      operation: 1
       value: 1
       valueRange: {x: 0, y: 0}
       callTime: 0
   - level: 2
-    cost: 2
+    cost: 4
     effects:
     - target: 0
-      operation: 0
+      operation: 1
       value: 2
       valueRange: {x: 0, y: 0}
       callTime: 0
   - level: 3
-    cost: 4
+    cost: 0
     effects:
     - target: 0
-      operation: 0
+      operation: 1
       value: 3
       valueRange: {x: 0, y: 0}
       callTime: 0
   minusTiers:
   - level: 1
-    cost: 0
+    cost: 2
     effects:
-    - target: 2
-      operation: 1
+    - target: 0
+      operation: 2
       value: 1.2
       valueRange: {x: 0, y: 0}
       callTime: 0
   - level: 2
-    cost: 2
+    cost: 4
     effects:
     - target: 2
-      operation: 0
+      operation: 2
       value: 1.1
       valueRange: {x: 0, y: 0}
       callTime: 0
   - level: 3
-    cost: 4
+    cost: 0
     effects:
     - target: 2
-      operation: 1
+      operation: 2
       value: 1
       valueRange: {x: 0, y: 0}
       callTime: 0

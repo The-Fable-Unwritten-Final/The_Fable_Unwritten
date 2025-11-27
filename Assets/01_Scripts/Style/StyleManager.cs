@@ -2,13 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Unity.Mathematics;
-using Unity.VisualScripting;
-using UnityEditor.Localization.Plugins.XLIFF.V20;
 using System.Linq;
 
 [System.Serializable]
-public class PlayerStyleState {
+public class StyleState {
     public int styleId =1;
     public int plusTier; // +강화 단계 (1,2,3 or 1 만)
     public int minusTier; // -강화 단계 (1,2,3 or 1 만)
@@ -19,7 +16,9 @@ public class StyleManager : MonoSingleton<StyleManager>
 {
     public bool isFirstTurnCard = false; // 전투 입장 후 첫번째 턴 카드, 행동을 하게되면 false로 변경
     public bool isStartOfTurnCard = false; // 턴 시작 후 첫번째 턴 카드, 행동을 하게되면 false로 변경
-    public PlayerStyleState CurrentState { get; private set; } = new PlayerStyleState();
+    public StyleDisplay display;
+    public StyleDefinition tempSty; // 문체 강화,교체 버튼을 누를 시 임시로 저장하는 문체
+    public StyleState CurrentState { get; private set; } = new StyleState();
     public Dictionary<int, StyleDefinition> StyleDic = new(); // 문체 딕셔너리
     private Dictionary<EffectCallTime, CompiledEntry> compiledEntries = new(); // 효과별 컴파일된 델리게이트 모음
     public Dictionary<int, CardModel> costDiscountCards = new(); // 코스트 할인 적용된 카드들 (CardCostModifier, TempCardCostModifier의 경우 사용)
@@ -56,8 +55,8 @@ public class StyleManager : MonoSingleton<StyleManager>
         public StunAllAllies stunAllAlliesFunc; // 아군 전체 스턴 적용
     }
 
-    public event Action<PlayerStyleState> OnStyleChanged;
-    public event Action<PlayerStyleState> OnStyleUpgraded;
+    public event Action<StyleState> OnStyleChanged;
+    public event Action<StyleState> OnStyleUpgraded;
     public event Action<int> OnInkChange;
 
     private void Start()
@@ -78,7 +77,7 @@ public class StyleManager : MonoSingleton<StyleManager>
 
     public void SetState(int styleId, int plusTier, int minusTier)
     {
-        var state = new PlayerStyleState
+        var state = new StyleState
         {
             styleId = styleId,
             plusTier = plusTier,
@@ -99,6 +98,9 @@ public class StyleManager : MonoSingleton<StyleManager>
         ProgressDataManager.Instance.SetStyleData(CurrentState.styleId); // 현재 데이터 동기화
         OnStyleChanged?.Invoke(CurrentState);
         RebuildCompiledFuncs();
+
+        // UI 초기화
+        display.UpdateButton(DataManager.Instance.styleDefs.Count);
     }
 
     public bool UpgradePlus()
@@ -149,7 +151,7 @@ public class StyleManager : MonoSingleton<StyleManager>
         OnInkChange?.Invoke(ProgressDataManager.Instance.inkAmount);
     }
 
-    private void RegisCardOnChange(PlayerStyleState state) // 카드 코스트 관련 효과 존재시 costDiscountCards에 등록
+    private void RegisCardOnChange(StyleState state) // 카드 코스트 관련 효과 존재시 costDiscountCards에 등록
     {
         costDiscountCards.Clear();
         StyleDefinition def = StyleDic[state.styleId];

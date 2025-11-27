@@ -277,7 +277,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 2
+  m_text: 3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ee7dfd5aa68108a4cae7a9c288dfbdce, type: 2}
   m_sharedMaterial: {fileID: -8146178071228311197, guid: ee7dfd5aa68108a4cae7a9c288dfbdce,
@@ -1033,7 +1033,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4364218043924069216}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: -7181791525281949732}
+        m_TargetAssemblyTypeName: StyleButton, Assembly-CSharp
+        m_MethodName: OnButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &7105333338252914596
 MonoBehaviour:
   m_ObjectHideFlags: 0

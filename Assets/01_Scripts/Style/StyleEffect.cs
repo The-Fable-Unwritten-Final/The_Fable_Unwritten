@@ -24,6 +24,7 @@ public enum EffectTarget
 public enum EffectOperation
 {
     Add,        // 추가
+    Minus,      // 빼기
     MulPercent, // 배율 증가 (예: +20% 면 1.2f 입력)
     Set,        // ~ 값 으로 설정
     RandomRange, // 랜덤한 범위 내 값 설정
