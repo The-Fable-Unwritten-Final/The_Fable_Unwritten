@@ -10,7 +10,7 @@ public class StyleButtonHoverScale : MonoBehaviour, IPointerEnterHandler, IPoint
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (styOnButton != null)
-            transform.DOScale(1.08f, 0.15f).SetEase(Ease.OutBack);
+            transform.DOScale(1.05f, 0.15f).SetEase(Ease.OutBack);
     }
 
     public void OnPointerExit(PointerEventData eventData)
