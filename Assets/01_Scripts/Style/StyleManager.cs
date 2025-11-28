@@ -18,6 +18,7 @@ public class StyleManager : MonoSingleton<StyleManager>
     public bool isStartOfTurnCard = false; // 턴 시작 후 첫번째 턴 카드, 행동을 하게되면 false로 변경
     public StyleDisplay display;
     public StyleDefinition tempSty; // 문체 강화,교체 버튼을 누를 시 임시로 저장하는 문체
+    public bool isPlus; // 현재 강화 하려는 효과의 종류(+,-)
     public StyleState CurrentState { get; private set; } = new StyleState();
     public Dictionary<int, StyleDefinition> StyleDic = new(); // 문체 딕셔너리
     private Dictionary<EffectCallTime, CompiledEntry> compiledEntries = new(); // 효과별 컴파일된 델리게이트 모음

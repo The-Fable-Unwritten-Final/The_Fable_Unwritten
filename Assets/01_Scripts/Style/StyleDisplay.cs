@@ -21,15 +21,26 @@ public class StyleDisplay : BasePopupUI
     [SerializeField] TextMeshProUGUI curEff1;
     [SerializeField] TextMeshProUGUI curEff2;
     [SerializeField] TextMeshProUGUI upgrEff1;
-    [SerializeField] TextMeshProUGUI upgrEff2;
+    [SerializeField] GameObject ClickToUp1;
+    [SerializeField] GameObject FullToUp1;
+    [SerializeField] Image upgrSprite1;
+    [SerializeField] GameObject Eff1InkImage;
     [SerializeField] TextMeshProUGUI Eff1Ink;
+
+    [SerializeField] TextMeshProUGUI upgrEff2;
+    [SerializeField] GameObject ClickToUp2;
+    [SerializeField] GameObject FullToUp2;
+    [SerializeField] Image upgrSprite2;
+    [SerializeField] GameObject Eff2InkImage;
     [SerializeField] TextMeshProUGUI Eff2Ink;
     
     // 하단 문체 선택 부분
     [Header("Bottom UI")]
     public Button prevButton;
     public Button nextButton;
-    public Sprite lockedButtonImage;
+    public Sprite lockedButtonImage;        // 잠긴 문체 교환 버튼
+    public Sprite nonFullUpgradeButtonImage;// 최대 강화가 아닌 문체 효과 강화 버튼
+    public Sprite FullUpgradeButtomImage;   // 최대 강화 상태, 문체 효과 강화 버튼
     public RectTransform buttonContainer;
     public GameObject buttonPrefab;
     public int buttonsPerPage = 4;
@@ -260,7 +271,7 @@ public class StyleDisplay : BasePopupUI
     public void UpdateButton(int totalCount)
     {
         // 전체 버튼 내용 초기화
-        for(int i =0; i<totalCount-1; i++)
+        for (int i = 0; i < totalCount - 1; i++)
             allButtons[i].definition = null;
 
         var defs = DataManager.Instance.styleDefs;
@@ -297,6 +308,11 @@ public class StyleDisplay : BasePopupUI
             }
         }
         UpdatePage();
+    }
+    public void OnUpgradeClick(bool isPlus)
+    {
+        StyleManager.Instance.isPlus = isPlus;
+        UIManager.Instance.ShowPopupByName("PopupUI_Upgrade");
     }
     public void NextPage()
     {
@@ -335,7 +351,7 @@ public class StyleDisplay : BasePopupUI
         for (int i = 0; i < amount; i++)
             inkGauge[i].gameObject.SetActive(true);
     } 
-    private void UpdateCurrentStyle(StyleDefinition sty) // 현재 문체 표시 부분의 정보 업데이트
+    public void UpdateCurrentStyle(StyleDefinition sty) // 현재 문체 표시 부분의(중단 UI 전부) 정보 업데이트
     {
         curName.text = LocaleDataManager.GetLocalizedStyleEffect(sty.displayName);
         curFlav.text = LocaleDataManager.GetLocalizedStyleEffect(sty.description);
@@ -343,9 +359,46 @@ public class StyleDisplay : BasePopupUI
         curEff1.text = GetValueFullTextEff(sty, sty.plusEffectDescription, true);
         upgrEff1.text = GetValueFullTextUpgraded(sty, sty.plusEffectDescription, true);
         Eff1Ink.text = sty.plusTiers[sty.currentPlus - 1].cost.ToString();
+        if (sty.currentPlus == sty.maxPlusLevel)
+        {
+            upgrSprite1.sprite = FullUpgradeButtomImage;
+            upgrSprite1.GetComponent<Button>().interactable = false;
+            upgrSprite1.GetComponent<UIButtonHoverScale>().targetScale = 1.0f;
+            ClickToUp1.SetActive(false);
+            FullToUp1.SetActive(true);
+            Eff1InkImage.SetActive(false);
+        }
+        else
+        {
+            upgrSprite1.sprite = nonFullUpgradeButtonImage;
+            upgrSprite1.GetComponent<Button>().interactable = true;
+            upgrSprite1.GetComponent<UIButtonHoverScale>().targetScale = 1.03f;
+            ClickToUp1.SetActive(true);
+            FullToUp1.SetActive(false);
+            Eff1InkImage.SetActive(true);
+        }
 
-        curEff2.text = GetValueFullTextEff(sty, sty.plusEffectDescription, false);
-        upgrEff2.text = GetValueFullTextUpgraded(sty, sty.plusEffectDescription, false);
+
+        curEff2.text = GetValueFullTextEff(sty, sty.minusEffectEffectDesc, false);
+        upgrEff2.text = GetValueFullTextUpgraded(sty, sty.minusEffectEffectDesc, false);
         Eff2Ink.text = sty.minusTiers[sty.currentMinus - 1].cost.ToString();
+        if (sty.currentMinus == sty.maxMinusLevel)
+        {
+            upgrSprite2.sprite = FullUpgradeButtomImage;
+            upgrSprite2.GetComponent<Button>().interactable = false;
+            upgrSprite2.GetComponent<UIButtonHoverScale>().targetScale = 1.0f;
+            ClickToUp2.SetActive(false);
+            FullToUp2.SetActive(true);
+            Eff2InkImage.SetActive(false);
+        }
+        else
+        {
+            upgrSprite2.sprite = nonFullUpgradeButtonImage;
+            upgrSprite2.GetComponent<Button>().interactable = true;
+            upgrSprite2.GetComponent<UIButtonHoverScale>().targetScale = 1.03f;
+            ClickToUp2.SetActive(true);
+            FullToUp2.SetActive(false);
+            Eff2InkImage.SetActive(true);
+        }
     }
 }

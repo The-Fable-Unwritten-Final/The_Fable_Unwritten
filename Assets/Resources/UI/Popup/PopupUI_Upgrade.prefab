@@ -200,7 +200,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 4607785191893169722}
         m_TargetAssemblyTypeName: BasePopupUI, Assembly-CSharp
         m_MethodName: Close
         m_Mode: 1
@@ -347,9 +347,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PopupUI_ReturnTitle, Assembly-CSharp
-        m_MethodName: OnClickToTitle
+      - m_Target: {fileID: 4607785191893169722}
+        m_TargetAssemblyTypeName: PopupUI_Upgrade, Assembly-CSharp
+        m_MethodName: TryUpgrade
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -466,8 +466,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 27
-  m_fontSizeBase: 27
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -522,9 +522,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_StringReference:
     m_TableReference:
-      m_TableCollectionName: GUID:1de767cfd71db194b868982066ee5431
+      m_TableCollectionName: GUID:16ca0ac77b0ded2489e8440276689dc3
     m_TableEntryReference:
-      m_KeyId: 4313844833333248
+      m_KeyId: 820941172736
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -560,6 +560,7 @@ GameObject:
   - component: {fileID: 4716892667922168109}
   - component: {fileID: 5310754173167269140}
   - component: {fileID: 7010803154212574388}
+  - component: {fileID: 8540744060151915374}
   m_Layer: 5
   m_Name: Txt
   m_TagString: Untagged
@@ -724,6 +725,21 @@ MonoBehaviour:
   references:
     version: 2
     RefIds: []
+--- !u!114 &8540744060151915374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4066330725509588863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ab81e3570277ac45945094064355275, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fontSize_EN: 24
+  fontSize_KO: 30
+  fontSize_JA: 24
 --- !u!1 &7117622515484062662
 GameObject:
   m_ObjectHideFlags: 0
@@ -736,6 +752,7 @@ GameObject:
   - component: {fileID: 4414949433583331507}
   - component: {fileID: 6938504163126694754}
   - component: {fileID: 9056169514381636053}
+  - component: {fileID: 7214745269725475682}
   m_Layer: 5
   m_Name: Txt
   m_TagString: Untagged
@@ -818,8 +835,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34
-  m_fontSizeBase: 34
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -900,6 +917,21 @@ MonoBehaviour:
   references:
     version: 2
     RefIds: []
+--- !u!114 &7214745269725475682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7117622515484062662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ab81e3570277ac45945094064355275, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fontSize_EN: 24
+  fontSize_KO: 30
+  fontSize_JA: 30
 --- !u!1 &7574188934433493408
 GameObject:
   m_ObjectHideFlags: 0

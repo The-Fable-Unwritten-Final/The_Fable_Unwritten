@@ -51,7 +51,6 @@ public class StyleButton : MonoBehaviour
     }
     public void OnButtonClicked() // 문체 교체를 위한 버튼 클릭 시 호출
     {
-        Debug.Log("clicked");
         StyleManager.Instance.tempSty = definition;
 
         UIManager.Instance.ShowPopupByName("PopupUI_StyleChange");
