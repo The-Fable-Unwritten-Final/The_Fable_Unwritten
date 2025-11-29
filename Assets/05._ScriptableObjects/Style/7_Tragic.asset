@@ -26,11 +26,11 @@ MonoBehaviour:
   - level: 1
     cost: 4
     effects:
-    - target: 0
+    - target: 5
       operation: 2
       value: 1.1
       valueRange: {x: 0, y: 0}
-      callTime: 0
+      callTime: 2
   - level: 2
     cost: 6
     effects:
@@ -51,11 +51,11 @@ MonoBehaviour:
   - level: 1
     cost: 4
     effects:
-    - target: 0
+    - target: 6
       operation: 2
       value: 0.6
       valueRange: {x: 0, y: 0}
-      callTime: 0
+      callTime: 2
   - level: 2
     cost: 6
     effects:

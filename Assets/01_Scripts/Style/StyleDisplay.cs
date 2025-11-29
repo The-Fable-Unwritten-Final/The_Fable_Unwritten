@@ -99,7 +99,7 @@ public class StyleDisplay : BasePopupUI
 
             case EffectOperation.Add:
                 int AddVal = Mathf.CeilToInt(eff.value);
-                valueStr = AddVal.ToString();
+                valueStr = "+" + AddVal.ToString();
                 break;
 
             case EffectOperation.Minus:
