@@ -157,7 +157,7 @@ public class StyleManager : MonoSingleton<StyleManager>
     {
         costDiscountCards.Clear();
         StyleDefinition def = StyleDic[state.styleId];
-        if(def.plusTiers[0].effects != null && def.minusTiers[0].effects != null)
+        if(def.plusTiers.Count > 0 && def.minusTiers.Count > 0 && def.plusTiers[0].effects != null && def.minusTiers[0].effects != null)
         {   
             // 카드 코스트 변환 효과가 있을 경우 costDiscountCards에 등록 
             // (이후 StyleDefinition에 카드 타입 변수를 추가하면, 이곳에서 특정 카드만 등록하는 방식도 가능)
