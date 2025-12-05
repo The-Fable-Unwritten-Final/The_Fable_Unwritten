@@ -64,7 +64,7 @@ public class StyleManager : MonoSingleton<StyleManager>
     {
         Initialize();
     }
-    public void Initialize() //호출순위 나머지 데이터가 로드가 끝난 이후
+    public void Initialize()
     {
         OnStyleChanged += RegisCardOnChange;
         // 모든 문체 정보 딕셔너리에 등록
@@ -98,6 +98,7 @@ public class StyleManager : MonoSingleton<StyleManager>
 
         ProgressDataManager.Instance.SetStyleData(CurrentState.styleId); // 현재 데이터 동기화
         OnStyleChanged?.Invoke(CurrentState);
+        ProgressDataManager.Instance.SaveProgress(true);
         RebuildCompiledFuncs();
 
         // UI 초기화

@@ -158,7 +158,6 @@ public class UI_UnlockController : BasePopupUI
         PlayerManager.Instance.activePlayers.Clear();
 
         // 데이터 초기화
-        ProgressDataManager.Instance.ResetProgress();
         ProgressDataManager.Instance.IsSecondGame = true;
         UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
 

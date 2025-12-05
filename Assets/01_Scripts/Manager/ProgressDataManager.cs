@@ -247,6 +247,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         //MinStageIndex = Mathf.Max(1, MinStageIndex);
         AssignThemesToStages();
 
+        int tempstageind = StageIndex;
         StageIndex = 1;
         MinStageIndex = 1;
 
@@ -274,12 +275,20 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
             chaos.minusTiers.Clear();
             chaos.isUnlocked = false;
             //
-            if(StageIndex >= 3)
+            if(tempstageind >= 3)
             {
                 // 스테이지 진행도가 2번째 스테이지 진입 상태 시 새로운 혼돈 문체로 설정
                 int styleCount = DataManager.Instance.styleDefs.Count;
-                var plus = DataManager.Instance.styleDefs[UnityEngine.Random.Range(1, styleCount)].plusTiers;
-                var minus = DataManager.Instance.styleDefs[UnityEngine.Random.Range(1, styleCount)].minusTiers;
+                int rnd = UnityEngine.Random.Range(1, styleCount);
+
+                // 랜덤하게 정해진 plus 효과와 동일한 등급의 minus 효과로 재설정
+                StyleDefinition.StyleRank rank = DataManager.Instance.styleDefs[rnd].rank;
+                var plus = DataManager.Instance.styleDefs[rnd].plusTiers;
+                var sameRankIndexes = Enumerable.Range(1, styleCount - 1)
+                                    .Where(i => i != rnd && DataManager.Instance.styleDefs[i].rank == rank)
+                                    .ToList();
+                rnd = sameRankIndexes[UnityEngine.Random.Range(0, sameRankIndexes.Count)];
+                var minus = DataManager.Instance.styleDefs[rnd].minusTiers;
 
                 DataManager.Instance.styleDefs[0].plusTiers = plus;
                 DataManager.Instance.styleDefs[0].minusTiers = minus;
