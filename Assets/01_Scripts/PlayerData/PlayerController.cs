@@ -38,7 +38,11 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     [SerializeField] private HpBarDisplay hpBarDisplay;
     [SerializeField] private DmgBarDisplay dmgBarDisplay;
-    [SerializeField] private TargetArrowDisplay targetArrow; 
+    [SerializeField] private TargetArrowDisplay targetArrow;
+
+    [Header("Potential Gauge & Stance")]
+    public PotentialGauge potentialGauge = new PotentialGauge();
+    public StanceEffectData stanceEffectData = new StanceEffectData();
 
     public Animator animator;
     public SpriteRenderer spriteRenderer;
@@ -79,6 +83,9 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         {
             Debug.LogWarning($"[{name}] PlayerData 또는 AnimationController가 누락되었습니다.");
         }
+
+        potentialGauge.OnGaugeChanged += OnPotentialGaugeChanged;
+        potentialGauge.OnGaugeFull += OnPotentialGaugeFull;
     }
 
     void Start()
@@ -89,8 +96,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public void TakeTrueDamage(float damage)
     {
         //Debug.Log($"{playerData.CharacterName}가 {damage}의 트루데미지를 받음! 현재 체력: {playerData.currentHP}");
-        currentHP -= damage;
-
         var dmg = new DmgTextData
         {
             Text = $"-{Mathf.RoundToInt(damage)}",
@@ -229,6 +234,9 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// <param name="amount">회복량</param>
     public void Heal(float amount)
     {
+        // 스탠스 효과 (카일라-자비) 적용
+        amount = StanceEffectHandler.ApplyHealBonus(amount, stanceEffectData);
+
         var grace = instantEffects.Find(e => e.statType == BuffStatType.Grace);
         if (grace != null && grace.value > 0)
         {
@@ -290,6 +298,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         {
             effect.isMaintain = false;  // 다음 턴부터는 제거 대상이 됨
         }
+        StanceEffectHandler.OnTurnEnd(stanceEffectData);
 
         statusDisplay?.PlayerUpdateUI();
     }
@@ -736,4 +745,58 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         return false;
     }
 
+    // 게이지 만충 시 호출
+    private void OnPotentialGaugeFull()
+    {
+        var battleFlow = GameManager.Instance.turnController.battleFlow;
+        StanceEffectHandler.TriggerStanceEffect(this, battleFlow);
+        potentialGauge.ConsumeForEffect();
+    }
+
+    // 게이지 변화 시 UI 업데이트
+    private void OnPotentialGaugeChanged(int newValue)
+    {
+        // UI 업데이트 로직 (추후 구현)
+        Debug.Log($"[{playerData.CharacterName}] 포텐셜 게이지: {newValue}/10");
+    }
+
+    // 아군이 카드 사용 시 호출 (외부에서 호출)
+    public void OnAllyUsedCard(PlayerController cardUser)
+    {
+        if (cardUser == this)
+        {
+            // 자신이 카드 사용 → 게이지 -1
+            potentialGauge.Decrease(1);
+        }
+        else
+        {
+            // 아군이 카드 사용 → 게이지 +1
+            potentialGauge.Increase(1);
+        }
+    }
+
+    // 전투 종료 시 호출
+    public void OnBattleEnd()
+    {
+        potentialGauge.Reset();
+        stanceEffectData.Reset();
+    }    
+
+    // 공격 시 스탠스 효과 적용 (외부에서 호출)
+    public float GetStanceModifiedDamage(float baseDamage)
+    {
+        return StanceEffectHandler.ApplyAttackBonus(baseDamage, stanceEffectData);
+    }
+
+    // 카드 효과 2배 적용 여부 확인
+    public bool ShouldDoubleCardEffect()
+    {
+        return StanceEffectHandler.ShouldDoubleCardEffect(stanceEffectData);
+    }
+
+    private void OnDestroy()
+    {
+        potentialGauge.OnGaugeChanged -= OnPotentialGaugeChanged;
+        potentialGauge.OnGaugeFull -= OnPotentialGaugeFull;
+    }
 }

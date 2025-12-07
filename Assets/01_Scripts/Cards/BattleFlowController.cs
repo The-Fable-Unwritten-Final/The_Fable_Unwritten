@@ -128,6 +128,8 @@ public class BattleFlowController : MonoBehaviour
                         break;
 
                 }
+                pc.potentialGauge.Reset();
+                pc.stanceEffectData.Reset();
             }
 
             UpdateManaUI();
@@ -195,15 +197,34 @@ public class BattleFlowController : MonoBehaviour
 
         //todo : 이후 카드에 따라 attack type 다르게 만들기
         int attackType = (int)card.type%3;
-        card.Play(caster, targets, attackType); // 카드 효과 실행
+        card.Play(caster, targets, attackType);
         // 임시 카메라 줌 인 아웃 효과 추가 (이후 캐릭터의 모션이 추가되면, 해당 모션의 시작과 끝에 맞춰 줌 인 아웃 재설정)
+
+        // ★ 소피아-통찰: 카드 효과 2배 적용 확인
+        int repeatCount = 1;
+        if (caster is PlayerController casterPC && casterPC.ShouldDoubleCardEffect())
+        {
+            repeatCount = 2;
+            Debug.Log($"[통찰] {card.cardName} 효과 2회 적용!");
+        }
+
 
 
         caster.CameraActionPlay(); // 시전 캐릭터 카메라 줌 인 아웃 액션 코루틴
 
         caster.Deck.Discard(card); // 핸드에서 사용 덱으로
 
-        
+
+        if (caster is PlayerController cardUser)
+        {
+            NotifyCardUsedToAllAllies(cardUser);
+
+            // ★ 카일라-규율: 공격 카드 사용 시 정화 보너스 적용
+            if (card.targetType == TargetType.Enemy && cardUser.ChClass == CharacterClass.Kayla)
+            {
+                StanceEffectHandler.ApplyPurifyAttackBonus(cardUser, playerParty);
+            }
+        }
 
         UpdateManaUI();
 
@@ -214,6 +235,21 @@ public class BattleFlowController : MonoBehaviour
 
         GameManager.Instance.analyticsLogger.LogUseCardInfo(card.index); // 카드 사용 정보 기록
     }
+
+    /// <summary>
+    /// 카드 사용 시 모든 아군에게 포텐셜 게이지 변화 알림
+    /// </summary>
+    private void NotifyCardUsedToAllAllies(PlayerController cardUser)
+    {
+        foreach (var ally in playerParty)
+        {
+            if (ally is PlayerController pc && pc.IsAlive())
+            {
+                pc.OnAllyUsedCard(cardUser);
+            }
+        }
+    }
+
 
 
 
@@ -342,6 +378,9 @@ public class BattleFlowController : MonoBehaviour
             ClearAllDeckEnhanced();
             ClearAllPlayerCardDiscounts();
             //Debug.Log("▶ 전투 패배");
+
+            ResetAllPotentialGauges();
+
             isWin = -1;
 
             for (int i = 0; i < enemyParty.Count; i++)  //파티 초기화
@@ -356,6 +395,9 @@ public class BattleFlowController : MonoBehaviour
             isBattleEnded = true;
             ClearAllDeckEnhanced();
             ClearAllPlayerCardDiscounts();
+
+            ResetAllPotentialGauges();
+
             BattleLogManager.Instance.ResetBattleLog();
             //Debug.Log("▶ 전투 승리");
             isWin = 1;
@@ -391,6 +433,20 @@ public class BattleFlowController : MonoBehaviour
                 enemyParty[i] = null;
             StopAllCoroutines();
             GameManager.Instance.turnController.ToGameEnd();
+        }
+    }
+
+    /// <summary>
+    /// 전투 종료 시 모든 플레이어의 포텐셜 게이지 초기화
+    /// </summary>
+    private void ResetAllPotentialGauges()
+    {
+        foreach (var player in playerParty)
+        {
+            if (player is PlayerController pc)
+            {
+                pc.OnBattleEnd();
+            }
         }
     }
 

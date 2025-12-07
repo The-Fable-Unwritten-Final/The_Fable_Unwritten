@@ -119,4 +119,23 @@ public class PlayerData : ScriptableObject
     {
         FirstTimeUsedType = null;
     }
+
+    [Header("Potential Gauge")]
+    [SerializeField] private int _potentialGauge = 0;
+    public int PotentialGauge
+    {
+        get => _potentialGauge;
+        set
+        {
+            _potentialGauge = Mathf.Clamp(value, 0, 10);
+            OnPotentialGaugeChanged?.Invoke(_potentialGauge);
+        }
+    }
+    public event Action<int> OnPotentialGaugeChanged;
+
+    // 전투 종료 시 게이지 초기화
+    public void ResetPotentialGauge()
+    {
+        PotentialGauge = 0;
+    }
 }

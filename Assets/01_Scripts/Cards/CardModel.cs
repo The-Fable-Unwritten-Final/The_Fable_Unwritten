@@ -146,8 +146,30 @@ public class CardModel : ScriptableObject
 
 
         // 4. 효과 적용
-        foreach (var effect in effects)
-            effect.Apply(caster, targets, fixedIsEnhanced);
+        int effectRepeatCount = 1;
+        if (caster is PlayerController casterPC && casterPC.stanceEffectData.NextCardDoubleEffect)
+        {
+            effectRepeatCount = 2;
+            casterPC.stanceEffectData.NextCardDoubleEffect = false; // 1회성 소모
+            Debug.Log($"[통찰] {cardName} 효과 2배 적용!");
+        }
+
+        for (int r = 0; r < effectRepeatCount; r++)
+        {
+            foreach (var effect in effects)
+                effect.Apply(caster, targets, fixedIsEnhanced);
+
+            // 2회차 적용 전에 타겟 생존 확인 (죽은 타겟에게 중복 적용 방지)
+            if (r == 0 && effectRepeatCount > 1)
+            {
+                targets = targets.FindAll(t => t.IsAlive());
+                if (targets.Count == 0)
+                {
+                    Debug.Log("[통찰] 모든 타겟 사망, 2회차 효과 스킵");
+                    break;
+                }
+            }
+        }
 
         yield return new WaitForSeconds(0.1f); // 효과 적용 후 약간 대기
 
