@@ -139,6 +139,8 @@ public class UI_RandomEvent : MonoBehaviour
         optionTxt_a.text = "";
         optionTxt_b.text = "";
 
+        optionButton_a.interactable = false;
+        optionButton_b.interactable = false;
 
         yield return new WaitForSeconds(0.5f);
 
