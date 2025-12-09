@@ -22,4 +22,5 @@ public class EventEffectData
     public bool unusable;
     public string note;
     public int battle;
+    public int healModi; // 힐량 증가/감소 수치
 }

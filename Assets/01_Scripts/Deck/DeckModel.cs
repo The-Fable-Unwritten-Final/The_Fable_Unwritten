@@ -220,6 +220,23 @@ public class DeckModel
         foreach (var card in usedDeck)
             card.ApplyPersistentDiscount(amount);
     }
+    /// <summary>
+    ///  '특정 타입'의 카드 대상 할인 적용
+    /// </summary>
+    public void ApplyPersistentDiscountByCardType(CardType targetType, int amount)
+    {
+        foreach (var card in hand)
+            if (card.type == targetType)
+                card.ApplyPersistentDiscount(amount);
+        
+        foreach (var card in unusedDeck)
+            if (card.type == targetType)
+                card.ApplyPersistentDiscount(amount);
+        
+        foreach (var card in usedDeck)
+            if (card.type == targetType)
+                card.ApplyPersistentDiscount(amount);
+    }
 
     public void DiscardUnmaintainedCardsAtTurnEnd()
     {
