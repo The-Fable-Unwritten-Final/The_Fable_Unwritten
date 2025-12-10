@@ -17,7 +17,10 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
     List<EventEffects> untillNextStage = new List<EventEffects>(); // 다음 스테이지까지 지속되는 효과 리스트
     List<EventEffects> untillEndAdventure = new List<EventEffects>(); // 모험이 끝날 때까지 지속되는 효과 리스트
 
-    public int healModi =0; // 힐량 변화 수치.
+
+    // 이벤트 효과 변수들 저장 (각 효과 클래스에서 사용)
+    public CardModel cardData; // 카드 획득시 팝업 UI에서 사용
+    public int healModi = 0; // 힐량 변화 수치.
 
     protected override void Awake()
     {
