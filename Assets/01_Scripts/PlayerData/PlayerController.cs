@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public PlayerData playerData;       //플레이어의 데이타
     public DeckModel deckModel;         //플레이어가 들고 있는 덱
     public bool hasBlock = false;           //방어막 획득 여부
+    public bool hasResist { get; set; } = false;          //상태이상 디버프 저항 여부
     private bool isTargetable;              //타겟 가능 여부
 
     // 스테이지 한 번만 이상실현 사용
@@ -120,6 +121,9 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// <param name="effect">적용할 효과</param>
     public void ApplyStatusEffect(StatusEffect effect)
     {
+        // 디버프 적용시 저항 체크
+        if (hasResist && Debuff.IsDebuff(effect.statType, effect.value)) return;
+        
         //Debug.Log($"[버프 적용] {playerData.CharacterName} 에게 {effect.statType} +{effect.value} ({effect.duration}턴)");
         switch (effect)     
         {

@@ -68,7 +68,7 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
                     eventEffectList.Add(statEffect);
                     break;
 
-                case 1:
+                case 1: // 카드 관련 효과 전반
                     var cardEventEffect = new CardEventEffects
                     {
                         index = data.index,
@@ -88,7 +88,7 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
                     eventEffectList.Add(cardEventEffect);
                     break;
 
-                case 2:
+                case 2: // 전투 인카운터 효과
                     var enemyEventEffect = new EncounterEventEffects
                     {
                         index = data.index,
@@ -100,7 +100,22 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
                     eventEffectList.Add(enemyEventEffect);
                     break;
 
-                    // TODO: 다른 타입 추가 예정
+                case 3: // 상태이상류 효과 (기절, 출혈, 수호 등..)
+                    var buffStatEffect = new BuffStatEventEffects
+                    {
+                        index = data.index,
+                        text = data.text,
+                        eventType = data.eventType,
+                        duration = data.duration,
+                        sophia = data.sophia,
+                        kyla = data.kyla,
+                        leon = data.leon,   
+                        buffStatType = data.buffStatType,
+                        buffStatValue = data.buffStatValue,
+                        buffStatDuration = data.buffStatDuration
+                    };
+                    eventEffectList.Add(buffStatEffect);
+                    break;
             }
         }
 

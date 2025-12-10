@@ -234,7 +234,6 @@ public class UI_RandomEvent : MonoBehaviour
                     var allCards = DataManager.Instance.AllCards;
                     var card = allCards.FirstOrDefault(c => c.index == cardEffect.newCardIndex);
                     EventEffectManager.Instance.cardData = card;
-                    Debug.Log($"card name : {card.name}");
                     UIManager.Instance.ShowPopupByName("PopupUI_UnlockCard");
                 }
             }

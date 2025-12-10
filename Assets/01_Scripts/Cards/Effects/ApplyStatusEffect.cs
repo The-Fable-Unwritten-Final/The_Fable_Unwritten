@@ -229,8 +229,8 @@ public static class Debuff
                 result.duration = 1;
                 break;
             case BuffStatType.Stun:
-                result.value = 1; // 기절 지속(턴)
-                result.duration = 1;
+                result.value = 1; 
+                result.duration = 1; // 기절 지속(턴)
                 break;
             case BuffStatType.Blind:
                 result.value = -1; 

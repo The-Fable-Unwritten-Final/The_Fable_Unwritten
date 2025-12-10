@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     public EnemyData enemyData;
 
     public bool hasBlock = false;
+    public bool hasResist { get; set; } = false;          //상태이상 디버프 저항 여부
     private bool isTargetable;
 
     public bool IsTargetable
