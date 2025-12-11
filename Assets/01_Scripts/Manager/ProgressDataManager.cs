@@ -26,6 +26,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     // 문체 시스템
     public int currentDefID = 1;                     // 현재 적용 중인 문체 ID
     public int inkAmount = 0;                        // 보유 잉크
+    public HashSet<int> unlockedStyles = new();     // 해금된 문체 ID 목록
 
     // 랜덤 이벤트
     HashSet<int> usedRandomEvent = new();     // RandomEvent 진행 유무(게임 재시작 및 실패 시 초기화 - ClearUsedEvents())
@@ -67,7 +68,13 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
         DataManager.Instance.InitCardUnlockStatus();
     }
-
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            UnlockStyle(8);
+        }
+    }
     // 나중에 저장을 세부적으로 쪼개기
     public void SaveProgress(bool safe)
     {
@@ -297,6 +304,8 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         }
         currentDefID = 1;
         inkAmount = 0;
+        // 기본 해금 문체로 되돌리는 기능으로, 추후 '처음부터' 시스템 완성 시 버튼을 눌러도 해당 데이터는 변경되면 안된다.
+        InitializeDefaultStyleUnlock();
 
         PlayerPrefs.DeleteKey("ProgressSaveData");
 
@@ -469,13 +478,95 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     {
         data.currentdefid = currentDefID;
         data.inkamount = inkAmount;
+        data.unlockedStyleIds = unlockedStyles.ToList();
     }
+
     private void LoadStyleData(ProgressSaveData data)
     {
         currentDefID = data.currentdefid;
         inkAmount = data.inkamount;
+        unlockedStyles = data.unlockedStyleIds.ToHashSet();
+
+        // 로드된 해금 상태를 StyleManager에 반영
+        if (StyleManager.Instance != null)
+        {
+            foreach (var styleId in unlockedStyles)
+            {
+                if (StyleManager.Instance.StyleDic.TryGetValue(styleId, out var style))
+                {
+                    style.isUnlocked = true;
+                }
+            }
+        }
     }
 
+    /// <summary>
+    /// 기본 해금 문체 초기화 (ID 1, 2, 3, 4는 기본 해금)
+    /// 게임을 최초 플레이 시 에만 호출 할 메서드
+    /// </summary>
+    private void InitializeDefaultStyleUnlock()
+    {
+        unlockedStyles.Clear();
+        
+        var styles = DataManager.Instance.styleDefs;
+        foreach (var style in styles) style.isUnlocked = false; // 일단 모두 잠금
+        // 1,2,3,4,6 문체는 기본 해금
+        unlockedStyles.Add(1);
+        unlockedStyles.Add(2);
+        unlockedStyles.Add(3);
+        unlockedStyles.Add(4);
+        unlockedStyles.Add(6); 
+        
+        // StyleManager가 준비되었다면 반영
+        if (StyleManager.Instance != null)
+        {
+            foreach (var styleId in unlockedStyles)
+            {
+                if (StyleManager.Instance.StyleDic.TryGetValue(styleId, out var style))
+                {
+                    style.isUnlocked = true;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// '특정 문체 ID'를 해금 처리
+    /// </summary>
+    /// <param name="styleId">해금할 문체 ID </param>
+    public void UnlockStyle(int styleId)
+    {
+        if (!unlockedStyles.Contains(styleId))
+        {
+            unlockedStyles.Add(styleId);
+
+            // StyleManager 반영
+            if (StyleManager.Instance != null && StyleManager.Instance.StyleDic.TryGetValue(styleId, out var style))
+            {
+                style.isUnlocked = true;
+                Debug.Log($"[ProgressDataManager] 문체 {styleId} 해금 완료");
+            }
+        }
+    }
+    /// <summary>
+    /// 게임 클리어 시 잠금 상태의 '랜덤한 문체 하나'를 잠금 해제
+    /// </summary>
+    public void UnlockRandomStyle()
+    {
+        List<int> lockstyles = StyleManager.Instance.StyleDic.Keys
+            .Where(id => !unlockedStyles.Contains(id) && id != 0) // 0은 혼돈 문체이므로 제외
+            .ToList();
+
+        if (lockstyles.Count == 0)
+        {
+            Debug.Log("[ProgressDataManager] 해금 가능한 문체가 없습니다.");
+            return;
+        }
+
+        int randomIndex = UnityEngine.Random.Range(0, lockstyles.Count);
+        int styleId = lockstyles[randomIndex];
+        UnlockStyle(styleId);
+    }
 
     private void OnApplicationQuit()
     {
@@ -530,6 +621,7 @@ public class ProgressSaveData
     // 문체 시스템
     public int currentdefid;
     public int inkamount;
+    public List<int> unlockedStyleIds = new();
 
     // 랜덤 이벤트
     public int savedRandomEvent;
