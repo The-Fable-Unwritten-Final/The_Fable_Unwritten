@@ -65,7 +65,6 @@ public class PlayerManager : MonoSingleton<PlayerManager>
         playerDataMap[character] = newPlayerData;
         activePlayers[character] = newPlayerData;
         ProgressDataManager.Instance.unlockedCharacterIDs.Add(newPlayerData.IDNum);
-        Debug.Log($"플레이어 추가됨: {character}");
     }
 
     /// <summary>
@@ -76,7 +75,6 @@ public class PlayerManager : MonoSingleton<PlayerManager>
     {
         InitializePlayers(allPlayerDatas, cardPool);
         activePlayers.Clear();
-        Debug.Log("액티브 플레이어 초기화 완료.");
     }
 
     /// <summary>
