@@ -34,7 +34,9 @@ public class UI_MainTitle : MonoBehaviour
 
     public void OnClickNewGame()
     {
-        ProgressDataManager.Instance.GameStartType = GameStartType.New;
+        ProgressDataManager pg = ProgressDataManager.Instance;
+
+        pg.GameStartType = GameStartType.New;
 
         // 플레이어 덱 초기화
         foreach (var player in PlayerManager.Instance.activePlayers.Values)
@@ -46,21 +48,8 @@ public class UI_MainTitle : MonoBehaviour
         PlayerManager.Instance.activePlayers.Clear();
 
         // 데이터 초기화
-        ProgressDataManager.Instance.ResetProgress();
-
-        // 튜토리얼 6(1스테이지 클리어 후 2스테이지 시작 )
-        if (ProgressDataManager.Instance.IsSecondGame && ProgressDataManager.Instance.ProgressTutorial.Contains(6))
-        {
-            UIManager.Instance.PopupUnlockUI();          
-            GameManager.Instance.tutorialController.ShowTutorial(0);
-
-#if UNITY_EDITOR
-            ProgressDataManager.Instance.IsSecondGame = false;
-#endif
-            return;
-        }
-
-        ProgressDataManager.Instance.IsSecondGame = true; // 인게임에서만 적용
+        if(pg.IsSecondGame) pg.ResetProgress(); // 튜토리얼을 클리어 한 이후 New Game 시 호출
+        else pg.FullResetProgress(); // 처음 플레이 시 호출
 
         // 애널리틱스
         GameManager.Instance.analyticsLogger.LogReplayInfo();

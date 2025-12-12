@@ -59,6 +59,8 @@ public class TutorialController : MonoBehaviour
         else if (stage == 2 && pmd.IsNewStage && scene == SceneNameData.StageScene)
         {
             ShowTutorial(6);
+            ProgressDataManager.Instance.IsSecondGame = true; // 튜토리얼 스테이지 클리어 판정 
+            ProgressDataManager.Instance.SaveProgress(true); // 클리어 판정 save
         }
         else if (pmd.IsNewCamp && scene == SceneNameData.CampScene)
         {
