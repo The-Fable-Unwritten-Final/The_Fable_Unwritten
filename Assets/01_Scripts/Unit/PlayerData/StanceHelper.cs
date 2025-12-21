@@ -14,9 +14,9 @@ public static class StanceHelper
         var currentTypes = logManager.GetCurrentTurnCardTypes();
         var firstCardType = logManager.GetFirstCardTypeInCurrentTurn();
 
-        switch (caster.playerData.currentStance)
+        /*switch (caster.playerData.currentStance)
         {
-            case PlayerData.StancType.refine:
+            case StancType.Inquiry:
                 if (!firstCardType.HasValue || firstCardType.Value == cardType)
                 {
                     result *= 1.5f;
@@ -29,7 +29,7 @@ public static class StanceHelper
                 }
                 break;
 
-            case PlayerData.StancType.mix:
+            case StancType.Insight:
                 if (!firstCardType.HasValue || firstCardType.Value != cardType)
                 {
                     result *= 1.5f;
@@ -41,8 +41,8 @@ public static class StanceHelper
                     weakened = true;
                 }
                 break;
-            case PlayerData.StancType.judge:
-            case PlayerData.StancType.rush:
+            case StancType.judge:
+            case StancType.rush:
                 result *= 1.5f;
                 boosted = true;
                 break;
@@ -51,7 +51,7 @@ public static class StanceHelper
                 result *= 0.5f;
                 weakened = true;
                 break;
-        }
+        }*/
 
         return (result, boosted, weakened);
     }
@@ -62,7 +62,7 @@ public static class StanceHelper
         bool weakened = false;
         float result = baseHeal;
 
-        switch (caster.playerData.currentStance)
+        /*switch (caster.playerData.currentStance)
         {
             case PlayerData.StancType.grace:
                 result *= 1.5f;
@@ -73,14 +73,14 @@ public static class StanceHelper
                 result *= 0.5f;
                 weakened = true;
                 break;
-        }
+        }*/
 
         return (result, boosted, weakened);
     }
 
     public static int ModifyBuffByStance(PlayerController caster, BuffStatType type, int value)
     {
-        switch (caster.playerData.currentStance)
+       /* switch (caster.playerData.currentStance)
         {
             case PlayerData.StancType.grace:
                 if (value > 0 && (type == BuffStatType.Attack || type == BuffStatType.Defense))
@@ -96,7 +96,7 @@ public static class StanceHelper
                 if (value < 0)
                     return value - 1; // 예: -1 → -2
                 break;
-        }
+        }*/
 
         return value;
     }

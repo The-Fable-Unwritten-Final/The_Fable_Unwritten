@@ -8,6 +8,7 @@ using System;
 public enum CardEffectType { Damage, Heal, Buff, Debuff, Conditional, Chain }
 public enum CharacterClass { Sophia, Kayla, Leon, Enemy }
 public enum SkillType { Fire, Ice, Electric, Nature, Buff, Debuff, Holy, Heal, Slash, Strike, Pierce, Defense }
+public enum StancType { Inquiry, Insight, Compassion, Discipline, Rush, Protection}
 public enum BuffStatType
 {
     None,                   // 기본값
@@ -60,7 +61,6 @@ public interface IStatusReceiver
     float maxHP { get; set; }                            //최대 체력
     float currentHP { get; set; }                        //현재 체력
     void UpdateHpStatus();                        //체력 상태 업데이트 (currentHp, maxHp 변수에 실제 데이터값 받아오기)
-    void CameraActionPlay();                   //행동시 카메라의 줌인 액션 연출.
     void ApplyStatusEffect(StatusEffect effect);     // 버프, 디버프 적용
     float ModifyStat(BuffStatType statType, float baseValue); // 버프 기반 수치 계산
     float TakeDamage(float amount);                     // 데미지 적용
@@ -71,14 +71,53 @@ public interface IStatusReceiver
     string CurrentStance { get; }                   //현재 자세 확인
     bool IsStunned();                          //스턴 상태 여부 확인
 
+    void ChangeStance(StancType stance);
+
     // 💥 애니메이션 및 GUI 관련 추가
     void PlayAttackAnimation(int input);
     void PlayHitAnimation();
+    void CameraActionPlay();                   //행동시 카메라의 줌인 액션 연출.
+
+
     Transform CachedTransform { get; }
     DmgBarDisplay dmgBar { get; }
     TargetArrowDisplay tarArrow { get; }          // 카드 사용시의 시전 대상 타겟 화살표
     bool IsTargetable { get; set; }                     // 타겟 가능 여부
     event Action OnTargetableChanged;       // 타겟 가능 여부 변경 이벤트
     public DmgBarQueueHandler dmgTextQueue { get; }
+}
 
+public static class StatusReceiverExtentions
+{
+    /// <summary>
+    /// 플레이어인지 확인
+    /// </summary>
+    public static bool IsPlayer(this IStatusReceiver receiver)
+    {
+        return receiver.ChClass != CharacterClass.Enemy;
+    }
+
+    /// <summary>
+    /// 적인지 확인
+    /// </summary>
+    public static bool IsEnemy(this IStatusReceiver receiver)
+    {
+        return receiver.ChClass == CharacterClass.Enemy;
+    }
+
+    /// <summary>
+    /// PlayerController로 캐스팅 (안전)
+    /// </summary>
+    public static PlayerController AsPlayer(this IStatusReceiver receiver)
+    {
+        return receiver as PlayerController;
+    }
+
+    /// <summary>
+    /// Enemy로 캐스팅 (안전)
+    /// </summary>
+    public static Enemy AsEnemy(this IStatusReceiver receiver)
+    {
+        return receiver as Enemy;
+    }
 }

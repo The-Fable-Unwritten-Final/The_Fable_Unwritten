@@ -54,7 +54,7 @@ public static class StanceEffectHandler
     /// </summary>
     public static void TriggerStanceEffect(PlayerController player, BattleFlowController battleFlow)
     {
-        var stance = player.playerData.currentStance;
+        var stance = player.PlayerData.currentStance;
         var charClass = player.ChClass;
         var effectData = player.stanceEffectData;
 
@@ -76,7 +76,7 @@ public static class StanceEffectHandler
                 break;
         }
 
-        Debug.Log($"[StanceEffect] {player.playerData.CharacterName} - {stance} 효과 발동!");
+        Debug.Log($"[StanceEffect] {player.PlayerData.CharacterName} - {stance} 효과 발동!");
     }
 
     /// <summary>
@@ -84,42 +84,9 @@ public static class StanceEffectHandler
     /// - 탐구(refine): 카드 1장 드로우, 1턴간 비용 0
     /// - 통찰(mix): 다음 카드 효과 2번 적용
     /// </summary>
-    private static void TriggerSophiaEffect(PlayerController player, PlayerData.StancType stance, BattleFlowController battleFlow)
+    private static void TriggerSophiaEffect(PlayerController player, StancType stance, BattleFlowController battleFlow)
     {
-        var effectData = player.stanceEffectData;
-
-        switch (stance)
-        {
-            case PlayerData.StancType.refine: // 탐구
-                // 드로우 전 핸드 수 기록
-                int handCountBefore = player.Deck.Hand.Count;
-
-                // 카드 1장 드로우
-                player.Deck.Draw(1);
-
-                // 드로우 성공 확인 (핸드 수 증가 여부)
-                if (player.Deck.Hand.Count > handCountBefore)
-                {
-                    // 드로우한 카드에 1턴간 비용 0 적용
-                    var drawnCard = player.Deck.Hand[player.Deck.Hand.Count - 1]; // 마지막으로 드로우한 카드
-                    drawnCard.ApplyTemporaryDiscount(drawnCard.manaCost); // 비용만큼 할인 (= 0)
-                    Debug.Log($"[Sophia-탐구] {drawnCard.cardName} 드로우, 1턴간 비용 0");
-                }
-                else
-                {
-                    Debug.LogWarning("[Sophia-탐구] 드로우 실패 (핸드가 가득 찼거나 덱이 비어있음)");
-                }
-                break;
-
-            case PlayerData.StancType.mix: // 통찰
-                effectData.NextCardDoubleEffect = true;
-                Debug.Log("[Sophia-통찰] 다음 카드 효과 2배 활성화");
-                break;
-
-            default:
-                Debug.LogWarning($"[Sophia] 해당 캐릭터에 맞지 않는 스탠스: {stance}");
-                break;
-        }
+        
     }
 
     /// <summary>
@@ -127,28 +94,9 @@ public static class StanceEffectHandler
     /// - 자비(grace): 카드 1장 드로우, 이번 턴 회복량 +30%
     /// - 규율(judge): 다음 공격 시 정화 수치만큼 아군 공방 증가
     /// </summary>
-    private static void TriggerKaylaEffect(PlayerController player, PlayerData.StancType stance, BattleFlowController battleFlow)
+    private static void TriggerKaylaEffect(PlayerController player, StancType stance, BattleFlowController battleFlow)
     {
-        var effectData = player.stanceEffectData;
-
-        switch (stance)
-        {
-            case PlayerData.StancType.grace: // 자비
-                // 카드 1장 드로우
-                player.Deck.Draw(1);
-                effectData.HealBonusPercent = 30f;
-                Debug.Log("[Kayla-자비] 카드 드로우 + 이번 턴 회복량 +30%");
-                break;
-
-            case PlayerData.StancType.judge: // 규율
-                effectData.NextAttackPurifyBonus = true;
-                Debug.Log("[Kayla-규율] 다음 공격 시 정화 보너스 활성화");
-                break;
-
-            default:
-                Debug.LogWarning($"[Kayla] 해당 캐릭터에 맞지 않는 스탠스: {stance}");
-                break;
-        }
+       
     }
 
     /// <summary>
@@ -156,39 +104,9 @@ public static class StanceEffectHandler
     /// - 돌진(rush): 다음 공격 피해 +100%
     /// - 수비(guard): 체력 +20%, 수호 +15
     /// </summary>
-    private static void TriggerLeonEffect(PlayerController player, PlayerData.StancType stance)
+    private static void TriggerLeonEffect(PlayerController player, StancType stance)
     {
-        var effectData = player.stanceEffectData;
-
-        switch (stance)
-        {
-            case PlayerData.StancType.rush: // 돌진
-                effectData.NextAttackDamageBonus = 100f; // +100%
-                Debug.Log("[Leon-돌진] 다음 공격 피해 +100% 활성화");
-                break;
-
-            case PlayerData.StancType.guard: // 수비
-                // 체력 +20%
-                float hpBonus = player.maxHP * 0.2f;
-                player.maxHP += hpBonus;
-                player.currentHP += hpBonus;
-
-                // 수호 +15
-                player.ApplyStatusEffect(new InstanceEffect
-                {
-                    statType = BuffStatType.GuardRedirect,
-                    value = 15,
-                    isMaintain = false
-                });
-
-                effectData.GuardBonusApplied = true;
-                Debug.Log($"[Leon-수비] 체력 +{hpBonus}, 수호 +15 적용");
-                break;
-
-            default:
-                Debug.LogWarning($"[Leon] 해당 캐릭터에 맞지 않는 스탠스: {stance}");
-                break;
-        }
+       
     }
 
     // ===== 효과 적용 헬퍼 메서드 =====

@@ -15,7 +15,6 @@ public class KaylaJudge : IdealSkillBase
         var flow = turn.battleFlow;
 
         int activeTurn = flow.turn;
-        bool active = true;
 
         //카드 생성 알고리즘 필요
 

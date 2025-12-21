@@ -13,7 +13,7 @@ public static class EnemyPattern
 {
     // StanceType 개수 (한 번만 계산)
     private static readonly int stanceCount =
-        System.Enum.GetValues(typeof(PlayerData.StancType)).Length;
+        System.Enum.GetValues(typeof(StancType)).Length;
     
     
     /// <summary>
@@ -108,7 +108,7 @@ public static class EnemyPattern
 
                             if (t is PlayerController pc)
                             {
-                                var stance = (PlayerData.StancType)enemyComponent.enemyData.currentStance;
+                                var stance = (StancType)enemyComponent.enemyData.currentStance;
                                 pc.TakeDamage(skill.damage);//todo 수정 필요
                             }
                             else
@@ -136,7 +136,7 @@ public static class EnemyPattern
 
                     if (t is PlayerController pc)
                     {
-                        var stance = (PlayerData.StancType)enemyComponent.enemyData.currentStance;
+                        var stance = (StancType)enemyComponent.enemyData.currentStance;
                         float dmg = pc.TakeDamage(skill.damage);
                     }
                     else

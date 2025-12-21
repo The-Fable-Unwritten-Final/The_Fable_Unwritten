@@ -68,18 +68,18 @@ public class ApplyStatusEffect : CardEffectBase
 
             string statusText = GetStatusEffectText(statType, value);
 
-            var Text = new DmgTextData
+           /* var Text = new DmgTextData
             {
                 Text = statusText,
                 type = Debuff.IsDebuff(statType, value) ? DmgTextType.Debuff : DmgTextType.Buff,
                 isCardEnhanced = isEnhanced == true,
                 isStanceEnhanced = caster is PlayerController pc &&
-                           (pc.playerData.currentStance == PlayerData.StancType.grace ||
-                            pc.playerData.currentStance == PlayerData.StancType.judge),
+                           (pc.playerData.currentStance == StancType.grace ||
+                            pc.playerData.currentStance == StancType.judge),
                 isWeakened = false
             };
 
-            t.dmgTextQueue.Enqueue(Text);
+            t.dmgTextQueue.Enqueue(Text);*/
         }
     }
 

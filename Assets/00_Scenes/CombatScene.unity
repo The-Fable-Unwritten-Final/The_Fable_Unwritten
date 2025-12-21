@@ -479,21 +479,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 972265828eb536d4b96f199d9ccca4e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerData: {fileID: 11400000, guid: ca1026c442338a840a15d81588272fa8, type: 2}
-  deckModel:
-    unusedDeck: []
-    usedDeck: []
-    hand: []
-  hasBlock: 0
   hpBarDisplay: {fileID: 3565488262354688568}
   dmgBarDisplay: {fileID: 1634073424}
   targetArrow: {fileID: 4322107113203982984}
-  animator: {fileID: 804341457}
-  spriteRenderer: {fileID: 804341455}
+  dmgQueue: {fileID: 106890153}
+  playerData: {fileID: 11400000, guid: ca1026c442338a840a15d81588272fa8, type: 2}
   stanceToggleButton: {fileID: 472439451756791913}
-  tickEffects: []
-  instantEffects: []
-  queue: {fileID: 106890153}
 --- !u!65 &106890149
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1006,16 +997,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8bde9d4ef728ec4199589461de2244e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyData: {fileID: 0}
-  hasBlock: 0
   hpBarDisplay: {fileID: 118312048259346877}
   dmgBarDisplay: {fileID: 326686467}
   targetArrow: {fileID: 469035930}
-  spriteRenderer: {fileID: 721223338}
-  animator: {fileID: 721223336}
-  tickEffects: []
-  instantEffects: []
-  queue: {fileID: 259473998}
+  dmgQueue: {fileID: 259473998}
+  enemyData: {fileID: 0}
 --- !u!65 &259473995
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2164,21 +2150,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 972265828eb536d4b96f199d9ccca4e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerData: {fileID: 11400000, guid: 55a39049fa44d7f4fbf6637398b4e81b, type: 2}
-  deckModel:
-    unusedDeck: []
-    usedDeck: []
-    hand: []
-  hasBlock: 0
   hpBarDisplay: {fileID: 2629051018129821340}
   dmgBarDisplay: {fileID: 1628950801}
   targetArrow: {fileID: 1242386048}
-  animator: {fileID: 764427309}
-  spriteRenderer: {fileID: 764427308}
+  dmgQueue: {fileID: 557679517}
+  playerData: {fileID: 11400000, guid: 55a39049fa44d7f4fbf6637398b4e81b, type: 2}
   stanceToggleButton: {fileID: 4123277150000972293}
-  tickEffects: []
-  instantEffects: []
-  queue: {fileID: 557679517}
 --- !u!114 &557679517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2613,18 +2590,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &753105239 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2039588529143125438, guid: e80e55e4d7839ad4a97cd864c52efb28,
-    type: 3}
-  m_PrefabInstance: {fileID: 5396969691877943150}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &764427306
 GameObject:
   m_ObjectHideFlags: 0
@@ -3935,16 +3900,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8bde9d4ef728ec4199589461de2244e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyData: {fileID: 0}
-  hasBlock: 0
   hpBarDisplay: {fileID: 289690891190480063}
   dmgBarDisplay: {fileID: 1560934504}
   targetArrow: {fileID: 959486187}
-  spriteRenderer: {fileID: 546388548}
-  animator: {fileID: 546388547}
-  tickEffects: []
-  instantEffects: []
-  queue: {fileID: 1016949506}
+  dmgQueue: {fileID: 1016949506}
+  enemyData: {fileID: 0}
 --- !u!114 &1016949506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6357,16 +6317,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8bde9d4ef728ec4199589461de2244e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyData: {fileID: 0}
-  hasBlock: 0
   hpBarDisplay: {fileID: 4039711242319734793}
   dmgBarDisplay: {fileID: 46784155}
   targetArrow: {fileID: 1267231373}
-  spriteRenderer: {fileID: 1725370774}
-  animator: {fileID: 1725370773}
-  tickEffects: []
-  instantEffects: []
-  queue: {fileID: 1739155349}
+  dmgQueue: {fileID: 1739155349}
+  enemyData: {fileID: 0}
 --- !u!65 &1739155346
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6479,6 +6434,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1773216951}
   m_CullTransparentMesh: 1
+--- !u!114 &1811622237 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2039588529143125438, guid: e80e55e4d7839ad4a97cd864c52efb28,
+    type: 3}
+  m_PrefabInstance: {fileID: 5396969691877943150}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1920819807
 GameObject:
   m_ObjectHideFlags: 0
@@ -6511,21 +6478,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 972265828eb536d4b96f199d9ccca4e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerData: {fileID: 11400000, guid: a6642074c90f5fa49ac122d3055b17c7, type: 2}
-  deckModel:
-    unusedDeck: []
-    usedDeck: []
-    hand: []
-  hasBlock: 0
   hpBarDisplay: {fileID: 3615750389766941839}
   dmgBarDisplay: {fileID: 1219395581}
   targetArrow: {fileID: 125084246}
-  animator: {fileID: 109279071}
-  spriteRenderer: {fileID: 109279072}
+  dmgQueue: {fileID: 1920819813}
+  playerData: {fileID: 11400000, guid: a6642074c90f5fa49ac122d3055b17c7, type: 2}
   stanceToggleButton: {fileID: 7043430841332727357}
-  tickEffects: []
-  instantEffects: []
-  queue: {fileID: 1920819813}
 --- !u!65 &1920819809
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7061,13 +7019,11 @@ MonoBehaviour:
   playerPrefab: {fileID: 277843439705113669, guid: 81642443dc28c7f469e808f0c4cbead3,
     type: 3}
   effectManage: {fileID: 2101769382}
-  Mana: {fileID: 753105239}
-  startMana: 4
-  currentMana: 0
+  manaText: {fileID: 1811622237}
   totalExp: 0
   isWin: 0
-  currentTurn: 0
-  turn: 1
+  startMana: 4
+  currentMana: 0
 --- !u!4 &2077516052
 Transform:
   m_ObjectHideFlags: 0

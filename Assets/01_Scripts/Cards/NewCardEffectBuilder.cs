@@ -132,7 +132,7 @@ public class NewCardEffectBuilder : MonoBehaviour
 
             case "blind":
                 var blind = Load<BlindEffect>("BlindEffect");
-                blind.blockedStance = (PlayerData.StancType)effectData.target;
+                blind.blockedStance = (StancType)effectData.target;
                 effect = blind;
                 break;
 
