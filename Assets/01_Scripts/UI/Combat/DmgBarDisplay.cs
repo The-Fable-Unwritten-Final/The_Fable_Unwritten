@@ -47,53 +47,57 @@ public static class DmgTextColors
 
 public class DmgBarDisplay : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI damageText;
-    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private GameObject dmgPrintPrefab;
+    
+    private Queue<GameObject> dmgPrintPool = new Queue<GameObject>();
 
-    private Vector3 floatOffset = Vector3.up * 1f;
+    private float floatOffset = 1f;
     private float floatDuration = 1f;
-
-    private void Awake()
-    {
-        // 최초에 텍스트는 숨긴 상태로 시작
-        canvasGroup.alpha = 0f;
-        damageText.text = "";
-    }
-
 
     public void Initialize(DmgTextData data, Transform target, float offsetY = 1f)
     {
-        transform.position = target.position + Vector3.up * offsetY;
+        // 풀에서 가져오기 또는 새로 생성
+        GameObject dmgInstance = dmgPrintPool.Count > 0 
+            ? dmgPrintPool.Dequeue() 
+            : Instantiate(dmgPrintPrefab, transform);
+        
+        dmgInstance.SetActive(true);
 
-        damageText.text = (data.isStanceEnhanced || data.isCardEnhanced) ? $"<b>{data.Text}</b>" : data.Text;
-        damageText.color = GetFinalColor(ResolveColor(data), data.isWeakened);
-        damageText.fontSize = (data.isStanceEnhanced || data.isCardEnhanced) ? 0.8f : 0.5f;
+        // 프리팹의 컴포넌트 가져오기
+        TextMeshProUGUI tmpText = dmgInstance.GetComponentInChildren<TextMeshProUGUI>();
+        CanvasGroup canvasGroup = dmgInstance.GetComponent<CanvasGroup>();
+
+        // 위치 설정
+        dmgInstance.transform.position = target.position + Vector3.up * offsetY;
+
+        // 텍스트 및 스타일 설정
+        tmpText.text = (data.isStanceEnhanced || data.isCardEnhanced) ? $"<b>{data.Text}</b>" : data.Text;
+        tmpText.color = GetFinalColor(ResolveColor(data), data.isWeakened);
+        tmpText.fontSize = (data.isStanceEnhanced || data.isCardEnhanced) ? 0.8f : 0.5f;
 
         canvasGroup.alpha = 1f;
 
-        StopAllCoroutines();
-        StartCoroutine(FadeAndFloat());
+        StartCoroutine(FadeAndFloat(dmgInstance, canvasGroup, tmpText));
     }
 
-
-    private IEnumerator FadeAndFloat()
+    private IEnumerator FadeAndFloat(GameObject dmgInstance, CanvasGroup canvasGroup, TextMeshProUGUI tmpText)
     {
-        Vector3 start = transform.position;
-        Vector3 end = start + floatOffset;
+        Vector3 start = dmgInstance.transform.position;
+        Vector3 end = start + Vector3.up * floatOffset;
         float time = 0;
 
         while (time < floatDuration)
         {
             time += Time.deltaTime;
-            transform.position = Vector3.Lerp(start, end, time / floatDuration);
+            dmgInstance.transform.position = Vector3.Lerp(start, end, time / floatDuration);
             canvasGroup.alpha = 1f - (time / floatDuration);
             yield return null;
         }
 
         canvasGroup.alpha = 0f;
-        damageText.text = ""; // 다음 표시를 위해 초기화
-
-        DmgPoolManager.Instance.Return(this);
+        tmpText.text = "";
+        dmgInstance.SetActive(false);
+        dmgPrintPool.Enqueue(dmgInstance);
     }
 
     private Color GetFinalColor(Color baseColor, bool isWeakened)

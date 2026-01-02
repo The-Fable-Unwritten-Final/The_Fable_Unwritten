@@ -69,11 +69,12 @@ public class ApplyStatusEffect : CardEffectBase
 
             t.ApplyStatusEffect(effect);
 
-            string statusText = GetStatusEffectText(statType, value);
-
+            //string statusText = GetStatusEffectText(statType, value); => 데미지 프린트 방식 변경으로 사용 안함
+            string statusText = value.ToString();
             var Text = new DmgTextData
             {
                 Text = statusText,
+
                 type = Debuff.IsDebuff(statType, value) ? DmgTextType.Debuff : DmgTextType.Buff,
                 isCardEnhanced = isEnhanced == true,
                 isStanceEnhanced = caster is PlayerController pc &&
