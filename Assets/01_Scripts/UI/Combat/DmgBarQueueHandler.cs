@@ -5,6 +5,7 @@ using UnityEngine;
 public class DmgBarQueueHandler : MonoBehaviour
 {
     private Queue<(DmgTextData data, float enqueuedTime)> queue = new();
+    [SerializeField] private DmgBarDisplay dmgDisplay;
     private bool isPlaying = false;
 
     [SerializeField] private float fastDelay = 0.25f;   // 연타 간 텀
@@ -16,9 +17,12 @@ public class DmgBarQueueHandler : MonoBehaviour
 
     public void Enqueue(DmgTextData data)
     {
+        dmgDisplay.Initialize(data, transform, verticalOffset);
+        // 데미지 프린트 방식 변경으로 사용 안함
+        /*
         queue.Enqueue((data, Time.time)); // enqueue 시점의 시간 저장
         if (!isPlaying)
-            StartCoroutine(PlayQueue());
+            StartCoroutine(PlayQueue());*/
     }
 
     private IEnumerator PlayQueue()

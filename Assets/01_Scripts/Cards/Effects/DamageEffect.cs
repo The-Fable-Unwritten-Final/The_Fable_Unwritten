@@ -47,7 +47,7 @@ public class DamageEffect : CardEffectBase
 
             var dmgData =  new DmgTextData
             {
-                Text = $"-{Mathf.RoundToInt(result)}",
+                Text = $"{Mathf.RoundToInt(result)}",
                 type = DmgTextType.Normal,
                 isStanceEnhanced = stanceBoosted,
                 isCardEnhanced = isEnhanced == true,

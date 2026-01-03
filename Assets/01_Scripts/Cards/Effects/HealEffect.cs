@@ -72,7 +72,7 @@ public class HealEffect : CardEffectBase
 
             var healText = new DmgTextData
             {
-                Text = $"+{Mathf.RoundToInt(finalHeal)}",
+                Text = $"{Mathf.RoundToInt(finalHeal)}",
                 type = DmgTextType.Heal,
                 isCardEnhanced = isEnhanced == true,
                 isStanceEnhanced = stanceBoosted,

@@ -83,8 +83,18 @@ public class ApplyStatusEffect : CardEffectBase
                 isWeakened = false
             };
 
-            t.dmgTextQueue.Enqueue(Text);
+            // Buff/Debuff는 1.5초 지연 후 Enqueue
+            if (Text.type == DmgTextType.Buff || Text.type == DmgTextType.Debuff)
+                GameManager.Instance.StartCoroutine(DelayedEnqueue(t, Text));
+            else
+                t.dmgTextQueue.Enqueue(Text);
         }
+    }
+
+    private IEnumerator DelayedEnqueue(IStatusReceiver target, DmgTextData text)
+    {
+        yield return new WaitForSeconds(1.5f);
+        target.dmgTextQueue.Enqueue(text);
     }
 
     private StatusEffect CreateEffect(BuffStatType type, float val, int dur)

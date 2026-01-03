@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         var dmg = new DmgTextData
         {
-            Text = $"-{Mathf.RoundToInt(damage)}",
+            Text = $"{Mathf.RoundToInt(damage)}",
             type = DmgTextType.Normal,
             isCardEnhanced = false,
             isStanceEnhanced = false,
@@ -216,7 +216,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         var dmg = new DmgTextData
         {
-            Text = $"-{Mathf.RoundToInt(reduced)}",
+            Text = $"{Mathf.RoundToInt(reduced)}",
             type = DmgTextType.Normal,
             isCardEnhanced = false,
             isStanceEnhanced = false,
