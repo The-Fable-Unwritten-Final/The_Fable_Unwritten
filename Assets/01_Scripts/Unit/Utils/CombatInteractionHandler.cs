@@ -28,7 +28,7 @@ public class CombatInteractionHandler
     {
         redirectTarget = null;
 
-        var guard = statusEffects.FindInstantEffect(BuffStatType.GuardRedirect);
+        var guard = statusEffects.FindInstantEffect(BuffStatType.Guard);
         if (guard == null || guard.value <= 0)
             return false;
 

@@ -37,19 +37,6 @@ public class ApplyDamageEffect : CardEffectBase
 
             target.TakeDamage(totalDamage);
 
-            if(totalDamage != 0)
-            {
-                var dmgData = new DmgTextData
-                {
-                    Text = Mathf.RoundToInt(totalDamage).ToString(),
-                    type = DmgTextType.Normal,
-                    isCardEnhanced = false,
-                    isStanceEnhanced = stanceBoosted,
-                    isWeakened = stanceWeakened
-                };
-                target.dmgTextQueue.Enqueue(dmgData);
-            }
-
             Debug.Log($"[ApplyDamageEffect] {index}번 카드를 {useCount}회 사용하여 {totalDamage} 추가 피해");
         }
     }

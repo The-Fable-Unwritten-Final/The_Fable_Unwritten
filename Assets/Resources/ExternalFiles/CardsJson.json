@@ -14,6 +14,10 @@
       "note": "",
       "flavortext": "Card_Flav_1000",
       "skilleffect": "fanfx2_fire_spell_large_orange",
+      "keywords": [ "Switch" ],
+      "switchType": "Insight",
+      "evolveCount": 0,
+      "evolveTarget": 0,
       "effects": [
         {
           "type": "damage",
@@ -23,7 +27,15 @@
           "type": "burn",
           "value": 4,
           "target": 4
-        }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              1003
+            ]
+          }
       ]
     },
     {

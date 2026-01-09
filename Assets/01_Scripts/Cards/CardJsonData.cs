@@ -19,6 +19,11 @@ public class CardJsonData
     public string flavortext;
     public string skilleffect;
     public List<CardEffect> effects;
+
+    public List<string> keywords;    // 키워드 배열
+    public string switchType;        // 스위치 스탠스
+    public int evolveCount;          // 성장 횟수
+    public int evolveTarget;         // 성장 후 카드 index
 }
 
 [System.Serializable]

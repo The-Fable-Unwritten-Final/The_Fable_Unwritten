@@ -20,67 +20,47 @@ public class ApplyStatusEffect : CardEffectBase
     /// <param name="target">타겟</param>
     public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
-        List<IStatusReceiver> filteredTargets = new();
-
-        switch (target)
-        {
-            case 0: // 소피아
-                foreach (var t in GameManager.Instance.turnController.battleFlow.playerParty)
-                {
-                    if (t.ChClass == CharacterClass.Sophia) filteredTargets.Add(t);
-                }
-                break;
-
-            case 1: // 카일라
-                foreach (var t in GameManager.Instance.turnController.battleFlow.playerParty)
-                {
-                    if (t.ChClass == CharacterClass.Kayla) filteredTargets.Add(t);
-                }
-                break;
-
-            case 2: // 레온
-                foreach (var t in GameManager.Instance.turnController.battleFlow.playerParty)
-                {
-                    if (t.ChClass == CharacterClass.Leon) filteredTargets.Add(t);
-                }
-                break;
-
-            case 3: // 아군 전체
-                foreach (var t in GameManager.Instance.turnController.battleFlow.playerParty)
-                {
-                    filteredTargets.Add(t);
-                }
-                break;
-
-            case 4:
-            case null:
-            default:
-                filteredTargets.AddRange(targets); break;
-        }
+        List<IStatusReceiver> filteredTargets = GetFilteredTargets(targets);
 
         foreach (var t in filteredTargets)
         {
             if (!t.IsAlive()) continue;
 
             StatusEffect effect = CreateEffect(statType, value, duration);
-
             t.ApplyStatusEffect(effect);
-
-            string statusText = GetStatusEffectText(statType, value);
-
-           /* var Text = new DmgTextData
-            {
-                Text = statusText,
-                type = Debuff.IsDebuff(statType, value) ? DmgTextType.Debuff : DmgTextType.Buff,
-                isCardEnhanced = isEnhanced == true,
-                isStanceEnhanced = caster is PlayerController pc &&
-                           (pc.playerData.currentStance == StancType.grace ||
-                            pc.playerData.currentStance == StancType.judge),
-                isWeakened = false
-            };
-
-            t.dmgTextQueue.Enqueue(Text);*/
         }
+    }
+
+    private List<IStatusReceiver> GetFilteredTargets(List<IStatusReceiver> targets)
+    {
+        List<IStatusReceiver> filtered = new();
+        var playerParty = GameManager.Instance.turnController.battleFlow.playerParty;
+
+        switch (target)
+        {
+            case 0: // 소피아
+                foreach (var t in playerParty)
+                    if (t.ChClass == CharacterClass.Sophia) filtered.Add(t);
+                break;
+            case 1: // 카일라
+                foreach (var t in playerParty)
+                    if (t.ChClass == CharacterClass.Kayla) filtered.Add(t);
+                break;
+            case 2: // 레온
+                foreach (var t in playerParty)
+                    if (t.ChClass == CharacterClass.Leon) filtered.Add(t);
+                break;
+            case 3: // 아군 전체
+                filtered.AddRange(playerParty);
+                break;
+            case 4:
+            case null:
+            default:
+                filtered.AddRange(targets);
+                break;
+        }
+
+        return filtered;
     }
 
     private StatusEffect CreateEffect(BuffStatType type, float val, int dur)
@@ -134,22 +114,19 @@ public class ApplyStatusEffect : CardEffectBase
             _ => ""
         };
 
-
         return statType switch
         {
-            BuffStatType.Attack => $"공격력 {direction}",
-            BuffStatType.Defense => $"방어력 {direction}",
-            BuffStatType.Bless => $"축복 {direction}",
-            BuffStatType.Grace => $"은총 {direction}",
-            BuffStatType.Purify => $"정화 {direction}",
-            BuffStatType.Burn => $"화상 {direction}",
-            BuffStatType.Freeze => $"빙결 {direction}%",
-            BuffStatType.Activate => $"활성화 {direction}",
-            BuffStatType.Bleed => $"출혈 {direction}",
-            BuffStatType.Stun => $"기절 {direction}",
-            BuffStatType.GuardRedirect => $"수호 발동률 {direction}%",
-            BuffStatType.CantAttackInStance => $"자세 제한",
-            BuffStatType.Blind => $"실명",
+            BuffStatType.Attack => "공격력",
+            BuffStatType.Defense => "방어력",
+            BuffStatType.Burn => "화상",
+            BuffStatType.Freeze => "빙결",
+            BuffStatType.Activate => "자연",
+            BuffStatType.Bless => "축복",
+            BuffStatType.Crime => "죄악",
+            BuffStatType.Penance => "참회",
+            BuffStatType.Scar => "상처",
+            BuffStatType.Stun => "기절",
+            BuffStatType.Guard => "수호",
             _ => "상태이상"
         };
     }
@@ -159,13 +136,8 @@ public static class Debuff
 {
     public static bool IsDebuff(BuffStatType type, float value)
     {
-        return type switch
-        {
-            BuffStatType.Attack => value < 0,
-            BuffStatType.Defense => value < 0,
-            BuffStatType.GuardRedirect or BuffStatType.Bless or BuffStatType.Grace => false,
-            _ => true
-        };
+        return StatusEffectSystem.IsHarmful(type) ||
+               (type == BuffStatType.Attack && value < 0) ||
+               (type == BuffStatType.Defense && value < 0);
     }
 }
-

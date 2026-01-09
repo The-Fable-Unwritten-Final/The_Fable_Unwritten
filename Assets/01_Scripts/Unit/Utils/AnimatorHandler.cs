@@ -62,6 +62,13 @@ public class AnimationHandler
         coroutineRunner.StartCoroutine(ResetBoolParam("Hit", HIT_RESET_DELAY));
     }
 
+    public void PlayDeath()
+    {
+        if (animator == null) return;
+
+        animator.SetTrigger("Death");
+    }
+
     /// <summary>
     /// 특정 트리거 발동
     /// </summary>

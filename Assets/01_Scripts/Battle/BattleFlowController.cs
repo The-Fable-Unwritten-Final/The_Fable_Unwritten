@@ -131,9 +131,9 @@ public class BattleFlowController : MonoBehaviour
             {
                 pc.PlayerData.currentStance = pc.PlayerData.IDNum switch
                 {
-                    0 => StancType.Inquiry,
-                    1 => StancType.Compassion,
-                    2 => StancType.Rush,
+                    0 => pc.PlayerData.currentStance,
+                    1 => pc.PlayerData.currentStance,
+                    2 => pc.PlayerData.currentStance,
                     _ => pc.PlayerData.currentStance
                 };
 
@@ -150,7 +150,6 @@ public class BattleFlowController : MonoBehaviour
             if (player.IsAlive())
             {
                 player.Deck.ResetDeckState();
-                player.Deck.Draw(DeckModel.startSize);
             }
         }
     }
@@ -168,7 +167,21 @@ public class BattleFlowController : MonoBehaviour
             currentMana = startMana;
 
         UpdateManaUI();
-        DrawMissingHands();
+        DrawCardsForNewTurn();
+    }
+
+    /// <summary>
+    /// 턴 시작 시 각 캐릭터별로 카드 드로우
+    /// </summary>
+    private void DrawCardsForNewTurn()
+    {
+        foreach (var player in playerParty)
+        {
+            if (!player.IsAlive()) continue;
+
+            // 캐릭터별 덱에서 n장 드로우 (부족하면 usedDeck 셔플 후 채움)
+            player.Deck.Draw(DeckModel.startSize);
+        }
     }
 
     /// <summary>
@@ -176,8 +189,21 @@ public class BattleFlowController : MonoBehaviour
     /// </summary>
     public void EndPlayerTurn()
     {
-        DiscardExcessCards();
+        DiscardNonPreservedHands();
         turnManager.EndPlayerTurn();
+    }
+
+    /// <summary>
+    /// '보존' 키워드 없는 핸드 카드를 모두 버림
+    /// </summary>
+    private void DiscardNonPreservedHands()
+    {
+        foreach (var player in playerParty)
+        {
+            if (!player.IsAlive()) continue;
+
+            player.Deck.DiscardNonPreservedCards();
+        }
     }
 
     private void DrawMissingHands()
@@ -278,7 +304,7 @@ public class BattleFlowController : MonoBehaviour
 
     private void OnTurnEnd()
     {
-        ExecutePlayerTurn();
+
     }
 
     /// <summary>
@@ -472,72 +498,8 @@ public class BattleFlowController : MonoBehaviour
     /// </summary>
     public List<IStatusReceiver> AutoChooseTargets(TargetType type, CharacterClass classNum, int targetNum, IStatusReceiver originTarget)
     {
-        var pool = type switch
-        {
-            TargetType.None => playerParty,
-            TargetType.Ally => playerParty,
-            TargetType.Enemy => enemyParty,
-            _ => new List<IStatusReceiver>()
-        };
-
-        List<IStatusReceiver> result = new();
-
-        if (type == TargetType.None)
-        {
-            result = GetSelfTargets(classNum, targetNum, originTarget, pool);
-        }
-        else
-        {
-            result = GetMultiTargets(targetNum, originTarget, pool);
-        }
-
-        return result;
-    }
-
-    private List<IStatusReceiver> GetSelfTargets(CharacterClass classNum, int targetNum, IStatusReceiver originTarget, List<IStatusReceiver> pool)
-    {
-        List<IStatusReceiver> result = new();
-        List<IStatusReceiver> candidates = pool.FindAll(p => p != null && p.IsAlive());
-
-        PlayerController selfSlot = classNum switch
-        {
-            CharacterClass.Sophia => middleSlot,
-            CharacterClass.Kayla => backSlot,
-            CharacterClass.Leon => frontSlot,
-            _ => null
-        };
-
-        switch (targetNum)
-        {
-            case 0:
-                if (selfSlot != null) result.Add(selfSlot);
-                break;
-            case 3:
-                result = candidates;
-                break;
-            default:
-                result.Add(originTarget);
-                break;
-        }
-
-        return result;
-    }
-
-    private List<IStatusReceiver> GetMultiTargets(int targetNum, IStatusReceiver originTarget, List<IStatusReceiver> pool)
-    {
-        List<IStatusReceiver> result = new();
-        List<IStatusReceiver> candidates = pool.FindAll(p => p != null && p.IsAlive() && p != originTarget);
-
-        result.Add(originTarget);
-
-        while (result.Count < targetNum && candidates.Count > 0)
-        {
-            var pick = candidates[UnityEngine.Random.Range(0, candidates.Count)];
-            result.Add(pick);
-            candidates.Remove(pick);
-        }
-
-        return result;
+        var caster = GetCharacter(classNum);
+        return TargetResolver.Resolve(type, targetNum, caster, originTarget);
     }
 
     private void RefreshAllDeckEnhanced()
@@ -632,3 +594,51 @@ public class BattleFlowController : MonoBehaviour
         }
     }
 }
+
+/*
+    private List<IStatusReceiver> GetSelfTargets(CharacterClass classNum, int targetNum, IStatusReceiver originTarget, List<IStatusReceiver> pool)
+    {
+        List<IStatusReceiver> result = new();
+        List<IStatusReceiver> candidates = pool.FindAll(p => p != null && p.IsAlive());
+
+        PlayerController selfSlot = classNum switch
+        {
+            CharacterClass.Sophia => middleSlot,
+            CharacterClass.Kayla => backSlot,
+            CharacterClass.Leon => frontSlot,
+            _ => null
+        };
+
+        switch (targetNum)
+        {
+            case 0:
+                if (selfSlot != null) result.Add(selfSlot);
+                break;
+            case 3:
+                result = candidates;
+                break;
+            default:
+                result.Add(originTarget);
+                break;
+        }
+
+        return result;
+    }
+
+    private List<IStatusReceiver> GetMultiTargets(int targetNum, IStatusReceiver originTarget, List<IStatusReceiver> pool)
+    {
+        List<IStatusReceiver> result = new();
+        List<IStatusReceiver> candidates = pool.FindAll(p => p != null && p.IsAlive() && p != originTarget);
+
+        result.Add(originTarget);
+
+        while (result.Count < targetNum && candidates.Count > 0)
+        {
+            var pick = candidates[UnityEngine.Random.Range(0, candidates.Count)];
+            result.Add(pick);
+            candidates.Remove(pick);
+        }
+
+        return result;
+    }
+*/

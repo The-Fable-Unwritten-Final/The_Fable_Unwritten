@@ -77,19 +77,20 @@ public class NewCardEffectBuilder : MonoBehaviour
                 effect = redraw;
                 break;
 
+            // case문 수정 부분
             case "atk":
-            case "def":// ToDo : 상태이상 추가하기
+            case "def":
             case "burn":
             case "freeze":
-            case "activate":
-            case "purify":
-            case "bless":
-            case "grace":
-            case "bleed":
+            case "activate":  // 자연
+            case "bless":     // 축복
+            case "crime":     // 죄악 (구 purify)
+            case "penance":   // 참회 (구 grace)
+            case "scar":      // 상처 (구 bleed)
             case "stun":
             case "guard":
                 var buff = Load<ApplyStatusEffect>("ApplyBuff");
-                
+
                 buff.statType = effectData.type switch
                 {
                     "atk" => BuffStatType.Attack,
@@ -97,16 +98,16 @@ public class NewCardEffectBuilder : MonoBehaviour
                     "burn" => BuffStatType.Burn,
                     "freeze" => BuffStatType.Freeze,
                     "activate" => BuffStatType.Activate,
-                    "purify" => BuffStatType.Purify,
                     "bless" => BuffStatType.Bless,
-                    "grace" => BuffStatType.Grace,
-                    "bleed" => BuffStatType.Bleed,
+                    "crime" => BuffStatType.Crime,
+                    "penance" => BuffStatType.Penance,
+                    "scar" => BuffStatType.Scar,
                     "stun" => BuffStatType.Stun,
-                    "guard" => BuffStatType.GuardRedirect,
+                    "guard" => BuffStatType.Guard,
                     _ => BuffStatType.None
                 };
 
-                buff.value = effectData.value;      //턴 지속이 아니니 duration 필요 없음.(턴 지속 디벞 추가 시 추가)
+                buff.value = effectData.value;
                 buff.target = effectData.target;
                 effect = buff;
                 break;

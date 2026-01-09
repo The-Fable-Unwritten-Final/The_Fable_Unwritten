@@ -149,7 +149,7 @@ public class PlayerController : UnitBase
     {
         return playerData.currentStance switch
         {
-            StancType.Protection => damage / 2f,
+            StancType.Defense => damage / 2f,
             StancType.Rush => damage * 2f,
             _ => damage
         };
@@ -159,20 +159,8 @@ public class PlayerController : UnitBase
     {
         // 스탠스 보너스 적용
         amount = stanceSystem?.ApplyHealBonus(amount) ?? amount;
-
-        // Grace 보너스
-        float graceBonus = statusEffectSystem?.ConsumeGrace() ?? 0;
-        if (graceBonus > 0)
-        {
-            Debug.Log($"[Grace] 회복량 증가 +{graceBonus}");
-            amount += graceBonus;
-        }
-
         return amount;
     }
-
- 
-
     protected override void OnBindHpBar(HpBarDisplay bar)
     {
         bar?.BindPlayerData(playerData);
@@ -223,15 +211,29 @@ public class PlayerController : UnitBase
         return combatHandler?.TryGuardRedirect(out redirectTarget) ?? false;
     }
 
-
-    public void TryApplyBlessBonus(float blessValue)
+    /// <summary>
+    /// 축복 적용
+    /// </summary>
+    public void ApplyBless(float blessValue)
     {
-        statusEffectSystem?.ApplyBless(blessValue);
+        var effect = new InstanceEffect
+        {
+            statType = BuffStatType.Bless,
+            value = blessValue
+        };
+        statusEffectSystem?.ApplyEffect(effect);
     }
-
-    public void TryApplyPurifyBonus(float purifyValue)
+    /// <summary>
+    /// 참회 적용
+    /// </summary>
+    public void ApplyPenance(float penanceValue)
     {
-        statusEffectSystem?.ApplyPurify(purifyValue);
+        var effect = new InstanceEffect
+        {
+            statType = BuffStatType.Penance,
+            value = penanceValue
+        };
+        statusEffectSystem?.ApplyEffect(effect);
     }
 
     public void OnBattleEnd()
@@ -262,5 +264,19 @@ public class PlayerController : UnitBase
         {
             StanceEffectHandler.TriggerStanceEffect(this, battleFlow);
         }
+    }
+
+    protected override void Die()
+    {
+        base.Die();
+
+        if (stanceToggleButton != null)
+            stanceToggleButton.gameObject.SetActive(false);
+    }
+
+    protected override void OnDeathComplete()
+    {
+        // 오브젝트 비활성화 (삭제가 아닌 비활성화 - 부활 가능성 대비)
+        gameObject.SetActive(false);
     }
 }

@@ -5,8 +5,6 @@ using UnityEngine;
 /// </summary>
 public class Enemy : UnitBase
 {
-  
-
     [Header("Enemy Data")]
     public EnemyData enemyData;
     private CharacterClass characterClass = CharacterClass.Enemy;
@@ -125,5 +123,19 @@ public class Enemy : UnitBase
             if (sr != null)
                 hpBarDisplay.FollowTarget(sr);
         }
+    }
+
+    protected override void Die()
+    {
+        base.Die();
+
+        var collider = GetComponent<Collider2D>();
+        if (collider != null)
+            collider.enabled = false;
+    }
+
+    protected override void OnDeathComplete()
+    {
+        gameObject.SetActive(false);
     }
 }

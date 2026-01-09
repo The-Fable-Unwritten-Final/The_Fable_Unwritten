@@ -25,12 +25,16 @@ public class PotentialGauge
     public event Action OnGaugeFull;
 
     public bool IsFull => CurrentGauge >= MAX_GAUGE;
+    public bool IsEmpty => CurrentGauge <= MIN_GAUGE;
+    public float FillPercent => (float)CurrentGauge / MAX_GAUGE;
 
     /// <summary>
     /// 게이지 증가 (아군이 카드 사용 시)
     /// </summary>
     public bool Increase(int amount = 1)
     {
+        if (amount <= 0) return false;
+
         int prev = CurrentGauge;
         CurrentGauge += amount;
 
@@ -50,6 +54,8 @@ public class PotentialGauge
     /// </summary>
     public void Decrease(int amount = 1)
     {
+        if (amount <= 0) return;
+
         int prev = CurrentGauge;
         CurrentGauge -= amount;
 
@@ -88,5 +94,13 @@ public class PotentialGauge
 
         if (CurrentGauge >= MAX_GAUGE)
             OnGaugeFull?.Invoke();
+    }
+
+    /// <summary>
+    /// 게이지를 최대로 채움
+    /// </summary>
+    public void Fill()
+    {
+        SetGauge(MAX_GAUGE);
     }
 }

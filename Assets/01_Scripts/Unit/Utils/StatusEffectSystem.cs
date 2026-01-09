@@ -11,23 +11,128 @@ public class StatusEffectSystem
     private readonly List<TickEffect> tickEffects = new();
     private readonly List<InstanceEffect> instantEffects = new();
 
+    private IStatusReceiver owner;
+
     public event Action OnEffectsChanged;
 
     public IReadOnlyList<TickEffect> TickEffects => tickEffects;
     public IReadOnlyList<InstanceEffect> InstantEffects => instantEffects;
+
+    public StatusEffectSystem(IStatusReceiver owner)
+    {
+        this.owner = owner;
+    }
+
+    /// <summary>
+    /// 특정 시점의 효과들 실행
+    /// </summary>
+    public void ExecuteTrigger(EffectTriggerType trigger)
+    {
+        for (int i = instantEffects.Count - 1; i >= 0; i--)
+        {
+            var effect = instantEffects[i];
+            if (effect.value <= 0) continue;
+
+            ExecuteEffect(effect, trigger);
+
+            if (effect.value <= 0)
+                instantEffects.RemoveAt(i);
+        }
+
+        // 턴 종료 시 추가 처리
+        if (trigger == EffectTriggerType.TurnEnd)
+        {
+            ProcessTickEffects();
+            ResetMaintainFlags();
+        }
+
+        OnEffectsChanged?.Invoke();
+    }
+
+    private void ExecuteEffect(InstanceEffect effect, EffectTriggerType trigger)
+    {
+        switch (effect.statType)
+        {
+            // 화상: 턴 시작 시 피해, 절반 감소
+            case BuffStatType.Burn:
+                if (trigger == EffectTriggerType.TurnStart && !effect.isMaintain)
+                {
+                    owner.TakeTrueDamage(effect.value);
+                    effect.value = Mathf.FloorToInt(effect.value / 2f);
+                }
+                break;
+
+            // 빙결: 턴 종료 시 초기화
+            case BuffStatType.Freeze:
+                if (trigger == EffectTriggerType.TurnEnd)
+                {
+                    effect.value = 0;
+                }
+                break;
+
+            // 죄악: 턴 종료 시 피해 후 제거
+            case BuffStatType.Crime:
+                if (trigger == EffectTriggerType.TurnEnd)
+                {
+                    owner.TakeTrueDamage(effect.value);
+                    effect.value = 0;
+                }
+                break;
+
+            // 수호: 턴 종료 시 초기화
+            case BuffStatType.Guard:
+                if (trigger == EffectTriggerType.TurnEnd)
+                {
+                    effect.value = 0;
+                }
+                break;
+
+            // 기절: 턴 시작 시 확률 판정
+            case BuffStatType.Stun:
+                if (trigger == EffectTriggerType.TurnStart)
+                {
+                    TryTriggerStunInternal(effect);
+                }
+                break;
+        }
+    }
+
+    private void ProcessTickEffects()
+    {
+        for (int i = tickEffects.Count - 1; i >= 0; i--)
+        {
+            tickEffects[i].duration--;
+            if (tickEffects[i].duration <= 0)
+                tickEffects.RemoveAt(i);
+        }
+    }
+
+    private void ResetMaintainFlags()
+    {
+        foreach (var effect in instantEffects)
+            effect.isMaintain = false;
+    }
 
     /// <summary>
     /// 상태효과 적용
     /// </summary>
     public void ApplyEffect(StatusEffect effect)
     {
+        // 자연(Active) 보너스 적용
+        if (effect is InstanceEffect inst && inst.statType != BuffStatType.Activate)
+        {
+            int activeBonus = GetActiveBonus();
+            if (activeBonus > 0)
+                inst.value += activeBonus;
+        }
+
         switch (effect)
         {
             case TickEffect tick:
                 ApplyTickEffect(tick);
                 break;
-            case InstanceEffect inst:
-                ApplyInstanceEffect(inst);
+            case InstanceEffect instEffect:
+                ApplyInstanceEffect(instEffect);
                 break;
             default:
                 Debug.LogWarning($"[StatusEffectSystem] 알 수 없는 타입: {effect.GetType()}");
@@ -49,24 +154,37 @@ public class StatusEffectSystem
 
     private void ApplyInstanceEffect(InstanceEffect inst)
     {
+        // 축복 특수 처리
+        if (inst.statType == BuffStatType.Bless)
+        {
+            ApplyBless(inst.value);
+            return;
+        }
+
+        // 참회 특수 처리
+        if (inst.statType == BuffStatType.Penance)
+        {
+            ApplyPenance(inst.value);
+            return;
+        }
+
         var existing = instantEffects.Find(e => e.statType == inst.statType);
 
         if (existing != null)
         {
-            existing.value = Mathf.Clamp(existing.value + inst.value, 0, 50);
-            existing.isMaintain = existing.isMaintain || inst.isMaintain;
+            existing.value = Mathf.Clamp(existing.value + inst.value, 0, 99);
+            existing.isMaintain = true;
         }
         else
         {
             instantEffects.Add(new InstanceEffect
             {
                 statType = inst.statType,
-                value = Mathf.Clamp(inst.value, 0, 50),
-                isMaintain = inst.isMaintain
+                value = Mathf.Clamp(inst.value, 0, 99),
+                isMaintain = true  // 이번 턴에 추가됨
             });
         }
     }
-
 
     /// <summary>
     /// 특정 타입의 효과가 있는지 확인
@@ -74,47 +192,24 @@ public class StatusEffectSystem
     public bool HasEffect(BuffStatType type)
     {
         return tickEffects.Exists(e => e.statType == type)
-            || instantEffects.Exists(e => e.statType == type);
+            || instantEffects.Exists(e => e.statType == type && e.value > 0);
     }
 
     /// <summary>
-    /// 스턴 상태인지 확인
+    /// 스턴 상태인지 확인 (TickEffect로 1턴 행동불가)
     /// </summary>
-    public bool IsStunned() => HasEffect(BuffStatType.Stun);
+    public bool IsStunned() => tickEffects.Exists(e => e.statType == BuffStatType.Stun);
 
     /// <summary>
-    /// 스탯에 적용된 버프 총합 계산
+    /// 특정 타입의 수치 반환
     /// </summary>
-    public float ModifyStat(BuffStatType statType, float baseValue)
-    {
-        float result = baseValue;
-
-        foreach (var e in tickEffects)
-            if (e.statType == statType)
-                result += e.value;
-
-        foreach (var e in instantEffects)
-            if (e.statType == statType)
-                result += e.value;
-
-        return result;
-    }
-
-    /// <summary>
-    /// 특정 타입의 버프 총합 반환
-    /// </summary>
-    public float GetBuffTotal(BuffStatType type)
+    public float GetEffectValue(BuffStatType type)
     {
         float total = 0;
-
-        foreach (var effect in tickEffects)
-            if (effect.statType == type)
-                total += effect.value;
-
-        foreach (var effect in instantEffects)
-            if (effect.statType == type)
-                total += effect.value;
-
+        foreach (var e in tickEffects)
+            if (e.statType == type) total += e.value;
+        foreach (var e in instantEffects)
+            if (e.statType == type) total += e.value;
         return total;
     }
 
@@ -126,63 +221,168 @@ public class StatusEffectSystem
         return instantEffects.Find(e => e.statType == type);
     }
 
-
     /// <summary>
-    /// 턴 종료 시 효과 감소/제거
+    /// 스탯에 적용된 버프 총합 계산
     /// </summary>
-    public void OnTurnEnd()
+    public float ModifyStat(BuffStatType statType, float baseValue)
     {
-        // TickEffect 지속시간 감소
-        for (int i = tickEffects.Count - 1; i >= 0; i--)
-        {
-            tickEffects[i].duration--;
-            if (tickEffects[i].duration <= 0)
-            {
-                Debug.Log($"[TickEffect 만료] {tickEffects[i].statType}");
-                tickEffects.RemoveAt(i);
-            }
-        }
-
-        // InstantEffect 유지 해제
-        foreach (var effect in instantEffects)
-        {
-            effect.isMaintain = false;
-        }
-
-        OnEffectsChanged?.Invoke();
+        return baseValue + GetEffectValue(statType);
     }
 
     /// <summary>
-    /// 발동 후 제거되는 효과 처리
+    /// 빙결 감소량 반환
     /// </summary>
+    public float GetFreezePenalty()
+    {
+        return GetEffectValue(BuffStatType.Freeze);
+    }
+
+    /// <summary>
+    /// 상처 보너스 반환 및 소모
+    /// </summary>
+    public float GetScarBonus()
+    {
+        var scar = FindInstantEffect(BuffStatType.Scar);
+        if (scar == null || scar.value <= 0) return 0;
+
+        float bonus = scar.value;
+        instantEffects.Remove(scar);
+        return bonus;
+    }
+
+    /// <summary>
+    /// 수호 효과 확인
+    /// </summary>
+    public (bool shouldRedirect, float damageReduction) GetGuardEffect()
+    {
+        var guard = FindInstantEffect(BuffStatType.Guard);
+        if (guard == null || guard.value <= 0)
+            return (false, 0);
+
+        return (true, guard.value);
+    }
+
+    /// <summary>
+    /// 수호 소모
+    /// </summary>
+    public void ConsumeGuard()
+    {
+        RemoveEffect(BuffStatType.Guard);
+    }
+
+    private void TryTriggerStunInternal(InstanceEffect stun)
+    {
+        float roll = UnityEngine.Random.Range(0f, 100f);
+        bool triggered = roll <= stun.value;
+
+        stun.value = 0; // 판정 후 제거
+
+        if (triggered)
+        {
+            tickEffects.Add(new TickEffect
+            {
+                statType = BuffStatType.Stun,
+                value = 1,
+                duration = 1
+            });
+        }
+    }
+
+
+    private int ConsumeActiveBonus()
+    {
+        var active = FindInstantEffect(BuffStatType.Activate);
+        if (active == null || active.value <= 0) return 0;
+
+        int bonus = (int)active.value;
+        instantEffects.Remove(active);
+        return bonus;
+    }
+
+    private void ApplyBless(float blessValue)
+    {
+        var targetBuff = instantEffects
+            .Where(e => IsBeneficial(e.statType)
+                     && e.statType != BuffStatType.Bless
+                     && e.statType != BuffStatType.Penance
+                     && e.value > 0)
+            .OrderByDescending(e => e.value)
+            .FirstOrDefault();
+
+        if (targetBuff != null)
+        {
+            targetBuff.value = Mathf.Min(99, targetBuff.value + blessValue);
+        }
+        else
+        {
+            var existing = FindInstantEffect(BuffStatType.Bless);
+            if (existing != null)
+                existing.value = Mathf.Min(99, existing.value + blessValue);
+            else
+                instantEffects.Add(new InstanceEffect { statType = BuffStatType.Bless, value = blessValue });
+        }
+    }
+
+    private void ApplyPenance(float penanceValue)
+    {
+        var targetDebuff = instantEffects
+            .Where(e => IsHarmful(e.statType)
+                     && e.statType != BuffStatType.Bless
+                     && e.statType != BuffStatType.Penance
+                     && e.value > 0)
+            .OrderByDescending(e => e.value)
+            .FirstOrDefault();
+
+        if (targetDebuff != null)
+        {
+            targetDebuff.value = Mathf.Max(0, targetDebuff.value - penanceValue);
+            if (targetDebuff.value <= 0)
+                instantEffects.Remove(targetDebuff);
+        }
+        else
+        {
+            var existing = FindInstantEffect(BuffStatType.Penance);
+            if (existing != null)
+                existing.value = Mathf.Min(99, existing.value + penanceValue);
+            else
+                instantEffects.Add(new InstanceEffect { statType = BuffStatType.Penance, value = penanceValue });
+        }
+    }
+
+    public float ConsumePendingBless()
+    {
+        var bless = FindInstantEffect(BuffStatType.Bless);
+        if (bless == null || bless.value <= 0) return 0;
+        float value = bless.value;
+        instantEffects.Remove(bless);
+        return value;
+    }
+
+    public float ConsumePendingPenance()
+    {
+        var penance = FindInstantEffect(BuffStatType.Penance);
+        if (penance == null || penance.value <= 0) return 0;
+        float value = penance.value;
+        instantEffects.Remove(penance);
+        return value;
+    }
+
+    public void RemoveEffect(BuffStatType type)
+    {
+        instantEffects.RemoveAll(e => e.statType == type);
+        OnEffectsChanged?.Invoke();
+    }
+
     public void TriggerEffectOnce(BuffStatType type)
     {
         for (int i = instantEffects.Count - 1; i >= 0; i--)
         {
             if (instantEffects[i].statType == type && !instantEffects[i].isMaintain)
-            {
                 instantEffects.RemoveAt(i);
-            }
         }
-
         OnEffectsChanged?.Invoke();
     }
 
-    /// <summary>
-    /// 특정 효과 수치 초기화
-    /// </summary>
-    public void ResetEffectValue(BuffStatType type)
-    {
-        var effect = instantEffects.Find(e => e.statType == type);
-        if (effect != null)
-        {
-            effect.value = 0;
-        }
-    }
-
-    /// <summary>
-    /// 모든 효과 제거
-    /// </summary>
     public void ClearAll()
     {
         tickEffects.Clear();
@@ -190,164 +390,102 @@ public class StatusEffectSystem
         OnEffectsChanged?.Invoke();
     }
 
-    /// <summary>
-    /// 화상 데미지 계산 및 수치 반환
-    /// </summary>
-    public float GetBurnDamage()
+    public static bool IsBeneficial(BuffStatType type) => type switch
     {
-        var burn = instantEffects.Find(e => e.statType == BuffStatType.Burn);
-        if (burn != null && burn.value > 0)
-        {
-            float damage = burn.value;
-            if (!burn.isMaintain)
-                burn.value = 0;
-            return damage;
-        }
-        return 0;
+        BuffStatType.Attack or BuffStatType.Defense or BuffStatType.Activate
+        or BuffStatType.Bless or BuffStatType.Penance or BuffStatType.Guard => true,
+        _ => false
+    };
+
+    public static bool IsHarmful(BuffStatType type) => type switch
+    {
+        BuffStatType.Burn or BuffStatType.Freeze or BuffStatType.Crime
+        or BuffStatType.Scar or BuffStatType.Stun => true,
+        _ => false
+    };
+
+    /// <summary>
+    /// 자연(Active) 보너스 가져오고 소모
+    /// </summary>
+    private int GetActiveBonus()
+    {
+        var active = FindInstantEffect(BuffStatType.Activate);
+        if (active == null || active.value <= 0) return 0;
+
+        int bonus = (int)active.value;
+        instantEffects.Remove(active);
+        return bonus;
     }
 
     /// <summary>
-    /// 빙결로 인한 데미지 감소 적용
+    /// 죄악 처리: 턴 종료 시 피해
     /// </summary>
-    public float ApplyFreezePenalty(float baseDamage)
+    private float ProcessCrime()
     {
-        var freeze = instantEffects.Find(e => e.statType == BuffStatType.Freeze);
-        if (freeze != null && freeze.value > 0)
-        {
-            float multiplier = Mathf.Clamp01(1f - freeze.value / 100f);
-            float reduced = baseDamage * multiplier;
-            freeze.value = 0;
-            return reduced;
-        }
-        return baseDamage;
+        var crime = FindInstantEffect(BuffStatType.Crime);
+        if (crime == null || crime.value <= 0) return 0;
+
+        float damage = crime.value;
+        instantEffects.Remove(crime);
+        return damage;
     }
 
     /// <summary>
-    /// 출혈 보너스 데미지 적용
-    /// </summary>
-    public float ApplyBleedBonus(float baseDamage)
-    {
-        var bleed = instantEffects.Find(e => e.statType == BuffStatType.Bleed);
-        if (bleed != null && bleed.value > 0)
-        {
-            baseDamage += bleed.value;
-            if (!bleed.isMaintain)
-                bleed.value = 0;
-        }
-        return baseDamage;
-    }
-
-    /// <summary>
-    /// 활성도 보너스 적용
-    /// </summary>
-    public void ApplyActivateBonus(BuffStatType incoming)
-    {
-        var activate = instantEffects.Find(e => e.statType == BuffStatType.Activate);
-        if (activate == null || activate.value <= 0) return;
-
-        if (incoming == BuffStatType.Burn || incoming == BuffStatType.Freeze)
-        {
-            var target = instantEffects.Find(e => e.statType == incoming);
-            if (target != null)
-            {
-                target.value = Mathf.Min(50, target.value + activate.value);
-            }
-        }
-        activate.value = 0;
-    }
-
-    /// <summary>
-    /// 스턴 발동 시도
+    /// 기절 발동 시도: 확률 기반
     /// </summary>
     public bool TryTriggerStun()
     {
-        var stun = instantEffects.Find(e => e.statType == BuffStatType.Stun);
-        if (stun != null && stun.value > 0)
+        var stun = FindInstantEffect(BuffStatType.Stun);
+        if (stun == null || stun.value <= 0) return false;
+
+        float roll = UnityEngine.Random.Range(0f, 100f);
+        bool triggered = roll <= stun.value;
+
+        // 발동 여부와 관계없이 수치 초기화
+        instantEffects.Remove(stun);
+
+        if (triggered)
         {
-            float roll = UnityEngine.Random.Range(0f, 100f);
-            if (roll <= stun.value)
+            // 1턴간 행동 불가 (TickEffect)
+            tickEffects.Add(new TickEffect
             {
-                ApplyEffect(new TickEffect
-                {
-                    statType = BuffStatType.Stun,
-                    value = 1,
-                    duration = 1
-                });
-                stun.value = 0;
-                return true;
-            }
+                statType = BuffStatType.Stun,
+                value = 1,
+                duration = 1
+            });
         }
-        return false;
+
+        return triggered;
     }
 
-    /// <summary>
-    /// Grace 수치 반환 및 소모
-    /// </summary>
-    public float ConsumeGrace()
-    {
-        var grace = instantEffects.Find(e => e.statType == BuffStatType.Grace);
-        if (grace != null && grace.value > 0)
-        {
-            float value = grace.value;
-            grace.value = 0;
-            return value;
-        }
-        return 0;
-    }
+
 
     /// <summary>
-    /// 축복 버프 처리
+    /// 가장 높은 이로운 효과 찾기
     /// </summary>
-    public void ApplyBless(float blessValue)
+    private InstanceEffect GetHighestBeneficialEffect()
     {
-        var targetBuff = instantEffects
-            .Where(e => !Debuff.IsDebuff(e.statType, e.value)
+        return instantEffects
+            .Where(e => IsBeneficial(e.statType)
                      && e.statType != BuffStatType.Bless
+                     && e.statType != BuffStatType.Penance
                      && e.value > 0)
             .OrderByDescending(e => e.value)
             .FirstOrDefault();
-
-        if (targetBuff != null)
-        {
-            targetBuff.value = Mathf.Min(50, targetBuff.value + blessValue);
-        }
-        else
-        {
-            ApplyEffect(new InstanceEffect
-            {
-                statType = BuffStatType.Bless,
-                value = blessValue,
-                isMaintain = false
-            });
-        }
     }
 
     /// <summary>
-    /// 정화 디버프 처리
+    /// 가장 높은 해로운 효과 찾기
     /// </summary>
-    public void ApplyPurify(float purifyValue)
+    private InstanceEffect GetHighestHarmfulEffect()
     {
-        var targetDebuff = instantEffects
-            .Where(e => Debuff.IsDebuff(e.statType, e.value)
-                     && e.statType != BuffStatType.Purify
+        return instantEffects
+            .Where(e => IsHarmful(e.statType)
+                     && e.statType != BuffStatType.Bless
+                     && e.statType != BuffStatType.Penance
                      && e.value > 0)
             .OrderByDescending(e => e.value)
             .FirstOrDefault();
-
-        if (targetDebuff != null)
-        {
-            float reduction = Mathf.Min(targetDebuff.value, purifyValue);
-            targetDebuff.value -= reduction;
-        }
-        else
-        {
-            ApplyEffect(new InstanceEffect
-            {
-                statType = BuffStatType.Purify,
-                value = purifyValue,
-                isMaintain = false
-            });
-        }
     }
 
 }

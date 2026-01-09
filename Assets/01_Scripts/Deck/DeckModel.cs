@@ -44,6 +44,31 @@ public class DeckModel
         }
     }
 
+    public List<CardModel> DrawAndCheck(int count)
+    {
+        List<CardModel> drawnCards = new();
+
+        for (int i = 0; i < count; i++)
+        {
+            if (hand.Count >= maxSize) break;   //5장 모두 들고 있을 때 드로우 시도 시 처리 안함
+
+            if (unusedDeck.Count == 0)          //모든 카드 사용 시
+                ReshuffleDiscardIntoDraw();
+
+            if (unusedDeck.Count == 0) break;   // 리셔플 후에도 카드가 없으면 종료
+
+            var card = unusedDeck[0];           //미사용 덱의 가장 앞의 카드를
+            unusedDeck.RemoveAt(0);
+            hand.Add(card);                     //핸드에 넣기
+            drawnCards.Add(card);               //드로우한 카드 기록
+
+            GameManager.Instance.combatUIController.DrawCard(card);
+            BattleLogManager.Instance.RegisterDrawnCard(card);
+        }
+
+        return drawnCards;
+    }
+
     /// <summary>
     /// 특정 카드 버리기
     /// </summary>
@@ -213,7 +238,6 @@ public class DeckModel
         foreach (var card in usedDeck)
             card.ApplyPersistentDiscount(amount);
     }
-
     public void DiscardUnmaintainedCardsAtTurnEnd()
     {
         List<CardModel> toRemove = new();
@@ -229,15 +253,26 @@ public class DeckModel
 
         foreach (var card in toRemove)
         {
+            hand.Remove(card);
             GameManager.Instance.combatUIController.ThrowCard(card);
-            Debug.Log($"[Deck] 유지되지 않는 카드 {card.cardName} 핸드에서 제거");
+
+            if (card.isOneUse)
+            {
+                GameObject.Destroy(card);
+                Debug.Log($"[Deck] 일회용 카드 {card.cardName} 파괴됨");
+            }
+            else
+            {
+                usedDeck.Add(card);
+                Debug.Log($"[Deck] 유지되지 않는 카드 {card.cardName} 사용 덱으로 이동");
+            }
         }
 
-        // 사용 덱 검사
+        // 사용 덱에서 isMaintain=false인 카드 제거 (일시적으로 추가된 카드 정리용)
         toRemove.Clear();
         foreach (var card in usedDeck)
         {
-            if (!card.isMaintain)
+            if (!card.isMaintain && card.isOneUse)
                 toRemove.Add(card);
         }
 
@@ -245,9 +280,31 @@ public class DeckModel
         {
             usedDeck.Remove(card);
             GameObject.Destroy(card);
-            Debug.Log($"[Deck] 유지되지 않는 카드 {card.cardName} 사용 덱에서 제거");
+            Debug.Log($"[Deck] 일회용 카드 {card.cardName} 사용 덱에서 제거");
+        }
+    }
+
+    /// <summary>
+    /// '보존' 키워드가 없는 핸드 카드를 모두 버림
+    /// </summary>
+    public void DiscardNonPreservedCards()
+    {
+        List<CardModel> toDiscard = new();
+
+        foreach (var card in hand)
+        {
+            // '보존' 키워드가 없는 카드만 버림
+            if (!card.isPreserve) // 또는 card.isPreserved 등
+            {
+                toDiscard.Add(card);
+            }
         }
 
+        foreach (var card in toDiscard)
+        {
+            Discard(card);
+            GameManager.Instance.combatUIController.ThrowCard(card);
+        }
     }
 
 }

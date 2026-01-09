@@ -66,7 +66,7 @@ public class StanceOptionButton : MonoBehaviour
 
         return (characterClass, stanceType) switch
         {
-            (CharacterClass.Sophia, StancType.Inquiry) => code switch
+            (CharacterClass.Sophia, StancType.Seek) => code switch
             {
                    "ko" => "<b><color=#FFD700>정제</color></b>\n<color=#ff5757>처음 사용한 타입 피해 50% 증가</color>\n<color=#518bff>이외 타입 피해 50% 감소</color>",
                    "ja" => "<b><color=#FFD700>精製</color></b>\n<color=#ff5757>最初に使用したタイプのダメージが50%増加</color>\n<color=#518bff>その他のタイプのダメージが50%減少</color>",
@@ -82,7 +82,7 @@ public class StanceOptionButton : MonoBehaviour
                 _ => "Unknown code"
             },
 
-            (CharacterClass.Kayla, StancType.Compassion) => code switch
+            (CharacterClass.Kayla, StancType.Mercy) => code switch
             {
                 "ko" => "<b><color=#FFD700>축복</color></b>\n<color=#ff5757>회복량 50% 증가, 버프 수치 1 증가</color>\n<color=#518bff>피해량 50% 감소, 디버프 수치 1 감소</color>",
                 "ja" => "<b><color=#FFD700>祝福</color></b>\n<color=#ff5757>回復量50%増加 バフ数値1増加</color>\n<color=#518bff>ダメージ量50%減少、デバフ数値1減少</color>",
@@ -98,7 +98,7 @@ public class StanceOptionButton : MonoBehaviour
                 _ => "Unknown code"
             },
 
-            (CharacterClass.Leon, StancType.Protection) => code switch
+            (CharacterClass.Leon, StancType.Defense) => code switch
             { 
                 "ko" => "<b><color=#FFD700>방어</color></b>\n<color=#ff5757>받는 피해 50% 감소</color>\n<color=#518bff>주는 피해 50% 감소</color>",
                 "ja" => "<b><color=#FFD700>防御</color></b>\n<color=#ff5757>受けるダメージ50%減少</color>\n<color=#518bff>与えるダメージ50%減少</color>",

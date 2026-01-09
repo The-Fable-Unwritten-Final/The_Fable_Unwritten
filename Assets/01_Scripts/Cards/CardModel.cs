@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
+
+
 [CreateAssetMenu(menuName = "Card/CardModel")]
 public class CardModel : ScriptableObject
 {
@@ -14,9 +16,8 @@ public class CardModel : ScriptableObject
     public string cardName;                 //카드 이름
     public string cardText;                 // 카드 설명 필드 추가 (CSV의 text 대응)
     public string FlavorText;               // 카드의 배경적 설명
-    public bool isOneUse { get; set; }           //일회성 카드인지 확인
-    public bool isMaintain { get; set; }          //한턴 유지 카드인지 확인
-
+    public string note;                     // 특수 효과
+   
     [Header("Core Cost")]
     public int manaCost;                    //카드 코스트
     private int temporaryCostModifier;       //할인 값 확인용
@@ -31,7 +32,6 @@ public class CardModel : ScriptableObject
     public int targetCount;         //카드 지정 개수
     public TargetType targetType;   //아군 한정, 적군 한정 등
     public string characterStance;  //자세에 따른 추가 효과 기대   
-    public string note;             //특수 효과
 
     [Header("Visuals")]
     public Sprite illustration;   // 일러스트 이미지 이름
@@ -43,12 +43,22 @@ public class CardModel : ScriptableObject
     [Header("Card Effects")]
     public List<CardEffectBase> effects = new();    //어떤 효과를 가졌는지
 
-    [Header("Skill Effect")]
-    public string skillEffectName;   // 스킬 이펙트 이름
+    [Header("Keywords")]
+    public List<CardKeyword> keywords = new();
+    public StancType switchStance = StancType.None;
+    public int evolveCount;
+    public int evolveTarget;
+    public bool isOneUse { get; set; }           //일회성 카드인지 확인
+    public bool isMaintain { get; set; }          //한턴 유지 카드인지 확인
+    public bool isPreserve { get; set; }        //보존 카드인지 확인
 
     public bool isUnlocked = true;              //카드가 해금 되었는지
 
     public bool isEnhanced = false;                 //카드가 연계효과로 강화 되었는지
+
+    [Header("Skill Effect")]
+    public string skillEffectName;   // 스킬 이펙트 이름
+
 
     // ==== 사용 조건 및 비용 ====
 
@@ -367,4 +377,26 @@ public class CardModel : ScriptableObject
     {
         isEnhanced = BattleLogManager.Instance.isEnhanced(this);
     }
+
+    public bool HasKeyword(CardKeyword keyword)
+    {
+        return keywords != null && keywords.Contains(keyword);
+    }
+
+    public void InitializeFromKeywords()
+    {
+        isOneUse = HasKeyword(CardKeyword.Exhaust);
+        isMaintain = !HasKeyword(CardKeyword.Temporary);
+        isPreserve = HasKeyword(CardKeyword.Retain);
+    }
+
+    public bool IsExhaust => HasKeyword(CardKeyword.Exhaust);
+    public bool IsRetain => HasKeyword(CardKeyword.Retain);
+    public bool IsTemporary => HasKeyword(CardKeyword.Temporary);
+    public bool IsCopy => HasKeyword(CardKeyword.Copy);
+    public bool IsInnate => HasKeyword(CardKeyword.Innate);
+    public bool IsCritical => HasKeyword(CardKeyword.Critical);
+    public bool HasSwitch => HasKeyword(CardKeyword.Switch);
+    public bool HasGrow => HasKeyword(CardKeyword.Grow);
+
 }

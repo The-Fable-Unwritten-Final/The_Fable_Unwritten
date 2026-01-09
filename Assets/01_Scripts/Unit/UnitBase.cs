@@ -75,7 +75,7 @@ public abstract class UnitBase : MonoBehaviour, IStatusReceiver
     protected virtual void Awake()
     {
         statusDisplay = GetComponentInChildren<StatusDisplay>();
-        statusEffectSystem = new StatusEffectSystem();
+        statusEffectSystem = new StatusEffectSystem(this);
         statusEffectSystem.OnEffectsChanged += OnStatusEffectsChanged;
 
         InitializeAnimationHandler();
@@ -116,6 +116,15 @@ public abstract class UnitBase : MonoBehaviour, IStatusReceiver
     public virtual bool IsAlive() => currentHP > 0;
 
     /// <summary>
+    /// 사망 처리
+    /// </summary>
+    protected virtual void Die()
+    {
+        HideStatusUI();
+        PlayDeathAnimation();
+    }
+
+    /// <summary>
     /// 일반 데미지 처리 (방어력 적용)
     /// </summary>
     public virtual float TakeDamage(float amount)
@@ -134,6 +143,9 @@ public abstract class UnitBase : MonoBehaviour, IStatusReceiver
         currentHP = Mathf.Max(0, currentHP - reduced);
         ShowDamageText(reduced);
 
+        if (currentHP <= 0)
+            Die();
+
         return reduced;
     }
 
@@ -144,6 +156,10 @@ public abstract class UnitBase : MonoBehaviour, IStatusReceiver
     {
         currentHP = Mathf.Max(0, currentHP - damage);
         ShowDamageText(damage);
+
+
+        if (currentHP <= 0)
+            Die();
     }
 
     /// <summary>
@@ -220,16 +236,40 @@ public abstract class UnitBase : MonoBehaviour, IStatusReceiver
 
     public bool IsStunned() => statusEffectSystem?.IsStunned() ?? false;
 
-    public float GetBuffAtk() => statusEffectSystem?.GetBuffTotal(BuffStatType.Attack) ?? 0;
+    public float GetBuffAtk() => statusEffectSystem?.GetEffectValue(BuffStatType.Attack) ?? 0;
 
-    public float GetBuffDef() => statusEffectSystem?.GetBuffTotal(BuffStatType.Defense) ?? 0;
+    public float GetBuffDef() => statusEffectSystem?.GetEffectValue(BuffStatType.Defense) ?? 0;
+
+    /// <summary>
+    /// 턴 시작 시 상태효과 처리
+    /// </summary>
+    public virtual void ProcessTurnStart()
+    {
+        statusEffectSystem?.ExecuteTrigger(EffectTriggerType.TurnStart);
+    }
 
     /// <summary>
     /// 턴 종료 시 상태효과 처리
     /// </summary>
     public virtual void TickStatusEffects()
     {
-        statusEffectSystem?.OnTurnEnd();
+        statusEffectSystem?.ExecuteTrigger(EffectTriggerType.TurnEnd);
+    }
+
+    /// <summary>
+    /// 피격 시 상태효과 처리
+    /// </summary>
+    public virtual void OnHit()
+    {
+        statusEffectSystem?.ExecuteTrigger(EffectTriggerType.OnHit);
+    }
+
+    /// <summary>
+    /// 공격 시 상태효과 처리
+    /// </summary>
+    public virtual void OnAttack()
+    {
+        statusEffectSystem?.ExecuteTrigger(EffectTriggerType.OnAttack);
     }
 
     /// <summary>
@@ -238,45 +278,52 @@ public abstract class UnitBase : MonoBehaviour, IStatusReceiver
     public void TriggerEffectOnce(BuffStatType type)
     {
         statusEffectSystem?.TriggerEffectOnce(type);
+    }/// <summary>
+     /// 빙결 감소량 반환
+     /// </summary>
+    public float GetFreezePenalty()
+    {
+        return statusEffectSystem?.GetFreezePenalty() ?? 0f;
     }
 
     /// <summary>
-    /// 화상 데미지 적용
+    /// 상처 보너스 반환 및 소모
     /// </summary>
-    public virtual void ApplyBurnEffect()
+    public float GetScarBonus()
     {
-        if (statusEffectSystem == null) return;
-
-        float burnDamage = statusEffectSystem.GetBurnDamage();
-        if (burnDamage > 0)
-        {
-            Debug.Log($"[Burn] {gameObject.name} 화상 피해 {burnDamage}");
-            TakeTrueDamage(burnDamage);
-        }
+        return statusEffectSystem?.GetScarBonus() ?? 0f;
     }
 
     /// <summary>
-    /// 빙결 데미지 감소 적용
+    /// 수호 효과 확인
     /// </summary>
-    public float ApplyFreezePenalty(float baseDamage)
+    public (bool shouldRedirect, float damageReduction) GetGuardEffect()
     {
-        return statusEffectSystem?.ApplyFreezePenalty(baseDamage) ?? baseDamage;
+        return statusEffectSystem?.GetGuardEffect() ?? (false, 0f);
     }
 
     /// <summary>
-    /// 출혈 추가 데미지 적용
+    /// 수호 소모
     /// </summary>
-    public float ApplyBleedBonus(float baseDamage)
+    public void ConsumeGuard()
     {
-        return statusEffectSystem?.ApplyBleedBonus(baseDamage) ?? baseDamage;
+        statusEffectSystem?.ConsumeGuard();
     }
 
     /// <summary>
-    /// 활성도 보너스 적용
+    /// 대기 중인 축복 소모
     /// </summary>
-    public void ApplyActivateBonus(BuffStatType incoming)
+    public float ConsumePendingBless()
     {
-        statusEffectSystem?.ApplyActivateBonus(incoming);
+        return statusEffectSystem?.ConsumePendingBless() ?? 0f;
+    }
+
+    /// <summary>
+    /// 대기 중인 참회 소모
+    /// </summary>
+    public float ConsumePendingPenance()
+    {
+        return statusEffectSystem?.ConsumePendingPenance() ?? 0f;
     }
 
     /// <summary>
@@ -287,6 +334,28 @@ public abstract class UnitBase : MonoBehaviour, IStatusReceiver
         return statusEffectSystem?.TryTriggerStun() ?? false;
     }
 
+    public virtual void ApplyBurnEffect()
+    {
+        ProcessTurnStart();
+    }
+
+    [Obsolete("GetFreezePenalty() 사용")]
+    public float ApplyFreezePenalty(float baseDamage)
+    {
+        return baseDamage - GetFreezePenalty();
+    }
+
+    [Obsolete("GetScarBonus() 사용")]
+    public float ApplyBleedBonus(float baseDamage)
+    {
+        return baseDamage + GetScarBonus();
+    }
+
+    [Obsolete("자동 처리됨")]
+    public void ApplyActivateBonus(BuffStatType incoming)
+    {
+        // StatusEffectSystem에서 ApplyEffect 시 자동 처리
+    }
 
     public virtual void ChangeStance(StancType stance) { }
 
@@ -298,6 +367,22 @@ public abstract class UnitBase : MonoBehaviour, IStatusReceiver
     public virtual void PlayHitAnimation()
     {
         animationHandler?.PlayHit();
+    }
+
+    public virtual void PlayDeathAnimation()
+    {
+        // TODO: 애니메이션 추가 시 활성화
+        // animationHandler?.PlayDeath();
+
+        OnDeathComplete();
+    }
+
+    /// <summary>
+    /// 사망 애니메이션 완료 후 호출
+    /// </summary>
+    protected virtual void OnDeathComplete()
+    {
+        // 하위 클래스에서 구현
     }
 
     public virtual void CameraActionPlay()

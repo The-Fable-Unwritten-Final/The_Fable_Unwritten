@@ -43,17 +43,6 @@ public class DamageEffect : CardEffectBase
 
             float result = target.TakeDamage(attackerAtk);
 
-            var dmgData =  new DmgTextData
-            {
-                Text = $"-{Mathf.RoundToInt(result)}",
-                type = DmgTextType.Normal,
-                isStanceEnhanced = stanceBoosted,
-                isCardEnhanced = isEnhanced == true,
-                isWeakened = stanceWeakened
-            };
-
-            target.dmgTextQueue.Enqueue(dmgData);
-
             //Debug.Log($"[피해 처리] {caster.ChClass} -> {target.ChClass} : {attackerAtk} 공격력으로 타격");
         }
     }

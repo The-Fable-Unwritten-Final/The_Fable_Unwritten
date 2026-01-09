@@ -17,11 +17,12 @@ public static class CardJsonLoader
         try
         {
             cardList = JsonUtilityWrapper.FromJsonList<CardJsonData>(jsonFile.text);
+            return cardList;
         }
         catch (System.Exception e)
         {
             Debug.LogError("[CardJsonLoader] JSON 파싱 중 오류 발생: " + e.Message);
+            return cardList;
         }
-        return cardList;
     }
 }

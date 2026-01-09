@@ -11,17 +11,11 @@ using Random = UnityEngine.Random;
 /// </summary>
 public static class EnemyPattern
 {
-    // StanceType 개수 (한 번만 계산)
-    private static readonly int stanceCount =
-        System.Enum.GetValues(typeof(StancType)).Length;
-    
-    
     /// <summary>
     /// 외부에서 호출되는 메인 메서드 - 적이 턴에 행동을 수행함
     /// </summary>
     public static IEnumerator ExecutePattern(IStatusReceiver enemy)
     {
-        // 받은 친구가 Enemy 타입인지 확인
         if (enemy is not Enemy enemyComponent)
         {
             Debug.LogError("[EnemyPattern] 전달된 IStatusReceiver는 Enemy가 아닙니다.");
@@ -30,20 +24,18 @@ public static class EnemyPattern
 
         if (enemyComponent.IsStunned())
         {
-            //Debug.Log($"[Stun] {enemyComponent.enemyData.EnemyName}은 스턴 상태로 행동 불가");
             yield break;
         }
 
         // 1. 사용할 스킬 선택
         var skill = ChooseSkill(enemyComponent);
-
         if (skill == null)
         {
-           Debug.LogWarning($"[EnemyPattern] {enemyComponent.enemyData.EnemyName}의 스킬 데이터 없음.");
+            Debug.LogWarning($"[EnemyPattern] {enemyComponent.enemyData.EnemyName}의 스킬 데이터 없음.");
             yield break;
         }
 
-        // 2. 스킬 데이터 가져오기 
+        // 2. 스킬 데이터 가져오기
         var actData = DataManager.Instance.EnemyActDict[skill.skillIndex];
         if (actData == null)
         {
@@ -51,14 +43,15 @@ public static class EnemyPattern
             yield break;
         }
 
-        // 3. 타겟 선택
-        var targets = ChooseTargetsFromActData(actData, enemyComponent);
+        // 3. 타겟 선택 (수호 리다이렉트 적용)
+        var targets = ResolveTargetsWithGuard(actData, enemyComponent);  // 여기 수정!
         yield return new WaitForSeconds(0.3f);
 
         var lowestSkill = enemyComponent.enemyData.SkillList
             .OrderBy(s => s.skillIndex)
-            .FirstOrDefault();        // 4. 타겟에게 데미지 및 추가 효과 적용
+            .FirstOrDefault();
 
+        // 4. 공격 애니메이션
         int attackType = skill.skillIndex % lowestSkill.skillIndex;
         enemyComponent.PlayAttackAnimation(attackType);
         yield return new WaitForSeconds(0.3f);
@@ -66,114 +59,162 @@ public static class EnemyPattern
         // 5. 스킬 효과 적용
         foreach (var t in targets)
         {
-            // 1. 피격 애니메이션 재생
-            t.PlayHitAnimation();
-            yield return new WaitForSeconds(0.2f);
+            yield return ApplySkillToTarget(enemyComponent, t, skill, actData);
+        }
+    }
 
-            // 대상이 플레이어면 공격 이펙트 사용
-            string effectname = (t.ChClass == CharacterClass.Enemy) ? enemyComponent.enemyData.AllySkillEffect : enemyComponent.enemyData.AttackSkillEffect; 
-            
-            // 2. 스킬 이펙트 재생
-            if (!string.IsNullOrEmpty(effectname))
+    /// <summary>
+    /// 수호 리다이렉트 적용된 타겟 선택
+    /// </summary>
+    private static List<IStatusReceiver> ResolveTargetsWithGuard(EnemyAct actData, Enemy enemy)
+    {
+        var originalTargets = TargetResolver.ResolveForEnemy(actData, enemy);
+        var finalTargets = new List<IStatusReceiver>();
+
+        var battleFlow = GameManager.Instance.turnController.battleFlow;
+        PlayerController leon = null;
+
+        // 레온 찾기
+        foreach (var player in battleFlow.playerParty)
+        {
+            if (player.ChClass == CharacterClass.Leon && player.IsAlive())
             {
-                // 에너미 스킬 행동 시 사운드 출력
-                if (t == enemy)
-                {
-                    SoundManager.Instance.PlaySFX(SoundCategory.Enemy, 0); // 디폴트값 (에너미 -> 에너미 스킬일경우)
-                }
-                else
-                {
-                    SoundManager.Instance.PlaySFX(SoundCategory.Enemy, enemyComponent.enemyData.IDNum);
-                }
-
-                Vector3 spawnPos = (t != null) ? t.CachedTransform.position : t.CachedTransform.position;
-
-                float scaleFactor = DetermineEffectScale(enemyComponent.enemyData.type);   //애니메이션 타입 및 크기 탐색
-                EffectAnimation animInfo = null;
-                DataManager.Instance.CardEffects.TryGetValue(effectname, out animInfo);
-
-
-                // ──────── K.T.H 변경 ────────
-                if (animInfo != null && animInfo.animationType == AnimationType.Projectile)
-                {
-                    // Projectile → 도착 후 Hit
-                    GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
-                        effectname,
-                        enemyComponent.CachedTransform,
-                        t.CachedTransform,
-                        scaleFactor,
-                        () =>
-                        {
-                            t.PlayHitAnimation();
-
-                            if (t is PlayerController pc)
-                            {
-                                var stance = (StancType)enemyComponent.enemyData.currentStance;
-                                pc.TakeDamage(skill.damage);//todo 수정 필요
-                            }
-                            else
-                            {
-                                t.TakeDamage(skill.damage);
-                            }
-
-                            ApplyStatusEffect(t, actData);
-                            //Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (Projectile, 데미지 {skill.damage})");
-                        }
-                    );
-                }
-                else
-                {
-                    // 일반 이펙트 → 바로 적용
-                    GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(
-                        effectname,
-                        enemyComponent.CachedTransform,
-                        t.CachedTransform,
-                        true,
-                        scaleFactor
-                    );
-
-                    t.PlayHitAnimation();
-
-                    if (t is PlayerController pc)
-                    {
-                        var stance = (StancType)enemyComponent.enemyData.currentStance;
-                        float dmg = pc.TakeDamage(skill.damage);
-                    }
-                    else
-                    {
-                        float dmg = t.TakeDamage(skill.damage);
-                    }
-
-                    ApplyStatusEffect(t, actData);
-                    //Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (즉시Hit, 데미지 {skill.damage})");
-
-                    yield return new WaitForSeconds(0.3f); // 이펙트 딜레이
-                }
-
-
-            }
-            // 6. 상태효과
-            ApplyStatusEffect(t, actData);
-            //t.TakeDamage(skill.damage);
-            //ApplyStatusEffect(t, actData);
-            // ───────────────────────
-
-            //Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (데미지 {skill.damage})");
-
-            yield return new WaitForSeconds(0.3f); // 타격 연출용 대기
-            if(!t.IsAlive()&& t is MonoBehaviour mb && mb.gameObject.activeSelf)
-            {
-                mb.gameObject.SetActive(false);
-
-                // 적일 경우 경험치 지급
-                if (t is Enemy e)
-                {
-                    ProgressDataManager.Instance.CurrentExp += e.enemyData.exp;
-                    GameManager.Instance.turnController.battleFlow.totalExp += e.enemyData.exp;
-                }
+                leon = player as PlayerController;
+                break;
             }
         }
 
+        // 수호 체크
+        bool hasGuard = false;
+        if (leon != null)
+        {
+            var guardEffect = leon.GetGuardEffect();
+            hasGuard = guardEffect.Item1;
+        }
+
+        foreach (var target in originalTargets)
+        {
+            if (hasGuard && target is PlayerController pc && pc.ChClass != CharacterClass.Leon)
+            {
+                Debug.Log($"[Guard] {pc.ChClass} → Leon으로 타겟 전환");
+                finalTargets.Add(leon);
+                continue;
+            }
+            finalTargets.Add(target);
+        }
+
+        return finalTargets;
+    }
+
+    /// <summary>
+    /// 개별 타겟에게 스킬 적용
+    /// </summary>
+    private static IEnumerator ApplySkillToTarget(Enemy enemy, IStatusReceiver target, EnemySkill skill, EnemyAct actData)
+    {
+        target.PlayHitAnimation();
+        yield return new WaitForSeconds(0.2f);
+
+        string effectName = (target.ChClass == CharacterClass.Enemy)
+            ? enemy.enemyData.AllySkillEffect
+            : enemy.enemyData.AttackSkillEffect;
+
+        // 사운드 재생
+        if (target.ChClass == CharacterClass.Enemy)
+            SoundManager.Instance.PlaySFX(SoundCategory.Enemy, 0);
+        else
+            SoundManager.Instance.PlaySFX(SoundCategory.Enemy, enemy.enemyData.IDNum);
+
+        float scaleFactor = DetermineEffectScale(enemy.enemyData.type);
+
+        if (!string.IsNullOrEmpty(effectName))
+        {
+            DataManager.Instance.CardEffects.TryGetValue(effectName, out var animInfo);
+
+            if (animInfo != null && animInfo.animationType == AnimationType.Projectile)
+            {
+                // Projectile 이펙트
+                GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
+                    effectName,
+                    enemy.CachedTransform,
+                    target.CachedTransform,
+                    scaleFactor,
+                    () => ApplyDamageAndEffects(enemy, target, skill, actData)
+                );
+            }
+            else
+            {
+                // 일반 이펙트
+                GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(
+                    effectName,
+                    enemy.CachedTransform,
+                    target.CachedTransform,
+                    true,
+                    scaleFactor
+                );
+
+                ApplyDamageAndEffects(enemy, target, skill, actData);
+                yield return new WaitForSeconds(0.3f);
+            }
+        }
+        else
+        {
+            ApplyDamageAndEffects(enemy, target, skill, actData);
+        }
+
+        yield return new WaitForSeconds(0.3f);
+
+        // 사망 처리
+        CheckDeathAndHandle(target);
+    }
+
+    /// <summary>
+    /// 데미지 및 상태효과 적용
+    /// </summary>
+    private static void ApplyDamageAndEffects(Enemy enemy, IStatusReceiver target, EnemySkill skill, EnemyAct actData)
+    {
+        target.PlayHitAnimation();
+
+        float damage = skill.damage;
+
+        // 빙결 적용 (적이 빙결 상태면 데미지 감소)
+        float freezePenalty = enemy.GetFreezePenalty();
+        if (freezePenalty > 0)
+        {
+            damage = Mathf.Max(0, damage - freezePenalty);
+            Debug.Log($"[Freeze] 빙결로 데미지 {freezePenalty} 감소");
+        }
+
+        // 수호 피해 감소 적용
+        if (target is PlayerController pc && pc.ChClass == CharacterClass.Leon)
+        {
+            var (shouldRedirect, damageReduction) = pc.GetGuardEffect();
+            if (shouldRedirect && damageReduction > 0)
+            {
+                damage = Mathf.Max(0, damage - damageReduction);
+                Debug.Log($"[Guard] 수호로 데미지 {damageReduction} 감소");
+                pc.ConsumeGuard();
+            }
+        }
+
+        target.TakeDamage(damage);
+        ApplyStatusEffect(target, actData);
+    }
+
+    /// <summary>
+    /// 사망 체크 및 처리
+    /// </summary>
+    private static void CheckDeathAndHandle(IStatusReceiver target)
+    {
+        if (!target.IsAlive() && target is MonoBehaviour mb && mb.gameObject.activeSelf)
+        {
+            mb.gameObject.SetActive(false);
+
+            if (target is Enemy e)
+            {
+                ProgressDataManager.Instance.CurrentExp += e.enemyData.exp;
+                GameManager.Instance.turnController.battleFlow.totalExp += e.enemyData.exp;
+            }
+        }
     }
 
     private static float DetermineEffectScale(EnemyType type)
@@ -189,67 +230,6 @@ public static class EnemyPattern
     }
 
 
-    /// <summary>
-    /// 스킬 데이터에 따라서 상대 및 아군 효과 대상을 선택
-    /// </summary>
-    /// <param name="actData"></param>
-    /// <param name="self"></param>
-    /// <returns></returns>
-    private static List<IStatusReceiver> ChooseTargetsFromActData(EnemyAct actData, Enemy self)
-    {
-        var targets = new List<IStatusReceiver>();
-        var candidates = new List<IStatusReceiver>();
-
-        // 1. 타겟 그룹 설정 (적 기준: Ally → 플레이어, Enemy → 적 자신 포함)
-        List<IStatusReceiver> targetGroup = actData.targetType == TargetType.Ally
-            ? GameManager.Instance.turnController.battleFlow.playerParty
-            : GameManager.Instance.turnController.battleFlow.enemyParty;
-
-
-        if (actData.targetType == TargetType.Ally)       // 적 기준 적 → 플레이어 파티 공격
-        {
-            // 플레이어 중에서 위치 조건에 맞는 대상만 후보로 추가
-            foreach (var target in targetGroup)
-            {
-                if (target == null) continue;
-                if (!target.IsAlive()) continue;
-
-                if ((target.ChClass == CharacterClass.Leon && actData.target_front) ||
-                (target.ChClass == CharacterClass.Sophia && actData.target_center) ||
-                (target.ChClass == CharacterClass.Kayla && actData.target_back))
-                {
-                    candidates.Add(target);
-                }
-            }
-        }
-        else
-        {
-            // 아군일 경우 enemyParty 순서대로 (0: front, 1: center, 2: back)
-            for (int i = 0; i < targetGroup.Count; i++)
-            {
-                if ((i == 0 && actData.target_front)||
-                    (i == 1 && actData.target_center)||
-                    (i == 2 && actData.target_back))
-                {
-                    if (targetGroup[i] == null) continue;
-
-                    if (targetGroup[i].IsAlive())
-                        candidates.Add(targetGroup[i]);
-                }
-            }
-        }
-
-        // 랜덤으로 targetNum만큼 선택하여 최종 적을 지정
-        int count = Mathf.Min(actData.targetNum, candidates.Count);
-        while (targets.Count < count)
-        {
-            var chosen = candidates[Random.Range(0, candidates.Count)];
-            if (!targets.Contains(chosen))
-                targets.Add(chosen);
-        }
-
-        return targets;
-    }
 
     private static EnemySkill ChooseSkill(Enemy enemy)
     {
