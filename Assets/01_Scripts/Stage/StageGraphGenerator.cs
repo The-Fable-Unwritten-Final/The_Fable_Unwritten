@@ -118,12 +118,16 @@ public static class StageGraphGenerator
                 if (pool.Count == 0) break;
                 float y = totalHeight / 2f - i * spacing.y; 
 
+                // 노드 위치 랜덤 오프셋 추가
+                float randomOffsetX = Random.Range(-spacing.x / 4f, spacing.x / 4f);
+                float randomOffsetY = Random.Range(-spacing.y / 4f, spacing.y / 4f);
+
                 column.Add(new GraphNode
                 {
                     id = id++,
                     type = pool[0],
                     columnIndex = col,
-                    position = new Vector2(col * spacing.x, y) // 해당 노드의 위치 값 저장
+                    position = new Vector2(col * spacing.x + randomOffsetX, y + randomOffsetY) // 해당 노드의 위치 값 저장
                 });
 
                 pool.RemoveAt(0);

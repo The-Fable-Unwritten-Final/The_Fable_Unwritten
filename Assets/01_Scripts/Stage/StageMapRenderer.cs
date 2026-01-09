@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using UnityEngine.UI.Extensions;
 
 /// <summary>
 /// 스테이지 노드와 연결선을 UI에 표시해주는 클래스
@@ -113,6 +114,21 @@ public class StageMapRenderer : MonoBehaviour
     {
         foreach (var info in lineInfos)
         {
+            var line = info.lineObj.GetComponent<UILineRenderer>();
+
+            bool isVisitedFrom = visited.Contains(info.from);
+            bool isVisitedTo = visited.Contains(info.to);
+            bool isCompletePath = isVisitedFrom && isVisitedTo;
+
+            Color lineColor = line.color;
+            lineColor.a = isCompletePath ? 1f : 0.66f;
+            line.color = lineColor;
+        }
+
+
+        /*
+        foreach (var info in lineInfos)
+        {
             var img = info.lineObj.GetComponent<Image>();
 
             bool isVisitedFrom = visited.Contains(info.from);
@@ -121,7 +137,7 @@ public class StageMapRenderer : MonoBehaviour
 
             img.sprite = isCompletePath ? lineCompleteSprite : lineBasicSprite;
             img.color = Color.white;
-        }
+        }*/
     }
 
     /// <summary>

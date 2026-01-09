@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI.Extensions;
 
 /// <summary>
 /// 라인 셋팅해주는 클래스
@@ -6,12 +7,12 @@ using UnityEngine;
 public static class LineDrawer
 {
     /// <summary>
-    /// 두 노드 위치 확인 후 연결해 주는 선 생성
+    /// 두 노드 위치 확인 후 연결해 주는 점선 생성
     /// </summary>
-    public static GameObject DrawLine(RectTransform from, RectTransform to, Transform parent, GameObject linePrefab)
+    public static GameObject DrawLine(RectTransform from, RectTransform to, Transform parent, GameObject linePrefab, float offsetFromNode = 50f)
     {
         GameObject lineObj = GameObject.Instantiate(linePrefab, parent);
-        RectTransform rt = lineObj.GetComponent<RectTransform>();
+        UILineRenderer lineRenderer = lineObj.GetComponent<UILineRenderer>();
 
         // 시작 점과 끝점 두 위치를 RectTransform 기준의 로컬 좌표로 전환(계산 작업을 위해)
         Vector2 start = WorldToLocal(from.position, parent as RectTransform);
@@ -19,15 +20,35 @@ public static class LineDrawer
         Vector2 direction = end - start;
         float distance = direction.magnitude;
 
-        // 선 위치 - 두 점의 중간
-        rt.anchoredPosition = start + direction / 2f;
+        // 노드 크기를 고려한 오프셋 적용 (노드의 중심에 겹침 방지)
+        Vector2 normalizedDirection = direction.normalized;
+        float fromNodeOffset = offsetFromNode > 0 ? offsetFromNode : from.rect.width / 2f; // 노드 반경 or 지정값
+        float toNodeOffset = offsetFromNode > 0 ? offsetFromNode : to.rect.width / 2f;
+        
+        start += normalizedDirection * fromNodeOffset;
+        end -= normalizedDirection * toNodeOffset;
+        direction = end - start;
+        distance = direction.magnitude;
 
-        // 선 길이 조절
-        rt.sizeDelta = new Vector2(distance, rt.sizeDelta.y);
-       
-        // 선 각도 회전
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        rt.localRotation = Quaternion.Euler(0, 0, angle);
+        // 점 간격 설정 (픽셀 단위) - 필요시 조정 가능~
+        float dotSpacing = 12f;
+        int dotCount = Mathf.Max(2, Mathf.FloorToInt(distance / dotSpacing));
+        
+        // LineList 모드에서는 짝수 개의 점이 필요 (시작과 끝의 시각적 일치를 위해)
+        if (dotCount % 2 != 0) dotCount++;
+
+        // 점들의 위치 배열 생성
+        Vector2[] points = new Vector2[dotCount];
+        for (int i = 0; i < dotCount; i++)
+        {
+            float t = i / (dotCount - 1f);
+            points[i] = Vector2.Lerp(start, end, t);
+        }
+
+        // UILineRenderer 설정
+        lineRenderer.Points = points;
+        lineRenderer.LineThickness = 8f; // 점의 굵기 - 필요시 조정 가능~
+        lineRenderer.LineList = true;
 
         return lineObj;
     }
