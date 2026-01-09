@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.UI.Extensions;
+using System.Collections;
 
 /// <summary>
 /// 스테이지 노드와 연결선을 UI에 표시해주는 클래스
@@ -29,6 +30,7 @@ public class StageMapRenderer : MonoBehaviour
 
     public Dictionary<GraphNode, RectTransform> nodeUIMap = new();
     private readonly List<LineInfo> lineInfos = new();
+    private bool isAnimating = false; // 애니메이션 중 클릭 방지
 
     /// <summary>
     /// 스테이지 노드 및 연결선을 UI에 표시
@@ -63,7 +65,9 @@ public class StageMapRenderer : MonoBehaviour
                 var toRT = nodeUIMap[next];
 
                 GameObject line = LineDrawer.DrawLine(fromRT, toRT, linesContainer, lineBasicPrefab);
-                lineInfos.Add(new LineInfo { from = node, to = next, lineObj = line });
+                var lineRenderer = line.GetComponent<UILineRenderer>();
+                var originalPoints = (Vector2[])lineRenderer.Points.Clone(); // 원본 포인트 저장
+                lineInfos.Add(new LineInfo { from = node, to = next, lineObj = line, originalPoints = originalPoints });
             }
         }
     }
@@ -217,5 +221,88 @@ public class StageMapRenderer : MonoBehaviour
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// 노드 클릭 시 이전 노드에서 클릭한 노드로 가는 라인을 채우는 애니메이션
+    /// </summary>
+    public void AnimateLineFill(GraphNode from, GraphNode to, Action onComplete)
+    {
+        if (isAnimating) return; // 애니메이션 중이면 진행 안 함
+        
+        var linesToAnimate = lineInfos.Where(l => l.from == from && l.to == to).ToList();
+
+        if (linesToAnimate.Count > 0)
+        {
+            Debug.Log($"Animating line fill from Node {from.id} to Node {to.id}");
+            StartCoroutine(AnimateLinesFillCoroutine(linesToAnimate, onComplete));
+        }
+        else
+        {
+            onComplete?.Invoke();
+        }
+    }
+
+    private IEnumerator AnimateLinesFillCoroutine(List<LineInfo> lines, Action onComplete)
+    {
+        isAnimating = true;
+        float duration = 2f; // 애니메이션 시간
+        float elapsed = 0f;
+        
+        // 애니메이션용 임시 라인 생성
+        List<GameObject> tempLines = new();
+        foreach (var lineInfo in lines)
+        {
+            GameObject tempLine = Instantiate(lineInfo.lineObj, linesContainer);
+            tempLine.name = lineInfo.lineObj.name + " (Temp)";
+            tempLines.Add(tempLine);
+        }
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+
+            for (int i = 0; i < tempLines.Count; i++)
+            {
+                var tempLine = tempLines[i];
+                var lineRenderer = tempLine.GetComponent<UILineRenderer>();
+                var originalPoints = lines[i].originalPoints;
+                
+                // 원본 포인트 개수에서 현재 진행도만큼만 포인트 선택
+                int totalPoints = originalPoints.Length;
+                int visiblePointCount = Mathf.Max(2, Mathf.CeilToInt(totalPoints * t));
+                
+                // 채워질 부분의 포인트 배열 생성
+                Vector2[] filledPoints = new Vector2[visiblePointCount];
+                System.Array.Copy(originalPoints, filledPoints, visiblePointCount);
+                
+                lineRenderer.Points = filledPoints;
+                
+                // 색상 설정 744E19
+                Color lineColor = new Color(0.455f, 0.306f, 0.098f);
+                lineRenderer.color = lineColor;
+            }
+
+            yield return null;
+        }
+        
+        // 임시 라인 제거
+        foreach (var tempLine in tempLines)
+        {
+            Destroy(tempLine);
+        }
+        
+        // 원본 라인의 알파값을 1로 설정
+        foreach (var lineInfo in lines)
+        {
+            var line = lineInfo.lineObj.GetComponent<UILineRenderer>();
+            Color lineColor = line.color;
+            lineColor.a = 1f;
+            line.color = lineColor;
+        }
+        
+        isAnimating = false;
+        onComplete?.Invoke();
     }
 }
