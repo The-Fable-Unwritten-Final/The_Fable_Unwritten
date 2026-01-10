@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 183bc419c704a3641825f81869e25870, type: 3}
+  m_Name: 5_Dreamlike
+  m_EditorClassIdentifier: 
+  styleId: 5
+  displayName: Name_Dreamlike
+  description: Desc_Dreamlike
+  plusEffectDescription: Plus_Dreamlike
+  minusEffectEffectDesc: Minus_Dreamlike
+  rank: 2
+  maxPlusLevel: 3
+  currentPlus: 1
+  maxMinusLevel: 1
+  currentMinus: 1
+  plusTiers:
+  - level: 1
+    cost: 3
+    effects:
+    - target: 5
+      operation: 4
+      value: 0
+      valueRange: {x: -2, y: 2}
+      callTime: 2
+  - level: 2
+    cost: 5
+    effects:
+    - target: 5
+      operation: 4
+      value: 3
+      valueRange: {x: 0, y: 3}
+      callTime: 2
+  - level: 3
+    cost: 0
+    effects:
+    - target: 5
+      operation: 4
+      value: 4
+      valueRange: {x: 2, y: 4}
+      callTime: 2
+  minusTiers:
+  - level: 1
+    cost: 0
+    effects:
+    - target: 10
+      operation: 6
+      value: 1
+      valueRange: {x: 0, y: 0}
+      callTime: 1
+  isUnlocked: 1

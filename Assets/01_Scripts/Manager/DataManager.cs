@@ -35,6 +35,8 @@ public class DataManager : MonoSingleton<DataManager>
     public EnemyDataContainer enemyDataContainer;
     // 스테이지 데이터
     public List<EnemyStageSpawnData> enemySpawnData;
+    // 문체 시스템 데이터
+    public List<StyleDefinition> styleDefs; // 문체 데이터를 수동으로 등록해 주어야함.
     // 랜덤 이벤트 데이터
     public List<RandomEventData> allRandomEvents { get; set;}
     // 백그라운드 이미지 데이터 + 전투용 배경
@@ -77,11 +79,12 @@ public class DataManager : MonoSingleton<DataManager>
     }
 
     /// <summary>
-    /// 언어 변경 이후, 각 텍스트 데이터를 초기화.
+    /// 설정에서 언어 변경 시 호출, 각 텍스트 데이터를 변경. (언어 변경은 타이틀 에서만 가능)
     /// </summary>
     public void InitLocaleText()
     {
         InitCardBookDictionary();
+     
     }
     void LocaleDatamanagerLoad()
     {
@@ -90,6 +93,7 @@ public class DataManager : MonoSingleton<DataManager>
         LocaleDataManager.LoadCardCsv();
         LocaleDataManager.LoadRandomEventCsv();
         LocaleDataManager.LoadRandomEventEffectCsv();
+        LocaleDataManager.LoadStyleEffectCsv();
         //LocaleDataManager.LoadDialogueCsv();
         //LocaleDataManager.LoadUICsv();
     }

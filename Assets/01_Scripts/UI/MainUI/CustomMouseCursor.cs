@@ -28,7 +28,11 @@ public class CustomMouseCursor : MonoBehaviour
 
     void Update()
     {
-        cursorUI.position = Input.mousePosition;
+        Vector3 pos = Input.mousePosition;
+
+    // Infinity / NaN 체크
+    if (float.IsNaN(pos.x) || float.IsNaN(pos.y) ||float.IsInfinity(pos.x) || float.IsInfinity(pos.y)) return;
+    cursorUI.position = pos;
     }
 
     public void SetCursorState(CursorState state)

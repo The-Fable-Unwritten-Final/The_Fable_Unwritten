@@ -20,16 +20,18 @@ public class ApplyDamageEffect : CardEffectBase
         }
 
         float totalDamage = value * (useCount-1);
-
+        var card = BattleLogManager.Instance.card;
         totalDamage = (isEnhanced == true) ? totalDamage * 1.5f : totalDamage;
         bool stanceBoosted = false;
         bool stanceWeakened = false;
 
         if (caster is PlayerController pc)
         {
-            var cardType = BattleLogManager.Instance.card.type;
-            (totalDamage, stanceBoosted, stanceWeakened) = StanceHelper.ApplyStanceToDamage(pc, totalDamage, cardType);
+            (totalDamage, stanceBoosted, stanceWeakened) = StanceHelper.ApplyStanceToDamage(pc, totalDamage, card.type);
         }
+
+        // 문체 효과 적용
+        totalDamage = StyleManager.Instance.GetDamageGiveModify(caster, null, card, totalDamage);
 
         foreach (var target in targets)
         {
@@ -37,6 +39,18 @@ public class ApplyDamageEffect : CardEffectBase
 
             target.TakeDamage(totalDamage);
 
+            if (totalDamage != 0)
+            {
+                var dmgData = new DmgTextData
+                {
+                    Text = Mathf.RoundToInt(totalDamage).ToString(),
+                    type = DmgTextType.Normal,
+                    isCardEnhanced = false,
+                    isStanceEnhanced = stanceBoosted,
+                    isWeakened = stanceWeakened
+                };
+                target.dmgTextQueue.Enqueue(dmgData);
+            }
             Debug.Log($"[ApplyDamageEffect] {index}번 카드를 {useCount}회 사용하여 {totalDamage} 추가 피해");
         }
     }

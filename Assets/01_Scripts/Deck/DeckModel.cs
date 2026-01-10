@@ -20,6 +20,13 @@ public class DeckModel
         Shuffle(unusedDeck);
         usedDeck.Clear();
         hand.Clear();
+
+        // 문체 효과 적용 => 첫 카드 코스트 변환
+        foreach (var card in unusedDeck)
+        {
+            int modifiedCost = StyleManager.Instance.GetFirstCardCostModifier(card, 0); // 디폴트 값 0
+            card.ApplyTemporaryDiscount(modifiedCost);
+        }
     }
 
 
@@ -238,6 +245,25 @@ public class DeckModel
         foreach (var card in usedDeck)
             card.ApplyPersistentDiscount(amount);
     }
+
+    /// <summary>
+    ///  '특정 타입'의 카드 대상 할인 적용
+    /// </summary>
+    public void ApplyPersistentDiscountByCardType(CardType targetType, int amount)
+    {
+        foreach (var card in hand)
+            if (card.type == targetType)
+                card.ApplyPersistentDiscount(amount);
+        
+        foreach (var card in unusedDeck)
+            if (card.type == targetType)
+                card.ApplyPersistentDiscount(amount);
+        
+        foreach (var card in usedDeck)
+            if (card.type == targetType)
+                card.ApplyPersistentDiscount(amount);
+    }
+
     public void DiscardUnmaintainedCardsAtTurnEnd()
     {
         List<CardModel> toRemove = new();

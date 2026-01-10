@@ -22,4 +22,8 @@ public class EventEffectData
     public bool unusable;
     public string note;
     public int battle;
+    public int healModi; // 힐량 증가/감소 수치
+    public int buffStatType; // 버프/디버프 스탯 타입
+    public int buffStatValue; // 버프/디버프 수치
+    public int buffStatDuration; // 버프/디버프 지속 시간
 }

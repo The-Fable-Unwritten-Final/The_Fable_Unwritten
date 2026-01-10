@@ -33,6 +33,11 @@ public class HealEffect : CardEffectBase
 
         finalHeal = Mathf.Round(finalHeal);
 
+        // 랜덤 이벤트 효과 적용
+        finalHeal += EventEffectManager.Instance.healModi;
+        // 문체 효과 적용
+        finalHeal = StyleManager.Instance.GetHealOnCardUse(caster, finalHeal);
+
         switch (target)
         {
             case 0:
@@ -67,7 +72,7 @@ public class HealEffect : CardEffectBase
 
             var healText = new DmgTextData
             {
-                Text = $"+{Mathf.RoundToInt(finalHeal)}",
+                Text = $"{Mathf.RoundToInt(finalHeal)}",
                 type = DmgTextType.Heal,
                 isCardEnhanced = isEnhanced == true,
                 isStanceEnhanced = stanceBoosted,

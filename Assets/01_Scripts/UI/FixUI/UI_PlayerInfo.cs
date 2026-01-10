@@ -29,7 +29,9 @@ public class UI_PlayerInfo : MonoBehaviour
 
     private Dictionary<CharacterClass, TextMeshProUGUI> charInfoText;
     private Dictionary<CharacterClass, Image> charhpBar;
-    private Coroutine changeHpCoroutine;
+    private Coroutine changeHpCoroutine_Sho;
+    private Coroutine changeHpCoroutine_Ky;
+    private Coroutine changeHpCoroutine_Le;
 
     private void Start()
     {
@@ -67,7 +69,7 @@ public class UI_PlayerInfo : MonoBehaviour
                 playerData.OnHpChanged -= (currentHp, maxHp) =>
                 {
                     charInfoText[character].text = $"{currentHp}/{maxHp}";
-                    ChangeHpBar(charhpBar[character], currentHp, maxHp);
+                    ChangeHpBar(charhpBar[character], currentHp, maxHp, character);
                 };
             }
         }
@@ -86,14 +88,14 @@ public class UI_PlayerInfo : MonoBehaviour
                 // 초기 체력 설정
                 if (charhpBar.TryGetValue(character, out var hpBar))
                 {
-                    ChangeHpBar(hpBar, playerData.currentHP, playerData.MaxHP);
+                    ChangeHpBar(hpBar, playerData.currentHP, playerData.MaxHP, character);
                 }
 
                 // 체력 변경 이벤트 등록
                 playerData.OnHpChanged += (currentHp, maxHp) =>
                 {
                     textObj.text = $"{currentHp}/{maxHp}";
-                    ChangeHpBar(charhpBar[character], currentHp, maxHp);
+                    ChangeHpBar(charhpBar[character], currentHp, maxHp, character);
                 };
             }
         }
@@ -180,16 +182,39 @@ public class UI_PlayerInfo : MonoBehaviour
         currentExp.text = exp.ToString();
     }
 
-    public void ChangeHpBar(Image hpBar,float hp, float maxHp)
+    public void ChangeHpBar(Image hpBar, float hp, float maxHp, CharacterClass character)
     {
         if (hpBar == null) return;
 
         float targetFill = hp / maxHp;
 
-        if (changeHpCoroutine != null)
-            StopCoroutine(changeHpCoroutine);
+        // 캐릭터별 코루틴 선택 및 중지
+        Coroutine currentCoroutine = character switch
+        {
+            CharacterClass.Sophia => changeHpCoroutine_Sho,
+            CharacterClass.Kayla => changeHpCoroutine_Ky,
+            CharacterClass.Leon => changeHpCoroutine_Le,
+            _ => null
+        };
 
-        changeHpCoroutine = StartCoroutine(AnimateHpBarChange(hpBar,targetFill, 0.4f));
+        if (currentCoroutine != null)
+            StopCoroutine(currentCoroutine);
+
+        // 새 코루틴 시작 및 저장
+        var newCoroutine = StartCoroutine(AnimateHpBarChange(hpBar, targetFill, 0.4f));
+        
+        switch (character)
+        {
+            case CharacterClass.Sophia:
+                changeHpCoroutine_Sho = newCoroutine;
+                break;
+            case CharacterClass.Kayla:
+                changeHpCoroutine_Ky = newCoroutine;
+                break;
+            case CharacterClass.Leon:
+                changeHpCoroutine_Le = newCoroutine;
+                break;
+        }
     }
 
     private IEnumerator AnimateHpBarChange(Image hpBar,float targetFill, float duration)

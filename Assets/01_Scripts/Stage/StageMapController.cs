@@ -64,10 +64,6 @@ public class StageMapController : MonoBehaviour
                     BattleLogManager.Instance.ResetStageLog();
                     stageSetting.StageIndex++;
 
-                    foreach(var player in ProgressDataManager.Instance.PlayerDatas)
-                    {
-                        player.ResetHPToMax();
-                    }
                     var newTheme = stageSetting.GetThemeForStage(stageSetting.StageIndex);
                     stageSetting.SetTheme(newTheme);
 

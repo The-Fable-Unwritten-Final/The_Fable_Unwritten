@@ -40,5 +40,18 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
             Destroy(gameObject);
         }
     }
+
+    protected virtual void OnDestroy()
+    {
+        // 플레이 중이면 정리 안 함 (게임 종료 시만)
+        #if !UNITY_EDITOR
+            if (instance == this)
+                instance = null;
+        #else
+            // 에디터에서는 항상 정리
+            if (instance == this)
+                instance = null;
+        #endif
+    }
 }
 

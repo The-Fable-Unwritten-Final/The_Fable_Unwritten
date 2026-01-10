@@ -83,6 +83,7 @@ public interface IStatusReceiver
     bool IsIgnited { get; }                         //각성 상태 확인
     string CurrentStance { get; }                   //현재 자세 확인
     bool IsStunned();                          //스턴 상태 여부 확인
+    bool hasResist { get; set; }         //상태이상 디버프 저항 여부
 
     void ChangeStance(StancType stance);
 

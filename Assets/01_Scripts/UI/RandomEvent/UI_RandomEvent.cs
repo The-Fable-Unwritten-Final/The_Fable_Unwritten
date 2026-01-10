@@ -139,6 +139,8 @@ public class UI_RandomEvent : MonoBehaviour
         optionTxt_a.text = "";
         optionTxt_b.text = "";
 
+        optionButton_a.interactable = false;
+        optionButton_b.interactable = false;
 
         yield return new WaitForSeconds(0.5f);
 
@@ -219,6 +221,23 @@ public class UI_RandomEvent : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         yield return StartCoroutine(TypeText(optionTxt_b, resultText));
+        // 만약 카드 해금이 포함되어 있으면, 해금 팝업 UI 출력
+        foreach (int resultIndex in results)
+        {
+            var effect = EventEffectManager.Instance.eventEffectDict[resultIndex];
+            if (effect != null && effect.eventType == 1)
+            {
+                var cardEffect = effect as CardEventEffects;
+                if (cardEffect != null && cardEffect.newCardIndex != 0)
+                {
+                    // 팝업 UI 출력
+                    var allCards = DataManager.Instance.AllCards;
+                    var card = allCards.FirstOrDefault(c => c.index == cardEffect.newCardIndex);
+                    EventEffectManager.Instance.cardData = card;
+                    UIManager.Instance.ShowPopupByName("PopupUI_UnlockCard");
+                }
+            }
+        }
 
         optionButton_b.onClick.RemoveAllListeners();
         // 최종적으로 등장하는 ~~ 효과 적용 버튼을 클릭해야지 다음 스테이지 이동 + 효과 적용이 실행된다

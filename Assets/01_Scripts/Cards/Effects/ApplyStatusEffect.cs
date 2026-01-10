@@ -27,7 +27,30 @@ public class ApplyStatusEffect : CardEffectBase
             if (!t.IsAlive()) continue;
 
             StatusEffect effect = CreateEffect(statType, value, duration);
+            // 문체에 따른 버프/디버프 수치 변환 => 이를 위해 value값은 최대한 int형으로 관리 요망
+            effect.value = StyleManager.Instance.ModifyBuffDebuffAmount(t, statType, (int)effect.value);
+
             t.ApplyStatusEffect(effect);
+
+            //string statusText = GetStatusEffectText(statType, value); => 데미지 프린트 방식 변경으로 사용 안함
+            string statusText = value.ToString();
+            var Text = new DmgTextData
+            {
+                Text = statusText,
+
+                type = Debuff.IsDebuff(statType, value) ? DmgTextType.Debuff : DmgTextType.Buff,
+                isCardEnhanced = isEnhanced == true,
+                isStanceEnhanced = caster is PlayerController pc &&
+                           (pc.playerData.currentStance == PlayerData.StancType.grace ||
+                            pc.playerData.currentStance == PlayerData.StancType.judge),
+                isWeakened = false
+            };
+
+            // Buff/Debuff는 1.5초 지연 후 Enqueue
+            if (Text.type == DmgTextType.Buff || Text.type == DmgTextType.Debuff)
+                GameManager.Instance.StartCoroutine(DelayedEnqueue(t, Text));
+            else
+                t.dmgTextQueue.Enqueue(Text);
         }
     }
 
@@ -61,6 +84,12 @@ public class ApplyStatusEffect : CardEffectBase
         }
 
         return filtered;
+    }
+
+    private IEnumerator DelayedEnqueue(IStatusReceiver target, DmgTextData text)
+    {
+        yield return new WaitForSeconds(1.5f);
+        target.dmgTextQueue.Enqueue(text);
     }
 
     private StatusEffect CreateEffect(BuffStatType type, float val, int dur)
@@ -132,6 +161,21 @@ public class ApplyStatusEffect : CardEffectBase
     }
 }
 
+// 이거 문체 시스템에서 버프 디버프 체킹용으로 추가 했어요, 아래쪽에 purify는 없어서 혹시 몰라서 새로 만들었습니다 -민준-
+public static class Buff
+{
+    public static bool IsBuff(BuffStatType type, float value)
+    {
+        return type switch
+        {
+            BuffStatType.Attack => value > 0,
+            BuffStatType.Defense => value > 0,
+            BuffStatType.GuardRedirect or BuffStatType.Bless or BuffStatType.Grace or BuffStatType.Purify => true,
+            _ => false
+        };
+    }
+}
+
 public static class Debuff
 {
     public static bool IsDebuff(BuffStatType type, float value)
@@ -139,5 +183,74 @@ public static class Debuff
         return StatusEffectSystem.IsHarmful(type) ||
                (type == BuffStatType.Attack && value < 0) ||
                (type == BuffStatType.Defense && value < 0);
+    }
+    public static ApplyStatusEffect GetRandomDebuffEffect()
+    {
+        // 후보 효과들: Burn, Freeze, Activate, Bleed, Stun, GuardRedirect, Blind
+        BuffStatType[] candidates = new BuffStatType[]
+        {
+            BuffStatType.Attack,
+            BuffStatType.Defense,
+            BuffStatType.Burn,
+            BuffStatType.Freeze,
+            BuffStatType.Bleed,
+            BuffStatType.Stun,
+            BuffStatType.Blind
+        };
+    
+        int idx = Random.Range(0, candidates.Length);
+        BuffStatType chosen = candidates[idx];
+
+        var result = ScriptableObject.CreateInstance<ApplyStatusEffect>();
+        result.statType = chosen;
+
+        // 각 디버프 효과별 1턴 값 수치 적용
+        switch (chosen)
+        {
+            case BuffStatType.Attack:
+                result.value = -1;
+                result.duration = 1;
+                break;
+            case BuffStatType.Defense:
+                result.value = -1;
+                result.duration = 1;
+                break;
+            case BuffStatType.Burn:
+                result.value = 3; // 화상 피해량
+                result.duration = 1;
+                break;
+            case BuffStatType.Freeze:
+                result.value = 100; // 빙결 확률/비율(%)
+                result.duration = 1;
+                break;
+            case BuffStatType.Bleed:
+                result.value = 3;
+                result.duration = 1;
+                break;
+            case BuffStatType.Stun:
+                result.value = 1; 
+                result.duration = 1; // 기절 지속(턴)
+                break;
+            case BuffStatType.Blind:
+                result.value = -1; 
+                result.duration = 1;
+                break;
+            default:
+                result.value = 1;
+                result.duration = 1;
+                break;
+        }
+
+        return result;
+    }
+
+    public static ApplyStatusEffect GetStunEffect(int dur)
+    {
+        var result = ScriptableObject.CreateInstance<ApplyStatusEffect>();
+        result.statType = BuffStatType.Stun;
+        result.value =1;
+        result.duration = dur;
+
+        return result;
     }
 }

@@ -12,6 +12,7 @@ public static class LocaleDataManager
     private static Dictionary<string, string[]> _randomEventTable = new Dictionary<string, string[]>();
     private static Dictionary<string, string[]> _randomEventEffectTable = new Dictionary<string, string[]>();
     private static Dictionary<string, string[]> _dialogueTable = new Dictionary<string, string[]>();
+    private static Dictionary<string, string[]> _styleEffectTable = new Dictionary<string, string[]>();
     private static Dictionary<string, string[]> _uiTable = new Dictionary<string, string[]>();
 
     private static Dictionary<string, int> _langColumnMap = new Dictionary<string, int>()
@@ -36,6 +37,11 @@ public static class LocaleDataManager
     {
         TextAsset csv = Resources.Load<TextAsset>("ExternalFiles/EventEffectsLocaleData");
         _randomEventEffectTable = LoadCsvToDictionary(csv);
+    }
+    public static void LoadStyleEffectCsv()
+    {
+        TextAsset csv = Resources.Load<TextAsset>("ExternalFiles/StyleEffectLocaleData");
+        _styleEffectTable = LoadCsvToDictionary(csv);
     }
     public static void LoadDialogueCsv(TextAsset csv)
     {
@@ -85,6 +91,11 @@ public static class LocaleDataManager
     public static string GetLocalizedRandomEventEffect(string key)
     {
         return GetLocalizedStringFromDict(_randomEventEffectTable, key);
+    }
+
+    public static string GetLocalizedStyleEffect(string key)
+    {
+        return GetLocalizedStringFromDict(_styleEffectTable, key);
     }
     
     public static string GetLocalizedDialogue(string key)

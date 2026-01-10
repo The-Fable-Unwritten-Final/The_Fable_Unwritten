@@ -17,6 +17,11 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
     List<EventEffects> untillNextStage = new List<EventEffects>(); // 다음 스테이지까지 지속되는 효과 리스트
     List<EventEffects> untillEndAdventure = new List<EventEffects>(); // 모험이 끝날 때까지 지속되는 효과 리스트
 
+
+    // 이벤트 효과 변수들 저장 (각 효과 클래스에서 사용)
+    public CardModel cardData; // 카드 획득시 팝업 UI에서 사용
+    public int healModi = 0; // 힐량 변화 수치.
+
     protected override void Awake()
     {
         base.Awake();
@@ -63,7 +68,7 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
                     eventEffectList.Add(statEffect);
                     break;
 
-                case 1:
+                case 1: // 카드 관련 효과 전반
                     var cardEventEffect = new CardEventEffects
                     {
                         index = data.index,
@@ -77,12 +82,13 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
 
                         newCardIndex = data.newCardIndex,
                         cardType = data.cardType,
-                        cost = data.cost
+                        cost = data.cost,
+                        healModi = data.healModi
                     };
                     eventEffectList.Add(cardEventEffect);
                     break;
 
-                case 2:
+                case 2: // 전투 인카운터 효과
                     var enemyEventEffect = new EncounterEventEffects
                     {
                         index = data.index,
@@ -94,7 +100,22 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
                     eventEffectList.Add(enemyEventEffect);
                     break;
 
-                    // TODO: 다른 타입 추가 예정
+                case 3: // 상태이상류 효과 (기절, 출혈, 수호 등..)
+                    var buffStatEffect = new BuffStatEventEffects
+                    {
+                        index = data.index,
+                        text = data.text,
+                        eventType = data.eventType,
+                        duration = data.duration,
+                        sophia = data.sophia,
+                        kyla = data.kyla,
+                        leon = data.leon,   
+                        buffStatType = data.buffStatType,
+                        buffStatValue = data.buffStatValue,
+                        buffStatDuration = data.buffStatDuration
+                    };
+                    eventEffectList.Add(buffStatEffect);
+                    break;
             }
         }
 

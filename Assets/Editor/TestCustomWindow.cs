@@ -21,6 +21,7 @@ public class TestCustomWindow : EditorWindow
 
     private void OnGUI()
     {
+        /* 테스트 유닛 추가 코드
         GUILayout.Label("테스트 유닛 추가", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
         if (GUILayout.Button("전체 추가"))
@@ -43,12 +44,19 @@ public class TestCustomWindow : EditorWindow
             TryAddPlayer(CharacterClass.Kayla, "KaylaPlayer");
         }
         EditorGUILayout.EndVertical();
-
+        */
+        GUILayout.Label("잉크 추가", EditorStyles.boldLabel);
+        EditorGUILayout.BeginVertical("box");
+        if (GUILayout.Button("잉크 1 추가"))
+        {
+            StyleManager.Instance.GetInk(1);
+        }
+        EditorGUILayout.EndVertical();
 
         GUILayout.Space(20);
 
 
-        GUILayout.Label("스테이지 클리어 / 실패 즉시 실행", EditorStyles.boldLabel);
+        GUILayout.Label("클리어 / 실패 / 데이터 초기화", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
         if (GUILayout.Button("스테이지 클리어"))
         {
@@ -104,6 +112,12 @@ public class TestCustomWindow : EditorWindow
             ProgressDataManager.Instance.ResetProgress();
             // 최소 시작 스테이지부터 재시작 (1 또는 2)
             setting.StageIndex = setting.MinStageIndex;
+            UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.SubTitleScene);
+        }
+        GUILayout.Space(5);
+        if (GUILayout.Button("데이터 완전 초기화")) // 모든 데이터를 초기 값으로 돌리는 버튼 (각종 잠금 해제 요소들 포함)
+        {
+            ProgressDataManager.Instance.FullResetProgress();
             UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.SubTitleScene);
         }
         EditorGUILayout.EndVertical();

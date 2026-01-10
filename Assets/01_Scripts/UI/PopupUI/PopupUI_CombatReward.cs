@@ -8,6 +8,10 @@ using UnityEngine.UI;
 
 public class PopupUI_CombatReward : BasePopupUI
 {
+    // 게임 최종 출시 시점에서는 전투 결과 창을 어떻게 할지 모르겠지만
+    // 일단은 전투가 끝나면 관련 데이터 정리의 대부분이 이곳에서 이루어 지니 만약 교체 시
+    // 해당 코드를 상세히 읽어 볼것.
+    // (최종 클리어 시 관련 연산 및 문체 해금, 애널리틱스 기록 등의 코드가 존재)
     [SerializeField] TextMeshProUGUI resultText; // 결과 텍스트
     [SerializeField] private GameObject itemPrefab;
     [SerializeField] private Transform rewardContentParent;
@@ -80,9 +84,10 @@ public class PopupUI_CombatReward : BasePopupUI
 
                 // 앤딩일시 표시(*유저 테스트용*)
                 if (setting.CurrentBattleNode.type == NodeType.Boss
-                    && setting.StageIndex == 3)
+                    && setting.StageIndex == 4)
                 {
                     ProgressDataManager.Instance.IsEndingClear = true;
+                    ProgressDataManager.Instance.UnlockRandomStyle(); // 앤딩 클리어시 랜덤 문체 해금
 
                     // 앤딩 처음인경우
                     if (!ProgressDataManager.Instance.ProgressTutorial.Contains(9))
