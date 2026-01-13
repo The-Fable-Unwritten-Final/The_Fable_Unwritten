@@ -535,12 +535,14 @@ public class BattleFlowController : MonoBehaviour
     // 살아있는 랜덤한 파티원 한명 리턴
     public IStatusReceiver GetRandomAliveParty()
     {
-        IStatusReceiver ranplayer = playerParty[0];
-            var alive = playerParty.Where(p => p != null && p.IsAlive()).ToList();
-            if (alive.Count > 0)
-                ranplayer = alive[UnityEngine.Random.Range(0, alive.Count)];
+        if (playerParty == null || playerParty.Count == 0)
+            return null;
 
-        return ranplayer;
+        var alive = playerParty.Where(p => p != null && p.IsAlive()).ToList();
+        if (alive.Count > 0)
+            return alive[UnityEngine.Random.Range(0, alive.Count)];
+
+        return null;
     }
 
 

@@ -234,7 +234,6 @@ public class StageMapRenderer : MonoBehaviour
 
         if (linesToAnimate.Count > 0)
         {
-            Debug.Log($"Animating line fill from Node {from.id} to Node {to.id}");
             StartCoroutine(AnimateLinesFillCoroutine(linesToAnimate, onComplete));
         }
         else
