@@ -69,8 +69,7 @@ public class ApplyStatusEffect : CardEffectBase
 
             t.ApplyStatusEffect(effect);
 
-            //string statusText = GetStatusEffectText(statType, value); => 데미지 프린트 방식 변경으로 사용 안함
-            string statusText = value.ToString();
+            string statusText = GetStatusEffectText(statType, value);
             var Text = new DmgTextData
             {
                 Text = statusText,
@@ -141,30 +140,35 @@ public class ApplyStatusEffect : CardEffectBase
 
     private string GetStatusEffectText(BuffStatType statType, float value)
     {
-        string direction = value switch
-        {
-            > 0 => $"+{value}",
-            < 0 => $"{value}",
-            _ => ""
-        };
+        bool useSignedFormat = statType is BuffStatType.Attack or BuffStatType.Defense;
 
+        string valueText = useSignedFormat? value 
+            switch
+            {
+                > 0 => $"+{value}",
+                < 0 => value.ToString(),
+                _ => ""
+            }
+            : value != 0
+                ? value.ToString()
+                : "";   
 
         return statType switch
         {
-            BuffStatType.Attack => $"공격력 {direction}",
-            BuffStatType.Defense => $"방어력 {direction}",
-            BuffStatType.Bless => $"축복 {direction}",
-            BuffStatType.Grace => $"은총 {direction}",
-            BuffStatType.Purify => $"정화 {direction}",
-            BuffStatType.Burn => $"화상 {direction}",
-            BuffStatType.Freeze => $"빙결 {direction}%",
-            BuffStatType.Activate => $"활성화 {direction}",
-            BuffStatType.Bleed => $"출혈 {direction}",
-            BuffStatType.Stun => $"기절 {direction}",
-            BuffStatType.GuardRedirect => $"수호 발동률 {direction}%",
-            BuffStatType.CantAttackInStance => $"자세 제한",
-            BuffStatType.Blind => $"실명",
-            _ => "상태이상"
+            BuffStatType.Attack => valueText,
+            BuffStatType.Defense => valueText,
+            BuffStatType.Bless => valueText,
+            BuffStatType.Grace => valueText,
+            BuffStatType.Purify => valueText,
+            BuffStatType.Burn => valueText,
+            BuffStatType.Freeze => string.IsNullOrEmpty(valueText) ? "" : $"{valueText}%",
+            BuffStatType.Activate => valueText,
+            BuffStatType.Bleed => valueText,
+            BuffStatType.Stun => valueText,
+            BuffStatType.GuardRedirect => string.IsNullOrEmpty(valueText) ? "" : $"{valueText}%",
+            BuffStatType.CantAttackInStance => "",
+            BuffStatType.Blind => "",
+            _ => ""
         };
     }
 }

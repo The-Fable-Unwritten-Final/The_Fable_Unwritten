@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Text;
 
 public enum DmgTextType
 {
@@ -20,34 +22,23 @@ public struct DmgTextData
     public bool isCardEnhanced;
     public bool isWeakened;
 }
-
 public static class DmgTextColors
 {
-    // Damage
-    public static readonly Color Damage = Color.white;
-    public static readonly Color StanceDamage = new Color(1f, 0.42f, 0.42f);      // #FF6B6B
-    public static readonly Color EnhanceDamage = new Color(1f, 0.118f, 0.118f);   // #FF1E1E
-    public static readonly Color FullEnhanceDamage = new Color(0.698f, 0f, 0f);   // #B20000
-
-    // Heal
-    public static readonly Color Heal = Color.white;
-    public static readonly Color StanceHeal = new Color(0.643f, 1f, 0.69f);       // #A4FFB0
-    public static readonly Color EnhanceHeal = new Color(0.365f, 1f, 0.533f);     // #5DFF88
-    public static readonly Color FullEnhanceHeal = new Color(0.122f, 0.651f, 0.298f); // #1FA64C
-
-    // Buff
-    public static readonly Color Buff = Color.white;
-    public static readonly Color StanceBuff = new Color(1f, 0.878f, 0.4f);        // #FFE066
-
-    // Debuff
-    public static readonly Color Debuff = Color.white;
-    public static readonly Color StanceDebuff = new Color(0.71f, 0.6f, 1f);       // #B599FF
+    //
+    // 색상 정의
+    // 0. 공격 : 주황
+    // 1. 치유 : 초록
+    // 2. 버프류 : 시안
+    // 3. 나머지 디버프 상태 이상류 : 마젠타
+    // 색상의 어느정도 통일성 유지 필요
+    // 
 }
 
 
 public class DmgBarDisplay : MonoBehaviour
 {
     [SerializeField] private GameObject dmgPrintPrefab;
+    [SerializeField] private Sprite[] typeIcons; // 타입별 아이콘 스프라이트 배열
     
     private Queue<GameObject> dmgPrintPool = new Queue<GameObject>();
     private const int maxPoolSize = 10; // 최대 풀 크기
@@ -66,14 +57,20 @@ public class DmgBarDisplay : MonoBehaviour
 
         // 프리팹의 컴포넌트 가져오기
         TextMeshProUGUI tmpText = dmgInstance.GetComponentInChildren<TextMeshProUGUI>();
+        Image image = dmgInstance.GetComponent<Image>();
         CanvasGroup canvasGroup = dmgInstance.GetComponent<CanvasGroup>();
 
         // 위치 설정
         dmgInstance.transform.position = target.position + Vector3.up * offsetY;
 
+        // 아이콘 설정
+        /* 아이콘 리소스 받기 전까지 주석 처리
+        Sprite typeIcon = SelectTypeIcon(data);
+        if (typeIcon != null)
+            image.sprite = typeIcon;*/
+            
         // 텍스트 및 스타일 설정
-        tmpText.text = NumberSpriteShift(data.Text);
-        tmpText.color = GetFinalColor(ResolveColor(data), data.isWeakened);
+        tmpText.text = NumberSpriteShift(data);
         tmpText.fontSize = (data.isStanceEnhanced || data.isCardEnhanced) ? 0.8f : 0.5f;
 
         // 스케일 설정 (시작: 1.6배 크기)
@@ -83,22 +80,63 @@ public class DmgBarDisplay : MonoBehaviour
 
         StartCoroutine(FadeAndFloat(dmgInstance, canvasGroup, tmpText));
     }
-
-    private string NumberSpriteShift(string dataT)
+    private Sprite SelectTypeIcon(DmgTextData data)
     {
-        string result = "";
+        int index = data.type switch
+        {
+            DmgTextType.Normal => 0,
+            DmgTextType.Heal => 1,
+            DmgTextType.Buff => 2,
+            DmgTextType.Debuff => 3,
+            _ => 0
+        };
+
+        if (index >= 0 && index < typeIcons.Length)
+            return typeIcons[index];
+        else
+            return null;
+    }
+    private string NumberSpriteShift(DmgTextData data)
+    {
+        string dataT = data.Text;
+        if (string.IsNullOrEmpty(dataT)) return "";
+
+        int prefix = (int)data.type;
+        StringBuilder sb = new StringBuilder();
+
+        // 현재 타입별 스프라이트 등록이 안 되어있어서 임시로 타입 0으로 고정
+        prefix = 0;
         foreach (char c in dataT)
         {
             if (char.IsDigit(c))
             {
-                result += $"<sprite={c}>";
+                // 숫자: {prefix}{digit}
+                // 숫자 only 스프라이트
+                sb.Append($"<sprite name=\"{prefix}{c}\">");
             }
             else
             {
-                result += c;
+                // +, -, % 을 포함한 문자는 그대로 출력
+                switch (c)
+                {
+                    case '+':
+                        sb.Append($"<sprite name=\"{prefix}plus\">");
+                        break;
+                    case '-':
+                        sb.Append($"<sprite name=\"{prefix}minus\">");
+                        break;
+                    case '%':
+                        sb.Append($"<sprite name=\"{prefix}percent\">");
+                        break;
+                    default:
+                        // 기타 문자 (공백 등)
+                        sb.Append(c);
+                        break;
+                }
             }
         }
-        return result;
+
+        return sb.ToString();
     }
     private IEnumerator FadeAndFloat(GameObject dmgInstance, CanvasGroup canvasGroup, TextMeshProUGUI tmpText)
     {
@@ -144,37 +182,5 @@ public class DmgBarDisplay : MonoBehaviour
             dmgPrintPool.Enqueue(dmgInstance);
         else
             Destroy(dmgInstance);
-    }
-
-    private Color GetFinalColor(Color baseColor, bool isWeakened)
-    {
-        return isWeakened ? baseColor * 0.6f : baseColor;
-    }
-
-    private Color ResolveColor(DmgTextData data)
-    {
-        return data.type switch
-        {
-            DmgTextType.Heal => ResolveHealColor(data),
-            DmgTextType.Buff => data.isStanceEnhanced ? DmgTextColors.StanceBuff : DmgTextColors.Buff,
-            DmgTextType.Debuff => data.isStanceEnhanced ? DmgTextColors.StanceDebuff : DmgTextColors.Debuff,
-            _ => ResolveDamageColor(data),
-        };
-    }
-
-    private Color ResolveDamageColor(DmgTextData data)
-    {
-        if (data.isStanceEnhanced && data.isCardEnhanced) return DmgTextColors.FullEnhanceDamage;
-        if (data.isCardEnhanced) return DmgTextColors.EnhanceDamage;
-        if (data.isStanceEnhanced) return DmgTextColors.StanceDamage;
-        return DmgTextColors.Damage;
-    }
-
-    private Color ResolveHealColor(DmgTextData data)
-    {
-        if (data.isStanceEnhanced && data.isCardEnhanced) return DmgTextColors.FullEnhanceHeal;
-        if (data.isCardEnhanced) return DmgTextColors.EnhanceHeal;
-        if (data.isStanceEnhanced) return DmgTextColors.StanceHeal;
-        return DmgTextColors.Heal;
     }
 }
