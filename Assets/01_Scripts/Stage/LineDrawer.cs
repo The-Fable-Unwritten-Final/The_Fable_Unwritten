@@ -9,7 +9,7 @@ public static class LineDrawer
     /// <summary>
     /// 두 노드 위치 확인 후 연결해 주는 점선 생성
     /// </summary>
-    public static GameObject DrawLine(RectTransform from, RectTransform to, Transform parent, GameObject linePrefab, float offsetFromNode = 50f)
+    public static GameObject DrawLine(CurvePoint curvePoint, RectTransform from, RectTransform to, Transform parent, GameObject linePrefab, float offsetFromNode = 50f)
     {
         GameObject lineObj = GameObject.Instantiate(linePrefab, parent);
         UILineRenderer lineRenderer = lineObj.GetComponent<UILineRenderer>();
@@ -39,11 +39,47 @@ public static class LineDrawer
 
         // 점들의 위치 배열 생성
         Vector2[] points = new Vector2[dotCount];
+        // 베지어 곡선 (0~2 개의 제어점 사용 곡선 버전)
+        for (int i = 0; i < dotCount; i++)
+        {
+            float t = i / (dotCount - 1f);
+
+            // 0개 >> 직선
+            if (curvePoint == null || curvePoint.position == null || curvePoint.position.Length == 0)
+            {
+                points[i] = Vector2.Lerp(start, end, t);
+            }
+            // 1개 >> 2차 베지어
+            else if (curvePoint.position.Length == 1)
+            {
+                Vector2 p1 = curvePoint.position[0];
+                float u = 1f - t;
+                points[i] =
+                    u * u * start +
+                    2f * u * t * p1 +
+                    t * t * end;
+            }
+            // 2개 >> 3차 베지어
+            else
+            {
+                Vector2 p1 = curvePoint.position[0];
+                Vector2 p2 = curvePoint.position[1];
+                float u = 1f - t;
+
+                points[i] =
+                    u * u * u * start +
+                    3f * u * u * t * p1 +
+                    3f * u * t * t * p2 +
+                    t * t * t * end;
+            }
+        }
+        /* 베지어 곡선 미사용 버전(직선)
         for (int i = 0; i < dotCount; i++)
         {
             float t = i / (dotCount - 1f);
             points[i] = Vector2.Lerp(start, end, t);
-        }
+        }*/
+        
 
         // UILineRenderer 설정
         lineRenderer.Points = points;

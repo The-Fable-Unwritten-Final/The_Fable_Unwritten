@@ -10,7 +10,10 @@ public enum NodeType
     RandomEvent = 4,  // 랜덤이벤트
     Camp = 5          // 야영지    
 }
-
+public class CurvePoint
+{
+    public Vector2[] position; // 곡선 제어점 위치
+}
 [SerializeField]
 public class GraphNode
 {
@@ -19,4 +22,29 @@ public class GraphNode
     public Vector2 position;                   // 노드 위치
     public int columnIndex;                    // 현재 노드가 속한 열 인덱스
     public List<GraphNode> nextNodes = new();  // 다음 노드 리스트
+    public List<CurvePoint> curvePointList = new(); // 다음 노드 별 곡선 제어점 리스트
+
+    public void SetRandomCurvePoints()
+    {
+        int nextNodeCount = nextNodes.Count;
+        curvePointList.Clear();
+        for (int i = 0; i < nextNodeCount; i++)
+        {
+            int controlPointCount = Random.Range(0, 3); // 0~2개의 제어점 생성
+            CurvePoint curvePoint = new CurvePoint();
+            curvePoint.position = new Vector2[controlPointCount];
+            // 본인의 position과 nextNodes[i] 의 위치를 기준으로 제어점 위치 설정
+            for (int j = 0; j < controlPointCount; j++)
+            {
+                float t = (j + 1f) / (controlPointCount + 1f); // 0~1 사이의 비율
+                Vector2 basePos = Vector2.Lerp(this.position, nextNodes[i].position, t);
+
+                // 약간의 랜덤 오프셋 추가
+                float offsetX = Random.Range(-40f, 40f);
+                float offsetY = Random.Range(-40f, 40f);
+                curvePoint.position[j] = basePos + new Vector2(offsetX, offsetY);
+            }
+            curvePointList.Add(curvePoint);
+        }
+    }
 }

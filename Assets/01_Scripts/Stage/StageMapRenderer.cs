@@ -33,8 +33,7 @@ public class StageMapRenderer : MonoBehaviour
     private bool isAnimating = false; // 애니메이션 중 클릭 방지
 
     /// <summary>
-    /// 스테이지 노드 및 연결선을 UI에 표시
-    /// </summary>
+    /// 스테이지 노드 및 연결선을 UI에 표시 </summary>
     public void Render(StageData stage, Action<GraphNode> onClick)
     {
         nodeUIMap.Clear();
@@ -59,22 +58,24 @@ public class StageMapRenderer : MonoBehaviour
         //모든 노드에 대해 연결 된 노드들 정보 확인 후 라인 그려주기
         foreach (var node in nodeUIMap.Keys)
         {
+            int index = 0;
             foreach (var next in node.nextNodes)
             {
                 var fromRT = nodeUIMap[node];
                 var toRT = nodeUIMap[next];
 
-                GameObject line = LineDrawer.DrawLine(fromRT, toRT, linesContainer, lineBasicPrefab);
+                GameObject line = LineDrawer.DrawLine(node.curvePointList[index],fromRT, toRT, linesContainer, lineBasicPrefab);
                 var lineRenderer = line.GetComponent<UILineRenderer>();
                 var originalPoints = (Vector2[])lineRenderer.Points.Clone(); // 원본 포인트 저장
                 lineInfos.Add(new LineInfo { from = node, to = next, lineObj = line, originalPoints = originalPoints });
+
+                index++;
             }
         }
     }
 
     /// <summary>
-    /// 게임 진행 중 노드 상태 관리 매서드
-    /// </summary>
+    /// 게임 진행 중 노드 상태 관리 매서드 </summary>
     public void UpdateInteractables(GraphNode current, List<GraphNode> visited)
     {
         // 

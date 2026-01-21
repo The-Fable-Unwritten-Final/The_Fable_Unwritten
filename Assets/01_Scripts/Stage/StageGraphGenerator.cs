@@ -161,6 +161,7 @@ public static class StageGraphGenerator
                     {
                         from.nextNodes.Add(to);
                     }
+                    from.SetRandomCurvePoints(); // from 노드에서 to 노드로 가는 각 곡선 제어점 세팅
                 }
             }
             else
@@ -187,6 +188,8 @@ public static class StageGraphGenerator
                     }
 
                     toIndex = Mathf.Min(toIndex + 1, toCount - 1);
+
+                    from.SetRandomCurvePoints(); // from 노드에서 to 노드로 가는 각 곡선 제어점 세팅
                 }
 
                 
@@ -210,6 +213,8 @@ public static class StageGraphGenerator
                         lastFrom.nextNodes.Add(to);
                     }
                 }
+
+                lastFrom.SetRandomCurvePoints(); // from 노드에서 to 노드로 가는 각 곡선 제어점 세팅
             }
         }
     }
