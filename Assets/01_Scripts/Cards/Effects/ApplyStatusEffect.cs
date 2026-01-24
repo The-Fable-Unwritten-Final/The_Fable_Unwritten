@@ -12,6 +12,7 @@ public class ApplyStatusEffect : CardEffectBase
     public float value;
     public int duration;
     public int? target;
+    public bool isInstant = true;
 
     /// <summary>
     /// 시전자가 타겟에게 버프/디버프를 줌
@@ -20,9 +21,8 @@ public class ApplyStatusEffect : CardEffectBase
     /// <param name="target">타겟</param>
     public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
-        List<IStatusReceiver> filteredTargets = GetFilteredTargets(targets);
 
-        foreach (var t in filteredTargets)
+        foreach (var t in targets)
         {
             if (!t.IsAlive()) continue;
 
@@ -96,7 +96,7 @@ public class ApplyStatusEffect : CardEffectBase
     {
         val = Mathf.Clamp(val, -50, 50);
 
-        if (IsTickEffect(type))
+        if (isInstant)
         {
             return new TickEffect
             {
@@ -116,48 +116,12 @@ public class ApplyStatusEffect : CardEffectBase
         }
     }
 
-    private bool IsTickEffect(BuffStatType type)
-    {
-        return type switch
-        {
-            BuffStatType.CantAttackInStance => true,
-            BuffStatType.Blind => true,                   // 실명 (명중률 저하 등, 필요 시)
-            _ => false
-        };
-    }
-
     public override string GetDescription()
     {
         string baseText = $"{statType} {(value > 0 ? "+" : "")}{value}";
-        if (IsTickEffect(statType))
+        if (!isInstant)
             baseText += $" ({duration}턴)";
         return baseText;
-    }
-
-    private string GetStatusEffectText(BuffStatType statType, float value)
-    {
-        string direction = value switch
-        {
-            > 0 => $"+{value}",
-            < 0 => $"{value}",
-            _ => ""
-        };
-
-        return statType switch
-        {
-            BuffStatType.Attack => "공격력",
-            BuffStatType.Defense => "방어력",
-            BuffStatType.Burn => "화상",
-            BuffStatType.Freeze => "빙결",
-            BuffStatType.Activate => "자연",
-            BuffStatType.Bless => "축복",
-            BuffStatType.Crime => "죄악",
-            BuffStatType.Penance => "참회",
-            BuffStatType.Scar => "상처",
-            BuffStatType.Stun => "기절",
-            BuffStatType.Guard => "수호",
-            _ => "상태이상"
-        };
     }
 }
 

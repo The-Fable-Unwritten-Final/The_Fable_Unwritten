@@ -175,7 +175,7 @@ public class NewCardEffectBuilder : MonoBehaviour
 
                     case "isStance":
                         var stance = ScriptableObject.CreateInstance<StanceCondition>();
-                        stance.requiredStance = (StancValue.EStancType)values[0];
+                        stance.requiredStance = (StancType)values[0];
                         condition = stance;
                         break;
 

@@ -85,7 +85,6 @@ public static class StanceEffectHandler
         Debug.Log($"[StanceEffect] {player.PlayerData.CharacterName} - {stance} 효과 발동!");
     }
 
-    #region 소피아 효과
 
     /// <summary>
     /// 소피아 스탠스 효과
@@ -126,10 +125,6 @@ public static class StanceEffectHandler
         }
     }
 
-    #endregion
-
-    #region 카일라 효과
-
     /// <summary>
     /// 카일라 스탠스 효과
     /// - 자비(Compassion): 카드 1장 드로우, 이번 턴 회복량 +30%
@@ -157,10 +152,6 @@ public static class StanceEffectHandler
                 break;
         }
     }
-
-    #endregion
-
-    #region 레온 효과
 
     /// <summary>
     /// 레온 스탠스 효과
@@ -209,9 +200,6 @@ public static class StanceEffectHandler
         }
     }
 
-    #endregion
-
-    #region 효과 적용 헬퍼 메서드
 
     /// <summary>
     /// 회복량에 스탠스 보너스 적용 (카일라-자비)
@@ -327,9 +315,6 @@ public static class StanceEffectHandler
         return false;
     }
 
-    #endregion
-
-    #region 턴/전투 종료 처리
 
     /// <summary>
     /// 턴 종료 시 효과 초기화
@@ -352,6 +337,4 @@ public static class StanceEffectHandler
     {
         effectData?.Reset();
     }
-
-    #endregion
 }

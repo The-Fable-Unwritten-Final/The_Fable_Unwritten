@@ -393,7 +393,7 @@ public class StatusEffectSystem
     public static bool IsBeneficial(BuffStatType type) => type switch
     {
         BuffStatType.Attack or BuffStatType.Defense or BuffStatType.Activate
-        or BuffStatType.Bless or BuffStatType.Penance or BuffStatType.Guard => true,
+        or BuffStatType.Bless or BuffStatType.Penance or BuffStatType.Guard or BuffStatType.Undying => true,
         _ => false
     };
 

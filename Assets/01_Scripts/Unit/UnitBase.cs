@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
 
 /// <summary>
@@ -18,7 +19,6 @@ public abstract class UnitBase : MonoBehaviour, IStatusReceiver
     protected AnimationHandler animationHandler;
     protected StatusDisplay statusDisplay;
     protected bool hasBlockInternal;
-
     private bool isTargetable;
 
     /// <summary>최대 체력</summary>
@@ -140,6 +140,17 @@ public abstract class UnitBase : MonoBehaviour, IStatusReceiver
         reduced = ApplyStanceModifierToDamage(reduced);
         reduced = Mathf.Round(reduced);
 
+
+        if (HasEffect(BuffStatType.Undying))
+        {
+            float maxDamage = currentHP - 1f;
+            if (reduced > maxDamage)
+            {
+                reduced = Mathf.Max(0, maxDamage);
+                TriggerEffectOnce(BuffStatType.Undying);
+                Debug.Log($"[Undying] {ChClass} 체력 1 유지!");
+            }
+        }
         currentHP = Mathf.Max(0, currentHP - reduced);
         ShowDamageText(reduced);
 
@@ -154,6 +165,17 @@ public abstract class UnitBase : MonoBehaviour, IStatusReceiver
     /// </summary>
     public virtual void TakeTrueDamage(float damage)
     {
+        if (HasEffect(BuffStatType.Undying))
+        {
+            float maxDamage = currentHP - 1f;
+            if (damage > maxDamage)
+            {
+                damage = Mathf.Max(0, maxDamage);
+                TriggerEffectOnce(BuffStatType.Undying);
+                Debug.Log($"[Undying] {ChClass} 체력 1 유지! (트루 데미지)");
+            }
+        }
+
         currentHP = Mathf.Max(0, currentHP - damage);
         ShowDamageText(damage);
 
@@ -278,7 +300,9 @@ public abstract class UnitBase : MonoBehaviour, IStatusReceiver
     public void TriggerEffectOnce(BuffStatType type)
     {
         statusEffectSystem?.TriggerEffectOnce(type);
-    }/// <summary>
+    }
+    
+    /// <summary>
      /// 빙결 감소량 반환
      /// </summary>
     public float GetFreezePenalty()
@@ -362,6 +386,11 @@ public abstract class UnitBase : MonoBehaviour, IStatusReceiver
     public virtual void PlayAttackAnimation(int attackType)
     {
         animationHandler?.PlayAttack(attackType);
+    }
+
+    public float GetEffectValue(BuffStatType StatType)
+    {
+        return statusEffectSystem?.GetEffectValue(StatType) ?? 0f;
     }
 
     public virtual void PlayHitAnimation()

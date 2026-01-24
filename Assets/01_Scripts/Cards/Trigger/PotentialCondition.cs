@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Potential : MonoBehaviour
+[CreateAssetMenu(menuName = "Card/Conditions/PotentialCondition")]
+public class PotentialCondition : TriggerCondition
 {
-    // Start is called before the first frame update
-    void Start()
+    public int requiredPercent;
+    public override bool IsConditionMet(IStatusReceiver caster, List<IStatusReceiver> targets)
     {
-        
+        if(caster is PlayerController pc)
+        {
+            return pc.potentialGauge.FillPercent >= requiredPercent;
+        }
+        return false;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public override string Description => $"{requiredPercent}만큼 찼는가?";
 }

@@ -5,7 +5,7 @@ using static StancValue;
 
 public class StanceCondition : TriggerCondition
 {
-    public EStancType requiredStance;
+    public StancType requiredStance;
 
     public override bool IsConditionMet(IStatusReceiver caster, List<IStatusReceiver> target)
     {

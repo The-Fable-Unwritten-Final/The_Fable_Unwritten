@@ -46,7 +46,8 @@ public enum BuffStatType
     Blind,                   // 실명 (명중률 저하 등, 필요 시)
     SustainRegen,           //지속 회복
     IronBlood,              //철혈 (레온 이상실현)(피해 전가, 받는 피해 반)
-    Exposed                 //노출 (레온 이상실현)(받피증 2배)
+    Exposed,                 //노출 (레온 이상실현)(받피증 2배)
+    Undying,                //체력 1 남기기
 }
 
 // ===== 카드 키워드 (CSV index 10~18) =====
@@ -84,6 +85,10 @@ public interface IStatusReceiver
     string CurrentStance { get; }                   //현재 자세 확인
     bool IsStunned();                          //스턴 상태 여부 확인
     bool hasResist { get; set; }         //상태이상 디버프 저항 여부
+    bool HasEffect(BuffStatType type);   //해당 버프/디버프 있는지 확인
+    float GetEffectValue(BuffStatType type); //해당 버프/디버프 얼마나 있는지 확인
+
+
 
     void ChangeStance(StancType stance);
 
