@@ -109,9 +109,12 @@ public static class LocaleDataManager
     }
 
     // 유니티 내의 String Table을 통한 로케일 데이터 가져오기
-    public static string GetLocalizedStringTable(string key)
+    public static string GetLocalizedStringTable(string tableName, string key)
     {
-        var table = LocalizationSettings.StringDatabase.GetTable("Card Tooltip");
+        // tableName 예시 //
+        // 카드 툴팁 : "Card Tooltip"
+        // UI 로컬 : "Locale Table"
+        var table = LocalizationSettings.StringDatabase.GetTable(tableName);
         return table.GetEntry(key).LocalizedValue;
     }
 

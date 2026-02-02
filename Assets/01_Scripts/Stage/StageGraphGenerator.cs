@@ -119,8 +119,8 @@ public static class StageGraphGenerator
                 float y = totalHeight / 2f - i * spacing.y; 
 
                 // 노드 위치 랜덤 오프셋 추가
-                float randomOffsetX = Random.Range(-spacing.x / 4f, spacing.x / 4f);
-                float randomOffsetY = Random.Range(-spacing.y / 4f, spacing.y / 4f);
+                float randomOffsetX = Random.Range(-spacing.x / 6f, spacing.x / 6f); 
+                float randomOffsetY = Random.Range(-spacing.y / 6f, spacing.y / 6f);
 
                 column.Add(new GraphNode
                 {

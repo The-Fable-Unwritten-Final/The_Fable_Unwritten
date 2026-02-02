@@ -9,7 +9,7 @@ public static class LineDrawer
     /// <summary>
     /// 두 노드 위치 확인 후 연결해 주는 점선 생성
     /// </summary>
-    public static GameObject DrawLine(CurvePoint curvePoint, RectTransform from, RectTransform to, Transform parent, GameObject linePrefab, float offsetFromNode = 50f)
+    public static GameObject DrawLine(CurvePoint curvePoint, RectTransform from, RectTransform to, Transform parent, GameObject linePrefab, float offsetFromNode = 50f, bool isBossDestination = false)
     {
         GameObject lineObj = GameObject.Instantiate(linePrefab, parent);
         UILineRenderer lineRenderer = lineObj.GetComponent<UILineRenderer>();
@@ -17,6 +17,13 @@ public static class LineDrawer
         // 시작 점과 끝점 두 위치를 RectTransform 기준의 로컬 좌표로 전환(계산 작업을 위해)
         Vector2 start = WorldToLocal(from.position, parent as RectTransform);
         Vector2 end = WorldToLocal(to.position, parent as RectTransform);
+        
+        // 보스 노드로 향하는 경우, 원래 위치로 복원 (임시 조정 해제)
+        if (isBossDestination)
+        {
+            end -= Vector2.left * (to.sizeDelta.x / 3f);
+        }
+        
         Vector2 direction = end - start;
         float distance = direction.magnitude;
 
@@ -32,7 +39,7 @@ public static class LineDrawer
 
         // 점 간격 설정 (픽셀 단위) - 필요시 조정 가능~
         float dotSpacing = 12f;
-        int dotCount = Mathf.Max(2, Mathf.FloorToInt(distance / dotSpacing));
+        int dotCount = Mathf.Max(4, Mathf.FloorToInt(distance / dotSpacing)); // 최소 4개의 점
         
         // LineList 모드에서는 짝수 개의 점이 필요 (시작과 끝의 시각적 일치를 위해)
         if (dotCount % 2 != 0) dotCount++;
@@ -101,6 +108,33 @@ public static class LineDrawer
             out localPoint
         );
         return localPoint;
+    }
+
+    /// <summary>
+    /// 제어점의 각도가 최대 110도를 넘지 않도록 제한
+    /// </summary>
+    private static Vector2 ClampControlPoint(Vector2 controlPoint, Vector2 start, Vector2 end)
+    {
+        const float maxBendAngle = 70f; // 180도 - 110도 = 70도
+        
+        Vector2 lineDir = (end - start).normalized;
+        Vector2 cpDir = controlPoint - start;
+        
+        if (cpDir.magnitude < 0.001f) return controlPoint;
+        
+        cpDir = cpDir.normalized;
+        float angle = Vector2.Angle(lineDir, cpDir);
+        
+        if (angle > maxBendAngle)
+        {
+            float clampedAngle = Mathf.Clamp(angle, 0, maxBendAngle);
+            Quaternion rotation = Quaternion.AngleAxis(clampedAngle, Vector3.forward);
+            Vector3 clampedDir = rotation * new Vector3(lineDir.x, lineDir.y, 0);
+            
+            return start + ((Vector2)clampedDir).normalized * (controlPoint - start).magnitude;
+        }
+        
+        return controlPoint;
     }
 }
 

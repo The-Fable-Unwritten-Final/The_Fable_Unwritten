@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,6 +12,7 @@ public class StageMapController : MonoBehaviour
 {
     [Header("Stage Settings")]
     [SerializeField] Image backGround; // stage별 백그라운드 설정
+    [SerializeField] TextMeshProUGUI stageTitleText; // 스테이지 타이틀 텍스트
     [SerializeField] Vector2 spacing = new(300, 200);      // 노드 간격
     [SerializeField] int mapTargetWidth;                   // 지도 가로 크기
     public StageMapRenderer mapRenderer;                   // StageMapRederer 연결
@@ -38,9 +40,12 @@ public class StageMapController : MonoBehaviour
             // 기획자 요청으로 대화씬 스킵
             DialogueManager.Instance.OnStageStart(pd.StageIndex); // 대화 호출
         }
-        
+
         int stageIndex = pd.StageIndex;
+        if(stageIndex < 1) stageIndex = 1;
+
         backGround.sprite = DataManager.Instance.GetBackground(stageIndex);
+        stageTitleText.text = LocaleDataManager.GetLocalizedStringTable("Locale Table", $"StageTitle_{stageIndex}");
 
         pd.SaveProgress(true);
     }
@@ -240,5 +245,19 @@ public class StageMapController : MonoBehaviour
         startBtn.image.color = Color.white;
 
         mapRenderer.UpdateInteractables(startNode, visitedNodes);
+    }
+    /// <summary>
+    /// UI전반의 구조가 바뀌며 각 씬에 존재하는 도감 UI를 개별로 UI매니저와 연결 해 주는 메서드
+    /// </summary>
+    public void BookUIManagerOpen()
+    {
+        UIManager.Instance.ShowPopupByName("PopupUI_Book");
+    }
+    /// <summary>
+    /// UI전반의 구조가 바뀌며 각 씬에 존재하는 세팅 UI를 개별로 UI매니저와 연결 해 주는 메서드
+    /// </summary>
+    public void SettingUIManagerOpen()
+    {
+        UIManager.Instance.ShowPopupByName("PopupUI_Setting");
     }
 }

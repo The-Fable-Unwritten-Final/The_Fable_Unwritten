@@ -26,6 +26,7 @@ public class GraphNode
 
     public void SetRandomCurvePoints()
     {
+        const float maxBendAngle = 70f; // 최대 70도 (110도 곡선 제한)
         int nextNodeCount = nextNodes.Count;
         curvePointList.Clear();
         for (int i = 0; i < nextNodeCount; i++)
@@ -38,11 +39,16 @@ public class GraphNode
             {
                 float t = (j + 1f) / (controlPointCount + 1f); // 0~1 사이의 비율
                 Vector2 basePos = Vector2.Lerp(this.position, nextNodes[i].position, t);
+                Vector2 lineDir = (nextNodes[i].position - this.position).normalized;
 
-                // 약간의 랜덤 오프셋 추가
-                float offsetX = Random.Range(-40f, 40f);
-                float offsetY = Random.Range(-40f, 40f);
-                curvePoint.position[j] = basePos + new Vector2(offsetX, offsetY);
+                // 최대 bend 각도 범위 내에서 랜덤 오프셋 생성
+                float randomAngle = Random.Range(-maxBendAngle, maxBendAngle);
+                float distance = Random.Range(20f, 60f);
+                
+                Quaternion rotation = Quaternion.AngleAxis(randomAngle, Vector3.forward);
+                Vector3 offsetDir = rotation * new Vector3(lineDir.x, lineDir.y, 0);
+                
+                curvePoint.position[j] = basePos + ((Vector2)offsetDir).normalized * distance;
             }
             curvePointList.Add(curvePoint);
         }
