@@ -36,9 +36,8 @@ public class StageMapController : MonoBehaviour
             pd.SetTheme(theme);
 
             LoadStage(pd.StageIndex);
-
-            // 기획자 요청으로 대화씬 스킵
-            DialogueManager.Instance.OnStageStart(pd.StageIndex); // 대화 호출
+            
+            //DialogueManager.Instance.OnStageStart(pd.StageIndex); // 대화 호출
         }
 
         int stageIndex = pd.StageIndex;
@@ -77,7 +76,7 @@ public class StageMapController : MonoBehaviour
                     stageSetting.StageCleared= false;
 
                     LoadStage(stageIndex);
-                    DialogueManager.Instance.OnStageStart(stageSetting.StageIndex); // 대화 호출
+                    //DialogueManager.Instance.OnStageStart(stageSetting.StageIndex); // 대화 호출
                     return true;
                 }
             }

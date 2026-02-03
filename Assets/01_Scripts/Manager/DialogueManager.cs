@@ -8,7 +8,9 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class DialogueManager : MonoSingleton<DialogueManager>
+// 컷씬 비활성화
+//public class DialogueManager : MonoSingleton<DialogueManager>
+public class DialogueManager : MonoBehaviour
 {
 
     [Header("컷씬 이름 (Hierarchy에 존재하는 오브젝트)")]
@@ -21,9 +23,9 @@ public class DialogueManager : MonoSingleton<DialogueManager>
     private bool isPlaying = false;
 
 
-    protected override void Awake()
+    protected  void Awake()
     {
-        base.Awake();
+        //base.Awake();
 
         if (targetCutscene == null)
         {
@@ -53,7 +55,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
     /// 특정 ID에 맞는 대화를 실행
     /// </summary>
     public void PlayDialogue(string dialogueID)
-    {        
+    {
         if (isPlaying)
         {
             //Debug.LogWarning("[DialogueManager] 대화 재생 중!");
@@ -118,7 +120,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 
         // 추가: 배경도 함께 꺼줌
         if (backgroundImage != null)
-        {   
+        {
             backgroundImage.enabled = false;
             backgroundImage.gameObject.SetActive(false);
         }

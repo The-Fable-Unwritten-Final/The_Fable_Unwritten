@@ -99,10 +99,12 @@ public class PopupUI_Setting : BasePopupUI
     }
     public void GoToTitle()
     {
+        // 컷씬 제거
+        /*
         if(DialogueManager.Instance.IsPlaying)
         {
             DialogueManager.Instance.ForceStopDialogue();
-        }
+        }*/
         if (SceneManager.GetActiveScene().name == SceneNameData.CombatScene) //전투씬 에서의 타이틀로 돌아가기.
         {
             

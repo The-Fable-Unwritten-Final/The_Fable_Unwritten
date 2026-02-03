@@ -9,6 +9,11 @@ public class NextSceneFade : MonoBehaviour
     public Image fadeImage; // 검정 이미지
     public float fadeDuration = 1f;
 
+    void Awake()
+    {
+        fadeImage.material.SetFloat("_Progress", 1f);
+    }
+
     /// <summary>
     /// 씬 전환시 사용하는 메서드
     /// </summary>
@@ -22,7 +27,7 @@ public class NextSceneFade : MonoBehaviour
     IEnumerator Transition(string nextScene)
     {
         // 페이드 아웃
-        yield return StartCoroutine(Fade(0f, 1f));
+        yield return StartCoroutine(InkCover(1f, 0f));
 
         // 씬 비동기 로드 (0.9까지 진행)
         AsyncOperation async = SceneManager.LoadSceneAsync(nextScene);
@@ -46,7 +51,7 @@ public class NextSceneFade : MonoBehaviour
         } 
 
         // 페이드 인
-        yield return StartCoroutine(Fade(1f, 0f));
+        yield return StartCoroutine(InkCover(0f, 1f));
 
         fadeImage.raycastTarget = false;
     }
@@ -65,5 +70,25 @@ public class NextSceneFade : MonoBehaviour
         }
 
         fadeImage.color = new Color(c.r, c.g, c.b, to);
+    }
+    
+    IEnumerator InkCover(float from, float to, float duration = 1.5f)
+    {
+        float elapsed = 0f;
+        Material mat = fadeImage.material;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+
+            float t = elapsed / duration;
+            float progress = Mathf.Lerp(from, to, t);
+
+            mat.SetFloat("_Progress", progress);
+            yield return null;
+        }
+
+        // 오차 방지용 스냅
+        mat.SetFloat("_Progress", to);
     }
 }
