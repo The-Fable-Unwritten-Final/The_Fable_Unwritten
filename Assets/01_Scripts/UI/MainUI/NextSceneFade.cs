@@ -11,7 +11,8 @@ public class NextSceneFade : MonoBehaviour
 
     void Awake()
     {
-        fadeImage.material.SetFloat("_Progress", 1f);
+        fadeImage.material.SetFloat("_Progress", 0f);
+        fadeImage.material.color = new Color(0f, 0f, 0f, 0f);
     }
 
     /// <summary>
@@ -27,7 +28,7 @@ public class NextSceneFade : MonoBehaviour
     IEnumerator Transition(string nextScene)
     {
         // 페이드 아웃
-        yield return StartCoroutine(InkCover(1f, 0f));
+        yield return StartCoroutine(InkCover(0f, 1f));
 
         // 씬 비동기 로드 (0.9까지 진행)
         AsyncOperation async = SceneManager.LoadSceneAsync(nextScene);
@@ -51,7 +52,7 @@ public class NextSceneFade : MonoBehaviour
         } 
 
         // 페이드 인
-        yield return StartCoroutine(InkCover(0f, 1f));
+        yield return StartCoroutine(InkCover(1f, 0f));
 
         fadeImage.raycastTarget = false;
     }
@@ -80,15 +81,27 @@ public class NextSceneFade : MonoBehaviour
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-
-            float t = elapsed / duration;
+            float t = Mathf.Clamp01(elapsed / duration);
+            t = t * t * (3f - 2f * t);
             float progress = Mathf.Lerp(from, to, t);
-
+            
+            // Progress와 Alpha를 조건부로 조정
+            float alpha;
+            if (from < to) // 페이드 아웃: 0 -> 1
+            {
+                // progress 0~0.5: alpha 0~1, progress 0.5~1: alpha 1
+                alpha = progress <= 0.1f ? progress / 0.1f : 1f;
+            }
+            else // 페이드 인: 1 -> 0
+            {
+                // progress 1~0.5: alpha 1, progress 0.5~0: alpha 1~0
+                alpha = progress >= 0.1f ? 1f : progress / 0.1f;
+            }
+            
             mat.SetFloat("_Progress", progress);
+            mat.color = new Color(0f, 0f, 0f, alpha);
+
             yield return null;
         }
-
-        // 오차 방지용 스냅
-        mat.SetFloat("_Progress", to);
     }
 }

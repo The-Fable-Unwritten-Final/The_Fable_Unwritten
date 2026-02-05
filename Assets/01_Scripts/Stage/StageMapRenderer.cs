@@ -102,7 +102,8 @@ public class StageMapRenderer : MonoBehaviour
     /// </summary>
     private void AdjustNodeSpacingForBoss()
     {
-        const float minSpacing = 315f;
+        const float minSpacing = 305f;
+        const float minStartSpacing = 150f; // 시작 노드와 2번째 노드 간의 최소 거리
 
         // 보스 노드 찾기
         RectTransform bossRT = null;
@@ -156,8 +157,20 @@ public class StageMapRenderer : MonoBehaviour
             }
         }
 
+        // 시작 노드 찾기 및 위치 확인
+        RectTransform startRT = null;
+        foreach (var kvp in nodeUIMap)
+        {
+            if (kvp.Key.type == NodeType.Start)
+            {
+                startRT = kvp.Value;
+                break;
+            }
+        }
+
         // 보스 노드와의 최소 거리 확인
         float bossX = bossRT.anchoredPosition.x;
+        float startX = startRT != null ? startRT.anchoredPosition.x : float.MinValue;
         float totalShiftNeeded = 0f;
         Dictionary<GraphNode, float> nodeShiftAmount = new();
 
@@ -174,6 +187,17 @@ public class StageMapRenderer : MonoBehaviour
             {
                 float shortfallForThisColumn = minSpacing - distanceToBoss;
                 totalShiftNeeded += shortfallForThisColumn;
+            }
+
+            // 2번째 열(columnIndex 1)의 경우 시작 노드와의 거리도 확인
+            if (col == 1 && startRT != null)
+            {
+                float distanceToStart = currentMaxX - startX;
+                if (distanceToStart < minStartSpacing)
+                {
+                    float extraShiftNeeded = minStartSpacing - distanceToStart;
+                    totalShiftNeeded = Mathf.Max(totalShiftNeeded, extraShiftNeeded);
+                }
             }
 
             // 현재 열의 모든 노드에 누적된 이동량 적용
@@ -417,15 +441,16 @@ public class StageMapRenderer : MonoBehaviour
             {
                 var tempLine = tempLines[i];
                 var lineRenderer = tempLine.GetComponent<UILineRenderer>();
-                var originalPoints = lines[i].originalPoints;
+                // 현재 표시되는 라인의 조정된 포인트를 사용 (왼쪽 밀기 적용 후)
+                var currentPoints = lines[i].lineObj.GetComponent<UILineRenderer>().Points;
                 
-                // 원본 포인트 개수에서 현재 진행도만큼만 포인트 선택
-                int totalPoints = originalPoints.Length;
+                // 포인트 개수에서 현재 진행도만큼만 포인트 선택
+                int totalPoints = currentPoints.Length;
                 int visiblePointCount = Mathf.Max(2, Mathf.CeilToInt(totalPoints * t));
                 
                 // 채워질 부분의 포인트 배열 생성
                 Vector2[] filledPoints = new Vector2[visiblePointCount];
-                System.Array.Copy(originalPoints, filledPoints, visiblePointCount);
+                System.Array.Copy(currentPoints, filledPoints, visiblePointCount);
                 
                 lineRenderer.Points = filledPoints;
                 

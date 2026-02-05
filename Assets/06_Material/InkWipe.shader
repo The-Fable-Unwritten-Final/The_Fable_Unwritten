@@ -71,22 +71,15 @@ Shader "UI/InkWipe"
                 half4 base = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
 
                 // Wipe 계산
-                float wipeAlpha = 1.0;
+                float wipe = uv.x;
 
-                if (_Progress > 0.0001)
-                {
-                    float wipe = uv.x;
+                float noise = SAMPLE_TEXTURE2D(_NoiseTex, sampler_NoiseTex, uv).r;
+                wipe += (noise - 0.5) * _NoiseStrength;
+                wipe = saturate(wipe);
 
-                    float noise = SAMPLE_TEXTURE2D(_NoiseTex, sampler_NoiseTex, uv).r;
-                    wipe += (noise - 0.5) * _NoiseStrength;
-                    wipe = saturate(wipe);
-
-                    wipeAlpha = smoothstep(
-                        _Progress - _Softness,
-                        _Progress + _Softness,
-                        wipe
-                    );
-                }
+                // Progress와의 거리 기반 계산
+                float diff = wipe - _Progress;
+                float wipeAlpha = smoothstep(_Softness, -_Softness, diff);
 
                 half4 col = _Color;
 
