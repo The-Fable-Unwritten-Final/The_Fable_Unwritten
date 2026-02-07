@@ -12,7 +12,7 @@ public class NextSceneFade : MonoBehaviour
     void Awake()
     {
         fadeImage.material.SetFloat("_Progress", 0f);
-        fadeImage.material.color = new Color(0f, 0f, 0f, 0f);
+        fadeImage.material.color = new Color(182f/255f, 150f/255f, 114f/255f, 0f);
     }
 
     /// <summary>
@@ -99,7 +99,7 @@ public class NextSceneFade : MonoBehaviour
             }
             
             mat.SetFloat("_Progress", progress);
-            mat.color = new Color(0f, 0f, 0f, alpha);
+            mat.color = new Color(182f/255f, 150f/255f, 114f/255f, alpha);
 
             yield return null;
         }

@@ -70,8 +70,8 @@ Shader "UI/InkWipe"
                 // 잉크 이미지
                 half4 base = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
 
-                // Wipe 계산
-                float wipe = uv.x;
+                // Wipe 계산 (좌상단에서 우하단으로)
+                float wipe = (uv.x + (1.0 - uv.y)) * 0.5;
 
                 float noise = SAMPLE_TEXTURE2D(_NoiseTex, sampler_NoiseTex, uv).r;
                 wipe += (noise - 0.5) * _NoiseStrength;
