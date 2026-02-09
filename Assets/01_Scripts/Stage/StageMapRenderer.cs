@@ -23,8 +23,11 @@ public class StageMapRenderer : MonoBehaviour
     [SerializeField] Sprite startIcon;
     [SerializeField] Sprite normalIcon, eliteIcon, randomIcon, campIcon; // 노드아이콘 설정
     [SerializeField] private Sprite[] bossStageIcons;
+    [SerializeField] private float[] bossIconCenterOffset; // 각 보스 아이콘별 중앙 위치 (점선의 목표 지점 설정용)
+    [Header("Offsets")]
+    [SerializeField] private float BossNodeXPos = 1450f;
 
-    [Header("숨길 UI들")]
+    [Header("UI For Dialogue")]
     [SerializeField] private GameObject[] hideDuringDialogue;
 
     public GameObject[] GetUIToHideDuringDialogue() => hideDuringDialogue;
@@ -58,7 +61,7 @@ public class StageMapRenderer : MonoBehaviour
 
                 if(node.type == NodeType.Boss)
                 {
-                    rt.anchoredPosition = new Vector2(1450, rt.anchoredPosition.y); // 보스 노드 위치 조정
+                    rt.anchoredPosition = new Vector2(BossNodeXPos, rt.anchoredPosition.y); // 보스 노드 위치 조정
                 }
             }
         }
@@ -67,20 +70,22 @@ public class StageMapRenderer : MonoBehaviour
         foreach (var node in nodeUIMap.Keys)
         {
             int index = 0;
-                foreach (var next in node.nextNodes)
+            int bossIconIndex = ProgressDataManager.Instance.StageIndex - 2;
+            if (bossIconIndex < 0 || bossIconIndex >= bossStageIcons.Length) bossIconIndex = 0;
+
+            foreach (var next in node.nextNodes)
                 {
                     var fromRT = nodeUIMap[node];
                     var toRT = nodeUIMap[next];
 
-                    // 보스 노드의 경우 스프라이트 경계에서 선을 이어주도록 위치 임시 조정
+                    // 보스 노드의 도착 선 위치 세부 조정을 위해, 노드의 위치 임시 조정
                     Vector2 originalToPos = toRT.anchoredPosition;
-
                     if (next.type == NodeType.Boss)
                     {
-                        toRT.anchoredPosition += Vector2.left * (toRT.sizeDelta.x / 3f);
+                        toRT.anchoredPosition += Vector2.left * bossIconCenterOffset[bossIconIndex];                                  
                     }
 
-                    GameObject line = LineDrawer.DrawLine(node.curvePointList[index], fromRT, toRT, linesContainer, lineBasicPrefab, 50f, next.type == NodeType.Boss);
+                    GameObject line = LineDrawer.DrawLine(node.curvePointList[index], fromRT, toRT, linesContainer, lineBasicPrefab, 60f, next.type == NodeType.Boss);
                     var lineRenderer = line.GetComponent<UILineRenderer>();
                     var originalPoints = (Vector2[])lineRenderer.Points.Clone(); // 원본 포인트 저장
                     lineInfos.Add(new LineInfo { from = node, to = next, lineObj = line, originalPoints = originalPoints });
@@ -90,10 +95,20 @@ public class StageMapRenderer : MonoBehaviour
 
                     index++;
                 }
+                
         }
 
         // 보스 노드와 다른 노드들 간의 최소 거리 보장 (라인 그린 후 실행)
         AdjustNodeSpacingForBoss();
+        // 보스노드의 렌더링 조정 (점선이 상단에 표시되도록 >> 아트의 요청)
+        foreach (var kvp in nodeUIMap)
+        {
+            if (kvp.Key.type == NodeType.Boss)
+            {
+                kvp.Value.SetAsFirstSibling();
+                break;
+            }
+        }
     }
 
     /// <summary>

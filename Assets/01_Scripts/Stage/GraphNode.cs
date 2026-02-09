@@ -26,7 +26,7 @@ public class GraphNode
 
     public void SetRandomCurvePoints()
     {
-        const float maxBendAngle = 70f; // 최대 70도 (110도 곡선 제한)
+        const float maxBendAngle = 45f; // 곡선 제한
         int nextNodeCount = nextNodes.Count;
         curvePointList.Clear();
         for (int i = 0; i < nextNodeCount; i++)
