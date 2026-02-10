@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Idle Table_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 24bc623474618f34499d0fdc01b28bd3, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 96723283968
+    m_Localized: Arcanist
+    m_Metadata:
+      m_Items: []
+  - m_Id: 99860623360
+    m_Localized: 'One of the card in your hand glows purple.
+
+      Every time you
+      use glowing card, next random card begins to glow.
+
+      Until you use a non-glowing
+      card, all cards cost is set to 0.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102469480448
+    m_Localized: Alchemist
+    m_Metadata:
+      m_Items: []
+  - m_Id: 209516507136
+    m_Localized: 'Discard all cards in your hand.
+
+      Add a single one-time card
+      to your hand based on the total cost of the discarded cards.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 518959673344
+    m_Localized: Sacred Flame
+    m_Metadata:
+      m_Items: []
+  - m_Id: 524689092608
+    m_Localized: "Convert all allies\u2019 HP to the amount of HP they have lost.\nIf
+      HP is reduced, apply 'Regeneration'."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 526924656640
+    m_Localized: Judicator
+    m_Metadata:
+      m_Items: []
+  - m_Id: 529294438400
+    m_Localized: Add either a 'Mercy' or 'Judgment' card to your hand at random.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 784622694400
+    m_Localized: Lionheart
+    m_Metadata:
+      m_Items: []
+  - m_Id: 788426928128
+    m_Localized: 'Gain ''Ironblood'' for 2 turns,
+
+      and become ''Weakness Exposed''
+      until the end of the battle.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 880156356608
+    m_Localized: Shadow Guardian
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1036515815424
+    m_Localized: "All harmful effects inflicted by enemies are increased to 3\xD7
+      value (cannot exceed the maximum),.\nAny excess amount is applied to leon instead."
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

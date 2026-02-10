@@ -114,6 +114,7 @@ public static class LocaleDataManager
         // tableName 예시 //
         // 카드 툴팁 : "Card Tooltip"
         // UI 로컬 : "Locale Table"
+        // 이상 실현 텍스트 : "Idle Table"
         var table = LocalizationSettings.StringDatabase.GetTable(tableName);
         return table.GetEntry(key).LocalizedValue;
     }
