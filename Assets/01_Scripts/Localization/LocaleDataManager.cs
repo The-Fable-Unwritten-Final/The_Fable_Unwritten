@@ -108,6 +108,13 @@ public static class LocaleDataManager
         return GetLocalizedStringFromDict(_uiTable, key);
     }
 
+    // 유니티 내의 String Table을 통한 로케일 데이터 가져오기
+    public static string GetLocalizedStringTable(string key)
+    {
+        var table = LocalizationSettings.StringDatabase.GetTable("Card Tooltip");
+        return table.GetEntry(key).LocalizedValue;
+    }
+
     private static string GetLocalizedStringFromDict(Dictionary<string, string[]> dict, string key)
     {
         // 예외 처리

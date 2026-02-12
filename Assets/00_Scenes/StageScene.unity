@@ -610,6 +610,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFirstTurnCard: 0
   isStartOfTurnCard: 0
+  display: {fileID: 0}
+  tempSty: {fileID: 0}
+  isPlus: 0
 --- !u!4 &841574260
 Transform:
   m_ObjectHideFlags: 0
@@ -1050,7 +1053,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodePrefab: {fileID: 5334812594238698168, guid: 183d45b9008132243b6685d95f58a920,
     type: 3}
-  lineBasicPrefab: {fileID: 2508127751886912357, guid: f2ffb682cd62e1046a552e1123e59d96,
+  lineBasicPrefab: {fileID: 2508127751886912357, guid: c72a53ce03fbef844a9098e599ecc6c2,
     type: 3}
   lineBasicSprite: {fileID: 21300000, guid: 7b6c4f6156374f74186183e0c9865843, type: 3}
   lineCompleteSprite: {fileID: 21300000, guid: bfa3400e2583b42419668e0bdcbcfdc4, type: 3}

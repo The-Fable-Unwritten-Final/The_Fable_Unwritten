@@ -97,6 +97,9 @@ public class StageMapController : MonoBehaviour
     // 노드 클릭 시 스테이지 호출 및 저장
     private void OnNodeClicked(GraphNode clicked)
     {
+        // 이전 노드를 먼저 저장 (clicked를 추가하기 전에)
+        var previousNode = visitedNodes.LastOrDefault() ?? stageData.columns[0].First();
+        
         GameManager.Instance.analyticsLogger.LogNodeInfo(stageData.stageIndex, (int)clicked.type);
         visitedNodes.Add(clicked);
 
@@ -107,8 +110,7 @@ public class StageMapController : MonoBehaviour
         // 노드 클릭 시 저장
         pdm.IsStageScene = false;
         pdm.SaveProgress(true);
-        SoundManager.Instance.PlaySFX(SoundCategory.Button, 1
-            );
+        SoundManager.Instance.PlaySFX(SoundCategory.Button, 1);
 
         int stageIndex = pdm.StageIndex;
         int columnIndex = clicked.columnIndex;
@@ -137,7 +139,13 @@ public class StageMapController : MonoBehaviour
             }
         }
 
-        // 노드 타입별 씬 전환
+        // 라인 채우기 애니메이션 후 씬 전환
+        mapRenderer.AnimateLineFill(previousNode, clicked, () => ExecuteNodeAction(clicked));
+    }
+
+    // 노드 타입에 따라 씬 전환을 실행
+    private void ExecuteNodeAction(GraphNode clicked)
+    {
         switch (clicked.type)
         {
             case NodeType.NormalBattle:
@@ -154,17 +162,17 @@ public class StageMapController : MonoBehaviour
                 UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.RandomEventScene);
                 return;
         }
-   
+
         if (IsLastColumnNode(clicked))
         {
             // 마지막 열(보스노드)의 경우 스테이지 증가
-            pdm.StageIndex++;
+            ProgressDataManager.Instance.StageIndex++;
         }
         else
         {
             // 중간 노드의 경우 다음 스테이지 연결
             mapRenderer.UpdateInteractables(clicked, visitedNodes);
-        }     
+        }
     }
 
     // 클릭된 노드가 마지막 열에 있는지 확인

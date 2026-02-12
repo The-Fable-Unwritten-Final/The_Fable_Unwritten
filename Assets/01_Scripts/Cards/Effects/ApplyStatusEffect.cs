@@ -32,8 +32,7 @@ public class ApplyStatusEffect : CardEffectBase
 
             t.ApplyStatusEffect(effect);
 
-            //string statusText = GetStatusEffectText(statType, value); => 데미지 프린트 방식 변경으로 사용 안함
-            string statusText = value.ToString();
+            string statusText = GetStatusEffectText(statType, value);
             var Text = new DmgTextData
             {
                 Text = statusText,
@@ -122,6 +121,40 @@ public class ApplyStatusEffect : CardEffectBase
         if (!isInstant)
             baseText += $" ({duration}턴)";
         return baseText;
+    }
+
+    private string GetStatusEffectText(BuffStatType statType, float value)
+    {
+        bool useSignedFormat = statType is BuffStatType.Attack or BuffStatType.Defense;
+
+        string valueText = useSignedFormat? value 
+            switch
+            {
+                > 0 => $"+{value}",
+                < 0 => value.ToString(),
+                _ => ""
+            }
+            : value != 0
+                ? value.ToString()
+                : "";   
+
+        return statType switch
+        {
+            BuffStatType.Attack => valueText,
+            BuffStatType.Defense => valueText,
+            BuffStatType.Bless => valueText,
+            BuffStatType.Grace => valueText,
+            BuffStatType.Purify => valueText,
+            BuffStatType.Burn => valueText,
+            BuffStatType.Freeze => string.IsNullOrEmpty(valueText) ? "" : $"{valueText}%",
+            BuffStatType.Activate => valueText,
+            BuffStatType.Bleed => valueText,
+            BuffStatType.Stun => valueText,
+            BuffStatType.GuardRedirect => string.IsNullOrEmpty(valueText) ? "" : $"{valueText}%",
+            BuffStatType.CantAttackInStance => "",
+            BuffStatType.Blind => "",
+            _ => ""
+        };
     }
 }
 

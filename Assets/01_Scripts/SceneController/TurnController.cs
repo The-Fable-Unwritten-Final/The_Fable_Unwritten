@@ -142,7 +142,8 @@ public class TurnController : MonoBehaviour
         battleFlow.StartBattle();
         StyleManager.Instance.isFirstTurnCard = true; // 전투 시작 후 첫 턴 플래그 설정
         // 전투 시작 직후 관련 문체 효과 호출 //
-        StyleManager.Instance.ApplyRandomDebuffToSingleAlly(battleFlow.GetRandomAliveParty()); // 살아있는 랜덤한 팀원 한명에게 랜덤 디버프 부여 문체
+        var randomAlly = battleFlow.GetRandomAliveParty();
+        if (randomAlly != null) StyleManager.Instance.ApplyRandomDebuffToSingleAlly(randomAlly); // 살아있는 랜덤한 팀원 한명에게 랜덤 디버프 부여 문체
         // 문체 효과 호출 종료 //
 
         SetTurnState(TurnState.StartPlayerTurn); // 게임 시작 후 플레이어 턴으로
