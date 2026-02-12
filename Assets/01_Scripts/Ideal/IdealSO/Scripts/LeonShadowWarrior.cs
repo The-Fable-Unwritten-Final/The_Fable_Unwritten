@@ -33,7 +33,7 @@ public class LeonShadowWarrior : IdealSkillBase
             if (e is not PlayerController epc || !e.IsAlive()) continue; // 적 클래스 타입에 맞게 조정
             foreach (var eff in epc.instantEffects)
             {
-                if (!Debuff.IsDebuff(eff.statType, eff.value)) continue;
+                //if (!Debuff.IsDebuff(eff.statType, eff.value)) continue;
                 float doubled = eff.value * 3f;
                 if (doubled > 50) overflow += (doubled - 50);
                 eff.value = Mathf.Min(50, doubled);

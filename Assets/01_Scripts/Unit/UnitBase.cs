@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
 
 /// <summary>
@@ -43,6 +42,12 @@ public abstract class UnitBase : MonoBehaviour, IStatusReceiver
     {
         get => hasBlockInternal;
         set => hasBlockInternal = value;
+    }
+
+    public virtual bool hasResist
+    {
+        get => hasResist;
+        set => hasResist = value;
     }
 
     public bool IsTargetable

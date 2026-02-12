@@ -409,7 +409,7 @@ public class BattleFlowController : MonoBehaviour
         ClearEnemyParty();
 
         StopAllCoroutines();
-        GameManager.Instance.turnController.ToGameEnd();
+        GameManager.Instance.turnController.ToGameEnd(false);
         BattleLogManager.Instance.ResetGameLog();
     }
 
@@ -427,7 +427,7 @@ public class BattleFlowController : MonoBehaviour
         ClearEnemyParty();
 
         StopAllCoroutines();
-        GameManager.Instance.turnController.ToGameEnd();
+        GameManager.Instance.turnController.ToGameEnd(true);
     }
 
     private void CollectRewards()
