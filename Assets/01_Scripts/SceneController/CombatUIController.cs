@@ -95,4 +95,8 @@ public class CombatUIController : MonoBehaviour
     {
         UIManager.Instance.ShowPopupByName("PopupUI_Setting");
     }
+    public void MoveCardsWhenExitSceneTransition()
+    {
+        cardDisplay.MoveCardsWhenExitScene();
+    }
 }

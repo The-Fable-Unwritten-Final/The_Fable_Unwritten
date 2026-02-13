@@ -27,6 +27,7 @@ public class NextSceneFade : MonoBehaviour
 
     IEnumerator Transition(string nextScene)
     {
+        IfCombatScene();
         // 페이드 아웃
         yield return StartCoroutine(InkCover(0f, 1f));
 
@@ -72,7 +73,7 @@ public class NextSceneFade : MonoBehaviour
 
         fadeImage.color = new Color(c.r, c.g, c.b, to);
     }
-    
+
     IEnumerator InkCover(float from, float to, float duration = 1.5f)
     {
         float elapsed = 0f;
@@ -84,7 +85,7 @@ public class NextSceneFade : MonoBehaviour
             float t = Mathf.Clamp01(elapsed / duration);
             t = t * t * (3f - 2f * t);
             float progress = Mathf.Lerp(from, to, t);
-            
+
             // Progress와 Alpha를 조건부로 조정
             float alpha;
             if (from < to) // 페이드 아웃: 0 -> 1
@@ -97,11 +98,20 @@ public class NextSceneFade : MonoBehaviour
                 // progress 1~0.5: alpha 1, progress 0.5~0: alpha 1~0
                 alpha = progress >= 0.1f ? 1f : progress / 0.1f;
             }
-            
+
             mat.SetFloat("_Progress", progress);
-            mat.color = new Color(182f/255f, 150f/255f, 114f/255f, alpha);
+            mat.color = new Color(182f / 255f, 150f / 255f, 114f / 255f, alpha);
 
             yield return null;
+        }
+    }
+    
+    void IfCombatScene()
+    {
+        if (GameManager.Instance.combatUIController != null)
+        {
+            // 전투 씬일 경우 카드를 아래로 내리는 메서드 호출
+            GameManager.Instance.combatUIController.MoveCardsWhenExitSceneTransition();
         }
     }
 }

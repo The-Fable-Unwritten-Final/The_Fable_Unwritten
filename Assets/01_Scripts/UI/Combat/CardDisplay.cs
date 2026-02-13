@@ -27,6 +27,12 @@ public class CardDisplay : MonoBehaviour
     [SerializeField] float cardSpacing = 120f; // 카드 간의 x 폭.
     [SerializeField] float cardAngle = 1.2f; // 카드 각도 (카드가 겹치지 않도록 하기 위함.)
 
+    [Header("Scene Transition Hand Movement")]
+    [SerializeField] Vector2 targetPo = new Vector2(0f, 50f); // 카드가 이동할 목표 위치
+    [SerializeField] Vector2 waitPos = new Vector2(0f, -400f); // 카드가 대기할 위치(씬 전환 전 or 씬을 떠날때 이동할 위치)
+    [SerializeField] float moveDuration = 1f; // 카드 이동 시간
+    Sequence seq;
+
     [Header("Drag with Arrow")]
     [SerializeField] private GraphicRaycaster uiRaycaster; // Canvas에 있는 GraphicRaycaster
     [SerializeField] private EventSystem eventSystem;
@@ -69,7 +75,7 @@ public class CardDisplay : MonoBehaviour
     }
     private void Start()
     {
-        // subscription moved to OnEnable/OnDisable to ensure proper unsubscription and avoid leaks
+        MoveCardsWhenEnterScene();
     }
 
     private void OnEnable()
@@ -602,14 +608,14 @@ public class CardDisplay : MonoBehaviour
         while (true)
         {
             // 현재 드래그 중일 경우 continue;
-            if(currentCard != null)
+            if (currentCard != null)
             {
                 if (currentCard.GetCardState() == CardState.OnDrag)
                 {
                     yield return new WaitForEndOfFrame();
                     continue;
                 }
-            }           
+            }
 
             // 간단한 상호작용 시의 경우, 최초 1회만 상태 업데이트
             if (Input.GetMouseButtonDown(0) || cardsInHand.Any(x => x.isPointerOver))
@@ -623,11 +629,11 @@ public class CardDisplay : MonoBehaviour
                 SetCardCanDrag();
                 //CardArrange();
                 yield return new WaitForEndOfFrame();
-                for(int i = 0; i < cardsInHand.Count; i++)
+                for (int i = 0; i < cardsInHand.Count; i++)
                 {
                     RectTransform cardRect = cardsInHand[i].GetComponent<RectTransform>();
 
-                    if(DOTween.IsTweening(cardRect)) continue; // 현재 카드가 이동 중이라면 아래의 재정렬 무시.
+                    if (DOTween.IsTweening(cardRect)) continue; // 현재 카드가 이동 중이라면 아래의 재정렬 무시.
 
                     if (!cardsInHand[i].isPointerOver && cardRect.position != (Vector3)cardsInHand[i].originalPos) // 마우스를 올린 카드가 아님 + 잘못된 위치에 있을경우
                     {
@@ -638,5 +644,48 @@ public class CardDisplay : MonoBehaviour
             }
             yield return new WaitForEndOfFrame();
         }
+    }
+
+    /////// 화면 전환 시 카드 이동 ///////
+
+    /// /// 씬에 진입 시 카드들을(this) 목표 위치로 dotween 이동
+    void MoveCardsWhenEnterScene()
+    {
+        RectTransform rt = this.GetComponent<RectTransform>();
+
+        if (seq != null)
+        {
+            seq.Kill();
+            seq = null;
+        }
+
+        rt.anchoredPosition = waitPos;
+
+        // 0.5초 대기 후 이동
+        seq = DOTween.Sequence();
+        seq.AppendInterval(0.5f);
+
+        seq.Append(
+            rt.DOAnchorPos(targetPo, moveDuration).SetEase(Ease.InOutCubic)
+        );
+    }
+    /// <summary>
+    /// 씬을 떠날 때 카드들을(this) 대기 위치로 dotween 이동
+    /// </summary>
+    public void MoveCardsWhenExitScene()
+    {
+        RectTransform rt = this.GetComponent<RectTransform>();
+
+        if (seq != null)
+        {
+            seq.Kill();
+            seq = null;
+        }
+
+        seq = DOTween.Sequence();
+
+        seq.Append(
+            rt.DOAnchorPos(waitPos, moveDuration).SetEase(Ease.InCubic)
+        );
     }
 }
