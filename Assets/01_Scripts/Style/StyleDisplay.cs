@@ -5,21 +5,23 @@ using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
 
-public class StyleDisplay : BasePopupUI
+public class StyleDisplay : MonoBehaviour // 기존 팝업 방식(basepopup 상속)에서 노드 선택 씬과 통합 시키며 monobehaviour로 변경.
 {
     // 문체의 UI를 담당하는 스크립트 (ui 적인 조작을 메인으로 사용 => 노드 선택 씬에서만 존재)
 
     // 상단 잉크 표시
     [Header("Upper UI")]
-    [SerializeField] Image[] inkGauge;
+    [SerializeField] Image inkHolder; // 잉크 병 (현재 잉크 보유량을 Fill amount 를 통해 시각적으로 표현)
     public TextMeshProUGUI inkText;
 
     // 중단 현재 문체 부분
     [Header("Main UI")]
+    [SerializeField] Image curStyleIcon; // 현재 문체를 표시하는 UI의 아이콘
+    [SerializeField] Image curStyleUI; // 현재 문체를 표시하는 UI의 테두리
     [SerializeField] TextMeshProUGUI curName;
     [SerializeField] TextMeshProUGUI curFlav;
-    [SerializeField] TextMeshProUGUI curEff1;
-    [SerializeField] TextMeshProUGUI curEff2;
+    //[SerializeField] TextMeshProUGUI curEff1;
+    //[SerializeField] TextMeshProUGUI curEff2;
     [SerializeField] TextMeshProUGUI upgrEff1;
     [SerializeField] GameObject ClickToUp1;
     [SerializeField] GameObject FullToUp1;
@@ -43,13 +45,14 @@ public class StyleDisplay : BasePopupUI
     public Sprite FullUpgradeButtomImage;   // 최대 강화 상태, 문체 효과 강화 버튼
     public RectTransform buttonContainer;
     public GameObject buttonPrefab;
-    public int buttonsPerPage = 4;
-    public float spacingBetweenButton = 4;
+    public TextMeshProUGUI pageText; // 페이지 표시 텍스트 (예: "1 / 3")
+    public int buttonsPerPage = 5;
+    public float spacingBetweenButton = 15;
 
     private List<StyleButton> allButtons = new List<StyleButton>();
     private int currentPage = 0;
     private int totalPages = 0;
-    private float buttonWidth;
+    private float buttonHeight;
     void Start()
     {
         // 일반 텍스트의 로컬라이제이션 데이터를 받아오는 경우 GetValueFullTextEff 가 아니라 LocaleDataManager.GetLocalizedStyleEffect("key") 형식으로 가져올 것
@@ -68,8 +71,6 @@ public class StyleDisplay : BasePopupUI
         StyleManager.Instance.OnInkChange -= InkChange;
         StyleManager.Instance.display = null;     
     }
-
-
 
     /// <summary>
     /// '문체 효과'가 고정 효과(등급 상승x)가 아닐 경우, 받아온 string 값의 ## << 부분에 value값을 변환해서 대입 후 출력
@@ -223,17 +224,17 @@ public class StyleDisplay : BasePopupUI
         }
 
         // 버튼 크기 가져오기
-        LayoutElement le = buttonPrefab.GetComponent<LayoutElement>();
-        buttonWidth = le != null ? le.preferredWidth : 23f;
+        buttonHeight = buttonPrefab.GetComponent<RectTransform>().rect.height; 
 
         // Spacing 가져오기
-        spacingBetweenButton = buttonContainer.GetComponent<HorizontalLayoutGroup>().spacing;
+        spacingBetweenButton = buttonContainer.GetComponent<VerticalLayoutGroup>().spacing;
 
         totalPages = Mathf.CeilToInt((float)(totalCount - 1) / buttonsPerPage);
         currentPage = 0;
 
         // 버튼들에 문체 정보 입력
         var defs = DataManager.Instance.styleDefs;
+        int buttonIndex = 0;
 
         for (int i = 0; i < totalCount; i++)
         {
@@ -245,15 +246,14 @@ public class StyleDisplay : BasePopupUI
                 continue;
             }
 
-            for (int j = 0; j < allButtons.Count; j++)
+            if (buttonIndex < allButtons.Count)
             {
-                if (allButtons[j].definition == null)
-                {
-                    StyleDefinition sty = defs[i];
-                    allButtons[j].SetDefinition(sty, GetValueFullTextEff(sty, sty.plusEffectDescription, true), GetValueFullTextEff(sty, sty.minusEffectEffectDesc, false)); // 문체 설정 및 텍스트 입력
-                    allButtons[j].GetComponent<StyleButtonHoverScale>().SetStyle(sty);
-                    break;
-                }
+                StyleDefinition sty = defs[i];
+                allButtons[buttonIndex].SetDefinition(sty, GetValueFullTextEff(sty, sty.plusEffectDescription, true), GetValueFullTextEff(sty, sty.minusEffectEffectDesc, false)); // 문체 설정 및 텍스트 입력
+                allButtons[buttonIndex].GetComponent<StyleButtonHoverScale>().SetStyle(sty);
+                allButtons[buttonIndex].GetComponent<Image>().sprite = sty.buttonSprite;
+                allButtons[buttonIndex].styleIcon.sprite = sty.buttonIconSprite;
+                buttonIndex++;
             }
         }
         // 문체가 들어있지 않은 버튼들은 잠김 상태 적용 (상호작용 off + 이미지 변경)
@@ -264,6 +264,16 @@ public class StyleDisplay : BasePopupUI
                 buttons.GetComponent<Button>().interactable = false;
                 buttons.GetComponent<Image>().sprite = lockedButtonImage;
                 buttons.TurnOffAll();
+            }
+        }
+        // 현재 문체를 표시하는 UI 업데이트
+        if (StyleManager.Instance.CurrentState != null)
+        {
+            var currentDef = DataManager.Instance.styleDefs.Find(def => def.styleId == StyleManager.Instance.CurrentState.styleId);
+            if (currentDef != null)
+            {
+                curStyleIcon.sprite = currentDef.buttonIconSprite; // 현재 문체 아이콘 업데이트
+                curStyleUI.sprite = currentDef.currentStyleSprite; // 현재 문체 UI 테두리 업데이트
             }
         }
         UpdatePage();
@@ -275,6 +285,7 @@ public class StyleDisplay : BasePopupUI
             allButtons[i].definition = null;
 
         var defs = DataManager.Instance.styleDefs;
+        int buttonIndex = 0;
 
         for (int i = 0; i < totalCount; i++)
         {
@@ -286,15 +297,14 @@ public class StyleDisplay : BasePopupUI
                 continue;
             }
 
-            for (int j = 0; j < allButtons.Count; j++)
+            if (buttonIndex < allButtons.Count)
             {
-                if (allButtons[j].definition == null)
-                {
-                    StyleDefinition sty = defs[i];
-                    allButtons[j].SetDefinition(sty, GetValueFullTextEff(sty, sty.plusEffectDescription, true), GetValueFullTextEff(sty, sty.minusEffectEffectDesc, false)); // 문체 설정 및 텍스트 입력
-                    allButtons[j].GetComponent<StyleButtonHoverScale>().SetStyle(sty);
-                    break;
-                }
+                StyleDefinition sty = defs[i];
+                allButtons[buttonIndex].SetDefinition(sty, GetValueFullTextEff(sty, sty.plusEffectDescription, true), GetValueFullTextEff(sty, sty.minusEffectEffectDesc, false)); // 문체 설정 및 텍스트 입력
+                allButtons[buttonIndex].GetComponent<StyleButtonHoverScale>().SetStyle(sty);
+                allButtons[buttonIndex].GetComponent<Image>().sprite = sty.buttonSprite;
+                allButtons[buttonIndex].styleIcon.sprite = sty.buttonIconSprite;
+                allButtons[buttonIndex].styleIcon.gameObject.SetActive(true); // 아이콘 활성화
             }
         }
         // 문체가 들어있지 않은 버튼들은 잠김 상태 적용 (상호작용 off + 이미지 변경)
@@ -304,9 +314,22 @@ public class StyleDisplay : BasePopupUI
             {
                 buttons.GetComponent<Button>().interactable = false;
                 buttons.GetComponent<Image>().sprite = lockedButtonImage;
+                buttons.styleIcon.gameObject.SetActive(false); // 아이콘 비활성화
                 buttons.TurnOffAll();
             }
         }
+
+        // 현재 문체를 표시하는 UI 업데이트
+        if (StyleManager.Instance.CurrentState != null)
+        {
+            var currentDef = DataManager.Instance.styleDefs.Find(def => def.styleId == StyleManager.Instance.CurrentState.styleId);
+            if (currentDef != null)
+            {
+                curStyleIcon.sprite = currentDef.buttonIconSprite; // 현재 문체 아이콘 업데이트
+                curStyleUI.sprite = currentDef.currentStyleSprite; // 현재 문체 UI 테두리 업데이트
+            }
+        }
+
         UpdatePage();
     }
     public void OnUpgradeClick(bool isPlus)
@@ -333,30 +356,34 @@ public class StyleDisplay : BasePopupUI
     }
     private void UpdatePage()
     {
-        float pageWidth = 4 * (buttonWidth + spacingBetweenButton);
-        float targetX = -currentPage * pageWidth;
+        // 정확한 페이지 높이 계산: 버튼 * 높이 + 사이 간격 * 버튼 개수
+        float pageHeight = buttonsPerPage * buttonHeight + buttonsPerPage * spacingBetweenButton;
+        float targetY = currentPage * pageHeight;
 
-        buttonContainer.DOAnchorPosX(targetX, 0.25f).SetEase(Ease.OutCubic);
+        // 이전 애니메이션을 중단하고 새 애니메이션 시작
+        buttonContainer.DOKill();
+        buttonContainer.DOAnchorPosY(targetY, 0.6f).SetEase(Ease.OutCubic);
 
         // 페이지 끝 여부에 따라 버튼 활성/비활성 처리
         prevButton.interactable = currentPage > 0;
         nextButton.interactable = currentPage < totalPages - 1;
+
+        // 현재 페이지 표시 업데이트
+        pageText.text = $"{currentPage + 1}/{totalPages}";
     }
     public void InkChange(int amount)
     {
+        // inkGauge의 fillAmount를 현재 잉크 양에 맞게 부드럽게 변화
+        float targetFill = Mathf.Clamp01((float)amount / 10);
+        inkHolder.DOFillAmount(targetFill, 0.5f).SetEase(Ease.OutCubic);
         inkText.text = $"{amount}/{10}";
-        foreach (var gauge in inkGauge)
-            gauge.gameObject.SetActive(false);
-
-        for (int i = 0; i < amount; i++)
-            inkGauge[i].gameObject.SetActive(true);
     } 
     public void UpdateCurrentStyle(StyleDefinition sty) // 현재 문체 표시 부분의(중단 UI 전부) 정보 업데이트
     {
         curName.text = LocaleDataManager.GetLocalizedStyleEffect(sty.displayName);
         curFlav.text = LocaleDataManager.GetLocalizedStyleEffect(sty.description);
 
-        curEff1.text = GetValueFullTextEff(sty, sty.plusEffectDescription, true);
+        //curEff1.text = GetValueFullTextEff(sty, sty.plusEffectDescription, true);
         upgrEff1.text = GetValueFullTextUpgraded(sty, sty.plusEffectDescription, true);
         Eff1Ink.text = sty.plusTiers[sty.currentPlus - 1].cost.ToString();
         if (sty.currentPlus == sty.maxPlusLevel)
@@ -379,7 +406,7 @@ public class StyleDisplay : BasePopupUI
         }
 
 
-        curEff2.text = GetValueFullTextEff(sty, sty.minusEffectEffectDesc, false);
+        //curEff2.text = GetValueFullTextEff(sty, sty.minusEffectEffectDesc, false);
         upgrEff2.text = GetValueFullTextUpgraded(sty, sty.minusEffectEffectDesc, false);
         Eff2Ink.text = sty.minusTiers[sty.currentMinus - 1].cost.ToString();
         if (sty.currentMinus == sty.maxMinusLevel)

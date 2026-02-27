@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StyleButton : MonoBehaviour
 {
     public StyleDefinition definition;
+    public Image styleIcon; // 문체 아이콘
     [SerializeField] TextMeshProUGUI _name;
     [SerializeField] TextMeshProUGUI _flav;
     [SerializeField] TextMeshProUGUI _eff1;

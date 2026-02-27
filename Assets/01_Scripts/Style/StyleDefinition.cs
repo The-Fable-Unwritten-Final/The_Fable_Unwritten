@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 [CreateAssetMenu(menuName = "Styles/StyleDefinition")]
 public class StyleDefinition : ScriptableObject
@@ -19,6 +20,9 @@ public class StyleDefinition : ScriptableObject
     public string description;              // 스타일 설명 (플레이버 텍스트)
     public string plusEffectDescription;    // + 효과 설명 텍스트 (로컬라이제이션을 적용 시 사용하는 key 값 설명 => ~~~ n 만큼 증가 같은 포멧 대응 가능하도록, 로컬라이제이션 쪽 별도 처리 필요)
     public string minusEffectEffectDesc;    // - 효과 설명 
+    public Sprite buttonSprite;             // 문체 선택 버튼에 사용되는 이미지 (UI에서 문체 선택 버튼에 표시될 이미지)
+    public Sprite buttonIconSprite;         // 문체 선택 버튼에 사용되는 아이콘 이미지
+    public Sprite currentStyleSprite;       // 현재 문체를 보여주는 UI의 이미지
     [Tooltip("문체 등급 => 1: 상급, 2: 중급, 3: 하급")]
     public StyleRank rank = StyleRank.High; // 등급 (1 == 상급, 2 == 중급, 3 == 하급 문체)
     public int maxPlusLevel = 3;             // 최대 +강화 단계 (고정 1단계 or 3단계 까지)
