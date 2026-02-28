@@ -253,6 +253,7 @@ public class StyleDisplay : MonoBehaviour // 기존 팝업 방식(basepopup 상�
                 allButtons[buttonIndex].GetComponent<StyleButtonHoverScale>().SetStyle(sty);
                 allButtons[buttonIndex].GetComponent<Image>().sprite = sty.buttonSprite;
                 allButtons[buttonIndex].styleIcon.sprite = sty.buttonIconSprite;
+                allButtons[buttonIndex].styleIcon.gameObject.SetActive(true); // 아이콘 활성화
                 buttonIndex++;
             }
         }
@@ -263,6 +264,7 @@ public class StyleDisplay : MonoBehaviour // 기존 팝업 방식(basepopup 상�
             {
                 buttons.GetComponent<Button>().interactable = false;
                 buttons.GetComponent<Image>().sprite = lockedButtonImage;
+                buttons.styleIcon.gameObject.SetActive(false); // 아이콘 비활성화
                 buttons.TurnOffAll();
             }
         }
@@ -305,6 +307,7 @@ public class StyleDisplay : MonoBehaviour // 기존 팝업 방식(basepopup 상�
                 allButtons[buttonIndex].GetComponent<Image>().sprite = sty.buttonSprite;
                 allButtons[buttonIndex].styleIcon.sprite = sty.buttonIconSprite;
                 allButtons[buttonIndex].styleIcon.gameObject.SetActive(true); // 아이콘 활성화
+                buttonIndex++;
             }
         }
         // 문체가 들어있지 않은 버튼들은 잠김 상태 적용 (상호작용 off + 이미지 변경)
