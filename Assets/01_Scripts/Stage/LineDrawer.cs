@@ -9,7 +9,7 @@ public static class LineDrawer
     /// <summary>
     /// 두 노드 위치 확인 후 연결해 주는 점선 생성
     /// </summary>
-    public static GameObject DrawLine(CurvePoint curvePoint, RectTransform from, RectTransform to, Transform parent, GameObject linePrefab, float offsetFromNode = 60f, bool isBossDestination = false)
+    public static GameObject DrawLine(CurvePoint curvePoint, RectTransform from, RectTransform to, Transform parent, GameObject linePrefab, float offsetFromNode = 55f, bool isBossDestination = false)
     {
         GameObject lineObj = GameObject.Instantiate(linePrefab, parent);
         UILineRenderer lineRenderer = lineObj.GetComponent<UILineRenderer>();
@@ -31,31 +31,44 @@ public static class LineDrawer
         direction = end - start;
         distance = direction.magnitude;
 
-        // 점 간격 설정 (픽셀 단위) - 필요시 조정 가능~
-        float dotSpacing = 9f;
+        // 점 간격 설정 (픽셀 단위) - 거리에 따라 동적으로 조정하여 장거리에서 점 개수 제한
+        float dotSpacing = 9f + (distance / 100f);
         int dotCount = Mathf.Max(4, Mathf.FloorToInt(distance / dotSpacing)); // 최소 4개의 점
+
+        // 일정 길이 이하인 경우만 최대 개수 제한 (거리 55 미만이면 최대 4개, 이때 55는 실제 원하는 값 - 2*offsetFromNode의 값) // 짧은 거리에서 많은 점이 생기는 경우 방지
+        if (distance < 55f)
+        {
+            dotCount = Mathf.Min(dotCount, 4);
+        }
+
+        // 최대 점 개수 제한 (18개까지만)
+        dotCount = Mathf.Min(dotCount, 18);
 
         // LineList 모드에서는 짝수 개의 점이 필요 (시작과 끝의 시각적 일치를 위해)
         if (dotCount % 2 != 0) dotCount++;
         
         // 점들의 위치 배열 생성
         Vector2[] points = new Vector2[dotCount];
-        // 베지어 곡선 (0~2 개의 제어점 사용 곡선 버전)
-        for (int i = 0; i < dotCount; i++)
+        
+        // 먼저 충분한 개수의 샘플 점을 생성
+        int sampleCount = dotCount * 4; // 더 많은 샘플 생성
+        Vector2[] samplePoints = new Vector2[sampleCount];
+
+        for (int i = 0; i < sampleCount; i++)
         {
-            float t = i / (dotCount - 1f);
+            float t = i / (sampleCount - 1f);
 
             // 0개 >> 직선
             if (curvePoint == null || curvePoint.position == null || curvePoint.position.Length == 0)
             {
-                points[i] = Vector2.Lerp(start, end, t);
+                samplePoints[i] = Vector2.Lerp(start, end, t);
             }
             // 1개 >> 2차 베지어
             else if (curvePoint.position.Length == 1)
             {
                 Vector2 p1 = curvePoint.position[0];
                 float u = 1f - t;
-                points[i] =
+                samplePoints[i] =
                     u * u * start +
                     2f * u * t * p1 +
                     t * t * end;
@@ -67,11 +80,44 @@ public static class LineDrawer
                 Vector2 p2 = curvePoint.position[1];
                 float u = 1f - t;
 
-                points[i] =
+                samplePoints[i] =
                     u * u * u * start +
                     3f * u * u * t * p1 +
                     3f * u * t * t * p2 +
                     t * t * t * end;
+            }
+        }
+
+        // 누적 거리 계산 (arc-length)
+        float[] cumulativeDistance = new float[sampleCount];
+        cumulativeDistance[0] = 0;
+        for (int i = 1; i < sampleCount; i++)
+        {
+            cumulativeDistance[i] = cumulativeDistance[i - 1] + Vector2.Distance(samplePoints[i], samplePoints[i - 1]);
+        }
+
+        float totalLength = cumulativeDistance[sampleCount - 1];
+
+        // 균등 거리로 재샘플링
+        for (int i = 0; i < dotCount; i++)
+        {
+            float targetDistance = (i / (dotCount - 1f)) * totalLength;
+            
+            // 이분 탐색으로 해당 거리를 가진 인덱스 찾기
+            int idx = System.Array.BinarySearch(cumulativeDistance, targetDistance);
+            if (idx < 0) idx = ~idx;
+            
+            if (idx >= sampleCount) idx = sampleCount - 1;
+            
+            // 선형 보간
+            if (idx > 0 && idx < sampleCount && cumulativeDistance[idx] != cumulativeDistance[idx - 1])
+            {
+                float t = (targetDistance - cumulativeDistance[idx - 1]) / (cumulativeDistance[idx] - cumulativeDistance[idx - 1]);
+                points[i] = Vector2.Lerp(samplePoints[idx - 1], samplePoints[idx], t);
+            }
+            else
+            {
+                points[i] = samplePoints[idx];
             }
         }
         /* 베지어 곡선 미사용 버전(직선)
@@ -81,6 +127,12 @@ public static class LineDrawer
             points[i] = Vector2.Lerp(start, end, t);
         }*/
         
+
+        // 3차 베지어 곡선(2개 제어점)인 경우만 마지막 점 하나 제거 (끝부분 왜곡 방지)
+        if (curvePoint != null && curvePoint.position != null && curvePoint.position.Length == 2)
+        {
+            System.Array.Resize(ref points, points.Length - 1);
+        }
 
         // UILineRenderer 설정
         lineRenderer.Points = points;

@@ -66,6 +66,9 @@ public class StageMapRenderer : MonoBehaviour
             }
         }
 
+        // 보스 노드의 위치 조정
+        AdjustNodeSpacingForBoss();
+
         //모든 노드에 대해 연결 된 노드들 정보 확인 후 라인 그려주기
         foreach (var node in nodeUIMap.Keys)
         {
@@ -85,7 +88,7 @@ public class StageMapRenderer : MonoBehaviour
                         toRT.anchoredPosition += Vector2.left * bossIconCenterOffset[bossIconIndex];                                  
                     }
 
-                    GameObject line = LineDrawer.DrawLine(node.curvePointList[index], fromRT, toRT, linesContainer, lineBasicPrefab, 60f, next.type == NodeType.Boss);
+                    GameObject line = LineDrawer.DrawLine(node.curvePointList[index], fromRT, toRT, linesContainer, lineBasicPrefab, 55f, next.type == NodeType.Boss);
                     var lineRenderer = line.GetComponent<UILineRenderer>();
                     var originalPoints = (Vector2[])lineRenderer.Points.Clone(); // 원본 포인트 저장
                     lineInfos.Add(new LineInfo { from = node, to = next, lineObj = line, originalPoints = originalPoints });
@@ -98,8 +101,6 @@ public class StageMapRenderer : MonoBehaviour
                 
         }
 
-        // 보스 노드와 다른 노드들 간의 최소 거리 보장 (라인 그린 후 실행)
-        AdjustNodeSpacingForBoss();
         // 보스노드의 렌더링 조정 (점선이 상단에 표시되도록 >> 아트의 요청)
         foreach (var kvp in nodeUIMap)
         {
