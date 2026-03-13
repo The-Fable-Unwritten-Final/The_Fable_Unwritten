@@ -109,16 +109,36 @@ public static class LineDrawer
             
             if (idx >= sampleCount) idx = sampleCount - 1;
             
+            Vector2 basePoint;
             // 선형 보간
             if (idx > 0 && idx < sampleCount && cumulativeDistance[idx] != cumulativeDistance[idx - 1])
             {
                 float t = (targetDistance - cumulativeDistance[idx - 1]) / (cumulativeDistance[idx] - cumulativeDistance[idx - 1]);
-                points[i] = Vector2.Lerp(samplePoints[idx - 1], samplePoints[idx], t);
+                basePoint = Vector2.Lerp(samplePoints[idx - 1], samplePoints[idx], t);
             }
             else
             {
-                points[i] = samplePoints[idx];
+                basePoint = samplePoints[idx];
             }
+            
+            // 곡선에 수직인 방향으로 작은 랜덤 오프셋 추가 (손으로 그린 듯한 자연스러움)
+            Vector2 tangent;
+            if (idx > 0 && idx < sampleCount - 1)
+            {
+                tangent = (samplePoints[idx + 1] - samplePoints[idx - 1]).normalized;
+            }
+            else if (idx > 0)
+            {
+                tangent = (samplePoints[idx] - samplePoints[idx - 1]).normalized;
+            }
+            else
+            {
+                tangent = (samplePoints[1] - samplePoints[0]).normalized;
+            }
+            
+            Vector2 perpendicular = new Vector2(-tangent.y, tangent.x);
+            float randomOffset = Random.Range(-1.5f, 1.5f); // 수정: -2~2 범위로 조정 가능
+            points[i] = basePoint + perpendicular * randomOffset;
         }
         /* 베지어 곡선 미사용 버전(직선)
         for (int i = 0; i < dotCount; i++)
@@ -127,11 +147,21 @@ public static class LineDrawer
             points[i] = Vector2.Lerp(start, end, t);
         }*/
         
-
-        // 3차 베지어 곡선(2개 제어점)인 경우만 마지막 점 하나 제거 (끝부분 왜곡 방지)
-        if (curvePoint != null && curvePoint.position != null && curvePoint.position.Length == 2)
+        // 곡선 왜곡 방지: X 역방향이 충분히 클 때만 포인트 제거 (낚시바늘 모양 왜곡 방지)
+        int validPointCount = dotCount;
+        for (int i = 1; i < dotCount; i++)
         {
-            System.Array.Resize(ref points, points.Length - 1);
+            Vector2 dir = points[i] - points[i - 1];
+            if (dir.x < 0 && Mathf.Abs(dir.x) > Mathf.Abs(dir.y) * 0.5f)
+            {
+                validPointCount = i;
+                break;
+            }
+        }
+
+        if (validPointCount < dotCount)
+        {
+            System.Array.Resize(ref points, validPointCount);
         }
 
         // UILineRenderer 설정

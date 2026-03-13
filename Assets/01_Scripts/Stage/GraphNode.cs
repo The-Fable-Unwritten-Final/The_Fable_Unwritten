@@ -57,8 +57,8 @@ public class GraphNode
                 float t = (j + 1f) / (controlPointCount + 1f);
                 Vector2 basePos = Vector2.Lerp(this.position, nextNodes[i].position, t);
                 
-                // 곡선의 중앙이 가장 많이 구부러지도록 (포물선 형태) - 모든 제어점에 동일한 구부러짐 적용
-                float bendAmount = Mathf.Sin(Mathf.PI * 0.5f) * lineDistance * 0.30f;
+                // 곡선의 중앙이 가장 많이 구부러지도록 (포물선 형태) - t 위치에 따라 구부러짐 강도 조정
+                float bendAmount = Mathf.Sin(Mathf.PI * t) * lineDistance * 0.30f;
                 curvePoint.position[j] = basePos + ((Vector2)bendDir).normalized * bendAmount;
                 
                 // 제어점이 offset된 범위를 넘지 않도록 제한 (낚시바늘 모양 등의 왜곡 방지)
