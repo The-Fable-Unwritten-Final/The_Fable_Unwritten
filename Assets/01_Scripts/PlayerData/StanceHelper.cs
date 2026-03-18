@@ -16,7 +16,7 @@ public static class StanceHelper
 
         switch (caster.playerData.currentStance)
         {
-            case PlayerData.StancType.refine:
+            case StancType.Insight:
                 if (!firstCardType.HasValue || firstCardType.Value == cardType)
                 {
                     result *= 1.5f;
@@ -29,7 +29,7 @@ public static class StanceHelper
                 }
                 break;
 
-            case PlayerData.StancType.mix:
+            case StancType.Seek:
                 if (!firstCardType.HasValue || firstCardType.Value != cardType)
                 {
                     result *= 1.5f;
@@ -41,13 +41,13 @@ public static class StanceHelper
                     weakened = true;
                 }
                 break;
-            case PlayerData.StancType.judge:
-            case PlayerData.StancType.rush:
+            case StancType.Discipline:
+            case StancType.Rush:
                 result *= 1.5f;
                 boosted = true;
                 break;
-            case PlayerData.StancType.grace:
-            case PlayerData.StancType.guard:
+            case StancType.Mercy:
+            case StancType.Defense:
                 result *= 0.5f;
                 weakened = true;
                 break;
@@ -64,12 +64,12 @@ public static class StanceHelper
 
         switch (caster.playerData.currentStance)
         {
-            case PlayerData.StancType.grace:
+            case StancType.Discipline:
                 result *= 1.5f;
                 boosted = true;
                 break;
 
-            case PlayerData.StancType.judge:
+            case StancType.Mercy:
                 result *= 0.5f;
                 weakened = true;
                 break;
@@ -82,14 +82,14 @@ public static class StanceHelper
     {
         switch (caster.playerData.currentStance)
         {
-            case PlayerData.StancType.grace:
+            case StancType.Mercy:
                 if (value > 0 && (type == BuffStatType.Attack || type == BuffStatType.Defense))
                     return value + 1;
                 if (value < 0)
                     return value + 1; // 예: -2 → -1
                 break;
 
-            case PlayerData.StancType.judge:
+            case StancType.Discipline:
                 // judge: 디버프 강화 (-1 → -2), 버프 약화 (+1 → 0)
                 if (value > 0 && (type == BuffStatType.Attack || type == BuffStatType.Defense))
                     return Mathf.Max(value - 1, 0);

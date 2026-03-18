@@ -24,6 +24,21 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         }
     }
 
+    public float GetEffectValue(BuffStatType type)
+    {
+        float total = 0;
+        foreach (var e in tickEffects)
+            if (e.statType == type) total += e.value;
+        foreach (var e in instantEffects)
+            if (e.statType == type) total += e.value;
+        return total;
+    }
+
+    public void ChangeStance(StancType stance)
+    {
+
+    }
+
     public event System.Action OnTargetableChanged;
 
     [SerializeField] private HpBarDisplay hpBarDisplay;

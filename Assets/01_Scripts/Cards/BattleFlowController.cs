@@ -117,13 +117,22 @@ public class BattleFlowController : MonoBehaviour
                 switch(pc.playerData.IDNum)
                 {
                     case 0:
-                        pc.playerData.currentStance = PlayerData.StancType.refine;
+                        if (pc.playerData.currentStance == StancType.None)
+                        {
+                            pc.playerData.currentStance = StancType.Seek;
+                        }
                         break;
                     case 1:
-                        pc.playerData.currentStance = PlayerData.StancType.grace;
+                        if (pc.playerData.currentStance == StancType.None)
+                        {
+                            pc.playerData.currentStance = StancType.Mercy;
+                        }
                         break;
                     case 2:
-                        pc.playerData.currentStance = PlayerData.StancType.guard;
+                        if (pc.playerData.currentStance == StancType.None)
+                        {
+                            pc.playerData.currentStance = StancType.Rush;
+                        }
                         break;
                     default:
                         break;

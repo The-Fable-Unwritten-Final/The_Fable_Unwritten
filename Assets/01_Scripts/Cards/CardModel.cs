@@ -51,6 +51,11 @@ public class CardModel : ScriptableObject
     public bool isEnhanced = false;                 //카드가 연계효과로 강화 되었는지
 
     // ==== 사용 조건 및 비용 ====
+    [Header("Keywords")]
+    public List<string> keywords = new();
+    public string switchType;
+    public int evolveCount;
+    public int evolveTarget;
 
     private void OnEnable()
     {
@@ -344,5 +349,64 @@ public class CardModel : ScriptableObject
     public void UpdateEnhancedState()
     {
         isEnhanced = BattleLogManager.Instance.isEnhanced(this);
+    }
+
+    public CardModel Clone()
+    {
+        CardModel clone = Instantiate(this);
+
+        clone.effects = new List<CardEffectBase>(effects);
+
+        clone.isEnhanced = false;
+        clone.isMaintain = true;
+        clone.isOneUse = false;
+
+        clone.temporaryCostModifier = 0;
+        clone.persistentCostModifier = 0;
+        clone.consumesDiscountOnce = false;
+
+        return clone;
+    }
+
+    public void InitializeRuntimeState(bool oneUse = false, bool maintain = true, bool enhanced = false)
+    {
+        isOneUse = oneUse;
+        isMaintain = maintain;
+        isEnhanced = enhanced;
+
+        temporaryCostModifier = 0;
+        persistentCostModifier = 0;
+        consumesDiscountOnce = false;
+    }
+
+    public void ConsumeOneTimeStates()
+    {
+        ClearTemporaryDiscount();
+        isEnhanced = false;
+    }
+
+    public bool HasKeyword(string keyword)
+    {
+        return keywords != null && keywords.Contains(keyword);
+    }
+
+    public bool HasIndex(int targetIndex)
+    {
+        return index == targetIndex;
+    }
+
+    public bool IsIdealCard()
+    {
+        return index == 4001;
+    }
+
+    public void SetOneUse(bool value)
+    {
+        isOneUse = value;
+    }
+
+    public void SetMaintain(bool value)
+    {
+        isMaintain = value;
     }
 }

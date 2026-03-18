@@ -135,7 +135,8 @@ public class DataManager : MonoSingleton<DataManager>
     private void InitCardBookDictionary()
     {
         // allCards 로 이쪽의 데이터를 플레이어의 덱과 공유중.
-        allCards = CardDatabaseLoader.LoadAll("ExternalFiles/Cards");
+        //allCards = CardDatabaseLoader.LoadAll("ExternalFiles/Cards");
+        allCards = CardDatabaseLoader.LoadAllNew("ExternalFiles/cards");
         cardLookup.Clear();
         foreach (var card in allCards)
         {
@@ -377,4 +378,12 @@ public class DataManager : MonoSingleton<DataManager>
         public List<UnlockRecipe> recipes;
     }
 
+    public CardModel GetCardByIndex(int index)
+    {
+        if (cardLookup.TryGetValue(index, out var card))
+            return card;
+
+        Debug.LogWarning($"[DataManager] 카드 index={index} 를 찾을 수 없습니다.");
+        return null;
+    }
 }
