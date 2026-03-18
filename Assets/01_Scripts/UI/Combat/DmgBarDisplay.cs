@@ -44,7 +44,7 @@ public class DmgBarDisplay : MonoBehaviour
     private const int maxPoolSize = 10; // 최대 풀 크기
 
     private float floatOffset = 0.7f;
-    private float floatDuration = 100.9f;
+    private float floatDuration = 0.9f;
 
     public void Initialize(DmgTextData data, Transform target, float offsetY = 1f)
     {
@@ -57,7 +57,7 @@ public class DmgBarDisplay : MonoBehaviour
 
         // 프리팹의 컴포넌트 가져오기
         TextMeshProUGUI tmpText = dmgInstance.GetComponentInChildren<TextMeshProUGUI>();
-        Image image = dmgInstance.GetComponentInChildren<Image>();
+        Image icon = dmgInstance.GetComponentInChildren<Image>();
         CanvasGroup canvasGroup = dmgInstance.GetComponent<CanvasGroup>();
 
         // 위치 설정
@@ -67,11 +67,14 @@ public class DmgBarDisplay : MonoBehaviour
         /* 아이콘 리소스 받기 전까지 주석 처리
         Sprite typeIcon = SelectTypeIcon(data);
         if (typeIcon != null)
-            image.sprite = typeIcon;*/
+            icon.sprite = typeIcon;*/
             
         // 텍스트 및 스타일 설정
         tmpText.text = NumberSpriteShift(data);
         tmpText.fontSize = (data.isStanceEnhanced || data.isCardEnhanced) ? 0.8f : 0.5f;
+        // 아이콘 강화 별 위치 및 크기 조정 
+        icon.GetComponent<RectTransform>().anchoredPosition = (data.isStanceEnhanced || data.isCardEnhanced) ? new Vector2(-1.2f, 0.5f) : new Vector2(-1f, 0.3f);
+        icon.GetComponent<RectTransform>().sizeDelta = (data.isStanceEnhanced || data.isCardEnhanced) ? new Vector2(1.5f, 1.5f) : new Vector2(1f, 1f);
 
         // 스케일 설정 (시작: 1.6배 크기)
         dmgInstance.transform.localScale = Vector3.one * 1.6f;
