@@ -44,7 +44,7 @@ public class DmgBarDisplay : MonoBehaviour
     private const int maxPoolSize = 10; // 최대 풀 크기
 
     private float floatOffset = 0.7f;
-    private float floatDuration = 0.9f;
+    private float floatDuration = 100.9f;
 
     public void Initialize(DmgTextData data, Transform target, float offsetY = 1f)
     {
@@ -57,7 +57,7 @@ public class DmgBarDisplay : MonoBehaviour
 
         // 프리팹의 컴포넌트 가져오기
         TextMeshProUGUI tmpText = dmgInstance.GetComponentInChildren<TextMeshProUGUI>();
-        Image image = dmgInstance.GetComponent<Image>();
+        Image image = dmgInstance.GetComponentInChildren<Image>();
         CanvasGroup canvasGroup = dmgInstance.GetComponent<CanvasGroup>();
 
         // 위치 설정
@@ -104,7 +104,7 @@ public class DmgBarDisplay : MonoBehaviour
         int prefix = (int)data.type;
         StringBuilder sb = new StringBuilder();
 
-        // 현재 타입별 스프라이트 등록이 안 되어있어서 임시로 타입 0으로 고정
+        // 현재 타입별 스프라이트 등록이 안 되어있어서 임시로 타입 0으로 고정 // 해당 데이터는 tmp 컴포넌트의 Extra settings/sprite asset 에서 접근 가능
         prefix = 0;
         foreach (char c in dataT)
         {

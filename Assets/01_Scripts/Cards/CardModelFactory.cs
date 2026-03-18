@@ -4,6 +4,8 @@ using UnityEngine;
 
 public static class CardModelFactory
 {
+    private static Dictionary<string, Sprite> spriteCache = new Dictionary<string, Sprite>();
+
     public static CardModel Create(CardJsonData data, List<CardEffectBase> effects)
     {
         var card = ScriptableObject.CreateInstance<CardModel>();
@@ -22,7 +24,7 @@ public static class CardModelFactory
         // 리소스에서 Sprite 할당
         card.illustration = LoadSprite($"Cards/Illustration/{data.illustration}");
         card.chClass = LoadSprite($"Cards/Class/class_{data.@class}");
-        card.cardType = LoadSprite($"Cards/Type/type_{data.type}");
+        card.cardType = LoadSprite($"Cards/Type", $"type_{data.type}");
         card.cardImage = data.cardframe;
         card.cardFrame = LoadSprite($"Cards/Frame/{data.cardframe}");
         card.effects = effects;
@@ -36,6 +38,26 @@ public static class CardModelFactory
         var sprite = Resources.Load<Sprite>(path);
         if (sprite == null)
             Debug.LogWarning($"[CardModelFactory] Sprite 리소스를 찾을 수 없습니다: {path}");
+        return sprite;
+    }
+
+    // Multiple 스프라이트 시트에서 특정 스프라이트를 로드하는 메서드
+    private static Sprite LoadSprite(string folderPath, string spriteName)
+    {
+        string cacheKey = $"{folderPath}/{spriteName}";
+        
+        if (spriteCache.ContainsKey(cacheKey))
+            return spriteCache[cacheKey];
+
+        // Multiple 스프라이트 시트에서 모든 스프라이트 로드
+        var allSprites = Resources.LoadAll<Sprite>(folderPath);
+        var sprite = System.Array.Find(allSprites, s => s.name == spriteName);
+        
+        if (sprite == null)
+            Debug.LogWarning($"[CardModelFactory] Sprite를 찾을 수 없습니다: {cacheKey}");
+        else
+            spriteCache[cacheKey] = sprite;
+            
         return sprite;
     }
 }
