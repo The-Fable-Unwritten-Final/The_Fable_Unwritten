@@ -6,9 +6,6 @@ public class PotentialBarUI : MonoBehaviour
     [Header("UI")]
     [SerializeField] private Image fillImage;
 
-    [Header("Optional")]
-    [SerializeField] private bool hideWhenStage1 = true;
-
     private PlayerController owner;
 
     public void Bind(PlayerController player)
@@ -18,12 +15,6 @@ public class PotentialBarUI : MonoBehaviour
         owner = player;
 
         if (owner == null || owner.StanceSystem == null)
-        {
-            gameObject.SetActive(false);
-            return;
-        }
-
-        if (hideWhenStage1 && IsStage1())
         {
             gameObject.SetActive(false);
             return;
@@ -80,13 +71,5 @@ public class PotentialBarUI : MonoBehaviour
         int maxGauge = PotentialGauge.MAX_GAUGE;
         float normalized = Mathf.Clamp01((float)currentGauge / maxGauge);
         fillImage.fillAmount = normalized;
-    }
-
-    private bool IsStage1()
-    {
-        if (ProgressDataManager.Instance == null)
-            return false;
-
-        return ProgressDataManager.Instance.CurrentBattleNode.columnIndex <= 1;
     }
 }

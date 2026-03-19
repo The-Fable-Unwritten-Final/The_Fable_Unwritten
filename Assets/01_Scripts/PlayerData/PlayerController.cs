@@ -136,6 +136,9 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         stanceSystem = new StanceSystem(this, playerData);
         stanceSystem.OnStanceChanged += HandleStanceChanged;
         stanceSystem.OnStanceEffectTriggered += HandleStanceEffectTriggered;
+
+        potentialBarUI?.Bind(this);
+        potentialBarUI?.Refresh();
     }
 
     private void HandleStanceChanged(StancType newStance)
@@ -538,9 +541,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             stanceEffectData = new StanceEffectData();
 
         InitializeStanceSystem();
-
-        if (potentialBarUI != null)
-            potentialBarUI.Bind(this);
     }
 
     //──────── K.T.H 변경 ────────
