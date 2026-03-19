@@ -93,7 +93,7 @@ public class CardModel : ScriptableObject
         float totalDuration = 2f;  // 카메라 줌인 + 줌아웃 포함 총 연출 시간
 
         // 1. 카메라 연출
-        GameManager.Instance.combatCameraController.PlayCombatCamera(caster, targets, totalDuration);
+        //GameManager.Instance.combatCameraController.PlayCombatCamera(caster, targets, totalDuration);
 
         List<IStatusReceiver> allCharacters = new List<IStatusReceiver>();
         allCharacters.AddRange(GameManager.Instance.turnController.battleFlow.playerParty);
