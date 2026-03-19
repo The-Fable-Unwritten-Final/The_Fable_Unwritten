@@ -77,8 +77,8 @@ public class ApplyStatusEffect : CardEffectBase
                 type = Debuff.IsDebuff(statType, value) ? DmgTextType.Debuff : DmgTextType.Buff,
                 isCardEnhanced = isEnhanced == true,
                 isStanceEnhanced = caster is PlayerController pc &&
-                           (pc.playerData.currentStance == PlayerData.StancType.grace ||
-                            pc.playerData.currentStance == PlayerData.StancType.judge),
+                           (pc.playerData.currentStance == StancType.Mercy ||
+                            pc.playerData.currentStance == StancType.Discipline),
                 isWeakened = false
             };
 
@@ -158,14 +158,14 @@ public class ApplyStatusEffect : CardEffectBase
             BuffStatType.Attack => valueText,
             BuffStatType.Defense => valueText,
             BuffStatType.Bless => valueText,
-            BuffStatType.Grace => valueText,
-            BuffStatType.Purify => valueText,
+            BuffStatType.Crime => valueText,
+            BuffStatType.Penance => valueText,
             BuffStatType.Burn => valueText,
             BuffStatType.Freeze => string.IsNullOrEmpty(valueText) ? "" : $"{valueText}%",
             BuffStatType.Activate => valueText,
-            BuffStatType.Bleed => valueText,
+            BuffStatType.Scar => valueText,
             BuffStatType.Stun => valueText,
-            BuffStatType.GuardRedirect => string.IsNullOrEmpty(valueText) ? "" : $"{valueText}%",
+            BuffStatType.Guard => string.IsNullOrEmpty(valueText) ? "" : $"{valueText}%",
             BuffStatType.CantAttackInStance => "",
             BuffStatType.Blind => "",
             _ => ""
@@ -182,7 +182,7 @@ public static class Buff
         {
             BuffStatType.Attack => value > 0,
             BuffStatType.Defense => value > 0,
-            BuffStatType.GuardRedirect or BuffStatType.Bless or BuffStatType.Grace or BuffStatType.Purify => true,
+            BuffStatType.Guard or BuffStatType.Bless or BuffStatType.Penance => true,
             _ => false
         };
     }
@@ -196,7 +196,7 @@ public static class Debuff
         {
             BuffStatType.Attack => value < 0,
             BuffStatType.Defense => value < 0,
-            BuffStatType.GuardRedirect or BuffStatType.Bless or BuffStatType.Grace => false,
+            BuffStatType.Guard or BuffStatType.Bless or BuffStatType.Penance=> false,
             _ => true
         };
     }
@@ -209,7 +209,7 @@ public static class Debuff
             BuffStatType.Defense,
             BuffStatType.Burn,
             BuffStatType.Freeze,
-            BuffStatType.Bleed,
+            BuffStatType.Scar,
             BuffStatType.Stun,
             BuffStatType.Blind
         };
@@ -239,7 +239,7 @@ public static class Debuff
                 result.value = 100; // 빙결 확률/비율(%)
                 result.duration = 1;
                 break;
-            case BuffStatType.Bleed:
+            case BuffStatType.Scar:
                 result.value = 3;
                 result.duration = 1;
                 break;

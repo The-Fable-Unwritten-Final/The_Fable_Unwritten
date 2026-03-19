@@ -15,4 +15,18 @@ public static class CardDatabaseLoader
         }
         return cards;
     }
+
+    public static List<CardModel> LoadAllNew(string csvPath)
+    {
+        var cards = new List<CardModel>();
+        var cardDatas = CardJsonLoader2.Load("ExternalFiles/cards");
+
+        foreach(var data in cardDatas)
+        {
+            var effects = CardEffectBuilder2.Build(data);
+            var card = CardModelFactory2.Create(data, effects);
+            cards.Add(card);
+        }
+        return cards;
+    }
 }

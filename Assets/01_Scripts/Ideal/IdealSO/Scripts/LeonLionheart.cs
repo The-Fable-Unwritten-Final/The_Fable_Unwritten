@@ -13,7 +13,7 @@ public class LeonLionheart : IdealSkillBase
     {
         owner.ApplyStatusEffect(new InstanceEffect
         {
-            statType = BuffStatType.GuardRedirect,
+            statType = BuffStatType.Guard,
             value = 50,
             isMaintain = true // 전투 지속
         });

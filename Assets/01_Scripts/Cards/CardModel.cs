@@ -51,6 +51,11 @@ public class CardModel : ScriptableObject
     public bool isEnhanced = false;                 //카드가 연계효과로 강화 되었는지
 
     // ==== 사용 조건 및 비용 ====
+    [Header("Keywords")]
+    public List<string> keywords = new();
+    public string switchType;
+    public int evolveCount;
+    public int evolveTarget;
 
     private void OnEnable()
     {
@@ -106,7 +111,7 @@ public class CardModel : ScriptableObject
         caster.PlayAttackAnimation(attackType); //시전자의 공격 애니메이션 적용
         SoundManager.Instance.PlaySFX(SoundCategory.Card, (int)type);
 
-        yield return new WaitForSeconds(0.2f); // 애니메이션 길이에 맞게 조정
+        yield return new WaitForSeconds(0.1f); // 애니메이션 길이에 맞게 조정
 
         // 3. 이펙트 재생 + 피격 애니메이션 동시에 진행
         if (!string.IsNullOrEmpty(skillEffectName) && targets.Count > 0)
@@ -127,6 +132,9 @@ public class CardModel : ScriptableObject
                         {
                             if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
                                 t.PlayHitAnimation();
+
+                            foreach (var effect in effects)
+                                effect.Apply(caster, new List<IStatusReceiver> { t }, fixedIsEnhanced);
                         }
                     );
                 }
@@ -139,6 +147,9 @@ public class CardModel : ScriptableObject
 
                     if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
                         t.PlayHitAnimation();
+
+                    foreach (var effect in effects)
+                        effect.Apply(caster, new List<IStatusReceiver> { t }, fixedIsEnhanced);
                 }
             }
         }
@@ -146,8 +157,8 @@ public class CardModel : ScriptableObject
 
 
         // 4. 효과 적용
-        foreach (var effect in effects)
-            effect.Apply(caster, targets, fixedIsEnhanced);
+        /*foreach (var effect in effects)
+            effect.Apply(caster, targets, fixedIsEnhanced);*/
 
         yield return new WaitForSeconds(0.1f); // 효과 적용 후 약간 대기
 
@@ -344,5 +355,64 @@ public class CardModel : ScriptableObject
     public void UpdateEnhancedState()
     {
         isEnhanced = BattleLogManager.Instance.isEnhanced(this);
+    }
+
+    public CardModel Clone()
+    {
+        CardModel clone = Instantiate(this);
+
+        clone.effects = new List<CardEffectBase>(effects);
+
+        clone.isEnhanced = false;
+        clone.isMaintain = true;
+        clone.isOneUse = false;
+
+        clone.temporaryCostModifier = 0;
+        clone.persistentCostModifier = 0;
+        clone.consumesDiscountOnce = false;
+
+        return clone;
+    }
+
+    public void InitializeRuntimeState(bool oneUse = false, bool maintain = true, bool enhanced = false)
+    {
+        isOneUse = oneUse;
+        isMaintain = maintain;
+        isEnhanced = enhanced;
+
+        temporaryCostModifier = 0;
+        persistentCostModifier = 0;
+        consumesDiscountOnce = false;
+    }
+
+    public void ConsumeOneTimeStates()
+    {
+        ClearTemporaryDiscount();
+        isEnhanced = false;
+    }
+
+    public bool HasKeyword(string keyword)
+    {
+        return keywords != null && keywords.Contains(keyword);
+    }
+
+    public bool HasIndex(int targetIndex)
+    {
+        return index == targetIndex;
+    }
+
+    public bool IsIdealCard()
+    {
+        return index == 4001;
+    }
+
+    public void SetOneUse(bool value)
+    {
+        isOneUse = value;
+    }
+
+    public void SetMaintain(bool value)
+    {
+        isMaintain = value;
     }
 }

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class StanceOptionButton : MonoBehaviour
 {
     [Tooltip("이 버튼이 설정할 태세 타입")]
-    [SerializeField] private PlayerData.StancType stanceType;
+    [SerializeField] private StancType stanceType;
 
     [Tooltip("이 버튼이 속한 캐릭터 클래스")]
     [SerializeField] private CharacterClass characterClass;
@@ -66,7 +66,7 @@ public class StanceOptionButton : MonoBehaviour
 
         return (characterClass, stanceType) switch
         {
-            (CharacterClass.Sophia, PlayerData.StancType.refine) => code switch
+            (CharacterClass.Sophia, StancType.Seek) => code switch
             {
                    "ko" => "<b><color=#FFD700>정제</color></b>\n<color=#ff5757>처음 사용한 타입 피해 50% 증가</color>\n<color=#518bff>이외 타입 피해 50% 감소</color>",
                    "ja" => "<b><color=#FFD700>精製</color></b>\n<color=#ff5757>最初に使用したタイプのダメージが50%増加</color>\n<color=#518bff>その他のタイプのダメージが50%減少</color>",
@@ -74,7 +74,7 @@ public class StanceOptionButton : MonoBehaviour
                    _ => "Unknown code"
             },
 
-            (CharacterClass.Sophia, PlayerData.StancType.mix) => code switch 
+            (CharacterClass.Sophia, StancType.Insight) => code switch 
             { 
                 "ko" => "<b><color=#FFD700>혼합</color></b>\n<color=#ff5757>타입마다 첫 카드 피해 50% 증가</color>\n<color=#518bff>이후 카드 피해 50% 감소</color>",
                 "ja" => "<b><color=#FFD700>混合</color></b>\n<color=#ff5757>タイプごとに最初のカードダメージが50%増加</color>\n<color=#518bff>その後のカードダメージが50%減少</color>",
@@ -82,7 +82,7 @@ public class StanceOptionButton : MonoBehaviour
                 _ => "Unknown code"
             },
 
-            (CharacterClass.Kayla, PlayerData.StancType.grace) => code switch
+            (CharacterClass.Kayla, StancType.Mercy) => code switch
             {
                 "ko" => "<b><color=#FFD700>축복</color></b>\n<color=#ff5757>회복량 50% 증가, 버프 수치 1 증가</color>\n<color=#518bff>피해량 50% 감소, 디버프 수치 1 감소</color>",
                 "ja" => "<b><color=#FFD700>祝福</color></b>\n<color=#ff5757>回復量50%増加 バフ数値1増加</color>\n<color=#518bff>ダメージ量50%減少、デバフ数値1減少</color>",
@@ -90,7 +90,7 @@ public class StanceOptionButton : MonoBehaviour
                 _ => "Unknown code"
             },
 
-            (CharacterClass.Kayla, PlayerData.StancType.judge) => code switch
+            (CharacterClass.Kayla, StancType.Discipline) => code switch
             { 
                 "ko" => "<b><color=#FFD700>심판</color></b>\n<color=#ff5757>피해량 50% 증가, 디버프 수치 1 증가</color>\n<color=#518bff>회복량 50% 감소, 버프 수치 1 감소</color>",
                 "ja" => "<b><color=#FFD700>審判</color></b>\n<color=#ff5757>ダメージ量50%増加 デバフ数値1増加</color>\n<color=#518bff>回復量50%減少 バフ数値1減少</color>",
@@ -98,7 +98,7 @@ public class StanceOptionButton : MonoBehaviour
                 _ => "Unknown code"
             },
 
-            (CharacterClass.Leon, PlayerData.StancType.guard) => code switch
+            (CharacterClass.Leon, StancType.Defense) => code switch
             { 
                 "ko" => "<b><color=#FFD700>방어</color></b>\n<color=#ff5757>받는 피해 50% 감소</color>\n<color=#518bff>주는 피해 50% 감소</color>",
                 "ja" => "<b><color=#FFD700>防御</color></b>\n<color=#ff5757>受けるダメージ50%減少</color>\n<color=#518bff>与えるダメージ50%減少</color>",
@@ -106,7 +106,7 @@ public class StanceOptionButton : MonoBehaviour
                 _ => "Unknown code"
             },
 
-            (CharacterClass.Leon, PlayerData.StancType.rush) => code switch
+            (CharacterClass.Leon, StancType.Rush) => code switch
             { 
                 "ko" => "<b><color=#FFD700>돌진</color></b>\n<color=#ff5757>주는 피해 50% 증가</color>\n<color=#518bff>받는 피해 50% 증가</color>",
                 "ja" => "<b><color=#FFD700>突進</color></b>\n<color=#ff5757>与えるダメージ50%増加</color>\n<color=#518bff>受けるダメージ50%増加</color>",

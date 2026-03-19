@@ -97,12 +97,12 @@ public class NewCardEffectBuilder : MonoBehaviour
                     "burn" => BuffStatType.Burn,
                     "freeze" => BuffStatType.Freeze,
                     "activate" => BuffStatType.Activate,
-                    "purify" => BuffStatType.Purify,
+                    "purify" => BuffStatType.Penance,
                     "bless" => BuffStatType.Bless,
-                    "grace" => BuffStatType.Grace,
-                    "bleed" => BuffStatType.Bleed,
+                    "grace" => BuffStatType.Crime,
+                    "bleed" => BuffStatType.Scar,
                     "stun" => BuffStatType.Stun,
-                    "guard" => BuffStatType.GuardRedirect,
+                    "guard" => BuffStatType.Guard,
                     _ => BuffStatType.None
                 };
 
@@ -132,7 +132,7 @@ public class NewCardEffectBuilder : MonoBehaviour
 
             case "blind":
                 var blind = Load<BlindEffect>("BlindEffect");
-                blind.blockedStance = (PlayerData.StancType)effectData.target;
+                blind.blockedStance = (StancType)effectData.target;
                 effect = blind;
                 break;
 
@@ -174,7 +174,7 @@ public class NewCardEffectBuilder : MonoBehaviour
 
                     case "isStance":
                         var stance = ScriptableObject.CreateInstance<StanceCondition>();
-                        stance.requiredStance = (StancValue.EStancType)values[0];
+                        stance.requiredStance = (StancType)values[0];
                         condition = stance;
                         break;
 
