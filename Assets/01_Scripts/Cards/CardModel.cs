@@ -275,16 +275,16 @@ public class CardModel : ScriptableObject
                 switch (localeCode)
                 {
                     case "ko":
-                        match = Regex.Match(result, @"\d+(?=의 피해)");
+                        match = Regex.Match(result, @"(\{0\}|\d+)(?=의 피해)");
                         break;
                     case "ja":
-                        match = Regex.Match(result, @"\d+(?=のダメージ)");
+                        match = Regex.Match(result, @"(\{0\}|\d+)(?=のダメージ)");
                         break;
                     case "en":
-                        match = Regex.Match(result, @"(?<=Deal\s)(\d+)(?=\sdamage)");
+                        match = Regex.Match(result, @"(?<=Deal\s)(\{0\}|\d+)(?=\sdamage)");
                         break;
                     default:
-                        match = Regex.Match(result, @"(?<=Deal\s)(\d+)(?=\sdamage)");
+                        match = Regex.Match(result, @"(?<=Deal\s)(\{0\}|\d+)(?=\sdamage)");
                         break;
                 }
                 
@@ -299,7 +299,12 @@ public class CardModel : ScriptableObject
 
                 if (match.Success)
                 {
-                    int baseDamage = int.Parse(match.Value);
+                    // {0} 플레이스홀더 또는 숫자 처리
+                    int baseDamage = 0;
+                    if (match.Value == "{0}" || !int.TryParse(match.Value, out baseDamage))
+                    {
+                        baseDamage = 0;  // 기본값
+                    }
 
                     // 2. 공격자(caster) 기준으로 예측 피해 계산
                     float predicted = (caster != null)
@@ -314,16 +319,16 @@ public class CardModel : ScriptableObject
                         switch (localeCode)
                         {
                             case "ko":
-                                result = Regex.Replace(result, @"(\d+)(?=의 피해)", $"‘{(int)predicted}’");
+                                result = Regex.Replace(result, @"(\{0\}|\d+)(?=의 피해)", $"'{(int)predicted}'");
                                 break;
                             case "ja":
-                                result = Regex.Replace(result, @"(\d+)(?=のダメージ)", $"‘{(int)predicted}’");
+                                result = Regex.Replace(result, @"(\{0\}|\d+)(?=のダメージ)", $"'{(int)predicted}'");
                                 break;
                             case "en":
-                                result = Regex.Replace(result, @"(?<=Deal\s)(\d+)(?=\sdamage)", $"‘{(int)predicted}’");
+                                result = Regex.Replace(result, @"(?<=Deal\s)(\{0\}|\d+)(?=\sdamage)", $"'{(int)predicted}'");
                                 break;
                             default:
-                                result = Regex.Replace(result, @"(?<=Deal\s)(\d+)(?=\sdamage)", $"‘{(int)predicted}’");
+                                result = Regex.Replace(result, @"(?<=Deal\s)(\{0\}|\d+)(?=\sdamage)", $"'{(int)predicted}'");
                                 break;
                         }
                     }
@@ -332,16 +337,16 @@ public class CardModel : ScriptableObject
                         switch (localeCode)
                         {
                             case "ko":
-                                result = Regex.Replace(result, @"(\d+)(?=의 피해)", ((int)predicted).ToString());
+                                result = Regex.Replace(result, @"(\{0\}|\d+)(?=의 피해)", ((int)predicted).ToString());
                                 break;
                             case "ja":
-                                result = Regex.Replace(result, @"(\d+)(?=のダメージ)", ((int)predicted).ToString());
+                                result = Regex.Replace(result, @"(\{0\}|\d+)(?=のダメージ)", ((int)predicted).ToString());
                                 break;
                             case "en":
-                                result = Regex.Replace(result, @"(?<=Deal\s)(\d+)(?=\sdamage)", ((int)predicted).ToString());
+                                result = Regex.Replace(result, @"(?<=Deal\s)(\{0\}|\d+)(?=\sdamage)", ((int)predicted).ToString());
                                 break;
                             default:
-                                result = Regex.Replace(result, @"(?<=Deal\s)(\d+)(?=\sdamage)", ((int)predicted).ToString());
+                                result = Regex.Replace(result, @"(?<=Deal\s)(\{0\}|\d+)(?=\sdamage)", ((int)predicted).ToString());
                                 break;
                         }
                     }
