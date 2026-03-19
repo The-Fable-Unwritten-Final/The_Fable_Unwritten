@@ -23,7 +23,9 @@
         },
         {
           "type": "burn",
-          "value": 4
+          "value": 4,
+          "target": 4
+          
         },
         {
           "type": "conditional",
@@ -63,7 +65,8 @@
       "effects": [
         {
           "type": "atk",
-          "value": 1
+          "value": 1,
+          "target": 3
         },
         {
           "type": "conditional",
@@ -75,7 +78,8 @@
           },
           "result": {
             "type": "atk",
-            "value": 2
+            "value": 2,
+            "target": 3
           }
         }
       ]
@@ -107,7 +111,8 @@
         },
         {
           "type": "burn",
-          "value": 5
+          "value": 5,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -147,7 +152,8 @@
         },
         {
           "type": "freeze",
-          "value": 2
+          "value": 2,
+          "target": 4
         },
         {
           "type": "applyDamage",
@@ -198,7 +204,8 @@
         },
         {
           "type": "freeze",
-          "value": 4
+          "value": 4,
+          "target": 4
         }
       ],
       "keywords": [
@@ -225,7 +232,8 @@
       "effects": [
         {
           "type": "def",
-          "value": 6
+          "value": 6,
+          "target": 3
         },
         {
           "type": "conditional",
@@ -237,7 +245,8 @@
           },
           "result": {
             "type": "def",
-            "value": 12
+            "value": 12,
+            "target": 3
           }
         }
       ]
@@ -265,7 +274,8 @@
         },
         {
           "type": "atk",
-          "value": -1
+          "value": -1,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -332,7 +342,8 @@
         },
         {
           "type": "active",
-          "value": 6
+          "value": 6,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -384,7 +395,8 @@
         },
         {
           "type": "active",
-          "value": 3
+          "value": 3,
+          "target": 4
         }
       ],
       "keywords": [
@@ -458,7 +470,8 @@
         },
         {
           "type": "freeze",
-          "value": 3
+          "value": 3,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -502,7 +515,8 @@
         },
         {
           "type": "active",
-          "value": 5
+          "value": 5,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -540,7 +554,9 @@
         },
         {
           "type": "burn",
-          "value": 8
+          "value": 8,
+          "target": 4
+
         },
         {
           "type": "conditional",
@@ -608,7 +624,9 @@
         },
         {
           "type": "active",
-          "value": 4
+          "value": 4,
+          "target": 4
+
         },
         {
           "type": "conditional",
@@ -649,7 +667,9 @@
         },
         {
           "type": "active",
-          "value": 5
+          "value": 5,
+          "target": 4
+
         },
         {
           "type": "conditional",
@@ -702,7 +722,9 @@
         },
         {
           "type": "burn",
-          "value": 8
+          "value": 8,
+          "target": 4
+
         },
         {
           "type": "conditional",
@@ -753,7 +775,8 @@
         },
         {
           "type": "burn",
-          "value": 1
+          "value": 1,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -796,7 +819,8 @@
         },
         {
           "type": "burn",
-          "value": 4
+          "value": 4,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -839,7 +863,8 @@
         },
         {
           "type": "freeze",
-          "value": 4
+          "value": 4,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -878,11 +903,13 @@
       "effects": [
         {
           "type": "atk",
-          "value": 2
+          "value": 2,
+          "target": 3
         },
         {
           "type": "active",
-          "value": 5
+          "value": 5,
+          "target": 4
         }
       ],
       "keywords": [
@@ -914,7 +941,8 @@
         },
         {
           "type": "active",
-          "value": 6
+          "value": 6,
+          "target": 4
         },
         {
           "type": "triggerOppositeStanceEffect",
@@ -941,11 +969,13 @@
       "effects": [
         {
           "type": "atk",
-          "value": 2
+          "value": 2,
+          "target": 3
         },
         {
           "type": "bless",
-          "value": 1
+          "value": 1,
+          "target": 3
         },
         {
           "type": "conditional",
@@ -957,7 +987,8 @@
           },
           "result": {
             "type": "penance",
-            "value": 1
+            "value": 1,
+            "target": 3
           }
         }
       ]
@@ -981,7 +1012,8 @@
       "effects": [
         {
           "type": "atk",
-          "value": 2
+          "value": 2,
+          "target": 1
         },
         {
           "type": "reduceNextCardCost",
@@ -990,7 +1022,8 @@
         },
         {
           "type": "bless",
-          "value": 1
+          "value": 1,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -1030,7 +1063,8 @@
         },
         {
           "type": "sin",
-          "value": 2
+          "value": 2,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -1070,7 +1104,8 @@
         },
         {
           "type": "sin",
-          "value": 2
+          "value": 2,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -1110,7 +1145,8 @@
         },
         {
           "type": "bless",
-          "value": 3
+          "value": 3,
+          "target": 3
         },
         {
           "type": "conditional",
@@ -1154,7 +1190,8 @@
         },
         {
           "type": "bless",
-          "value": 5
+          "value": 5,
+          "target": 3
         },
         {
           "type": "conditional",
@@ -1198,7 +1235,8 @@
         },
         {
           "type": "bless",
-          "value": 3
+          "value": 3,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -1234,15 +1272,18 @@
       "effects": [
         {
           "type": "atk",
-          "value": 1
+          "value": 1,
+          "target": 3
         },
         {
           "type": "def",
-          "value": 1
+          "value": 1,
+          "target": 3
         },
         {
           "type": "bless",
-          "value": 2
+          "value": 2,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -1252,7 +1293,8 @@
           },
           "result": {
             "type": "def",
-            "value": 2
+            "value": 2,
+            "target": 4
           }
         }
       ]
@@ -1280,7 +1322,8 @@
         },
         {
           "type": "sin",
-          "value": 3
+          "value": 3,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -1324,7 +1367,8 @@
         },
         {
           "type": "sin",
-          "value": 4
+          "value": 4,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -1364,7 +1408,8 @@
         },
         {
           "type": "bless",
-          "value": 4
+          "value": 4,
+          "target": 3
         }
       ],
       "keywords": [
@@ -1391,11 +1436,13 @@
       "effects": [
         {
           "type": "def",
-          "value": 4
+          "value": 4,
+          "target": 3
         },
         {
           "type": "bless",
-          "value": 3
+          "value": 3,
+          "target": 3
         },
         {
           "type": "conditional",
@@ -1431,11 +1478,13 @@
       "effects": [
         {
           "type": "atk",
-          "value": 2
+          "value": 2,
+          "target": 3
         },
         {
           "type": "sin",
-          "value": 2
+          "value": 2,
+          "target": 3
         }
       ],
       "keywords": [
@@ -1466,7 +1515,8 @@
         },
         {
           "type": "sin",
-          "value": 5
+          "value": 5,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -1506,7 +1556,8 @@
         },
         {
           "type": "bless",
-          "value": 6
+          "value": 6,
+          "target": 3
         },
         {
           "type": "conditional",
@@ -1553,7 +1604,8 @@
         },
         {
           "type": "bless",
-          "value": 3
+          "value": 3,
+          "target": 4
         }
       ],
       "keywords": [
@@ -1607,7 +1659,8 @@
       "effects": [
         {
           "type": "bless",
-          "value": 1
+          "value": 1,
+          "target": 3
         },
         {
           "type": "conditional",
@@ -1619,7 +1672,8 @@
           },
           "result": {
             "type": "bless",
-            "value": 2
+            "value": 2,
+            "target": 3
           }
         }
       ]
@@ -1647,7 +1701,8 @@
         },
         {
           "type": "bless",
-          "value": 5
+          "value": 5,
+          "target": 4
         }
       ],
       "keywords": [
@@ -1720,7 +1775,8 @@
         },
         {
           "type": "bless",
-          "value": 4
+          "value": 4,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -1732,7 +1788,8 @@
           },
           "result": {
             "type": "bless",
-            "value": 2
+            "value": 2,
+            "target": 3
           }
         },
         {
@@ -1745,7 +1802,8 @@
           },
           "result": {
             "type": "penance",
-            "value": 2
+            "value": 2,
+            "target": 3
           }
         }
       ]
@@ -1773,7 +1831,8 @@
         },
         {
           "type": "scar",
-          "value": 3
+          "value": 3,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -1813,7 +1872,8 @@
         },
         {
           "type": "scar",
-          "value": 2
+          "value": 2,
+          "target": 4
         },
         {
           "type": "applyDamage",
@@ -1847,7 +1907,8 @@
         },
         {
           "type": "stun",
-          "value": 2
+          "value": 2,
+          "target": 4
         },
         {
           "type": "reduceNextCardCost",
@@ -1896,7 +1957,8 @@
         },
         {
           "type": "stun",
-          "value": 2
+          "value": 2,
+          "target": 4
         }
       ]
     },
@@ -1923,7 +1985,8 @@
         },
         {
           "type": "stun",
-          "value": 2
+          "value": 2,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -1959,7 +2022,8 @@
       "effects": [
         {
           "type": "def",
-          "value": 2
+          "value": 2,
+          "target": 2
         },
         {
           "type": "draw",
@@ -1967,7 +2031,8 @@
         },
         {
           "type": "guard",
-          "value": 3
+          "value": 3,
+          "target": 2
         },
         {
           "type": "conditional",
@@ -1979,7 +2044,8 @@
           },
           "result": {
             "type": "def",
-            "value": 4
+            "value": 4,
+            "target": 2
           }
         }
       ]
@@ -2003,11 +2069,13 @@
       "effects": [
         {
           "type": "def",
-          "value": 4
+          "value": 4,
+          "target": 2
         },
         {
           "type": "guard",
-          "value": 8
+          "value": 8,
+          "target": 2
         }
       ],
       "keywords": [
@@ -2034,15 +2102,18 @@
       "effects": [
         {
           "type": "def",
-          "value": 4
+          "value": 4,
+          "target": 2
         },
         {
           "type": "guard",
-          "value": 7
+          "value": 7,
+          "target": 2
         },
         {
           "type": "atk",
-          "value": 3
+          "value": 3,
+          "target": 3
         },
         {
           "type": "conditional",
@@ -2054,7 +2125,8 @@
           },
           "result": {
             "type": "def",
-            "value": 6
+            "value": 6,
+            "target": 3
           }
         }
       ]
@@ -2082,7 +2154,8 @@
         },
         {
           "type": "stun",
-          "value": 4
+          "value": 4,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -2116,11 +2189,13 @@
       "effects": [
         {
           "type": "def",
-          "value": 8
+          "value": 8,
+          "target": 2
         },
         {
           "type": "guard",
-          "value": 10
+          "value": 10,
+          "target": 2
         },
         {
           "type": "conditional",
@@ -2132,7 +2207,8 @@
           },
           "result": {
             "type": "def",
-            "value": 12
+            "value": 12,
+            "target": 2
           }
         }
       ]
@@ -2160,7 +2236,8 @@
         },
         {
           "type": "stun",
-          "value": 3
+          "value": 3,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -2200,7 +2277,8 @@
         },
         {
           "type": "scar",
-          "value": 3
+          "value": 3,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -2253,7 +2331,8 @@
         },
         {
           "type": "stun",
-          "value": 3
+          "value": 3,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -2287,11 +2366,13 @@
       "effects": [
         {
           "type": "def",
-          "value": 6
+          "value": 6,
+          "target": 2
         },
         {
           "type": "guard",
-          "value": 8
+          "value": 8,
+          "target": 2
         },
         {
           "type": "conditional",
@@ -2303,7 +2384,8 @@
           },
           "result": {
             "type": "def",
-            "value": 4
+            "value": 4,
+            "target": 3
           }
         }
       ]
@@ -2331,7 +2413,8 @@
         },
         {
           "type": "stun",
-          "value": 4
+          "value": 4,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -2371,7 +2454,8 @@
         },
         {
           "type": "scar",
-          "value": 4
+          "value": 4,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -2411,7 +2495,8 @@
         },
         {
           "type": "stun",
-          "value": 5
+          "value": 5,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -2449,7 +2534,8 @@
         },
         {
           "type": "scar",
-          "value": 4
+          "value": 4,
+          "target": 4
         },
         {
           "type": "conditional",
@@ -2485,11 +2571,13 @@
       "effects": [
         {
           "type": "def",
-          "value": 10
+          "value": 10,
+          "target": 2
         },
         {
           "type": "guard",
-          "value": 10
+          "value": 10,
+          "target": 2
         },
         {
           "type": "immortalThreshold",
@@ -2504,7 +2592,8 @@
           },
           "result": {
             "type": "def",
-            "value": 4
+            "value": 4,
+            "target": 2
           }
         }
       ]

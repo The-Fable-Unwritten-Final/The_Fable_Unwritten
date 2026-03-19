@@ -111,7 +111,7 @@ public class CardModel : ScriptableObject
         caster.PlayAttackAnimation(attackType); //시전자의 공격 애니메이션 적용
         SoundManager.Instance.PlaySFX(SoundCategory.Card, (int)type);
 
-        yield return new WaitForSeconds(0.2f); // 애니메이션 길이에 맞게 조정
+        yield return new WaitForSeconds(0.1f); // 애니메이션 길이에 맞게 조정
 
         // 3. 이펙트 재생 + 피격 애니메이션 동시에 진행
         if (!string.IsNullOrEmpty(skillEffectName) && targets.Count > 0)
@@ -132,6 +132,9 @@ public class CardModel : ScriptableObject
                         {
                             if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
                                 t.PlayHitAnimation();
+
+                            foreach (var effect in effects)
+                                effect.Apply(caster, new List<IStatusReceiver> { t }, fixedIsEnhanced);
                         }
                     );
                 }
@@ -144,6 +147,9 @@ public class CardModel : ScriptableObject
 
                     if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
                         t.PlayHitAnimation();
+
+                    foreach (var effect in effects)
+                        effect.Apply(caster, new List<IStatusReceiver> { t }, fixedIsEnhanced);
                 }
             }
         }
@@ -151,8 +157,8 @@ public class CardModel : ScriptableObject
 
 
         // 4. 효과 적용
-        foreach (var effect in effects)
-            effect.Apply(caster, targets, fixedIsEnhanced);
+        /*foreach (var effect in effects)
+            effect.Apply(caster, targets, fixedIsEnhanced);*/
 
         yield return new WaitForSeconds(0.1f); // 효과 적용 후 약간 대기
 
