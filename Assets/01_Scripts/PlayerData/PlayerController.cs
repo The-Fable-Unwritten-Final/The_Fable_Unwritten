@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public PlayerData playerData;       //플레이어의 데이타
     public DeckModel deckModel;         //플레이어가 들고 있는 덱
     public bool hasBlock = false;           //방어막 획득 여부
+
+    [SerializeField] private PotentialBarUI potentialBarUI;
     public bool hasResist { get; set; } = false;          //상태이상 디버프 저항 여부
     private bool isTargetable;              //타겟 가능 여부
 
@@ -56,6 +58,9 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             InitializeStanceSystem();
         else
             stanceSystem.ResetGauge();
+
+        potentialBarUI?.Bind(this);
+        potentialBarUI?.Refresh();
     }
 
     public void OnTurnStart()
@@ -533,6 +538,9 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             stanceEffectData = new StanceEffectData();
 
         InitializeStanceSystem();
+
+        if (potentialBarUI != null)
+            potentialBarUI.Bind(this);
     }
 
     //──────── K.T.H 변경 ────────
