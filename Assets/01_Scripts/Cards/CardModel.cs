@@ -260,101 +260,135 @@ public class CardModel : ScriptableObject
         consumesDiscountOnce = false;
     }
     public bool HasAnyDiscount() => temporaryCostModifier > 0 || persistentCostModifier > 0;
-
     public string GetFormattedCardText(IStatusReceiver caster)
     {
         string result = cardText;
-        string localeCode = LocaleDataManager.CurrentLanguageCode;
+
+        if (string.IsNullOrEmpty(result) || effects == null || effects.Count == 0)
+            return result;
+
+        List<CardEffectBase> displayEffects = new List<CardEffectBase>();
 
         foreach (var effect in effects)
         {
-            if(effect is DamageEffect damageEffect)
-            {
-                Match match = null;
-
-                switch (localeCode)
-                {
-                    case "ko":
-                        match = Regex.Match(result, @"(\{0\}|\d+)(?=의 피해)");
-                        break;
-                    case "ja":
-                        match = Regex.Match(result, @"(\{0\}|\d+)(?=のダメージ)");
-                        break;
-                    case "en":
-                        match = Regex.Match(result, @"(?<=Deal\s)(\{0\}|\d+)(?=\sdamage)");
-                        break;
-                    default:
-                        match = Regex.Match(result, @"(?<=Deal\s)(\{0\}|\d+)(?=\sdamage)");
-                        break;
-                }
-                
-
-                // 예외 처리
-                if (match == null || !match.Success)
-                {
-                    Debug.LogWarning($"[CardModel] '{cardName}' 카드의 설명에서 피해 숫자를 찾을 수 없습니다: {result}");
-                    return result;
-                }
-
-
-                if (match.Success)
-                {
-                    // {0} 플레이스홀더 또는 숫자 처리
-                    int baseDamage = 0;
-                    if (match.Value == "{0}" || !int.TryParse(match.Value, out baseDamage))
-                    {
-                        baseDamage = 0;  // 기본값
-                    }
-
-                    // 2. 공격자(caster) 기준으로 예측 피해 계산
-                    float predicted = (caster != null)
-                        ? damageEffect.PredictPureDamage(caster)
-                        : baseDamage;
-
-                    // 3. "피해 숫자"만 교체
-                    if (isEnhanced)
-                    {
-                        predicted *= 1.5f;
-
-                        switch (localeCode)
-                        {
-                            case "ko":
-                                result = Regex.Replace(result, @"(\{0\}|\d+)(?=의 피해)", $"'{(int)predicted}'");
-                                break;
-                            case "ja":
-                                result = Regex.Replace(result, @"(\{0\}|\d+)(?=のダメージ)", $"'{(int)predicted}'");
-                                break;
-                            case "en":
-                                result = Regex.Replace(result, @"(?<=Deal\s)(\{0\}|\d+)(?=\sdamage)", $"'{(int)predicted}'");
-                                break;
-                            default:
-                                result = Regex.Replace(result, @"(?<=Deal\s)(\{0\}|\d+)(?=\sdamage)", $"'{(int)predicted}'");
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        switch (localeCode)
-                        {
-                            case "ko":
-                                result = Regex.Replace(result, @"(\{0\}|\d+)(?=의 피해)", ((int)predicted).ToString());
-                                break;
-                            case "ja":
-                                result = Regex.Replace(result, @"(\{0\}|\d+)(?=のダメージ)", ((int)predicted).ToString());
-                                break;
-                            case "en":
-                                result = Regex.Replace(result, @"(?<=Deal\s)(\{0\}|\d+)(?=\sdamage)", ((int)predicted).ToString());
-                                break;
-                            default:
-                                result = Regex.Replace(result, @"(?<=Deal\s)(\{0\}|\d+)(?=\sdamage)", ((int)predicted).ToString());
-                                break;
-                        }
-                    }
-                }
-            }
-            // 필요한 경우 atk_buff, def_buff 별도 처리 가능
+            CollectDisplayEffects(effect, displayEffects);
         }
+
+        result = Regex.Replace(result, @"\{(\d+)\}", match =>
+        {
+            if (!int.TryParse(match.Groups[1].Value, out int index))
+                return match.Value;
+
+            if (index < 0 || index >= displayEffects.Count)
+                return match.Value;
+
+            return GetEffectDisplayValue(displayEffects[index], caster);
+        });
+
         return result;
+    }
+
+    private void CollectDisplayEffects(CardEffectBase effect, List<CardEffectBase> results)
+    {
+        if (effect == null)
+            return;
+
+        if (effect is ConditionalEffect conditionalEffect)
+        {
+            if (conditionalEffect.effectIfTrue != null)
+                CollectDisplayEffects(conditionalEffect.effectIfTrue, results);
+
+            return;
+        }
+
+        results.Add(effect);
+    }
+
+    private string GetEffectDisplayValue(CardEffectBase effect, IStatusReceiver caster)
+    {
+        if (effect == null)
+            return "0";
+
+        switch (effect)
+        {
+            case DamageEffect damageEffect:
+                {
+                    float value = (caster != null)
+                        ? damageEffect.PredictPureDamage(caster)
+                        : damageEffect.amount;
+
+                    if (isEnhanced)
+                        value *= 1.5f;
+
+                    return Mathf.RoundToInt(value).ToString();
+                }
+
+            case HealEffect healEffect:
+                return Mathf.RoundToInt(healEffect.amount).ToString();
+
+            case DrawCardEffect drawEffect:
+                return Mathf.RoundToInt(drawEffect.amount).ToString();
+
+            case DiscardCardEffect discardEffect:
+                return discardEffect.discardCount.ToString();
+
+
+            case DuplicateCardEffect duplicateEffect:
+                return duplicateEffect.duplicateNum.ToString();
+
+            case ApplyDamageEffect applyDamageEffect:
+                return applyDamageEffect.value.ToString();
+
+            case SelfDamageEffect selfDamageEffect:
+                return Mathf.RoundToInt(selfDamageEffect.amount).ToString();
+
+            case ReduceNextCardCostEffect reduceCostEffect:
+                return reduceCostEffect.amount.ToString();
+
+            case ApplyStatusEffect statusEffect:
+                return Mathf.RoundToInt(statusEffect.value).ToString();
+
+            case DamagePercentEffect damagePercentEffect:
+                return damagePercentEffect.percent.ToString();
+
+            case RepeatEffect repeatEffect:
+                return repeatEffect.repeatCount.ToString();
+
+            case AutoCastEffect autoCastEffect:
+                return autoCastEffect.count.ToString();
+
+            case LockPotentialChargeEffect lockPotentialEffect:
+                return lockPotentialEffect.turns.ToString();
+
+            case MultiplyBlessEffect multiplyBlessEffect:
+                return multiplyBlessEffect.value.ToString();
+
+            case MultiplyBuffEffect multiplyBuffEffect:
+                return multiplyBuffEffect.value.ToString();
+
+            case HealByBlessEffect healByBlessEffect:
+                return healByBlessEffect.value.ToString();
+
+            case NoBlessConsumeEffect noBlessConsumeEffect:
+                return noBlessConsumeEffect.value.ToString();
+
+            case TriggerBlessImmediatelyEffect triggerBlessEffect:
+                return triggerBlessEffect.value.ToString();
+
+            case RemoveDebuffFromEnemyEffect removeDebuffEffect:
+                return removeDebuffEffect.value.ToString();
+
+            case DamageByRemovedDebuffSumMultiplierEffect damageByRemovedEffect:
+                return damageByRemovedEffect.multiplier.ToString();
+
+            case TriggerOppositeStanceEffect triggerOppositeEffect:
+                return triggerOppositeEffect.value.ToString();
+
+            case ImmortalThresholdEffect immortalEffect:
+                return immortalEffect.count.ToString();
+        }
+
+        return "0";
     }
 
     public void UpdateEnhancedState()
