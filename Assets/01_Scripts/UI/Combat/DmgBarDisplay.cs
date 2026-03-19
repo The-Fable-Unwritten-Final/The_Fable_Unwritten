@@ -56,6 +56,7 @@ public class DmgBarDisplay : MonoBehaviour
             : Instantiate(dmgPrintPrefab, transform);
         
         dmgInstance.SetActive(true);
+        dmgInstance.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;  // RectTransform 위치 초기화
 
         // 프리팹의 컴포넌트 가져오기
         TextMeshProUGUI tmpText = dmgInstance.GetComponentInChildren<TextMeshProUGUI>();
@@ -63,7 +64,10 @@ public class DmgBarDisplay : MonoBehaviour
         CanvasGroup canvasGroup = dmgInstance.GetComponent<CanvasGroup>();
 
         // 위치 설정
-        dmgInstance.transform.position = target.position + Vector3.up * offsetY;
+        RectTransform rect = dmgInstance.GetComponent<RectTransform>();
+        rect.anchoredPosition = Vector2.zero;
+        dmgInstance.transform.position += Vector3.up * offsetY;
+        
 
         // 아이콘 설정
         Sprite typeIcon = SelectTypeIcon(data);
