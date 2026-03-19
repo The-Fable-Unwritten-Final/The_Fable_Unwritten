@@ -62,7 +62,7 @@ public class EffectManager : MonoBehaviour
         if (sr != null)
         {
             sr.sortingLayerName = "Effect";
-            sr.sortingOrder = 100;
+            sr.sortingOrder = 4;
             sr.flipX = flipX;
         }
 
