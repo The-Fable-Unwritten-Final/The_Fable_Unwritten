@@ -74,7 +74,7 @@ public class ApplyStatusEffect : CardEffectBase
             {
                 Text = statusText,
 
-                type = Debuff.IsDebuff(statType, value) ? DmgTextType.Debuff : DmgTextType.Buff,
+                type = GetDmgTextType(statType, value),
                 isCardEnhanced = isEnhanced == true,
                 isStanceEnhanced = caster is PlayerController pc &&
                            (pc.playerData.currentStance == StancType.Mercy ||
@@ -83,7 +83,7 @@ public class ApplyStatusEffect : CardEffectBase
             };
 
             // Buff/Debuff는 1.5초 지연 후 Enqueue
-            if (Text.type == DmgTextType.Buff || Text.type == DmgTextType.Debuff)
+            if (Text.type > DmgTextType.Heal) // DmgTextType 기준으로 버프/디버프는 2 이상
                 GameManager.Instance.StartCoroutine(DelayedEnqueue(t, Text));
             else
                 t.dmgTextQueue.Enqueue(Text);
@@ -169,6 +169,28 @@ public class ApplyStatusEffect : CardEffectBase
             BuffStatType.CantAttackInStance => "",
             BuffStatType.Blind => "",
             _ => ""
+        };
+    }
+
+    private DmgTextType GetDmgTextType(BuffStatType statType, float value)
+    {
+        return statType switch
+        {
+            BuffStatType.Attack => value > 0 ? DmgTextType.AttackBuff : DmgTextType.AttackDebuff,
+            BuffStatType.Defense => value > 0 ? DmgTextType.DefenseBuff : DmgTextType.DefenseDebuff,
+            
+            // 이름이 동일한 것들
+            BuffStatType.Burn => DmgTextType.Burn,
+            BuffStatType.Freeze => DmgTextType.Freeze,
+            BuffStatType.Bless => DmgTextType.Bless,
+            BuffStatType.Penance => DmgTextType.Penance,
+            BuffStatType.Guard => DmgTextType.Guard,
+            BuffStatType.Scar => DmgTextType.Scar,
+            BuffStatType.Stun => DmgTextType.Stun,
+            BuffStatType.Crime => DmgTextType.Crime,
+            BuffStatType.Activate => DmgTextType.Activate,
+            
+            _ => DmgTextType.Normal,
         };
     }
 }

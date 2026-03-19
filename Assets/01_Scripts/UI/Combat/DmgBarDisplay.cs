@@ -9,8 +9,10 @@ public enum DmgTextType
 {
     Normal,
     Heal,
-    Buff, // 약간의 딜레이
-    Debuff, // 약간의 딜레이
+    // 버프류
+    AttackBuff, DefenseBuff, Bless, Penance, Guard,
+    // 디버프류
+    AttackDebuff, DefenseDebuff, Burn, Freeze, Activate, Crime, Scar, Stun,
 }
 
 public struct DmgTextData
@@ -64,10 +66,9 @@ public class DmgBarDisplay : MonoBehaviour
         dmgInstance.transform.position = target.position + Vector3.up * offsetY;
 
         // 아이콘 설정
-        /* 아이콘 리소스 받기 전까지 주석 처리
         Sprite typeIcon = SelectTypeIcon(data);
         if (typeIcon != null)
-            icon.sprite = typeIcon;*/
+            icon.sprite = typeIcon;
             
         // 텍스트 및 스타일 설정
         tmpText.text = NumberSpriteShift(data);
@@ -89,8 +90,19 @@ public class DmgBarDisplay : MonoBehaviour
         {
             DmgTextType.Normal => 0,
             DmgTextType.Heal => 1,
-            DmgTextType.Buff => 2,
-            DmgTextType.Debuff => 3,
+            DmgTextType.AttackBuff => 2,
+            DmgTextType.DefenseBuff => 3,
+            DmgTextType.Bless => 4,
+            DmgTextType.Penance => 5,
+            DmgTextType.Guard => 6,
+            DmgTextType.AttackDebuff => 7,
+            DmgTextType.DefenseDebuff => 8,
+            DmgTextType.Burn => 9,
+            DmgTextType.Freeze => 10,
+            DmgTextType.Activate => 11,
+            DmgTextType.Crime => 12,
+            DmgTextType.Scar => 13,
+            DmgTextType.Stun => 14,
             _ => 0
         };
 
