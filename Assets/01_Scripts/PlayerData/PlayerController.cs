@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using static ReduceNextCardCostEffect;
+using System;
 
 public class PlayerController : MonoBehaviour, IStatusReceiver
 {
@@ -601,20 +602,37 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     }
 
     //공격 애니메이션 호출 시
-    public void PlayAttackAnimation(int attackType)
+    private Action currentAttackHitCallback;
+    private Coroutine resetAttackRoutine;
+
+    public void PlayAttackAnimation(int attackType, Action onHitTiming = null)
     {
-        if (animator != null)
-        {
-            animator.SetInteger("Attack", attackType);
-            GameManager.Instance.StartCoroutine(ResetAttackParam(1.5f));
-        }
+        if (animator == null)
+            return;
+
+        currentAttackHitCallback = onHitTiming;
+
+        animator.SetInteger("Attack", attackType);
+
+        if (resetAttackRoutine != null)
+            StopCoroutine(resetAttackRoutine);
+
+        resetAttackRoutine = StartCoroutine(ResetAttackParam(1.5f));
     }
 
-    // 일정 시간 후 Attack 파라미터를 기본값으로 되돌림
     private IEnumerator ResetAttackParam(float delay)
     {
         yield return new WaitForSeconds(delay);
         animator.SetInteger("Attack", -1);
+        currentAttackHitCallback = null;
+        resetAttackRoutine = null;
+    }
+
+    // 애니메이션 이벤트에서 호출할 함수
+    public void OnAttackHitEvent()
+    {
+        currentAttackHitCallback?.Invoke();
+        currentAttackHitCallback = null; // 한 번만 실행되게
     }
 
     //피격 애니메이션 호출 시
@@ -969,7 +987,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         var guard = instantEffects.Find(e => e.statType == BuffStatType.Guard);
         if (guard != null && guard.value > 0)
         {
-            float roll = Random.Range(0f, 100f);
+            float roll = UnityEngine.Random.Range(0f, 100f);
             if (roll <= guard.value)
             {
                 var leon = GameManager.Instance.turnController.battleFlow.playerParty

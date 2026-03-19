@@ -85,15 +85,9 @@ public class CardModel : ScriptableObject
 
         GameManager.Instance.StartCoroutine(PlayWithAnimation(caster, targets, originalEnhanced, attackType));
     }
-
     private IEnumerator PlayWithAnimation(IStatusReceiver caster, List<IStatusReceiver> targets, bool fixedIsEnhanced, int attackType)
     {
         GameManager.Instance.turnController.Onaction();
-
-        float totalDuration = 2f;  // 카메라 줌인 + 줌아웃 포함 총 연출 시간
-
-        // 1. 카메라 연출
-        //GameManager.Instance.combatCameraController.PlayCombatCamera(caster, targets, totalDuration);
 
         List<IStatusReceiver> allCharacters = new List<IStatusReceiver>();
         allCharacters.AddRange(GameManager.Instance.turnController.battleFlow.playerParty);
@@ -102,49 +96,66 @@ public class CardModel : ScriptableObject
         foreach (var ch in allCharacters)
         {
             if (ch is PlayerController pc && !targets.Contains(pc) && pc != caster)
-                pc.HideStatusUI(); // 구현 필요
+                pc.HideStatusUI();
         }
 
-        // 2. 공격 애니메이션
-        yield return new WaitForSeconds(0.2f); // 애니메이션 길이에 맞게 조정
+        yield return new WaitForSeconds(0.2f);
 
-        caster.PlayAttackAnimation(attackType); //시전자의 공격 애니메이션 적용
-        SoundManager.Instance.PlaySFX(SoundCategory.Card, (int)type);
+        bool hitTriggered = false;
 
-        yield return new WaitForSeconds(0.1f); // 애니메이션 길이에 맞게 조정
-
-        // 3. 이펙트 재생 + 피격 애니메이션 동시에 진행
-        if (!string.IsNullOrEmpty(skillEffectName) && targets.Count > 0)
+        caster.PlayAttackAnimation(attackType, () =>
         {
-            foreach (var t in targets)
+            if (hitTriggered) return;
+            hitTriggered = true;
+
+            if (!string.IsNullOrEmpty(skillEffectName) && targets.Count > 0)
             {
-                float scaleFactor = DetermineEffectScale(GetEffectiveCost());
-
-                if (!DataManager.Instance.CardEffects.TryGetValue(skillEffectName, out var animInfo))
-                    continue;
-
-                if (animInfo.animationType == AnimationType.Projectile)
+                foreach (var t in targets)
                 {
-                    //  Projectile → 이펙트 끝나고 Hit 처리
-                    GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
-                        skillEffectName, caster.CachedTransform, t.CachedTransform, scaleFactor,
-                        () =>
-                        {
-                            if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
-                                t.PlayHitAnimation();
+                    float scaleFactor = DetermineEffectScale(GetEffectiveCost());
 
-                            foreach (var effect in effects)
-                                effect.Apply(caster, new List<IStatusReceiver> { t }, fixedIsEnhanced);
-                        }
-                    );
+                    if (!DataManager.Instance.CardEffects.TryGetValue(skillEffectName, out var animInfo))
+                        continue;
+
+                    if (animInfo.animationType == AnimationType.Projectile)
+                    {
+                        GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
+                            skillEffectName,
+                            caster.CachedTransform,
+                            t.CachedTransform,
+                            scaleFactor,
+                            () =>
+                            {
+                                if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
+                                    t.PlayHitAnimation();
+
+                                foreach (var effect in effects)
+                                    effect.Apply(caster, new List<IStatusReceiver> { t }, fixedIsEnhanced);
+                            }
+                        );
+                    }
+                    else
+                    {
+                        GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(
+                            skillEffectName,
+                            caster.CachedTransform,
+                            t.CachedTransform,
+                            false,
+                            scaleFactor
+                        );
+
+                        if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
+                            t.PlayHitAnimation();
+
+                        foreach (var effect in effects)
+                            effect.Apply(caster, new List<IStatusReceiver> { t }, fixedIsEnhanced);
+                    }
                 }
-                else
+            }
+            else
+            {
+                foreach (var t in targets)
                 {
-                    // 일반 이펙트 → 즉시 재생 + Hit
-                    GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(
-                        skillEffectName, caster.CachedTransform, t.CachedTransform, false, scaleFactor
-                    );
-
                     if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
                         t.PlayHitAnimation();
 
@@ -152,33 +163,32 @@ public class CardModel : ScriptableObject
                         effect.Apply(caster, new List<IStatusReceiver> { t }, fixedIsEnhanced);
                 }
             }
-        }
-        yield return new WaitForSeconds(0.9f); // 이펙트와 피격 연출 대기
+        });
 
+        SoundManager.Instance.PlaySFX(SoundCategory.Card, (int)type);
 
-        // 4. 효과 적용
-        /*foreach (var effect in effects)
-            effect.Apply(caster, targets, fixedIsEnhanced);*/
-
-        yield return new WaitForSeconds(0.1f); // 효과 적용 후 약간 대기
+        yield return new WaitUntil(() => hitTriggered);
+        yield return new WaitForSeconds(0.9f);
 
         foreach (var target in targets)
         {
             if (!target.IsAlive() && target is MonoBehaviour mb && mb.gameObject.activeSelf)
             {
-                //Debug.Log($"[CardModel] {target.ChClass} 연출 종료 후 사망 처리");
                 mb.gameObject.SetActive(false);
             }
         }
+
         GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
 
         GameManager.Instance.turnController.OffAction();
         GameManager.Instance.turnController.battleFlow.CheckBattleEnd();
-        yield return new WaitForSeconds(0.7f); // 이펙트와 피격 연출 대기
+
+        yield return new WaitForSeconds(0.7f);
+
         foreach (var ch in allCharacters)
         {
             if (ch is PlayerController pc && !targets.Contains(pc) && pc != caster)
-                pc.ShowStatusUI(); // 구현 필요
+                pc.ShowStatusUI();
         }
     }
 

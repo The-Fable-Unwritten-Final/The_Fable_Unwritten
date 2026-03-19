@@ -93,7 +93,7 @@ public interface IStatusReceiver
     void ChangeStance(StancType stance);
 
     // 💥 애니메이션 및 GUI 관련 추가
-    void PlayAttackAnimation(int input);
+    void PlayAttackAnimation(int input, Action onHitTiming = null);
     void PlayHitAnimation();
     void CameraActionPlay();                   //행동시 카메라의 줌인 액션 연출.
 

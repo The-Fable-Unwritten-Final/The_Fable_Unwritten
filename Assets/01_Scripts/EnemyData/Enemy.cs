@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System;
 
 public class Enemy : MonoBehaviour, IStatusReceiver
 {
@@ -346,7 +347,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         if (stun == null || stun.value <= 0)
             return false;
 
-        float roll = Random.Range(0f, 100f);
+        float roll = UnityEngine.Random.Range(0f, 100f);
         if (roll <= stun.value)
         {
             stun.value = 0;
@@ -588,7 +589,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         }
     }
 
-    public void PlayAttackAnimation(int attackType)
+    public void PlayAttackAnimation(int attackType, Action onHitTiming = null)
     {
         if (animator != null)
         {
