@@ -20,6 +20,87 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public void ResetIdealForStage() => IsIdealUsed = false;
     public void MarkIdealThisStage() => IsIdealUsed = true;
 
+    private bool skipTurnThisRound = false;
+
+    // Burn 관련
+    private bool burnIncreasedDuringOpponentTurn = false;
+
+    // Guard 관련 (레온)
+    private bool guardRedirectPending = false;
+
+    private bool IsOpponentActingTurn()
+    {
+        var flow = GameManager.Instance?.turnController?.battleFlow;
+        if (flow == null) return false;
+
+        // 플레이어 입장에서는 EnemyTurn이 상대 턴
+        return flow.currentTurn == TurnState.EnemyTurn;
+    }
+
+    public void OnBattleStart()
+    {
+        skipTurnThisRound = false;
+        burnIncreasedDuringOpponentTurn = false;
+        guardRedirectPending = false;
+
+        hasBlock = false;
+        hasResist = false;
+
+        tickEffects.Clear();
+        instantEffects.Clear();
+
+        ResetStanceBattleState();
+        ResetIdealForStage();
+
+        if (stanceSystem == null)
+            InitializeStanceSystem();
+        else
+            stanceSystem.ResetGauge();
+    }
+
+    public void OnTurnStart()
+    {
+        skipTurnThisRound = false;
+
+        ApplyBurnOnTurnStart();
+
+        if (TryTriggerStun())
+            skipTurnThisRound = true;
+
+        statusDisplay?.PlayerUpdateUI();
+    }
+
+    public void OnTurnEnd()
+    {
+        ApplyCrimeOnTurnEnd();
+        TickStatusEffects();
+        ClearTurnEndInstantEffects();
+        ClearBlock();
+
+        // Freeze는 턴 종료 시 초기화
+        ClearInstantEffect(BuffStatType.Freeze);
+
+        playerData.ResetCurCard();
+        statusDisplay?.PlayerUpdateUI();
+    }
+
+    private void ClearInstantEffect(BuffStatType type)
+    {
+        var effect = instantEffects.Find(e => e.statType == type);
+        if (effect != null)
+            effect.value = 0;
+    }
+
+    private void ClearTurnEndInstantEffects()
+    {
+        for (int i = instantEffects.Count - 1; i >= 0; i--)
+        {
+            var e = instantEffects[i];
+            if (e.value <= 0)
+                instantEffects.RemoveAt(i);
+        }
+    }
+
 
     /// <summary>
     /// 이상실현 사용 시 이후 처리를 위해 필요한 bool
@@ -152,46 +233,111 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     }
 
 
-    /// <summary>
-    /// 상태이상 혹은 버프를 적용하여 리스트에 추가
-    /// </summary>
-    /// <param name="effect">적용할 효과</param>
     public void ApplyStatusEffect(StatusEffect effect)
     {
-        // 디버프 적용시 저항 체크
-        if (hasResist && Debuff.IsDebuff(effect.statType, effect.value)) return;
-        
-        //Debug.Log($"[버프 적용] {playerData.CharacterName} 에게 {effect.statType} +{effect.value} ({effect.duration}턴)");
-        switch (effect)     
-        {
-            case TickEffect tick:   //턴 이펙트일 경우
-                tickEffects.Add(new TickEffect
-                {
-                    statType = tick.statType,
-                    value = tick.value,
-                    duration = tick.duration
-                });
-                break;
+        if (effect == null) return;
 
-            case InstanceEffect inst:       // 단일 적용인 경우
-                var existing = instantEffects.Find(e => e.statType == inst.statType);
-                if (existing != null)       
+        // 디버프 저항
+        if (hasResist && Debuff.IsDebuff(effect.statType, effect.value))
+            return;
+
+        switch (effect)
+        {
+            case TickEffect tick:
                 {
-                    // 기존 수치에 누적
-                    existing.value = Mathf.Clamp(existing.value + inst.value, 0, 50);
-                    existing.isMaintain = existing.isMaintain || inst.isMaintain; // 유지되는 버프가 들어오면 유지로 전환
+                    float finalValue = tick.value;
+
+                    // Active: 다음 상태이상 수치 증가
+                    finalValue += ConsumeActiveBonusIfExists();
+
+                    tickEffects.Add(new TickEffect
+                    {
+                        statType = tick.statType,
+                        value = finalValue,
+                        duration = tick.duration
+                    });
+
+                    if (tick.statType == BuffStatType.Burn && finalValue > 0 && IsOpponentActingTurn())
+                        burnIncreasedDuringOpponentTurn = true;
+
+                    break;
                 }
-                else
+
+            case InstanceEffect inst:
                 {
-                    // 새로 추가
-                    instantEffects.Add(new InstanceEffect
+                    var incoming = new InstanceEffect
                     {
                         statType = inst.statType,
-                        value = Mathf.Clamp(inst.value, 0, 50),
+                        value = inst.value,
                         isMaintain = inst.isMaintain
-                    });
+                    };
+
+                    // 1) Active 먼저 적용
+                    incoming.value += ConsumeActiveBonusIfExists();
+
+                    bool isDebuff = Debuff.IsDebuff(incoming.statType, incoming.value);
+                    bool isPositive = !isDebuff;
+
+                    // 2) Bless / Penance 선처리
+                    if (incoming.statType != BuffStatType.Bless &&
+                        incoming.statType != BuffStatType.Penance)
+                    {
+                        if (isPositive)
+                            TryApplyStoredBlessIfExists(incoming);
+                        else
+                            TryApplyStoredPenanceIfExists(incoming);
+                    }
+
+                    // 3) Bless 자체 적용
+                    if (incoming.statType == BuffStatType.Bless)
+                    {
+                        TryApplyBlessBonus(incoming.value);
+                        statusDisplay?.PlayerUpdateUI();
+                        return;
+                    }
+
+                    // 4) Penance 자체 적용
+                    if (incoming.statType == BuffStatType.Penance)
+                    {
+                        TryApplyPenanceBonus(incoming.value);
+                        statusDisplay?.PlayerUpdateUI();
+                        return;
+                    }
+
+                    // 5) 실제 저장
+                    var existing = instantEffects.Find(e => e.statType == incoming.statType);
+                    if (existing != null)
+                    {
+                        float before = existing.value;
+                        existing.value = Mathf.Clamp(existing.value + incoming.value, 0, 999);
+                        existing.isMaintain = existing.isMaintain || incoming.isMaintain;
+
+                        if (incoming.statType == BuffStatType.Burn &&
+                            existing.value > before &&
+                            IsOpponentActingTurn())
+                        {
+                            burnIncreasedDuringOpponentTurn = true;
+                        }
+                    }
+                    else
+                    {
+                        instantEffects.Add(new InstanceEffect
+                        {
+                            statType = incoming.statType,
+                            value = Mathf.Clamp(incoming.value, 0, 999),
+                            isMaintain = incoming.isMaintain
+                        });
+
+                        if (incoming.statType == BuffStatType.Burn &&
+                            incoming.value > 0 &&
+                            IsOpponentActingTurn())
+                        {
+                            burnIncreasedDuringOpponentTurn = true;
+                        }
+                    }
+
+                    break;
                 }
-                break;
 
             default:
                 Debug.LogWarning($"[ApplyStatusEffect] 알 수 없는 타입: {effect.GetType()}");
@@ -231,40 +377,29 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         if (hasBlock)
         {
             hasBlock = false;
-            //Debug.Log($"[Block] {playerData.CharacterClass.ToString()}의 블록으로 피해 {amount} 무효화");
             return 0;
         }
-        // 문체 효과 적용
+
         amount = StyleManager.Instance.GetOnComingDamageModify(this, this, amount);
+
+        // Guard 감소 적용 (레온용)
+        if (HasGuardValue())
+        {
+            amount = Mathf.Max(0, amount - GetGuardValue());
+            ConsumeGuard(); // 발동 후 초기화
+        }
 
         float reduced = amount - ModifyStat(BuffStatType.Defense, 0f);
         reduced = Mathf.Max(reduced, 1f);
 
-        if(playerData.currentStance == StancType.Defense)
-        {
-            reduced = reduced / 2;
-        }
+        if (playerData.currentStance == StancType.Defense)
+            reduced *= 0.5f;
         else if (playerData.currentStance == StancType.Rush)
-        {
-            reduced = reduced * 2;
-        }
+            reduced *= 2f;
 
         reduced = Mathf.Round(reduced);
 
-        var dmg = new DmgTextData
-        {
-            Text = $"{Mathf.RoundToInt(reduced)}",
-            type = DmgTextType.Normal,
-            isCardEnhanced = false,
-            isStanceEnhanced = false,
-            isWeakened = false
-        };
-
-        this.dmgTextQueue.Enqueue(dmg);
-
         playerData.currentHP = Mathf.Max(0, playerData.currentHP - reduced);
-        //Debug.Log($"{playerData.CharacterName} 피해: {reduced}, 현재 체력: {playerData.currentHP}");
-
         return reduced;
     }
 
@@ -579,6 +714,28 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         }
     }
 
+
+    public void ApplyBurnOnTurnStart()
+    {
+        var burn = instantEffects.Find(e => e.statType == BuffStatType.Burn);
+        if (burn == null || burn.value <= 0) return;
+
+        // 직전 상대 턴에 증가했으면 이번 턴에는 발동 안 함
+        if (burnIncreasedDuringOpponentTurn)
+        {
+            burnIncreasedDuringOpponentTurn = false;
+            return;
+        }
+
+        float damage = burn.value;
+        TakeTrueDamage(damage);
+
+        burn.value = Mathf.Floor(burn.value / 2f);
+
+        if (burn.value < 1f)
+            instantEffects.Remove(burn);
+    }
+
     /// <summary>
     /// 빙결 처리
     /// </summary>
@@ -587,20 +744,11 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public float ApplyFreezePenalty(float baseDamage)
     {
         var freeze = instantEffects.Find(e => e.statType == BuffStatType.Freeze);
-        if (freeze != null && freeze.value > 0)
-        {
-            float multiplier = Mathf.Clamp01(1f - freeze.value / 100f);
-            float reduced = baseDamage * multiplier;
+        if (freeze == null || freeze.value <= 0)
+            return baseDamage;
 
-            Debug.Log($"[Freeze] {playerData.CharacterName} 공격력 {freeze.value}% 감소 → {reduced}");
-
-            // 빙결 효과는 발동 시 수치 초기화
-            freeze.value = 0;
-
-            return reduced;
-        }
-
-        return baseDamage;
+        float reduced = Mathf.Max(0, baseDamage - freeze.value);
+        return reduced;
     }
 
     public void ApplyActivateBonus(BuffStatType incoming)
@@ -629,72 +777,81 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public void TryApplyBlessBonus(float blessValue)
     {
         var targetBuff = instantEffects
-            .Where(e => Debuff.IsDebuff(e.statType, e.value) == false &&
-                        e.statType != BuffStatType.Bless &&
+            .Where(e => e.statType != BuffStatType.Bless &&
+                        !Debuff.IsDebuff(e.statType, e.value) &&
                         e.value > 0)
             .OrderByDescending(e => e.value)
             .FirstOrDefault();
 
         if (targetBuff != null)
         {
-            targetBuff.value = Mathf.Min(50, targetBuff.value + blessValue);
-            Debug.Log($"[Bless] {targetBuff.statType} → +{blessValue} 증가됨");
+            targetBuff.value += blessValue;
         }
         else
         {
-            // 적용할 버프가 없으면 Bless 수치만 저장
-            ApplyStatusEffect(new InstanceEffect
+            var bless = instantEffects.Find(e => e.statType == BuffStatType.Bless);
+            if (bless != null) bless.value += blessValue;
+            else
             {
-                statType = BuffStatType.Bless,
-                value = blessValue,
-                isMaintain = false
-            });
+                instantEffects.Add(new InstanceEffect
+                {
+                    statType = BuffStatType.Bless,
+                    value = blessValue,
+                    isMaintain = false
+                });
+            }
         }
     }
+
+    private void TryApplyStoredBlessIfExists(InstanceEffect incoming)
+    {
+        var bless = instantEffects.Find(e => e.statType == BuffStatType.Bless && e.value > 0);
+        if (bless == null) return;
+
+        incoming.value += bless.value;
+        bless.value = 0;
+    }
+
     /// <summary>
     /// 정화 디버프 처리
     /// </summary>
     /// <param name="purifyValue"></param>
-    public void TryApplyPurifyBonus(float purifyValue)
+    public void TryApplyPenanceBonus(float penanceValue)
     {
         var targetDebuff = instantEffects
-            .Where(e => Debuff.IsDebuff(e.statType, e.value) &&
-                        e.statType != BuffStatType.Penance &&
+            .Where(e => e.statType != BuffStatType.Penance &&
+                        Debuff.IsDebuff(e.statType, e.value) &&
                         e.value > 0)
             .OrderByDescending(e => e.value)
             .FirstOrDefault();
 
         if (targetDebuff != null)
         {
-            float reduction = Mathf.Min(targetDebuff.value, purifyValue);
-            targetDebuff.value -= reduction;
-            Debug.Log($"[Purify] {targetDebuff.statType} → -{reduction} 감소됨");
+            targetDebuff.value = Mathf.Max(0, targetDebuff.value - penanceValue);
         }
         else
         {
-            // 적용할 디버프가 없으면 Purify 수치만 저장
-            ApplyStatusEffect(new InstanceEffect
+            var penance = instantEffects.Find(e => e.statType == BuffStatType.Penance);
+            if (penance != null) penance.value += penanceValue;
+            else
             {
-                statType = BuffStatType.Penance,
-                value = purifyValue,
-                isMaintain = false
-            });
+                instantEffects.Add(new InstanceEffect
+                {
+                    statType = BuffStatType.Penance,
+                    value = penanceValue,
+                    isMaintain = false
+                });
+            }
         }
     }
 
-
-    /// <summary>
-    /// 존재하는 축복 수치 적용
-    /// </summary>
-    private void TryApplyStoredBlessIfExists(InstanceEffect incoming)
+    private void TryApplyStoredPenanceIfExists(InstanceEffect incoming)
     {
-        var bless = instantEffects.Find(e => e.statType == BuffStatType.Bless && !e.isMaintain);
-        if (bless != null)
-        {
-            incoming.value = Mathf.Min(50, incoming.value + bless.value);
-            Debug.Log($"[Bless Triggered] {incoming.statType} 수치 증가 +{bless.value}");
-            instantEffects.Remove(bless); // 일회성
-        }
+        var penance = instantEffects.Find(e => e.statType == BuffStatType.Penance && e.value > 0);
+        if (penance == null) return;
+
+        incoming.value = Mathf.Max(0, incoming.value - penance.value);
+        penance.value = 0;
     }
 
     /// <summary>
@@ -710,6 +867,69 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             Debug.Log($"[Purify Triggered] {incoming.statType} 수치 감소 -{purify.value}");
             instantEffects.Remove(purify); // 일회성
         }
+    }
+
+    public void ApplyCrimeOnTurnEnd()
+    {
+        var crime = instantEffects.Find(e => e.statType == BuffStatType.Crime);
+        if (crime == null || crime.value <= 0) return;
+
+        TakeTrueDamage(crime.value);
+    }
+
+    public float ApplyScarBonus(float baseDamage)
+    {
+        var scar = instantEffects.Find(e => e.statType == BuffStatType.Scar);
+        if (scar == null || scar.value <= 0)
+            return baseDamage;
+
+        float finalDamage = baseDamage + scar.value;
+        scar.value = 0; // 발동 후 초기화
+        return finalDamage;
+    }
+
+    public bool TryTriggerStun()
+    {
+        var stun = instantEffects.Find(e => e.statType == BuffStatType.Stun);
+        if (stun == null || stun.value <= 0)
+            return false;
+
+        float roll = UnityEngine.Random.Range(0f, 100f);
+        if (roll <= stun.value)
+        {
+            stun.value = 0;
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool CanActThisTurn() => !skipTurnThisRound;
+
+    public bool HasGuardValue()
+    {
+        var guard = instantEffects.Find(e => e.statType == BuffStatType.Guard);
+        return guard != null && guard.value > 0;
+    }
+
+    public float GetGuardValue()
+    {
+        var guard = instantEffects.Find(e => e.statType == BuffStatType.Guard);
+        return guard?.value ?? 0f;
+    }
+
+    public void MarkGuardRedirectPending()
+    {
+        guardRedirectPending = true;
+    }
+
+    private void ConsumeGuard()
+    {
+        var guard = instantEffects.Find(e => e.statType == BuffStatType.Guard);
+        if (guard != null)
+            guard.value = 0;
+
+        guardRedirectPending = false;
     }
 
     /// <summary>
@@ -732,32 +952,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         }
 
         return baseDamage;
-    }
-
-    /// <summary>
-    /// 스턴 적용
-    /// </summary>
-    /// <returns></returns>
-    public bool TryTriggerStun()
-    {
-        var stun = instantEffects.Find(e => e.statType == BuffStatType.Stun);
-        if (stun != null && stun.value > 0)
-        {
-            float roll = Random.Range(0f, 100f);
-            if (roll <= stun.value)
-            {
-                Debug.Log($"[Stun] {playerData.CharacterName} 기절 발동 → 1턴 행동 불가");
-                ApplyStatusEffect(new TickEffect
-                {
-                    statType = BuffStatType.Stun,
-                    value = 1,
-                    duration = 1
-                });
-                stun.value = 0;
-                return true;
-            }
-        }
-        return false;
     }
 
     public bool TryTriggerGuardRedirect(out PlayerController redirectTarget)
@@ -917,4 +1111,16 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         immortalMinHp = minHp;
         immortalCount = count;
     }
+
+    private float ConsumeActiveBonusIfExists()
+    {
+        var active = instantEffects.Find(e => e.statType == BuffStatType.Activate);
+        if (active == null || active.value <= 0)
+            return 0;
+
+        float bonus = active.value;
+        active.value = 0; // 발동 후 초기화
+        return bonus;
+    }
+
 }

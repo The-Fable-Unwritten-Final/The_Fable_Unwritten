@@ -30,7 +30,9 @@ public class PotentialGauge
         CurrentGauge += amount;
 
         if (prev != CurrentGauge)
+        {
             OnGaugeChanged?.Invoke(CurrentGauge);
+        }
 
         bool becameFull = prev < MAX_GAUGE && CurrentGauge >= MAX_GAUGE;
         if (becameFull)
@@ -50,16 +52,18 @@ public class PotentialGauge
         CurrentGauge -= amount;
 
         if (prev != CurrentGauge)
+        {
             OnGaugeChanged?.Invoke(CurrentGauge);
+        }
     }
 
-    public void Reset()
+    public void ConsumeForEffect()
     {
         CurrentGauge = 0;
         OnGaugeChanged?.Invoke(CurrentGauge);
     }
 
-    public void ConsumeForEffect()
+    public void Reset()
     {
         CurrentGauge = 0;
         OnGaugeChanged?.Invoke(CurrentGauge);
