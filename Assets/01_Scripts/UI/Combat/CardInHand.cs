@@ -21,6 +21,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     [Header("UI Info")]
     [SerializeField] Image cardFrame;
     [SerializeField] Image cardImage; // 카드 이미지
+    [SerializeField] Image cardCostImage; // 카드 코스트 이미지
     [SerializeField] Image cardTypeImage; // 카드 타입 이미지
     [SerializeField] Image cardCharImage; // 카드 캐릭터 이미지
     [SerializeField] TextMeshProUGUI cardCost; // 카드 코스트
@@ -52,6 +53,22 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     private void OnDestroy()
     {
         StopAllCoroutines(); // 카드가 파괴될 때 모든 코루틴 정지
+        
+        // UIParticle 정리
+        if (effectVisualizer != null)
+        {
+            if (effectVisualizer.useCardFXParticle != null)
+            {
+                effectVisualizer.useCardFXParticle.Clear();
+                effectVisualizer.useCardFXParticle.Stop();
+            }
+            
+            if (effectVisualizer.useEnhancedCardFXParticle != null)
+            {
+                effectVisualizer.useEnhancedCardFXParticle.Clear();
+                effectVisualizer.useEnhancedCardFXParticle.Stop();
+            }
+        }
     }
 
 
@@ -205,6 +222,8 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         // 첫 단계: frameCover, illustCover 반투명하게
         seq.Append(frameCover.DOFade(0.5f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(illustCover.DOFade(0.5f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(cardCostImage.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+
 
         // 두 번째 단계: 전체 fade out + FX 적용
         seq.AppendCallback(() =>
@@ -217,6 +236,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
         seq.Append(frameCover.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(illustCover.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(cardCostImage.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(cardFrame.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(cardImage.DOFade(0f, 0.4f).SetEase(Ease.OutSine));
         seq.Join(cardTypeImage.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
@@ -225,9 +245,29 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         seq.Join(cardCost.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(cardDescription.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
 
+        // 파티클이 재생될 시간 (약 1초 정도 대기)
+        seq.AppendInterval(1f);
+
         // 마지막 단계: 오브젝트 제거 및 정렬
         seq.OnComplete(() =>
         {
+            // UIParticle 정리 (재생 종료 후)
+            if (effectVisualizer != null)
+            {
+                if (effectVisualizer.useCardFXParticle != null)
+                {
+                    effectVisualizer.useCardFXParticle.Clear();
+                    effectVisualizer.useCardFXParticle.Stop();
+                    Debug.Log($"[CardInHand] 카드 사용 효과 파티클 정리 완료. 카드 이름: {cardData.cardName}");
+                }
+
+                if (effectVisualizer.useEnhancedCardFXParticle != null)
+                {
+                    effectVisualizer.useEnhancedCardFXParticle.Clear();
+                    effectVisualizer.useEnhancedCardFXParticle.Stop();
+                }
+            }
+
             Destroy(this.gameObject);
             cardDisplay.isOnDrag = false; // 드래그 상태 해제
             cardDisplay.CardArrange();

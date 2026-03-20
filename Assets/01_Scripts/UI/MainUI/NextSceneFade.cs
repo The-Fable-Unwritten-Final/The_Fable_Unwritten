@@ -12,7 +12,7 @@ public class NextSceneFade : MonoBehaviour
     void Awake()
     {
         fadeImage.material.SetFloat("_Progress", 0f);
-        fadeImage.material.color = new Color(182f/255f, 150f/255f, 114f/255f, 0f);
+        fadeImage.material.color = new Color(182f / 255f, 150f / 255f, 114f / 255f, 0f);
     }
 
     /// <summary>
@@ -44,6 +44,10 @@ public class NextSceneFade : MonoBehaviour
         // 씬 전환 완료까지 대기
         while (!async.isDone)
             yield return null;
+
+        // UIParticle 및 메모리 정리
+        Resources.UnloadUnusedAssets();
+        System.GC.Collect();
 
         // 열려있는 팝업 닫기
         while (UIManager.Instance.popupStack.Count > 0)
@@ -105,13 +109,24 @@ public class NextSceneFade : MonoBehaviour
             yield return null;
         }
     }
-    
+
     void IfCombatScene()
     {
         if (GameManager.Instance.combatUIController != null)
         {
             // 전투 씬일 경우 카드를 아래로 내리는 메서드 호출
             GameManager.Instance.combatUIController.MoveCardsWhenExitSceneTransition();
+
+            // 모든 UIParticle 강제 정리
+            Coffee.UIExtensions.UIParticle[] allParticles = FindObjectsOfType<Coffee.UIExtensions.UIParticle>();
+            foreach (Coffee.UIExtensions.UIParticle particle in allParticles)
+            {
+                if (particle != null)
+                {
+                    particle.Clear();
+                    particle.Stop();
+                }
+            }
         }
     }
 }

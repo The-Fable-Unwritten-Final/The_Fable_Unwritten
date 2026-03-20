@@ -21,8 +21,12 @@ Shader "UI/InkWipe"
         }
 
         Blend SrcAlpha OneMinusSrcAlpha
+        BlendOp Add
         Cull Off
         ZWrite Off
+        
+        // 알파가 거의 0이면 완전히 투명하게 처리
+        AlphaToMask On
 
         Pass
         {
