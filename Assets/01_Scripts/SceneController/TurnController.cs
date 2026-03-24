@@ -20,7 +20,7 @@ public class TurnController : MonoBehaviour
     public TurnState turnState = TurnState.GameStart; // 현재 턴 상태
     [SerializeField] CardDisplay cardDisplay; // 카드 디스플레이
     public BattleFlowController battleFlow;
-    [SerializeField] Animator TurnButtonAnimator; // 턴 종료 버튼 애니메이터
+    [SerializeField] TurnEndButtonControl TurnButton; 
 
     // 턴의 각 상태 진입시 호출되는 이벤트
     /// <summary>
@@ -158,8 +158,8 @@ public class TurnController : MonoBehaviour
         // 문체 효과 호출 종료 //
 
         // 턴 종료 버튼 활성화
-        if (TurnButtonAnimator != null)
-            TurnButtonAnimator.SetBool("isActive", true);
+        if (TurnButton != null)
+            TurnButton.OnStartTurn(); // 버튼 UI 업데이트 (텍스트 보이게 하고 인터렉션 켜기)
     }
     public void AtPlayerTurn()// 턴 종료 버튼을 눌러서 EndPlayerTurn으로 진입
     {
@@ -170,8 +170,8 @@ public class TurnController : MonoBehaviour
         if (!GameManager.Instance.cardDiscardController.CheckCountOk()) return; // 만약 카드수량이 초과시 return.
         SetTurnState(TurnState.EndPlayerTurn); // 플레이어 턴 종료
         // 턴 종료 버튼 비활성화
-        if (TurnButtonAnimator != null)
-            TurnButtonAnimator.SetBool("isActive", false);
+        if (TurnButton != null)
+            TurnButton.OnTurnEnd(); // 버튼 UI 업데이트 (텍스트 숨기고 인터렉션 끄기)
     }
     IEnumerator AtEndPlayerTurn()
     {

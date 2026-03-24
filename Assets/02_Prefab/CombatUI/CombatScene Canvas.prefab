@@ -192,6 +192,9 @@ MonoBehaviour:
   yOffset: 5
   cardSpacing: 120
   cardAngle: 1.2
+  targetPo: {x: 0, y: 50}
+  waitPos: {x: 0, y: -400}
+  moveDuration: 1
   uiRaycaster: {fileID: 4812558853377772333}
   eventSystem: {fileID: 0}
   arrowImage: {fileID: 5549886556155804497}
@@ -210,7 +213,6 @@ GameObject:
   - component: {fileID: 6267710412232554750}
   - component: {fileID: 6739194443924397597}
   - component: {fileID: 2816663069003842466}
-  - component: {fileID: 7772820133896533512}
   - component: {fileID: 3892547892982372722}
   m_Layer: 5
   m_Name: TurnEnd
@@ -346,27 +348,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stanceButton: {fileID: 0}
---- !u!95 &7772820133896533512
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2739594335736927423}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 456896d8338703f4b9463b708476e6e2, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &3892547892982372722
 MonoBehaviour:
   m_ObjectHideFlags: 0
