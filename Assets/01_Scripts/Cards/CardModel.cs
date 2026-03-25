@@ -89,6 +89,10 @@ public class CardModel : ScriptableObject
     {
         GameManager.Instance.turnController.Onaction();
 
+        // 카메라 연출
+        float totalDuration = 2f;
+        GameManager.Instance.combatCameraController.PlayCombatCamera(caster, targets, totalDuration);
+        
         List<IStatusReceiver> allCharacters = new List<IStatusReceiver>();
         allCharacters.AddRange(GameManager.Instance.turnController.battleFlow.playerParty);
         allCharacters.AddRange(GameManager.Instance.turnController.battleFlow.enemyParty);

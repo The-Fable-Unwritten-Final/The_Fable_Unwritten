@@ -13568,6 +13568,41 @@ PrefabInstance:
       propertyPath: m_text
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 2262613072858604047, guid: e80e55e4d7839ad4a97cd864c52efb28,
+        type: 3}
+      propertyPath: m_UpdateString.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2262613072858604047, guid: e80e55e4d7839ad4a97cd864c52efb28,
+        type: 3}
+      propertyPath: m_UpdateString.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2262613072858604047, guid: e80e55e4d7839ad4a97cd864c52efb28,
+        type: 3}
+      propertyPath: m_UpdateString.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5396969691877943155}
+    - target: {fileID: 2262613072858604047, guid: e80e55e4d7839ad4a97cd864c52efb28,
+        type: 3}
+      propertyPath: m_UpdateString.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2262613072858604047, guid: e80e55e4d7839ad4a97cd864c52efb28,
+        type: 3}
+      propertyPath: m_UpdateString.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: set_text
+      objectReference: {fileID: 0}
+    - target: {fileID: 2262613072858604047, guid: e80e55e4d7839ad4a97cd864c52efb28,
+        type: 3}
+      propertyPath: m_UpdateString.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: TMPro.TMP_Text, Unity.TextMeshPro
+      objectReference: {fileID: 0}
+    - target: {fileID: 2262613072858604047, guid: e80e55e4d7839ad4a97cd864c52efb28,
+        type: 3}
+      propertyPath: m_UpdateString.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3386400363431125892, guid: e80e55e4d7839ad4a97cd864c52efb28,
         type: 3}
       propertyPath: eventSystem
@@ -13785,6 +13820,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d069ff756cdde014da5a19352e435868, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5396969691877943155 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8674434885319364374, guid: e80e55e4d7839ad4a97cd864c52efb28,
+    type: 3}
+  m_PrefabInstance: {fileID: 5396969691877943150}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5399150894868842222
