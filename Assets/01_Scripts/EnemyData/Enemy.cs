@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using System;
 
 public class Enemy : MonoBehaviour, IStatusReceiver
 {
     public EnemyData enemyData;
 
     public bool hasBlock = false;
+    public bool hasResist { get; set; } = false;
     private bool isTargetable;
 
     public bool IsTargetable
@@ -26,37 +29,63 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     [SerializeField] private HpBarDisplay hpBarDisplay;
     [SerializeField] private DmgBarDisplay dmgBarDisplay;
-    [SerializeField] private TargetArrowDisplay targetArrow; 
+    [SerializeField] private TargetArrowDisplay targetArrow;
+    [SerializeField] private DmgBarQueueHandler queue;
 
-    private Animator animator;
+    public SpriteRenderer spriteRenderer;
+    public Animator animator;
     private StatusDisplay statusDisplay;
 
-    [SerializeField]public List<StatusEffect> activeEffects = new List<StatusEffect>();  //현재 가지고 있는 상태이상 및 버프
+    [SerializeField] public List<TickEffect> tickEffects = new();
+    [SerializeField] public List<InstanceEffect> instantEffects = new();
+
+    private bool skipTurnThisRound = false;
+    private bool burnIncreasedDuringOpponentTurn = false;
+
+    private CharacterClass characterClass = CharacterClass.Enemy;
+
+    public CharacterClass ChClass
+    {
+        get => characterClass;
+        set => characterClass = value;
+    }
+
+    public DeckModel Deck => null;
+    public bool IsIgnited => false;
+    public string CurrentStance => enemyData != null ? enemyData.currentStance.ToString() : "";
+    public Transform CachedTransform => transform;
+    public DmgBarQueueHandler dmgTextQueue => queue;
+    public DmgBarDisplay dmgBar => dmgBarDisplay;
+    public TargetArrowDisplay tarArrow => targetArrow;
 
     private void Awake()
     {
-
-        animator = GetComponent<Animator>();
         statusDisplay = GetComponentInChildren<StatusDisplay>();
 
-        if (enemyData != null && enemyData.animationController != null)
+        if (animator == null)
+            animator = GetComponent<Animator>();
+
+        if (enemyData != null && enemyData.animationController != null && animator != null)
         {
             animator.runtimeAnimatorController = enemyData.animationController;
         }
-        else
+        else if (enemyData == null)
         {
-            Debug.LogWarning($"[{name}] enemyData 또는 AnimationController가 누락되었습니다.");
+            Debug.LogWarning($"[{name}] enemyData가 누락되었습니다.");
         }
     }
-    void Start()
+
+    private void Start()
     {
-        targetArrow.Init(this); // 옵저버 연결
+        targetArrow?.Init(this);
     }
 
     public void SetData(EnemyData data)
     {
         enemyData = data;
 
+        // 문체 효과 적용
+        enemyData.MaxHP = StyleManager.Instance.ModifyEnemyMaxHp(this, (int)enemyData.MaxHP);
         enemyData.CurrentHP = enemyData.MaxHP;
 
         if (animator == null)
@@ -65,60 +94,403 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         if (enemyData.animationController != null && animator != null)
             animator.runtimeAnimatorController = enemyData.animationController;
 
-        if (hpBarDisplay != null){
+        if (hpBarDisplay != null)
             hpBarDisplay.BindEnemyData(enemyData);
+
+        if (hpBarDisplay != null)
+        {
+            var rt = hpBarDisplay.GetComponent<RectTransform>();
+            var s = rt.localScale;
+
+            if (enemyData.type == EnemyType.elite || enemyData.type == EnemyType.boss)
+                s.x = 1.8f;
+            else
+                s.x = 1.1f;
+
+            rt.localScale = s;
         }
     }
 
-    /// <summary>
-    /// 상태이상 혹은 버프를 적용하여 리스트에 추가
-    /// </summary>
-    /// <param name="effect">적용할 효과</param>
+    public void ChangeStance(StancType stance)
+    {
+        
+    }
+
+    public float GetEffectValue(BuffStatType type)
+    {
+        float total = 0;
+
+        foreach (var e in tickEffects)
+            if (e.statType == type) total += e.value;
+
+        foreach (var e in instantEffects)
+            if (e.statType == type) total += e.value;
+
+        return total;
+    }
+
+    private bool IsOpponentActingTurn()
+    {
+        var flow = GameManager.Instance?.turnController?.battleFlow;
+        if (flow == null) return false;
+
+        // 적 입장에서는 PlayerTurn이 상대 턴
+        return flow.currentTurn == TurnState.PlayerTurn;
+    }
+
+    public void OnBattleStart()
+    {
+        skipTurnThisRound = false;
+        burnIncreasedDuringOpponentTurn = false;
+
+        hasBlock = false;
+        hasResist = false;
+
+        tickEffects.Clear();
+        instantEffects.Clear();
+
+        statusDisplay?.EnemyUpdateUI();
+    }
+
+    public void OnTurnStart()
+    {
+        skipTurnThisRound = false;
+
+        ApplyBurnOnTurnStart();
+
+        if (TryTriggerStun())
+            skipTurnThisRound = true;
+
+        statusDisplay?.EnemyUpdateUI();
+    }
+
+    public void OnTurnEnd()
+    {
+        ApplyCrimeOnTurnEnd();
+        TickStatusEffects();
+        ClearTurnEndInstantEffects();
+        ClearBlock();
+
+        // Freeze는 턴 종료 시 초기화
+        ClearInstantEffect(BuffStatType.Freeze);
+
+        statusDisplay?.EnemyUpdateUI();
+    }
+
+    public bool CanActThisTurn() => !skipTurnThisRound;
+
     public void ApplyStatusEffect(StatusEffect effect)
     {
-        //Debug.Log($"[버프 적용] {enemyData.EnemyName} 에게 {effect.statType} +{effect.value} ({effect.duration}턴)");
-        activeEffects.Add(new StatusEffect
+        if (effect == null) return;
+
+        if (hasResist && Debuff.IsDebuff(effect.statType, effect.value))
+            return;
+
+        switch (effect)
         {
-            statType = effect.statType,
-            value = effect.value,
-            duration = effect.duration
-        });
+            case TickEffect tick:
+                {
+                    float finalValue = tick.value;
+
+                    // Active: 다음에 들어오는 상태이상 수치 증가
+                    finalValue += ConsumeActiveBonusIfExists();
+
+                    tickEffects.Add(new TickEffect
+                    {
+                        statType = tick.statType,
+                        value = finalValue,
+                        duration = tick.duration
+                    });
+
+                    if (tick.statType == BuffStatType.Burn && finalValue > 0 && IsOpponentActingTurn())
+                        burnIncreasedDuringOpponentTurn = true;
+
+                    break;
+                }
+
+            case InstanceEffect inst:
+                {
+                    var incoming = new InstanceEffect
+                    {
+                        statType = inst.statType,
+                        value = inst.value,
+                        isMaintain = inst.isMaintain
+                    };
+
+                    // 1. Active 적용
+                    incoming.value += ConsumeActiveBonusIfExists();
+
+                    bool isDebuff = Debuff.IsDebuff(incoming.statType, incoming.value);
+                    bool isPositive = !isDebuff;
+
+                    // 2. 저장된 Bless / Penance 적용
+                    if (incoming.statType != BuffStatType.Bless &&
+                        incoming.statType != BuffStatType.Penance)
+                    {
+                        if (isPositive)
+                            TryApplyStoredBlessIfExists(incoming);
+                        else
+                            TryApplyStoredPenanceIfExists(incoming);
+                    }
+
+                    // 3. Bless 자체 처리
+                    if (incoming.statType == BuffStatType.Bless)
+                    {
+                        TryApplyBlessBonus(incoming.value);
+                        statusDisplay?.EnemyUpdateUI();
+                        return;
+                    }
+
+                    // 4. Penance 자체 처리
+                    if (incoming.statType == BuffStatType.Penance)
+                    {
+                        TryApplyPenanceBonus(incoming.value);
+                        statusDisplay?.EnemyUpdateUI();
+                        return;
+                    }
+
+                    // 5. 실제 저장
+                    var existing = instantEffects.Find(e => e.statType == incoming.statType);
+                    if (existing != null)
+                    {
+                        float before = existing.value;
+                        existing.value = Mathf.Clamp(existing.value + incoming.value, 0, 999);
+                        existing.isMaintain = existing.isMaintain || incoming.isMaintain;
+
+                        if (incoming.statType == BuffStatType.Burn &&
+                            existing.value > before &&
+                            IsOpponentActingTurn())
+                        {
+                            burnIncreasedDuringOpponentTurn = true;
+                        }
+                    }
+                    else
+                    {
+                        instantEffects.Add(new InstanceEffect
+                        {
+                            statType = incoming.statType,
+                            value = Mathf.Clamp(incoming.value, 0, 999),
+                            isMaintain = incoming.isMaintain
+                        });
+
+                        if (incoming.statType == BuffStatType.Burn &&
+                            incoming.value > 0 &&
+                            IsOpponentActingTurn())
+                        {
+                            burnIncreasedDuringOpponentTurn = true;
+                        }
+                    }
+
+                    break;
+                }
+
+            default:
+                Debug.LogWarning($"[ApplyStatusEffect] 알 수 없는 타입: {effect.GetType()}");
+                break;
+        }
 
         statusDisplay?.EnemyUpdateUI();
     }
 
-    public void TakeTrueDamage(float damage)
+    public void ApplyBurnOnTurnStart()
     {
-        //Debug.Log($"{enemyData.EnemyName}가 {damage}의 트루데미지를 받음! 현재 체력: {enemyData.CurrentHP}");
-        currentHP -= damage;
+        var burn = instantEffects.Find(e => e.statType == BuffStatType.Burn);
+        if (burn == null || burn.value <= 0) return;
+
+        // 직전 상대 턴에 증가했으면 발동 안 함
+        if (burnIncreasedDuringOpponentTurn)
+        {
+            burnIncreasedDuringOpponentTurn = false;
+            return;
+        }
+
+        float damage = burn.value;
+        TakeTrueDamage(damage);
+
+        burn.value = Mathf.Floor(burn.value / 2f);
+
+        if (burn.value < 1f)
+            instantEffects.Remove(burn);
     }
 
-    /// <summary>
-    /// 턴 종료 시 버프 감소 용
-    /// </summary>
-    public void TickStatusEffects()
+    public void ApplyCrimeOnTurnEnd()
     {
-        for (int i = activeEffects.Count - 1; i >= 0; i--)
+        var crime = instantEffects.Find(e => e.statType == BuffStatType.Crime);
+        if (crime == null || crime.value <= 0) return;
+
+        TakeTrueDamage(crime.value);
+    }
+
+    public float ApplyFreezePenalty(float baseDamage)
+    {
+        var freeze = instantEffects.Find(e => e.statType == BuffStatType.Freeze);
+        if (freeze == null || freeze.value <= 0)
+            return baseDamage;
+
+        return Mathf.Max(0, baseDamage - freeze.value);
+    }
+
+    public float ApplyScarBonus(float baseDamage)
+    {
+        var scar = instantEffects.Find(e => e.statType == BuffStatType.Scar);
+        if (scar == null || scar.value <= 0)
+            return baseDamage;
+
+        float finalDamage = baseDamage + scar.value;
+        scar.value = 0; // 발동 후 초기화
+        return finalDamage;
+    }
+
+    public bool TryTriggerStun()
+    {
+        var stun = instantEffects.Find(e => e.statType == BuffStatType.Stun);
+        if (stun == null || stun.value <= 0)
+            return false;
+
+        float roll = UnityEngine.Random.Range(0f, 100f);
+        if (roll <= stun.value)
         {
-            activeEffects[i].duration--;
-            if (activeEffects[i].duration <= 0)
+            stun.value = 0;
+            return true;
+        }
+
+        return false;
+    }
+
+    private float ConsumeActiveBonusIfExists()
+    {
+        var active = instantEffects.Find(e => e.statType == BuffStatType.Activate);
+        if (active == null || active.value <= 0)
+            return 0;
+
+        float bonus = active.value;
+        active.value = 0;
+        return bonus;
+    }
+
+    public void TryApplyBlessBonus(float blessValue)
+    {
+        var targetBuff = instantEffects
+            .Where(e => e.statType != BuffStatType.Bless &&
+                        !Debuff.IsDebuff(e.statType, e.value) &&
+                        e.value > 0)
+            .OrderByDescending(e => e.value)
+            .FirstOrDefault();
+
+        if (targetBuff != null)
+        {
+            targetBuff.value += blessValue;
+        }
+        else
+        {
+            var bless = instantEffects.Find(e => e.statType == BuffStatType.Bless);
+            if (bless != null)
             {
-                //Debug.Log($"[버프 종료] {enemyData.EnemyName} 의 {activeEffects[i].statType} 효과 종료");
-                activeEffects.RemoveAt(i);
+                bless.value += blessValue;
+            }
+            else
+            {
+                instantEffects.Add(new InstanceEffect
+                {
+                    statType = BuffStatType.Bless,
+                    value = blessValue,
+                    isMaintain = false
+                });
             }
         }
-        statusDisplay?.EnemyUpdateUI();
-    }
-    /// <summary>
-    /// 특정 타입의 버프/디버프가 있는지 확인
-    /// </summary>
-    /// <param name="type">스탯 타입</param>
-    /// <returns>존재 여부</returns>
-    public bool HasEffect(BuffStatType type)
-    {
-        return activeEffects.Exists(e => e.statType == type && e.duration > 0);
     }
 
+    public void TryApplyPenanceBonus(float penanceValue)
+    {
+        var targetDebuff = instantEffects
+            .Where(e => e.statType != BuffStatType.Penance &&
+                        Debuff.IsDebuff(e.statType, e.value) &&
+                        e.value > 0)
+            .OrderByDescending(e => e.value)
+            .FirstOrDefault();
+
+        if (targetDebuff != null)
+        {
+            targetDebuff.value = Mathf.Max(0, targetDebuff.value - penanceValue);
+        }
+        else
+        {
+            var penance = instantEffects.Find(e => e.statType == BuffStatType.Penance);
+            if (penance != null)
+            {
+                penance.value += penanceValue;
+            }
+            else
+            {
+                instantEffects.Add(new InstanceEffect
+                {
+                    statType = BuffStatType.Penance,
+                    value = penanceValue,
+                    isMaintain = false
+                });
+            }
+        }
+    }
+
+    private void TryApplyStoredBlessIfExists(InstanceEffect incoming)
+    {
+        var bless = instantEffects.Find(e => e.statType == BuffStatType.Bless && e.value > 0);
+        if (bless == null) return;
+
+        incoming.value += bless.value;
+        bless.value = 0;
+    }
+
+    private void TryApplyStoredPenanceIfExists(InstanceEffect incoming)
+    {
+        var penance = instantEffects.Find(e => e.statType == BuffStatType.Penance && e.value > 0);
+        if (penance == null) return;
+
+        incoming.value = Mathf.Max(0, incoming.value - penance.value);
+        penance.value = 0;
+    }
+
+    public void TickStatusEffects()
+    {
+        for (int i = tickEffects.Count - 1; i >= 0; i--)
+        {
+            tickEffects[i].duration--;
+            if (tickEffects[i].duration <= 0)
+            {
+                Debug.Log($"[TickEffect 만료] {tickEffects[i].statType}");
+                tickEffects.RemoveAt(i);
+            }
+        }
+
+        statusDisplay?.EnemyUpdateUI();
+    }
+
+    private void ClearInstantEffect(BuffStatType type)
+    {
+        var effect = instantEffects.Find(e => e.statType == type);
+        if (effect != null)
+            effect.value = 0;
+    }
+
+    private void ClearTurnEndInstantEffects()
+    {
+        for (int i = instantEffects.Count - 1; i >= 0; i--)
+        {
+            if (instantEffects[i].value <= 0)
+                instantEffects.RemoveAt(i);
+        }
+    }
+
+    public bool HasEffect(BuffStatType type)
+    {
+        return tickEffects.Exists(e => e.statType == type)
+            || instantEffects.Exists(e => e.statType == type);
+    }
+
+    public bool IsStunned()
+    {
+        return HasEffect(BuffStatType.Stun);
+    }
 
     public void BindHpBar(HpBarDisplay bar)
     {
@@ -126,95 +498,74 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         hpBarDisplay.BindEnemyData(enemyData);
     }
 
-    /// <summary>
-    /// 해당 스탯에 현재 적용 중인 버프를 계산하여 반환
-    /// </summary>
-    /// <param name="statType">수정할 스탯 타입</param>
-    /// <param name="baseValue">기본값</param>
-    /// <returns>버프 적용 후 최종 값</returns>
     public float ModifyStat(BuffStatType statType, float baseValue)
     {
-        float modifiedValue = baseValue;
-        foreach (var effect in activeEffects)
-        {
-            if (effect.statType == statType)
-                modifiedValue += effect.value;
-        }
-        return modifiedValue;
+        float result = baseValue;
+
+        foreach (var e in tickEffects)
+            if (e.statType == statType) result += e.value;
+
+        foreach (var e in instantEffects)
+            if (e.statType == statType) result += e.value;
+
+        return result;
     }
 
-
-    /// <summary>
-    /// 체력 회복
-    /// </summary>
-    /// <param name="amount">회복량</param>
     public void Heal(float amount)
     {
         enemyData.CurrentHP = Mathf.Min(enemyData.MaxHP, enemyData.CurrentHP + amount);
         Debug.Log($"{enemyData.EnemyName} 회복: {amount}, 현재 체력: {enemyData.CurrentHP}");
     }
 
-
-    /// <summary>
-    /// 생존 여부 확인
-    /// </summary>
-    /// <returns>체력이 0 초과인지 여부</returns>
     public bool IsAlive()
     {
         return enemyData.CurrentHP > 0;
     }
 
-
-    public bool IsStunned()
+    public void TakeTrueDamage(float damage)
     {
-        return activeEffects.Exists(e => e.statType == BuffStatType.stun && e.duration > 0);
+        damage = StyleManager.Instance.GetDamageGiveModify(this, this, BattleLogManager.Instance.card, damage);
+        currentHP = Mathf.Max(0, currentHP - damage);
     }
-
-    private CharacterClass characterClass = CharacterClass.Enemy;
-    public CharacterClass ChClass
-    {
-        get => characterClass;
-        set => characterClass = value;
-    }
-
-    public DeckModel Deck => null;
-
-    public bool IsIgnited => false;
-
-    public string CurrentStance => enemyData.currentStance.ToString();
-
-    public Transform CachedTransform => transform;
 
     public float TakeDamage(float amount)
     {
         if (hasBlock)
         {
             hasBlock = false;
-            //Debug.Log($"[Block] {enemyData.EnemyName}의 블록으로 피해 {amount} 무효화");
             return 0;
         }
 
-        float reduced = amount - ModifyStat(BuffStatType.Defense, 0f); // 방어력으로 피해 감소
+        float reduced = amount - ModifyStat(BuffStatType.Defense, 0f);
         reduced = Mathf.Max(reduced, 0);
 
-        enemyData.CurrentHP -= reduced;
-        //Debug.Log($"{enemyData.EnemyName}가 {reduced}의 피해를 받음! 현재 체력: {enemyData.CurrentHP}");
-
+        currentHP = Mathf.Max(0, currentHP - reduced);
         return reduced;
+    }
+
+    public void GrantBlock()
+    {
+        hasBlock = true;
+        statusDisplay?.EnemyUpdateUI();
+    }
+
+    public void ClearBlock()
+    {
+        if (!hasBlock) return;
+        hasBlock = false;
+        statusDisplay?.EnemyUpdateUI();
     }
 
     public void CameraActionPlay()
     {
-        //GameManager.Instance.combatCameraController.CameraZoomInAction(transform);
+        // GameManager.Instance.combatCameraController.CameraZoomInAction(transform);
     }
 
-    // 최대 체력
     public float maxHP
     {
         get => enemyData.MaxHP;
         set => enemyData.MaxHP = value;
     }
-    //현재 체력
 
     public float currentHP
     {
@@ -222,14 +573,12 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         set => enemyData.CurrentHP = value;
     }
 
-    //체력 변화 시
     public void UpdateHpStatus()
     {
         maxHP = enemyData.MaxHP;
         currentHP = enemyData.CurrentHP;
     }
 
-    //HP바 위치 조절용
     public void UpdateHpBarFollowTarget()
     {
         if (hpBarDisplay != null)
@@ -240,13 +589,20 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         }
     }
 
-    public void PlayAttackAnimation()
+    public void PlayAttackAnimation(int attackType, Action onHitTiming = null)
     {
         if (animator != null)
         {
-            animator.SetBool("Attack", true);
-            GameManager.Instance.StartCoroutine(ResetBool("Attack", 1f));
+            animator.SetInteger("Attack", attackType);
+            GameManager.Instance.StartCoroutine(ResetAttackParam(1.5f));
         }
+    }
+
+    private IEnumerator ResetAttackParam(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (animator != null)
+            animator.SetInteger("Attack", -1);
     }
 
     public void PlayHitAnimation()
@@ -262,59 +618,17 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     {
         yield return new WaitForSeconds(delay);
 
-        // 오브젝트가 살아있을 때만 실행
         if (this != null && animator != null)
-        {
             animator.SetBool(param, false);
-        }
     }
 
-    /// <summary>
-    /// 해당 자세로 공격 가능한지 확인
-    /// </summary>
-    /// <param name="stance">공격 가능한지 확인하는 함수</param>
-    /// <returns></returns>
-    public bool IsAttackBlockedByStance(StancValue.EStancType stance)
-    {
-        var blockEffects = activeEffects.FindAll(e => e.statType == BuffStatType.CantAttackInStance);
-
-        foreach (var effect in blockEffects)
-        {
-            if ((int)stance == (int)effect.value)
-                return true;
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// 현재 적용 중인 공격력 버프 총합 반환
-    /// </summary>
     public float GetBuffAtk()
     {
-        float atkTotal = 0;
-        foreach (var effect in activeEffects)
-        {
-            if (effect.statType == BuffStatType.Attack)
-                atkTotal += effect.value;
-        }
-        return atkTotal;
+        return ModifyStat(BuffStatType.Attack, 0f);
     }
 
-    /// <summary>
-    /// 현재 적용 중인 방어력 버프 총합 반환
-    /// </summary>
     public float GetBuffDef()
     {
-        float defTotal = 0;
-        foreach (var effect in activeEffects)
-        {
-            if (effect.statType == BuffStatType.Defense)
-                defTotal += effect.value;
-        }
-        return defTotal;
+        return ModifyStat(BuffStatType.Defense, 0f);
     }
-
-    public DmgBarDisplay dmgBar => dmgBarDisplay;
-    public TargetArrowDisplay tarArrow => targetArrow;
-
 }

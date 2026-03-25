@@ -97,6 +97,8 @@ public class UIManager : MonoSingleton<UIManager>
         ShowPopupByName("UI_UnlockController");
     }
 
+    // note : 그냥 string 으로 팝업 이름을 받아서 구현하는것도 가능하지만
+    //        확장성과 개발 편의성을 고려하여 제네릭으로 구현.
     /// <summary>
     /// 팝업 Open 매서드(컴포넌트 기준)
     /// </summary>
@@ -174,10 +176,7 @@ public class UIManager : MonoSingleton<UIManager>
                 System.Type popupType = popup.GetType();
 
                 if (!popupTypeMap.ContainsKey(popupName))
-                {
                     popupTypeMap.Add(popupName, popupType);
-                    // Debug.Log($"[UIManager] 등록됨: {popupName} → {popupType}");
-                }
             }
             else
             {

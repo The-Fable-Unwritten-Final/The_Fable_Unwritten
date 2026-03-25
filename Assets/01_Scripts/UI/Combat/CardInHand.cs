@@ -21,6 +21,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     [Header("UI Info")]
     [SerializeField] Image cardFrame;
     [SerializeField] Image cardImage; // 카드 이미지
+    [SerializeField] Image cardCostImage; // 카드 코스트 이미지
     [SerializeField] Image cardTypeImage; // 카드 타입 이미지
     [SerializeField] Image cardCharImage; // 카드 캐릭터 이미지
     [SerializeField] TextMeshProUGUI cardCost; // 카드 코스트
@@ -52,11 +53,28 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     private void OnDestroy()
     {
         StopAllCoroutines(); // 카드가 파괴될 때 모든 코루틴 정지
+        
+        // UIParticle 정리
+        if (effectVisualizer != null)
+        {
+            if (effectVisualizer.useCardFXParticle != null)
+            {
+                effectVisualizer.useCardFXParticle.Clear();
+                effectVisualizer.useCardFXParticle.Stop();
+            }
+            
+            if (effectVisualizer.useEnhancedCardFXParticle != null)
+            {
+                effectVisualizer.useEnhancedCardFXParticle.Clear();
+                effectVisualizer.useEnhancedCardFXParticle.Stop();
+            }
+        }
     }
 
 
-    public void OnPointerClick(PointerEventData eventData)// 카드 버리기 관련 상호작용 클릭
+    public void OnPointerClick(PointerEventData eventData)
     {
+        // 카드 버리기 관련 클릭 상호작용
         CardDiscardController con = GameManager.Instance.cardDiscardController;
 
         if(cardState == CardState.CanDiscard)
@@ -98,6 +116,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if(!cardDisplay.deckInitComplete) return; // 덱 이닛이 완료되지 않았을 경우 상호작용 불가능
         isPointerOver = true; // 마우스 포인터가 카드 위에 있는 상태로 설정
         
         if(GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 상호작용 불가능
@@ -139,41 +158,6 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
         // canchain 상태의 카드들을 원상태로(enhanced에 따라서 다르게 설정)
         cardDisplay.ResetCanChain();
-    }
-    public void FXOnUse()
-    {
-        DG.Tweening.Sequence seq = DOTween.Sequence();
-
-        // 첫 단계: frameCover, illustCover 반투명하게
-        seq.Append(frameCover.DOFade(0.5f, 0.3f).SetEase(Ease.OutSine));
-        seq.Join(illustCover.DOFade(0.5f, 0.3f).SetEase(Ease.OutSine));
-        
-        // 두 번째 단계: 전체 fade out + FX 적용
-        seq.AppendCallback(() =>
-        {
-            if (effectVisualizer.currentState == CardVisualState.ReadyOnChain || effectVisualizer.currentState == CardVisualState.Chain)
-                effectVisualizer.enhanceTriggered = true; // 강화 사용 효과 트리거
-
-            effectVisualizer.ApplyVisualState(CardVisualState.Use);
-        });
-
-        seq.Append(frameCover.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
-        seq.Join(illustCover.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
-        seq.Join(cardFrame.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
-        seq.Join(cardImage.DOFade(0f, 0.4f).SetEase(Ease.OutSine));
-        seq.Join(cardTypeImage.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
-        seq.Join(cardCharImage.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
-        seq.Join(cardName.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
-        seq.Join(cardCost.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
-        seq.Join(cardDescription.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
-
-        // 마지막 단계: 오브젝트 제거 및 정렬
-        seq.OnComplete(() =>
-        {
-            Destroy(this.gameObject);
-            cardDisplay.isOnDrag = false; // 드래그 상태 해제
-            cardDisplay.CardArrange();
-        });
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -231,6 +215,64 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         effectVisualizer.SetStateToNone(); // 카드의 상태를 None으로 변경
     }
 
+    public void FXOnUse()
+    {
+        DG.Tweening.Sequence seq = DOTween.Sequence();
+
+        // 첫 단계: frameCover, illustCover 반투명하게
+        seq.Append(frameCover.DOFade(0.5f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(illustCover.DOFade(0.5f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(cardCostImage.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+
+
+        // 두 번째 단계: 전체 fade out + FX 적용
+        seq.AppendCallback(() =>
+        {
+            if (effectVisualizer.currentState == CardVisualState.ReadyOnChain || effectVisualizer.currentState == CardVisualState.Chain)
+                effectVisualizer.enhanceTriggered = true; // 강화 사용 효과 트리거
+
+            effectVisualizer.ApplyVisualState(CardVisualState.Use);
+        });
+
+        seq.Append(frameCover.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(illustCover.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(cardCostImage.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(cardFrame.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(cardImage.DOFade(0f, 0.4f).SetEase(Ease.OutSine));
+        seq.Join(cardTypeImage.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(cardCharImage.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(cardName.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(cardCost.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(cardDescription.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+
+        // 파티클이 재생될 시간 (약 1초 정도 대기)
+        seq.AppendInterval(1f);
+
+        // 마지막 단계: 오브젝트 제거 및 정렬
+        seq.OnComplete(() =>
+        {
+            // UIParticle 정리 (재생 종료 후)
+            if (effectVisualizer != null)
+            {
+                if (effectVisualizer.useCardFXParticle != null)
+                {
+                    effectVisualizer.useCardFXParticle.Clear();
+                    effectVisualizer.useCardFXParticle.Stop();
+                    Debug.Log($"[CardInHand] 카드 사용 효과 파티클 정리 완료. 카드 이름: {cardData.cardName}");
+                }
+
+                if (effectVisualizer.useEnhancedCardFXParticle != null)
+                {
+                    effectVisualizer.useEnhancedCardFXParticle.Clear();
+                    effectVisualizer.useEnhancedCardFXParticle.Stop();
+                }
+            }
+
+            Destroy(this.gameObject);
+            cardDisplay.isOnDrag = false; // 드래그 상태 해제
+            cardDisplay.CardArrange();
+        });
+    }
     public void SetCardData(CardModel card)// 카드 데이터 설정
     {
         cardData = card;

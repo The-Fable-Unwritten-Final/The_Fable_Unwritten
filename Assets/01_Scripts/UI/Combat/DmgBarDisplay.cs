@@ -2,13 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Text;
 
 public enum DmgTextType
 {
     Normal,
     Heal,
-    Buff,
-    Debuff,
+    // 버프류
+    AttackBuff, DefenseBuff, Bless, Penance, Guard,
+    // 디버프류
+    AttackDebuff, DefenseDebuff, Burn, Freeze, Activate, Crime, Scar, Stun,
 }
 
 public struct DmgTextData
@@ -20,109 +24,182 @@ public struct DmgTextData
     public bool isCardEnhanced;
     public bool isWeakened;
 }
-
 public static class DmgTextColors
 {
-    // Damage
-    public static readonly Color Damage = Color.white;
-    public static readonly Color StanceDamage = new Color(1f, 0.42f, 0.42f);      // #FF6B6B
-    public static readonly Color EnhanceDamage = new Color(1f, 0.118f, 0.118f);   // #FF1E1E
-    public static readonly Color FullEnhanceDamage = new Color(0.698f, 0f, 0f);   // #B20000
-
-    // Heal
-    public static readonly Color Heal = Color.white;
-    public static readonly Color StanceHeal = new Color(0.643f, 1f, 0.69f);       // #A4FFB0
-    public static readonly Color EnhanceHeal = new Color(0.365f, 1f, 0.533f);     // #5DFF88
-    public static readonly Color FullEnhanceHeal = new Color(0.122f, 0.651f, 0.298f); // #1FA64C
-
-    // Buff
-    public static readonly Color Buff = Color.white;
-    public static readonly Color StanceBuff = new Color(1f, 0.878f, 0.4f);        // #FFE066
-
-    // Debuff
-    public static readonly Color Debuff = Color.white;
-    public static readonly Color StanceDebuff = new Color(0.71f, 0.6f, 1f);       // #B599FF
+    //
+    // 색상 정의
+    // 0. 공격 : 주황
+    // 1. 치유 : 초록
+    // 2. 버프류 : 시안
+    // 3. 나머지 디버프 상태 이상류 : 마젠타
+    // 색상의 어느정도 통일성 유지 필요
+    // 
 }
 
 
 public class DmgBarDisplay : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI damageText;
-    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private GameObject dmgPrintPrefab;
+    [SerializeField] private Sprite[] typeIcons; // 타입별 아이콘 스프라이트 배열
+    
+    private Queue<GameObject> dmgPrintPool = new Queue<GameObject>();
+    private const int maxPoolSize = 10; // 최대 풀 크기
 
-    private Vector3 floatOffset = Vector3.up * 1f;
-    private float floatDuration = 1f;
+    private float floatOffset = 0.7f;
+    private float floatDuration = 0.9f;
 
-    private void Awake()
+    public void Initialize(DmgTextData data, Transform target, float offsetY = 1f)
     {
-        // 최초에 텍스트는 숨긴 상태로 시작
-        canvasGroup.alpha = 0f;
-        damageText.text = "";
-    }
+        // 풀에서 가져오기 또는 새로 생성
+        GameObject dmgInstance = dmgPrintPool.Count > 0 
+            ? dmgPrintPool.Dequeue() 
+            : Instantiate(dmgPrintPrefab, transform);
+        
+        dmgInstance.SetActive(true);
+        dmgInstance.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;  // RectTransform 위치 초기화
 
+        // 프리팹의 컴포넌트 가져오기
+        TextMeshProUGUI tmpText = dmgInstance.GetComponentInChildren<TextMeshProUGUI>();
+        Image icon = dmgInstance.GetComponentInChildren<Image>();
+        CanvasGroup canvasGroup = dmgInstance.GetComponent<CanvasGroup>();
 
-    public void Initialize(DmgTextData data, Vector3 worldPos)
-    {
-        transform.position = new Vector3(worldPos.x, worldPos.y - 1, worldPos.z);
+        // 위치 설정
+        RectTransform rect = dmgInstance.GetComponent<RectTransform>();
+        rect.anchoredPosition = Vector2.zero;
+        dmgInstance.transform.position += Vector3.up * offsetY;
+        
 
-        damageText.text = (data.isStanceEnhanced || data.isCardEnhanced) ? $"<b>{data.Text}</b>" : data.Text;
-        damageText.color = GetFinalColor(ResolveColor(data), data.isWeakened);
-        damageText.fontSize = (data.isStanceEnhanced || data.isCardEnhanced) ? 0.8f : 0.5f;
+        // 아이콘 설정
+        Sprite typeIcon = SelectTypeIcon(data);
+        if (typeIcon != null)
+            icon.sprite = typeIcon;
+            
+        // 텍스트 및 스타일 설정
+        tmpText.text = NumberSpriteShift(data);
+        tmpText.fontSize = (data.isStanceEnhanced || data.isCardEnhanced) ? 0.8f : 0.5f;
+        // 아이콘 강화 별 위치 및 크기 조정 
+        icon.GetComponent<RectTransform>().anchoredPosition = (data.isStanceEnhanced || data.isCardEnhanced) ? new Vector2(-1.2f, 0.5f) : new Vector2(-1f, 0.3f);
+        icon.GetComponent<RectTransform>().sizeDelta = (data.isStanceEnhanced || data.isCardEnhanced) ? new Vector2(1.5f, 1.5f) : new Vector2(1f, 1f);
+
+        // 스케일 설정 (시작: 1.6배 크기)
+        dmgInstance.transform.localScale = Vector3.one * 1.6f;
 
         canvasGroup.alpha = 1f;
 
-        StopAllCoroutines(); // 이전 연출 중단
-        StartCoroutine(FadeAndFloat());
+        StartCoroutine(FadeAndFloat(dmgInstance, canvasGroup, tmpText));
     }
-
-
-    private IEnumerator FadeAndFloat()
+    private Sprite SelectTypeIcon(DmgTextData data)
     {
-        Vector3 start = transform.position;
-        Vector3 end = start + floatOffset;
-        float time = 0;
+        int index = data.type switch
+        {
+            DmgTextType.Normal => 0,
+            DmgTextType.Heal => 1,
+            DmgTextType.AttackBuff => 2,
+            DmgTextType.DefenseBuff => 3,
+            DmgTextType.Bless => 4,
+            DmgTextType.Penance => 5,
+            DmgTextType.Guard => 6,
+            DmgTextType.AttackDebuff => 7,
+            DmgTextType.DefenseDebuff => 8,
+            DmgTextType.Burn => 9,
+            DmgTextType.Freeze => 10,
+            DmgTextType.Activate => 11,
+            DmgTextType.Crime => 12,
+            DmgTextType.Scar => 13,
+            DmgTextType.Stun => 14,
+            _ => 0
+        };
 
-        while (time < floatDuration)
+        if (index >= 0 && index < typeIcons.Length)
+            return typeIcons[index];
+        else
+            return null;
+    }
+    private string NumberSpriteShift(DmgTextData data)
+    {
+        string dataT = data.Text;
+        if (string.IsNullOrEmpty(dataT)) return "";
+
+        int prefix = (int)data.type;
+        StringBuilder sb = new StringBuilder();
+
+        // 현재 타입별 스프라이트 등록이 안 되어있어서 임시로 타입 0으로 고정 // 해당 데이터는 tmp 컴포넌트의 Extra settings/sprite asset 에서 접근 가능
+        prefix = 0;
+        foreach (char c in dataT)
+        {
+            if (char.IsDigit(c))
+            {
+                // 숫자: {prefix}{digit}
+                // 숫자 only 스프라이트
+                sb.Append($"<sprite name=\"{prefix}{c}\">");
+            }
+            else
+            {
+                // +, -, % 을 포함한 문자는 그대로 출력
+                switch (c)
+                {
+                    case '+':
+                        sb.Append($"<sprite name=\"{prefix}plus\">");
+                        break;
+                    case '-':
+                        sb.Append($"<sprite name=\"{prefix}minus\">");
+                        break;
+                    case '%':
+                        sb.Append($"<sprite name=\"{prefix}percent\">");
+                        break;
+                    default:
+                        // 기타 문자 (공백 등)
+                        sb.Append(c);
+                        break;
+                }
+            }
+        }
+
+        return sb.ToString();
+    }
+    private IEnumerator FadeAndFloat(GameObject dmgInstance, CanvasGroup canvasGroup, TextMeshProUGUI tmpText)
+    {
+        Vector3 start = dmgInstance.transform.position;
+        Vector3 end = start + Vector3.up * floatOffset;
+        Vector3 startScale = dmgInstance.transform.localScale;
+        Vector3 targetScale = Vector3.one;
+        
+        // 1단계: 빠른 크기 축소 (충격 효과) - 0.15초
+        float scaleDownDuration = 0.15f;
+        float time = 0;
+        while (time < scaleDownDuration)
         {
             time += Time.deltaTime;
-            transform.position = Vector3.Lerp(start, end, time / floatDuration);
-            canvasGroup.alpha = 1f - (time / floatDuration);
+            float t = time / scaleDownDuration;
+            dmgInstance.transform.localScale = Vector3.Lerp(startScale, targetScale, t);
+            yield return null;
+        }
+        dmgInstance.transform.localScale = targetScale;
+
+        // 2단계: 딜레이 - 0.2초 (원래 크기 유지)
+        yield return new WaitForSeconds(0.2f);
+
+        // 3단계: 위로 올라가며 페이드 아웃 - 남은 시간에 걸쳐 animate
+        float floatAndFadeDuration = floatDuration - scaleDownDuration - 0.3f; // 약 0.45초
+        time = 0;
+        while (time < floatAndFadeDuration)
+        {
+            time += Time.deltaTime;
+            float t = time / floatAndFadeDuration;
+            dmgInstance.transform.position = Vector3.Lerp(start, end, t);
+            canvasGroup.alpha = 1f - t;
             yield return null;
         }
 
         canvasGroup.alpha = 0f;
-        damageText.text = ""; // 다음 표시를 위해 초기화
-    }
-
-    private Color GetFinalColor(Color baseColor, bool isWeakened)
-    {
-        return isWeakened ? baseColor * 0.6f : baseColor;
-    }
-
-    private Color ResolveColor(DmgTextData data)
-    {
-        return data.type switch
-        {
-            DmgTextType.Heal => ResolveHealColor(data),
-            DmgTextType.Buff => data.isStanceEnhanced ? DmgTextColors.StanceBuff : DmgTextColors.Buff,
-            DmgTextType.Debuff => data.isStanceEnhanced ? DmgTextColors.StanceDebuff : DmgTextColors.Debuff,
-            _ => ResolveDamageColor(data),
-        };
-    }
-
-    private Color ResolveDamageColor(DmgTextData data)
-    {
-        if (data.isStanceEnhanced && data.isCardEnhanced) return DmgTextColors.FullEnhanceDamage;
-        if (data.isCardEnhanced) return DmgTextColors.EnhanceDamage;
-        if (data.isStanceEnhanced) return DmgTextColors.StanceDamage;
-        return DmgTextColors.Damage;
-    }
-
-    private Color ResolveHealColor(DmgTextData data)
-    {
-        if (data.isStanceEnhanced && data.isCardEnhanced) return DmgTextColors.FullEnhanceHeal;
-        if (data.isCardEnhanced) return DmgTextColors.EnhanceHeal;
-        if (data.isStanceEnhanced) return DmgTextColors.StanceHeal;
-        return DmgTextColors.Heal;
+        tmpText.text = "";
+        dmgInstance.transform.localScale = Vector3.one;
+        dmgInstance.SetActive(false);
+        
+        // 풀 크기 제한
+        if (dmgPrintPool.Count < maxPoolSize)
+            dmgPrintPool.Enqueue(dmgInstance);
+        else
+            Destroy(dmgInstance);
     }
 }

@@ -33,20 +33,20 @@ public class StatusDisplay : MonoBehaviour
     public void PlayerUpdateUI()
     {
         if (player == null) return;
-        UpdateUI(player.activeEffects, player.hasBlock);
+        UpdateUI(player.tickEffects, player.hasBlock);
     }
 
     public void EnemyUpdateUI()
     {
         if (enemy == null) return;
-        UpdateUI(enemy.activeEffects, enemy.hasBlock);
+        UpdateUI(enemy.tickEffects, enemy.hasBlock);
     }
 
-    private void UpdateUI(List<StatusEffect> effects, bool hasBlock)
+    private void UpdateUI(List<TickEffect> effects, bool hasBlock)
     {
         atk.SetActive(effects.Exists(e => e.statType == BuffStatType.Attack && e.duration > 0));
         def.SetActive(effects.Exists(e => e.statType == BuffStatType.Defense && e.duration > 0));
-        stun_Img.SetActive(effects.Exists(e => e.statType == BuffStatType.stun && e.duration > 0));
+        stun_Img.SetActive(effects.Exists(e => e.statType == BuffStatType.Stun && e.duration > 0));
         block_Img.SetActive(hasBlock);
 
         blindTop_Img.SetActive(effects.Exists(e => e.statType == BuffStatType.CantAttackInStance && e.value == 0 && e.duration > 0));

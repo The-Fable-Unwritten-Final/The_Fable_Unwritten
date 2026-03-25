@@ -10,6 +10,8 @@ public class EffectAnimation : ScriptableObject
     public string animationName;
     public List<Sprite> frames;
     public AnimationType animationType;
+
+    public int hitFrame = -1;
 }
 
 public enum AnimationType       //추후 적용 애니메이션

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -12,7 +13,7 @@ public static class EnemyPattern
 {
     // StanceType 개수 (한 번만 계산)
     private static readonly int stanceCount =
-        System.Enum.GetValues(typeof(PlayerData.StancType)).Length;
+        System.Enum.GetValues(typeof(StancType)).Length;
     
     
     /// <summary>
@@ -54,8 +55,12 @@ public static class EnemyPattern
         var targets = ChooseTargetsFromActData(actData, enemyComponent);
         yield return new WaitForSeconds(0.3f);
 
-        // 4. 타겟에게 데미지 및 추가 효과 적용
-        enemyComponent.PlayAttackAnimation();
+        var lowestSkill = enemyComponent.enemyData.SkillList
+            .OrderBy(s => s.skillIndex)
+            .FirstOrDefault();        // 4. 타겟에게 데미지 및 추가 효과 적용
+
+        int attackType = skill.skillIndex % lowestSkill.skillIndex;
+        enemyComponent.PlayAttackAnimation(attackType);
         yield return new WaitForSeconds(0.3f);
 
         // 5. 스킬 효과 적용
@@ -103,7 +108,7 @@ public static class EnemyPattern
 
                             if (t is PlayerController pc)
                             {
-                                var stance = (PlayerData.StancType)enemyComponent.enemyData.currentStance;
+                                var stance = (StancType)enemyComponent.enemyData.currentStance;
                                 pc.TakeDamage(skill.damage);//todo 수정 필요
                             }
                             else
@@ -131,7 +136,7 @@ public static class EnemyPattern
 
                     if (t is PlayerController pc)
                     {
-                        var stance = (PlayerData.StancType)enemyComponent.enemyData.currentStance;
+                        var stance = (StancType)enemyComponent.enemyData.currentStance;
                         float dmg = pc.TakeDamage(skill.damage);
                     }
                     else
@@ -246,58 +251,6 @@ public static class EnemyPattern
         return targets;
     }
 
-    public static void SetRandomStance(Enemy enemy) //enemy 자세 변경
-    {
-        var enemyData = enemy.enemyData;
-
-        if (enemyData == null)
-        {
-            Debug.LogWarning("[EnemyPattern] EnemyData가 null입니다.");
-            return;
-        }
-
-        // 2) 확률값 읽어오기
-        float topP = enemyData.TopStance;      // High 확률
-        float midP = enemyData.MiddleStance;   // Middle 확률
-        float botP = enemyData.BottomStance;   // Low 확률
-
-        // 차단된 스탠스를 제외한 확률만 고려
-        List<(StancValue.EStancType stance, float prob)> candidates = new();
-
-        if (!enemy.IsAttackBlockedByStance(StancValue.EStancType.High) && topP > 0)
-            candidates.Add((StancValue.EStancType.High, topP));
-        if (!enemy.IsAttackBlockedByStance(StancValue.EStancType.Middle) && midP > 0)
-            candidates.Add((StancValue.EStancType.Middle, midP));
-        if (!enemy.IsAttackBlockedByStance(StancValue.EStancType.Low) && botP > 0)
-            candidates.Add((StancValue.EStancType.Low, botP));
-
-        if (candidates.Count == 0)
-        {
-            Debug.LogWarning("[EnemyPattern] 모든 스탠스가 차단되어 기본값 사용");
-            enemy.enemyData.currentStance = StancValue.EStancType.Middle;
-            return;
-        }
-
-        float total = 0f;
-        foreach (var (stance, prob) in candidates)
-            total += prob;
-
-        // 3) 랜덤 값으로 분포 적용
-        float r = Random.Range(0f, total);
-        float cumulative = 0f;
-        foreach (var (stance, prob) in candidates)
-        {
-            cumulative += prob;
-            if (r <= cumulative)
-            {
-                enemy.enemyData.currentStance = stance;
-                Debug.Log($"[EnemyPattern] {enemy.enemyData.EnemyName} 자세 → {stance} (r={r:F2})");
-                return;
-            }
-        }
-    }
-
-
     private static EnemySkill ChooseSkill(Enemy enemy)
     {
         var skills = enemy.enemyData.SkillList;
@@ -363,7 +316,7 @@ public static class EnemyPattern
     {
         if(act.atk_buff != 0)
         {
-            target.ApplyStatusEffect(new StatusEffect
+            target.ApplyStatusEffect(new TickEffect
             {
                 statType = BuffStatType.Attack,
                 value = act.atk_buff,
@@ -374,7 +327,7 @@ public static class EnemyPattern
 
         if (act.def_buff != 0)
         {
-            target.ApplyStatusEffect(new StatusEffect
+            target.ApplyStatusEffect(new TickEffect
             {
                 statType = BuffStatType.Defense,
                 value = act.def_buff,
@@ -391,9 +344,9 @@ public static class EnemyPattern
 
         if (act.stun > 0)
         {
-            target.ApplyStatusEffect(new StatusEffect
+            target.ApplyStatusEffect(new TickEffect
             {
-                statType = BuffStatType.stun,
+                statType = BuffStatType.Stun,
                 value = -999,
                 duration = act.buff_time
             }); 

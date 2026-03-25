@@ -20,6 +20,13 @@ public class DeckModel
         Shuffle(unusedDeck);
         usedDeck.Clear();
         hand.Clear();
+
+        // 문체 효과 적용 => 첫 카드 코스트 변환
+        foreach (var card in unusedDeck)
+        {
+            int modifiedCost = StyleManager.Instance.GetFirstCardCostModifier(card, 0); // 디폴트 값 0
+            card.ApplyTemporaryDiscount(modifiedCost);
+        }
     }
 
 
@@ -213,6 +220,23 @@ public class DeckModel
         foreach (var card in usedDeck)
             card.ApplyPersistentDiscount(amount);
     }
+    /// <summary>
+    ///  '특정 타입'의 카드 대상 할인 적용
+    /// </summary>
+    public void ApplyPersistentDiscountByCardType(CardType targetType, int amount)
+    {
+        foreach (var card in hand)
+            if (card.type == targetType)
+                card.ApplyPersistentDiscount(amount);
+        
+        foreach (var card in unusedDeck)
+            if (card.type == targetType)
+                card.ApplyPersistentDiscount(amount);
+        
+        foreach (var card in usedDeck)
+            if (card.type == targetType)
+                card.ApplyPersistentDiscount(amount);
+    }
 
     public void DiscardUnmaintainedCardsAtTurnEnd()
     {
@@ -248,6 +272,102 @@ public class DeckModel
             Debug.Log($"[Deck] 유지되지 않는 카드 {card.cardName} 사용 덱에서 제거");
         }
 
+    }
+
+    public bool AddToHandRightmost(CardModel card, bool updateUI = true)
+    {
+        if (card == null)
+            return false;
+
+        if (hand.Count >= maxSize)
+            return false;
+
+        hand.Add(card);
+
+        if (updateUI && GameManager.Instance != null && GameManager.Instance.combatUIController != null)
+        {
+            GameManager.Instance.combatUIController.DrawCard(card);
+        }
+
+        return true;
+    }
+
+    public List<CardModel> DrawAndReturn(int count)
+    {
+        List<CardModel> drawn = new();
+
+        for (int i = 0; i < count; i++)
+        {
+            if (hand.Count >= maxSize)
+                break;
+
+            if (unusedDeck.Count == 0)
+                ReshuffleDiscardIntoDraw();
+
+            if (unusedDeck.Count == 0)
+                break;
+
+            var card = unusedDeck[0];
+            unusedDeck.RemoveAt(0);
+            hand.Add(card);
+            drawn.Add(card);
+
+            if (GameManager.Instance != null && GameManager.Instance.combatUIController != null)
+                GameManager.Instance.combatUIController.DrawCard(card);
+
+            if (BattleLogManager.Instance != null)
+                BattleLogManager.Instance.RegisterDrawnCard(card);
+        }
+
+        return drawn;
+    }
+
+    public bool HasCardInHandByIndex(int cardIndex)
+    {
+        foreach (var card in hand)
+        {
+            if (card != null && card.index == cardIndex)
+                return true;
+        }
+
+        return false;
+    }
+
+    public CardModel FindHandCardByIndex(int cardIndex)
+    {
+        foreach (var card in hand)
+        {
+            if (card != null && card.index == cardIndex)
+                return card;
+        }
+
+        return null;
+    }
+
+    public bool RemoveFromHand(CardModel card)
+    {
+        if (card == null)
+            return false;
+
+        return hand.Remove(card);
+    }
+
+    public void ApplyDiscountToRandomCards(int amount, int count)
+    {
+        List<CardModel> pool = new();
+        pool.AddRange(hand);
+        pool.AddRange(unusedDeck);
+
+        if (pool.Count == 0 || count <= 0)
+            return;
+
+        Shuffle(pool);
+
+        int applyCount = Mathf.Min(count, pool.Count);
+        for (int i = 0; i < applyCount; i++)
+        {
+            pool[i].ApplyTemporaryDiscount(amount);
+        }
     }
 
 }

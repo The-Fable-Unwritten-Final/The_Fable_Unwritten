@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class CombatUIController : MonoBehaviour
 {
@@ -79,5 +80,23 @@ public class CombatUIController : MonoBehaviour
         CardInHand cardHand = cardDisplay.cardsInHand.Find(c => c.cardData == card);
         cardDisplay.cardsInHand.Remove(cardHand); // 핸드에서 카드 제거
         Destroy(cardHand.gameObject);
+    }
+    /// <summary>
+    /// UI전반의 구조가 바뀌며 각 씬에 존재하는 도감 UI를 개별로 UI매니저와 연결 해 주는 메서드
+    /// </summary>
+    public void BookUIManagerOpen()
+    {
+        UIManager.Instance.ShowPopupByName("PopupUI_Book");
+    }
+    /// <summary>
+    /// UI전반의 구조가 바뀌며 각 씬에 존재하는 세팅 UI를 개별로 UI매니저와 연결 해 주는 메서드
+    /// </summary>
+    public void SettingUIManagerOpen()
+    {
+        UIManager.Instance.ShowPopupByName("PopupUI_Setting");
+    }
+    public void MoveCardsWhenExitSceneTransition()
+    {
+        cardDisplay.MoveCardsWhenExitScene();
     }
 }

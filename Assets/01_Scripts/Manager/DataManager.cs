@@ -35,6 +35,8 @@ public class DataManager : MonoSingleton<DataManager>
     public EnemyDataContainer enemyDataContainer;
     // 스테이지 데이터
     public List<EnemyStageSpawnData> enemySpawnData;
+    // 문체 시스템 데이터
+    public List<StyleDefinition> styleDefs; // 문체 데이터를 수동으로 등록해 주어야함.
     // 랜덤 이벤트 데이터
     public List<RandomEventData> allRandomEvents { get; set;}
     // 백그라운드 이미지 데이터 + 전투용 배경
@@ -61,6 +63,8 @@ public class DataManager : MonoSingleton<DataManager>
     protected override void Awake()
     {
         base.Awake();
+        // 우선적으로 로케일 데이터 로드 호출.
+        LocaleDatamanagerLoad();
         InitDiaryDictionary();
         enemySpawnData = StageSpawnSetCSVParser.LoadEnemySpawnSet() ?? new();
         allRandomEvents = RandomEventJsonLoader.LoadAllEvents() ?? new();
@@ -72,6 +76,26 @@ public class DataManager : MonoSingleton<DataManager>
         InitCardEffectSprites();
         InitCardBookDictionary();
         InitializeUnlockRecipes();
+    }
+
+    /// <summary>
+    /// 설정에서 언어 변경 시 호출, 각 텍스트 데이터를 변경. (언어 변경은 타이틀 에서만 가능)
+    /// </summary>
+    public void InitLocaleText()
+    {
+        InitCardBookDictionary();
+     
+    }
+    void LocaleDatamanagerLoad()
+    {
+        // 로케일 데이터 매니저 csv => Dictionary 로딩
+        // 스태틱 클래스라서 Execution Order 지정 불가능하기에 이곳에서 호출.
+        LocaleDataManager.LoadCardCsv();
+        LocaleDataManager.LoadRandomEventCsv();
+        LocaleDataManager.LoadRandomEventEffectCsv();
+        LocaleDataManager.LoadStyleEffectCsv();
+        //LocaleDataManager.LoadDialogueCsv();
+        //LocaleDataManager.LoadUICsv();
     }
 
     /// <summary>
@@ -106,28 +130,53 @@ public class DataManager : MonoSingleton<DataManager>
     }
 
     /// <summary>
-    /// 카드북 카드 데이터를 초기화 + 분류작업.
+    /// 카드북 카드 데이터를 초기화 + 분류작업. (사실상 이쪽이 카드 데이터 베이스)
     /// </summary>
     private void InitCardBookDictionary()
     {
-        allCards = CardDatabaseLoader.LoadAll("ExternalFiles/Cards");
+        // allCards 로 이쪽의 데이터를 플레이어의 덱과 공유중.
+        //allCards = CardDatabaseLoader.LoadAll("ExternalFiles/Cards");
+        allCards = CardDatabaseLoader.LoadAllNew("ExternalFiles/cards");
         cardLookup.Clear();
         foreach (var card in allCards)
         {
             cardLookup[card.index] = card;
 
-            ///이부분은 나중에 최적화 위해 이야기 필요할 것 같습니다. 분류가 필수라면 이쪽을 남기는게 좋을 수도 있겠네요.
+            /// 이부분은 나중에 최적화 위해 이야기 필요할 것 같습니다. 분류가 필수라면 이쪽을 남기는게 좋을 수도 있겠네요.
+            /// to 동환님. 이거 카드 도감 때문에 최초 이닛 시에 쪼개서 저장하는게, 도감의 상대적 열람 빈도를 생각했을때 나을것 같았어요.
+
             if (card.characterClass == CharacterClass.Sophia)
             {
-                cardForShopia.Add(card.index, card);
+                if(cardForShopia.ContainsKey(card.index))
+                {
+                    Debug.LogWarning($"[DataManager] 중복된 카드 인덱스: {card.index} (Sophia)");
+                }
+                else
+                {
+                    cardForShopia.Add(card.index, card);
+                }
             }
             else if (card.characterClass == CharacterClass.Kayla)
             {
-                cardForKayla.Add(card.index, card);
+                if(cardForKayla.ContainsKey(card.index))
+                {
+                    Debug.LogWarning($"[DataManager] 중복된 카드 인덱스: {card.index} (Kayla)");
+                }
+                else
+                {
+                    cardForKayla.Add(card.index, card);
+                }
             }
             else if (card.characterClass == CharacterClass.Leon)
             {
-                cardForLeon.Add(card.index, card);
+                if(cardForLeon.ContainsKey(card.index))
+                {
+                    Debug.LogWarning($"[DataManager] 중복된 카드 인덱스: {card.index} (Leon)");
+                }
+                else
+                {
+                    cardForLeon.Add(card.index, card);
+                }
             }
         }
     }
@@ -329,4 +378,12 @@ public class DataManager : MonoSingleton<DataManager>
         public List<UnlockRecipe> recipes;
     }
 
+    public CardModel GetCardByIndex(int index)
+    {
+        if (cardLookup.TryGetValue(index, out var card))
+            return card;
+
+        Debug.LogWarning($"[DataManager] 카드 index={index} 를 찾을 수 없습니다.");
+        return null;
+    }
 }

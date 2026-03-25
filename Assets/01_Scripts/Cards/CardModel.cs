@@ -51,6 +51,11 @@ public class CardModel : ScriptableObject
     public bool isEnhanced = false;                 //카드가 연계효과로 강화 되었는지
 
     // ==== 사용 조건 및 비용 ====
+    [Header("Keywords")]
+    public List<string> keywords = new();
+    public string switchType;
+    public int evolveCount;
+    public int evolveTarget;
 
     private void OnEnable()
     {
@@ -74,22 +79,20 @@ public class CardModel : ScriptableObject
 
     // ==== 카드 사용 ====
 
-    public void Play(IStatusReceiver caster, List<IStatusReceiver> targets)
+    public void Play(IStatusReceiver caster, List<IStatusReceiver> targets, int attackType)
     {
         bool originalEnhanced = isEnhanced; // 현재 강화 상태 백업
 
-        GameManager.Instance.StartCoroutine(PlayWithAnimation(caster, targets, originalEnhanced));
+        GameManager.Instance.StartCoroutine(PlayWithAnimation(caster, targets, originalEnhanced, attackType));
     }
-
-    private IEnumerator PlayWithAnimation(IStatusReceiver caster, List<IStatusReceiver> targets, bool fixedIsEnhanced)
+    private IEnumerator PlayWithAnimation(IStatusReceiver caster, List<IStatusReceiver> targets, bool fixedIsEnhanced, int attackType)
     {
         GameManager.Instance.turnController.Onaction();
 
-        float totalDuration = 2f;  // 카메라 줌인 + 줌아웃 포함 총 연출 시간
-
-        // 1. 카메라 연출
+        // 카메라 연출
+        float totalDuration = 2f;
         GameManager.Instance.combatCameraController.PlayCombatCamera(caster, targets, totalDuration);
-
+        
         List<IStatusReceiver> allCharacters = new List<IStatusReceiver>();
         allCharacters.AddRange(GameManager.Instance.turnController.battleFlow.playerParty);
         allCharacters.AddRange(GameManager.Instance.turnController.battleFlow.enemyParty);
@@ -97,76 +100,99 @@ public class CardModel : ScriptableObject
         foreach (var ch in allCharacters)
         {
             if (ch is PlayerController pc && !targets.Contains(pc) && pc != caster)
-                pc.HideStatusUI(); // 구현 필요
+                pc.HideStatusUI();
         }
 
-        // 2. 공격 애니메이션
-        yield return new WaitForSeconds(0.2f); // 애니메이션 길이에 맞게 조정
-        caster.PlayAttackAnimation(); //시전자의 공격 애니메이션 적용
-        SoundManager.Instance.PlaySFX(SoundCategory.Card, (int)type);
+        yield return new WaitForSeconds(0.2f);
 
-        yield return new WaitForSeconds(0.2f); // 애니메이션 길이에 맞게 조정
+        bool hitTriggered = false;
 
-        // 3. 이펙트 재생 + 피격 애니메이션 동시에 진행
-        if (!string.IsNullOrEmpty(skillEffectName) && targets.Count > 0)
+        caster.PlayAttackAnimation(attackType, () =>
         {
-            foreach (var t in targets)
+            if (hitTriggered) return;
+            hitTriggered = true;
+
+            if (!string.IsNullOrEmpty(skillEffectName) && targets.Count > 0)
             {
-                float scaleFactor = DetermineEffectScale(GetEffectiveCost());
-
-                if (!DataManager.Instance.CardEffects.TryGetValue(skillEffectName, out var animInfo))
-                    continue;
-
-                if (animInfo.animationType == AnimationType.Projectile)
+                foreach (var t in targets)
                 {
-                    //  Projectile → 이펙트 끝나고 Hit 처리
-                    GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
-                        skillEffectName, caster.CachedTransform, t.CachedTransform, scaleFactor,
-                        () =>
-                        {
-                            if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
-                                t.PlayHitAnimation();
-                        }
-                    );
-                }
-                else
-                {
-                    // 일반 이펙트 → 즉시 재생 + Hit
-                    GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(
-                        skillEffectName, caster.CachedTransform, t.CachedTransform, false, scaleFactor
-                    );
+                    float scaleFactor = DetermineEffectScale(GetEffectiveCost());
 
-                    if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
-                        t.PlayHitAnimation();
+                    if (!DataManager.Instance.CardEffects.TryGetValue(skillEffectName, out var animInfo))
+                        continue;
+
+                    if (animInfo.animationType == AnimationType.Projectile)
+                    {
+                        GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
+                            skillEffectName,
+                            caster.CachedTransform,
+                            t.CachedTransform,
+                            scaleFactor,
+                            () =>
+                            {
+                                if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
+                                    t.PlayHitAnimation();
+
+                                foreach (var effect in effects)
+                                    effect.Apply(caster, new List<IStatusReceiver> { t }, fixedIsEnhanced);
+                            }
+                        );
+                    }
+                    else
+                    {
+                        GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(
+                            skillEffectName,
+                            caster.CachedTransform,
+                            t.CachedTransform,
+                            false,
+                            scaleFactor
+                        );
+
+                        if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
+                            t.PlayHitAnimation();
+
+                        foreach (var effect in effects)
+                            effect.Apply(caster, new List<IStatusReceiver> { t }, fixedIsEnhanced);
+                    }
                 }
             }
-        }
-        yield return new WaitForSeconds(0.9f); // 이펙트와 피격 연출 대기
+            else
+            {
+                foreach (var t in targets)
+                {
+                    if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
+                        t.PlayHitAnimation();
 
+                    foreach (var effect in effects)
+                        effect.Apply(caster, new List<IStatusReceiver> { t }, fixedIsEnhanced);
+                }
+            }
+        });
 
-        // 4. 효과 적용
-        foreach (var effect in effects)
-            effect.Apply(caster, targets, fixedIsEnhanced);
+        SoundManager.Instance.PlaySFX(SoundCategory.Card, (int)type);
 
-        yield return new WaitForSeconds(0.1f); // 효과 적용 후 약간 대기
+        yield return new WaitUntil(() => hitTriggered);
+        yield return new WaitForSeconds(0.9f);
 
         foreach (var target in targets)
         {
             if (!target.IsAlive() && target is MonoBehaviour mb && mb.gameObject.activeSelf)
             {
-                //Debug.Log($"[CardModel] {target.ChClass} 연출 종료 후 사망 처리");
                 mb.gameObject.SetActive(false);
             }
         }
+
         GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
 
         GameManager.Instance.turnController.OffAction();
         GameManager.Instance.turnController.battleFlow.CheckBattleEnd();
-        yield return new WaitForSeconds(0.7f); // 이펙트와 피격 연출 대기
+
+        yield return new WaitForSeconds(0.7f);
+
         foreach (var ch in allCharacters)
         {
             if (ch is PlayerController pc && !targets.Contains(pc) && pc != caster)
-                pc.ShowStatusUI(); // 구현 필요
+                pc.ShowStatusUI();
         }
     }
 
@@ -248,45 +274,198 @@ public class CardModel : ScriptableObject
         consumesDiscountOnce = false;
     }
     public bool HasAnyDiscount() => temporaryCostModifier > 0 || persistentCostModifier > 0;
-
     public string GetFormattedCardText(IStatusReceiver caster)
     {
         string result = cardText;
 
+        if (string.IsNullOrEmpty(result) || effects == null || effects.Count == 0)
+            return result;
+
+        List<CardEffectBase> displayEffects = new List<CardEffectBase>();
+
         foreach (var effect in effects)
         {
-            if(effect is DamageEffect damageEffect)
-            {
-                Match match = Regex.Match(result, @"(\d+)(?=의 피해)");
-
-                if (match.Success)
-                {
-                    int baseDamage = int.Parse(match.Value);
-
-                    // 2. 공격자(caster) 기준으로 예측 피해 계산
-                    float predicted = (caster != null)
-                        ? damageEffect.PredictPureDamage(caster)
-                        : baseDamage;
-
-                    // 3. "피해 숫자"만 교체
-                    if (isEnhanced)
-                    {
-                        predicted *= 1.5f;      //소수점 남기나?
-                        result = Regex.Replace(result, @"(\d+)(?=의 피해)", $"‘{(int)predicted}’");
-                    }
-                    else
-                    {
-                        result = Regex.Replace(result, @"(\d+)(?=의 피해)", ((int)predicted).ToString());
-                    }
-                }
-            }
-            // 필요한 경우 atk_buff, def_buff 별도 처리 가능
+            CollectDisplayEffects(effect, displayEffects);
         }
+
+        result = Regex.Replace(result, @"\{(\d+)\}", match =>
+        {
+            if (!int.TryParse(match.Groups[1].Value, out int index))
+                return match.Value;
+
+            if (index < 0 || index >= displayEffects.Count)
+                return match.Value;
+
+            return GetEffectDisplayValue(displayEffects[index], caster);
+        });
+
         return result;
+    }
+
+    private void CollectDisplayEffects(CardEffectBase effect, List<CardEffectBase> results)
+    {
+        if (effect == null)
+            return;
+
+        if (effect is ConditionalEffect conditionalEffect)
+        {
+            if (conditionalEffect.effectIfTrue != null)
+                CollectDisplayEffects(conditionalEffect.effectIfTrue, results);
+
+            return;
+        }
+
+        results.Add(effect);
+    }
+
+    private string GetEffectDisplayValue(CardEffectBase effect, IStatusReceiver caster)
+    {
+        if (effect == null)
+            return "0";
+
+        switch (effect)
+        {
+            case DamageEffect damageEffect:
+                {
+                    float value = (caster != null)
+                        ? damageEffect.PredictPureDamage(caster)
+                        : damageEffect.amount;
+
+                    if (isEnhanced)
+                        value *= 1.5f;
+
+                    return Mathf.RoundToInt(value).ToString();
+                }
+
+            case HealEffect healEffect:
+                return Mathf.RoundToInt(healEffect.amount).ToString();
+
+            case DrawCardEffect drawEffect:
+                return Mathf.RoundToInt(drawEffect.amount).ToString();
+
+            case DiscardCardEffect discardEffect:
+                return discardEffect.discardCount.ToString();
+
+
+            case DuplicateCardEffect duplicateEffect:
+                return duplicateEffect.duplicateNum.ToString();
+
+            case ApplyDamageEffect applyDamageEffect:
+                return applyDamageEffect.value.ToString();
+
+            case SelfDamageEffect selfDamageEffect:
+                return Mathf.RoundToInt(selfDamageEffect.amount).ToString();
+
+            case ReduceNextCardCostEffect reduceCostEffect:
+                return reduceCostEffect.amount.ToString();
+
+            case ApplyStatusEffect statusEffect:
+                return Mathf.RoundToInt(statusEffect.value).ToString();
+
+            case DamagePercentEffect damagePercentEffect:
+                return damagePercentEffect.percent.ToString();
+
+            case RepeatEffect repeatEffect:
+                return repeatEffect.repeatCount.ToString();
+
+            case AutoCastEffect autoCastEffect:
+                return autoCastEffect.count.ToString();
+
+            case LockPotentialChargeEffect lockPotentialEffect:
+                return lockPotentialEffect.turns.ToString();
+
+            case MultiplyBlessEffect multiplyBlessEffect:
+                return multiplyBlessEffect.value.ToString();
+
+            case MultiplyBuffEffect multiplyBuffEffect:
+                return multiplyBuffEffect.value.ToString();
+
+            case HealByBlessEffect healByBlessEffect:
+                return healByBlessEffect.value.ToString();
+
+            case NoBlessConsumeEffect noBlessConsumeEffect:
+                return noBlessConsumeEffect.value.ToString();
+
+            case TriggerBlessImmediatelyEffect triggerBlessEffect:
+                return triggerBlessEffect.value.ToString();
+
+            case RemoveDebuffFromEnemyEffect removeDebuffEffect:
+                return removeDebuffEffect.value.ToString();
+
+            case DamageByRemovedDebuffSumMultiplierEffect damageByRemovedEffect:
+                return damageByRemovedEffect.multiplier.ToString();
+
+            case TriggerOppositeStanceEffect triggerOppositeEffect:
+                return triggerOppositeEffect.value.ToString();
+
+            case ImmortalThresholdEffect immortalEffect:
+                return immortalEffect.count.ToString();
+        }
+
+        return "0";
     }
 
     public void UpdateEnhancedState()
     {
         isEnhanced = BattleLogManager.Instance.isEnhanced(this);
+    }
+
+    public CardModel Clone()
+    {
+        CardModel clone = Instantiate(this);
+
+        clone.effects = new List<CardEffectBase>(effects);
+
+        clone.isEnhanced = false;
+        clone.isMaintain = true;
+        clone.isOneUse = false;
+
+        clone.temporaryCostModifier = 0;
+        clone.persistentCostModifier = 0;
+        clone.consumesDiscountOnce = false;
+
+        return clone;
+    }
+
+    public void InitializeRuntimeState(bool oneUse = false, bool maintain = true, bool enhanced = false)
+    {
+        isOneUse = oneUse;
+        isMaintain = maintain;
+        isEnhanced = enhanced;
+
+        temporaryCostModifier = 0;
+        persistentCostModifier = 0;
+        consumesDiscountOnce = false;
+    }
+
+    public void ConsumeOneTimeStates()
+    {
+        ClearTemporaryDiscount();
+        isEnhanced = false;
+    }
+
+    public bool HasKeyword(string keyword)
+    {
+        return keywords != null && keywords.Contains(keyword);
+    }
+
+    public bool HasIndex(int targetIndex)
+    {
+        return index == targetIndex;
+    }
+
+    public bool IsIdealCard()
+    {
+        return index == 4001;
+    }
+
+    public void SetOneUse(bool value)
+    {
+        isOneUse = value;
+    }
+
+    public void SetMaintain(bool value)
+    {
+        isMaintain = value;
     }
 }

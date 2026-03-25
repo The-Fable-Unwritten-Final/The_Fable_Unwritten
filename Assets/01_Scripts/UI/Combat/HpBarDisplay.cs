@@ -73,7 +73,7 @@ public class HpBarDisplay : MonoBehaviour
 
         float targetFill = hp / maxHp;
 
-        hpText.text = hp.ToString();
+        hpText.text = hp.ToString() + "/" + maxHp.ToString();
 
         if (changeHpCoroutine != null)
             StopCoroutine(changeHpCoroutine);

@@ -4,15 +4,15 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "CardEffect/BlindEffect")]
 public class BlindEffect : CardEffectBase
 {
-    public PlayerData.StancType blockedStance;
+    public StancType blockedStance;
     public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
         foreach(var target in targets)
         {
             // 상태 이상으로 처리
-            target.ApplyStatusEffect(new StatusEffect
+            target.ApplyStatusEffect(new TickEffect
             {
-                statType = BuffStatType.blind,
+                statType = BuffStatType.Blind,
                 value = -1, // 블라인드 효과
                 duration = 1
             });

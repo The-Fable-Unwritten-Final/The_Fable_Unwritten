@@ -8,48 +8,52 @@ using UnityEngine;
 public class RandomEventData
 {
     public int index;
+    public int repeatIndex; // 반복 이벤트시 실행될 연속 인덱스
     public StageTheme theme;
     public string title;
     public string illustration;
     public string description;
 
-    public string option_0;
-    public float percentage_0;
-    public string description_01;
-    public string description_02;
-    public string result_01;
-    public string result_02;
-
-    public string option_1;
-    public float percentage_1;
-    public string description_11;
-    public string description_12;
-    public string result_11;
-    public string result_12;
+    public string option_a;
+    public string option_b;
+    // 확률 선택지가 1개의 경우 1 고정.
+    // 선택지가 복수라면, 첫번째 경우의 확률 n/1.0 기준으로 등장 설정.
+    public float percentage_a;
+    public float percentage_b;
+    // 선택지를 선택했을때 출력되는 설명 (percentage의 확률로 1,2 가 나뉨)
+    public string description_a1;
+    public string description_a2;
+    public string description_b1;
+    public string description_b2;
+    // 선택지별 결과(적용될 효과)값 index => 이 값을 토대로 실제 적용될 효과를 하단 버튼에 표시
+    public string result_a1; // 만약 이게 100000 이면 반복 이벤트로 처리
+    public string result_a2;
+    public string result_b1;
+    public string result_b2;
 
     [NonSerialized] public Sprite illustrationSprite;
 
-    [NonSerialized] public List<int> parsed_result_01 = new();
-    [NonSerialized] public List<int> parsed_result_02 = new();
-    [NonSerialized] public List<int> parsed_result_11 = new();
-    [NonSerialized] public List<int> parsed_result_12 = new();
+    [NonSerialized] public List<int> parsed_result_a1 = new();
+    [NonSerialized] public List<int> parsed_result_a2 = new();
+    [NonSerialized] public List<int> parsed_result_b1 = new();
+    [NonSerialized] public List<int> parsed_result_b2 = new();
 
     public void ParseResults()
     {
-        parsed_result_01 = ParseResultString(result_01);
-        parsed_result_02 = ParseResultString(result_02);
-        parsed_result_11 = ParseResultString(result_11);
-        parsed_result_12 = ParseResultString(result_12);
+        parsed_result_a1 = ParseResultString(result_a1);
+        parsed_result_a2 = ParseResultString(result_a2);
+        parsed_result_b1 = ParseResultString(result_b1);
+        parsed_result_b2 = ParseResultString(result_b2);
     }
 
     private List<int> ParseResultString(string resultStr)
     {
         if (string.IsNullOrWhiteSpace(resultStr)) return new();
         return resultStr
-            .Split('&')
-            .Select(s => int.TryParse(s.Trim(), out int value) ? value : -1)
-            .Where(i => i >= 0)
-            .ToList();
+        .Split('&')
+        .Select(s => int.TryParse(s.Trim(), out int value) ? value : -1)
+        .Where(i => i >= 0)
+        .ToList();
     }
 
     

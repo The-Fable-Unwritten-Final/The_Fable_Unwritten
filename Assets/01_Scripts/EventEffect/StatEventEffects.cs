@@ -36,7 +36,7 @@ public class StatEventEffects : EventEffects
                 {
                     if (chars.ChClass == CharacterClass.Sophia)
                     {
-                        chars.ApplyStatusEffect(new StatusEffect
+                        chars.ApplyStatusEffect(new TickEffect
                         {
                             statType = BuffStatType.Attack,
                             value = atk,
@@ -52,7 +52,7 @@ public class StatEventEffects : EventEffects
                 {
                     if (chars.ChClass == CharacterClass.Sophia)
                     {
-                        chars.ApplyStatusEffect(new StatusEffect
+                        chars.ApplyStatusEffect(new TickEffect
                         {
                             statType = BuffStatType.Defense,
                             value = def,
@@ -80,7 +80,7 @@ public class StatEventEffects : EventEffects
                 {
                     if (chars.ChClass == CharacterClass.Kayla)
                     {
-                        chars.ApplyStatusEffect(new StatusEffect
+                        chars.ApplyStatusEffect(new TickEffect
                         {
                             statType = BuffStatType.Attack,
                             value = atk,
@@ -96,7 +96,7 @@ public class StatEventEffects : EventEffects
                 {
                     if (chars.ChClass == CharacterClass.Kayla)
                     {
-                        chars.ApplyStatusEffect(new StatusEffect
+                        chars.ApplyStatusEffect(new TickEffect
                         {
                             statType = BuffStatType.Defense,
                             value = def,
@@ -124,7 +124,7 @@ public class StatEventEffects : EventEffects
                 {
                     if (chars.ChClass == CharacterClass.Leon)
                     {
-                        chars.ApplyStatusEffect(new StatusEffect
+                        chars.ApplyStatusEffect(new TickEffect
                         {
                             statType = BuffStatType.Attack,
                             value = atk,
@@ -140,7 +140,7 @@ public class StatEventEffects : EventEffects
                 {
                     if (chars.ChClass == CharacterClass.Leon)
                     {
-                        chars.ApplyStatusEffect(new StatusEffect
+                        chars.ApplyStatusEffect(new TickEffect
                         {
                             statType = BuffStatType.Defense,
                             value = def,

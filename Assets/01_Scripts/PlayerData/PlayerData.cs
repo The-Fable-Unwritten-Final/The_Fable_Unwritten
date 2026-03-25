@@ -52,16 +52,6 @@ public class PlayerData : ScriptableObject
     public float[] HPValue; //체력변화
     public float[] ATKValue; //공격력 변화
 
-    public enum StancType
-    {
-        refine,
-        mix,
-        grace,
-        judge,
-        guard,
-        rush
-    }
-
     public StancType currentStance;//현재 자세
     public CardType? FirstTimeUsedType;  //소피아 처음 사용 카드 확인 용
 

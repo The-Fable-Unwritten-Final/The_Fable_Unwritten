@@ -39,7 +39,11 @@ public class EventEffectCSVParser : MonoBehaviour
                     def = ParseInt(tokens, 14),
                     unusable = ParseBool(tokens, 15),
                     note = ParseString(tokens, 16),
-                    battle = ParseInt(tokens, 17)
+                    battle = ParseInt(tokens, 17),
+                    healModi = ParseInt(tokens, 18),
+                    buffStatType = ParseInt(tokens, 19),
+                    buffStatValue = ParseInt(tokens, 20),
+                    buffStatDuration = ParseInt(tokens, 21)
                 };
 
                 list.Add(data);

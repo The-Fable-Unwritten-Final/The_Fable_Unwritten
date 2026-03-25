@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 183bc419c704a3641825f81869e25870, type: 3}
+  m_Name: 7_Tragic
+  m_EditorClassIdentifier: 
+  styleId: 7
+  displayName: Name_Tragic
+  description: Desc_Tragic
+  plusEffectDescription: Plus_Tragic
+  minusEffectEffectDesc: Minus_Tragic
+  buttonSprite: {fileID: 318094276, guid: 052d69fbfa3292c479157868dacb8018, type: 3}
+  buttonIconSprite: {fileID: 21300000, guid: bdc1cfbde46a9314db7d3d647bed5404, type: 3}
+  currentStyleSprite: {fileID: 318094276, guid: 052d69fbfa3292c479157868dacb8018,
+    type: 3}
+  rank: 1
+  maxPlusLevel: 3
+  currentPlus: 1
+  maxMinusLevel: 3
+  currentMinus: 1
+  plusTiers:
+  - level: 1
+    cost: 4
+    effects:
+    - target: 5
+      operation: 2
+      value: 1.1
+      valueRange: {x: 0, y: 0}
+      callTime: 2
+  - level: 2
+    cost: 6
+    effects:
+    - target: 5
+      operation: 2
+      value: 1.2
+      valueRange: {x: 0, y: 0}
+      callTime: 2
+  - level: 3
+    cost: 0
+    effects:
+    - target: 5
+      operation: 2
+      value: 1.3
+      valueRange: {x: 0, y: 0}
+      callTime: 2
+  minusTiers:
+  - level: 1
+    cost: 4
+    effects:
+    - target: 6
+      operation: 2
+      value: 0.6
+      valueRange: {x: 0, y: 0}
+      callTime: 2
+  - level: 2
+    cost: 6
+    effects:
+    - target: 6
+      operation: 2
+      value: 0.8
+      valueRange: {x: 0, y: 0}
+      callTime: 2
+  - level: 3
+    cost: 0
+    effects:
+    - target: 6
+      operation: 2
+      value: 1
+      valueRange: {x: 0, y: 0}
+      callTime: 2
+  isUnlocked: 0

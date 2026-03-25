@@ -10,10 +10,11 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
     {
         { CardType.Ice,      new List<CardType>{CardType.Strike } }, // 빙결 → 타격
         { CardType.Nature,   new List < CardType > { CardType.Holy } },  // 자연 → 성력
-        { CardType.Buff,     new List < CardType > { CardType.Electric } }, // 버프 → 전격
-        { CardType.Heal,     new List < CardType > { CardType.Defense } },   // 힐 → 방어
-        { CardType.Slash,    new List < CardType > { CardType.Fire } },    // 참격 → 화염
-        { CardType.Pierce,   new List < CardType > { CardType.Debuff } },   // 관통 → 디버프
+        { CardType.baptism,     new List < CardType > { CardType.Defense } }, // 세례 → 방어
+        { CardType.Pray,    new List < CardType > { CardType.Nature} },    // 기도 → 자연
+        { CardType.Slash,   new List < CardType > { CardType.Fire } },   // 참격 → 화염
+        { CardType.Defense,   new List < CardType > { CardType.Pray } },   // 방어 → 기도
+
     };      //추후 연계효과 추가 대비
 
     /// <summary>
@@ -175,5 +176,39 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
 
         return false;
     }
+
+    // ── 회차 범위 raw ──
+    public float KaylaDamage = 0;
+    // ── 전투 범위 raw ──
+    public int KaylaKills = 0;
+    public int LeonDebuffs = 0;
+    public int GuardTriggers = 0;
+
+    // 리셋
+    public void ResetForRun()
+    {
+        KaylaDamage = 0f;
+        ResetForBattle();
+    }
+
+    public void ResetForBattle()
+    {
+        KaylaKills = 0;
+        LeonDebuffs = 0;
+        GuardTriggers = 0;
+
+        ResetBattleLog(); // (너의 기존 턴/배틀 로그 초기화)
+    }
+
+    // 리포트(원자료 카운터 갱신)
+    public void ReportDamageTaken(IStatusReceiver target, float applied)
+    {
+        if (target is PlayerController pc && pc.ChClass == CharacterClass.Kayla)
+            KaylaDamage += Mathf.Max(0f, applied);
+    }
+
+    public void ReportKillByKayla() => KaylaKills++;
+    public void ReportDebuffAppliedByLeon() => LeonDebuffs++;
+    public void ReportGuardTriggered() => GuardTriggers++;
 }
 

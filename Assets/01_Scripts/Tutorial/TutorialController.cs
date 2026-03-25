@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class TutorialController : MonoBehaviour
 {
@@ -58,6 +59,8 @@ public class TutorialController : MonoBehaviour
         else if (stage == 2 && pmd.IsNewStage && scene == SceneNameData.StageScene)
         {
             ShowTutorial(6);
+            ProgressDataManager.Instance.IsSecondGame = true; // 튜토리얼 스테이지 클리어 판정 
+            ProgressDataManager.Instance.SaveProgress(true); // 클리어 판정 save
         }
         else if (pmd.IsNewCamp && scene == SceneNameData.CampScene)
         {
@@ -83,8 +86,17 @@ public class TutorialController : MonoBehaviour
 
         for (int i = 0; i < obj.EmphasizeObject.Length; i++)
         {
+            if (obj.EmphasizeObject[i] == null) continue;
+            
             var clon =Instantiate(obj.EmphasizeObject[i], tutorials[index].transform);
             clon.transform.SetAsFirstSibling();
+            if(clon.TryGetComponent(out CardDisplay deck))
+            {
+                for (int j = 0; j < deck.cardsInHand.Count; j++)
+                {
+                    deck.cardsInHand[j].GetComponent<Image>().raycastTarget = false; // 튜토리얼용 카드는 비활성화
+                }
+            }
         }
 
         if (!obj.firstTutorial)

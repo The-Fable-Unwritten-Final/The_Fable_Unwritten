@@ -5,15 +5,25 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Localization.Settings;
 
 public class PopupUI_Setting : BasePopupUI
 {
+    private static readonly Dictionary<string, string> _localeDisplayNames = new Dictionary<string, string>()
+    {
+    { "en", "English" },
+    { "ko", "한국어" },
+    { "ja", "日本語" },
+    };
+
     [Header("Sound")]
     [SerializeField] Slider BGMvolumSlider;
     [SerializeField] Slider SFXvolumSlider;
 
     [Header("Resoolution")]
     [SerializeField] TMP_Dropdown resolutionDropdown;
+    [SerializeField] TMP_Dropdown localeDropdown;
+    bool isChangingLocale;
     [SerializeField] Transform resolutionTransform;
 
     private readonly Vector2Int[] resolutions = new Vector2Int[]
@@ -36,9 +46,7 @@ public class PopupUI_Setting : BasePopupUI
 
         // 해상도 셋팅
         resolutionDropdown.ClearOptions();
-
         var options = new List<TMP_Dropdown.OptionData>();
-
         int currentResolutionIndex = 0;
         for (int i = 0; i < resolutions.Length; i++)
         {
@@ -56,6 +64,8 @@ public class PopupUI_Setting : BasePopupUI
         resolutionDropdown.value = currentResolutionIndex;
         resolutionDropdown.RefreshShownValue();
         resolutionDropdown.onValueChanged.AddListener(OnResolutionChanged);
+
+        InitLocaleDropdown();
     }
 
     public void OnBGMVolumChange(float value)
@@ -74,7 +84,7 @@ public class PopupUI_Setting : BasePopupUI
         var selectedResolution = resolutions[index];
         Screen.SetResolution(selectedResolution.x, selectedResolution.y, false);   
         ProgressDataManager.Instance.resolutions = new Vector2Int[] { new Vector2Int(selectedResolution.x, selectedResolution.y) };
-        ProgressDataManager.Instance.SaveProgress(); // 해상도 변경 시 저장
+        ProgressDataManager.Instance.SaveProgress(true); // 해상도 변경 시 저장
     }
 
 
@@ -89,10 +99,12 @@ public class PopupUI_Setting : BasePopupUI
     }
     public void GoToTitle()
     {
+        // 컷씬 제거
+        /*
         if(DialogueManager.Instance.IsPlaying)
         {
             DialogueManager.Instance.ForceStopDialogue();
-        }
+        }*/
         if (SceneManager.GetActiveScene().name == SceneNameData.CombatScene) //전투씬 에서의 타이틀로 돌아가기.
         {
             
@@ -111,22 +123,61 @@ public class PopupUI_Setting : BasePopupUI
     }
 
 
-    //.Find 를 활용하는 코드이고, 쓰고있는곳이 없어 보여서 일단은 주석 처리했어요.
-    /*
-    public void OnDropdownClicked()
+
+
+    // 언어 변경 드롭다운 설정
+    private void InitLocaleDropdown()
     {
-        StartCoroutine(MoveBlockerToResolution());
+        localeDropdown.ClearOptions();
+
+        var locales = LocalizationSettings.AvailableLocales.Locales;
+        var options = new List<TMP_Dropdown.OptionData>();
+        int currentLocaleIndex = 0;
+
+        for (int i = 0; i < locales.Count; i++)
+        {
+            var locale = locales[i];
+            string code = locale.Identifier.Code; // "en", "ko", "ja"
+
+            if (!_localeDisplayNames.TryGetValue(code, out string displayName))
+                displayName = locale.LocaleName; // fallback
+
+            options.Add(new TMP_Dropdown.OptionData(displayName));
+
+            if (LocalizationSettings.SelectedLocale == locale)
+                currentLocaleIndex = i;
+        }
+
+        localeDropdown.AddOptions(options);
+        localeDropdown.value = currentLocaleIndex;
+        localeDropdown.RefreshShownValue();
+        localeDropdown.onValueChanged.AddListener(ChangeLocale);
+    }
+    private void ChangeLocale(int index)
+    {
+        //  사용자가 선택한 Locale
+        var targetLocale = LocalizationSettings.AvailableLocales.Locales[index];
+
+        // 현재 적용중인 Locale와 비교, 동일한 경우 return
+        if (LocalizationSettings.SelectedLocale == targetLocale)
+            return;
+
+        if (isChangingLocale) return;
+        StartCoroutine(ChangeLocaleCoroutine(index));
+
     }
 
-    IEnumerator MoveBlockerToResolution()
+    IEnumerator ChangeLocaleCoroutine(int index)
     {
-        
-        GameObject blocker = GameObject.Find("Blocker");
-        if (blocker != null)
-        {
-            blocker.transform.SetParent(resolutionTransform, false);
-            blocker.transform.SetAsFirstSibling();
-        }
-        yield return null;
-    }*/
+        isChangingLocale = true;
+
+        // 로케일 변경
+        yield return LocalizationSettings.InitializationOperation;
+        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
+
+        isChangingLocale = false;
+
+        // 로케일 변경후 텍스트 데이터 업데이트
+        DataManager.Instance.InitLocaleText();
+    }
 }

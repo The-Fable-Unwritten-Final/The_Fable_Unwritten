@@ -37,7 +37,7 @@ public class EnemySpawner : MonoBehaviour
             RandomSetting(stageData);
         }
 
-        ProgressDataManager.Instance.SaveProgress();
+        ProgressDataManager.Instance.SaveProgress(true);
     }
 
 

@@ -13,8 +13,8 @@ public class CardEffectVisualizer : MonoBehaviour
     [SerializeField] float targetAlpha = 0.6f; // 목표 알파값
 
     [SerializeField] private Image innerEdge;
-    [SerializeField] UIParticle useCardFXParticle; // 사용 효과 파티클
-    [SerializeField] UIParticle useEnhancedCardFXParticle; // 강화된 카드 사용 효과 파티클
+    [SerializeField] public UIParticle useCardFXParticle; // 사용 효과 파티클
+    [SerializeField] public UIParticle useEnhancedCardFXParticle; // 강화된 카드 사용 효과 파티클
     public bool enhanceTriggered = false; // 강화 효과가 트리거 되었는지 확인용(강화 상태에서, Use 상태로 전환시 이곳에서 트리거 실행.)
 
     [SerializeField] GameObject cardReadyFX; // 카드 준비 효과 (노란 테두리)
@@ -92,6 +92,8 @@ public class CardEffectVisualizer : MonoBehaviour
     }
     void UseFXPlay()
     {
+        // 잉크 덮는 효과에 잔상이 남아서 일단 비활성화, 파티클 구현 방식은 추후 변경 필요.
+        return;
         if (enhanceTriggered)
             useEnhancedCardFXParticle.Play();
         else

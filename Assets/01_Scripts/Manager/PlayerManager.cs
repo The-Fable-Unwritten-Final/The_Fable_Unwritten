@@ -64,6 +64,7 @@ public class PlayerManager : MonoSingleton<PlayerManager>
 
         playerDataMap[character] = newPlayerData;
         activePlayers[character] = newPlayerData;
+        ProgressDataManager.Instance.unlockedCharacterIDs.Add(newPlayerData.IDNum);
     }
 
     /// <summary>
@@ -115,18 +116,6 @@ public class PlayerManager : MonoSingleton<PlayerManager>
             return data;
 
         return null;
-    }
-
-    /// <summary>
-    /// 전투 시작 시 실제 캐릭터에게 덱을 넘겨줄 때 사용
-    /// </summary>
-    public void AssignDeckToPlayer(IStatusReceiver receiver)
-    {
-        var data = GetPlayerData(receiver.ChClass);
-        if (data != null)
-        {
-            receiver.Deck.Initialize(data.currentDeck);
-        }
     }
 
     /// <summary>

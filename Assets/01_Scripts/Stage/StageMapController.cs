@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,6 +12,7 @@ public class StageMapController : MonoBehaviour
 {
     [Header("Stage Settings")]
     [SerializeField] Image backGround; // stage별 백그라운드 설정
+    [SerializeField] TextMeshProUGUI stageTitleText; // 스테이지 타이틀 텍스트
     [SerializeField] Vector2 spacing = new(300, 200);      // 노드 간격
     [SerializeField] int mapTargetWidth;                   // 지도 가로 크기
     public StageMapRenderer mapRenderer;                   // StageMapRederer 연결
@@ -34,15 +36,17 @@ public class StageMapController : MonoBehaviour
             pd.SetTheme(theme);
 
             LoadStage(pd.StageIndex);
-
-            // 기획자 요청으로 대화씬 스킵
-            DialogueManager.Instance.OnStageStart(pd.StageIndex); // 대화 호출
+            
+            //DialogueManager.Instance.OnStageStart(pd.StageIndex); // 대화 호출
         }
-        
-        int stageIndex = pd.StageIndex;
-        backGround.sprite = DataManager.Instance.GetBackground(stageIndex);
 
-        pd.SaveProgress();
+        int stageIndex = pd.StageIndex;
+        if(stageIndex < 1) stageIndex = 1;
+
+        backGround.sprite = DataManager.Instance.GetBackground(stageIndex);
+        stageTitleText.text = LocaleDataManager.GetLocalizedStringTable("Locale Table", $"StageTitle_{stageIndex}");
+
+        pd.SaveProgress(true);
     }
 
     // 저장된 상태가 있다면 복원 시도
@@ -64,10 +68,6 @@ public class StageMapController : MonoBehaviour
                     BattleLogManager.Instance.ResetStageLog();
                     stageSetting.StageIndex++;
 
-                    foreach(var player in ProgressDataManager.Instance.PlayerDatas)
-                    {
-                        player.ResetHPToMax();
-                    }
                     var newTheme = stageSetting.GetThemeForStage(stageSetting.StageIndex);
                     stageSetting.SetTheme(newTheme);
 
@@ -76,7 +76,7 @@ public class StageMapController : MonoBehaviour
                     stageSetting.StageCleared= false;
 
                     LoadStage(stageIndex);
-                    DialogueManager.Instance.OnStageStart(stageSetting.StageIndex); // 대화 호출
+                    //DialogueManager.Instance.OnStageStart(stageSetting.StageIndex); // 대화 호출
                     return true;
                 }
             }
@@ -101,6 +101,9 @@ public class StageMapController : MonoBehaviour
     // 노드 클릭 시 스테이지 호출 및 저장
     private void OnNodeClicked(GraphNode clicked)
     {
+        // 이전 노드를 먼저 저장 (clicked를 추가하기 전에)
+        var previousNode = visitedNodes.LastOrDefault() ?? stageData.columns[0].First();
+        
         GameManager.Instance.analyticsLogger.LogNodeInfo(stageData.stageIndex, (int)clicked.type);
         visitedNodes.Add(clicked);
 
@@ -110,9 +113,8 @@ public class StageMapController : MonoBehaviour
 
         // 노드 클릭 시 저장
         pdm.IsStageScene = false;
-        pdm.SaveProgress();
-        SoundManager.Instance.PlaySFX(SoundCategory.Button, 1
-            );
+        pdm.SaveProgress(true);
+        SoundManager.Instance.PlaySFX(SoundCategory.Button, 1);
 
         int stageIndex = pdm.StageIndex;
         int columnIndex = clicked.columnIndex;
@@ -141,7 +143,13 @@ public class StageMapController : MonoBehaviour
             }
         }
 
-        // 노드 타입별 씬 전환
+        // 라인 채우기 애니메이션 후 씬 전환
+        mapRenderer.AnimateLineFill(previousNode, clicked, () => ExecuteNodeAction(clicked));
+    }
+
+    // 노드 타입에 따라 씬 전환을 실행
+    private void ExecuteNodeAction(GraphNode clicked)
+    {
         switch (clicked.type)
         {
             case NodeType.NormalBattle:
@@ -158,17 +166,17 @@ public class StageMapController : MonoBehaviour
                 UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.RandomEventScene);
                 return;
         }
-   
+
         if (IsLastColumnNode(clicked))
         {
             // 마지막 열(보스노드)의 경우 스테이지 증가
-            pdm.StageIndex++;
+            ProgressDataManager.Instance.StageIndex++;
         }
         else
         {
             // 중간 노드의 경우 다음 스테이지 연결
             mapRenderer.UpdateInteractables(clicked, visitedNodes);
-        }     
+        }
     }
 
     // 클릭된 노드가 마지막 열에 있는지 확인
@@ -236,5 +244,19 @@ public class StageMapController : MonoBehaviour
         startBtn.image.color = Color.white;
 
         mapRenderer.UpdateInteractables(startNode, visitedNodes);
+    }
+    /// <summary>
+    /// UI전반의 구조가 바뀌며 각 씬에 존재하는 도감 UI를 개별로 UI매니저와 연결 해 주는 메서드
+    /// </summary>
+    public void BookUIManagerOpen()
+    {
+        UIManager.Instance.ShowPopupByName("PopupUI_Book");
+    }
+    /// <summary>
+    /// UI전반의 구조가 바뀌며 각 씬에 존재하는 세팅 UI를 개별로 UI매니저와 연결 해 주는 메서드
+    /// </summary>
+    public void SettingUIManagerOpen()
+    {
+        UIManager.Instance.ShowPopupByName("PopupUI_Setting");
     }
 }

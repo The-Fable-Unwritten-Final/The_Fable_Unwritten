@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Linq;
 
 public enum TurnState { PlayerTurn, EnemyTurn } //적 턴인지 아군 턴인지 판별자
 
@@ -103,6 +104,7 @@ public class BattleFlowController : MonoBehaviour
     /// </summary>
     public void StartBattle()
     {
+
         isBattleEnded = false;
         currentMana = startMana;
         currentTurn = TurnState.PlayerTurn;
@@ -112,17 +114,45 @@ public class BattleFlowController : MonoBehaviour
         foreach (var player in playerParty)
         {
             if (player is PlayerController pc)
+                pc.OnBattleStart();
+
+            if (player.IsAlive())
+            {
+                player.Deck.ResetDeckState();
+                player.Deck.Draw(DeckModel.startSize);
+            }
+        }
+
+        foreach (var enemy in enemyParty)
+        {
+            if (enemy is Enemy e)
+                e.OnBattleStart();
+        }
+
+
+        foreach (var player in playerParty)
+        {
+            if (player is PlayerController pc)
             {
                 switch(pc.playerData.IDNum)
                 {
                     case 0:
-                        pc.playerData.currentStance = PlayerData.StancType.refine;
+                        if (pc.playerData.currentStance == StancType.None)
+                        {
+                            pc.playerData.currentStance = StancType.Seek;
+                        }
                         break;
                     case 1:
-                        pc.playerData.currentStance = PlayerData.StancType.grace;
+                        if (pc.playerData.currentStance == StancType.None)
+                        {
+                            pc.playerData.currentStance = StancType.Mercy;
+                        }
                         break;
                     case 2:
-                        pc.playerData.currentStance = PlayerData.StancType.guard;
+                        if (pc.playerData.currentStance == StancType.None)
+                        {
+                            pc.playerData.currentStance = StancType.Rush;
+                        }
                         break;
                     default:
                         break;
@@ -131,13 +161,6 @@ public class BattleFlowController : MonoBehaviour
             }
 
             UpdateManaUI();
-
-            if (player.IsAlive())            //모두 덱 초기화 후 3장 뽑기
-            {
-                if (!player.IsAlive()) continue;
-                player.Deck.ResetDeckState();
-                player.Deck.Draw(DeckModel.startSize);
-            }
         }
         PlanEnemySkills();      //적 스킬 목록 설정
     }
@@ -145,7 +168,7 @@ public class BattleFlowController : MonoBehaviour
     /// <summary>
     /// 플레이어 턴 행동
     /// </summary>
-    public void ExecutePlayerTurn()
+    public void ExecutePlayerTurn() // turnController의 플레이어 턴 시작 부분에서도 호출됨 => 효과 적용 시 이중 호출에 유의할 것
     {
         if (isBattleEnded) return;      //전투 종료 명령 확인 시 전투 종료
         currentTurn = TurnState.PlayerTurn;
@@ -153,11 +176,33 @@ public class BattleFlowController : MonoBehaviour
         if (currentMana < startMana)    //마나가 시작 마나보다 적을 시 시작 마나로 초기화
             currentMana = startMana;
 
+        // 문체 효과 적용 => 턴 시작시 마나 보유량 변환
+        currentMana = StyleManager.Instance.ModifySupplyManaAtStartOfTurn(currentMana);
+
+        foreach (var player in playerParty)
+        {
+            if (player is PlayerController pc && pc.IsAlive())
+                pc.OnTurnStart();
+        }
+
+
         UpdateManaUI(); // << 추가
         DrawMissingHands();             //각각 패가 3장이 되도록(살아 있을 경우에만) 드로우
 
 
         // 이후 카드 사용 → 외부에서 UseCard 호출
+    }
+
+    private void NotifyAllPlayersCardUsed(IStatusReceiver caster)
+    {
+        foreach (var member in playerParty)
+        {
+            if (member is PlayerController pc && pc.IsAlive())
+            {
+                bool isSelf = ReferenceEquals(pc, caster);
+                pc.NotifyCardUsed(isSelf);
+            }
+        }
     }
 
     /// <summary>
@@ -172,15 +217,34 @@ public class BattleFlowController : MonoBehaviour
         {
             return;
         }
-        
+
+        if (caster is PlayerController pcCaster && !pcCaster.CanActThisTurn())
+            return;
+
 
         int actualCost = card.GetEffectiveCost();
         currentMana -= actualCost; // 할인된 코스트 차감
+        // 문체 효과 적용 //
+        var styleManager = StyleManager.Instance;
+        if (styleManager.isFirstTurnCard)
+        {
+            styleManager.isFirstTurnCard = false;
+        }
+        else if (styleManager.isStartOfTurnCard)
+        {
+            styleManager.isStartOfTurnCard = false;
+            currentMana += styleManager.GetStartTurnModifiedCardCost(card, 0); // default 값 0
+        }
+        else
+        {
+            currentMana += styleManager.GetModifiedCardCost(card, 0); // default 값 0
+        }
+        // 문체 효과 적용 끝 //
 
         if (targets == null || targets.Count == 0)
         {
             int count = Mathf.Max(1, card.targetCount);
-            targets = AutoChooseTargets(card.targetType, card.characterClass,count, targets[0]);
+            targets = AutoChooseTargets(card.targetType, card.characterClass, count, targets[0]);
         }
 
         //Debug.Log($"{caster.ChClass} 가 {card.cardName} 사용 → {string.Join(", ", targets.ConvertAll(t => t.ChClass.ToString()))}, cost : {actualCost}");
@@ -193,7 +257,11 @@ public class BattleFlowController : MonoBehaviour
             }
         }
 
-        card.Play(caster, targets); // 카드 효과 실행
+        //todo : 이후 카드에 따라 attack type 다르게 만들기
+        int attackType = (int)card.type%3;
+        card.Play(caster, targets, attackType); // 카드 효과 실행
+                                                // 포텐셜 게이지 연동
+        NotifyAllPlayersCardUsed(caster);
         // 임시 카메라 줌 인 아웃 효과 추가 (이후 캐릭터의 모션이 추가되면, 해당 모션의 시작과 끝에 맞춰 줌 인 아웃 재설정)
 
 
@@ -260,54 +328,67 @@ public class BattleFlowController : MonoBehaviour
 
     private void AfterEnemyTurn()
     {
-        // 1. 플레이어/적 모두 상태효과 지속시간 감소
         foreach (var player in playerParty)
         {
-            if (player.IsAlive())
-            {
-                (player as PlayerController)?.TickStatusEffects();
-                if(player is PlayerController p)
-                {
-                    p.playerData.ResetCurCard();
-                }
-            }
-
+            if (player is PlayerController pc && pc.IsAlive())
+                pc.OnTurnEnd();
 
             player.Deck.DiscardUnmaintainedCardsAtTurnEnd();
-            ClearAllDeckEnhanced();
         }
 
         foreach (var enemy in enemyParty)
         {
-            if (enemy != null && enemy.IsAlive())
-                (enemy as Enemy)?.TickStatusEffects();
+            if (enemy is Enemy e && e.IsAlive())
+                e.OnTurnEnd();
         }
-        
+
+        ClearAllDeckEnhanced();
         BattleLogManager.Instance.OnTurnEnd();
 
-        // 2. 턴 수 증가
         turn++;
-        //Debug.Log($"턴 종료 → 새로운 턴 시작: {turn}턴");
-
-        // 3. 플레이어 턴 시작
-        //카드 드로우 사운드 출력
         SoundManager.Instance.PlaySFX(SoundCategory.UI, 3);
         ExecutePlayerTurn();
     }
 
+    public IStatusReceiver ResolveEnemyAttackTarget(IStatusReceiver originalTarget)
+    {
+        var leon = playerParty
+            .OfType<PlayerController>()
+            .FirstOrDefault(p => p.IsAlive() && p.ChClass == CharacterClass.Leon && p.HasGuardValue());
+
+        if (leon != null)
+        {
+            leon.MarkGuardRedirectPending();
+            return leon;
+        }
+
+        return originalTarget;
+    }
+
     private IEnumerator EnemyTurnCoroutine(Action onEnemyTurnComplete)
     {
-        var currentEnemies = new List<IStatusReceiver>(enemyParty); // 복사본
+        var currentEnemies = new List<IStatusReceiver>(enemyParty);
 
         foreach (var enemy in currentEnemies)
         {
             if (enemy == null || !enemy.IsAlive()) continue;
 
+            if (enemy is Enemy e)
+            {
+                e.OnTurnStart();
+
+                if (!e.CanActThisTurn())
+                {
+                    yield return new WaitForSeconds(0.2f);
+                    continue;
+                }
+            }
+
             yield return EnemyPattern.ExecutePattern(enemy);
             yield return new WaitForSeconds(0.2f);
         }
-        CheckBattleEnd();
 
+        CheckBattleEnd();
         onEnemyTurnComplete?.Invoke();
     }
 
@@ -346,7 +427,7 @@ public class BattleFlowController : MonoBehaviour
                 enemyParty[i] = null;
             
             StopAllCoroutines();
-            GameManager.Instance.turnController.ToGameEnd();
+            GameManager.Instance.turnController.ToGameEnd(false);
             BattleLogManager.Instance.ResetGameLog();
         }
         else if (allEnemiesDead)
@@ -388,7 +469,7 @@ public class BattleFlowController : MonoBehaviour
             for (int i = 0; i < enemyParty.Count; i++)
                 enemyParty[i] = null;
             StopAllCoroutines();
-            GameManager.Instance.turnController.ToGameEnd();
+            GameManager.Instance.turnController.ToGameEnd(true);
         }
     }
 
@@ -510,6 +591,19 @@ public class BattleFlowController : MonoBehaviour
             decksByCharacter[player.ChClass] = player.Deck;
         }
     }
+    // 살아있는 랜덤한 파티원 한명 리턴
+    public IStatusReceiver GetRandomAliveParty()
+    {
+        if (playerParty == null || playerParty.Count == 0)
+            return null;
+
+        var alive = playerParty.Where(p => p != null && p.IsAlive()).ToList();
+        if (alive.Count > 0)
+            return alive[UnityEngine.Random.Range(0, alive.Count)];
+
+        return null;
+    }
+
 
     /// <summary>
     /// 자동 타겟 설정

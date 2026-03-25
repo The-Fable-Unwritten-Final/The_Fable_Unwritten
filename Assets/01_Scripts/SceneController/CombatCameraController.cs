@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 //// 카메라 줌인 액션은 기본적으로
 //// 1. 플레이어 > 몬스터
 //// 2. 플레이어 > 플레이어 그룹 or 플레이어 > 대상지정 없음
-//// 두 가지 경우로 나뉜다는 가정하에 설계했음. 만약 플레이어 + 몬스터 전체 대상의 효과가 추가될 경우 추가적인 구조 변경이 필요함. (if (target[0] is Enemy) 방식으로 target을 직접 체크 중)
+//// 두 가지 경우로 나뉜다는 가정하에 설계했음. 만약 플레이어 + 몬스터 전체 대상의 효과가 추가될 경우 추가적인 구조 변경이 필요함.
 
 public class CombatCameraController : MonoBehaviour
 {
@@ -25,7 +25,7 @@ public class CombatCameraController : MonoBehaviour
     public List<Enemy> enemies;
     [SerializeField] Material combatBackgroundMaterial; // 전투 배경 머티리얼
 
-    Coroutine combatCameraCoroutine;
+    public Coroutine combatCameraCoroutine; // 특수 모션 카메라 줌인 효과시
 
 
     private void Awake()
@@ -63,15 +63,15 @@ public class CombatCameraController : MonoBehaviour
             {
                 if (t is PlayerController player)
                 {
-                    player.GetComponent<SpriteRenderer>().sortingOrder = -1;
+                    player.spriteRenderer.sortingOrder = -1;
                     if(caster is Enemy e)
-                        e.GetComponent<SpriteRenderer>().sortingOrder = -1;
+                        e.spriteRenderer.sortingOrder = -1;
                 }
                 else if (t is Enemy enemy)
                 {
-                    enemy.GetComponent<SpriteRenderer>().sortingOrder = -1;
+                    enemy.spriteRenderer.sortingOrder = -1;
                     if (caster is PlayerController p)
-                        p.GetComponent<SpriteRenderer>().sortingOrder = -1;
+                        p.spriteRenderer.sortingOrder = -1;
                 }
             }
         }
@@ -101,13 +101,13 @@ public class CombatCameraController : MonoBehaviour
             combatBackgroundMaterial.DOFade(1f, combatTransitionTime); // 알파 1로
 
             // sortingOrder 설정
-            player.GetComponent<SpriteRenderer>().sortingOrder = 1;
+            player.spriteRenderer.sortingOrder = 1;
             foreach (var t in target)
             {
                 var mono = t as MonoBehaviour;
 
                 if(mono!= null)
-                    mono.GetComponent<SpriteRenderer>().sortingOrder = 1;
+                    mono.GetComponentInChildren<SpriteRenderer>().sortingOrder = 1;
             }
 
             yield return new WaitForSeconds(time);
@@ -120,13 +120,13 @@ public class CombatCameraController : MonoBehaviour
                 .DOFade(0f, combatTransitionTime) // 알파 0으로
                 .onComplete = () =>
                 {
-                    player.GetComponent<SpriteRenderer>().sortingOrder = -1;
+                    player.spriteRenderer.sortingOrder = -1;
                     foreach (var t in target)
                     {
                         var mono = t as MonoBehaviour;
 
                         if (mono != null)
-                            mono.GetComponent<SpriteRenderer>().sortingOrder = -1;
+                            mono.GetComponentInChildren<SpriteRenderer>().sortingOrder = -1;
                     }
                 };
         }
@@ -134,12 +134,12 @@ public class CombatCameraController : MonoBehaviour
         {
             //0.3초동안 전투배경 alpha값 페이드인
             combatBackgroundMaterial.DOFade(1f, combatTransitionTime); // 알파 1로
-            enemy.GetComponent<SpriteRenderer>().sortingOrder = 1;
+            enemy.spriteRenderer.sortingOrder = 1;
             foreach (var t in target)
             {
                 if (t is PlayerController p)
                 {
-                    p.GetComponent<SpriteRenderer>().sortingOrder = 1;
+                    p.spriteRenderer.sortingOrder = 1;
                 }
             }
             //caster
@@ -152,10 +152,10 @@ public class CombatCameraController : MonoBehaviour
                 {
                     foreach (var t in target)
                     {
-                        enemy.GetComponent<SpriteRenderer>().sortingOrder = -1;
+                        enemy.spriteRenderer.sortingOrder = -1;
                         if (t is PlayerController p)
                         {
-                            p.GetComponent<SpriteRenderer>().sortingOrder = -1;
+                            p.spriteRenderer.sortingOrder = -1;
                         }
                     }
                 };

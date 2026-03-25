@@ -77,12 +77,36 @@ public class NewCardEffectBuilder : MonoBehaviour
                 effect = redraw;
                 break;
 
-            case "atk_buff":
-            case "def_buff":
+            case "atk":
+            case "def":// ToDo : 상태이상 추가하기
+            case "burn":
+            case "freeze":
+            case "activate":
+            case "purify":
+            case "bless":
+            case "grace":
+            case "bleed":
+            case "stun":
+            case "guard":
                 var buff = Load<ApplyStatusEffect>("ApplyBuff");
-                buff.statType = effectData.type == "atk_buff" ? BuffStatType.Attack : BuffStatType.Defense;
-                buff.value = effectData.value;
-                buff.duration = effectData.duration;
+                
+                buff.statType = effectData.type switch
+                {
+                    "atk" => BuffStatType.Attack,
+                    "def" => BuffStatType.Defense,
+                    "burn" => BuffStatType.Burn,
+                    "freeze" => BuffStatType.Freeze,
+                    "activate" => BuffStatType.Activate,
+                    "purify" => BuffStatType.Penance,
+                    "bless" => BuffStatType.Bless,
+                    "grace" => BuffStatType.Crime,
+                    "bleed" => BuffStatType.Scar,
+                    "stun" => BuffStatType.Stun,
+                    "guard" => BuffStatType.Guard,
+                    _ => BuffStatType.None
+                };
+
+                buff.value = effectData.value;      //턴 지속이 아니니 duration 필요 없음.(턴 지속 디벞 추가 시 추가)
                 buff.target = effectData.target;
                 effect = buff;
                 break;
@@ -99,12 +123,6 @@ public class NewCardEffectBuilder : MonoBehaviour
                 effect = block;
                 break;
 
-            case "stun":
-                var stun = Load<StunEffect>("StunEffect");
-                stun.duration = effectData.value;
-                effect = stun;
-                break;
-
             case "reduceCost":
                 var cost = Load<ReduceNextCardCostEffect>("ReduceNextCardCostEffect");
                 cost.amount = effectData.value;
@@ -114,7 +132,7 @@ public class NewCardEffectBuilder : MonoBehaviour
 
             case "blind":
                 var blind = Load<BlindEffect>("BlindEffect");
-                blind.blockedStance = (PlayerData.StancType)effectData.target;
+                blind.blockedStance = (StancType)effectData.target;
                 effect = blind;
                 break;
 
@@ -156,7 +174,7 @@ public class NewCardEffectBuilder : MonoBehaviour
 
                     case "isStance":
                         var stance = ScriptableObject.CreateInstance<StanceCondition>();
-                        stance.requiredStance = (StancValue.EStancType)values[0];
+                        stance.requiredStance = (StancType)values[0];
                         condition = stance;
                         break;
 

@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-public class CardUnlocker : MonoBehaviour
+public static class CardUnlocker 
 {
 
     public static event Action<CharacterClass> OnRecipeUnlocked;
@@ -58,5 +58,24 @@ public class CardUnlocker : MonoBehaviour
         OnCardUnlocked?.Invoke(selected);
 
         return selected;
+    }
+
+    /// <summary>
+    /// 랜덤 이벤트를 통해서 카드 해금 시 호출
+    /// </summary>
+    /// <param name="cardIndex"></param>
+    /// <returns></returns>
+    public static bool UnlockByEvent(int cardIndex)
+    {
+        var allCards = DataManager.Instance.AllCards;
+        var card = allCards.FirstOrDefault(c => c.index == cardIndex);
+        if (card == null || card.isUnlocked)
+            return false;
+
+        card.isUnlocked = true;
+        ProgressDataManager.Instance.unlockedCards.Add(card.index);
+
+        //OnCardUnlocked?.Invoke(card); // 해금한 카드 보여주는 팝업 UI 출력 => UI 출력과 실제 효과 적용을 분리하여 구현하기로 결정 (2025.12.09)
+        return true;
     }
 }

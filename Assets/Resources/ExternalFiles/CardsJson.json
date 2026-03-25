@@ -4,20 +4,25 @@
       "index": 1000,
       "cost": 1,
       "illustration": "illust_0",
-      "name": "나비불",
-      "text": "적 하나 8의 피해",
+      "name": "Card_Name_1000",
+      "text": "Card_Text_1000",
       "type": 0,
       "class": 0,
       "cardframe": "frame_0",
       "target_type": 2,
       "target_num": 1,
       "note": "",
-      "flavortext": "날갯짓 하나로 피어난 작은 불꽃입니다.",
+      "flavortext": "Card_Flav_1000",
       "skilleffect": "fanfx2_fire_spell_large_orange",
       "effects": [
         {
           "type": "damage",
           "value": 8
+        },
+        {
+          "type": "burn",
+          "value": 4,
+          "target": 4
         }
       ]
     },
@@ -25,21 +30,20 @@
       "index": 1001,
       "cost": 1,
       "illustration": "illust_18",
-      "name": "정화의 불꽃",
-      "text": "카드 2장 버리기\n1턴 간 아군 전체 공격력 1 증가",
+      "name": "Card_Name_1001",
+      "text": "Card_Text_1001",
       "type": 0,
       "class": 0,
       "cardframe": "frame_0",
       "target_type": 1,
       "target_num": 3,
       "note": "",
-      "flavortext": "쓸모없는 것을 불태워 힘으로 전환합니다.",
+      "flavortext": "Card_Flav_1001",
       "skilleffect": "fanfx1_spellcast_B_large_red",
       "effects": [
         {
-          "type": "atk_buff",
+          "type": "atk",
           "value": 1,
-          "duration": 1,
           "target": 3
         },
         {
@@ -52,15 +56,15 @@
       "index": 1002,
       "cost": 2,
       "illustration": "illust_29",
-      "name": "불꽃 주먹",
-      "text": "소피아 체력 3 감소\n적 하나 15의 피해",
+      "name": "Card_Name_1002",
+      "text": "Card_Text_1002",
       "type": 0,
       "class": 0,
       "cardframe": "frame_0",
       "target_type": 2,
       "target_num": 1,
       "note": "",
-      "flavortext": "자신을 희생한 마법은 그 위력이 더 강력합니다.",
+      "flavortext": "Card_Flav_1002",
       "skilleffect": "pj2_fireball_large_red",
       "effects": [
         {
@@ -70,6 +74,11 @@
         {
           "type": "self_damage",
           "value": 3
+        },
+        {
+          "type": "burn",
+          "value": 6,
+          "target": 4
         }
       ]
     },
@@ -77,15 +86,15 @@
       "index": 1003,
       "cost": 1,
       "illustration": "illust_10",
-      "name": "얼음 파편",
-      "text": "적 둘 3의 피해\n일시적인 복사본 생성\n사용할 때마다 피해 2 증가",
+      "name": "Card_Name_1003",
+      "text": "Card_Text_1003",
       "type": 1,
       "class": 0,
       "cardframe": "frame_1",
       "target_type": 2,
       "target_num": 2,
       "note": "사용할 때마다 데미지가 2 더 증가합니다.",
-      "flavortext": "우박처럼 쏟아지는 얼음 조각을 피하기란 쉽지 않습니다.",
+      "flavortext": "Card_Flav_1003",
       "skilleffect": "fanfx2_ice_spell_large_blue",
       "effects": [
         {
@@ -100,12 +109,19 @@
           "type": "conditional",
           "condition": {
             "trigger": "isUsedParticularCard",
-            "value": [ 1003 ]
+            "value": [
+              1003
+            ]
           },
           "result": {
             "type": "applyDamage",
             "value": 2
           }
+        },
+        {
+          "type": "freeze",
+          "value": 2,
+          "target": 4
         }
       ]
     },
@@ -113,15 +129,15 @@
       "index": 1004,
       "cost": 2,
       "illustration": "illust_30",
-      "name": "서리대지",
-      "text": "소피아 체력 2 감소\n적 전체 11의 피해",
+      "name": "Card_Name_1004",
+      "text": "Card_Text_1004",
       "type": 1,
       "class": 0,
       "cardframe": "frame_1",
       "target_type": 2,
       "target_num": 3,
       "note": "강화 시 체력이 감소하지 않습니다.",
-      "flavortext": "지면의 닿는 모든 것을 얼려버리는 냉기입니다.",
+      "flavortext": "Card_Flav_1004",
       "skilleffect": "fanfx2_earth_spikes_large_blue",
       "effects": [
         {
@@ -131,6 +147,11 @@
         {
           "type": "self_damage",
           "value": 2
+        },
+        {
+          "type": "freeze",
+          "value": 4,
+          "target": 4
         }
       ]
     },
@@ -138,21 +159,20 @@
       "index": 1005,
       "cost": 2,
       "illustration": "illust_27",
-      "name": "서리방벽",
-      "text": "1턴 간 아군 전체 방어력 5 증가",
+      "name": "Card_Name_1005",
+      "text": "Card_Text_1005",
       "type": 1,
       "class": 0,
       "cardframe": "frame_1",
       "target_type": 1,
       "target_num": 3,
       "note": "",
-      "flavortext": "서리방벽 내부는 생각보다 따뜻하다고 합니다.",
+      "flavortext": "Card_Flav_1005",
       "skilleffect": "fx3_toon_explosion_large_blue",
       "effects": [
         {
-          "type": "def_buff",
+          "type": "def",
           "value": 5,
-          "duration": 1,
           "target": 3
         }
       ]
@@ -160,103 +180,21 @@
     {
       "index": 1006,
       "cost": 0,
-      "illustration": "illust_22",
-      "name": "역전류",
-      "text": "소피아 카드 1장 뽑기",
-      "type": 2,
-      "class": 0,
-      "cardframe": "frame_2",
-      "target_type": 0,
-      "target_num": 0,
-      "note": "",
-      "flavortext": "마법사에게 전류의 흐름을 뒤집는 건 어렵지 않다고 합니다.",
-      "skilleffect": "fx3_lightning_aura_large_yellow",
-      "effects": [
-        {
-          "type": "draw",
-          "value": 1,
-          "target": 0
-        }
-      ]
-    },
-    {
-      "index": 1007,
-      "cost": 2,
-      "illustration": "illust_11",
-      "name": "전자 지류",
-      "text": "적 하나 9의 피해\n대상 기절",
-      "type": 2,
-      "class": 0,
-      "cardframe": "frame_2",
-      "target_type": 2,
-      "target_num": 1,
-      "note": "",
-      "flavortext": "지하를 흐르던 전류가 마법에 이끌려 지면 위로 솟구칩니다.",
-      "skilleffect": "fanfx2_lightning_spell_large_yellow",
-      "effects": [
-        {
-          "type": "damage",
-          "value": 9
-        },
-        {
-          "type": "stun",
-          "value": 1
-        }
-      ]
-    },
-    {
-      "index": 1008,
-      "cost": 2,
-      "illustration": "illust_16",
-      "name": "직렬 연결",
-      "text": "소피아 카드 뽑기\n전격 카드라면 비용 1 감소",
-      "type": 2,
-      "class": 0,
-      "cardframe": "frame_2",
-      "target_type": 0,
-      "target_num": 0,
-      "note": "",
-      "flavortext": "적절한 전력은 두뇌 회전에도 도움이 될 수 있습니다.",
-      "skilleffect": "fx3_lightning_aura_large_blue",
-      "effects": [
-        {
-          "type": "draw",
-          "value": 1,
-          "target": 0
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "trigger": "isDrawCard",
-            "value": [ 2 ]
-          },
-          "result": {
-            "type": "reduceCost",
-            "value": 2,
-            "target": 4
-          }
-        }
-      ]
-    },
-    {
-      "index": 1009,
-      "cost": 0,
       "illustration": "illust_6",
-      "name": "가벼운 한 모금",
-      "text": "다음 카드 비용이 1 감소\n1턴 간 공격력 1 감소",
-      "type": 3,
+      "name": "Card_Name_1006",
+      "text": "Card_Text_1006",
+      "type": 2,
       "class": 0,
       "cardframe": "frame_3",
       "target_type": 1,
       "target_num": 1,
       "note": "",
-      "flavortext": "소피아의 물약은 늘 기묘한 기대와 불안감을 줍니다.",
+      "flavortext": "Card_Flav_1006",
       "skilleffect": "fanfx1_spellcast_B_large_green",
       "effects": [
         {
-          "type": "atk_buff",
+          "type": "atk",
           "value": -1,
-          "duration": 1,
           "target": 4
         },
         {
@@ -267,18 +205,18 @@
       ]
     },
     {
-      "index": 1010,
+      "index": 1007,
       "cost": 1,
       "illustration": "illust_15",
-      "name": "자연의 숨결",
-      "text": "아군 체력 6 회복",
-      "type": 3,
+      "name": "Card_Name_1007",
+      "text": "Card_Text_1007",
+      "type": 2,
       "class": 0,
       "cardframe": "frame_3",
       "target_type": 1,
       "target_num": 1,
       "note": "",
-      "flavortext": "바람을 타고 날아온 푸르름은 활력을 불어넣습니다.",
+      "flavortext": "Card_Flav_1007",
       "skilleffect": "fx2_slash_large_green",
       "effects": [
         {
@@ -289,18 +227,18 @@
       ]
     },
     {
-      "index": 1011,
+      "index": 1008,
       "cost": 3,
       "illustration": "illust_9",
-      "name": "원소 반응",
-      "text": "적 전체 12의 피해\n'화염', '빙결' 카드 사용 시 1턴 간 강화",
-      "type": 3,
+      "name": "Card_Name_1008",
+      "text": "Card_Text_1008",
+      "type": 2,
       "class": 0,
       "cardframe": "frame_3",
       "target_type": 2,
       "target_num": 3,
       "note": "강화 시 데미지가 6 더 증가합니다.",
-      "flavortext": "불과 얼음의 원소 마법에 반응한 자연은 평소보다 격렬해집니다.",
+      "flavortext": "Card_Flav_1008",
       "skilleffect": "fanfx2_wind_spell_large_green",
       "effects": [
         {
@@ -311,12 +249,80 @@
           "type": "conditional",
           "condition": {
             "trigger": "isUsedAllCard",
-            "value": [ 0, 1 ]
+            "value": [
+              0,
+              1
+            ]
           },
           "result": {
             "type": "damage",
             "value": 6
           }
+        },
+        {
+          "type": "activate",
+          "value": 6,
+          "target": 4
+        }
+      ]
+    },
+    {
+      "index": 1009,
+      "cost": 1,
+      "illustration": "illust_32",
+      "name": "Card_Name_1009",
+      "text": "Card_Text_1009",
+      "type": 0,
+      "class": 0,
+      "cardframe": "frame_0",
+      "target_type": 2,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_1009",
+      "skilleffect": "expfx1_stylized_explosion_A_large_red",
+      "effects": [
+        {
+          "type": "damage",
+          "value": 5
+        },
+        {
+          "type": "self_damage",
+          "value": 2
+        },
+        {
+          "type": "burn",
+          "value": 1,
+          "target": 4
+        }
+      ]
+    },
+    {
+      "index": 1010,
+      "cost": 1,
+      "illustration": "illust_33",
+      "name": "Card_Name_1010",
+      "text": "Card_Text_1010",
+      "type": 2,
+      "class": 0,
+      "cardframe": "frame_4",
+      "target_type": 1,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_1010",
+      "skilleffect": "fanfx1_spellcast_B_large_green",
+      "effects": [
+        {
+          "type": "heal",
+          "value": 3
+        },
+        {
+          "type": "atk",
+          "value": 1
+        },
+        {
+          "type": "purify",
+          "value": 1,
+          "target": 4
         }
       ]
     },
@@ -324,21 +330,25 @@
       "index": 2000,
       "cost": 1,
       "illustration": "illust_12",
-      "name": "축성",
-      "text": "2턴 간 아군 공격력 2 증가",
-      "type": 4,
+      "name": "Card_Name_2000",
+      "text": "Card_Text_2000",
+      "type": 3,
       "class": 1,
       "cardframe": "frame_4",
       "target_type": 1,
       "target_num": 1,
       "note": "",
-      "flavortext": "기도는 무기가 되고 무기는 다시 믿음이 됩니다.",
+      "flavortext": "Card_Flav_2000",
       "skilleffect": "fanfx1_spellcast_B_large_red",
       "effects": [
         {
-          "type": "atk_buff",
+          "type": "atk",
           "value": 2,
-          "duration": 2,
+          "target": 4
+        },
+        {
+          "type": "bless",
+          "value": 1,
           "target": 4
         }
       ]
@@ -347,25 +357,29 @@
       "index": 2001,
       "cost": 2,
       "illustration": "illust_21",
-      "name": "정신 집중",
-      "text": "1턴 간 카일라 공격력 2 증가\n다음 카일라 카드 비용 1 감소",
-      "type": 4,
+      "name": "Card_Name_2001",
+      "text": "Card_Text_2001",
+      "type": 3,
       "class": 1,
       "cardframe": "frame_4",
       "target_type": 0,
       "target_num": 2,
       "note": "",
-      "flavortext": "신앙심은 일격을 위한 준비에도 도움이 됩니다.",
+      "flavortext": "Card_Flav_2001",
       "skilleffect": "fx2_magic_swirl_large_yellow",
       "effects": [
         {
-          "type": "atk_buff",
+          "type": "atk",
           "value": 2,
-          "duration": 1,
           "target": 1
         },
         {
           "type": "reduceCost",
+          "value": 1,
+          "target": 1
+        },
+        {
+          "type": "bless",
           "value": 1,
           "target": 1
         }
@@ -374,110 +388,42 @@
     {
       "index": 2002,
       "cost": 1,
-      "illustration": "illust_13",
-      "name": "고통의 속박",
-      "text": "카일라 체력 2 감소\n1 턴간 적 공격력 4 감소",
-      "type": 5,
-      "class": 1,
-      "cardframe": "frame_5",
-      "target_type": 2,
-      "target_num": 1,
-      "note": "",
-      "flavortext": "감내한 고통은 적을 묶는 대가가 됩니다.",
-      "skilleffect": "fanfx1_spellcast_C_large_red",
-      "effects": [
-        {
-          "type": "atk_buff",
-          "value": -4,
-          "duration": 1,
-          "target": 4
-        },
-        {
-          "type": "self_damage",
-          "value": 2
-        }
-      ]
-    },
-    {
-      "index": 2003,
-      "cost": 1,
-      "illustration": "illust_19",
-      "name": "기억 소각",
-      "text": "카드 1장 버리기\n적 기절",
-      "type": 5,
-      "class": 1,
-      "cardframe": "frame_5",
-      "target_type": 2,
-      "target_num": 1,
-      "note": "",
-      "flavortext": "성직자들은 생각보다 다양한 마법을 사용할 수 있습니다. 그들의 본성이 선해서 다행입니다.",
-      "skilleffect": "impfx1_dust_impact_A_large_violet",
-      "effects": [
-        {
-          "type": "stun",
-          "value": 1
-        },
-        {
-          "type": "discard",
-          "value": 1
-        }
-      ]
-    },
-    {
-      "index": 2004,
-      "cost": 3,
-      "illustration": "illust_26",
-      "name": "정지 명령",
-      "text": "적 전체 기절",
-      "type": 5,
-      "class": 1,
-      "cardframe": "frame_5",
-      "target_type": 2,
-      "target_num": 3,
-      "note": "",
-      "flavortext": "신의 이름을 빌리는 것은 능력 있는 성직자의 특권입니다.",
-      "skilleffect": "scifx2_electric_aura_large_violet",
-      "effects": [
-        {
-          "type": "stun",
-          "value": 1
-        }
-      ]
-    },
-    {
-      "index": 2005,
-      "cost": 1,
       "illustration": "illust_1",
-      "name": "생츄어리",
-      "text": "적 전체 5의 피해",
-      "type": 6,
+      "name": "Card_Name_2002",
+      "text": "Card_Text_2002",
+      "type": 4,
       "class": 1,
       "cardframe": "frame_6",
       "target_type": 2,
       "target_num": 3,
       "note": "",
-      "flavortext": "빛이 닿는 순간 정화의 영역이 펼쳐집니다.",
+      "flavortext": "Card_Flav_2002",
       "skilleffect": "fx3_impact_hit_large_yellow",
       "effects": [
         {
           "type": "damage",
           "value": 5
+        },
+        {
+          "type": "purify",
+          "value": 2,
+          "target": 4
         }
       ]
     },
     {
-      "index": 2006,
+      "index": 2003,
       "cost": 2,
       "illustration": "illust_8",
-      "name": "응보의 빛",
-      "text": "적 하나 8의 피해\n'힐' 카드 사용 시 1턴 간 피해 4 증가",
-      "type": 6,
+      "name": "Card_Name_2003",
+      "text": "Card_Text_2003",
+      "type": 4,
       "class": 1,
       "cardframe": "frame_6",
       "target_type": 2,
       "target_num": 1,
       "note": "",
-      "flavortext": "되돌아온 생기만큼 날카로운 빛이 쏘아올려집니다.",
+      "flavortext": "Card_Flav_2003",
       "skilleffect": "fx3_toon_impact_large_yellow",
       "effects": [
         {
@@ -488,73 +434,89 @@
           "type": "conditional",
           "condition": {
             "trigger": "isUsedCard",
-            "value": [ 7 ]
+            "value": [
+              7
+            ]
           },
           "result": {
             "type": "damage",
             "value": 4
           }
+        },
+        {
+          "type": "purify",
+          "value": 2,
+          "target": 4
         }
       ]
     },
     {
-      "index": 2007,
+      "index": 2004,
       "cost": 1,
       "illustration": "illust_3",
-      "name": "성스러운 회복",
-      "text": "아군 체력 6 회복",
-      "type": 7,
+      "name": "Card_Name_2004",
+      "text": "Card_Text_2004",
+      "type": 5,
       "class": 1,
       "cardframe": "frame_7",
       "target_type": 1,
       "target_num": 1,
       "note": "",
-      "flavortext": "손끝에 맺힌 빛은 잃었던 생기를 돌려줍니다.",
+      "flavortext": "Card_Flav_2004",
       "skilleffect": "fanfx2_cure_large_yellow",
       "effects": [
         {
           "type": "heal",
           "value": 6,
           "target": 3
-            
+        },
+        {
+          "type": "grace",
+          "value": 3,
+          "target": 4
         }
       ]
     },
     {
-      "index": 2008,
+      "index": 2005,
       "cost": 1,
       "illustration": "illust_31",
-      "name": "간절한 기도",
-      "text": "아군 체력 8 회복",
-      "type": 7,
+      "name": "Card_Name_2005",
+      "text": "Card_Text_2005",
+      "type": 5,
       "class": 1,
       "cardframe": "frame_7",
       "target_type": 1,
       "target_num": 1,
       "note": "",
-      "flavortext": "간절한 기도는 다시 일어날 힘을 줍니다.",
+      "flavortext": "Card_Flav_2008",
       "skilleffect": "fx2_magic_swirl_large_yellow",
       "effects": [
         {
           "type": "heal",
-          "value": 8,
+          "value": 10,
           "target": 3
+        },
+        {
+          "type": "grace",
+          "value": 5,
+          "target": 4
         }
       ]
     },
     {
-      "index": 2009,
+      "index": 2006,
       "cost": 2,
       "illustration": "illust_17",
-      "name": "따스한 손길",
-      "text": "아군 체력 6 회복\n대상 카드 뽑기",
-      "type": 7,
+      "name": "Card_Name_2006",
+      "text": "Card_Text_2006",
+      "type": 5,
       "class": 1,
       "cardframe": "frame_7",
       "target_type": 1,
       "target_num": 1,
       "note": "",
-      "flavortext": "성직자의 기본 소양은 따뜻한 손이라는 소문이 있습니다.",
+      "flavortext": "Card_Flav_2006",
       "skilleffect": "fanfx1_spellcast_D_large_yellow",
       "effects": [
         {
@@ -566,6 +528,11 @@
           "type": "draw",
           "value": 1,
           "target": 1
+        },
+        {
+          "type": "grace",
+          "value": 3,
+          "target": 4
         }
       ]
     },
@@ -573,20 +540,25 @@
       "index": 3000,
       "cost": 1,
       "illustration": "illust_2",
-      "name": "서툰 일격",
-      "text": "적 하나 6의 피해",
-      "type": 8,
+      "name": "Card_Name_3000",
+      "text": "Card_Text_3000",
+      "type": 6,
       "class": 2,
       "cardframe": "frame_8",
       "target_type": 2,
       "target_num": 1,
       "note": "",
-      "flavortext": "두려움은 남아있지만 방향만은 틀리지 않았습니다.",
+      "flavortext": "Card_Flav_3000",
       "skilleffect": "pj1_slash_large_yellow",
       "effects": [
         {
           "type": "damage",
           "value": 6
+        },
+        {
+          "type": "bleed",
+          "value": 3,
+          "target": 4
         }
       ]
     },
@@ -594,15 +566,15 @@
       "index": 3001,
       "cost": 2,
       "illustration": "illust_24",
-      "name": "칼날비",
-      "text": "적 전체 4의 피해\n일시적인 복사본 생성\n사용할 때마다 강화",
-      "type": 8,
+      "name": "Card_Name_3001",
+      "text": "Card_Text_3001",
+      "type": 6,
       "class": 2,
       "cardframe": "frame_8",
       "target_type": 2,
       "target_num": 3,
       "note": "사용할 때마다 데미지가 2 더 증가합니다.",
-      "flavortext": "비처럼 내리는 검격은 모든 적에게 공포의 대상입니다.",
+      "flavortext": "Card_Flav_3001",
       "skilleffect": "fanfx2_claw_large_red",
       "effects": [
         {
@@ -617,12 +589,19 @@
           "type": "conditional",
           "condition": {
             "trigger": "isUsedParticularCard",
-            "value": [ 3001 ]
+            "value": [
+              3001
+            ]
           },
           "result": {
             "type": "applyDamage",
             "value": 2
           }
+        },
+        {
+          "type": "bleed",
+          "value": 2,
+          "target": 4
         }
       ]
     },
@@ -630,15 +609,15 @@
       "index": 3002,
       "cost": 1,
       "illustration": "illust_20",
-      "name": "기선 제압",
-      "text": "적 하나 5의 피해\n다음 레온 카드 비용 1 감소",
-      "type": 9,
+      "name": "Card_Name_3002",
+      "text": "Card_Text_3002",
+      "type": 7,
       "class": 2,
       "cardframe": "frame_9",
       "target_type": 2,
       "target_num": 1,
       "note": "",
-      "flavortext": "주먹은 약하지만 검보다 가볍습니다.",
+      "flavortext": "Card_Flav_3002",
       "skilleffect": "fx1_splatter_large_orange",
       "effects": [
         {
@@ -649,6 +628,11 @@
           "type": "reduceCost",
           "value": 1,
           "target": 2
+        },
+        {
+          "type": "stun",
+          "value": 2,
+          "target": 4
         }
       ]
     },
@@ -656,15 +640,15 @@
       "index": 3003,
       "cost": 1,
       "illustration": "illust_4",
-      "name": "통괘한 타격",
-      "text": "적 하나 4의 피해\n레온 카드 뽑기",
-      "type": 9,
+      "name": "Card_Name_3003",
+      "text": "Card_Text_3003",
+      "type": 7,
       "class": 2,
       "cardframe": "frame_9",
       "target_type": 2,
       "target_num": 1,
       "note": "",
-      "flavortext": "빈틈을 만드는 공격은 다음 동작을 위한 길을 엽니다.",
+      "flavortext": "Card_Flav_3003",
       "skilleffect": "fx2_impact_shock_large_brown",
       "effects": [
         {
@@ -674,7 +658,12 @@
         {
           "type": "draw",
           "value": 1,
-          "target": 0 
+          "target": 0
+        },
+        {
+          "type": "stun",
+          "value": 2,
+          "target": 4
         }
       ]
     },
@@ -682,15 +671,15 @@
       "index": 3004,
       "cost": 1,
       "illustration": "illust_25",
-      "name": "충격 강타",
-      "text": "적 하나 4의 피해\n대상 기절",
-      "type": 9,
+      "name": "Card_Name_3004",
+      "text": "Card_Text_3004",
+      "type": 7,
       "class": 2,
       "cardframe": "frame_9",
       "target_type": 2,
       "target_num": 1,
       "note": "",
-      "flavortext": "방패도 때로는 무기로 사용할 수 있습니다.",
+      "flavortext": "Card_Flav_3004",
       "skilleffect": "fx2_impact_shock_large_yellow",
       "effects": [
         {
@@ -699,84 +688,28 @@
         },
         {
           "type": "stun",
-          "value": 1
+          "value": 2,
+          "target": 4
         }
       ]
     },
     {
       "index": 3005,
       "cost": 1,
-      "illustration": "illust_5",
-      "name": "꿰뚫기",
-      "text": "레온 카드 1장 버리기\n적 하나 8의 피해",
-      "type": 10,
-      "class": 2,
-      "cardframe": "frame_10",
-      "target_type": 2,
-      "target_num": 1,
-      "note": "",
-      "flavortext": "멈추지 않는 돌진은 때로 무모함에 가까운 결심입니다.",
-      "skilleffect": "fx1_impact_hit_large_blue",
-      "effects": [
-        {
-          "type": "damage",
-          "value": 8
-        },
-        {
-          "type": "discard",
-          "value": 1
-        }
-      ]
-    },
-    {
-      "index": 3006,
-      "cost": 2,
-      "illustration": "illust_23",
-      "name": "꿰뚫는 섬광",
-      "text": "적 하나 6의 피해\n'방어' 카드 미사용 시 1턴 간 피해 6 증가",
-      "type": 10,
-      "class": 2,
-      "cardframe": "frame_10",
-      "target_type": 2,
-      "target_num": 1,
-      "note": "강화 시 데미지가 6 더 증가합니다.",
-      "flavortext": "한 점을 노리는 공격은 적이 반응하기도 힘들 것입니다.",
-      "skilleffect": "fx1_impact_hit_large_yellow",
-      "effects": [
-        {
-          "type": "damage",
-          "value": 6
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "trigger": "isUnusedCard",
-            "value": [ 11 ]
-          },
-          "result": {
-            "type": "damage",
-            "value": 6
-          }
-        }
-      ]
-    },
-    {
-      "index": 3007,
-      "cost": 1,
       "illustration": "illust_7",
-      "name": "숨 고르기",
-      "text": "1턴 간 레온 방어력 2 증가\n레온 카드 1장 뽑기",
-      "type": 11,
+      "name": "Card_Name_3005",
+      "text": "Card_Text_3005",
+      "type": 8,
       "class": 2,
       "cardframe": "frame_11",
       "target_type": 0,
       "target_num": 0,
       "note": "",
-      "flavortext": "단 한 번의 호흡으로 다음 움직임을 준비합니다.",
+      "flavortext": "Card_Flav_3005",
       "skilleffect": "fanfx1_spellcast_B_large_blue",
       "effects": [
         {
-          "type": "def_buff",
+          "type": "def",
           "value": 2,
           "duration": 1,
           "target": 2
@@ -785,26 +718,31 @@
           "type": "draw",
           "value": 1,
           "target": 0
+        },
+        {
+          "type": "guard",
+          "value": 3,
+          "target": 2
         }
       ]
     },
     {
-      "index": 3008,
+      "index": 3006,
       "cost": 1,
       "illustration": "illust_14",
-      "name": "중무장",
-      "text": "1턴 간 레온 방어력 4 증가\n아군 보호",
-      "type": 11,
+      "name": "Card_Name_3006",
+      "text": "Card_Text_3006",
+      "type": 8,
       "class": 2,
       "cardframe": "frame_11",
       "target_type": 1,
       "target_num": 1,
       "note": "",
-      "flavortext": "단단하게 움츠린 몸은 동료를 지켜냅니다.",
+      "flavortext": "Card_Flav_3006",
       "skilleffect": "fanfx1_spellcast_B_large_blue",
       "effects": [
         {
-          "type": "def_buff",
+          "type": "def",
           "value": 4,
           "duration": 1,
           "target": 2
@@ -812,88 +750,43 @@
         {
           "type": "block",
           "value": 1
-        }
-      ]
-    },
-    {
-      "index": 3009,
-      "cost": 2,
-      "illustration": "illust_28",
-      "name": "견고한 기세",
-      "text": "1턴 간 레온 방어력 4 증가\n아군 공격력 3 증가",
-      "type": 11,
-      "class": 2,
-      "cardframe": "frame_11",
-      "target_type": 1,
-      "target_num": 1,
-      "note": "",
-      "flavortext": "아군을 고무시키는 것도 선봉장의 역할입니다.",
-      "skilleffect": "fanfx1_power_up_large_yellow",
-      "effects": [
-        {
-          "type": "atk_buff",
-          "value": 3,
-          "duration": 1,
-          "target": 4
         },
         {
-          "type": "def_buff",
+          "type": "guard",
           "value": 4,
-          "duration": 1,
           "target": 2
         }
       ]
     },
     {
-      "index": 900,
-      "cost": 1,
-      "illustration": "illust_32",
-      "name": "불안정한 혼합물",
-      "text": "소피아 체력 2 감소\n적 하나 5의 피해",
-      "type": 0,
-      "class": 0,
-      "cardframe": "frame_0",
-      "target_type": 2,
-      "target_num": 1,
-      "note": "",
-      "flavortext": "출처를 알 수 없는 실험물은 소피아의 힘으로도 통제하기 힘듭니다.",
-      "skilleffect": "expfx1_stylized_explosion_A_large_red",
-      "effects": [
-        {
-          "type": "damage",
-          "value": 5
-        },
-        {
-          "type": "self_damage",
-          "value": 2
-        }
-      ]
-    },
-    {
-      "index": 901,
-      "cost": 1,
-      "illustration": "illust_33",
-      "name": "남겨진 마음",
-      "text": "아군의 체력을 3 회복하고 1턴 동안 해당 캐릭터의 공격력이 1 증가합니다.",
-      "type": 4,
-      "class": 0,
-      "cardframe": "frame_4",
+      "index": 3007,
+      "cost": 2,
+      "illustration": "illust_28",
+      "name": "Card_Name_3007",
+      "text": "Card_Text_3007",
+      "type": 8,
+      "class": 2,
+      "cardframe": "frame_11",
       "target_type": 1,
       "target_num": 1,
       "note": "",
-      "flavortext": "아군 체력 3 회복\n1턴 간 대상 공격력 1 증가",
-      "skilleffect": "fanfx1_spellcast_B_large_green",
+      "flavortext": "Card_Flav_3007",
+      "skilleffect": "fanfx1_power_up_large_yellow",
       "effects": [
         {
-          "type": "heal",
-          "value": 3
+          "type": "atk",
+          "value": 3,
+          "target": 3
         },
         {
-          "type": "atk_buff",
-          "value": 1,
-          "duration": 1,
-          "target": 4
-
+          "type": "def",
+          "value": 4,
+          "target": 2
+        },
+        {
+          "type": "guard",
+          "value": 7,
+          "target": 2
         }
       ]
     }
