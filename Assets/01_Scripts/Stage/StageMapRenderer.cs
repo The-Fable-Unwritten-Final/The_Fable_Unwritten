@@ -462,12 +462,10 @@ public class StageMapRenderer : MonoBehaviour
                 
                 // 포인트 개수에서 현재 진행도만큼만 포인트 선택
                 int totalPoints = currentPoints.Length;
-                int visiblePointCount = Mathf.Max(2, Mathf.CeilToInt(totalPoints * t));
-                
-                // 채워질 부분의 포인트 배열 생성
+                int visiblePointCount = Mathf.Min(Mathf.Max(2, Mathf.CeilToInt(totalPoints * t)), totalPoints);
                 Vector2[] filledPoints = new Vector2[visiblePointCount];
                 System.Array.Copy(currentPoints, filledPoints, visiblePointCount);
-                
+
                 lineRenderer.Points = filledPoints;
                 
                 // 색상 설정 744E19
