@@ -184,6 +184,9 @@ public class TurnController : MonoBehaviour
     }
     public void ToGameEnd(bool isWin)// 아군, 적군 중 한쪽의 체력이 전부 0 이되면 호출. (플레이어 or 몬스터가 행동을 할때마다 전투 종료 체크, 해당 메서드 호출)
     {
+        // 턴 종료 버튼 비활성화
+        if (TurnButton != null)
+            TurnButton.OnBattleEnd(); // 버튼 UI 업데이트 (텍스트 숨기고 인터렉션 끄기)
         // 결과창 팝업을 띄우기 (승패 결과는 battleflowCon 에서 가져올 수 있음 win <<)
         UIManager.Instance.PopupRewardUI();
         // 데이터 처리
