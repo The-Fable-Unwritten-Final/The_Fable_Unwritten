@@ -46,7 +46,7 @@ public class PotentialBarUI : MonoBehaviour
 
     private void HandleGaugeChanged(int currentGauge)
     {
-        Debug.Log($"[PotentialBarUI] {owner?.playerData?.CharacterName} gauge changed -> {currentGauge}");
+        //Debug.Log($"[PotentialBarUI] {owner?.playerData?.CharacterName} gauge changed -> {currentGauge}");
         RefreshGauge(currentGauge);
     }
 

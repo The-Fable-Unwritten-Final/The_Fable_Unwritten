@@ -54,7 +54,7 @@ public class DamageEffect : CardEffectBase
                 isWeakened = stanceWeakened
             };
 
-            target.dmgTextQueue.Enqueue(dmgData);
+            target.dmgTextQueue.InitPrint(dmgData);
 
             //Debug.Log($"[피해 처리] {caster.ChClass} -> {target.ChClass} : {attackerAtk} 공격력으로 타격");
         }

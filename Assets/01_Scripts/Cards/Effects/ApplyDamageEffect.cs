@@ -49,7 +49,7 @@ public class ApplyDamageEffect : CardEffectBase
                     isStanceEnhanced = stanceBoosted,
                     isWeakened = stanceWeakened
                 };
-                target.dmgTextQueue.Enqueue(dmgData);
+                target.dmgTextQueue.InitPrint(dmgData);
             }
 
             Debug.Log($"[ApplyDamageEffect] {index}번 카드를 {useCount}회 사용하여 {totalDamage} 추가 피해");

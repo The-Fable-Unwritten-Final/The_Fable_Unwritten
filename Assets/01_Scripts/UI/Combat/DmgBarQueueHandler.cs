@@ -4,25 +4,35 @@ using UnityEngine;
 
 public class DmgBarQueueHandler : MonoBehaviour
 {
-    private Queue<(DmgTextData data, float enqueuedTime)> queue = new();
+    private Queue<DmgTextData> queue = new();
     [SerializeField] private DmgBarDisplay dmgDisplay;
     private bool isPlaying = false;
 
-    [SerializeField] private float fastDelay = 0.25f;   // 연타 간 텀
-    [SerializeField] private float slowDelay = 0.6f;    // 일반 텀
-    [SerializeField] private float fastThreshold = 0.3f; // 몇 초 이내면 연타로 간주
+    [SerializeField] private float queueDelay = 0.4f;   // 연속 출력 텀
     [SerializeField] private float verticalOffset = 1.0f;
 
-    private float lastPlayTime = -999f;
+    private float lastPlayTime = -999f;  // 마지막 출력 시간
 
-    public void Enqueue(DmgTextData data)
+    /// <summary>
+    /// 즉시 출력 데미지 프린트
+    /// </summary>
+    /// <param name="data"></param>
+    public void InitPrint(DmgTextData data)
     {
         dmgDisplay.Initialize(data, transform, verticalOffset);
-        // 데미지 프린트 방식 변경으로 사용 안함
-        /*
-        queue.Enqueue((data, Time.time)); // enqueue 시점의 시간 저장
+    }
+    /// <summary>
+    /// 버프/디버프 류의 출력 시 텀을 두고 출력
+    /// </summary>
+    /// <param name="data"></param>
+    public void DmgEnqueue(DmgTextData data)
+    {
+        queue.Enqueue(data);
         if (!isPlaying)
-            StartCoroutine(PlayQueue());*/
+        {
+            isPlaying = true;
+            StartCoroutine(PlayQueue());
+        }
     }
 
     private IEnumerator PlayQueue()
@@ -30,19 +40,19 @@ public class DmgBarQueueHandler : MonoBehaviour
         while (queue.Count > 0)
         {
             isPlaying = true;
-            var (data, enqueuedTime) = queue.Dequeue();
-
+            var data = queue.Dequeue();
+            
+            // 마지막 출력 시간으로부터 0.4초 경과했는지 확인 (연속으로 버프/디버프류 출력시 0.4초씩의 텀 제공)
+            float timeSinceLastPlay = Time.time - lastPlayTime;
+            if (timeSinceLastPlay < queueDelay)
+            {
+                // 남은 시간 만큼 대기
+                yield return new WaitForSeconds(queueDelay - timeSinceLastPlay);
+            }
+            
             // 출력
-            var dmgText = DmgPoolManager.Instance.Get();
-            dmgText.Initialize(data, transform, verticalOffset);
-
-            // 마지막 재생 시간과의 차이로 delay 계산
-            float currentTime = Time.time;
-            float delta = currentTime - lastPlayTime;
-            float delay = delta < fastThreshold ? 0f : slowDelay; // 연타의 경우 텀 없이 바로 재생하게 변경 => 2026.01.02
-            lastPlayTime = currentTime;
-
-            yield return new WaitForSeconds(delay);
+            dmgDisplay.Initialize(data, transform, verticalOffset);
+            lastPlayTime = Time.time;
         }
 
         isPlaying = false;

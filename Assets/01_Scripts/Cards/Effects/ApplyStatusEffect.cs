@@ -86,14 +86,14 @@ public class ApplyStatusEffect : CardEffectBase
             if (Text.type > DmgTextType.Heal) // DmgTextType 기준으로 버프/디버프는 2 이상
                 GameManager.Instance.StartCoroutine(DelayedEnqueue(t, Text));
             else
-                t.dmgTextQueue.Enqueue(Text);
+                t.dmgTextQueue.InitPrint(Text);
         }
     }
 
     private IEnumerator DelayedEnqueue(IStatusReceiver target, DmgTextData text)
     {
         yield return new WaitForSeconds(1.5f);
-        target.dmgTextQueue.Enqueue(text);
+        target.dmgTextQueue.DmgEnqueue(text);
     }
 
     private StatusEffect CreateEffect(BuffStatType type, float val, int dur)

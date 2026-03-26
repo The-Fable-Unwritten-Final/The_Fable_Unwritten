@@ -258,7 +258,6 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
                 {
                     effectVisualizer.useCardFXParticle.Clear();
                     effectVisualizer.useCardFXParticle.Stop();
-                    Debug.Log($"[CardInHand] 카드 사용 효과 파티클 정리 완료. 카드 이름: {cardData.cardName}");
                 }
 
                 if (effectVisualizer.useEnhancedCardFXParticle != null)

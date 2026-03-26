@@ -230,7 +230,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             isWeakened = false
         };
 
-        this.dmgTextQueue.Enqueue(dmg);
+        this.dmgTextQueue.InitPrint(dmg);
 
         playerData.currentHP = Mathf.Max(0, playerData.currentHP - damage);
     }
