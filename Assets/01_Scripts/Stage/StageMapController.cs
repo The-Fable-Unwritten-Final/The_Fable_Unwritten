@@ -56,6 +56,14 @@ public class StageMapController : MonoBehaviour
         
         if (stageSetting.SavedStageData != null && !stageSetting.RetryFromStart)
         {
+            // 데이터 유효성 검증
+            if (!IsValidStageData(stageSetting.SavedStageData))
+            {
+                Debug.LogError("[TryRestoreStage] 손상된 스테이지 데이터 감지 - 새 스테이지 로드");
+                stageSetting.ClearStageState();
+                return false;
+            }
+
             if (stageSetting.StageCleared)
             {
                 var lastVisited = stageSetting.VisitedNodes.LastOrDefault();
@@ -87,15 +95,87 @@ public class StageMapController : MonoBehaviour
             stageIndex = stageSetting.StageIndex;
             stageSetting.StageCleared = false;
 
-            mapRenderer.Render(stageData, OnNodeClicked);
-            mapRenderer.CenterMap();
+            try
+            {
+                mapRenderer.Render(stageData, OnNodeClicked);
+                mapRenderer.CenterMap();
 
-            var lastNode = visitedNodes.LastOrDefault() ?? stageData.columns[0].First();
-            mapRenderer.UpdateInteractables(lastNode, visitedNodes);
-            return true;
+                var lastNode = visitedNodes.LastOrDefault() ?? stageData.columns[0][0];
+                mapRenderer.UpdateInteractables(lastNode, visitedNodes);
+                return true;
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"[TryRestoreStage] 렌더링 중 오류 발생: {ex.Message}\n{ex.StackTrace}");
+                stageSetting.ClearStageState();
+                return false;
+            }
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// 스테이지 데이터 유효성 검증
+    /// </summary>
+    private bool IsValidStageData(StageData stageData)
+    {
+        if (stageData == null)
+        {
+            Debug.LogError("StageData is null");
+            return false;
+        }
+
+        if (stageData.columns == null || stageData.columns.Count == 0)
+        {
+            Debug.LogError("StageData.columns is null or empty");
+            return false;
+        }
+
+        // 각 열이 유효한지 확인
+        for (int i = 0; i < stageData.columns.Count; i++)
+        {
+            if (stageData.columns[i] == null || stageData.columns[i].Count == 0)
+            {
+                Debug.LogError($"Column {i} is null or empty");
+                return false;
+            }
+
+            // 각 노드의 곡선 제어점 검증
+            foreach (var node in stageData.columns[i])
+            {
+                if (node == null)
+                {
+                    Debug.LogError($"Null node found in column {i}");
+                    return false;
+                }
+
+                if (node.nextNodes != null && node.nextNodes.Count > 0)
+                {
+                    if (node.curvePointList == null || node.curvePointList.Count != node.nextNodes.Count)
+                    {
+                        Debug.LogWarning($"Node {node.id} curvePointList count mismatch (nextNodes: {node.nextNodes.Count}, curvePoints: {node.curvePointList?.Count ?? 0})");
+                        // 데이터 재생성 시도
+                        RegenerateCurvePoints(node);
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// 손상된 곡선 제어점 재생성
+    /// </summary>
+    private void RegenerateCurvePoints(GraphNode node)
+    {
+        if (node.curvePointList == null)
+            node.curvePointList = new();
+
+        node.curvePointList.Clear();
+        node.SetRandomCurvePoints();
+        Debug.Log($"Regenerated curvePoints for node {node.id}");
     }
 
     // 노드 클릭 시 스테이지 호출 및 저장
@@ -258,5 +338,9 @@ public class StageMapController : MonoBehaviour
     public void SettingUIManagerOpen()
     {
         UIManager.Instance.ShowPopupByName("PopupUI_Setting");
+    }
+    public void MiniMapUIManagerOpen()
+    {
+        UIManager.Instance.ShowPopupByName("PopupUI_MiniMap");
     }
 }
