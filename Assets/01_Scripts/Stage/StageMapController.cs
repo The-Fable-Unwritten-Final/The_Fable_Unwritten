@@ -175,7 +175,6 @@ public class StageMapController : MonoBehaviour
 
         node.curvePointList.Clear();
         node.SetRandomCurvePoints();
-        Debug.Log($"Regenerated curvePoints for node {node.id}");
     }
 
     // 노드 클릭 시 스테이지 호출 및 저장
@@ -272,6 +271,12 @@ public class StageMapController : MonoBehaviour
         visitedNodes.Clear();
 
         stageData = RebuildStage(index);
+        
+        // 생성한 스테이지 데이터를 ProgressDataManager에 저장
+        var progressManager = ProgressDataManager.Instance;
+        progressManager.SaveStageState(stageData, visitedNodes);
+        progressManager.CurrentBattleNode = null;  // 시작 노드를 선택하게 됨
+        
         mapRenderer.Render(stageData, OnNodeClicked);
         mapRenderer.CenterMap();
 

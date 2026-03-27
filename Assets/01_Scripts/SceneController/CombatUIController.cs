@@ -95,6 +95,10 @@ public class CombatUIController : MonoBehaviour
     {
         UIManager.Instance.ShowPopupByName("PopupUI_Setting");
     }
+    public void MiniMapUIManagerOpen()
+    {
+        UIManager.Instance.ShowPopupByName("PopupUI_MiniMap");
+    }
     public void MoveCardsWhenExitSceneTransition()
     {
         cardDisplay.MoveCardsWhenExitScene();

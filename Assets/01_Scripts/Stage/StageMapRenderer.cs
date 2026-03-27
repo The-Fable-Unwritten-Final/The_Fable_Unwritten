@@ -40,14 +40,35 @@ public class StageMapRenderer : MonoBehaviour
     /// 스테이지 노드 및 연결선을 UI에 표시 </summary>
     public void Render(StageData stage, Action<GraphNode> onClick)
     {
+        // 데이터 검증
+        if (stage == null || stage.columns == null || stage.columns.Count == 0)
+        {
+            Debug.LogError("[StageMapRenderer.Render] Invalid StageData - columns is null or empty");
+            return;
+        }
+
         nodeUIMap.Clear();
         lineInfos.Clear();
 
-        foreach (var column in stage.columns)
+        try
         {
-            foreach (var node in column)
+            foreach (var column in stage.columns)
             {
-                var go = Instantiate(nodePrefab, nodesContainer);   // 해당 노드 UI 생성
+                if (column == null || column.Count == 0)
+                {
+                    Debug.LogWarning("Column is null or empty, skipping...");
+                    continue;
+                }
+
+                foreach (var node in column)
+                {
+                    if (node == null)
+                    {
+                        Debug.LogWarning("Node is null, skipping...");
+                        continue;
+                    }
+
+                    var go = Instantiate(nodePrefab, nodesContainer);   // 해당 노드 UI 생성
                 var rt = go.GetComponent<RectTransform>();
                 rt.anchoredPosition = node.position;                // 해당 노드 위치 설정
                 nodeUIMap[node] = rt;                               // 해당 노드의 UI 위치 저장 (라인 이어주기 위해)
@@ -78,6 +99,19 @@ public class StageMapRenderer : MonoBehaviour
 
             foreach (var next in node.nextNodes)
                 {
+                    // 곡선 제어점 데이터 검증
+                    if (node.curvePointList == null || index >= node.curvePointList.Count)
+                    {
+                        Debug.LogWarning($"CurvePoint missing for node {node.id} nextNode index {index}. Regenerating...");
+                        node.SetRandomCurvePoints();
+                        
+                        if (node.curvePointList == null || index >= node.curvePointList.Count)
+                        {
+                            Debug.LogError($"CurvePoint regeneration failed for node {node.id}");
+                            continue;
+                        }
+                    }
+
                     var fromRT = nodeUIMap[node];
                     var toRT = nodeUIMap[next];
 
@@ -85,7 +119,15 @@ public class StageMapRenderer : MonoBehaviour
                     Vector2 originalToPos = toRT.anchoredPosition;
                     if (next.type == NodeType.Boss)
                     {
-                        toRT.anchoredPosition += Vector2.left * bossIconCenterOffset[bossIconIndex];                                  
+                        // bossIconCenterOffset 배열 크기 검증
+                        if (bossIconCenterOffset != null && bossIconIndex < bossIconCenterOffset.Length)
+                        {
+                            toRT.anchoredPosition += Vector2.left * bossIconCenterOffset[bossIconIndex];
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"bossIconCenterOffset[{bossIconIndex}] out of range");
+                        }
                     }
 
                     GameObject line = LineDrawer.DrawLine(node.curvePointList[index], fromRT, toRT, linesContainer, lineBasicPrefab, 55f, next.type == NodeType.Boss);
@@ -109,6 +151,11 @@ public class StageMapRenderer : MonoBehaviour
                 kvp.Value.SetAsFirstSibling();
                 break;
             }
+        }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"❌ [StageMapRenderer.Render] 렌더링 중 예외 발생:\n{ex.Message}\n{ex.StackTrace}");
         }
     }
 

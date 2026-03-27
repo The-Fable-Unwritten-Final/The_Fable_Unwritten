@@ -649,9 +649,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dmgDisplay: {fileID: 1634073424}
-  fastDelay: 0.25
-  slowDelay: 0.6
-  fastThreshold: 0.3
+  queueDelay: 0.4
   verticalOffset: 1
 --- !u!114 &106890154
 MonoBehaviour:
@@ -1258,9 +1256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dmgDisplay: {fileID: 326686467}
-  fastDelay: 0.25
-  slowDelay: 0.6
-  fastThreshold: 0.3
+  queueDelay: 0.4
   verticalOffset: 1
 --- !u!114 &260082002 stripped
 MonoBehaviour:
@@ -2442,9 +2438,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 8916162457186377369}
         m_TargetAssemblyTypeName: CombatUIController, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: MiniMapUIManagerOpen
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2777,9 +2773,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dmgDisplay: {fileID: 1628950801}
-  fastDelay: 0.25
-  slowDelay: 0.6
-  fastThreshold: 0.3
+  queueDelay: 0.4
   verticalOffset: 1
 --- !u!114 &557679518
 MonoBehaviour:
@@ -5156,9 +5150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dmgDisplay: {fileID: 1560934504}
-  fastDelay: 0.25
-  slowDelay: 0.6
-  fastThreshold: 0.3
+  queueDelay: 0.4
   verticalOffset: 1
 --- !u!1 &1027908679
 GameObject:
@@ -8646,9 +8638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dmgDisplay: {fileID: 46784155}
-  fastDelay: 0.25
-  slowDelay: 0.6
-  fastThreshold: 0.3
+  queueDelay: 0.4
   verticalOffset: 1
 --- !u!1 &1773216951
 GameObject:
@@ -8949,9 +8939,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dmgDisplay: {fileID: 1219395581}
-  fastDelay: 0.25
-  slowDelay: 0.6
-  fastThreshold: 0.3
+  queueDelay: 0.4
   verticalOffset: 1
 --- !u!114 &1920819814
 MonoBehaviour:
