@@ -40437,7 +40437,7 @@ GameObject:
   - component: {fileID: 6410473346242866933}
   - component: {fileID: 808398625261205136}
   m_Layer: 0
-  m_Name: CardDesc
+  m_Name: '*CardDesc'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40459,8 +40459,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -44.7753}
-  m_SizeDelta: {x: 70, y: 39.1893}
+  m_AnchoredPosition: {x: 0, y: -47}
+  m_SizeDelta: {x: 70, y: 37.0731}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8241083641680693132
 CanvasRenderer:
@@ -40490,11 +40490,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC801 \uD558\uB098\uC5D0\uAC8C \uD53C\uD574 0\n[\uD654\uC0C1] +0\n[\uD0D0\uAD6C]\uC77C
-    \uB54C \uD53C\uD574 +0%\n\uC124\uBA85123123"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ee7dfd5aa68108a4cae7a9c288dfbdce, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: f2400d954a7469b40b4192968655d8e0, type: 2}
+  m_sharedMaterial: {fileID: -8146178071228311197, guid: ee7dfd5aa68108a4cae7a9c288dfbdce,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -40523,10 +40523,10 @@ MonoBehaviour:
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 4
-  m_fontSizeMax: 6
-  m_fontStyle: 1
+  m_fontSizeMax: 6.8
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0

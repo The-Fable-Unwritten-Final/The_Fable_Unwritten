@@ -43,15 +43,24 @@ public class LocalizedFontSizeAdjuster : MonoBehaviour
         {
             case "ko":
                 _text.fontSize = fontSize_KO;
+                _text.characterSpacing = 0f;
+                _text.wordSpacing = 0f;
                 break;
             case "ja":
                 _text.fontSize = fontSize_JA;
+                _text.characterSpacing = 0f;
+                _text.wordSpacing = 0f;
                 break;
             case "en":
                 _text.fontSize = fontSize_EN;
+                _text.characterSpacing = -3f; // 영어 글자 간격 줄이기
+                _text.wordSpacing = -8f; // 영어 글자 간격 줄이기
                 break;
             default:
+                // 디폴트 영어
                 _text.fontSize = fontSize_EN;
+                _text.characterSpacing = -3f; // 영어 글자 간격 줄이기
+                _text.wordSpacing = -8f; // 영어 글자 간격 줄이기
                 break;
         }
     }
