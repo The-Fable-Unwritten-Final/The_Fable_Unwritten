@@ -653,12 +653,13 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public void TryFinalizeDeath()
     {
-        GameManager.Instance.combatCameraController.CameraPunchHard();
 
         if (!isDeathPending || isDead) return;
 
         isDead = true;
         isDeathPending = false;
+
+        GameManager.Instance.combatCameraController.CameraPunchHard();
 
         gameObject.SetActive(false);
 

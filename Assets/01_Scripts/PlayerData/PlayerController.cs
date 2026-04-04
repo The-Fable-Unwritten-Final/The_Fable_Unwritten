@@ -645,6 +645,30 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         resetAttackRoutine = StartCoroutine(ResetAttackParam(1.5f));
     }
 
+    public void PlayAttackAnimation(int cardIndex, CardType cardType, Action onHitTiming = null)
+    {
+        int fallbackAttackType = ((int)cardType) % 3;
+        int finalAttackType = HasAttackAnimation(cardIndex) ? cardIndex : fallbackAttackType;
+
+        PlayAttackAnimation(finalAttackType, onHitTiming);
+    }
+
+    private bool HasAttackAnimation(int attackType)
+    {
+        if (animator == null || animator.runtimeAnimatorController == null)
+            return false;
+
+        string clipName = $"{attackType}";
+
+        foreach (var clip in animator.runtimeAnimatorController.animationClips)
+        {
+            if (clip != null && clip.name == clipName)
+                return true;
+        }
+
+        return false;
+    }
+
     private IEnumerator ResetAttackParam(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -1178,12 +1202,13 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     public void TryFinalizeDeath()
     {
-        GameManager.Instance.combatCameraController.CameraPunchHard();
 
         if (!isDeathPending || isDead) return;
 
         isDead = true;
         isDeathPending = false;
+
+        GameManager.Instance.combatCameraController.CameraPunchHard();
 
         gameObject.SetActive(false);
     }

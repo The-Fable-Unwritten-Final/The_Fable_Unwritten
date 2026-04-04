@@ -85,6 +85,7 @@ public class CardModel : ScriptableObject
 
         GameManager.Instance.StartCoroutine(PlayWithAnimation(caster, targets, originalEnhanced, attackType));
     }
+
     private IEnumerator PlayWithAnimation(IStatusReceiver caster, List<IStatusReceiver> targets, bool fixedIsEnhanced, int attackType)
     {
         GameManager.Instance.turnController.Onaction();
@@ -107,7 +108,8 @@ public class CardModel : ScriptableObject
 
         bool hitTriggered = false;
 
-        caster.PlayAttackAnimation(attackType, () =>
+        var cast = caster.AsPlayer();
+        cast.PlayAttackAnimation(attackType, type,() =>
         {
             if (hitTriggered) return;
             hitTriggered = true;
