@@ -12,6 +12,11 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     public bool hasResist { get; set; } = false;
     private bool isTargetable;
 
+    private bool isDead = false;
+    private bool isDeathPending = false;
+
+    public bool IsDeathPending => isDeathPending;
+
     public bool IsTargetable
     {
         get => isTargetable;
@@ -109,6 +114,9 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
             rt.localScale = s;
         }
+
+        isDead = false;
+        isDeathPending = false;
     }
 
     public void ChangeStance(StancType stance)
@@ -526,6 +534,11 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     {
         damage = StyleManager.Instance.GetDamageGiveModify(this, this, BattleLogManager.Instance.card, damage);
         currentHP = Mathf.Max(0, currentHP - damage);
+        
+        if (!IsAlive())
+        {
+            isDeathPending = true;
+        }
     }
 
     public float TakeDamage(float amount)
@@ -540,6 +553,12 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         reduced = Mathf.Max(reduced, 0);
 
         currentHP = Mathf.Max(0, currentHP - reduced);
+
+        if(!IsAlive())
+        {
+            isDeathPending = true;
+        }
+        
         return reduced;
     }
 
@@ -630,5 +649,18 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     public float GetBuffDef()
     {
         return ModifyStat(BuffStatType.Defense, 0f);
+    }
+
+    public void TryFinalizeDeath()
+    {
+        GameManager.Instance.combatCameraController.CameraPunchHard();
+
+        if (!isDeathPending || isDead) return;
+
+        isDead = true;
+        isDeathPending = false;
+
+        gameObject.SetActive(false);
+
     }
 }

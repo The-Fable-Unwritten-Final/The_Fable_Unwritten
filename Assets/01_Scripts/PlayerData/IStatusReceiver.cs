@@ -87,8 +87,8 @@ public interface IStatusReceiver
     bool hasResist { get; set; }         //상태이상 디버프 저항 여부
     bool HasEffect(BuffStatType type);   //해당 버프/디버프 있는지 확인
     float GetEffectValue(BuffStatType type); //해당 버프/디버프 얼마나 있는지 확인
-
-
+    bool IsDeathPending { get; }
+    void TryFinalizeDeath();
 
     void ChangeStance(StancType stance);
 

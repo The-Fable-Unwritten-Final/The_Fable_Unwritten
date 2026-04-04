@@ -31,6 +31,11 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     // Guard 관련 (레온)
     private bool guardRedirectPending = false;
 
+    private bool isDead = false;
+    private bool isDeathPending = false;
+
+    public bool IsDeathPending => isDeathPending;
+
     private bool IsOpponentActingTurn()
     {
         var flow = GameManager.Instance?.turnController?.battleFlow;
@@ -233,6 +238,11 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         this.dmgTextQueue.InitPrint(dmg);
 
         playerData.currentHP = Mathf.Max(0, playerData.currentHP - damage);
+
+        if (!IsAlive())
+        {
+            isDeathPending = true;
+        }
     }
 
     public void BindHpBar(HpBarDisplay bar)
@@ -244,6 +254,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     public void ApplyStatusEffect(StatusEffect effect)
     {
+        Debug.Log($"call {effect.statType}, {effect.value}");
         if (effect == null) return;
 
         // 디버프 저항
@@ -409,8 +420,15 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         reduced = Mathf.Round(reduced);
 
         playerData.currentHP = Mathf.Max(0, playerData.currentHP - reduced);
+
+        if(!IsAlive())
+        {
+            isDeathPending = true;
+        }
+
         return reduced;
     }
+
 
     /// <summary>
     /// 체력 회복 (grace 수치 만큼 추가)
@@ -533,7 +551,12 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         deckModel.Initialize(data.currentDeck);
 
         if (!IsAlive())
+        {
+            isDead = false;
+            isDeathPending = false;
             playerData.ReviveIfDead();
+        }
+
 
         if (hpBarDisplay != null)
             hpBarDisplay.BindPlayerData(playerData);
@@ -542,6 +565,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             stanceEffectData = new StanceEffectData();
 
         InitializeStanceSystem();
+
+
     }
 
     //──────── K.T.H 변경 ────────
@@ -704,6 +729,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     public void ShowStatusUI()
     {
+        if (isDead || isDeathPending) return;
+
         if (statusDisplay != null)
             statusDisplay.gameObject.SetActive(true);
     }
@@ -1149,4 +1176,15 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         return bonus;
     }
 
+    public void TryFinalizeDeath()
+    {
+        GameManager.Instance.combatCameraController.CameraPunchHard();
+
+        if (!isDeathPending || isDead) return;
+
+        isDead = true;
+        isDeathPending = false;
+
+        gameObject.SetActive(false);
+    }
 }

@@ -174,14 +174,6 @@ public class CardModel : ScriptableObject
         yield return new WaitUntil(() => hitTriggered);
         yield return new WaitForSeconds(0.9f);
 
-        foreach (var target in targets)
-        {
-            if (!target.IsAlive() && target is MonoBehaviour mb && mb.gameObject.activeSelf)
-            {
-                mb.gameObject.SetActive(false);
-            }
-        }
-
         GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
 
         GameManager.Instance.turnController.OffAction();
@@ -193,6 +185,11 @@ public class CardModel : ScriptableObject
         {
             if (ch is PlayerController pc && !targets.Contains(pc) && pc != caster)
                 pc.ShowStatusUI();
+        }
+
+        foreach(var ch in allCharacters)
+        {
+            ch.TryFinalizeDeath();
         }
     }
 

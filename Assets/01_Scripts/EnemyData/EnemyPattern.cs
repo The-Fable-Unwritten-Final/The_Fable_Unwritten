@@ -163,8 +163,7 @@ public static class EnemyPattern
             yield return new WaitForSeconds(0.3f); // 타격 연출용 대기
             if(!t.IsAlive()&& t is MonoBehaviour mb && mb.gameObject.activeSelf)
             {
-                mb.gameObject.SetActive(false);
-
+                t.TryFinalizeDeath();
                 // 적일 경우 경험치 지급
                 if (t is Enemy e)
                 {
