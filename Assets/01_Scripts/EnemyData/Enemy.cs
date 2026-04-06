@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System;
+using DG.Tweening;
 
 public class Enemy : MonoBehaviour, IStatusReceiver
 {
@@ -34,6 +35,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public SpriteRenderer spriteRenderer;
     public Animator animator;
+    private Sequence hitShakeSequence;
     private StatusDisplay statusDisplay;
 
     [SerializeField] public List<TickEffect> tickEffects = new();
@@ -609,6 +611,18 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     {
         if (animator != null)
         {
+            // 이전 진동 효과 취소
+            if (hitShakeSequence != null && hitShakeSequence.IsActive())
+            {
+                hitShakeSequence.Kill();
+            }
+            // Visual의 Transform을 기준으로, 피격시 진동 효과 재생
+            Transform trans = animator.transform;
+            hitShakeSequence = DOTween.Sequence()
+                .Append(trans.DOLocalMoveX(-0.1f, 0.05f))
+                .Append(trans.DOLocalMoveX(0.1f, 0.1f))
+                .Append(trans.DOLocalMoveX(0f, 0.05f));
+
             animator.SetBool("Hit", true);
             GameManager.Instance.StartCoroutine(ResetBool("Hit", 1f));
         }

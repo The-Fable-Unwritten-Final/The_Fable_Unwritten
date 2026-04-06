@@ -35,9 +35,9 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
             instance = (T)this;
             DontDestroyOnLoad(gameObject);
         }
-        else
+        else if (instance != this)
         {
-            Destroy(gameObject);
+            Destroy(this);  // gameObject 대신 component만 파괴
         }
     }
 
