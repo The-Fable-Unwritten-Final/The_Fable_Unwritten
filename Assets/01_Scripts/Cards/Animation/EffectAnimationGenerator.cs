@@ -7,6 +7,7 @@ using UnityEngine.U2D;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 public class EffectAnimationGenerator
 {
@@ -105,7 +106,8 @@ public class EffectAnimationGenerator
 
             // 이름 기준 정렬
             sprites = sprites
-                .OrderBy(s => s.name, System.StringComparer.Ordinal)
+                .OrderBy(s => GetTrailingNumber(s.name))
+                .ThenBy(s => s.name, System.StringComparer.Ordinal)
                 .ToList();
 
             string savePath = $"{animationSavePath}{animName}.asset".Replace("\\", "/");
@@ -134,6 +136,14 @@ public class EffectAnimationGenerator
         AssetDatabase.Refresh();
 
         Debug.Log($"[완료] EffectAnimationDatabase 생성: 총 {db.allAnimations.Count}개 등록됨");
+    }
+    private static int GetTrailingNumber(string name)
+    {
+        var match = Regex.Match(name, @"(\d+)$");
+        if (match.Success && int.TryParse(match.Value, out int number))
+            return number;
+
+        return int.MaxValue;
     }
 }
 #endif
