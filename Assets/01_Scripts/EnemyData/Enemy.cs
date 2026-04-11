@@ -39,6 +39,11 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public SpriteRenderer spriteRenderer;
     public Animator animator;
+    //공격 애니메이션 호출 시
+    private Action currentAttackHitCallback;
+    private Coroutine resetAttackRoutine;
+
+
     private StatusDisplay statusDisplay;
 
     [SerializeField] public List<TickEffect> tickEffects = new();
@@ -610,18 +615,31 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public void PlayAttackAnimation(int attackType, Action onHitTiming = null)
     {
-        if (animator != null)
-        {
-            animator.SetInteger("Attack", attackType);
-            GameManager.Instance.StartCoroutine(ResetAttackParam(1.5f));
-        }
+        if (animator == null)
+            return;
+
+        currentAttackHitCallback = onHitTiming;
+
+        animator.SetInteger("Attack", attackType);
+
+        if (resetAttackRoutine != null)
+            StopCoroutine(resetAttackRoutine);
+
+        resetAttackRoutine = StartCoroutine(ResetAttackParam(1.5f));
     }
 
     private IEnumerator ResetAttackParam(float delay)
     {
         yield return new WaitForSeconds(delay);
-        if (animator != null)
-            animator.SetInteger("Attack", -1);
+        animator.SetInteger("Attack", -1);
+        currentAttackHitCallback = null;
+        resetAttackRoutine = null;
+    }
+
+    public void OnAttackHitEvent()
+    {
+        currentAttackHitCallback?.Invoke();
+        currentAttackHitCallback = null;
     }
 
     public void PlayHitAnimation()
