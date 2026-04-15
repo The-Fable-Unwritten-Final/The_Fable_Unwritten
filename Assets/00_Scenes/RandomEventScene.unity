@@ -2141,6 +2141,7 @@ GameObject:
   - component: {fileID: 2138451850}
   - component: {fileID: 2138451852}
   - component: {fileID: 2138451851}
+  - component: {fileID: 2138451853}
   m_Layer: 5
   m_Name: Description_Txt
   m_TagString: Untagged
@@ -2198,9 +2199,8 @@ MonoBehaviour:
     were engraved on its surface.\\nCurious about its contents, Dorothy hesitated,
     then decided to choose who would hold the book."
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ee7dfd5aa68108a4cae7a9c288dfbdce, type: 2}
-  m_sharedMaterial: {fileID: -8146178071228311197, guid: ee7dfd5aa68108a4cae7a9c288dfbdce,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d8556fd1a640a5c4188fdf04e64f706b, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 56557745f6b35cc48b690eeecba306c1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2224,7 +2224,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
+  m_fontSize: 18.3
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2236,9 +2236,9 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 60
+  m_lineSpacing: 30
   m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
+  m_paragraphSpacing: -10
   m_charWidthMaxAdj: 0
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
@@ -2274,6 +2274,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2138451849}
   m_CullTransparentMesh: 1
+--- !u!114 &2138451853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2138451849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 602f314f8b29c5f40bbffaa193787287, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 2138451851}
 --- !u!114 &90213531852202690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43862,6 +43875,7 @@ MonoBehaviour:
   cardState: 0
   cardFrame: {fileID: 8836171520200064856}
   cardImage: {fileID: 4293094134723354660}
+  cardCostImage: {fileID: 0}
   cardTypeImage: {fileID: 5556457947950361000}
   cardCharImage: {fileID: 8135045316231621369}
   cardCost: {fileID: 5474470912837464795}
