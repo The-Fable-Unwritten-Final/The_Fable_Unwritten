@@ -493,7 +493,8 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     {
         var available = DataManager.Instance.allRandomEvents
         // 현재 테마와 일치하거나 공통 이벤트중, 등장하지 않은 이벤트 선정
-            .Where(x => (x.theme == theme || x.theme == 0)&& !usedRandomEvent.Contains(x.index))
+        // 천의 자리수가 0인 이벤트만 선택 (x1xxx는 연속 이벤트이기 때문에 제외)
+            .Where(x => (x.theme == theme || x.theme == 0) && !usedRandomEvent.Contains(x.index) && (x.index / 1000) % 10 == 0)
             .ToList();
 
         if (available.Count == 0) return null;
