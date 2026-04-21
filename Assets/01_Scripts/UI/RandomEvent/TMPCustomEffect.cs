@@ -50,7 +50,6 @@ public class TMPCustomEffect : MonoBehaviour
         {
             if (tag.tag.Contains("wave"))
             {
-                Debug.Log($"Detected wave tag: {tag.tag}");
                 StartCoroutine(ApplyWaveEffect(tag.start, tag.end));
             }
         }
@@ -180,8 +179,6 @@ public class TMPCustomEffect : MonoBehaviour
         float waveFrequency = 0.5f;  // 문자 간 위상 간격
         float waveAmplitude = 3f;  // 움직임 크기 (증가됨)
         
-        Debug.Log($"Wave effect started: start={start}, end={end}");
-
         // 원본 위치 저장
         var originalVertices = new Vector3[end - start + 1][];
         for (int i = start; i <= end; i++)

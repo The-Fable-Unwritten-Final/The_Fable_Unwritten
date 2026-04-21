@@ -9,7 +9,8 @@ using UnityEngine.UI;
 public enum SoundCategory
 {
     BGM,
-    EvenetBGM,
+    RandomEventBGM,
+    EventBGM,
     BossBGM,
     Button,
     Player,
@@ -83,6 +84,7 @@ public class SoundManager : MonoSingleton<SoundManager>
         }
         else if (sceneToBGMKey.TryGetValue(scene.name, out var bgmKey))
         {
+            if (scene.name == SceneNameData.RandomEventScene) return; // 랜덤 이벤트는 별도의 BGM 출력 방식 사용
             PlayBGM(SoundCategory.BGM, bgmKey);
         }
     }
@@ -94,16 +96,36 @@ public class SoundManager : MonoSingleton<SoundManager>
     /// </summary>
     public void PlayBGM(SoundCategory category, int key)
     {
-        if (isMuted ||
-            !bgmClips.TryGetValue(category, out var categoryDict) ||
-            !categoryDict.TryGetValue(key, out var clip)) return;
+        if (isMuted) return;
 
-        if (bgmSource.clip == clip) return;
+        // 요청한 category/key가 있으면 그것 사용
+        if (bgmClips.TryGetValue(category, out var categoryDict) && categoryDict.TryGetValue(key, out var clip))
+        {
+            if (bgmSource.clip == clip) return;
 
-        bgmSource.Stop();
-        bgmSource.clip = clip;
-        bgmSource.volume = bgmVolume;
-        bgmSource.Play();
+            bgmSource.Stop();
+            bgmSource.clip = clip;
+            bgmSource.volume = bgmVolume;
+            bgmSource.Play();
+            return;
+        }
+
+        // 없으면 디폴트 재생 (BGM, 0)
+        Debug.LogWarning($"[SoundManager] BGM not found: category={category}, key={key}. Falling back to default (BGM, 0)");
+
+        if (bgmClips.TryGetValue(SoundCategory.BGM, out var defaultCategoryDict) && defaultCategoryDict.TryGetValue(0, out var defaultClip))
+        {
+            if (bgmSource.clip == defaultClip) return;
+
+            bgmSource.Stop();
+            bgmSource.clip = defaultClip;
+            bgmSource.volume = bgmVolume;
+            bgmSource.Play();
+        }
+        else
+        {
+            Debug.LogError("[SoundManager] Default BGM (BGM, 0) also not found!");
+        }
     }
 
 
@@ -135,7 +157,26 @@ public class SoundManager : MonoSingleton<SoundManager>
 
     private IEnumerator FadeIn(SoundCategory category, int key, float duration)
     {
-        if (!bgmClips.TryGetValue(category, out var categoryDict) || !categoryDict.TryGetValue(key, out var clip)) yield break;
+        // 요청한 category/key 시도
+        AudioClip clip = null;
+        if (bgmClips.TryGetValue(category, out var categoryDict) && categoryDict.TryGetValue(key, out var foundClip))
+        {
+            clip = foundClip;
+        }
+        else
+        {
+            // 해당하는 카테고리 및 key가 없을 경우, 디폴트 재생 (BGM, 0)
+            Debug.LogWarning($"[SoundManager] BGM not found for FadeIn: category={category}, key={key}. Falling back to default (BGM, 0)");
+            if (bgmClips.TryGetValue(SoundCategory.BGM, out var defaultCategoryDict) && defaultCategoryDict.TryGetValue(0, out var defaultClip))
+            {
+                clip = defaultClip;
+            }
+            else
+            {
+                Debug.LogError("[SoundManager] Default BGM (BGM, 0) also not found for FadeIn!");
+                yield break;
+            }
+        }
 
         bgmSource.clip = clip;
         bgmSource.volume = 0f;
@@ -239,7 +280,7 @@ public class SoundManager : MonoSingleton<SoundManager>
 
             if (!Enum.TryParse(rawCategory, true, out SoundCategory parsedCategory))
             {
-                Debug.LogWarning($"[SoundManager] Invalid category: '{entry.category}' at index {entry.index}");
+                Debug.LogWarning($"[SoundManager] Invalid category: '{entry.category}'");
                 continue;
             }
 
@@ -259,7 +300,7 @@ public class SoundManager : MonoSingleton<SoundManager>
                 continue;
             }
 
-            bool isBGMType = parsedCategory == SoundCategory.BGM || parsedCategory == SoundCategory.BossBGM || parsedCategory == SoundCategory.EvenetBGM;
+            bool isBGMType = parsedCategory == SoundCategory.BGM || parsedCategory == SoundCategory.BossBGM || parsedCategory == SoundCategory.EventBGM || parsedCategory == SoundCategory.RandomEventBGM;
             var targetDict = isBGMType ? bgmClips : sfxClips;
 
             if (!targetDict.ContainsKey(parsedCategory))
@@ -292,7 +333,6 @@ public class SoundManager : MonoSingleton<SoundManager>
 [System.Serializable]
 public class SoundEntry
 {
-    public int index;
     public string category;
     public int key;
     public string sound;
