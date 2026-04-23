@@ -85,17 +85,17 @@ public class UI_PlayerInfo : MonoBehaviour
 
             if (charInfoText.TryGetValue(character, out var textObj))
             {
-                // 초기 체력 설정
+                // 초기 체력 설정 (애니메이션 없이 바로 적용)
                 if (charhpBar.TryGetValue(character, out var hpBar))
                 {
-                    ChangeHpBar(hpBar, playerData.currentHP, playerData.MaxHP, character);
+                    ChangeHpBar(hpBar, playerData.currentHP, playerData.MaxHP, character, animate: false);
                 }
 
-                // 체력 변경 이벤트 등록
+                // 체력 변경 이벤트 등록 (애니메이션 포함)
                 playerData.OnHpChanged += (currentHp, maxHp) =>
                 {
                     textObj.text = $"{currentHp}/{maxHp}";
-                    ChangeHpBar(charhpBar[character], currentHp, maxHp, character);
+                    ChangeHpBar(charhpBar[character], currentHp, maxHp, character, animate: true);
                 };
             }
         }
@@ -182,11 +182,18 @@ public class UI_PlayerInfo : MonoBehaviour
         currentExp.text = exp.ToString();
     }
 
-    public void ChangeHpBar(Image hpBar, float hp, float maxHp, CharacterClass character)
+    public void ChangeHpBar(Image hpBar, float hp, float maxHp, CharacterClass character, bool animate = true)
     {
         if (hpBar == null) return;
 
         float targetFill = hp / maxHp;
+
+        // 애니메이션 없이 바로 적용
+        if (!animate)
+        {
+            hpBar.fillAmount = targetFill;
+            return;
+        }
 
         // 캐릭터별 코루틴 선택 및 중지
         Coroutine currentCoroutine = character switch
