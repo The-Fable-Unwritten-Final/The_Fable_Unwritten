@@ -41,7 +41,14 @@ public class TMPCustomEffect : MonoBehaviour
         {
             if (tag.tag.Contains("shake") && !tag.tag.Contains("wave"))
             {
-                StartCoroutine(ApplyShakeEffect(tag.start, tag.end));
+                if (tag.tag.Contains("weakshake"))
+                {
+                    StartCoroutine(ApplyWeakShakeEffect(tag.start, tag.end));
+                }
+                else
+                {
+                    StartCoroutine(ApplyShakeEffect(tag.start, tag.end));
+                }
             }
         }
 
@@ -68,7 +75,7 @@ public class TMPCustomEffect : MonoBehaviour
         }
 
         // 색상 타입 추출
-        string colorType = tag.tag.Replace("shake_", "").Replace("wave_", "").Replace("shake", "").Replace("wave", "");
+        string colorType = tag.tag.Replace("weakshake_", "").Replace("shake_", "").Replace("wave_", "").Replace("weakshake", "").Replace("shake", "").Replace("wave", "");
 
         if (colorType.Contains("gr_SB"))// 스카이 블루
             ApplyHorizontalGradient(tag.start, tag.end, Color.blue, Color.cyan, 1, 5);
@@ -91,11 +98,92 @@ public class TMPCustomEffect : MonoBehaviour
 
     }
 
+    IEnumerator ApplyWeakShakeEffect(int start, int end)
+    {
+        var textInfo = text.textInfo;
+        float cycleDuration = 0.3f;  // 한 사이클 길이
+        float shakeAmount = 0.3f;  // 약한 흔들림
+
+        // 원본 위치 저장
+        var originalVertices = new Vector3[end - start + 1][];
+        for (int i = start; i <= end; i++)
+        {
+            if (i < 0 || i >= textInfo.characterInfo.Length) continue;
+            
+            var charInfo = textInfo.characterInfo[i];
+            int vertexIndex = charInfo.vertexIndex;
+            int meshIndex = charInfo.materialReferenceIndex;
+            
+            if (meshIndex >= textInfo.meshInfo.Length) continue;
+            
+            originalVertices[i - start] = new Vector3[4];
+            var verts = textInfo.meshInfo[meshIndex].vertices;
+            System.Array.Copy(verts, vertexIndex, originalVertices[i - start], 0, 4);
+        }
+
+        // 무한 반복
+        while (true)
+        {
+            float elapsed = 0f;
+            
+            while (elapsed < cycleDuration)
+            {
+                for (int i = start; i <= end; i++)
+                {
+                    if (i < 0 || i >= textInfo.characterInfo.Length) continue;
+
+                    var charInfo = textInfo.characterInfo[i];
+                    if (!charInfo.isVisible) continue;
+
+                    int vertexIndex = charInfo.vertexIndex;
+                    int meshIndex = charInfo.materialReferenceIndex;
+                    
+                    if (meshIndex >= textInfo.meshInfo.Length) continue;
+                    
+                    var verts = textInfo.meshInfo[meshIndex].vertices;
+
+                    Vector3 randomShake = new Vector3(
+                        Random.Range(-shakeAmount, shakeAmount),
+                        Random.Range(-shakeAmount, shakeAmount),
+                        0
+                    );
+
+                    for (int j = 0; j < 4; j++)
+                    {
+                        verts[vertexIndex + j] = originalVertices[i - start][j] + randomShake;
+                    }
+                }
+
+                // Vertices만 업데이트 (Colors는 유지)
+                text.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices);
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            // 한 사이클 끝나면 원위치 복원
+            for (int i = start; i <= end; i++)
+            {
+                if (i < 0 || i >= textInfo.characterInfo.Length) continue;
+                
+                var charInfo = textInfo.characterInfo[i];
+                int vertexIndex = charInfo.vertexIndex;
+                int meshIndex = charInfo.materialReferenceIndex;
+                
+                if (meshIndex >= textInfo.meshInfo.Length) continue;
+                
+                var verts = textInfo.meshInfo[meshIndex].vertices;
+                System.Array.Copy(originalVertices[i - start], 0, verts, vertexIndex, 4);
+            }
+            
+            text.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices);
+        }
+    }
+
     IEnumerator ApplyShakeEffect(int start, int end)
     {
         var textInfo = text.textInfo;
         float cycleDuration = 0.3f;  // 한 사이클 길이
-        float shakeAmount = 1f;
+        float shakeAmount = 1f;  // 강한 흔들림
 
         // 원본 위치 저장
         var originalVertices = new Vector3[end - start + 1][];
