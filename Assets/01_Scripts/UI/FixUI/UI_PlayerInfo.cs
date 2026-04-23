@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,7 @@ public class UI_PlayerInfo : MonoBehaviour
 
     private Dictionary<CharacterClass, TextMeshProUGUI> charInfoText;
     private Dictionary<CharacterClass, Image> charhpBar;
+    private Dictionary<CharacterClass, Action<float, float>> hpChangedHandlers = new();
     private Coroutine changeHpCoroutine_Sho;
     private Coroutine changeHpCoroutine_Ky;
     private Coroutine changeHpCoroutine_Le;
@@ -57,22 +59,17 @@ public class UI_PlayerInfo : MonoBehaviour
 
     void OnDisable()
     {
-        foreach (var kvp in PlayerManager.Instance.activePlayers)
+        foreach (var kvp in hpChangedHandlers)
         {
             CharacterClass character = kvp.Key;
-            PlayerData playerData = kvp.Value;
+            Action<float, float> handler = kvp.Value;
 
-            if (charInfoText.ContainsKey(character))
+            if (PlayerManager.Instance.activePlayers.TryGetValue(character, out var playerData))
             {
-                // 체력 변경 이벤트 해제
-                if(playerData != null)
-                playerData.OnHpChanged -= (currentHp, maxHp) =>
-                {
-                    charInfoText[character].text = $"{currentHp}/{maxHp}";
-                    ChangeHpBar(charhpBar[character], currentHp, maxHp, character);
-                };
+                playerData.OnHpChanged -= handler;
             }
         }
+        hpChangedHandlers.Clear();
     }
     private void RegisterHpUpdateEvent()
     {
@@ -91,12 +88,19 @@ public class UI_PlayerInfo : MonoBehaviour
                     ChangeHpBar(hpBar, playerData.currentHP, playerData.MaxHP, character, animate: false);
                 }
 
-                // 체력 변경 이벤트 등록 (애니메이션 포함)
-                playerData.OnHpChanged += (currentHp, maxHp) =>
+                // 기존 핸들러 제거
+                if (hpChangedHandlers.TryGetValue(character, out var oldHandler))
+                    playerData.OnHpChanged -= oldHandler;
+
+                // 새 핸들러 생성 및 저장
+                Action<float, float> handler = (currentHp, maxHp) =>
                 {
                     textObj.text = $"{currentHp}/{maxHp}";
                     ChangeHpBar(charhpBar[character], currentHp, maxHp, character, animate: true);
                 };
+
+                hpChangedHandlers[character] = handler;
+                playerData.OnHpChanged += handler;
             }
         }
     }
