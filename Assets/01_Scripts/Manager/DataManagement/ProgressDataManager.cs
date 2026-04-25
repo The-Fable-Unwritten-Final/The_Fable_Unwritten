@@ -80,6 +80,9 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     public void SaveProgress(bool safe)
     {
         ProgressSaveData data = new ProgressSaveData();
+        
+        // 현재 데이터 버전 저장
+        data.dataVersion = ProgressDataMigration.CURRENT_DATA_VERSION;
 
         data.GameStartType = (int)GameStartType;
         data.stageIndex = StageIndex;
@@ -147,6 +150,14 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         string json = PlayerPrefs.GetString("ProgressSaveData");
         ProgressSaveData data = JsonUtility.FromJson<ProgressSaveData>(json);
 
+        // 데이터 마이그레이션 (ProgressDataMigration에서 처리)
+        if (data.dataVersion < ProgressDataMigration.CURRENT_DATA_VERSION)
+        {
+            Debug.Log($"[ProgressDataManager] 데이터 마이그레이션 필요: v{data.dataVersion} -> v{ProgressDataMigration.CURRENT_DATA_VERSION}");
+            ProgressDataMigration.MigrateData(data, data.dataVersion, ProgressDataMigration.CURRENT_DATA_VERSION);
+            data.dataVersion = ProgressDataMigration.CURRENT_DATA_VERSION;
+        }
+
         GameStartType = (GameStartType)data.GameStartType;
         StageIndex = data.stageIndex;
         MinStageIndex = data.minStageIndex;
@@ -173,15 +184,19 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
             CurrentBattleNode = current;
         }
 
+        // 버전 호환성: 없는 이펙트 인덱스는 필터링
         untillNextCombat = data.untilNextCombatEffects
+            .Where(index => EventEffectManager.Instance.eventEffectDict.ContainsKey(index))
             .Select(index => EventEffectManager.Instance.eventEffectDict[index].Clone())
             .ToList();
 
         untillNextStage = data.untilNextStageEffects
+            .Where(index => EventEffectManager.Instance.eventEffectDict.ContainsKey(index))
             .Select(index => EventEffectManager.Instance.eventEffectDict[index].Clone())
             .ToList();
 
         untillEndAdventure = data.untilEndAdventureEffects
+            .Where(index => EventEffectManager.Instance.eventEffectDict.ContainsKey(index))
             .Select(index => EventEffectManager.Instance.eventEffectDict[index].Clone())
             .ToList();
 
@@ -221,6 +236,13 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
     public void ApplySaveToPlayerDatas(List<PlayerSaveData> saves)
     {
+        // null 체크 추가 - 업데이트 후 호환성 보장
+        if (saves == null || saves.Count == 0)
+        {
+            Debug.LogWarning("[ProgressDataManager] 저장된 플레이어 데이터가 없습니다.");
+            return;
+        }
+
         foreach (var save in saves)
         {
             var match = PlayerDatas.FirstOrDefault(p => p.IDNum == save.id);
@@ -524,23 +546,43 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         if(DataManager.Instance.allRandomEvents.Any(e => e.index == eventIndex))
             TriggeredRandomEvent.Add(eventIndex);
     }
+    
     public void LoadResolution()
     {
         string json = PlayerPrefs.GetString("ProgressSaveData");
-        ProgressSaveData data = JsonUtility.FromJson<ProgressSaveData>(json);
-
-        if (data.resolutions != null && data.resolutions.Length > 0)
+        
+        // null 체크: JSON이 없거나 파싱 실패 시 기본값 사용
+        if (string.IsNullOrEmpty(json))
         {
-            resolutions = data.resolutions;
+            resolutions[0] = new Vector2Int(1920, 1080);
             Screen.SetResolution(resolutions[0].x, resolutions[0].y, false);
+            return;
         }
-        else
+
+        try
         {
-            // 저장된 해상도 데이터가 없을경우 FHD 적용
+            ProgressSaveData data = JsonUtility.FromJson<ProgressSaveData>(json);
+
+            if (data?.resolutions != null && data.resolutions.Length > 0)
+            {
+                resolutions = data.resolutions;
+                Screen.SetResolution(resolutions[0].x, resolutions[0].y, false);
+            }
+            else
+            {
+                // 저장된 해상도 데이터가 없을경우 FHD 적용
+                resolutions[0] = new Vector2Int(1920, 1080);
+                Screen.SetResolution(resolutions[0].x, resolutions[0].y, false);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning($"[ProgressDataManager] 해상도 로드 실패, 기본값 적용: {ex.Message}");
             resolutions[0] = new Vector2Int(1920, 1080);
             Screen.SetResolution(resolutions[0].x, resolutions[0].y, false);
         }
     }
+    
     // 각 시스템 별 세이브 로드 분리
 
     /// <summary>
@@ -654,6 +696,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
             Debug.LogError($"Save on quit failed: {ex}");
         }
     }
+    
     private void OnApplicationPause(bool pause)
     {
         if (pause)
@@ -673,6 +716,9 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
 [System.Serializable]
 public class ProgressSaveData
 {
+    // 데이터 버전 추적
+    public int dataVersion = 1;
+    
     public int GameStartType;
     public int stageIndex;
     public int minStageIndex;
