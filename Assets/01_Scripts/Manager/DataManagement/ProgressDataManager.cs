@@ -135,8 +135,26 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         data.unlockedCharacterIDs = unlockedCharacterIDs.ToList();
 
         string json = JsonUtility.ToJson(data, true);
-        PlayerPrefs.SetString("ProgressSaveData", json);
-        PlayerPrefs.Save();
+        
+        try
+        {
+            // 기존 데이터를 백업으로 저장
+            string existingData = PlayerPrefs.GetString("ProgressSaveData", "");
+            if (!string.IsNullOrEmpty(existingData))
+            {
+                PlayerPrefs.SetString("ProgressSaveData_Backup", existingData);
+            }
+            
+            // 새 데이터 저장
+            PlayerPrefs.SetString("ProgressSaveData", json);
+            PlayerPrefs.Save();
+            
+            Debug.Log("[ProgressDataManager] 데이터 저장 완료 (백업도 함께 생성)");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[ProgressDataManager] 데이터 저장 실패: {ex.Message}");
+        }
     }
 
     public void LoadProgress()
@@ -148,7 +166,58 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         }
 
         string json = PlayerPrefs.GetString("ProgressSaveData");
-        ProgressSaveData data = JsonUtility.FromJson<ProgressSaveData>(json);
+        ProgressSaveData data = null;
+
+        // 메인 데이터 로드 시도
+        try
+        {
+            data = JsonUtility.FromJson<ProgressSaveData>(json);
+            
+            if (data == null)
+            {
+                throw new System.Exception("JSON 파싱 실패");
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogWarning($"[ProgressDataManager] 메인 데이터 로드 실패: {ex.Message}");
+            Debug.Log("[ProgressDataManager] 백업 데이터로 복원을 시도합니다.");
+            
+            // 백업 데이터로 복원 시도
+            if (PlayerPrefs.HasKey("ProgressSaveData_Backup"))
+            {
+                try
+                {
+                    json = PlayerPrefs.GetString("ProgressSaveData_Backup");
+                    data = JsonUtility.FromJson<ProgressSaveData>(json);
+                    
+                    if (data != null)
+                    {
+                        Debug.Log("[ProgressDataManager] 백업 데이터로 성공적으로 복원되었습니다!");
+                        // 복원된 데이터를 메인 저장소에 다시 저장
+                        PlayerPrefs.SetString("ProgressSaveData", json);
+                        PlayerPrefs.Save();
+                    }
+                    else
+                    {
+                        throw new System.Exception("백업 데이터도 손상됨");
+                    }
+                }
+                catch (System.Exception backupEx)
+                {
+                    Debug.LogError($"[ProgressDataManager] 백업 데이터도 로드 실패: {backupEx.Message}");
+                    Debug.LogError("[ProgressDataManager] ⚠️ 복구 불가능한 손상 - 게임 데이터를 자동으로 초기화합니다.");
+                    ResetToNewGame();
+                    return;
+                }
+            }
+            else
+            {
+                Debug.LogError("[ProgressDataManager] ⚠️ 백업 데이터도 손실 - 게임 데이터를 자동으로 초기화합니다.");
+                ResetToNewGame();
+                return;
+            }
+        }
 
         // 데이터 마이그레이션 (ProgressDataMigration에서 처리)
         if (data.dataVersion < ProgressDataMigration.CURRENT_DATA_VERSION)
@@ -259,7 +328,10 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         }
     }
 
-    public void FullResetProgress() // 완전 초기화 (게임을 처음 시작하는 상태로 초기화)
+    /// <summary>
+    /// 완전 초기화 (게임을 처음 시작하는 상태로 초기화) >> 커스텀 UI 에서 사용하는 완전 초기화 버튼
+    /// </summary>
+    public void FullResetProgress()
     {
         GameStartType = GameStartType.New;
         BattleLogManager.Instance.ResetGameLog();
@@ -339,8 +411,11 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         // 저장된 데이터 다시 로드하여 메모리에 반영
         LoadProgress();
     }
-    public void ResetProgress() // 튜토리얼을 끝낸 이후 new game 시 호출 및 저장 (카드 해금, 문체 해금의 경우 보존)
-    {   
+    /// <summary>
+    /// 튜토리얼을 끝낸 이후 new game 시 호출 및 저장 (카드 해금, 문체 해금의 경우 보존)
+    /// </summary>
+    public void ResetProgress() 
+    {
         GameStartType = GameStartType.New;
         BattleLogManager.Instance.ResetGameLog();
         untillNextCombat.Clear();
@@ -381,7 +456,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
             chaos.plusTiers.Clear();
             chaos.minusTiers.Clear();
             chaos.isUnlocked = false;
-            
+
             if (tempstageind >= 3)
             {
                 int styleCount = DataManager.Instance.styleDefs.Count;
@@ -404,9 +479,103 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         inkAmount = 0;
 
         PlayerPrefs.DeleteKey("ProgressSaveData");
-        SaveProgress(true);   
+        SaveProgress(true);
         // 저장된 데이터 다시 로드하여 메모리에 반영
         LoadProgress();
+    }
+    /// <summary>
+    /// 복구 불가능한 손상 발생 시 호출 - 게임 진행은 초기화하되, 카드/문체/캐릭터 해금 정보는 보존
+    /// </summary>
+    private void ResetToNewGame()
+    {
+        Debug.Log("[ProgressDataManager] 게임 데이터를 초기화하고 새 게임을 시작. (해금 정보는 보존)");
+        
+        // 손상된 데이터 삭제
+        PlayerPrefs.DeleteKey("ProgressSaveData");
+        PlayerPrefs.DeleteKey("ProgressSaveData_Backup");
+        PlayerPrefs.Save();
+
+        // 게임 상태 초기화 (ResetProgress()와 동일)
+        GameStartType = GameStartType.New;
+        BattleLogManager.Instance.ResetGameLog();
+        
+        untillNextCombat.Clear();
+        untillNextStage.Clear();
+        untillEndAdventure.Clear();
+
+        usedRandomEvent.Clear();
+        TriggeredRandomEvent.Clear();
+        stageThemes.Clear();
+        eliteClearThemes.Clear();
+
+        AssignThemesToStages();
+
+        int tempstageind = StageIndex;
+        StageIndex = 1;
+        MinStageIndex = 1;
+
+        CurrentExp = 0;
+        SavedEnemySetIndex = -1;
+        SavedRandomEvent = -1;
+        IsNewCamp = true;
+        IsNewStage = true;
+        RetryFromStart = true;
+        StageCleared = false;
+        IsStageScene = true;
+        IsSecondGame = false;
+        CurrentBattleNode = null;
+        SavedStageData = null;
+        VisitedNodes.Clear();
+        CurrentTheme = default;
+        ProgressTutorial.Clear();
+
+        // 스타일 진행도만 초기화 (해금 정보는 보존)
+        foreach (StyleDefinition st in StyleManager.Instance.StyleDic.Values)
+        {
+            st.ResetProgress(); // 진행도만 1로 초기화
+        }
+
+        // 혼돈 문체 처리 (해금 상태는 기존 값 유지)
+        if (StyleManager.Instance.StyleDic.TryGetValue(0, out var chaos))
+        {
+            chaos.plusTiers.Clear();
+            chaos.minusTiers.Clear();
+            
+            if (tempstageind >= 3)
+            {
+                int styleCount = DataManager.Instance.styleDefs.Count;
+                int rnd = UnityEngine.Random.Range(1, styleCount);
+
+                StyleDefinition.StyleRank rank = DataManager.Instance.styleDefs[rnd].rank;
+                var plus = DataManager.Instance.styleDefs[rnd].plusTiers;
+                var sameRankIndexes = Enumerable.Range(1, styleCount - 1)
+                                    .Where(i => i != rnd && DataManager.Instance.styleDefs[i].rank == rank)
+                                    .ToList();
+                rnd = sameRankIndexes[UnityEngine.Random.Range(0, sameRankIndexes.Count)];
+                var minus = DataManager.Instance.styleDefs[rnd].minusTiers;
+
+                DataManager.Instance.styleDefs[0].plusTiers = plus;
+                DataManager.Instance.styleDefs[0].minusTiers = minus;
+                chaos.isUnlocked = true;
+            }
+        }
+
+        currentDefID = 1;
+        inkAmount = 0;
+
+        // 해금 정보는 보존
+        // unlockedCards.Clear();  보존
+        // unlockedCharacterIDs.Clear();  보존
+        // unlockedStyles.Clear();  보존
+
+        // 플레이어 데이터 초기화
+        InitializePlayerData();
+        InitializePlayerManagerWithLoadedData(DataManager.Instance.AllCards);
+
+        SaveProgress(true);
+        LoadProgress();
+
+        Debug.Log("[ProgressDataManager] 게임 데이터 초기화 완료 - 새 게임을 시작합니다! (해금 정보 보존됨)");
     }
 
     public void InitializePlayerData()      //아예 초기 데이터로 완전 초기화
