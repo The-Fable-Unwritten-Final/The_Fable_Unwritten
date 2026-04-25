@@ -11,7 +11,7 @@ using UnityEngine.UI;
 public class UI_RandomEvent : MonoBehaviour
 {
     [Header("ConnetObject")]
-    [SerializeField] Image backGround;
+    //[SerializeField] Image backGround;
     [SerializeField] Image illustration_Img;
     [SerializeField] TextMeshProUGUI titleTxt; 
     [SerializeField] TextMeshProUGUI descriptionTxt;
@@ -29,7 +29,7 @@ public class UI_RandomEvent : MonoBehaviour
 
     private void Start()
     {
-        backGround.sprite = DataManager.Instance.GetBackground(ProgressDataManager.Instance.StageIndex);
+        //backGround.sprite = DataManager.Instance.GetBackground(ProgressDataManager.Instance.StageIndex);
         ProgressDataManager.Instance.IsNewStage = false;
 
         if (ProgressDataManager.Instance.SavedRandomEvent <= 0) // 저장 된 현재 랜덤이밴트 없을 경우
