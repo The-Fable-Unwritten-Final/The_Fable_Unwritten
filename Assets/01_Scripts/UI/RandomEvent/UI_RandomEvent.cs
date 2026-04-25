@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -9,7 +11,7 @@ using UnityEngine.UI;
 public class UI_RandomEvent : MonoBehaviour
 {
     [Header("ConnetObject")]
-    [SerializeField] Image backGround;
+    //[SerializeField] Image backGround;
     [SerializeField] Image illustration_Img;
     [SerializeField] TextMeshProUGUI titleTxt; 
     [SerializeField] TextMeshProUGUI descriptionTxt;
@@ -27,7 +29,7 @@ public class UI_RandomEvent : MonoBehaviour
 
     private void Start()
     {
-        backGround.sprite = DataManager.Instance.GetBackground(ProgressDataManager.Instance.StageIndex);
+        //backGround.sprite = DataManager.Instance.GetBackground(ProgressDataManager.Instance.StageIndex);
         ProgressDataManager.Instance.IsNewStage = false;
 
         if (ProgressDataManager.Instance.SavedRandomEvent <= 0) // 저장 된 현재 랜덤이밴트 없을 경우
@@ -46,6 +48,7 @@ public class UI_RandomEvent : MonoBehaviour
             InitUI(currentData);
         }
 
+        SoundManager.Instance.PlayBGM(SoundCategory.RandomEventBGM, currentData.index); // 랜덤 이벤트 BGM 재생
     }
     private void GetSavedEvent()
     {
@@ -93,7 +96,19 @@ public class UI_RandomEvent : MonoBehaviour
 
    private IEnumerator StartTyping()
     {
-        yield return StartCoroutine(TypeText(descriptionTxt, LocaleDataManager.GetLocalizedRandomEvent(currentData.description)));
+        //yield return StartCoroutine(TypeText(descriptionTxt, LocaleDataManager.GetLocalizedRandomEvent(currentData.description))); 점진적 텍스트 표시 => 텍스트 이펙트를 위해서 즉시 텍스트 표시로 변경
+        var customEffect = descriptionTxt.GetComponent<TMPCustomEffect>();
+        if (customEffect != null)
+        {
+            customEffect.SetGradientText(LocaleDataManager.GetLocalizedRandomEvent(currentData.description));
+        }
+        else
+        {
+            Debug.LogError("TMPCustomEffect 컴포넌트를 찾을 수 없습니다!");
+            descriptionTxt.text = LocaleDataManager.GetLocalizedRandomEvent(currentData.description);
+        }
+        
+
         yield return new WaitForSeconds(0.5f);
         Coroutine op_0 = StartCoroutine(TypeText(optionTxt_a, LocaleDataManager.GetLocalizedRandomEvent(currentData.option_a)));
         Coroutine op_1 = StartCoroutine(TypeText(optionTxt_b, LocaleDataManager.GetLocalizedRandomEvent(currentData.option_b)));
@@ -144,7 +159,7 @@ public class UI_RandomEvent : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        float randomValue = Random.value; // 0 ~ 1 사이
+        float randomValue = UnityEngine.Random.value; // 0 ~ 1 사이
         string resultDescription = "";
         results = null;
 
@@ -205,7 +220,8 @@ public class UI_RandomEvent : MonoBehaviour
 
         // 적용되는 효과를 텍스트로 나열 및 출력 해주는 효과 (이때 카드 해금은 텍스트 출력하지 않음 => 별도의 팝업 UI로 처리)
         string resultText = string.Join("\n", results
-            .Where(i => {
+            .Where(i =>
+            {
                 var effect = EventEffectManager.Instance.eventEffectDict[i];
                 if (effect != null && effect.eventType == 1)
                 {
@@ -215,9 +231,19 @@ public class UI_RandomEvent : MonoBehaviour
                 }
                 return true;
             })
-            .Select(i => LocaleDataManager.GetLocalizedRandomEventEffect("Event_"+i)));
+            .Select(i => LocaleDataManager.GetLocalizedRandomEventEffect("Event_" + i)));
 
-        yield return StartCoroutine(TypeText(descriptionTxt, resultDescription));
+        //yield return StartCoroutine(TypeText(descriptionTxt, resultDescription)); 점진적 텍스트 표시 => 텍스트 이펙트를 위해서 즉시 텍스트 표시로 변경
+        var customEffect = descriptionTxt.GetComponent<TMPCustomEffect>();
+        if (customEffect != null)
+        {
+            customEffect.SetGradientText(resultDescription);
+        }
+        else
+        {
+            Debug.LogError("TMPCustomEffect 컴포넌트를 찾을 수 없습니다!");
+            descriptionTxt.text = resultDescription;
+        }
         yield return new WaitForSeconds(0.5f);
 
         yield return StartCoroutine(TypeText(optionTxt_b, resultText));

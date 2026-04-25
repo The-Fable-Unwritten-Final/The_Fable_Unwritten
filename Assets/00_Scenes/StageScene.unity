@@ -155,11 +155,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1283476900}
+  m_Father: {fileID: 192475373}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -135, y: -50}
+  m_AnchoredPosition: {x: 775, y: 440}
   m_SizeDelta: {x: 90, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &16261664
@@ -414,9 +414,9 @@ MonoBehaviour:
   m_fontSize: 45
   m_fontSizeBase: 45
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 35
+  m_fontSizeMax: 45
   m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
@@ -619,6 +619,7 @@ RectTransform:
   - {fileID: 2929142820977311995}
   - {fileID: 1853512654}
   - {fileID: 1649628333}
+  - {fileID: 16261663}
   - {fileID: 943649294}
   m_Father: {fileID: 1774875860}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -812,7 +813,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 180, y: 0}
+  m_AnchoredPosition: {x: 204.00003, y: 0}
   m_SizeDelta: {x: 74, y: 91}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &346712009
@@ -1625,9 +1626,9 @@ MonoBehaviour:
   m_fontSize: 45
   m_fontSizeBase: 45
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 35
+  m_fontSizeMax: 45
   m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
@@ -2227,8 +2228,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 16261663}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2823,7 +2823,7 @@ MonoBehaviour:
   lineCompleteSprite: {fileID: 21300000, guid: bfa3400e2583b42419668e0bdcbcfdc4, type: 3}
   nodesContainer: {fileID: 458465399}
   linesContainer: {fileID: 1910465127}
-  startIcon: {fileID: 653870441, guid: 3eff774fe32218f4dab1ca7ad61e9b9f, type: 3}
+  startIcon: {fileID: 166489461, guid: 3eff774fe32218f4dab1ca7ad61e9b9f, type: 3}
   normalIcon: {fileID: -1681653993, guid: 3eff774fe32218f4dab1ca7ad61e9b9f, type: 3}
   eliteIcon: {fileID: -689925253, guid: 3eff774fe32218f4dab1ca7ad61e9b9f, type: 3}
   randomIcon: {fileID: 773605195, guid: 3eff774fe32218f4dab1ca7ad61e9b9f, type: 3}
@@ -3099,7 +3099,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 20, y: 0}
+  m_AnchoredPosition: {x: 44, y: 0}
   m_SizeDelta: {x: 65, y: 101}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1509430758
@@ -3498,7 +3498,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -140, y: 0}
+  m_AnchoredPosition: {x: -126, y: 0}
   m_SizeDelta: {x: 98, y: 104}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1610904302
@@ -3860,9 +3860,9 @@ MonoBehaviour:
   m_fontSize: 50
   m_fontSizeBase: 50
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 40
+  m_fontSizeMax: 50
   m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
@@ -5071,9 +5071,9 @@ MonoBehaviour:
   m_fontSize: 50
   m_fontSizeBase: 50
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 40
+  m_fontSizeMax: 50
   m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
@@ -7330,7 +7330,7 @@ PrefabInstance:
     - target: {fileID: 6562793441516033271, guid: 79312473a988b464b95d3efd6e017624,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 19
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 6991773390491203599, guid: 79312473a988b464b95d3efd6e017624,
         type: 3}

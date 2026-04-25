@@ -79,7 +79,7 @@ public class DialogueManager : MonoBehaviour
 
         if (parts.Length == 2 && int.TryParse(parts[1], out int number))
         {
-            SoundManager.Instance.PlayBGM(SoundCategory.EvenetBGM, number);
+            SoundManager.Instance.PlayBGM(SoundCategory.EventBGM, number);
         }
 
         var data = JsonCutsceneLoader.Convert(DataManager.Instance.DialogueDatabase[dialogueID]);

@@ -155,7 +155,7 @@ public class StageMapRenderer : MonoBehaviour
         }
         catch (System.Exception ex)
         {
-            Debug.LogError($"❌ [StageMapRenderer.Render] 렌더링 중 예외 발생:\n{ex.Message}\n{ex.StackTrace}");
+            Debug.LogError($"[StageMapRenderer.Render] 렌더링 중 예외 발생:\n{ex.Message}\n{ex.StackTrace}");
         }
     }
 
