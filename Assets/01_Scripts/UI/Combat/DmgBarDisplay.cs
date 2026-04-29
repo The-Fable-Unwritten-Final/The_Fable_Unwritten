@@ -120,17 +120,38 @@ public class DmgBarDisplay : MonoBehaviour
         string dataT = data.Text;
         if (string.IsNullOrEmpty(dataT)) return "";
 
-        int prefix = (int)data.type;
+        // 색상 정의에 따라 prefix 설정
+        // 0. 공격 : 흰색
+        // 1. 주황 : 미정
+        // 2. 치유 : 초록
+        // 3. 버프류 : 시안
+        // 4. 나머지 디버프 상태 이상류 : 마젠타
+        int prefix = data.type switch
+        {
+            DmgTextType.Normal => 0,
+            DmgTextType.Heal => 2,
+            DmgTextType.AttackBuff => 3,
+            DmgTextType.DefenseBuff => 3,
+            DmgTextType.Bless => 3,
+            DmgTextType.Penance => 3,
+            DmgTextType.Guard => 3,
+            DmgTextType.AttackDebuff => 4,
+            DmgTextType.DefenseDebuff => 4,
+            DmgTextType.Burn => 4,
+            DmgTextType.Freeze => 4,
+            DmgTextType.Activate => 4,
+            DmgTextType.Crime => 4,
+            DmgTextType.Scar => 4,
+            DmgTextType.Stun => 4,
+            _ => 0
+        };
         StringBuilder sb = new StringBuilder();
 
-        // 현재 타입별 스프라이트 등록이 안 되어있어서 임시로 타입 0으로 고정 // 해당 데이터는 tmp 컴포넌트의 Extra settings/sprite asset 에서 접근 가능
-        prefix = 0;
         foreach (char c in dataT)
         {
             if (char.IsDigit(c))
             {
-                // 숫자: {prefix}{digit}
-                // 숫자 only 스프라이트
+                // 숫자: {prefix}{digit} 형식의 name을 가진 sprite character
                 sb.Append($"<sprite name=\"{prefix}{c}\">");
             }
             else
