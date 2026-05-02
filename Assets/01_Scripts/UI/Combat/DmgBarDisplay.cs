@@ -26,7 +26,7 @@ public struct DmgTextData
 }
 public static class DmgTextColors
 {
-    //
+    // >>>>>>>>>>>>>> 색상 정의 수정 : 아이콘 색상과 텍스트 색상 모두 통일성 있게 변경 <<<<<<<<<<<<
     // 색상 정의
     // 0. 공격 : 주황
     // 1. 치유 : 초록
@@ -120,39 +120,37 @@ public class DmgBarDisplay : MonoBehaviour
         string dataT = data.Text;
         if (string.IsNullOrEmpty(dataT)) return "";
 
-        // 색상 정의에 따라 prefix 설정
-        // 0. 공격 : 흰색
-        // 1. 주황 : 미정
-        // 2. 치유 : 초록
-        // 3. 버프류 : 시안
-        // 4. 나머지 디버프 상태 이상류 : 마젠타
-        int prefix = data.type switch
+        int typeIndex = data.type switch
         {
             DmgTextType.Normal => 0,
-            DmgTextType.Heal => 2,
-            DmgTextType.AttackBuff => 3,
+            DmgTextType.Heal => 1,
+            DmgTextType.AttackBuff => 2,
             DmgTextType.DefenseBuff => 3,
-            DmgTextType.Bless => 3,
-            DmgTextType.Penance => 3,
-            DmgTextType.Guard => 3,
-            DmgTextType.AttackDebuff => 4,
-            DmgTextType.DefenseDebuff => 4,
-            DmgTextType.Burn => 4,
-            DmgTextType.Freeze => 4,
-            DmgTextType.Activate => 4,
-            DmgTextType.Crime => 4,
-            DmgTextType.Scar => 4,
-            DmgTextType.Stun => 4,
+            DmgTextType.Bless => 4,
+            DmgTextType.Penance => 5,
+            DmgTextType.Guard => 6,
+            DmgTextType.AttackDebuff => 7,
+            DmgTextType.DefenseDebuff => 8,
+            DmgTextType.Burn => 9,
+            DmgTextType.Freeze => 10,
+            DmgTextType.Activate => 11,
+            DmgTextType.Crime => 12,
+            DmgTextType.Scar => 13,
+            DmgTextType.Stun => 14,
             _ => 0
         };
+        
+        // 각 색상당 13개의 스프라이트 (0~9 숫자 10개 + plus, minus, percent 3개)
+        int baseIndex = typeIndex * 13;
         StringBuilder sb = new StringBuilder();
 
         foreach (char c in dataT)
         {
             if (char.IsDigit(c))
             {
-                // 숫자: {prefix}{digit} 형식의 name을 가진 sprite character
-                sb.Append($"<sprite name=\"{prefix}{c}\">");
+                int digitValue = int.Parse(c.ToString());
+                int spriteIndex = baseIndex + digitValue;
+                sb.Append($"<sprite name=\"DMGPrint_{spriteIndex}\">");
             }
             else
             {
@@ -160,13 +158,13 @@ public class DmgBarDisplay : MonoBehaviour
                 switch (c)
                 {
                     case '+':
-                        sb.Append($"<sprite name=\"{prefix}plus\">");
+                        sb.Append($"<sprite name=\"DMGPrint_{baseIndex + 10}\">");
                         break;
                     case '-':
-                        sb.Append($"<sprite name=\"{prefix}minus\">");
+                        sb.Append($"<sprite name=\"DMGPrint_{baseIndex + 11}\">");
                         break;
                     case '%':
-                        sb.Append($"<sprite name=\"{prefix}percent\">");
+                        sb.Append($"<sprite name=\"DMGPrint_{baseIndex + 12}\">");
                         break;
                     default:
                         // 기타 문자 (공백 등)
