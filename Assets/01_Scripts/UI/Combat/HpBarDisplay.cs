@@ -19,6 +19,7 @@ public class HpBarDisplay : MonoBehaviour
 
     private Transform targetTransform;
     private SpriteRenderer targetRenderer;
+    private CanvasGroup canvasGroup;
 
     // 플레이어 데이터 연결
     public void BindPlayerData(PlayerData data)
@@ -64,7 +65,7 @@ public class HpBarDisplay : MonoBehaviour
         hpBar.fillAmount = hp / maxHp;
 
         if (hpText != null)
-            hpText.text = Mathf.FloorToInt(hp).ToString();
+            hpText.text = Mathf.FloorToInt(hp).ToString() + "/" + Mathf.FloorToInt(maxHp).ToString();
     }
 
     public void ChangeHpBar(float hp, float maxHp)
@@ -73,7 +74,7 @@ public class HpBarDisplay : MonoBehaviour
 
         float targetFill = hp / maxHp;
 
-        hpText.text = hp.ToString() + "/" + maxHp.ToString();
+        hpText.text = Mathf.FloorToInt(hp).ToString() + "/" + Mathf.FloorToInt(maxHp).ToString();
 
         if (changeHpCoroutine != null)
             StopCoroutine(changeHpCoroutine);
@@ -102,6 +103,34 @@ public class HpBarDisplay : MonoBehaviour
     {
         targetTransform = spriteRenderer.transform;
         targetRenderer = spriteRenderer;
+    }
+
+    /// <summary>
+    /// HP 바와 텍스트의 가시성 조절 (CanvasGroup 사용)
+    /// </summary>
+    public void SetHPBarVisible(bool isVisible)
+    {
+        if (canvasGroup == null)
+        {
+            canvasGroup = GetComponent<CanvasGroup>();
+            if (canvasGroup == null)
+            {
+                canvasGroup = gameObject.AddComponent<CanvasGroup>();
+            }
+        }
+
+        canvasGroup.alpha = isVisible ? 1f : 0f;
+
+        // hpText 가시성 처리
+        if (hpText != null)
+        {
+            CanvasGroup textCanvasGroup = hpText.GetComponent<CanvasGroup>();
+            if (textCanvasGroup == null)
+            {
+                textCanvasGroup = hpText.gameObject.AddComponent<CanvasGroup>();
+            }
+            textCanvasGroup.alpha = isVisible ? 1f : 0f;
+        }
     }
 
     /*void LateUpdate()

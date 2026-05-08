@@ -22,6 +22,7 @@ public class BattleFlowController : MonoBehaviour
 
     [Header("UI")]
     public TextMeshProUGUI Mana;
+    [SerializeField] private OnUseSkillBlack skillFocusEffect; // 스킬 포커스 효과
 
 
     public List<IStatusReceiver> playerParty { get; private set; } = new();
@@ -257,6 +258,12 @@ public class BattleFlowController : MonoBehaviour
             }
         }
 
+        // 스킬 포커스 효과 표시
+        if (skillFocusEffect != null)
+        {
+            skillFocusEffect.ShowSkillFocus(caster, targets);
+        }
+
         //todo : 이후 카드에 따라 attack type 다르게 만들기
         int attackType = (int)card.type%3;
         card.Play(caster, targets, attackType); // 카드 효과 실행
@@ -279,6 +286,24 @@ public class BattleFlowController : MonoBehaviour
 
 
         GameManager.Instance.analyticsLogger.LogUseCardInfo(card.index); // 카드 사용 정보 기록
+
+        // 스킬 포커스 효과 숨김 (약간의 지연 후)
+        if (skillFocusEffect != null)
+        {
+            StartCoroutine(HideSkillFocusAfterDelay(skillFocusEffect, 1.5f));
+        }
+    }
+
+    /// <summary>
+    /// 일정 시간 후 스킬 포커스 효과를 숨김
+    /// </summary>
+    private IEnumerator HideSkillFocusAfterDelay(OnUseSkillBlack skillBlack, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (skillBlack != null)
+        {
+            skillBlack.HideSkillFocus();
+        }
     }
 
 
