@@ -1,0 +1,4443 @@
+fileFormatVersion: 2
+guid: ed0993dd6133a564caa0fffbb05d13d8
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: DMGPrint_0
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 977
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ed9fb04465284346b7f9751b1360895
+      internalID: 15774292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_1
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 977
+        width: 17
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66932d89cd611d14fbdb6f68c44c0dbd
+      internalID: -1696798531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_2
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 977
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5dd1159f901bf6e46bb11957bd319e38
+      internalID: 1092872109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_3
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 977
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 818fcc3c4b72bfb46b9f40c445e0d4cc
+      internalID: -1420083210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_4
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 977
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2029fa39de354d04c831b8fa7d07792f
+      internalID: 576421772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_5
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 977
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76ca3fa0ade3d0d4aaffb76cc87caa57
+      internalID: -1843619049
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_6
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 978
+        width: 27
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a548d588df0ad1c4fb9e85eb8fd8bef0
+      internalID: -244760044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_7
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 978
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00519d099fcb95645b8f9c812caaf841
+      internalID: 145218706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_8
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 978
+        width: 25
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52f55132922fcde47a9580f15f3994f5
+      internalID: 1859756214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_9
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 978
+        width: 26
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98a440a29fe0f50428bc10f563d3b067
+      internalID: 449231408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_10
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 985
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec91f014c9da59849ad6ebf291bb9bb2
+      internalID: 2120934742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_11
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 994
+        width: 29
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 174a69a7a8adcaf4e9a30681b8fe04d7
+      internalID: -1073366438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_12
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 988
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 632d824ca1f552d4b93f2435f549759d
+      internalID: -253918116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_13
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 929
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af622f30c134071419d0104d33110914
+      internalID: 860377384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_14
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 929
+        width: 17
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f6d61ca3016b924882db295798d249d
+      internalID: -174778226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_15
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 929
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf31619275e5fee4d991f31649964a0d
+      internalID: 1643335109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_16
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 929
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2516070004221ef41ac4ff5ffbae5ede
+      internalID: -1986042152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_17
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 929
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4ba1d9caf41f754ea74430e1f011329
+      internalID: 1767013553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_18
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 929
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ace832d8e35233946bf78a75785825dd
+      internalID: 1821727029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_19
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 930
+        width: 27
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1e869991fa05ec45b6eef2a944213dd
+      internalID: 915624981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_20
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 930
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a0e640836cc47741944a09b38f2d7c3
+      internalID: -126772222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_21
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 930
+        width: 25
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 383bf923f0e9b8045be89d1bdf4c9dc7
+      internalID: 173809124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_22
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 930
+        width: 26
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b34f00c3660dd774f8a2db644334193d
+      internalID: 974830326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_23
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 937
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e34af4c1d201a4a479e4ea25a7879273
+      internalID: 1088676546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_24
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 946
+        width: 29
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc4cd0cff2a3dcc4fa78d623d60707f8
+      internalID: 1519621018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_25
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 940
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c19acbdbf9a2afe4d88d8d80cf0748f3
+      internalID: -1112484498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_26
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 881
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54fbbf940029e6d42a2193f914c64c95
+      internalID: -2118096990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_27
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 881
+        width: 17
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4bda8d0fbd1a27847a955ff4db254424
+      internalID: 2137458553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_28
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 881
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8514e9539cc5a504b993f85c10221a6a
+      internalID: 1479125167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_29
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 881
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c10c84465e42a9949877c3df527753ff
+      internalID: 763417065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_30
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 881
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d707fc33560105489dde365db00250b
+      internalID: -2042033621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_31
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 881
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7a08ad193be1824cb692306def69972
+      internalID: -964521094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_32
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 882
+        width: 27
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aaa78bb6a645c4349a24159cca98a444
+      internalID: -1132386143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_33
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 882
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c75e9f576e919ab469673f9b851430ce
+      internalID: 1000465660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_34
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 882
+        width: 25
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74e4375a873b480439bb24731ce72051
+      internalID: -105239355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_35
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 882
+        width: 26
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a0f5a93d62b59114b8ee3aa555e86345
+      internalID: 1662815366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_36
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 889
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12362eb43852dd14e9e2fae17e9699c0
+      internalID: -1976578993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_37
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 898
+        width: 29
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1feb21c8566806a4d9270b89742722b8
+      internalID: -303218714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_38
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 892
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d007a6568b8ced4f874728acdf9cce6
+      internalID: -853870260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_39
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 833
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a09223c17d2ac544b0bca3e47ca36c3
+      internalID: 680621652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_40
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 833
+        width: 17
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca5531aec68dc2649ac6ce1a74ae0d80
+      internalID: -513117406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_41
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 833
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8cb748b68bda3e04ba6099c27ac4f50a
+      internalID: 518024856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_42
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 833
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 286c869da9c93b94b9a872b38a338c69
+      internalID: -1191623945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_43
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 833
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4ca8840e78a43646a002970cca6a6fc
+      internalID: 669304037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_44
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 833
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32022b89a4edd7943b4656d81d01df56
+      internalID: 1315190275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_45
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 834
+        width: 27
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c6d48bf06537064c910a5e4ea674a51
+      internalID: -1618121288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_46
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 834
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46d469b87555d044894abc74d20544df
+      internalID: -606948130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_47
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 834
+        width: 25
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aee142958dd180045973c221982a31f6
+      internalID: -899198414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_48
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 834
+        width: 26
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb2999839dc70554f8f5e94129a39b0f
+      internalID: 1419143646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_49
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 841
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15f748495a1b3544daa6d82aa56e7cc6
+      internalID: 188714027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_50
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 850
+        width: 29
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba222d15f4e57e744b063e2bfe5e8905
+      internalID: 454323883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_51
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 844
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bff94c2a94f226240ace30f32cef7406
+      internalID: 510977028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_52
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 785
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46df49d13d025d44f800b5e4e9c90dd3
+      internalID: 1782655898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_53
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 785
+        width: 17
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d47bd11a0177fd40b6491bd06ccf493
+      internalID: 1986106734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_54
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 785
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f077c1a82f22949419b5367db650424b
+      internalID: 435431319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_55
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 785
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e0c29709520bf642b807e2f0a2269b1
+      internalID: 711822271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_56
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 785
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d01576279e26c704887eb0da71f2a6d0
+      internalID: 1157031359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_57
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 785
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bcf4e42e0218d7546924c81af33e0cd0
+      internalID: 2040249614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_58
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 786
+        width: 27
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb56528e08eb5354c9ada4fc45b4cf97
+      internalID: 1882471070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_59
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 786
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba22dabf43148bb4c860971c9ed07c89
+      internalID: -1043395490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_60
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 786
+        width: 25
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b845828b8ccce1b47a841a0b296b640d
+      internalID: 957593118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_61
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 786
+        width: 26
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a36c1d27329520348a95c43094f17c0e
+      internalID: 1277964536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_62
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 793
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6f2da4fc99bf0040b16f25de88415e8
+      internalID: 611554485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_63
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 802
+        width: 29
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e84761d17850ad34caf2155bba7689d2
+      internalID: -2039760970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_64
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 796
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70079d9302a8b134eaec8b5268b14928
+      internalID: -1690287013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_65
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 737
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70536c25241ebf244913a2f993ba41c1
+      internalID: 1284182308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_66
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 737
+        width: 17
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d7233445d98e014d97e1d7f76920016
+      internalID: 64559601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_67
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 737
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ce335bf5c41b7a459397ae8ebaf6f0b
+      internalID: -1552129424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_68
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 737
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a0e363b758659b44bbb68579b6c0029
+      internalID: 1567533743
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_69
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 737
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab3fe82557597d748afe34a5b91e4dd8
+      internalID: 395362508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_70
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 737
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4120a6ba45b7d744fa6ea589d6da46d9
+      internalID: -983878306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_71
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 738
+        width: 27
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c60869d3ec237b745a12c69793b143af
+      internalID: -855844774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_72
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 738
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d17b6e821d564c4fa617638b1f9555e
+      internalID: 876339353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_73
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 738
+        width: 25
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e35b39f6ca30e24b8930454776f5207
+      internalID: -1016086051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_74
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 738
+        width: 26
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90a04483537e41a4fa91267b549e34a0
+      internalID: 205987174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_75
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 745
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06c8c7216b0f1434d86c1950eefae647
+      internalID: -421707303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_76
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 754
+        width: 29
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8fe91ea0bc100743a6edf242ea0aeee
+      internalID: -1417099535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_77
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 748
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db8dc516cb87a8c4a97e6cf26265da09
+      internalID: -401961063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_78
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 689
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab214be49e6ff3a46a53049ce80bfb03
+      internalID: 463554475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_79
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 689
+        width: 17
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 114fabb6d5863774d90ca2355d2f8a0e
+      internalID: -515585108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_80
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 689
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a898092f8c302ab40a56b621082ff2e4
+      internalID: 2059526394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_81
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 689
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 492910e26f0e77149a74a09c0cc2e62e
+      internalID: -1073614521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_82
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 689
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7000a1550fe3da24aaf6c418930e28e0
+      internalID: -485122824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_83
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 689
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: daecb7e1f9b01b5408abfc8998dd60e8
+      internalID: 2113347151
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_84
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 690
+        width: 27
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3465c7a9063ce204da7670bdcc5331d6
+      internalID: -1090608974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_85
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 690
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 133fc57d38d51194cbbd380746b9b1d6
+      internalID: 2006433910
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_86
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 690
+        width: 25
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 376b96dc1752c544c922eb15edbdce63
+      internalID: -2118836716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_87
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 690
+        width: 26
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57bbc97e81127a04f9f8b2582285e3f6
+      internalID: 2113283808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_88
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 697
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d9083e7cbeddb64283faefc152aee61
+      internalID: 2144368687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_89
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 706
+        width: 29
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fef434dfcbc57fd4cb7076a97e5255db
+      internalID: 155339908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_90
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 700
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92723f27600d5fa418ce5e877423273d
+      internalID: 104266169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_91
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 641
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6cbc9d1c9cad98f44bbf4bad7585a6b8
+      internalID: -381424716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_92
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 641
+        width: 17
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a07f3956774418d48b017443632dc571
+      internalID: -1805657085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_93
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 641
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ce974a4e6b1ba747a0a264921b83b22
+      internalID: 1894367843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_94
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 641
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9ae6b4927f94d445b6ecf5c7ae4eaf8
+      internalID: -431804880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_95
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 641
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92f79d26ac035344f8634a751e8a66b2
+      internalID: -1149428531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_96
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 641
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1fe8b7ec5f62c0b4b89b98019452a6ca
+      internalID: -161888754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_97
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 642
+        width: 27
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95ad15e0b58af5141bef1af5c92bbdd6
+      internalID: 2017473815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_98
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 642
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a705a60713cd7bd4584ec1a0588f09e4
+      internalID: -868905665
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_99
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 642
+        width: 25
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 786a04d6e0b9d314bb5c6ce4168b296b
+      internalID: 1861563907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_100
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 642
+        width: 26
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11d5fcdb478d1c04abe2cb8fe51d9072
+      internalID: 1870494141
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_101
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 649
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab62ba6db76f2dd42a97dbbf7cc7a498
+      internalID: 1007144492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_102
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 658
+        width: 29
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a4c6139586b7d6428dc9eaf9c281d2e
+      internalID: 378922330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_103
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 652
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d766a04b29ebca45b31f2ea33b1f9e6
+      internalID: 1615886786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_104
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 593
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0661379f179724419c31c29d01e29ed
+      internalID: 1293791680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_105
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 593
+        width: 17
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0803095573cf70845bbbd148aa262f32
+      internalID: -1139403828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_106
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 593
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4056bb215bee6b54fbd05b36d48eaf2c
+      internalID: -708662201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_107
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 593
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32d82824fb869534a8617d08a09a0d5e
+      internalID: -1134690848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_108
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 593
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87e0de1a37ad32d4d804c804bc0cf56f
+      internalID: -1004752335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_109
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 593
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75a5f3ed1e4f2e24ba7b5e9fcb99f993
+      internalID: -1386065367
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_110
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 594
+        width: 27
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9842caa95868de743b045c42a9fd3598
+      internalID: -106097987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_111
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 594
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25b5ec1b0e8f9984f8b1eb46b8aef80e
+      internalID: 357262178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_112
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 594
+        width: 25
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58685b3eaeee6cf4eadcc12648d68a8e
+      internalID: -250141815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_113
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 594
+        width: 26
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a348ad02c82d954a999424a6ab9e8cf
+      internalID: 1960385603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_114
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 601
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a8b71e65b99116438d90f597e566184
+      internalID: -500256644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_115
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 610
+        width: 29
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48832660bfb7c3a449fa6cc9cc059ef7
+      internalID: -858337945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_116
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 604
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4cee174467d2b3e4abb49455c9dc60c3
+      internalID: -1717039556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_117
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 545
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03afc545a8e00454da1b8e8a76417cd6
+      internalID: 13658228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_118
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 545
+        width: 17
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a001ad555080a924980bff20e42dc89f
+      internalID: -55856156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_119
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 545
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3b0d224ee83fea4f890fb65c2b2653e
+      internalID: -294731477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_120
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 545
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48b5a9cc494e9b246bc78adb97739b14
+      internalID: 2091695463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_121
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 545
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f278a0e0a947141439dbb472905ac07d
+      internalID: -783607881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_122
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 545
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1744a4a21cccf514e8e3136ca8fda658
+      internalID: -2051223856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_123
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 546
+        width: 27
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80c1ee878ef21e949a9eeeea30f284db
+      internalID: 854956182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_124
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 546
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdb9a4d9e46a7d244919904af04cbc97
+      internalID: -920543878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_125
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 546
+        width: 25
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f94c18ca40d351428678e4ab45372ad
+      internalID: 1627617682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_126
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 546
+        width: 26
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a0464a397213fde4284c15f9ec5b622a
+      internalID: -1764108471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_127
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 553
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ea6408204429c446ad2b75ea460f831
+      internalID: -1016834161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_128
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 562
+        width: 29
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d64d8912b0bb57545883d0598ad17ac0
+      internalID: -1548982725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_129
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 556
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0124434979b36904eb089221c4b1f922
+      internalID: 864312749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_130
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 497
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97058d65f1911624f8cadecaf78a2892
+      internalID: -1961681370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_131
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 497
+        width: 17
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e95ef45228d27ca418be74accab74a4c
+      internalID: 659753373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_132
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 497
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e058ea02c085014bb05a9eb2d2a275a
+      internalID: 1580366942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_133
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 497
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9cae795793a57024e89e0ab51b1d2de8
+      internalID: -978671909
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_134
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 497
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e917eaa489f039244a024ac3ee06c616
+      internalID: -1606503980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_135
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 497
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0ee894617be3914c841d192aa6a0286
+      internalID: -1376638236
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_136
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 498
+        width: 27
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 036c70f34dc5cd84694b7586d328b9db
+      internalID: -2132444953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_137
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 498
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d97a96c2308295479bc958506f3efda
+      internalID: 525643396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_138
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 498
+        width: 25
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1d932499657ad3459db5a44f58c5620
+      internalID: -266399973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_139
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 498
+        width: 26
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69df373e2673d954ebc447c4cf6736b1
+      internalID: 305442358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_140
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 505
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c847d1e8760142e429ad038da5b58daa
+      internalID: 163095955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_141
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 514
+        width: 29
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dec0629e9a9fc2a44b707390b8910bda
+      internalID: -1765641585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_142
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 508
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e5cbccc8f2784a438518f9ffc81671b
+      internalID: -267708150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_143
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 449
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a185cb4ceb1e9694782581216a288aaf
+      internalID: 1555399705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_144
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 449
+        width: 17
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6095cfd57b5d4447840051da0a5b818
+      internalID: 1295081103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_145
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 449
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6281e66fa457ec14da0a7e6f8586c1fa
+      internalID: -1845473411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_146
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 449
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e2529b9250374847adf5cc287b451eb
+      internalID: -1736857591
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_147
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 449
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 470de9db05ed3cc4a8ba8220715ea8e7
+      internalID: -181900863
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_148
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 449
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db1fe0120ac1e9c48b7b69e0701ab001
+      internalID: 1287030334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_149
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 450
+        width: 27
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b38b7310befde9e42beadd0f4dd9ab10
+      internalID: -801453206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_150
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 450
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28b198219e367cb48b986a42248b5943
+      internalID: -771005727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_151
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 450
+        width: 25
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84cf22ec44e0f4047b321929cb00ff64
+      internalID: 706907635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_152
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 450
+        width: 26
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d638187a6687f5849844f30500561c2d
+      internalID: 1136710306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_153
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 457
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48771c9e7cd09014fb304d85cb42583b
+      internalID: 1590404724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_154
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 466
+        width: 29
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 893d8cb806131d847bd4348e3d8aa240
+      internalID: 1787939408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_155
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 460
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0497730de55865441bd6658abd88c0bb
+      internalID: -1086238832
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_156
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 401
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c25ee012e718ec47a00865d09585286
+      internalID: 293008783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_157
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 401
+        width: 17
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ebb7cecd669fe9c4081f133eda06877b
+      internalID: 1063196653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_158
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 401
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2460af83b22e6d47b24c954a2ea28dc
+      internalID: 576949457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_159
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 401
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93bce2b28203e2540934fef75a5c29de
+      internalID: 1803364992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_160
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 401
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07734f9ddc8095145aaebcd1f018adc5
+      internalID: 535240259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_161
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 401
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f962c2096fe99143b7ae417c852d447
+      internalID: 1703824313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_162
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 402
+        width: 27
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3451c831db6da73478af99f7ba9434f1
+      internalID: 2101786170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_163
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 402
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9faaf2ba1c3a6aa4ca81182434c42134
+      internalID: 396224155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_164
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 402
+        width: 25
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a4a1b12f7decd944bf6a1df8add96b3
+      internalID: -1970891146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_165
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 402
+        width: 26
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2a37e0b03d0a624da5f66a7018ad9ec
+      internalID: 952039405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_166
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 409
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf2194909bdf9d8469fb82b6689ea7a8
+      internalID: 119062526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_167
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 418
+        width: 29
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dcd0769c33e08f54381cf1a155f1c1b8
+      internalID: -1390223224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_168
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 412
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46590478a1e98724883ac8b6f22ad956
+      internalID: -100348407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_169
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 353
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1ccb1f2dec3fd643bdb9f014a3de4b7
+      internalID: 1395624706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_170
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 353
+        width: 17
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 817e67dfb64cd66449b8480e85efe1ad
+      internalID: -1543473377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_171
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 353
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bfe04841a66ba0344aa548f11efc95f7
+      internalID: 1747614864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_172
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 353
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4df0a083a9a06f44d8cfb87ec8aba8bc
+      internalID: -502147901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_173
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 353
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9b9d62d6f1641a46808ede2792afc47
+      internalID: 750870252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_174
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 353
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d7d0f9884c6a2b4f912be0f81fdc518
+      internalID: -634703045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_175
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 354
+        width: 27
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23e48fce648a1624fb729e6400c2032e
+      internalID: -1391570937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_176
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 354
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 686f8e31ca61b1848ba07fe60dbb3558
+      internalID: -831305334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_177
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 354
+        width: 25
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32f4e0ebf563790489eb3baa9f446f64
+      internalID: 25367257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_178
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 354
+        width: 26
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 512d25c2617716b4e8359bfc37d103c2
+      internalID: -2094386654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_179
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 361
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f3548bbcd0265e4aac5fb474e20eef0
+      internalID: 240870661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_180
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 370
+        width: 29
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b99044d7ae14e1408e8e6e7d412b0a5
+      internalID: -2061529983
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_181
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 364
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2276ceed0a96a894090d7b444fe0fb1b
+      internalID: -786164690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_182
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 305
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e467ab811d1137b4aa5c97d61a2c6a9c
+      internalID: -2024796996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_183
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 305
+        width: 17
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55b12de2940c26e48a6b936ae713fa54
+      internalID: 35929774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_184
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 305
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b0db131d89e9f7428f32c9dc3b5eb84
+      internalID: -1483655670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_185
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 305
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6df892cab1b34224e803be2c6bdf4e7f
+      internalID: -997999371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_186
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 305
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58a7e5f825bb20b4faec4d3fa977f86a
+      internalID: -1131049118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_187
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 305
+        width: 27
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2acd27db4938710479f542ca88bea979
+      internalID: 1215062341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_188
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 306
+        width: 27
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 10ab5627b7d87804fbe129712202cdf2
+      internalID: -1852955537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_189
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 306
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d12df839dbbf8964eab41dd3aaa47c77
+      internalID: 789626296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_190
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 306
+        width: 25
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4368ce840b7307d45bbba5881a18d456
+      internalID: 1203295452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_191
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 306
+        width: 26
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4976a2069b3ccb4ab413bd9af984244
+      internalID: 1848033506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_192
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 313
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04f192db469e36341bf17f60bc9d211c
+      internalID: -514640790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_193
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 322
+        width: 29
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 005bf79e3fa801647b1e2201d1a05a3c
+      internalID: -1102923523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DMGPrint_194
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 316
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54ed05d2976f6674582ec50e138d2eea
+      internalID: 260892232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: ab0fec58802cd3e4d95c0a37ee4cf9d8
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      DMGPrint_0: 15774292
+      DMGPrint_1: -1696798531
+      DMGPrint_10: 2120934742
+      DMGPrint_100: 1870494141
+      DMGPrint_101: 1007144492
+      DMGPrint_102: 378922330
+      DMGPrint_103: 1615886786
+      DMGPrint_104: 1293791680
+      DMGPrint_105: -1139403828
+      DMGPrint_106: -708662201
+      DMGPrint_107: -1134690848
+      DMGPrint_108: -1004752335
+      DMGPrint_109: -1386065367
+      DMGPrint_11: -1073366438
+      DMGPrint_110: -106097987
+      DMGPrint_111: 357262178
+      DMGPrint_112: -250141815
+      DMGPrint_113: 1960385603
+      DMGPrint_114: -500256644
+      DMGPrint_115: -858337945
+      DMGPrint_116: -1717039556
+      DMGPrint_117: 13658228
+      DMGPrint_118: -55856156
+      DMGPrint_119: -294731477
+      DMGPrint_12: -253918116
+      DMGPrint_120: 2091695463
+      DMGPrint_121: -783607881
+      DMGPrint_122: -2051223856
+      DMGPrint_123: 854956182
+      DMGPrint_124: -920543878
+      DMGPrint_125: 1627617682
+      DMGPrint_126: -1764108471
+      DMGPrint_127: -1016834161
+      DMGPrint_128: -1548982725
+      DMGPrint_129: 864312749
+      DMGPrint_13: 860377384
+      DMGPrint_130: -1961681370
+      DMGPrint_131: 659753373
+      DMGPrint_132: 1580366942
+      DMGPrint_133: -978671909
+      DMGPrint_134: -1606503980
+      DMGPrint_135: -1376638236
+      DMGPrint_136: -2132444953
+      DMGPrint_137: 525643396
+      DMGPrint_138: -266399973
+      DMGPrint_139: 305442358
+      DMGPrint_14: -174778226
+      DMGPrint_140: 163095955
+      DMGPrint_141: -1765641585
+      DMGPrint_142: -267708150
+      DMGPrint_143: 1555399705
+      DMGPrint_144: 1295081103
+      DMGPrint_145: -1845473411
+      DMGPrint_146: -1736857591
+      DMGPrint_147: -181900863
+      DMGPrint_148: 1287030334
+      DMGPrint_149: -801453206
+      DMGPrint_15: 1643335109
+      DMGPrint_150: -771005727
+      DMGPrint_151: 706907635
+      DMGPrint_152: 1136710306
+      DMGPrint_153: 1590404724
+      DMGPrint_154: 1787939408
+      DMGPrint_155: -1086238832
+      DMGPrint_156: 293008783
+      DMGPrint_157: 1063196653
+      DMGPrint_158: 576949457
+      DMGPrint_159: 1803364992
+      DMGPrint_16: -1986042152
+      DMGPrint_160: 535240259
+      DMGPrint_161: 1703824313
+      DMGPrint_162: 2101786170
+      DMGPrint_163: 396224155
+      DMGPrint_164: -1970891146
+      DMGPrint_165: 952039405
+      DMGPrint_166: 119062526
+      DMGPrint_167: -1390223224
+      DMGPrint_168: -100348407
+      DMGPrint_169: 1395624706
+      DMGPrint_17: 1767013553
+      DMGPrint_170: -1543473377
+      DMGPrint_171: 1747614864
+      DMGPrint_172: -502147901
+      DMGPrint_173: 750870252
+      DMGPrint_174: -634703045
+      DMGPrint_175: -1391570937
+      DMGPrint_176: -831305334
+      DMGPrint_177: 25367257
+      DMGPrint_178: -2094386654
+      DMGPrint_179: 240870661
+      DMGPrint_18: 1821727029
+      DMGPrint_180: -2061529983
+      DMGPrint_181: -786164690
+      DMGPrint_182: -2024796996
+      DMGPrint_183: 35929774
+      DMGPrint_184: -1483655670
+      DMGPrint_185: -997999371
+      DMGPrint_186: -1131049118
+      DMGPrint_187: 1215062341
+      DMGPrint_188: -1852955537
+      DMGPrint_189: 789626296
+      DMGPrint_19: 915624981
+      DMGPrint_190: 1203295452
+      DMGPrint_191: 1848033506
+      DMGPrint_192: -514640790
+      DMGPrint_193: -1102923523
+      DMGPrint_194: 260892232
+      DMGPrint_2: 1092872109
+      DMGPrint_20: -126772222
+      DMGPrint_21: 173809124
+      DMGPrint_22: 974830326
+      DMGPrint_23: 1088676546
+      DMGPrint_24: 1519621018
+      DMGPrint_25: -1112484498
+      DMGPrint_26: -2118096990
+      DMGPrint_27: 2137458553
+      DMGPrint_28: 1479125167
+      DMGPrint_29: 763417065
+      DMGPrint_3: -1420083210
+      DMGPrint_30: -2042033621
+      DMGPrint_31: -964521094
+      DMGPrint_32: -1132386143
+      DMGPrint_33: 1000465660
+      DMGPrint_34: -105239355
+      DMGPrint_35: 1662815366
+      DMGPrint_36: -1976578993
+      DMGPrint_37: -303218714
+      DMGPrint_38: -853870260
+      DMGPrint_39: 680621652
+      DMGPrint_4: 576421772
+      DMGPrint_40: -513117406
+      DMGPrint_41: 518024856
+      DMGPrint_42: -1191623945
+      DMGPrint_43: 669304037
+      DMGPrint_44: 1315190275
+      DMGPrint_45: -1618121288
+      DMGPrint_46: -606948130
+      DMGPrint_47: -899198414
+      DMGPrint_48: 1419143646
+      DMGPrint_49: 188714027
+      DMGPrint_5: -1843619049
+      DMGPrint_50: 454323883
+      DMGPrint_51: 510977028
+      DMGPrint_52: 1782655898
+      DMGPrint_53: 1986106734
+      DMGPrint_54: 435431319
+      DMGPrint_55: 711822271
+      DMGPrint_56: 1157031359
+      DMGPrint_57: 2040249614
+      DMGPrint_58: 1882471070
+      DMGPrint_59: -1043395490
+      DMGPrint_6: -244760044
+      DMGPrint_60: 957593118
+      DMGPrint_61: 1277964536
+      DMGPrint_62: 611554485
+      DMGPrint_63: -2039760970
+      DMGPrint_64: -1690287013
+      DMGPrint_65: 1284182308
+      DMGPrint_66: 64559601
+      DMGPrint_67: -1552129424
+      DMGPrint_68: 1567533743
+      DMGPrint_69: 395362508
+      DMGPrint_7: 145218706
+      DMGPrint_70: -983878306
+      DMGPrint_71: -855844774
+      DMGPrint_72: 876339353
+      DMGPrint_73: -1016086051
+      DMGPrint_74: 205987174
+      DMGPrint_75: -421707303
+      DMGPrint_76: -1417099535
+      DMGPrint_77: -401961063
+      DMGPrint_78: 463554475
+      DMGPrint_79: -515585108
+      DMGPrint_8: 1859756214
+      DMGPrint_80: 2059526394
+      DMGPrint_81: -1073614521
+      DMGPrint_82: -485122824
+      DMGPrint_83: 2113347151
+      DMGPrint_84: -1090608974
+      DMGPrint_85: 2006433910
+      DMGPrint_86: -2118836716
+      DMGPrint_87: 2113283808
+      DMGPrint_88: 2144368687
+      DMGPrint_89: 155339908
+      DMGPrint_9: 449231408
+      DMGPrint_90: 104266169
+      DMGPrint_91: -381424716
+      DMGPrint_92: -1805657085
+      DMGPrint_93: 1894367843
+      DMGPrint_94: -431804880
+      DMGPrint_95: -1149428531
+      DMGPrint_96: -161888754
+      DMGPrint_97: 2017473815
+      DMGPrint_98: -868905665
+      DMGPrint_99: 1861563907
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

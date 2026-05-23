@@ -26,7 +26,7 @@ public struct DmgTextData
 }
 public static class DmgTextColors
 {
-    //
+    // >>>>>>>>>>>>>> 색상 정의 수정 : 아이콘 색상과 텍스트 색상 모두 통일성 있게 변경 <<<<<<<<<<<<
     // 색상 정의
     // 0. 공격 : 주황
     // 1. 치유 : 초록
@@ -120,18 +120,37 @@ public class DmgBarDisplay : MonoBehaviour
         string dataT = data.Text;
         if (string.IsNullOrEmpty(dataT)) return "";
 
-        int prefix = (int)data.type;
+        int typeIndex = data.type switch
+        {
+            DmgTextType.Normal => 0,
+            DmgTextType.Heal => 1,
+            DmgTextType.AttackBuff => 2,
+            DmgTextType.DefenseBuff => 3,
+            DmgTextType.Bless => 4,
+            DmgTextType.Penance => 5,
+            DmgTextType.Guard => 6,
+            DmgTextType.AttackDebuff => 7,
+            DmgTextType.DefenseDebuff => 8,
+            DmgTextType.Burn => 9,
+            DmgTextType.Freeze => 10,
+            DmgTextType.Activate => 11,
+            DmgTextType.Crime => 12,
+            DmgTextType.Scar => 13,
+            DmgTextType.Stun => 14,
+            _ => 0
+        };
+        
+        // 각 색상당 13개의 스프라이트 (0~9 숫자 10개 + plus, minus, percent 3개)
+        int baseIndex = typeIndex * 13;
         StringBuilder sb = new StringBuilder();
 
-        // 현재 타입별 스프라이트 등록이 안 되어있어서 임시로 타입 0으로 고정 // 해당 데이터는 tmp 컴포넌트의 Extra settings/sprite asset 에서 접근 가능
-        prefix = 0;
         foreach (char c in dataT)
         {
             if (char.IsDigit(c))
             {
-                // 숫자: {prefix}{digit}
-                // 숫자 only 스프라이트
-                sb.Append($"<sprite name=\"{prefix}{c}\">");
+                int digitValue = int.Parse(c.ToString());
+                int spriteIndex = baseIndex + digitValue;
+                sb.Append($"<sprite name=\"DMGPrint_{spriteIndex}\">");
             }
             else
             {
@@ -139,13 +158,13 @@ public class DmgBarDisplay : MonoBehaviour
                 switch (c)
                 {
                     case '+':
-                        sb.Append($"<sprite name=\"{prefix}plus\">");
+                        sb.Append($"<sprite name=\"DMGPrint_{baseIndex + 10}\">");
                         break;
                     case '-':
-                        sb.Append($"<sprite name=\"{prefix}minus\">");
+                        sb.Append($"<sprite name=\"DMGPrint_{baseIndex + 11}\">");
                         break;
                     case '%':
-                        sb.Append($"<sprite name=\"{prefix}percent\">");
+                        sb.Append($"<sprite name=\"DMGPrint_{baseIndex + 12}\">");
                         break;
                     default:
                         // 기타 문자 (공백 등)

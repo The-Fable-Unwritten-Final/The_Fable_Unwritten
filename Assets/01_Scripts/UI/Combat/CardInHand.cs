@@ -220,7 +220,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         DG.Tweening.Sequence seq = DOTween.Sequence();
 
         // 첫 단계: frameCover, illustCover 반투명하게
-        seq.Append(frameCover.DOFade(0.5f, 0.3f).SetEase(Ease.OutSine));
+        //seq.Append(frameCover.DOFade(0.5f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(illustCover.DOFade(0.5f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(cardCostImage.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
 
@@ -234,7 +234,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             effectVisualizer.ApplyVisualState(CardVisualState.Use);
         });
 
-        seq.Append(frameCover.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        //seq.Append(frameCover.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(illustCover.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(cardCostImage.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(cardFrame.DOFade(0f, 0.3f).SetEase(Ease.OutSine));

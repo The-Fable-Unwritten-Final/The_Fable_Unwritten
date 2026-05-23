@@ -206,14 +206,14 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
                 catch (System.Exception backupEx)
                 {
                     Debug.LogError($"[ProgressDataManager] 백업 데이터도 로드 실패: {backupEx.Message}");
-                    Debug.LogError("[ProgressDataManager] ⚠️ 복구 불가능한 손상 - 게임 데이터를 자동으로 초기화합니다.");
+                    Debug.LogError("[ProgressDataManager] 복구 불가능한 손상 - 게임 데이터를 자동으로 초기화합.");
                     ResetToNewGame();
                     return;
                 }
             }
             else
             {
-                Debug.LogError("[ProgressDataManager] ⚠️ 백업 데이터도 손실 - 게임 데이터를 자동으로 초기화합니다.");
+                Debug.LogError("[ProgressDataManager] 백업 데이터도 손실 - 게임 데이터를 자동으로 초기화합.");
                 ResetToNewGame();
                 return;
             }

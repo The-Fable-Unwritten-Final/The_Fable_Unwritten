@@ -317,7 +317,7 @@ public class StageMapRenderer : MonoBehaviour
             var stageNode = rt.GetComponent<StageNode>();
 
             // 지나온 노드 버튼 비활성화, 색상 초기화
-            if (visited.Contains(node))
+            if (visited.Contains(node) || node.type == NodeType.Start)
             {
                 btn.interactable = false;
                 btn.enabled = false;
