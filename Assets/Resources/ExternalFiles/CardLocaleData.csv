@@ -74,13 +74,13 @@ Card_Name_1007,Breath of Nature,자연의 숨결,自然の息吹
 Card_Name_1008,Elemental Reaction,원소 반응,元素反応
 Card_Name_1009,Unstable Crystal,불안정한 결정,不安定な混合物
 Card_Name_1010,Tome of Mana,마력의 서,魔力の書
-Card_Name_1011,Radiant Wave,성광 파동,聖光の波動
+Card_Name_1011,Frozen Wave,빙결 파동,氷結波動
 Card_Name_1108,Elemental Burst,원소 폭발,元素爆発
 Card_Name_1109,Detonation,폭열,爆熱
-Card_Name_1110,Arcane Revelation,비전 계시,秘奥の啓示
+Card_Name_1110,Mana Rearrangement,마력 재배열,魔力再編
 Card_Name_1111,Elemental Resonance,원소 공명,元素共鳴
 Card_Name_1210,Essence of Elements,원소의 정수,元素の精髄
-Card_Name_1211,Heavenly Vision,천상의 비전,天啓の幻視
+Card_Name_1211,Limit Burst,한계 폭발,限界爆発
 Card_Name_1300,Unstable Mixture,불안정한 혼합물,不安定な混合物
 Card_Name_1301,Improvised Detonation Formula,급조 폭열식,即席爆熱式
 Card_Name_1302,Cooling Reaction,냉각 반응,冷却反応
@@ -108,7 +108,7 @@ Card_Name_2300,Mercy,자비,慈悲
 Card_Name_2301,Judgment,심판,審判
 Card_Name_2400,Prayer of Radiance,성광의 기도,聖光の祈り
 Card_Name_3000,Clumsy Strike,서툰 일격,恐れる一撃
-Card_Name_3001,Rain of Blade,칼날비,刃の雨
+Card_Name_3001,Blade Flurry,난무,乱舞
 Card_Name_3002,Preemptive Blow,기선 제압,先制打撃
 Card_Name_3003,Satisfying Hit,통괘한 타격,決まった一撃
 Card_Name_3004,Shock Smash,충격 강타,衝撃強打
@@ -121,9 +121,9 @@ Card_Name_3010,Powerful Strike,강력한 일격,強烈な一撃
 Card_Name_3011,Exploit Weakness,약점 베기,弱点斬り
 Card_Name_3108,Shockwave,충격파,衝撃波
 Card_Name_3109,Iron Guardian,철의 수호자,鉄の守護者
-Card_Name_3110,Wave Slash,파동 베기,波動斬り
+Card_Name_3110,Wave Slash,바람 가르기,波動斬り
 Card_Name_3111,Chain Slash,연속 베기,連続斬り
-Card_Name_3210,Collapse Slash,붕괴 베기,崩壊斬り
+Card_Name_3210,Ground Slam,지면 강타,地面強打
 Card_Name_3211,Tempest Slash,폭풍 베기,嵐斬り
 Card_Name_3400,Undying Resolve,불멸의 결의,不滅の決意
 Card_Name_4000,Manifestation,이상실현,理想顕現
@@ -134,7 +134,7 @@ Card_Text_1003,"{0} damage to two enemies \nWhen card is used in this turn\nDMG 
 Card_Text_1004,"Sophia loses {0} HP\n{1} damage to all enemies\n <color=#00ffffff><link=""Freeze"">[Freeze]</link></color> +{2}\n <color=yellow><link=""Switch"">Switch</link></color> : [Insight]","소피아 체력 -{0}\n적 전체에게 피해 {1}\n <color=#00ffffff><link=""Freeze"">[빙결]</link></color> +{2}\n <color=yellow><link=""Switch"">전환</link></color> : [통찰]","ソフィアのHP -{0}\n敵全体に {2}ダメージ\n <color=#00ffffff><link=""Freeze"">[凍結]</link></color> +{2}\n <color=yellow><link=""Switch"">転換</link></color> : [洞察]"
 Card_Text_1005,All allies gain +{0} DEF\n*When used after [Insight]*\nDEF +{1},아군 전체 방어력 +{0}\n*[통찰] 발동 직후일 경우*\n방어력 +{1},味方全員の防御力 +{0}\n*[洞察]発動直後なら*\n防御力 +{1}
 Card_Text_1006,Next card cost -{0}\nATK -1 for this turn\n*If Potential is {1} or higher*\ncost -{2} instead,다음 카드 비용 -{0}\n이번 턴 공격력 -{1}\n*포텐셜이 {2} 이상일 경우*\n비용 -{3},次のカードのコスト -{0}\nこのターンの攻撃力 -{1}\n*ポテンシャルが {2}以上の時*\nコスト -{3}
-Card_Text_1007,"Restore {0} HP for all allies\n <color=yellow><link=""Switch"">Switch</link></color> : [Explore]","아군 체력 {0} 회복\n<color=yellow><link=""Switch"">전환</link></color> : [탐구]","味方全員のHPを {0}回復\n<color=yellow><link=""Switch"">転換</link></color> : [探求]"
+Card_Text_1007,"Restore {0} HP for Sophia\n <color=yellow><link=""Switch"">Switch</link></color> : [Explore]","소피아 체력 {0} 회복 <color=yellow><link=""Switch"">[전환]</link></color> : [탐구]","ソフィアのHPを {0}回復\n<color=yellow><link=""Switch"">転換</link></color> : [探求]"
 Card_Text_1008,"{0} damage to all enemies\n*If used after stance activation*\nDMG +{3}%\nFire/Freeze card in this turn\ngets DMG +{2}\n<color=green><link=""Active"">[Active]</link></color> +{1}","적 전체에게 피해 {0}\n*스탠스 발동 직후일 경우*\n피해 +{3}%\n이번 턴에 화염/빙결 카드를\n사용 시 피해 +{2}\n<color=green><link=""Active"">[활성]</link></color> +{1}","敵全体に {0}ダメージ\n*スタンス発動直後なら*\nダメージ +{3}%\nこのターンに使う火炎/凍結カードの\nダメージ +{2}\n<color=green><link=""Active"">[活性]</link></color> +{1}"
 Card_Text_1009,"{0} damage to an enemy\n<color=green><link=""Active"">[Active]</link></color> +{1}\n<color=yellow><link=""Switch"">Switch</link></color> : Random","적 하나에게 피해 {0}\n<color=green><link=""Active"">[활성]</link></color> +{1}\n<color=yellow><link=""Switch"">전환</link></color> : 무작위","敵に {0}ダメージ\n<color=green><link=""Active"">[活性]</link></color> +{1}\n<color=yellow><link=""Switch"">転換</link></color> : ランダム"
 Card_Text_1010,Draw {0} card and\nreduce its cost by {1}\n*When in [Explore]*\ndraw {2} cards instead,카드 {0}장 드로우 및\n해당 카드의 비용 -{1}\n*[탐구]일 때*카드 {2}장 드로우,カードを {0}枚ドローし\nそのカードのコスト -{1}\n*[探求]の時*\nカードを{2}枚ドロー
