@@ -14,14 +14,13 @@ public static class EnemyPattern
     // StanceType 개수 (한 번만 계산)
     private static readonly int stanceCount =
         System.Enum.GetValues(typeof(StancType)).Length;
-    
-    
+
+
     /// <summary>
     /// 외부에서 호출되는 메인 메서드 - 적이 턴에 행동을 수행함
     /// </summary>
     public static IEnumerator ExecutePattern(IStatusReceiver enemy)
     {
-        // 받은 친구가 Enemy 타입인지 확인
         if (enemy is not Enemy enemyComponent)
         {
             Debug.LogError("[EnemyPattern] 전달된 IStatusReceiver는 Enemy가 아닙니다.");
@@ -29,21 +28,15 @@ public static class EnemyPattern
         }
 
         if (enemyComponent.IsStunned())
-        {
-            //Debug.Log($"[Stun] {enemyComponent.enemyData.EnemyName}은 스턴 상태로 행동 불가");
             yield break;
-        }
 
-        // 1. 사용할 스킬 선택
         var skill = ChooseSkill(enemyComponent);
-
         if (skill == null)
         {
-           Debug.LogWarning($"[EnemyPattern] {enemyComponent.enemyData.EnemyName}의 스킬 데이터 없음.");
+            Debug.LogWarning($"[EnemyPattern] {enemyComponent.enemyData.EnemyName}의 스킬 데이터 없음.");
             yield break;
         }
 
-        // 2. 스킬 데이터 가져오기 
         var actData = DataManager.Instance.EnemyActDict[skill.skillIndex];
         if (actData == null)
         {
@@ -51,121 +44,117 @@ public static class EnemyPattern
             yield break;
         }
 
-        // 3. 타겟 선택
         var targets = ChooseTargetsFromActData(actData, enemyComponent);
+        if (targets == null || targets.Count == 0)
+            yield break;
+
         yield return new WaitForSeconds(0.3f);
 
         var lowestSkill = enemyComponent.enemyData.SkillList
             .OrderBy(s => s.skillIndex)
-            .FirstOrDefault();        // 4. 타겟에게 데미지 및 추가 효과 적용
+            .FirstOrDefault();
+
+        if (lowestSkill == null || lowestSkill.skillIndex == 0)
+        {
+            Debug.LogWarning("[EnemyPattern] lowestSkill 계산 실패");
+            yield break;
+        }
 
         int attackType = skill.skillIndex % lowestSkill.skillIndex;
-        enemyComponent.PlayAttackAnimation(attackType);
-        yield return new WaitForSeconds(0.3f);
 
-        // 5. 스킬 효과 적용
-        foreach (var t in targets)
+        bool hitTriggered = false;
+
+        enemyComponent.PlayAttackAnimation(attackType, () =>
         {
-            // 1. 피격 애니메이션 재생
-            t.PlayHitAnimation();
-            yield return new WaitForSeconds(0.2f);
+            if (hitTriggered)
+                return;
 
-            // 대상이 플레이어면 공격 이펙트 사용
-            string effectname = (t.ChClass == CharacterClass.Enemy) ? enemyComponent.enemyData.AllySkillEffect : enemyComponent.enemyData.AttackSkillEffect; 
-            
-            // 2. 스킬 이펙트 재생
-            if (!string.IsNullOrEmpty(effectname))
+            hitTriggered = true;
+
+            foreach (var t in targets)
             {
-                // 에너미 스킬 행동 시 사운드 출력
+                if (t == null || !t.IsAlive())
+                    continue;
+
+                string effectname = (t.ChClass == CharacterClass.Enemy)
+                    ? enemyComponent.enemyData.AllySkillEffect
+                    : enemyComponent.enemyData.AttackSkillEffect;
+
+                // 이펙트가 없는 경우에도 데미지/상태이상은 들어가게
+                if (string.IsNullOrEmpty(effectname))
+                {
+                    if (t.IsAlive())
+                        t.PlayHitAnimation();
+
+                    ApplyDamageAndStatus(enemyComponent, t, skill, actData);
+                    continue;
+                }
+
                 if (t == enemy)
-                {
-                    SoundManager.Instance.PlaySFX(SoundCategory.Enemy, 0); // 디폴트값 (에너미 -> 에너미 스킬일경우)
-                }
+                    SoundManager.Instance.PlaySFX(SoundCategory.Enemy, 0);
                 else
-                {
                     SoundManager.Instance.PlaySFX(SoundCategory.Enemy, enemyComponent.enemyData.IDNum);
+
+                float scaleFactor = DetermineEffectScale(enemyComponent.enemyData.type);
+
+                if (!DataManager.Instance.CardEffects.TryGetValue(effectname, out var animInfo) || animInfo == null)
+                {
+                    if (t.IsAlive())
+                        t.PlayHitAnimation();
+
+                    ApplyDamageAndStatus(enemyComponent, t, skill, actData);
+                    continue;
                 }
 
-                Vector3 spawnPos = (t != null) ? t.CachedTransform.position : t.CachedTransform.position;
-
-                float scaleFactor = DetermineEffectScale(enemyComponent.enemyData.type);   //애니메이션 타입 및 크기 탐색
-                EffectAnimation animInfo = null;
-                DataManager.Instance.CardEffects.TryGetValue(effectname, out animInfo);
-
-
-                // ──────── K.T.H 변경 ────────
-                if (animInfo != null && animInfo.animationType == AnimationType.Projectile)
+                if (animInfo.animationType == AnimationType.Projectile)
                 {
-                    // Projectile → 도착 후 Hit
                     GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
                         effectname,
-                        enemyComponent.CachedTransform,
-                        t.CachedTransform,
+                        enemyComponent,
+                        t,
                         scaleFactor,
                         () =>
                         {
-                            t.PlayHitAnimation();
+                            if (t.IsAlive())
+                                t.PlayHitAnimation();
 
-                            if (t is PlayerController pc)
-                            {
-                                var stance = (StancType)enemyComponent.enemyData.currentStance;
-                                pc.TakeDamage(skill.damage);//todo 수정 필요
-                            }
-                            else
-                            {
-                                t.TakeDamage(skill.damage);
-                            }
-
-                            ApplyStatusEffect(t, actData);
-                            //Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (Projectile, 데미지 {skill.damage})");
+                            ApplyDamageAndStatus(enemyComponent, t, skill, actData);
                         }
                     );
                 }
                 else
                 {
-                    // 일반 이펙트 → 바로 적용
                     GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(
                         effectname,
-                        enemyComponent.CachedTransform,
-                        t.CachedTransform,
+                        enemyComponent,
+                        t,
                         true,
                         scaleFactor
                     );
 
-                    t.PlayHitAnimation();
+                    if (t.IsAlive())
+                        t.PlayHitAnimation();
 
-                    if (t is PlayerController pc)
-                    {
-                        var stance = (StancType)enemyComponent.enemyData.currentStance;
-                        float dmg = pc.TakeDamage(skill.damage);
-                    }
-                    else
-                    {
-                        float dmg = t.TakeDamage(skill.damage);
-                    }
-
-                    ApplyStatusEffect(t, actData);
-                    //Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (즉시Hit, 데미지 {skill.damage})");
-
-                    yield return new WaitForSeconds(0.3f); // 이펙트 딜레이
+                    ApplyDamageAndStatus(enemyComponent, t, skill, actData);
                 }
-
-
             }
-            // 6. 상태효과
-            ApplyStatusEffect(t, actData);
-            //t.TakeDamage(skill.damage);
-            //ApplyStatusEffect(t, actData);
-            // ───────────────────────
+        });
 
-            //Debug.Log($"[EnemyPattern] {enemyComponent.enemyData.EnemyName} → {t.ChClass}에게 스킬 {skill.skillIndex} 사용 (데미지 {skill.damage})");
+        // 실제 히트 프레임까지 기다림
+        yield return new WaitUntil(() => hitTriggered);
 
-            yield return new WaitForSeconds(0.3f); // 타격 연출용 대기
-            if(!t.IsAlive()&& t is MonoBehaviour mb && mb.gameObject.activeSelf)
+        // 투사체/피격 연출 마무리 대기
+        yield return new WaitForSeconds(0.6f);
+
+        foreach (var t in targets)
+        {
+            if (t == null)
+                continue;
+
+            if (!t.IsAlive() && t is MonoBehaviour mb && mb.gameObject.activeSelf)
             {
-                mb.gameObject.SetActive(false);
+                t.TryFinalizeDeath();
 
-                // 적일 경우 경험치 지급
                 if (t is Enemy e)
                 {
                     ProgressDataManager.Instance.CurrentExp += e.enemyData.exp;
@@ -173,7 +162,6 @@ public static class EnemyPattern
                 }
             }
         }
-
     }
 
     private static float DetermineEffectScale(EnemyType type)
@@ -250,6 +238,21 @@ public static class EnemyPattern
 
         return targets;
     }
+
+    private static void ApplyDamageAndStatus(Enemy enemyComponent, IStatusReceiver target, EnemySkill skill, EnemyAct actData)
+    {
+        if (target is PlayerController pc)
+        {
+            pc.TakeDamage(skill.damage);
+        }
+        else
+        {
+            target.TakeDamage(skill.damage);
+        }
+
+        ApplyStatusEffect(target, actData);
+    }
+
 
     private static EnemySkill ChooseSkill(Enemy enemy)
     {

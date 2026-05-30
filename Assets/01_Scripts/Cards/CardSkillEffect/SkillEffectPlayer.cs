@@ -1,58 +1,103 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
-/// <summary>
-/// Skill 이펙트 재생기 (Coroutine 기반, 부드러운 재생 + 자동 삭제)
-/// </summary>
 public class SkillEffectPlayer : MonoBehaviour
 {
     [Header("컴포넌트")]
     [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Animator animator;
+    [SerializeField] private RuntimeAnimatorController baseController;
 
     private Action onHitFrame;
     private bool hitTriggered;
     private EffectAnimation currentAnim;
+    private List<Sprite> frames;
 
-    private List<Sprite> frames;    // 재생할 스프라이트 리스트
-
-    /// <summary>
-    /// 이펙트를 설정하고 재생 시작
-    /// </summary>
-    /// <param name="animationFrames">애니메이션 정보 (스프라이트 리스트 포함)</param>
-    /// <param name="fps">전체 재생 시간 (초)</param>
-    public void Play(EffectAnimation animInfo, float totalDuration, bool flipX = false, Action onHitFrame = null)
+    public void Play(
+        EffectAnimation animInfo,
+        float totalDuration,
+        bool flipX = false,
+        Action onHitFrame = null)
     {
-        if (animInfo == null || animInfo.frames.Count == 0)
+        if (animInfo == null)
         {
-            Debug.LogWarning("[SkillEffectPlayer] 재생할 스프라이트가 없습니다.");
             Destroy(gameObject);
             return;
         }
-        currentAnim = animInfo;
-        frames = animInfo.frames;
-        spriteRenderer.flipX = flipX; // ← 방향 반영
 
-        this.onHitFrame = onHitFrame;   
+        if (spriteRenderer != null)
+            spriteRenderer.flipX = flipX;
+
+        currentAnim = animInfo;
+        this.onHitFrame = onHitFrame;
         hitTriggered = false;
 
-        StartCoroutine(PlayCoroutine(totalDuration));
+        if (animInfo.playMode == EffectPlayMode.AnimationClip && animInfo.animationClip != null)
+        {
+            PlayAnimatorClip(animInfo, onHitFrame);
+            return;
+        }
+
+        if (animInfo.frames == null || animInfo.frames.Count == 0)
+        {
+            Debug.LogWarning("[SkillEffectPlayer] 재생할 스프라이트/클립이 없습니다.");
+            Destroy(gameObject);
+            return;
+        }
+
+        frames = animInfo.frames;
+        StartCoroutine(PlaySpriteCoroutine(totalDuration));
     }
 
-    /// <summary>
-    /// 코루틴으로 프레임마다 자연스럽게 스프라이트 교체
-    /// </summary>
-    private IEnumerator PlayCoroutine(float totalDuration)
+    private void PlayAnimatorClip(EffectAnimation animInfo, Action onHitFrame)
+    {
+        if (animator == null)
+            animator = GetComponent<Animator>();
+
+        if (animator == null)
+        {
+            Debug.LogError("[SkillEffectPlayer] Animator가 없습니다.");
+            Destroy(gameObject);
+            return;
+        }
+
+        if (baseController == null)
+        {
+            Debug.LogError("[SkillEffectPlayer] Base Controller가 없습니다.");
+            Destroy(gameObject);
+            return;
+        }
+        Debug.Log($"[Effect] BaseController: {baseController}");
+        Debug.Log($"[Effect] Override Clip: {animInfo.animationClip}");
+
+        AnimatorOverrideController overrideController =
+            new AnimatorOverrideController(baseController);
+
+        overrideController["BaseEffect"] = animInfo.animationClip;
+
+        animator.runtimeAnimatorController = overrideController;
+
+        Debug.Log($"[Effect] Runtime Controller: {animator.runtimeAnimatorController}");
+
+        animator.Play("Play", 0, 0f);
+
+        if (animInfo.clipHitTime >= 0f && onHitFrame != null)
+            StartCoroutine(CallHitAfter(animInfo.clipHitTime, onHitFrame));
+
+        Destroy(gameObject, animInfo.animationClip.length);
+    }
+
+    private IEnumerator PlaySpriteCoroutine(float totalDuration)
     {
         int frameCount = frames.Count;
         float frameDelay = totalDuration / frameCount;
 
-
         for (int i = 0; i < frameCount; i++)
         {
             spriteRenderer.sprite = frames[i];
-            
+
             if (!hitTriggered && currentAnim.hitFrame >= 0 && i >= currentAnim.hitFrame)
             {
                 hitTriggered = true;
@@ -62,6 +107,12 @@ public class SkillEffectPlayer : MonoBehaviour
             yield return new WaitForSeconds(frameDelay);
         }
 
-        Destroy(gameObject); // 마지막 프레임 이후 삭제
+        Destroy(gameObject);
+    }
+
+    private IEnumerator CallHitAfter(float delay, Action callback)
+    {
+        yield return new WaitForSeconds(delay);
+        callback?.Invoke();
     }
 }

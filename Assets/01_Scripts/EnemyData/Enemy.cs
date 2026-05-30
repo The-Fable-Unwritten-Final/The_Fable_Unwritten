@@ -13,6 +13,11 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     public bool hasResist { get; set; } = false;
     private bool isTargetable;
 
+    private bool isDead = false;
+    private bool isDeathPending = false;
+
+    public bool IsDeathPending => isDeathPending;
+
     public bool IsTargetable
     {
         get => isTargetable;
@@ -26,6 +31,20 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         }
     }
 
+    [SerializeField] private Transform footpoint;
+    [SerializeField] private Transform bodypoint;
+    [SerializeField] private Transform headpoint;
+    [SerializeField] private Transform overheadpoint;
+    [SerializeField] private Transform aheadpoint;
+
+    public Transform FootPoint => footpoint;
+    public Transform BodyPoint => bodypoint;
+    public Transform HeadPoint => headpoint;
+    public Transform OverheadPoint => overheadpoint;
+
+    public Transform AheadPoint => aheadpoint;
+
+
     public event System.Action OnTargetableChanged;
 
     [SerializeField] private HpBarDisplay hpBarDisplay;
@@ -35,6 +54,11 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public SpriteRenderer spriteRenderer;
     public Animator animator;
+
+    private Action currentAttackHitCallback;
+    private Coroutine resetAttackRoutine;
+
+
     private Sequence hitShakeSequence;
     private StatusDisplay statusDisplay;
 
@@ -111,6 +135,9 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
             rt.localScale = s;
         }
+
+        isDead = false;
+        isDeathPending = false;
     }
 
     public void ChangeStance(StancType stance)
@@ -528,6 +555,11 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     {
         damage = StyleManager.Instance.GetDamageGiveModify(this, this, BattleLogManager.Instance.card, damage);
         currentHP = Mathf.Max(0, currentHP - damage);
+        
+        if (!IsAlive())
+        {
+            isDeathPending = true;
+        }
     }
 
     public float TakeDamage(float amount)
@@ -542,6 +574,12 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         reduced = Mathf.Max(reduced, 0);
 
         currentHP = Mathf.Max(0, currentHP - reduced);
+
+        if(!IsAlive())
+        {
+            isDeathPending = true;
+        }
+        
         return reduced;
     }
 
@@ -593,18 +631,31 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public void PlayAttackAnimation(int attackType, Action onHitTiming = null)
     {
-        if (animator != null)
-        {
-            animator.SetInteger("Attack", attackType);
-            GameManager.Instance.StartCoroutine(ResetAttackParam(1.5f));
-        }
+        if (animator == null)
+            return;
+
+        currentAttackHitCallback = onHitTiming;
+
+        animator.SetInteger("Attack", attackType);
+
+        if (resetAttackRoutine != null)
+            StopCoroutine(resetAttackRoutine);
+
+        resetAttackRoutine = StartCoroutine(ResetAttackParam(1.5f));
     }
 
     private IEnumerator ResetAttackParam(float delay)
     {
         yield return new WaitForSeconds(delay);
-        if (animator != null)
-            animator.SetInteger("Attack", -1);
+        animator.SetInteger("Attack", -1);
+        currentAttackHitCallback = null;
+        resetAttackRoutine = null;
+    }
+
+    public void OnAttackHitEvent()
+    {
+        currentAttackHitCallback?.Invoke();
+        currentAttackHitCallback = null;
     }
 
     public void PlayHitAnimation()
@@ -644,5 +695,19 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     public float GetBuffDef()
     {
         return ModifyStat(BuffStatType.Defense, 0f);
+    }
+
+    public void TryFinalizeDeath()
+    {
+
+        if (!isDeathPending || isDead) return;
+
+        isDead = true;
+        isDeathPending = false;
+
+        GameManager.Instance.combatCameraController.CameraPunchHard();
+
+        gameObject.SetActive(false);
+
     }
 }

@@ -7,6 +7,7 @@ using UnityEngine.U2D;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 public class EffectAnimationGenerator
 {
@@ -31,46 +32,101 @@ public class EffectAnimationGenerator
         {
             string animName = Path.GetFileName(animFolder);
             string[] pngFiles = Directory.GetFiles(animFolder, "*.png", SearchOption.TopDirectoryOnly);
-            if (pngFiles.Length == 0) continue;
+
+            if (pngFiles.Length == 0)
+                continue;
 
             List<Sprite> sprites = new();
 
-            foreach (var path in pngFiles)
+            foreach (var filePath in pngFiles)
             {
-                string assetPath = path.Replace(Application.dataPath, "Assets");
+                string assetPath = filePath.Replace("\\", "/");
 
                 var importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
-                if (importer != null)
+                if (importer == null)
+                    continue;
+
+                // 공통 설정
+                bool changed = false;
+
+                if (importer.textureType != TextureImporterType.Sprite)
                 {
                     importer.textureType = TextureImporterType.Sprite;
-                    importer.spriteImportMode = SpriteImportMode.Single;
-                    importer.filterMode = FilterMode.Point;
-                    importer.spritePixelsPerUnit = 100;
-                    importer.mipmapEnabled = false;
-                    importer.textureCompression = TextureImporterCompression.Uncompressed;
-                    importer.SaveAndReimport();
+                    changed = true;
                 }
 
-                var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
-                if (sprite != null)
-                    sprites.Add(sprite);
+                if (importer.filterMode != FilterMode.Point)
+                {
+                    importer.filterMode = FilterMode.Point;
+                    changed = true;
+                }
+
+                if (importer.spritePixelsPerUnit != 100)
+                {
+                    importer.spritePixelsPerUnit = 100;
+                    changed = true;
+                }
+
+                if (importer.mipmapEnabled)
+                {
+                    importer.mipmapEnabled = false;
+                    changed = true;
+                }
+
+                if (importer.textureCompression != TextureImporterCompression.Uncompressed)
+                {
+                    importer.textureCompression = TextureImporterCompression.Uncompressed;
+                    changed = true;
+                }
+
+                if (changed)
+                    importer.SaveAndReimport();
+
+                // 여기서 Single / Multiple 구분 처리
+                if (importer.spriteImportMode == SpriteImportMode.Multiple)
+                {
+                    Object[] assets = AssetDatabase.LoadAllAssetsAtPath(assetPath);
+
+                    foreach (var asset in assets)
+                    {
+                        if (asset is Sprite sprite)
+                            sprites.Add(sprite);
+                    }
+                }
+                else
+                {
+                    var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
+                    if (sprite != null)
+                        sprites.Add(sprite);
+                }
             }
 
-            if (sprites.Count == 0) continue;
+            if (sprites.Count == 0)
+                continue;
 
-            sprites = sprites.OrderBy(s => s.name).ToList();
+            // 이름 기준 정렬
+            sprites = sprites
+                .OrderBy(s => GetTrailingNumber(s.name))
+                .ThenBy(s => s.name, System.StringComparer.Ordinal)
+                .ToList();
 
-            // EffectAnimation 생성
+            string savePath = $"{animationSavePath}{animName}.asset".Replace("\\", "/");
+
+            // 기존 애니메이션 에셋이 있으면 삭제
+            var oldAnim = AssetDatabase.LoadAssetAtPath<EffectAnimation>(savePath);
+            if (oldAnim != null)
+                AssetDatabase.DeleteAsset(savePath);
+
             var animAsset = ScriptableObject.CreateInstance<EffectAnimation>();
             animAsset.animationName = animName;
             animAsset.frames = sprites;
-            animAsset.animationType = AnimationType.OnTarget; // 기본값, 나중에 변경 가능
-            string savePath = $"{animationSavePath}{animName}.asset";
+            animAsset.animationType = AnimationType.OnTarget;
+
             AssetDatabase.CreateAsset(animAsset, savePath);
             db.allAnimations.Add(animAsset);
 
             Debug.Log($"[EffectAnimation] 생성 완료: {animName} ({sprites.Count} frames)");
-        }    
+        }
 
         if (!Directory.Exists("Assets/Resources"))
             Directory.CreateDirectory("Assets/Resources");
@@ -80,6 +136,14 @@ public class EffectAnimationGenerator
         AssetDatabase.Refresh();
 
         Debug.Log($"[완료] EffectAnimationDatabase 생성: 총 {db.allAnimations.Count}개 등록됨");
+    }
+    private static int GetTrailingNumber(string name)
+    {
+        var match = Regex.Match(name, @"(\d+)$");
+        if (match.Success && int.TryParse(match.Value, out int number))
+            return number;
+
+        return int.MaxValue;
     }
 }
 #endif

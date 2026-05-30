@@ -10,7 +10,11 @@ public class SelfDamageEffect : CardEffectBase
     public float amount;    //자해량
     public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
-        caster.TakeTrueDamage(amount);  //시전자에게 트루데미지
+        if (caster == null) return;
+
+        float damage = Mathf.Min(amount, caster.currentHP - 1);
+        caster.TakeTrueDamage(damage);
+
     }
 
     public override string GetDescription()

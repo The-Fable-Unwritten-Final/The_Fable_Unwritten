@@ -9,56 +9,58 @@ public class EffectManager : MonoBehaviour
     [SerializeField] private Transform effectRoot;
 
     public void PlayEffect(
-        string effectName,
-        Transform caster,
-        Transform target,
-        bool flipX = false,
-        float scaleFactor = 1f,
-        System.Action onHitFrame = null)
+       string effectName,
+       IStatusReceiver caster,
+       IStatusReceiver target,
+       bool flipX = false,
+       float scaleFactor = 1f,
+       System.Action onHitFrame = null)
     {
-        if (!DataManager.Instance.CardEffects.TryGetValue(effectName, out var animInfo) || animInfo == null || animInfo.frames == null)
-        {
-            Debug.LogWarning($"[EffectManager] 이펙트 {effectName}를 찾지 못했거나 스프라이트 없음.");
+        if (!TryGetEffect(effectName, out EffectAnimation animInfo))
             return;
-        }
 
         switch (animInfo.animationType)
         {
             case AnimationType.Projectile:
-                StartCoroutine(PlayProjectileCoroutine(caster, target, animInfo, scaleFactor, onHitFrame));
+                StartCoroutine(PlayProjectileCoroutine(
+                    caster,
+                    target,
+                    animInfo,
+                    scaleFactor,
+                    onHitFrame));
                 break;
 
             case AnimationType.OnBottomTarget:
-                Vector3 bottomPos = GetBottomPosition(target);
-                PlayOneShotEffect(animInfo, bottomPos, flipX, scaleFactor, onHitFrame, alignToBottom: true);
-                break;
-
             case AnimationType.OnTarget:
+            case AnimationType.OnHeadPoint:
+            case AnimationType.OnOverheadPoint:
+            case AnimationType.Looping:
+            case AnimationType.AOE:
             default:
-                PlayOneShotEffect(animInfo, target.position, flipX, scaleFactor, onHitFrame);
+                Vector3 position = GetEffectPosition(target, animInfo.animationType);
+                PlayOneShotEffect(
+                    animInfo,
+                    position,
+                    flipX,
+                    scaleFactor,
+                    onHitFrame);
                 break;
         }
     }
 
-    public void PlayOneShotEffect(
-        EffectAnimation animInfo,
-        Vector3 position,
-        bool flipX,
-        float scaleFactor,
-        System.Action onHitFrame = null,
-        bool alignToBottom = false)
+    private void PlayOneShotEffect(
+           EffectAnimation animInfo,
+           Vector3 position,
+           bool flipX,
+           float scaleFactor,
+           System.Action onHitFrame = null)
     {
-        var effectInstance = Instantiate(effectPrefab, position, Quaternion.identity, effectRoot);
+        SkillEffectPlayer effectInstance =
+            Instantiate(effectPrefab, position, Quaternion.identity, effectRoot);
+
         effectInstance.transform.localScale *= scaleFactor;
 
-        if (alignToBottom)
-        {
-            float baseHeight = animInfo.frames[0].bounds.size.y;
-            float spriteHeight = baseHeight * effectInstance.transform.localScale.y * scaleFactor / 2f;
-            effectInstance.transform.position += new Vector3(0, spriteHeight, 0);
-        }
-
-        var sr = effectInstance.GetComponent<SpriteRenderer>();
+        SpriteRenderer sr = effectInstance.GetComponent<SpriteRenderer>();
         if (sr != null)
         {
             sr.sortingLayerName = "Effect";
@@ -71,46 +73,53 @@ public class EffectManager : MonoBehaviour
 
     public void PlayProjectileEffect(
         string effectName,
-        Transform caster,
-        Transform target,
+        IStatusReceiver caster,
+        IStatusReceiver target,
         float scaleFactor,
         System.Action onHitFrame = null)
     {
-        if (!DataManager.Instance.CardEffects.TryGetValue(effectName, out var animInfo) || animInfo == null)
-        {
+        if (!TryGetEffect(effectName, out EffectAnimation animInfo))
             return;
-        }
 
-        StartCoroutine(PlayProjectileCoroutine(caster, target, animInfo, scaleFactor, onHitFrame));
+        StartCoroutine(PlayProjectileCoroutine(
+                    caster,
+                    target,
+                    animInfo,
+                    scaleFactor,
+                    onHitFrame));
     }
 
     private IEnumerator PlayProjectileCoroutine(
-        Transform caster,
-        Transform target,
+        IStatusReceiver caster,
+        IStatusReceiver target,
         EffectAnimation animInfo,
         float scaleFactor,
         System.Action onHitFrame = null)
     {
-        var projectile = Instantiate(effectPrefab, caster.position, Quaternion.identity, effectRoot);
+        Vector3 casterBody = GetEffectPosition(caster, AnimationType.OnTarget);
+        Vector3 targetBody = GetEffectPosition(target, AnimationType.OnTarget);
+
+        Vector3 direction = (targetBody - casterBody).normalized;
+
+        Vector3 start = casterBody;
+        Vector3 end = targetBody;
+
+        SkillEffectPlayer projectile =
+            Instantiate(effectPrefab, start, Quaternion.identity, effectRoot);
+
         projectile.transform.localScale *= scaleFactor;
 
-        var sr = projectile.GetComponent<SpriteRenderer>();
+        SpriteRenderer sr = projectile.GetComponent<SpriteRenderer>();
         if (sr != null)
         {
             sr.sortingLayerName = "Effect";
             sr.sortingOrder = 100;
         }
 
-        Vector3 end = target.position;
-        Vector3 direction = (end - caster.position).normalized;
-        Vector3 start = end - direction * 1.0f;
-
-        projectile.transform.position = start;
+        bool flipX = end.x < start.x;
 
         float duration = 0.5f;
         float elapsed = 0f;
-
-        bool flipX = target.position.x < caster.position.x;
 
         projectile.Play(animInfo, duration, flipX);
 
@@ -126,17 +135,46 @@ public class EffectManager : MonoBehaviour
         onHitFrame?.Invoke();
     }
 
-    public Vector3 GetBottomPosition(Transform target)
+    private bool TryGetEffect(string effectName, out EffectAnimation animInfo)
     {
-        Transform ground = target.Find("GroundPoint");
-        if (ground != null)
-            return ground.position;
+        animInfo = null;
 
-        if (target.TryGetComponent<SpriteRenderer>(out var sr))
+        if (!DataManager.Instance.CardEffects.TryGetValue(effectName, out animInfo) || animInfo == null)
         {
-            return new Vector3(sr.bounds.center.x, sr.bounds.min.y, target.position.z);
+            Debug.LogWarning($"[EffectManager] 이펙트 {effectName}를 찾지 못했습니다.");
+            return false;
         }
 
-        return target.position;
+        bool hasSpriteFrames = animInfo.frames != null && animInfo.frames.Count > 0;
+        bool hasAnimationClip = animInfo.animationClip != null;
+
+        if (!hasSpriteFrames && !hasAnimationClip)
+        {
+            Debug.LogWarning($"[EffectManager] 이펙트 {effectName}에 frames/animationClip이 없습니다.");
+            return false;
+        }
+
+        return true;
+    }
+
+    private Vector3 GetEffectPosition(IStatusReceiver target, AnimationType type)
+    {
+        if (target == null)
+            return Vector3.zero;
+
+        return type switch
+        {
+            AnimationType.OnBottomTarget => target.FootPoint.position,
+            AnimationType.OnTarget => target.BodyPoint.position,
+            AnimationType.OnHeadPoint => target.HeadPoint.position,
+            AnimationType.OnOverheadPoint => target.OverheadPoint.position,
+            AnimationType.OnAheadPoint => target.AheadPoint.position,
+
+            AnimationType.Projectile => target.BodyPoint.position,
+            AnimationType.Looping => target.BodyPoint.position,
+            AnimationType.AOE => target.BodyPoint.position,
+
+            _ => target.CachedTransform.position
+        };
     }
 }

@@ -1,6 +1,7 @@
 
-using UnityEngine;
 using System;
+using System.Net;
+using UnityEngine;
 
 /// <summary>
 /// 공통 enum(효과 타입, 캐릭터, 스킬 타입, 버프) 
@@ -87,8 +88,8 @@ public interface IStatusReceiver
     bool hasResist { get; set; }         //상태이상 디버프 저항 여부
     bool HasEffect(BuffStatType type);   //해당 버프/디버프 있는지 확인
     float GetEffectValue(BuffStatType type); //해당 버프/디버프 얼마나 있는지 확인
-
-
+    bool IsDeathPending { get; }
+    void TryFinalizeDeath();
 
     void ChangeStance(StancType stance);
 
@@ -104,6 +105,13 @@ public interface IStatusReceiver
     bool IsTargetable { get; set; }                     // 타겟 가능 여부
     event Action OnTargetableChanged;       // 타겟 가능 여부 변경 이벤트
     public DmgBarQueueHandler dmgTextQueue { get; }
+
+    public Transform FootPoint { get; }
+    public Transform BodyPoint { get; }
+    public Transform HeadPoint { get; }
+    public Transform OverheadPoint { get; }
+    public Transform AheadPoint { get; }
+
 }
 
 public static class StatusReceiverExtentions

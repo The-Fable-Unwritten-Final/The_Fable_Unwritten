@@ -32,6 +32,24 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     // Guard 관련 (레온)
     private bool guardRedirectPending = false;
 
+    private bool isDead = false;
+    private bool isDeathPending = false;
+
+    public bool IsDeathPending => isDeathPending;
+
+
+    [SerializeField] private Transform footpoint;
+    [SerializeField] private Transform bodypoint;
+    [SerializeField] private Transform headpoint;
+    [SerializeField] private Transform overheadpoint;
+    [SerializeField] private Transform aheadpoint;
+
+    public Transform FootPoint => footpoint;
+    public Transform BodyPoint => bodypoint;
+    public Transform HeadPoint => headpoint;
+    public Transform OverheadPoint => overheadpoint;
+    public Transform AheadPoint => aheadpoint;
+
     private bool IsOpponentActingTurn()
     {
         var flow = GameManager.Instance?.turnController?.battleFlow;
@@ -235,6 +253,11 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         this.dmgTextQueue.InitPrint(dmg);
 
         playerData.currentHP = Mathf.Max(0, playerData.currentHP - damage);
+
+        if (!IsAlive())
+        {
+            isDeathPending = true;
+        }
     }
 
     public void BindHpBar(HpBarDisplay bar)
@@ -246,6 +269,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     public void ApplyStatusEffect(StatusEffect effect)
     {
+        Debug.Log($"call {effect.statType}, {effect.value}");
         if (effect == null) return;
 
         // 디버프 저항
@@ -411,8 +435,15 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         reduced = Mathf.Round(reduced);
 
         playerData.currentHP = Mathf.Max(0, playerData.currentHP - reduced);
+
+        if(!IsAlive())
+        {
+            isDeathPending = true;
+        }
+
         return reduced;
     }
+
 
     /// <summary>
     /// 체력 회복 (grace 수치 만큼 추가)
@@ -535,7 +566,12 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         deckModel.Initialize(data.currentDeck);
 
         if (!IsAlive())
+        {
+            isDead = false;
+            isDeathPending = false;
             playerData.ReviveIfDead();
+        }
+
 
         if (hpBarDisplay != null)
             hpBarDisplay.BindPlayerData(playerData);
@@ -544,6 +580,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             stanceEffectData = new StanceEffectData();
 
         InitializeStanceSystem();
+
+
     }
 
     //──────── K.T.H 변경 ────────
@@ -620,6 +658,30 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             StopCoroutine(resetAttackRoutine);
 
         resetAttackRoutine = StartCoroutine(ResetAttackParam(1.5f));
+    }
+
+    public void PlayAttackAnimation(int cardIndex, CardType cardType, Action onHitTiming = null)
+    {
+        int fallbackAttackType = ((int)cardType) % 3;
+        int finalAttackType = HasAttackAnimation(cardIndex) ? cardIndex : fallbackAttackType;
+
+        PlayAttackAnimation(finalAttackType, onHitTiming);
+    }
+
+    private bool HasAttackAnimation(int attackType)
+    {
+        if (animator == null || animator.runtimeAnimatorController == null)
+            return false;
+
+        string clipName = $"{attackType}";
+
+        foreach (var clip in animator.runtimeAnimatorController.animationClips)
+        {
+            if (clip != null && clip.name == clipName)
+                return true;
+        }
+
+        return false;
     }
 
     private IEnumerator ResetAttackParam(float delay)
@@ -718,6 +780,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     public void ShowStatusUI()
     {
+        if (isDead || isDeathPending) return;
+
         if (statusDisplay != null)
             statusDisplay.gameObject.SetActive(true);
     }
@@ -1163,4 +1227,16 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         return bonus;
     }
 
+    public void TryFinalizeDeath()
+    {
+
+        if (!isDeathPending || isDead) return;
+
+        isDead = true;
+        isDeathPending = false;
+
+        GameManager.Instance.combatCameraController.CameraPunchHard();
+
+        gameObject.SetActive(false);
+    }
 }

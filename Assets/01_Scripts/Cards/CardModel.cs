@@ -85,6 +85,7 @@ public class CardModel : ScriptableObject
 
         GameManager.Instance.StartCoroutine(PlayWithAnimation(caster, targets, originalEnhanced, attackType));
     }
+
     private IEnumerator PlayWithAnimation(IStatusReceiver caster, List<IStatusReceiver> targets, bool fixedIsEnhanced, int attackType)
     {
         GameManager.Instance.turnController.Onaction();
@@ -107,7 +108,8 @@ public class CardModel : ScriptableObject
 
         bool hitTriggered = false;
 
-        caster.PlayAttackAnimation(attackType, () =>
+        var cast = caster.AsPlayer();
+        cast.PlayAttackAnimation(attackType, type,() =>
         {
             if (hitTriggered) return;
             hitTriggered = true;
@@ -125,8 +127,8 @@ public class CardModel : ScriptableObject
                     {
                         GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
                             skillEffectName,
-                            caster.CachedTransform,
-                            t.CachedTransform,
+                            caster,
+                            t,
                             scaleFactor,
                             () =>
                             {
@@ -142,8 +144,8 @@ public class CardModel : ScriptableObject
                     {
                         GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(
                             skillEffectName,
-                            caster.CachedTransform,
-                            t.CachedTransform,
+                            caster,
+                            t,
                             false,
                             scaleFactor
                         );
@@ -174,14 +176,6 @@ public class CardModel : ScriptableObject
         yield return new WaitUntil(() => hitTriggered);
         yield return new WaitForSeconds(0.9f);
 
-        foreach (var target in targets)
-        {
-            if (!target.IsAlive() && target is MonoBehaviour mb && mb.gameObject.activeSelf)
-            {
-                mb.gameObject.SetActive(false);
-            }
-        }
-
         GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
 
         GameManager.Instance.turnController.OffAction();
@@ -193,6 +187,11 @@ public class CardModel : ScriptableObject
         {
             if (ch is PlayerController pc && !targets.Contains(pc) && pc != caster)
                 pc.ShowStatusUI();
+        }
+
+        foreach(var ch in allCharacters)
+        {
+            ch.TryFinalizeDeath();
         }
     }
 
