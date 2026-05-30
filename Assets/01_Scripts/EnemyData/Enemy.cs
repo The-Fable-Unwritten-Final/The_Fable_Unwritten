@@ -31,6 +31,20 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         }
     }
 
+    [SerializeField] private Transform footpoint;
+    [SerializeField] private Transform bodypoint;
+    [SerializeField] private Transform headpoint;
+    [SerializeField] private Transform overheadpoint;
+    [SerializeField] private Transform aheadpoint;
+
+    public Transform FootPoint => footpoint;
+    public Transform BodyPoint => bodypoint;
+    public Transform HeadPoint => headpoint;
+    public Transform OverheadPoint => overheadpoint;
+
+    public Transform AheadPoint => aheadpoint;
+
+
     public event System.Action OnTargetableChanged;
 
     [SerializeField] private HpBarDisplay hpBarDisplay;

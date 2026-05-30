@@ -1,6 +1,7 @@
 
-using UnityEngine;
 using System;
+using System.Net;
+using UnityEngine;
 
 /// <summary>
 /// 공통 enum(효과 타입, 캐릭터, 스킬 타입, 버프) 
@@ -104,6 +105,13 @@ public interface IStatusReceiver
     bool IsTargetable { get; set; }                     // 타겟 가능 여부
     event Action OnTargetableChanged;       // 타겟 가능 여부 변경 이벤트
     public DmgBarQueueHandler dmgTextQueue { get; }
+
+    public Transform FootPoint { get; }
+    public Transform BodyPoint { get; }
+    public Transform HeadPoint { get; }
+    public Transform OverheadPoint { get; }
+    public Transform AheadPoint { get; }
+
 }
 
 public static class StatusReceiverExtentions

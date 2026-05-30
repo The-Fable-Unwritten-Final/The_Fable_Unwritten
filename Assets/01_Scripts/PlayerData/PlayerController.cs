@@ -37,6 +37,19 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     public bool IsDeathPending => isDeathPending;
 
+
+    [SerializeField] private Transform footpoint;
+    [SerializeField] private Transform bodypoint;
+    [SerializeField] private Transform headpoint;
+    [SerializeField] private Transform overheadpoint;
+    [SerializeField] private Transform aheadpoint;
+
+    public Transform FootPoint => footpoint;
+    public Transform BodyPoint => bodypoint;
+    public Transform HeadPoint => headpoint;
+    public Transform OverheadPoint => overheadpoint;
+    public Transform AheadPoint => aheadpoint;
+
     private bool IsOpponentActingTurn()
     {
         var flow = GameManager.Instance?.turnController?.battleFlow;

@@ -127,8 +127,8 @@ public class CardModel : ScriptableObject
                     {
                         GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
                             skillEffectName,
-                            caster.CachedTransform,
-                            t.CachedTransform,
+                            caster,
+                            t,
                             scaleFactor,
                             () =>
                             {
@@ -144,8 +144,8 @@ public class CardModel : ScriptableObject
                     {
                         GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(
                             skillEffectName,
-                            caster.CachedTransform,
-                            t.CachedTransform,
+                            caster,
+                            t,
                             false,
                             scaleFactor
                         );

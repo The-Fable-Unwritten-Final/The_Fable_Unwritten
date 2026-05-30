@@ -110,8 +110,8 @@ public static class EnemyPattern
                 {
                     GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
                         effectname,
-                        enemyComponent.CachedTransform,
-                        t.CachedTransform,
+                        enemyComponent,
+                        t,
                         scaleFactor,
                         () =>
                         {
@@ -126,8 +126,8 @@ public static class EnemyPattern
                 {
                     GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(
                         effectname,
-                        enemyComponent.CachedTransform,
-                        t.CachedTransform,
+                        enemyComponent,
+                        t,
                         true,
                         scaleFactor
                     );
