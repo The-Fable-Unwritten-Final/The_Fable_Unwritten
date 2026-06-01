@@ -118,7 +118,6 @@ public class CardModel : ScriptableObject
             {
                 foreach (var t in targets)
                 {
-                    float scaleFactor = DetermineEffectScale(GetEffectiveCost());
 
                     if (!DataManager.Instance.CardEffects.TryGetValue(skillEffectName, out var animInfo))
                         continue;
@@ -129,7 +128,7 @@ public class CardModel : ScriptableObject
                             skillEffectName,
                             caster,
                             t,
-                            scaleFactor,
+                            1,
                             () =>
                             {
                                 if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
@@ -147,7 +146,7 @@ public class CardModel : ScriptableObject
                             caster,
                             t,
                             false,
-                            scaleFactor
+                            1
                         );
 
                         if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
