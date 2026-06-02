@@ -100,6 +100,7 @@ public class UI_RandomEvent : MonoBehaviour
         var customEffect = descriptionTxt.GetComponent<TMPCustomEffect>();
         if (customEffect != null)
         {
+            customEffect.Reset();
             customEffect.SetGradientText(LocaleDataManager.GetLocalizedRandomEvent(currentData.description));
         }
         else
@@ -237,6 +238,7 @@ public class UI_RandomEvent : MonoBehaviour
         var customEffect = descriptionTxt.GetComponent<TMPCustomEffect>();
         if (customEffect != null)
         {
+            customEffect.Reset();
             customEffect.SetGradientText(resultDescription);
         }
         else

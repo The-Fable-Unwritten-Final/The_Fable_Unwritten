@@ -7,6 +7,13 @@ public class TMPCustomEffect : MonoBehaviour
 {
     public TMP_Text text;
 
+    public void Reset()
+    {
+        StopAllCoroutines();
+        text.text = "";
+        text.ForceMeshUpdate();
+    }
+
     public void SetGradientText(string t)
     {
         string raw = t;
