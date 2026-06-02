@@ -83,6 +83,7 @@ public class CombatCameraController : MonoBehaviour
 
         if (caster is PlayerController player) // 시전자가 플레이어 진영
         {
+            /*
             Vector3 playerPos = player.transform.position; // 플레이어 위치 저장
             Vector3 targetPos = playerGoPos; // 플레이어를 이동시킬 위치
 
@@ -96,6 +97,7 @@ public class CombatCameraController : MonoBehaviour
             {
                 CameraZoomInAction(time,false);// 카메라 줌인(플레이어 방향)
             }
+            */ //카메라 액션 비활성화
 
             //0.3초동안 전투배경 alpha값 페이드인
             combatBackgroundMaterial.DOFade(1f, combatTransitionTime); // 알파 1로
@@ -112,9 +114,11 @@ public class CombatCameraController : MonoBehaviour
 
             yield return new WaitForSeconds(time);
 
+            /*
             if (target[0] is Enemy)
                 player.transform.DOMove(playerPos, combatTransitionTime); // 플레이어 원래 위치로 이동
-
+            */ //카메라 액션 비활성화
+            
             //0.2초동안 전투배경 alpha값 페이드 아웃 + 페이드 아웃에 맞춰 sortingOrder 조정
             combatBackgroundMaterial
                 .DOFade(0f, combatTransitionTime) // 알파 0으로
