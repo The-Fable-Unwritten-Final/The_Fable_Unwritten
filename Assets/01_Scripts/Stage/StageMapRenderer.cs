@@ -370,7 +370,7 @@ public class StageMapRenderer : MonoBehaviour
             bool isCompletePath = isVisitedFrom && isVisitedTo;
 
             Color lineColor = line.color;
-            lineColor.a = isCompletePath ? 1f : 0.66f;
+            lineColor.a = isCompletePath ? 1f : 0.4f;
             line.color = lineColor;
         }
 
@@ -525,7 +525,7 @@ public class StageMapRenderer : MonoBehaviour
                 lineRenderer.Points = filledPoints;
                 
                 // 색상 설정 744E19
-                Color lineColor = new Color(0.455f, 0.306f, 0.098f);
+                Color lineColor = new Color(0.302f, 0.199f, 0.055f);
                 lineRenderer.color = lineColor;
             }
 
