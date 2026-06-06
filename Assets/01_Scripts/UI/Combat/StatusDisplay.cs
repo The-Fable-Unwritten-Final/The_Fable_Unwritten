@@ -92,7 +92,12 @@ public class StatusDisplay : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            slots[i].bind(entries[i].icon, entries[i].value, entries[i].hideNumber);
+            slots[i].Bind(
+                entries[i].type.ToString(),
+                entries[i].icon,
+                entries[i].value,
+                hideNumber: entries[i].hideNumber
+            );
         }
     }
 
