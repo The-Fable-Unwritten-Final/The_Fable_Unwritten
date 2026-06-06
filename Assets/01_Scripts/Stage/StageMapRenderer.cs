@@ -83,6 +83,7 @@ public class StageMapRenderer : MonoBehaviour
                 if(node.type == NodeType.Boss)
                 {
                     rt.anchoredPosition = new Vector2(BossNodeXPos, rt.anchoredPosition.y); // 보스 노드 위치 조정
+                    go.GetComponent<Button>().image.color = new Color(42f/255f, 23f/255f, 7f/255f); // 2A1707 색상
                 }
             }
         }
@@ -330,17 +331,25 @@ public class StageMapRenderer : MonoBehaviour
             {
                 btn.enabled = true;
                 btn.interactable = true;
-                btn.image.color = Color.white;
+                // 보스 노드는 색상 변경 안 함 (Render에서 설정한 2A1707 유지)
+                if (node.type != NodeType.Boss)
+                {
+                    btn.image.color = new Color(255f/255f, 187f/255f, 129f/255f);
+                }
                 stageNode.HideClearCircle();
                 stageNode.PlayPulse();
             }
             // 그 외 노드 버튼 비활성화, 색상 흐리게
             else
             {
-                //btn.enabled = false;
+                btn.enabled = true;
                 btn.interactable = false;
                 //btn.image.color = new Color(1, 1, 1, 0.6f); 버튼 노드 불투명도 제거 요청
-                btn.image.color = Color.white;
+                // 보스 노드는 색상 변경 안 함 (Render에서 설정한 2A1707 유지)
+                if (node.type != NodeType.Boss)
+                {
+                    btn.image.color = new Color(255f/255f, 187f/255f, 129f/255f);
+                }
                 stageNode.HideClearCircle();
                 stageNode.StopPulse();
             }
@@ -361,7 +370,7 @@ public class StageMapRenderer : MonoBehaviour
             bool isCompletePath = isVisitedFrom && isVisitedTo;
 
             Color lineColor = line.color;
-            lineColor.a = isCompletePath ? 1f : 0.66f;
+            lineColor.a = isCompletePath ? 1f : 0.4f;
             line.color = lineColor;
         }
 
@@ -516,7 +525,7 @@ public class StageMapRenderer : MonoBehaviour
                 lineRenderer.Points = filledPoints;
                 
                 // 색상 설정 744E19
-                Color lineColor = new Color(0.455f, 0.306f, 0.098f);
+                Color lineColor = new Color(0.302f, 0.199f, 0.055f);
                 lineRenderer.color = lineColor;
             }
 

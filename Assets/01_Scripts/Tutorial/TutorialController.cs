@@ -14,7 +14,9 @@ public class TutorialController : MonoBehaviour
     private void Start()
     {
         GameManager.Instance.RegisterTutorialController(this);
-        Invoke(nameof(StartTutorial), 1f);
+        // Stage 2 진입 시 더 긴 대기 시간 필요 (노드 선택 전 튜토리얼 방지)
+        float delayTime = ProgressDataManager.Instance.StageIndex == 2 ? 2f : 1f;
+        Invoke(nameof(StartTutorial), delayTime);
     }
     private void OnEnable()
     {
@@ -32,11 +34,13 @@ public class TutorialController : MonoBehaviour
     private void StartTutorial()
     {
         var pmd = ProgressDataManager.Instance;
-        if (pmd.CurrentBattleNode == null) return;
+        
+        // Stage 2는 노드 선택 없이 시작되므로, Stage 2가 아닐 때만 null 체크
+        int stage = pmd.StageIndex;
+        if (stage != 2 && pmd.CurrentBattleNode == null) return;
 
         string scene = SceneManager.GetActiveScene().name;
-        int stage = pmd.StageIndex;
-        int col = pmd.CurrentBattleNode.columnIndex;
+        int col = stage == 2 ? 0 : pmd.CurrentBattleNode.columnIndex;
 
         if (stage == 1 && pmd.IsNewStage && scene == SceneNameData.CombatScene)
         {
@@ -65,6 +69,10 @@ public class TutorialController : MonoBehaviour
         else if (pmd.IsNewCamp && scene == SceneNameData.CampScene)
         {
             ShowTutorial(7);
+        }
+        else
+        {
+            Debug.Log("No tutorial condition matched");
         }
     }
 

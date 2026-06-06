@@ -705,7 +705,8 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         isDead = true;
         isDeathPending = false;
 
-        GameManager.Instance.combatCameraController.CameraPunchHard();
+        // 몬스터의 죽음의 경우는 카메라 펀치 효과 재생 하지 않음
+        //GameManager.Instance.combatCameraController.CameraPunchHard(); 
 
         gameObject.SetActive(false);
 
