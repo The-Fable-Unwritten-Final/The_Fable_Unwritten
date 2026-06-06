@@ -9,14 +9,22 @@ public class StatusTooltipUI : MonoSingleton<StatusTooltipUI>
     [SerializeField] private TMP_Text titleText;
     [SerializeField] private TMP_Text descText;
 
+    private RectTransform panelRect;
+
+    private void Awake()
+    {
+        panelRect = panel.GetComponent<RectTransform>();
+    }
+
     private void Start()
     {
-        panel.SetActive(false);
+        Hide();
     }
 
     public void Show(string keywordType, Vector2 screenPos)
     {
-        if (panel == null) return;
+        if (panel == null || titleText == null || descText == null)
+            return;
 
         string nameKey = TooltipKeyMapper.GetNameKey(keywordType);
         string descKey = TooltipKeyMapper.GetDescKey(keywordType);
@@ -25,7 +33,20 @@ public class StatusTooltipUI : MonoSingleton<StatusTooltipUI>
         descText.text = TempKeywordKrDB.Get(descKey);
 
         panel.SetActive(true);
-        ((RectTransform)transform).position = screenPos + new Vector2(20f, -20f);
+        panel.transform.SetAsLastSibling();
+
+        Vector2 pos = screenPos;
+
+        float width = panelRect.rect.width;
+        float height = panelRect.rect.height;
+
+        if (pos.x + width > Screen.width)
+            pos.x = Screen.width - width;
+
+        if (pos.y - height < 0)
+            pos.y = height;
+
+        panelRect.position = pos;
     }
 
     public void Hide()
