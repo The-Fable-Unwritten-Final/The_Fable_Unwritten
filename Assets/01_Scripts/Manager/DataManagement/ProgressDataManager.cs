@@ -23,6 +23,15 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     List<EventEffects> untillNextStage = new List<EventEffects>(); // 다음 스테이지까지 지속되는 효과 리스트
     List<EventEffects> untillEndAdventure = new List<EventEffects>(); // 모험이 끝날 때까지 지속되는 효과 리스트
 
+    // 플레이어 개별 효과 캐시 (전투 복귀 시 사용)
+    private Dictionary<int, List<TickEffectData>> cachedTickEffects = new(); // 캐릭터ID -> TickEffect 리스트
+    private Dictionary<int, List<InstanceEffectData>> cachedInstanceEffects = new(); // 캐릭터ID -> InstanceEffect 리스트
+
+    // 전투 입장 시점의 상태 백업 (전투에서 나갔다가 복귀할 때 사용)
+    private Dictionary<int, float> battleEntryHPBackup = new(); // 캐릭터ID -> 전투 입장 시 HP
+    private Dictionary<int, List<TickEffectData>> battleEntryTickEffectsBackup = new(); // 캐릭터ID -> 전투 입장 시 TickEffect
+    private Dictionary<int, List<InstanceEffectData>> battleEntryInstanceEffectsBackup = new(); // 캐릭터ID -> 전투 입장 시 InstanceEffect
+
     // 문체 시스템
     public int currentDefID = 1;                     // 현재 적용 중인 문체 ID
     public int inkAmount = 0;                        // 보유 잉크
@@ -77,6 +86,253 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         }
     }
     // 나중에 저장을 세부적으로 쪼개기
+    /// <summary>
+    /// 캐릭터에게 현재 적용된 TickEffect들을 수집합니다.
+    /// 전투 중이 아닐 때는 빈 리스트를 반환합니다.
+    /// </summary>
+    private List<TickEffectData> GetActiveTickEffectsForCharacter(int characterID)
+    {
+        var effects = new List<TickEffectData>();
+        
+        try
+        {
+            // 현재 활성 PlayerController를 찾기 (CombatScene에서만 존재)
+            var playerControllers = GameObject.FindObjectsOfType<PlayerController>();
+            
+            foreach (var pc in playerControllers)
+            {
+                if (pc.playerData != null && pc.playerData.IDNum == characterID)
+                {
+                    // 해당 캐릭터의 tickEffects를 모두 수집
+                    foreach (var tickEffect in pc.tickEffects)
+                    {
+                        effects.Add(new TickEffectData(tickEffect));
+                    }
+                    break;
+                }
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogWarning($"[ProgressDataManager] 플레이어 TickEffect 수집 중 오류: {ex.Message}");
+        }
+
+        return effects;
+    }
+
+    /// <summary>
+    /// 캐릭터에게 현재 적용된 InstanceEffect들을 수집합니다.
+    /// 전투 중이 아닐 때는 빈 리스트를 반환합니다.
+    /// </summary>
+    private List<InstanceEffectData> GetActiveInstanceEffectsForCharacter(int characterID)
+    {
+        var effects = new List<InstanceEffectData>();
+        
+        try
+        {
+            // 현재 활성 PlayerController를 찾기 (CombatScene에서만 존재)
+            var playerControllers = GameObject.FindObjectsOfType<PlayerController>();
+            
+            foreach (var pc in playerControllers)
+            {
+                if (pc.playerData != null && pc.playerData.IDNum == characterID)
+                {
+                    // 해당 캐릭터의 instantEffects를 모두 수집
+                    foreach (var instanceEffect in pc.instantEffects)
+                    {
+                        effects.Add(new InstanceEffectData(instanceEffect));
+                    }
+                    break;
+                }
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogWarning($"[ProgressDataManager] 플레이어 InstanceEffect 수집 중 오류: {ex.Message}");
+        }
+
+        return effects;
+    }
+
+    /// <summary>
+    /// 저장된 플레이어 효과를 전투 복귀 시 적용합니다.
+    /// BattleFlowController.OnBattleStart() 등에서 호출되어야 합니다.
+    /// </summary>
+    public void ApplyRestoredEffectsToPlayers()
+    {
+        try
+        {
+            // 현재 활성 PlayerController를 찾아서 캐시된 효과 적용
+            var playerControllers = GameObject.FindObjectsOfType<PlayerController>();
+
+            foreach (var pc in playerControllers)
+            {
+                if (pc.playerData == null) continue;
+
+                int characterID = pc.playerData.IDNum;
+
+                // 저장된 TickEffect 적용
+                if (cachedTickEffects.TryGetValue(characterID, out var tickEffects))
+                {
+                    pc.tickEffects.Clear();
+                    foreach (var tickEffectData in tickEffects)
+                    {
+                        pc.tickEffects.Add(tickEffectData.ToTickEffect());
+                    }
+                    Debug.Log($"[ProgressDataManager] {pc.playerData.CharacterName}에게 {tickEffects.Count}개의 TickEffect 적용");
+                }
+
+                // 저장된 InstanceEffect 적용
+                if (cachedInstanceEffects.TryGetValue(characterID, out var instanceEffects))
+                {
+                    pc.instantEffects.Clear();
+                    foreach (var instanceEffectData in instanceEffects)
+                    {
+                        pc.instantEffects.Add(instanceEffectData.ToInstanceEffect());
+                    }
+                    Debug.Log($"[ProgressDataManager] {pc.playerData.CharacterName}에게 {instanceEffects.Count}개의 InstanceEffect 적용");
+                }
+
+                // UI 업데이트 (StatusDisplay가 있다면)
+                var statusDisplay = pc.GetComponentInChildren<StatusDisplay>();
+                if (statusDisplay != null)
+                {
+                    statusDisplay.PlayerUpdateUI();
+                }
+            }
+
+            Debug.Log("[ProgressDataManager] 저장된 플레이어 효과 복원 완료");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[ProgressDataManager] 플레이어 효과 복원 중 오류: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// 특정 캐릭터의 저장된 TickEffect를 조회합니다.
+    /// </summary>
+    public List<TickEffectData> GetCachedTickEffects(int characterID)
+    {
+        if (cachedTickEffects.TryGetValue(characterID, out var effects))
+            return new List<TickEffectData>(effects);
+        return new List<TickEffectData>();
+    }
+
+    /// <summary>
+    /// 특정 캐릭터의 저장된 InstanceEffect를 조회합니다.
+    /// </summary>
+    public List<InstanceEffectData> GetCachedInstanceEffects(int characterID)
+    {
+        if (cachedInstanceEffects.TryGetValue(characterID, out var effects))
+            return new List<InstanceEffectData>(effects);
+        return new List<InstanceEffectData>();
+    }
+
+    /// <summary>
+    /// 효과 캐시를 초기화합니다.
+    /// 새 게임 시작 시 호출됩니다.
+    /// </summary>
+    public void ClearEffectCache()
+    {
+        cachedTickEffects.Clear();
+        cachedInstanceEffects.Clear();
+    }
+
+    /// <summary>
+    /// 전투 입장 시점의 플레이어 상태(HP, 효과)를 백업합니다.
+    /// BattleFlowController.StartBattle() 초반에 호출되어야 합니다.
+    /// </summary>
+    public void BackupBattleEntryState()
+    {
+        battleEntryHPBackup.Clear();
+        battleEntryTickEffectsBackup.Clear();
+        battleEntryInstanceEffectsBackup.Clear();
+
+        try
+        {
+            var playerControllers = GameObject.FindObjectsOfType<PlayerController>();
+
+            foreach (var pc in playerControllers)
+            {
+                if (pc.playerData == null) continue;
+
+                int characterID = pc.playerData.IDNum;
+
+                // HP 백업
+                battleEntryHPBackup[characterID] = pc.playerData.currentHP;
+
+                // TickEffect 백업
+                var tickEffectBackup = new List<TickEffectData>();
+                foreach (var tickEffect in pc.tickEffects)
+                {
+                    tickEffectBackup.Add(new TickEffectData(tickEffect));
+                }
+                battleEntryTickEffectsBackup[characterID] = tickEffectBackup;
+
+                // InstanceEffect 백업
+                var instanceEffectBackup = new List<InstanceEffectData>();
+                foreach (var instanceEffect in pc.instantEffects)
+                {
+                    instanceEffectBackup.Add(new InstanceEffectData(instanceEffect));
+                }
+                battleEntryInstanceEffectsBackup[characterID] = instanceEffectBackup;
+
+                Debug.Log($"[ProgressDataManager] {pc.playerData.CharacterName} 상태 백업 (HP: {battleEntryHPBackup[characterID]}, TickEffect: {tickEffectBackup.Count}, InstanceEffect: {instanceEffectBackup.Count})");
+            }
+
+            Debug.Log("[ProgressDataManager] 전투 입장 시점의 모든 플레이어 상태 백업 완료");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[ProgressDataManager] 전투 상태 백업 중 오류: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// 전투 입장 시점의 플레이어 상태(HP, 효과)를 복원합니다.
+    /// 타이틀에서 "이어하기"를 눌렀을 때 호출되어야 합니다.
+    /// </summary>
+    public void RestoreBattleEntryState()
+    {
+        try
+        {
+            // 백업 상태를 현재 캐시에 덮어쓰기 (전투 진행 중 저장된 상태 무시)
+            cachedTickEffects.Clear();
+            cachedInstanceEffects.Clear();
+
+            foreach (var kvp in battleEntryTickEffectsBackup)
+            {
+                cachedTickEffects[kvp.Key] = new List<TickEffectData>(kvp.Value);
+            }
+
+            foreach (var kvp in battleEntryInstanceEffectsBackup)
+            {
+                cachedInstanceEffects[kvp.Key] = new List<InstanceEffectData>(kvp.Value);
+            }
+
+            // PlayerData의 HP도 복원
+            foreach (var kvp in battleEntryHPBackup)
+            {
+                int characterID = kvp.Key;
+                float hp = kvp.Value;
+
+                var playerData = PlayerDatas.FirstOrDefault(p => p.IDNum == characterID);
+                if (playerData != null)
+                {
+                    playerData.currentHP = hp;
+                    Debug.Log($"[ProgressDataManager] {playerData.CharacterName} HP 복원 ({hp})");
+                }
+            }
+
+            Debug.Log("[ProgressDataManager] 전투 입장 시점의 플레이어 상태 복원 완료");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[ProgressDataManager] 전투 상태 복원 중 오류: {ex.Message}");
+        }
+    }
+
     public void SaveProgress(bool safe)
     {
         ProgressSaveData data = new ProgressSaveData();
@@ -124,13 +380,23 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         data.unlockedCardIndexes = unlockedCards.ToList();
         data.itemCounts = itemCounts.ToArray();
         if(safe)
-            data.playerSaves = PlayerDatas.Select(p => new PlayerSaveData
+        {
+            // 플레이어 데이터 저장 + 현재 적용된 버프/디버프 정보
+            data.playerSaves = new List<PlayerSaveData>();
+            foreach (var p in PlayerDatas)
             {
-                id = p.IDNum,
-                maxHP = p.MaxHP,
-                currentHP = p.currentHP,
-                currentDeckIndexes = new List<int>(p.currentDeckIndexes)
-            }).ToList();
+                var saveData = new PlayerSaveData
+                {
+                    id = p.IDNum,
+                    maxHP = p.MaxHP,
+                    currentHP = p.currentHP,
+                    currentDeckIndexes = new List<int>(p.currentDeckIndexes),
+                    tickEffectsData = GetActiveTickEffectsForCharacter(p.IDNum),
+                    instanceEffectsData = GetActiveInstanceEffectsForCharacter(p.IDNum)
+                };
+                data.playerSaves.Add(saveData);
+            }
+        }
 
         data.unlockedCharacterIDs = unlockedCharacterIDs.ToList();
 
@@ -312,6 +578,10 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
             return;
         }
 
+        // 효과 캐시 초기화
+        cachedTickEffects.Clear();
+        cachedInstanceEffects.Clear();
+
         foreach (var save in saves)
         {
             var match = PlayerDatas.FirstOrDefault(p => p.IDNum == save.id);
@@ -320,6 +590,17 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
                 match.MaxHP = save.maxHP;
                 match.currentHP = save.currentHP;
                 match.currentDeckIndexes = new List<int>(save.currentDeckIndexes);
+
+                // 플레이어의 저장된 버프/디버프 효과를 캐시에 저장
+                if (save.tickEffectsData != null && save.tickEffectsData.Count > 0)
+                {
+                    cachedTickEffects[save.id] = new List<TickEffectData>(save.tickEffectsData);
+                }
+
+                if (save.instanceEffectsData != null && save.instanceEffectsData.Count > 0)
+                {
+                    cachedInstanceEffects[save.id] = new List<InstanceEffectData>(save.instanceEffectsData);
+                }
             }
             else
             {
@@ -338,6 +619,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         untillNextCombat.Clear();
         untillNextStage.Clear();
         untillEndAdventure.Clear();
+        ClearEffectCache(); // 플레이어 개별 효과 캐시 초기화
 
         usedRandomEvent.Clear();
         TriggeredRandomEvent.Clear();
@@ -421,6 +703,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         untillNextCombat.Clear();
         untillNextStage.Clear();
         untillEndAdventure.Clear();
+        ClearEffectCache(); // 플레이어 개별 효과 캐시 초기화
 
         usedRandomEvent.Clear();
         TriggeredRandomEvent.Clear();
@@ -494,6 +777,8 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         PlayerPrefs.DeleteKey("ProgressSaveData");
         PlayerPrefs.DeleteKey("ProgressSaveData_Backup");
         PlayerPrefs.Save();
+        
+        ClearEffectCache(); // 플레이어 개별 효과 캐시 초기화
 
         // 게임 상태 초기화 (ResetProgress()와 동일)
         GameStartType = GameStartType.New;
@@ -976,6 +1261,68 @@ public class PlayerSaveData
     public float maxHP;
     public float currentHP;
     public List<int> currentDeckIndexes = new();
+    public List<TickEffectData> tickEffectsData = new();       // 플레이어에게 적용된 TickEffect들
+    public List<InstanceEffectData> instanceEffectsData = new(); // 플레이어에게 적용된 InstanceEffect들
+}
+
+/// <summary>
+/// TickEffect를 저장/로드하기 위한 직렬화 가능한 클래스
+/// </summary>
+[System.Serializable]
+public class TickEffectData
+{
+    public int statType;    // BuffStatType (enum이므로 int로 변환)
+    public float value;
+    public int duration;
+
+    public TickEffectData() { }
+
+    public TickEffectData(TickEffect effect)
+    {
+        statType = (int)effect.statType;
+        value = effect.value;
+        duration = effect.duration;
+    }
+
+    public TickEffect ToTickEffect()
+    {
+        return new TickEffect
+        {
+            statType = (BuffStatType)statType,
+            value = value,
+            duration = duration
+        };
+    }
+}
+
+/// <summary>
+/// InstanceEffect를 저장/로드하기 위한 직렬화 가능한 클래스
+/// </summary>
+[System.Serializable]
+public class InstanceEffectData
+{
+    public int statType;    // BuffStatType (enum이므로 int로 변환)
+    public float value;
+    public bool isMaintain;
+
+    public InstanceEffectData() { }
+
+    public InstanceEffectData(InstanceEffect effect)
+    {
+        statType = (int)effect.statType;
+        value = effect.value;
+        isMaintain = effect.isMaintain;
+    }
+
+    public InstanceEffect ToInstanceEffect()
+    {
+        return new InstanceEffect
+        {
+            statType = (BuffStatType)statType,
+            value = value,
+            isMaintain = isMaintain
+        };
+    }
 }
 
 public static class StageDataSaveHelper

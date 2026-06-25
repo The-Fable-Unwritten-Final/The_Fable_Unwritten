@@ -67,6 +67,12 @@ public class UI_MainTitle : MonoBehaviour
             return;
         }
 
+        // 저장된 게임 데이터 로드
+        ProgressDataManager.Instance.LoadProgress();
+        
+        // 전투 입장 시점의 상태 복원 (진행 중 저장된 상태 무시)
+        ProgressDataManager.Instance.RestoreBattleEntryState();
+
         switch (currentNode.type)
         {
             case NodeType.NormalBattle:
