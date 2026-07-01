@@ -23,6 +23,13 @@ MonoBehaviour:
   blind: 0
   block: 0
   note: 
+  anchorData:
+    footPoint: {x: 0, y: -0.5}
+    bodyPoint: {x: 0, y: -0.1}
+    headPoint: {x: 0, y: 0.25}
+    overheadPoint: {x: 0, y: 0.65}
+    aheadPoint: {x: -0.5, y: 0}
+    shadowOffset: {x: -0.024, y: 0.049}
   type: 0
   skillList:
   - skillIndex: 100

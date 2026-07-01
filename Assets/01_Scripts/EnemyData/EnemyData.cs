@@ -53,6 +53,8 @@ public class EnemyData : ScriptableObject
 
     public string note;
 
+    public CharacterAnchorOffsetData anchorData;
+
     public EnemyType type;
 
     [Header("스킬 목록")]
@@ -123,3 +125,4 @@ public enum EnemyType
     elite,
     boss
 }
+

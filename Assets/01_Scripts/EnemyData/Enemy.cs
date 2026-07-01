@@ -37,12 +37,12 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     [SerializeField] private Transform overheadpoint;
     [SerializeField] private Transform aheadpoint;
 
-    public Transform FootPoint => footpoint;
-    public Transform BodyPoint => bodypoint;
-    public Transform HeadPoint => headpoint;
-    public Transform OverheadPoint => overheadpoint;
+    public Transform FootPoint => anchorController.FootPoint;
+    public Transform BodyPoint => anchorController.BodyPoint;
+    public Transform HeadPoint => anchorController.HeadPoint;
+    public Transform OverheadPoint => anchorController.OverheadPoint;
 
-    public Transform AheadPoint => aheadpoint;
+    public Transform AheadPoint => anchorController.AheadPoint;
 
 
     public event System.Action OnTargetableChanged;
@@ -84,6 +84,9 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     public DmgBarDisplay dmgBar => dmgBarDisplay;
     public TargetArrowDisplay tarArrow => targetArrow;
 
+    [SerializeField] private CharacterAnchorController anchorController;
+
+
     private void Awake()
     {
         statusDisplay = GetComponentInChildren<StatusDisplay>();
@@ -99,6 +102,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         {
             Debug.LogWarning($"[{name}] enemyData가 누락되었습니다.");
         }
+        SetData(enemyData);
     }
 
     private void Start()
@@ -109,6 +113,8 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     public void SetData(EnemyData data)
     {
         enemyData = data;
+
+        anchorController.Apply(enemyData.anchorData);
 
         // 문체 효과 적용
         enemyData.MaxHP = StyleManager.Instance.ModifyEnemyMaxHp(this, (int)enemyData.MaxHP);
