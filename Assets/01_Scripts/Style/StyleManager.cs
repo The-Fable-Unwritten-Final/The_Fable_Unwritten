@@ -177,18 +177,18 @@ public class StyleManager : MonoSingleton<StyleManager>
         var list = new List<StyleEffect>();
         if (!StyleDic.TryGetValue(CurrentState.styleId, out var def) || def == null) return list;
 
-        // 현재 문체의 + 효과들 정리 및 list에 추가
-        foreach (var te in def.plusTiers)
+        // 현재 문체의 + 효과들 정리 및 list에 추가 (currentPlus까지만)
+        for (int i = 0; i < CurrentState.plusTier; i++)
         {
-            if (te.effects != null)
-                list.AddRange(te.effects);
+            if (i < def.plusTiers.Count && def.plusTiers[i].effects != null)
+                list.AddRange(def.plusTiers[i].effects);
         }
 
-        // 현재 문체의 - 효과들 정리 및 list에 추가
-        foreach (var te in def.minusTiers)
+        // 현재 문체의 - 효과들 정리 및 list에 추가 (currentMinus까지만)
+        for (int i = 0; i < CurrentState.minusTier; i++)
         {
-            if (te.effects != null)
-                list.AddRange(te.effects);
+            if (i < def.minusTiers.Count && def.minusTiers[i].effects != null)
+                list.AddRange(def.minusTiers[i].effects);
         }
 
         return list;

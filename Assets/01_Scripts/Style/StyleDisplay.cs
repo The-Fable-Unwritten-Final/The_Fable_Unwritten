@@ -144,19 +144,17 @@ public class StyleDisplay : MonoBehaviour // 기존 팝업 방식(basepopup 상�
         if (isPlus)
         {
             eff = sty.plusTiers[sty.currentPlus - 1].effects[0];
-            if (sty.plusTiers.Count > sty.currentPlus) // 최대 강화가 아닌 경우 다음 강화 단계 표시
+            if (sty.plusTiers.Count > sty.currentPlus) // 최대 강화가 아닌 경우
             {
                 isFullUpgrade = false;
-                eff = sty.plusTiers[sty.currentPlus].effects[0];
             }
         }
         else
         {
             eff = sty.minusTiers[sty.currentMinus - 1].effects[0];
-            if (sty.minusTiers.Count > sty.currentMinus) // 최대 강화가 아닌 경우 다음 강화 단계 표시
+            if (sty.minusTiers.Count > sty.currentMinus) // 최대 강화가 아닌 경우
             {
                 isFullUpgrade = false;
-                eff = sty.minusTiers[sty.currentMinus].effects[0];
             }
         }
 

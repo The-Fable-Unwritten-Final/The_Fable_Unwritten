@@ -124,6 +124,12 @@ public class BattleFlowController : MonoBehaviour
             }
         }
 
+        // 전투 입장 시점의 상태 백업 (타이틀에서 돌아올 때 이 상태로 복원됨)
+        ProgressDataManager.Instance.BackupBattleEntryState();
+
+        // 저장된 플레이어 효과 복원 (전투 복귀 시)
+        ProgressDataManager.Instance.ApplyRestoredEffectsToPlayers();
+
         foreach (var enemy in enemyParty)
         {
             if (enemy is Enemy e)
