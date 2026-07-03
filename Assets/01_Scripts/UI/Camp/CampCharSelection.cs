@@ -22,14 +22,13 @@ public class CampCharSelection : MonoBehaviour
     // 캐릭터 상호작용 완료
     public System.Action OnCharacterInteractionComplete;
 
+    // 캠프 선택 상태 추적
+    private bool isRested = false; // 휴식 선택 여부
+    private List<CardModel> selectedCardsToRemove = new(); // 정비에서 제거할 카드 목록
+
     private void Start()
     {
-        // 스토리 버튼은 최초, 비활성화
-        // UI_CampController에서 조건에 따라 활성화
-        if (storyButton != null)
-        {
-            storyButton.SetActive(false);
-        }
+
     }
 
     /// <summary>
@@ -42,13 +41,14 @@ public class CampCharSelection : MonoBehaviour
         // 1. 캐릭터 모션 재생 (잠에 빠지는 모션)
         PlayRestAnimation();
 
-        // 2. 체력 회복 (10)
-        HealCharacter(10);
+        // 2. 휴식 선택 상태 표시 (체력 회복은 씬 종료 시에 일괄 처리)
+        isRested = true;
+        selectedCardsToRemove.Clear();
 
         // 3. 상호작용 완료 표시
         MarkCharacterInteractionComplete();
 
-        Debug.Log($"[CampCharSelection] {character.CharacterName}이(가) 휴식 - 10 체력 회복");
+        Debug.Log($"[CampCharSelection] {character.CharacterName}이(가) 휴식 등록 - 캠프 종료 시 10 체력 회복");
     }
 
     /// <summary>
@@ -58,11 +58,11 @@ public class CampCharSelection : MonoBehaviour
     {
         if (character == null) return;
 
-        // PopupUI_Maintenance 팝업 열기 (캐릭터 & 현재 CampCharSelection 전달)
+        // PopupUI_Maintenance 팝업 열기 (CampCharSelection만 전달)
         PopupUI_Maintenance maintenancePopup = UIManager.Instance.ShowPopup<PopupUI_Maintenance>();
         if (maintenancePopup != null)
         {
-            maintenancePopup.ShowMaintenance(character, this);
+            maintenancePopup.ShowMaintenance(this);
         }
 
         Debug.Log($"[CampCharSelection] {character.CharacterName}의 정비 팝업 표시");
@@ -73,9 +73,32 @@ public class CampCharSelection : MonoBehaviour
     /// </summary>
     public void OnMaintenanceComplete()
     {
+        isRested = false; // 정비 선택
         MarkCharacterInteractionComplete();
         Debug.Log($"[CampCharSelection] 정비 완료 - {character.CharacterName}");
     }
+
+    /// <summary>
+    /// 제거할 카드 추가 (PopupUI_Maintenance에서 호출)
+    /// </summary>
+    public void AddCardToRemoval(CardModel card)
+    {
+        if (card != null && !selectedCardsToRemove.Contains(card))
+        {
+            selectedCardsToRemove.Add(card);
+            Debug.Log($"[CampCharSelection] {character.CharacterName}에 제거 카드 등록: {card.cardName}");
+        }
+    }
+
+    /// <summary>
+    /// 캠프 씬에서 호출 - 휴식 여부 반환
+    /// </summary>
+    public bool GetIsRested() => isRested;
+
+    /// <summary>
+    /// 캠프 씬에서 호출 - 제거할 카드 목록 반환
+    /// </summary>
+    public List<CardModel> GetCardsToRemove() => new List<CardModel>(selectedCardsToRemove);
 
     /// <summary>
     /// 스토리 대화 버튼 클릭
@@ -147,5 +170,13 @@ public class CampCharSelection : MonoBehaviour
             storyButton.SetActive(active);
         }
     }
-}
 
+    /// <summary>
+    /// 캠프 선택 상태 초기화 (새 팝업 열 때)
+    /// </summary>
+    public void ResetCampState()
+    {
+        isRested = false;
+        selectedCardsToRemove.Clear();
+    }
+}

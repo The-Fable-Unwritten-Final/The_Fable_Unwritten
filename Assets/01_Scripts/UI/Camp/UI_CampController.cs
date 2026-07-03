@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+/// 1. 휴식 OR 정비 선택지가 존재한다
+/// 2. 각 선택지는 선택이 완료 후, 캠프 씬 종료 시점에서 효과가 적용된다.
 public class UI_CampController : MonoBehaviour
 {
     [Header("Background")]
@@ -22,9 +25,9 @@ public class UI_CampController : MonoBehaviour
     {
         SetBackground();
         ProgressDataManager.Instance.IsNewStage = false;
-        
+
         completedCharacterCount = 0;
-        
+
         // 각 CampCharSelection에 완료 이벤트 등록
         if (campCharSelections != null)
         {
@@ -36,7 +39,7 @@ public class UI_CampController : MonoBehaviour
                 }
             }
         }
-        
+
         // 랜덤하게 스토리 버튼을 표시할 캐릭터 선택 (4명 중 1명)
         SelectRandomStoryCharacter();
     }
@@ -61,7 +64,7 @@ public class UI_CampController : MonoBehaviour
     private void SelectRandomStoryCharacter()
     {
         storyCharacterIndex = Random.Range(0, campCharSelections.Length);
-        
+
         if (campCharSelections[storyCharacterIndex] != null)
         {
             campCharSelections[storyCharacterIndex].SetStoryButtonActive(true);
@@ -114,7 +117,58 @@ public class UI_CampController : MonoBehaviour
     /// </summary>
     private void ExitCampScene()
     {
+        Debug.Log("[CampController] 캠프 씬 종료 - 선택 사항 처리 중");
+
+        // 모든 캐릭터의 선택 사항 처리
+        if (campCharSelections != null)
+        {
+            for (int i = 0; i < campCharSelections.Length; i++)
+            {
+                if (campCharSelections[i] == null || campCharSelections[i].character == null)
+                    continue;
+
+                CampCharSelection campChar = campCharSelections[i];
+                PlayerData character = campChar.character;
+
+                // 휴식 선택 시: 체력 회복 처리
+                if (campChar.GetIsRested())
+                {
+                    character.currentHP += 10;
+                    Debug.Log($"[CampController] {character.CharacterName}: 10 체력 회복 (현재 HP: {character.currentHP})");
+                }
+
+                // 정비 선택 시: 제거 카드 일괄 처리
+                List<CardModel> cardsToRemove = campChar.GetCardsToRemove();
+                if (cardsToRemove.Count > 0)
+                {
+                    foreach (var card in cardsToRemove)
+                    {
+                        character.currentDeck.Remove(card);
+                    }
+                    character.UpdateCurrentDeckIndexes();
+                    Debug.Log($"[CampController] {character.CharacterName}: {cardsToRemove.Count}개 카드 제거 완료");
+                }
+            }
+        }
+
+        Debug.Log("[CampController] 캠프 선택 사항 처리 완료");
         UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
+    }
+
+
+    /// <summary>
+    /// UI전반의 구조가 바뀌며 각 씬에 존재하는 도감 UI를 개별로 UI매니저와 연결 해 주는 메서드
+    /// </summary>
+    public void BookUIManagerOpen()
+    {
+        UIManager.Instance.ShowPopupByName("PopupUI_Book");
+    }
+    /// <summary>
+    /// UI전반의 구조가 바뀌며 각 씬에 존재하는 세팅 UI를 개별로 UI매니저와 연결 해 주는 메서드
+    /// </summary>
+    public void SettingUIManagerOpen()
+    {
+        UIManager.Instance.ShowPopupByName("PopupUI_Setting");
     }
 }
 

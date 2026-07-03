@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -116,6 +117,9 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
+        // cardDisplay가 없으면 (정비 UI 등) 상호작용 불가능
+        if (cardDisplay == null) return;
+
         if(!cardDisplay.deckInitComplete) return; // 덱 이닛이 완료되지 않았을 경우 상호작용 불가능
         isPointerOver = true; // 마우스 포인터가 카드 위에 있는 상태로 설정
         
@@ -133,16 +137,22 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         // 연계 가능한 카드들을 canchain으로
         cardDisplay.CheckCanChain();
 
-        if (effectVisualizer.currentState == CardVisualState.Chain)// 카드의 상태가 Chain인 경우 이펙트 변경 취소 (빨간색 유지)
+        if (effectVisualizer != null)
         {
-            effectVisualizer.ApplyVisualState(CardVisualState.ReadyOnChain); // 카드의 상태를 ReadyOnChain으로 변경 (노란색 테두리 + 연계 가능 상태 >> ReadyOnChain상태)
-            return;
+            if (effectVisualizer.currentState == CardVisualState.Chain)// 카드의 상태가 Chain인 경우 이펙트 변경 취소 (빨간색 유지)
+            {
+                effectVisualizer.ApplyVisualState(CardVisualState.ReadyOnChain); // 카드의 상태를 ReadyOnChain으로 변경 (노란색 테두리 + 연계 가능 상태 >> ReadyOnChain상태)
+                return;
+            }
+            effectVisualizer.ApplyVisualState(CardVisualState.Ready); // 카드의 상태를 Ready로 변경 (노란색 테두리)
         }
-        effectVisualizer.ApplyVisualState(CardVisualState.Ready); // 카드의 상태를 Ready로 변경 (노란색 테두리)
     }
     public void OnPointerExit(PointerEventData eventData)
     {
         isPointerOver = false; // 마우스 포인터가 카드 위에 있지 않은 상태로 설정
+
+        // cardDisplay가 없으면 (정비 UI 등) 상호작용 불가능
+        if (cardDisplay == null) return;
 
         // 카드의 시각적 효과 (이펙트 제외)
         if(!cardDisplay.isOnDrag) cardDisplay.TargetArrowReset(); // 카드 드래그 중이 아닐 때 타겟 화살표 초기화
@@ -154,7 +164,10 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine);
 
         // 예외처리 + 이펙트 초기화
-        effectVisualizer.SetStateToNone(); // 카드의 상태를 None으로 변경
+        if (effectVisualizer != null)
+        {
+            effectVisualizer.SetStateToNone(); // 카드의 상태를 None으로 변경
+        }
 
         // canchain 상태의 카드들을 원상태로(enhanced에 따라서 다르게 설정)
         cardDisplay.ResetCanChain();
@@ -289,18 +302,29 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         cardCharImage.sprite = cardData.chClass; // 카드 캐릭터 이미지 설정
     }
     /// <summary>
-    /// 카드(본인의) description, cost, name 설명 업데이트.
+    /// 카드 description, cost, name 설명 업데이트.
     /// </summary>
     public void UpdatCardInfo()// 외부에서 해당 메서드 for문 으로 묶어서 action에 구독하여 사용하기에, 기능 분리.
     {
         cardName.text = cardData.cardName; // 카드 이름 설정
         cardCost.text = cardData.GetEffectiveCost().ToString(); // 카드 코스트 설정
 
-
-        var battleFlow = GameManager.Instance.turnController.battleFlow;
-        IStatusReceiver caster = battleFlow.playerParty.Find(p => p.ChClass == cardData.characterClass);
-
+        IStatusReceiver caster = GameManager.Instance.turnController.battleFlow.playerParty.Find(p => p.ChClass == cardData.characterClass);
         cardDescription.text = cardData.GetFormattedCardText(caster);// 카드 설명 설정
+    }
+
+    /// <summary>
+    /// UI 전용 카드 정보 업데이트 (캠프 씬에서 사용)
+    /// </summary>
+    public void UpdateCardInfoOnlyUI()
+    {
+        cardName.text = cardData.cardName; // 카드 이름 설정
+        cardCost.text = cardData.GetEffectiveCost().ToString(); // 카드 코스트 설정
+        
+        // 캠프 씬에서는 caster 정보가 없으므로 플레이스홀더 {숫자}를 ?로 치환
+        string description = cardData.cardText;
+        description = Regex.Replace(description, @"\{\d+\}", "?");
+        cardDescription.text = description;
     }
     public void SetOriginalPos()// 덱 최초 세팅 시점, 카드 추가 혹은 감소시 위치 초기화.
     {
@@ -339,6 +363,10 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public CardState GetCardState()
     {
         return cardState; // 카드 상태 가져오기
+    }
+    public GameObject GetCoverIllust()
+    {
+        return illustCover.gameObject; // 카드 일러스트 커버 오브젝트 가져오기
     }
     public void UpdateStateMoveEnd()
     {
