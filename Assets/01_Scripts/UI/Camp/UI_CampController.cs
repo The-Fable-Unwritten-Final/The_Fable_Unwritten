@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 
 /// 1. 휴식 OR 정비 선택지가 존재한다
@@ -14,12 +15,14 @@ public class UI_CampController : MonoBehaviour
 
     [Header("Character Interactions")]
     [SerializeField] private CampCharSelection[] campCharSelections; // 4명의 캐릭터 (0=Kyla, 1=Sophia, 2=Leon, 3=Dorothy)
+    [SerializeField] private CampTalkController campTalkController; // 캠프 대화 컨트롤러
 
     private int completedCharacterCount = 0;
     private const int REQUIRED_CHARACTERS = 3; // 3명의 플레이어블 캐릭터만 필요
     private const float EXIT_DELAY = 2f; // 모두 완료 후 종료 대기 시간
 
     private int storyCharacterIndex = -1; // ? 버튼을 표시할 캐릭터 인덱스
+    private CampTalkData currentSelectedTalkData; // 현재 선택된 대화 (? 버튼 대상)
 
     private void Start()
     {
@@ -60,16 +63,81 @@ public class UI_CampController : MonoBehaviour
 
     /// <summary>
     /// 랜덤하게 스토리 버튼을 표시할 캐릭터 선택
+    /// 조건을 만족하는 첫 대화의 첫 번째 스피커에게 버튼 표시
     /// </summary>
     private void SelectRandomStoryCharacter()
     {
-        storyCharacterIndex = Random.Range(0, campCharSelections.Length);
+        // 조건을 만족하는 대화 데이터 수집
+        var validTalks = DataManager.Instance.campTalkDataList
+            .Where(talk => talk != null && talk.IsValid())
+            .ToList();
 
-        if (campCharSelections[storyCharacterIndex] != null)
+        if (validTalks.Count == 0)
         {
-            campCharSelections[storyCharacterIndex].SetStoryButtonActive(true);
-            Debug.Log($"[CampController] 스토리 버튼 표시: 캐릭터 {storyCharacterIndex}");
+            Debug.LogWarning("[CampController] 조건을 만족하는 대화가 없습니다.");
+            return;
         }
+
+        // 랜덤으로 하나 선택
+        currentSelectedTalkData = validTalks[Random.Range(0, validTalks.Count)];
+
+        // 선택된 대화의 첫 번째 라인에서 스피커 파싱
+        if (currentSelectedTalkData.keyTextSerial.Count > 0)
+        {
+            // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 아래의 디버그문 절대 지우지 말것, 지우면 버그 생김.. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+            // >> 일단 고치긴 했는데, 혹시 ? 와는 다른 캐릭터가 대화를 시작하는 버그가 생길 경우, 아래의 디버그 문을 다시 사용할것.
+            string firstKey = currentSelectedTalkData.keyTextSerial[0];
+            //Debug.Log($"[SelectRandomStoryCharacter] 첫 번째 키: '{firstKey}'");
+            
+            char lastChar = firstKey[firstKey.Length - 1];
+            //Debug.Log($"[SelectRandomStoryCharacter] 마지막 문자: '{lastChar}'");
+            
+            int speakerIndex = GetSpeakerIndexFromKey(firstKey);
+            //Debug.Log($"[SelectRandomStoryCharacter] 파싱된 인덱스: {speakerIndex} (K=0, S=1, L=2, D=3)");
+            //Debug.Log($"[SelectRandomStoryCharacter] 버튼 표시 대상: {(speakerIndex < campCharSelections.Length && campCharSelections[speakerIndex] != null ? campCharSelections[speakerIndex].character?.CharacterName : "ERROR")}");
+
+            // 해당 캐릭터에만 스토리 버튼 표시
+            storyCharacterIndex = speakerIndex;
+            if (campCharSelections[storyCharacterIndex] != null)
+            {
+                campCharSelections[storyCharacterIndex].SetStoryButtonActive(true);
+                
+                // ? 버튼 클릭 이벤트 등록 - 선택된 대화 시작
+                campCharSelections[storyCharacterIndex].OnStoryButtonClickedEvent += OnStoryButtonClicked;
+            }
+        }
+    }
+
+    /// <summary>
+    /// ? 버튼 클릭 콜백 - UI_CampController에서 선택한 대화 시작
+    /// </summary>
+    private void OnStoryButtonClicked()
+    {
+        if (campTalkController != null && currentSelectedTalkData != null)
+        {
+            campTalkController.StartSpecificDialogue(currentSelectedTalkData);
+        }
+    }
+
+    /// <summary>
+    /// CSV key에서 캐릭터 코드 파싱
+    /// 예: "Camp_OT_01_01_K" → K (Kayla=0)
+    /// </summary>
+    private int GetSpeakerIndexFromKey(string csvKey)
+    {
+        if (string.IsNullOrEmpty(csvKey) || csvKey.Length < 1)
+            return 0;
+
+        char lastChar = csvKey[csvKey.Length - 1];
+
+        return lastChar switch
+        {
+            'K' => 0, // Kayla
+            'S' => 1, // Sophia
+            'L' => 2, // Leon
+            'D' => 3, // Dorothy
+            _ => 0    // 기본값
+        };
     }
 
     // 스테이지에 따른 백그라운드 설정
@@ -93,8 +161,6 @@ public class UI_CampController : MonoBehaviour
     private void OnCharacterComplete()
     {
         completedCharacterCount++;
-        Debug.Log($"[CampController] 캐릭터 상호작용 완료 ({completedCharacterCount}/{REQUIRED_CHARACTERS})");
-
         // 모든 플레이어블 캐릭터(3명)가 상호작용을 완료했을 경우
         if (completedCharacterCount >= REQUIRED_CHARACTERS)
         {
@@ -107,7 +173,6 @@ public class UI_CampController : MonoBehaviour
     /// </summary>
     private IEnumerator ExitCampSceneAfterDelay()
     {
-        Debug.Log($"[CampController] 모든 상호작용 완료. {EXIT_DELAY}초 후 캠프 씬 종료");
         yield return new WaitForSeconds(EXIT_DELAY);
         ExitCampScene();
     }
@@ -117,8 +182,6 @@ public class UI_CampController : MonoBehaviour
     /// </summary>
     private void ExitCampScene()
     {
-        Debug.Log("[CampController] 캠프 씬 종료 - 선택 사항 처리 중");
-
         // 모든 캐릭터의 선택 사항 처리
         if (campCharSelections != null)
         {
@@ -134,7 +197,6 @@ public class UI_CampController : MonoBehaviour
                 if (campChar.GetIsRested())
                 {
                     character.currentHP += 10;
-                    Debug.Log($"[CampController] {character.CharacterName}: 10 체력 회복 (현재 HP: {character.currentHP})");
                 }
 
                 // 정비 선택 시: 제거 카드 일괄 처리
@@ -150,8 +212,6 @@ public class UI_CampController : MonoBehaviour
                 }
             }
         }
-
-        Debug.Log("[CampController] 캠프 선택 사항 처리 완료");
         UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
     }
 
