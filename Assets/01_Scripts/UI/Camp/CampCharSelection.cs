@@ -61,8 +61,6 @@ public class CampCharSelection : MonoBehaviour
 
         // 3. 상호작용 완료 표시
         MarkCharacterInteractionComplete();
-
-        Debug.Log($"[CampCharSelection] {character.CharacterName}이(가) 휴식 등록 - 캠프 종료 시 10 체력 회복");
     }
 
     /// <summary>
@@ -78,8 +76,6 @@ public class CampCharSelection : MonoBehaviour
         {
             maintenancePopup.ShowMaintenance(this);
         }
-
-        Debug.Log($"[CampCharSelection] {character.CharacterName}의 정비 팝업 표시");
     }
 
     /// <summary>
@@ -89,7 +85,6 @@ public class CampCharSelection : MonoBehaviour
     {
         isRested = false; // 정비 선택
         MarkCharacterInteractionComplete();
-        Debug.Log($"[CampCharSelection] 정비 완료 - {character.CharacterName}");
     }
 
     /// <summary>
@@ -100,7 +95,6 @@ public class CampCharSelection : MonoBehaviour
         if (card != null && !selectedCardsToRemove.Contains(card))
         {
             selectedCardsToRemove.Add(card);
-            Debug.Log($"[CampCharSelection] {character.CharacterName}에 제거 카드 등록: {card.cardName}");
         }
     }
 
@@ -172,21 +166,28 @@ public class CampCharSelection : MonoBehaviour
 
     /// <summary>
     /// TypeWriter 효과 스킵 - 타이핑 애니메이션을 건너뛰고 전체 텍스트 표시
+    /// 실제로 스킵했는지 여부를 반환
+    /// 타이핑 중이었으면 true, 이미 완료되었으면 false
     /// </summary>
-    public void SkipTypeWriter()
+    public bool SkipTypeWriter()
     {
+        // 타이핑 중인 경우만 스킵 (타이핑이 완료되면 다음 진행)
         if (typeWriterCoroutine != null)
         {
             StopCoroutine(typeWriterCoroutine);
             typeWriterCoroutine = null;
+
+            if (dialogueText != null)
+            {
+                dialogueText.text = currentFullText;
+            }
+
+            isTypeWriterActive = false;
+            return true; // 실제로 스킵함
         }
 
-        if (dialogueText != null)
-        {
-            dialogueText.text = currentFullText;
-        }
-
-        isTypeWriterActive = false;
+        // 이미 완료됨
+        return false;
     }
 
     /// <summary>

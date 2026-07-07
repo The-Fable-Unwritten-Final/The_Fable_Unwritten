@@ -67,14 +67,15 @@ public class UI_CampController : MonoBehaviour
     /// </summary>
     private void SelectRandomStoryCharacter()
     {
-        // 조건을 만족하는 대화 데이터 수집
+        // 조건을 만족하고 아직 사용되지 않은 대화 데이터 수집
         var validTalks = DataManager.Instance.campTalkDataList
             .Where(talk => talk != null && talk.IsValid())
+            .Where(talk => !ProgressDataManager.Instance.usedCampTalks.Contains(talk.GetInstanceID()))
             .ToList();
 
         if (validTalks.Count == 0)
         {
-            Debug.LogWarning("[CampController] 조건을 만족하는 대화가 없습니다.");
+            Debug.LogWarning("[CampController] 조건을 만족하는 미사용 대화가 없습니다.");
             return;
         }
 
@@ -208,7 +209,6 @@ public class UI_CampController : MonoBehaviour
                         character.currentDeck.Remove(card);
                     }
                     character.UpdateCurrentDeckIndexes();
-                    Debug.Log($"[CampController] {character.CharacterName}: {cardsToRemove.Count}개 카드 제거 완료");
                 }
             }
         }

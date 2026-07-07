@@ -27,40 +27,22 @@ public class CampTalkController : MonoBehaviour
         // Space 키로 다음 대화 진행
         if (isDialogueActive && Input.GetKeyDown(KeyCode.Space))
         {
+            bool wasSkipped = false;
+            
             // TypeWriter 실행 중이면 스킵
             if (currentSpeakerIndex >= 0 && campCharSelections[currentSpeakerIndex] != null)
             {
-                campCharSelections[currentSpeakerIndex].SkipTypeWriter();
+                wasSkipped = campCharSelections[currentSpeakerIndex].SkipTypeWriter();
             }
             
-            ShowNextDialogueLine();
+            // 텍스트가 출력중 스킵을 누를 시, 전체 텍스트 표기. 텍스트가 이미 다 출력되었을때 스킵을 누를 시, 다음 대화로 진행
+            if (!wasSkipped)
+            {
+                ShowNextDialogueLine();
+            }
         }
     }
 
-    /// <summary>
-    /// 랜덤 대화 시작
-    /// 조건을 만족하는 CampTalkData 중에서 랜덤으로 선택하여 재생
-    /// </summary>
-    public void StartRandomDialogue()
-    {
-        // 조건을 만족하는 대화 데이터 모두 수집
-        var validTalks = DataManager.Instance.campTalkDataList
-            .Where(talk => talk != null && talk.IsValid())
-            .ToList();
-
-        if (validTalks.Count == 0)
-        {
-            Debug.LogWarning("[CampTalkController] 조건을 만족하는 대화가 없습니다.");
-            return;
-        }
-
-        // 랜덤 선택
-        currentTalkData = validTalks[Random.Range(0, validTalks.Count)];
-        currentTextIndex = 0;
-        isDialogueActive = true;
-
-        ShowNextDialogueLine();
-    }
 
     /// <summary>
     /// CSV key에서 캐릭터 코드 파싱
@@ -143,7 +125,8 @@ public class CampTalkController : MonoBehaviour
         currentTextIndex = 0;
         isDialogueActive = true;
 
-        Debug.Log($"[CampTalkController] 특정 대화 시작: {talkData.name}");
+        // 특정 대화도 사용 완료 목록에 추가
+        ProgressDataManager.Instance.usedCampTalks.Add(currentTalkData.GetInstanceID());
         ShowNextDialogueLine();
     }
 
