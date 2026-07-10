@@ -18,10 +18,6 @@ public class CampTalkController : MonoBehaviour
     private bool isDialogueActive = false;
     private int currentSpeakerIndex = -1; // 현재 말하고 있는 캐릭터 인덱스
 
-    private void Start()
-    {
-    }
-
     private void Update()
     {
         // Space 키로 다음 대화 진행

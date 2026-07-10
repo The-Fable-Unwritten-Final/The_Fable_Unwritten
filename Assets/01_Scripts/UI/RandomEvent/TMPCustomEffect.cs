@@ -31,6 +31,93 @@ public class TMPCustomEffect : MonoBehaviour
         ApplyEffects(tags);
     }
 
+    public void SetGradientTextPartial(string rawText)
+    {
+        // 현재 표시된 텍스트의 길이
+        int currentDisplayLength = text.text.Length;
+        
+        // 파싱 (전체 rawText에서 태그 정보 추출)
+        var parsed = GradientTextParser.Parse(rawText, out var tags);
+        
+        // Mesh 업데이트
+        text.ForceMeshUpdate();
+        
+        // 현재 표시 범위 내의 효과만 적용
+        ApplyEffectsPartial(tags, currentDisplayLength);
+    }
+
+    void ApplyEffectsPartial(List<GradientTextParser.TagInfo> tags, int displayLength)
+    {
+        // 색상 효과 적용 (현재 표시 범위 내만)
+        foreach (var tag in tags)
+        {
+            if (tag.tag.Contains("gr_"))
+            {
+                // 태그 범위가 현재 표시 범위와 겹치면 효과 적용
+                if (tag.start < displayLength && tag.end < displayLength)
+                {
+                    ApplyColorEffect(tag);
+                }
+                else if (tag.start < displayLength)
+                {
+                    // 일부만 표시되는 경우, end를 displayLength-1로 조정
+                    var partialTag = tag;
+                    partialTag.end = displayLength - 1;
+                    ApplyColorEffect(partialTag);
+                }
+            }
+        }
+        text.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
+
+        // shake 효과 (색상 보존)
+        foreach (var tag in tags)
+        {
+            if (tag.tag.Contains("shake") && !tag.tag.Contains("wave"))
+            {
+                if (tag.start < displayLength && tag.end < displayLength)
+                {
+                    if (tag.tag.Contains("weakshake"))
+                    {
+                        StartCoroutine(ApplyWeakShakeEffect(tag.start, tag.end));
+                    }
+                    else
+                    {
+                        StartCoroutine(ApplyShakeEffect(tag.start, tag.end));
+                    }
+                }
+                else if (tag.start < displayLength)
+                {
+                    int adjustedEnd = Mathf.Min(tag.end, displayLength - 1);
+                    if (tag.tag.Contains("weakshake"))
+                    {
+                        StartCoroutine(ApplyWeakShakeEffect(tag.start, adjustedEnd));
+                    }
+                    else
+                    {
+                        StartCoroutine(ApplyShakeEffect(tag.start, adjustedEnd));
+                    }
+                }
+            }
+        }
+
+        // wave 효과 (색상 보존)
+        foreach (var tag in tags)
+        {
+            if (tag.tag.Contains("wave"))
+            {
+                if (tag.start < displayLength && tag.end < displayLength)
+                {
+                    StartCoroutine(ApplyWaveEffect(tag.start, tag.end));
+                }
+                else if (tag.start < displayLength)
+                {
+                    int adjustedEnd = Mathf.Min(tag.end, displayLength - 1);
+                    StartCoroutine(ApplyWaveEffect(tag.start, adjustedEnd));
+                }
+            }
+        }
+    }
+
     void ApplyEffects(List<GradientTextParser.TagInfo> tags)
     {
         // 색상 효과 모두 적용
