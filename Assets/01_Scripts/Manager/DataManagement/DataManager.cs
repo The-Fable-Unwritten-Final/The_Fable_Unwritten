@@ -39,6 +39,8 @@ public class DataManager : MonoSingleton<DataManager>
     public List<StyleDefinition> styleDefs; // 문체 데이터를 수동으로 등록해 주어야함.
     // 랜덤 이벤트 데이터
     public List<RandomEventData> allRandomEvents { get; set;}
+    // 캠프 대화 데이터
+    [SerializeField] public List<CampTalkData> campTalkDataList = new(); // 조건에 따른 캠프 대화 데이터 목록
     // 백그라운드 이미지 데이터 + 전투용 배경
     Dictionary<int, Sprite> stageBackgrounds;
     Dictionary<int, Sprite> battleCamImages;
@@ -94,6 +96,7 @@ public class DataManager : MonoSingleton<DataManager>
         LocaleDataManager.LoadRandomEventCsv();
         LocaleDataManager.LoadRandomEventEffectCsv();
         LocaleDataManager.LoadStyleEffectCsv();
+        LocaleDataManager.LoadCampTalkCsv(); // 캠프 대화 CSV 로드
         //LocaleDataManager.LoadDialogueCsv();
         //LocaleDataManager.LoadUICsv();
     }

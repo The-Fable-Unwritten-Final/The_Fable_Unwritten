@@ -14,6 +14,7 @@ public static class LocaleDataManager
     private static Dictionary<string, string[]> _dialogueTable = new Dictionary<string, string[]>();
     private static Dictionary<string, string[]> _styleEffectTable = new Dictionary<string, string[]>();
     private static Dictionary<string, string[]> _uiTable = new Dictionary<string, string[]>();
+    private static Dictionary<string, string[]> _campTalkTable = new Dictionary<string, string[]>(); // 캠프 대화 전용
 
     private static Dictionary<string, int> _langColumnMap = new Dictionary<string, int>()
     {
@@ -43,6 +44,13 @@ public static class LocaleDataManager
         TextAsset csv = Resources.Load<TextAsset>("ExternalFiles/StyleEffectLocaleData");
         _styleEffectTable = LoadCsvToDictionary(csv);
     }
+
+    public static void LoadCampTalkCsv()
+    {
+        TextAsset csv = Resources.Load<TextAsset>("ExternalFiles/CampTalkLocaleData");
+        _campTalkTable = LoadCsvToDictionary(csv);
+    }
+
     public static void LoadDialogueCsv(TextAsset csv)
     {
         _dialogueTable = LoadCsvToDictionary(csv);
@@ -101,6 +109,11 @@ public static class LocaleDataManager
     public static string GetLocalizedDialogue(string key)
     {
         return GetLocalizedStringFromDict(_dialogueTable, key);
+    }
+
+    public static string GetLocalizedCampTalk(string key)
+    {
+        return GetLocalizedStringFromDict(_campTalkTable, key);
     }
 
     public static string GetLocalizedUI(string key)

@@ -39,9 +39,21 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     public HashSet<int> unlockedCharacterIDs = new(); // 해금된 캐릭터 ID 목록
 
     // 랜덤 이벤트
-    HashSet<int> usedRandomEvent = new();     // RandomEvent 진행 유무(게임 재시작 및 실패 시 초기화 - ClearUsedEvents())
+    public HashSet<int> usedRandomEvent = new();     // RandomEvent 진행 유무(게임 재시작 및 실패 시 초기화 - ClearUsedEvents())
     HashSet<int> TriggeredRandomEvent = new(); // 인과 형식의 랜덤 이벤트가 활성화 된 경우 저장.
     Dictionary<int, StageTheme> stageThemes = new(); // 2~4 스테이지용 테마
+
+    // 캠프 대화
+    public HashSet<int> usedCampTalks = new();       // 현재 회차에서 이미 사용된 캠프 대화 ID (ResetProgress 호출 시 초기화)
+
+
+    /// <summary>
+    /// 특정 랜덤 이벤트가 이미 사용되었는지 확인 (캠프 대화 조건 체크용)
+    /// </summary>
+    public bool HasUsedRandomEvent(int eventId)
+    {
+        return usedRandomEvent.Contains(eventId);
+    }
     HashSet<StageTheme> eliteClearThemes = new(); // Theme 별 Elite Clear 리스트
 
     // 스테이지 방문 & 현재 노드 정보
@@ -709,6 +721,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         TriggeredRandomEvent.Clear();
         stageThemes.Clear();
         eliteClearThemes.Clear();
+        usedCampTalks.Clear();  // 캠프 대화 초기화
 
         AssignThemesToStages();
 

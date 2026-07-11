@@ -96,19 +96,16 @@ public class UI_RandomEvent : MonoBehaviour
 
    private IEnumerator StartTyping()
     {
-        //yield return StartCoroutine(TypeText(descriptionTxt, LocaleDataManager.GetLocalizedRandomEvent(currentData.description))); 점진적 텍스트 표시 => 텍스트 이펙트를 위해서 즉시 텍스트 표시로 변경
         var customEffect = descriptionTxt.GetComponent<TMPCustomEffect>();
         if (customEffect != null)
         {
             customEffect.Reset();
-            customEffect.SetGradientText(LocaleDataManager.GetLocalizedRandomEvent(currentData.description));
-        }
-        else
-        {
-            Debug.LogError("TMPCustomEffect 컴포넌트를 찾을 수 없습니다!");
-            descriptionTxt.text = LocaleDataManager.GetLocalizedRandomEvent(currentData.description);
         }
         
+        string fullText = LocaleDataManager.GetLocalizedRandomEvent(currentData.description);
+        
+        // 타이핑 도중에도 이펙트 적용 (태그는 안 보임)
+        yield return StartCoroutine(TypeTextWithEffect(descriptionTxt, fullText));
 
         yield return new WaitForSeconds(0.5f);
         Coroutine op_0 = StartCoroutine(TypeText(optionTxt_a, LocaleDataManager.GetLocalizedRandomEvent(currentData.option_a)));
@@ -128,6 +125,28 @@ public class UI_RandomEvent : MonoBehaviour
         foreach (var c in fullText)
         {
             textUI.text += c;
+            yield return new WaitForSeconds(typingSpeed);
+        }
+    }
+
+    private IEnumerator TypeTextWithEffect(TextMeshProUGUI textUI, string rawText)
+    {
+        var customEffect = textUI.GetComponent<TMPCustomEffect>();
+        string parsedText = GradientTextParser.Parse(rawText, out var _);
+        
+        textUI.text = "";
+        int charCount = parsedText.Length;
+        
+        for (int i = 0; i < charCount; i++)
+        {
+            textUI.text += parsedText[i];
+            
+            // 매 글자마다 부분적으로 이펙트 적용 (타이핑 진행 상황 유지)
+            if (customEffect != null)
+            {
+                customEffect.SetGradientTextPartial(rawText);
+            }
+            
             yield return new WaitForSeconds(typingSpeed);
         }
     }
@@ -234,18 +253,15 @@ public class UI_RandomEvent : MonoBehaviour
             })
             .Select(i => LocaleDataManager.GetLocalizedRandomEventEffect("Event_" + i)));
 
-        //yield return StartCoroutine(TypeText(descriptionTxt, resultDescription)); 점진적 텍스트 표시 => 텍스트 이펙트를 위해서 즉시 텍스트 표시로 변경
         var customEffect = descriptionTxt.GetComponent<TMPCustomEffect>();
         if (customEffect != null)
         {
             customEffect.Reset();
-            customEffect.SetGradientText(resultDescription);
         }
-        else
-        {
-            Debug.LogError("TMPCustomEffect 컴포넌트를 찾을 수 없습니다!");
-            descriptionTxt.text = resultDescription;
-        }
+        
+        // 태그를 제거한 텍스트만 타이핑 (화면에 <gr_??> 같은 태그가 보이지 않음)
+        string parsedResultText = GradientTextParser.Parse(resultDescription, out var _);
+        yield return StartCoroutine(TypeTextWithEffect(descriptionTxt, resultDescription));
         yield return new WaitForSeconds(0.5f);
 
         yield return StartCoroutine(TypeText(optionTxt_b, resultText));
