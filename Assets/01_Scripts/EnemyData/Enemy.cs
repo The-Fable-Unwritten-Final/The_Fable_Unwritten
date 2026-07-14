@@ -102,7 +102,6 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         {
             Debug.LogWarning($"[{name}] enemyData가 누락되었습니다.");
         }
-        SetData(enemyData);
     }
 
     private void Start()
