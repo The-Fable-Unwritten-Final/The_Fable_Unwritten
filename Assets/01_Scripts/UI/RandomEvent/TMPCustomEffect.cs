@@ -178,7 +178,7 @@ public class TMPCustomEffect : MonoBehaviour
         else if (colorType.Contains("gr_R") && !colorType.Contains("gr_RBW"))// 레드
             ApplyHorizontalGradient(tag.start, tag.end, Color.white, Color.red, 1, 5);
         else if (colorType.Contains("gr_O"))// 오렌지
-            ApplyHorizontalGradient(tag.start, tag.end, Color.yellow, Color.red, 1, 5);
+            ApplyHorizontalGradient(tag.start, tag.end, new Color(1f, 0.7f, 0f), new Color(1f, 0.3f, 0f), 1, 5);
         else if (colorType.Contains("gr_Y"))// 옐로우
             ApplyHorizontalGradient(tag.start, tag.end, Color.white, Color.yellow, 1, 5);
         else if (colorType.Contains("gr_P"))// 퍼플

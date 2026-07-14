@@ -88,13 +88,13 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         InitializePlayerData();
         LoadProgress();
 
-        DataManager.Instance.InitCardUnlockStatus();
+        DataManager.Instance.InitCardUnlockStatus();    
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.C))
         {
-            UnlockStyle(8);
+            Debug.Log($"[ProgressDataManager] 현재 해금 카드: {string.Join(", ", unlockedCards)}");
         }
     }
     // 나중에 저장을 세부적으로 쪼개기

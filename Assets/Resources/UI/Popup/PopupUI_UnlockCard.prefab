@@ -10910,8 +10910,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1275277533845035749}
-        m_TargetAssemblyTypeName: BasePopupUI, Assembly-CSharp
-        m_MethodName: Close
+        m_TargetAssemblyTypeName: PopupUI_UnlockCard, Assembly-CSharp
+        m_MethodName: OnConfirmUnlock
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11478,7 +11478,7 @@ MonoBehaviour:
     m_TableReference:
       m_TableCollectionName: GUID:1de767cfd71db194b868982066ee5431
     m_TableEntryReference:
-      m_KeyId: 1865719048843264
+      m_KeyId: 4313544198205440
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0

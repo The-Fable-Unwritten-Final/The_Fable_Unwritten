@@ -20,7 +20,7 @@ public class PopupUI_UnlockCard : BasePopupUI
     public void Show()
     {
         CardModel model = EventEffectManager.Instance.cardData;
-        if(model == null)
+        if (model == null)
         {
             Debug.LogError("[PopupUI_UnlockCard] 카드 데이터가 없습니다.");
             return;
@@ -32,5 +32,19 @@ public class PopupUI_UnlockCard : BasePopupUI
         cardName.text = model.cardName;
         cardDesc.text = model.cardText;
 
+    }
+    
+    public void OnConfirmUnlock()
+    {
+        CardModel cardData = EventEffectManager.Instance.cardData;
+        if (cardData != null)
+        {
+            ProgressDataManager.Instance.unlockedCards.Add(cardData.index);
+            cardData.isUnlocked = true;  // CardModel의 isUnlocked도 즉시 업데이트
+            ProgressDataManager.Instance.SaveProgress(true);
+        }
+
+        // 팝업 닫기
+        base.Close();
     }
 }
