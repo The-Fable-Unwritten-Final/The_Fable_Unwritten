@@ -275,7 +275,7 @@ public class StageMapController : MonoBehaviour
         // 생성한 스테이지 데이터를 ProgressDataManager에 저장
         var progressManager = ProgressDataManager.Instance;
         progressManager.SaveStageState(stageData, visitedNodes);
-        progressManager.CurrentBattleNode = null;  // 시작 노드를 선택하게 됨
+        progressManager.CurrentNode = null;  // 시작 노드를 선택하게 됨
         
         mapRenderer.Render(stageData, OnNodeClicked);
         mapRenderer.CenterMap();

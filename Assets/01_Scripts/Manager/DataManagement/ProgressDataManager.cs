@@ -64,7 +64,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     public bool StageCleared { get; set; }             // 전투 승리 여부
     public bool IsNewStage { get; set; }               // 새 스테이지 여부 (튜토리얼 용)
     public bool IsStageScene { get; set; }             // 마지막 플레이 중이였던 컨텐츠 스테이지씬 여부 (전투,랜덤이벤트,휴식 등..)
-    public GraphNode CurrentBattleNode { get; set; }   // 현재 선택한 노드
+    public GraphNode CurrentNode { get; set; }   // 현재 선택한 노드
     public StageData SavedStageData { get; private set; }               // 현재 진행 중인 스테이지 데이터
     public List<GraphNode> VisitedNodes { get; private set; } = new();  // 플레이어가 진행한 노드 리스트
     public StageTheme CurrentTheme { get; private set; }  // 진행 테마 저장용
@@ -367,7 +367,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
         if (SavedStageData != null && VisitedNodes != null)
         {
-            var dto = StageDataSaveHelper.ConvertToDTO(SavedStageData, VisitedNodes, CurrentBattleNode);
+            var dto = StageDataSaveHelper.ConvertToDTO(SavedStageData, VisitedNodes, CurrentNode);
             data.stageDataJson = JsonUtility.ToJson(dto);
         }
 
@@ -528,7 +528,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
             var dto = JsonUtility.FromJson<StageDataDTO>(data.stageDataJson);
             SavedStageData = StageDataSaveHelper.ConvertFromDTO(dto, out var visited, out var current);
             VisitedNodes = visited;
-            CurrentBattleNode = current;
+            CurrentNode = current;
         }
 
         // 버전 호환성: 없는 이펙트 인덱스는 필터링
@@ -656,7 +656,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         StageCleared = false;
         IsStageScene = true;
         IsSecondGame = false;
-        CurrentBattleNode = null;
+        CurrentNode = null;
         SavedStageData = null;
         VisitedNodes.Clear();
         CurrentTheme = default;
@@ -737,7 +737,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         RetryFromStart = true;
         StageCleared = false;
         IsStageScene = true;
-        CurrentBattleNode = null;
+        CurrentNode = null;
         SavedStageData = null;
         VisitedNodes.Clear();
         CurrentTheme = default;
@@ -821,7 +821,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         StageCleared = false;
         IsStageScene = true;
         IsSecondGame = false;
-        CurrentBattleNode = null;
+        CurrentNode = null;
         SavedStageData = null;
         VisitedNodes.Clear();
         CurrentTheme = default;
@@ -945,7 +945,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     /// </summary>
     public void SetCurrentBattleNode(GraphNode node)
     {
-        CurrentBattleNode = node;
+        CurrentNode = node;
     }
     public void AssignThemesToStages()
     {

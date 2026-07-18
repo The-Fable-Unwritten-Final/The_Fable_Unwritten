@@ -37,10 +37,10 @@ public class TutorialController : MonoBehaviour
         
         // Stage 2는 노드 선택 없이 시작되므로, Stage 2가 아닐 때만 null 체크
         int stage = pmd.StageIndex;
-        if (stage != 2 && pmd.CurrentBattleNode == null) return;
+        if (stage != 2 && pmd.CurrentNode == null) return;
 
         string scene = SceneManager.GetActiveScene().name;
-        int col = stage == 2 ? 0 : pmd.CurrentBattleNode.columnIndex;
+        int col = stage == 2 ? 0 : pmd.CurrentNode.columnIndex;
 
         if (stage == 1 && pmd.IsNewStage && scene == SceneNameData.CombatScene)
         {

@@ -20,7 +20,7 @@ public class EnemySpawner : MonoBehaviour
     {
         stageIndex = ProgressDataManager.Instance.StageIndex;
         var theme = ProgressDataManager.Instance.CurrentTheme;
-        var node = ProgressDataManager.Instance.CurrentBattleNode;
+        var node = ProgressDataManager.Instance.CurrentNode;
 
         stageSpawnDatas = DataManager.Instance.GetEnemySpawnData(theme, node.type);      
 
@@ -43,7 +43,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void FixedStage1Setting(EnemyStageSpawnData stageData)
     {
-        var currentNode = ProgressDataManager.Instance.CurrentBattleNode;
+        var currentNode = ProgressDataManager.Instance.CurrentNode;
         if (currentNode == null) return;
 
         int columnIndex = currentNode.columnIndex;

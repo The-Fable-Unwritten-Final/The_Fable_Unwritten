@@ -73,7 +73,7 @@ public class SoundManager : MonoSingleton<SoundManager>
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        var node = ProgressDataManager.Instance.CurrentBattleNode;
+        var node = ProgressDataManager.Instance.CurrentNode;
         var theme = ProgressDataManager.Instance.CurrentTheme;
 
 
@@ -197,7 +197,7 @@ public class SoundManager : MonoSingleton<SoundManager>
     public void PlayBGMForCurrentScene()
     {
         Scene scene = SceneManager.GetActiveScene();
-        var node = ProgressDataManager.Instance.CurrentBattleNode;
+        var node = ProgressDataManager.Instance.CurrentNode;
         var theme = ProgressDataManager.Instance.CurrentTheme;
 
         if (scene.name == SceneNameData.CombatScene &&

@@ -295,6 +295,14 @@ public class UI_RandomEvent : MonoBehaviour
     /// 
     private void ApplyEffectsAndGoToStage()
     {
+        Debug.Log($"[TEST] RetryFromStart = {ProgressDataManager.Instance.RetryFromStart}");
+        Debug.Log($"[TEST] SavedStageData = {ProgressDataManager.Instance.SavedStageData}");
+        Debug.Log($"[TEST] VisitedNodes count = {ProgressDataManager.Instance.VisitedNodes.Count}");
+        Debug.Log($"[TEST] CurrentNode = {ProgressDataManager.Instance.CurrentNode?.id ?? -1}");
+
+        // 이전 스테이지 상태를 복원하도록 설정
+        ProgressDataManager.Instance.RetryFromStart = false;
+        
         ProgressDataManager.Instance.SavedRandomEvent = -1;
         foreach (int resultIndex in results)
         {

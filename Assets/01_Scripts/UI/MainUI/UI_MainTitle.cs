@@ -59,7 +59,7 @@ public class UI_MainTitle : MonoBehaviour
 
     public void OnClickSaveGame()
     {
-        var currentNode = ProgressDataManager.Instance.CurrentBattleNode;
+        var currentNode = ProgressDataManager.Instance.CurrentNode;
 
         if (currentNode == null || ProgressDataManager.Instance.IsStageScene)
         {

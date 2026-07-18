@@ -194,7 +194,7 @@ public class PopupUI_MiniMap : BasePopupUI
 
             currentStageData = progressManager.SavedStageData;
             visitedNodes = progressManager.VisitedNodes;
-            var currentBattleNode = progressManager.CurrentBattleNode;
+            var currentBattleNode = progressManager.CurrentNode;
 
             if (currentStageData == null || currentStageData.columns == null || currentStageData.columns.Count == 0)
             {
@@ -419,7 +419,7 @@ public class PopupUI_MiniMap : BasePopupUI
     /// </summary>
     private void UpdateNodeColors()
     {
-        var currentBattleNode = progressManager?.CurrentBattleNode;
+        var currentBattleNode = progressManager?.CurrentNode;
 
         if (visitedNodes == null)
         {

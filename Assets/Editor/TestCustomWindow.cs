@@ -76,8 +76,8 @@ public class TestCustomWindow : EditorWindow
                 }
             }
 
-            if (setting.CurrentBattleNode.type == NodeType.Boss ||
-                    (setting.StageIndex == 1 && setting.CurrentBattleNode.columnIndex == 3))
+            if (setting.CurrentNode.type == NodeType.Boss ||
+                    (setting.StageIndex == 1 && setting.CurrentNode.columnIndex == 3))
             {
                 setting.IsNewStage = true;
             }
@@ -86,14 +86,14 @@ public class TestCustomWindow : EditorWindow
                 setting.IsNewStage = false;
             }
 
-            if (setting.CurrentBattleNode.type == NodeType.EliteBattle)
+            if (setting.CurrentNode.type == NodeType.EliteBattle)
             {
                 setting.EliteClear(setting.CurrentTheme);
             }
             ProgressDataManager.Instance.SavedEnemySetIndex = -1; // 랜덤 에너미 셋 초기화
 
             // 앤딩일시 표시(*유저 테스트용*)
-            if (setting.CurrentBattleNode.type == NodeType.Boss
+            if (setting.CurrentNode.type == NodeType.Boss
                 && setting.StageIndex == 3)
             {
                 GameManager.Instance.tutorialController.ShowTutorial(9);
