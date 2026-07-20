@@ -127,6 +127,18 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
                     };
                     eventEffectList.Add(nodeTeleportEffect);
                     break;
+
+                case 5: // 잉크 +- 효과
+                    var inkEffect = new InkEventEffect
+                    {
+                        index = data.index,
+                        text = data.text,
+                        eventType = data.eventType,
+                        duration = data.duration,
+                        inkAmount = data.inkAmount
+                    };
+                    eventEffectList.Add(inkEffect);
+                    break;
             }
         }
 

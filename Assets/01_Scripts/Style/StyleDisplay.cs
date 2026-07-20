@@ -377,7 +377,7 @@ public class StyleDisplay : MonoBehaviour // 기존 팝업 방식(basepopup 상�
         // inkGauge의 fillAmount를 현재 잉크 양에 맞게 부드럽게 변화
         float targetFill = Mathf.Clamp01((float)amount / 10);
         inkHolder.DOFillAmount(targetFill, 0.5f).SetEase(Ease.OutCubic);
-        inkText.text = $"{amount}/{10}";
+        inkText.text = $"{amount}/{ProgressDataManager.Instance.maxInkAmount}";
     } 
     public void UpdateCurrentStyle(StyleDefinition sty) // 현재 문체 표시 부분의(중단 UI 전부) 정보 업데이트
     {

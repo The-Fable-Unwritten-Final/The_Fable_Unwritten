@@ -35,6 +35,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     // 문체 시스템
     public int currentDefID = 1;                     // 현재 적용 중인 문체 ID
     public int inkAmount = 0;                        // 보유 잉크
+    public int maxInkAmount = 10;                       // 최대 잉크량 (추후 해당 데이터가 변동 가능하도록 설정할 계획)
     public HashSet<int> unlockedStyles = new();     // 해금된 문체 ID 목록
     public HashSet<int> unlockedCharacterIDs = new(); // 해금된 캐릭터 ID 목록
 
@@ -694,6 +695,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         }
         currentDefID = 1;
         inkAmount = 0;
+        maxInkAmount = 10;
         // 카드 해금, 문체 해금, 캐릭터 해금 초기화
         unlockedCards.Clear();
         unlockedCharacterIDs.Clear();
@@ -773,6 +775,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         }
         currentDefID = 1;
         inkAmount = 0;
+        maxInkAmount = 10;
 
         PlayerPrefs.DeleteKey("ProgressSaveData");
         SaveProgress(true);
@@ -860,6 +863,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
         currentDefID = 1;
         inkAmount = 0;
+        maxInkAmount = 10;
 
         // 해금 정보는 보존
         // unlockedCards.Clear();  보존
@@ -1070,6 +1074,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     {
         data.currentdefid = currentDefID;
         data.inkamount = inkAmount;
+        data.maxInkAmount = maxInkAmount;
         data.unlockedStyleIds = unlockedStyles.ToList();
     }
 
@@ -1217,6 +1222,7 @@ public class ProgressSaveData
     // 문체 시스템
     public int currentdefid;
     public int inkamount;
+    public int maxInkAmount;
     public List<int> unlockedStyleIds = new();
 
     // 랜덤 이벤트
