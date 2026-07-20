@@ -81,8 +81,8 @@ public class PopupUI_CombatReward : BasePopupUI
                 ProgressDataManager.Instance.SavedEnemySetIndex = -1; // 랜덤 에너미 셋 초기화
 
                 gameObject.SetActive(false);
-
-                // 앤딩일시 표시(*유저 테스트용*)
+                
+                // 엔딩일시 표시(테스트 버전용 - 스테이지 4 클리어시 얼리 액세스 기준 엔드)
                 if (setting.CurrentNode.type == NodeType.Boss
                     && setting.StageIndex == 4)
                 {

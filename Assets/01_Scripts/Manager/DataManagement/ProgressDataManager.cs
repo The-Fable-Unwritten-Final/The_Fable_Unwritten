@@ -74,7 +74,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     public int CurrentExp { get; set; }                 //현재까지 얻은 Exp;
     public bool IsNewCamp { get; set; }                 // 첫 야영지 확인용 (첫 캠프에만 튜토리얼)
     public bool IsSecondGame { get; set; }                  // 새로하기 확인용 (완전 처음 일때 false / 이후 새로하기 일때 true)
-    public bool IsEndingClear { get; set; }                 // 앤딩봤을 경우
+    public bool IsEndingClear { get; set; }                 // 엔딩봤을 경우
     // 설정 데이터
     public Vector2Int[] resolutions = new Vector2Int[1];
 
@@ -657,6 +657,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         StageCleared = false;
         IsStageScene = true;
         IsSecondGame = false;
+        IsEndingClear = false;
         CurrentNode = null;
         SavedStageData = null;
         VisitedNodes.Clear();
@@ -696,7 +697,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         currentDefID = 1;
         inkAmount = 0;
         maxInkAmount = 10;
-        // 카드 해금, 문체 해금, 캐릭터 해금 초기화
+        IsEndingClear = false;  // 엔딩 클리어 상태 초기화        // 카드 해금, 문체 해금, 캐릭터 해금 초기화
         unlockedCards.Clear();
         unlockedCharacterIDs.Clear();
         InitializeDefaultStyleUnlock();
@@ -776,7 +777,6 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         currentDefID = 1;
         inkAmount = 0;
         maxInkAmount = 10;
-
         PlayerPrefs.DeleteKey("ProgressSaveData");
         SaveProgress(true);
         // 저장된 데이터 다시 로드하여 메모리에 반영
@@ -988,12 +988,14 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         // 현재 테마와 일치하거나 공통 이벤트중, 등장하지 않은 이벤트 선정
         // 천의 자리수가 0인 이벤트만 선택 (x1xxx는 연속 이벤트이기 때문에 제외)
         // 선행 조건 이벤트가 있으면 해당 이벤트를 이미 진행했을 경우에만 등장
+        // result에 63(NodeTeleportEventEffect)이 있으면 IsEndingClear가 true일 때만 등장
             .Where(x => 
                 (x.theme == theme || x.theme == 0) &&                        // 테마 일치
                 !usedRandomEvent.Contains(x.index) &&                        // 미사용
                 (x.index / 1000) % 10 == 0 &&                               // 천의 자리 0
-                (x.prerequisiteEventIndex == 0 ||                           // 조건 없거나
-                 usedRandomEvent.Contains(x.prerequisiteEventIndex))        // 선행 조건 완료
+                (x.prerequisiteEventIndex == 0 ||                           // (스토리 선행)조건 없거나
+                 usedRandomEvent.Contains(x.prerequisiteEventIndex)) &&     // 선행 조건 완료
+                (!HasResult63(x) || IsEndingClear)                           // result 63 필터링 => 2회차 클리어 부터 보스 노드 순간이동 이벤트가 활성화.
             )
             .ToList();
 
@@ -1002,6 +1004,33 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         var selected = available[UnityEngine.Random.Range(0, available.Count)];
         usedRandomEvent.Add(selected.index);
         return selected;
+    }
+
+    /// <summary>
+    /// 랜덤 이벤트의 result에 63(NodeTeleportEventEffect)이 포함되어 있는지 확인
+    /// </summary>
+    private bool HasResult63(RandomEventData eventData)
+    {
+        var resultStrings = new[] { eventData.result_a1, eventData.result_a2, eventData.result_b1, eventData.result_b2 };
+        
+        foreach (var resultStr in resultStrings)
+        {
+            if (string.IsNullOrWhiteSpace(resultStr)) continue;
+            
+            // & 기준으로 split해서 각 숫자를 파싱
+            var resultIndices = resultStr.Split('&')
+                .Select(s => 
+                {
+                    int.TryParse(s.Trim(), out int value);
+                    return value;
+                })
+                .ToList();
+            
+            if (resultIndices.Contains(63))
+                return true;
+        }
+        
+        return false;
     }
     public void SaveEnemySetIndex(int index)
     {
