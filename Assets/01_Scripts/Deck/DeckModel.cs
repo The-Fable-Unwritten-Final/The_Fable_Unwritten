@@ -211,14 +211,30 @@ public class DeckModel
     }
 
 
+    /// <summary>
+    /// 카드가 지속적 할인을 받을 자격이 있는지 판단
+    /// (특정 키워드를 가진 카드는 제외)
+    /// </summary>
+    private bool ShouldApplyPersistentDiscount(CardModel card)
+    {
+        // 'copy' 키워드를 가진 카드는 할인 적용 안함
+        return !card.HasKeyword("copy");
+    }
+
+    /// <summary>
+    /// '모든 카드' 대상 amount 만큼 할인 적용
+    /// </summary>
     public void ApplyPersistentDiscountToAllCards(int amount)
     {
         foreach (var card in hand)
-            card.ApplyPersistentDiscount(amount);
+            if (ShouldApplyPersistentDiscount(card))
+                card.ApplyPersistentDiscount(amount);
         foreach (var card in unusedDeck)
-            card.ApplyPersistentDiscount(amount);
+            if (ShouldApplyPersistentDiscount(card))
+                card.ApplyPersistentDiscount(amount);
         foreach (var card in usedDeck)
-            card.ApplyPersistentDiscount(amount);
+            if (ShouldApplyPersistentDiscount(card))
+                card.ApplyPersistentDiscount(amount);
     }
     /// <summary>
     ///  '특정 타입'의 카드 대상 할인 적용
@@ -226,15 +242,15 @@ public class DeckModel
     public void ApplyPersistentDiscountByCardType(CardType targetType, int amount)
     {
         foreach (var card in hand)
-            if (card.type == targetType)
+            if (card.type == targetType && ShouldApplyPersistentDiscount(card))
                 card.ApplyPersistentDiscount(amount);
         
         foreach (var card in unusedDeck)
-            if (card.type == targetType)
+            if (card.type == targetType && ShouldApplyPersistentDiscount(card))
                 card.ApplyPersistentDiscount(amount);
         
         foreach (var card in usedDeck)
-            if (card.type == targetType)
+            if (card.type == targetType && ShouldApplyPersistentDiscount(card))
                 card.ApplyPersistentDiscount(amount);
     }
 

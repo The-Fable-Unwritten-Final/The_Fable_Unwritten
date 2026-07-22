@@ -27,3 +27,4 @@ public class EventEffectData
     public int buffStatValue; // 버프/디버프 수치
     public int buffStatDuration; // 버프/디버프 지속 시간
     public int inkAmount; // 잉크량 변화
+}
