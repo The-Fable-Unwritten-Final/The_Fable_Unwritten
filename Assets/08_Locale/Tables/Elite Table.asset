@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5be51871efa6c3e4eae1703925c8f5ac, type: 3}
+  m_Name: Elite Table
+  m_EditorClassIdentifier: 
+  m_SharedTableData: {fileID: 11400000, guid: 55a70267677e2654493ba84cc0192783, type: 2}
+  m_Tables:
+  - {fileID: 11400000, guid: ea8c3569f61cea445b4a36961eb76eaf, type: 2}
+  - {fileID: 11400000, guid: 8a2b841dcb613d74b89d3bf0020c6dd3, type: 2}
+  - {fileID: 11400000, guid: 9f0cc5f8622f7434b87aec02ff48f8a3, type: 2}
+  m_Extensions: []
+  m_Group: String Table
+  references:
+    version: 2
+    RefIds: []

@@ -1,0 +1,518 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Elite Table_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 55a70267677e2654493ba84cc0192783, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 834354556928
+    m_Localized: Scroll
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10320621568
+    m_Localized: Runic Carapace
+    m_Metadata:
+      m_Items: []
+  - m_Id: 842986434560
+    m_Localized: Predation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 850922057728
+    m_Localized: Swallowed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 858085928960
+    m_Localized: Soprano
+    m_Metadata:
+      m_Items: []
+  - m_Id: 867581833216
+    m_Localized: Mezzo-Soprano
+    m_Metadata:
+      m_Items: []
+  - m_Id: 874884116480
+    m_Localized: Alto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 892080762880
+    m_Localized: Clash
+    m_Metadata:
+      m_Items: []
+  - m_Id: 883729903616
+    m_Localized: Face-Off
+    m_Metadata:
+      m_Items: []
+  - m_Id: 902046429184
+    m_Localized: Clash
+    m_Metadata:
+      m_Items: []
+  - m_Id: 909885583360
+    m_Localized: Challenger
+    m_Metadata:
+      m_Items: []
+  - m_Id: 922330083328
+    m_Localized: Encirclement
+    m_Metadata:
+      m_Items: []
+  - m_Id: 931909873664
+    m_Localized: Exhaustion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 941477081088
+    m_Localized: Formation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 949182017536
+    m_Localized: Marching Orders
+    m_Metadata:
+      m_Items: []
+  - m_Id: 955288924160
+    m_Localized: Formation Break
+    m_Metadata:
+      m_Items: []
+  - m_Id: 961785901056
+    m_Localized: Rally
+    m_Metadata:
+      m_Items: []
+  - m_Id: 972036780032
+    m_Localized: Doubt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1044828925952
+    m_Localized: Solo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1037212069888
+    m_Localized: Duet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 985089454080
+    m_Localized: Intimidated
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1023081459712
+    m_Localized: Encouragement
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1030555709440
+    m_Localized: Trio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1084616093696
+    m_Localized: Unidentified Rune
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1105784745984
+    m_Localized: Current Rune
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1149015437312
+    m_Localized: Rune Storm Warning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1155982176256
+    m_Localized: Trace of Deciphering
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1161950670848
+    m_Localized: Agape
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1169546555392
+    m_Localized: Divine Veil
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1175762513920
+    m_Localized: Devotion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1181101862912
+    m_Localized: Obsession
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1187066163200
+    m_Localized: Balance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1193932238848
+    m_Localized: Contrast {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1201599426560
+    m_Localized: Mastery
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1210621374464
+    m_Localized: Opening {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1219240669184
+    m_Localized: Phantom Veil
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1224546463744
+    m_Localized: Doubt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1229340553216
+    m_Localized: Misjudgment
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1234910588928
+    m_Localized: Trust
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1240077971456
+    m_Localized: Authority
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1245333434368
+    m_Localized: 'Defense +{0}
+
+      Decreases by 1 on attack damage taken
+
+      When
+      it reaches 0, gain {1} Attack at the start of next enemy turn and use Tidal
+      Wave'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1251008327680
+    m_Localized: 'If any Flip survives at the end of the enemy turn, +1
+
+      At
+      {0}, remove all Flip at the start of enemy turn
+
+      Deal {1} damage to all
+      allies and reset the stack
+
+      If below {0} at the end of enemy turn,
+
+      summon
+      a Flip'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1257656299520
+    m_Localized: 'Decreases by the attack damage taken
+
+      When it reaches 0,
+      spit out the swallowed target
+
+      If any stacks remain at the end of the
+      player''s turn
+
+      Deal {0} damage to the target, recover {1} HP,
+
+      then
+      spit out the target'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1286181761024
+    m_Localized: '{0}
+
+      {1}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1279273742336
+    m_Localized: '{0}
+
+      {1}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1273183612928
+    m_Localized: '{0}
+
+      {1}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1266401423360
+    m_Localized: 'Can''t use cards
+
+      Removed immediately when spat out or when
+      Grolly is dead
+
+      Can''t be reduced to 0 HP by damage taken when swallowed
+      or spat out'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1293584707584
+    m_Localized: 'When attacking the Nameless Swordsman,
+
+      Attacker and Nameless
+      Swordsman: Clash +1
+
+      Attack damage to Nameless Swordsman +{0} per Clash
+
+      Remove
+      Clash when this is removed'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1299758723072
+    m_Localized: Maximum {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410836730916864
+    m_Localized: 'Max {0}
+
+      -{1} when attacked by non Face-Off (max {2} per
+      turn)
+
+      This strengthens Issen'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410838026956800
+    m_Localized: Next Sweep Target
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410838651908096
+    m_Localized: 'Number of allies that attacked this player turn
+
+      At 3 or
+      more, use Whirlwind on next enemy turn'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410896109678592
+    m_Localized: 'Accumulated Damage {0}, Damage Taken +{1}%
+
+      Removed at the
+      end of the player turn
+
+      When removed, recover {2}% of lost HP (Max {3})
+
+      When
+      accumulated damage is {4} or more: Attack +{5},
+
+      {6} or more: Defense
+      +{7}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410898248773632
+    m_Localized: 'Max {0}
+
+      -1 when taking attack damage
+
+      Knight Commander
+      takes {1}% reduced attack damage per Formation (Max {2}%)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410899578368000
+    m_Localized: 'At turn end, all Wraith Soldiers: Formation +{0}
+
+      Target
+      the ally that played the most cards this turn'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410900182347776
+    m_Localized: 'Skip next turn
+
+      Attack Damage Taken +{0}% until end of next
+      player turn'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410900756967424
+    m_Localized: 'Attack +{1} until end of next enemy turn
+
+      Ignore the first
+      Formation reduction next player turn'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410901327392768
+    m_Localized: 'Max {0}
+
+      Card Effects -{1}%
+
+      Become Intimidated at
+      {2} or more'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410901927178240
+    m_Localized: 'Card Effects -{0}%
+
+      Removed when Doubt is below {1}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410902510186496
+    m_Localized: 'Doubt Resolved: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410906985508864
+    m_Localized: Deal {0} damage to all allies
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411085981626368
+    m_Localized: Deal {0} damage to all allies
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411089630670848
+    m_Localized: Deal {0} damage to all allies
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411092403105792
+    m_Localized: All Elua Attack +{0}, Defense +{1}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411094542200832
+    m_Localized: All Elua Defense +{0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411096232505344
+    m_Localized: Attack +{0}, Defense +{1}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411098338045952
+    m_Localized: Restore {0} HP to all Elua
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411100993040384
+    m_Localized: Restore {0} HP to the Elua with the lowest HP
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411104268791808
+    m_Localized: Restore {0} HP and Defense +{1}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411185294356480
+    m_Localized: "when Decipher succeeds -{0}\nFurther reduced by Activation cost
+      reduction (Max {1})\n Enemy turn start: Decreases by 1 per {2} Burn damage
+      (Max {3})"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411186925940736
+    m_Localized: On successful Decipher, changes to a new Rune
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411187580252160
+    m_Localized: 'At 0, use Rune Storm
+
+      On enemy turn end -1 (excluding the
+      turn Rune Storm is used)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411188217786368
+    m_Localized: 'After Deciphering {0} or more,weaken the next Rune Storm with the
+      most deciphered type
+
+      Fire: Damage -{1}, Ice: Remove {2} Debuffs
+
+      Nature:
+      Next turn Sophia Activation +{3},
+
+      Draw {4} additional cards'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411188758851584
+    m_Localized: 'Using Prayer/Baptism on enemies: Devotion +1
+
+      Using Taboo
+      on allies: Obsession +1'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411242513051648
+    m_Localized: 'Attack Damage Taken -{0}%
+
+      Reduced by Balance and Obsession,
+
+      increased
+      by Devotion'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411243129614336
+    m_Localized: 'When higher than Obsession at player turn end
+
+      Weakens the
+      next skill at enemy turn start
+
+      Restore Luciel''s HP and Divine Veil'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411243700039680
+    m_Localized: 'When higher than Devotion at player turn end
+
+      Strengthens
+      the next skill and reduces Divine Veil at enemy turn start
+
+      If the strengthened
+      skill is a healing/buff skill,
+
+      Deal damage equal to the value to all
+      players'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411244253687808
+    m_Localized: 'Reduces Divine Veil at enemy turn start
+
+      At {0} or more,
+      weaken the next skill, then remove'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411244798947328
+    m_Localized: Last Leon card type in this turn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411245340012544
+    m_Localized: 'Below {0}: Counter failure +1
+
+      At {0}: Counter failure strengthens
+      skill and set it to {1}
+
+      [Proof of Bare Hands] strengthens based on value'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411245860106240
+    m_Localized: 'Removed when a Leon card of the same type is used,
+
+      before
+      the end of the next player turn
+
+      On removal success, reduce Mastery by
+      {0}
+
+      on failure, increase Mastery by {1}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411322070609920
+    m_Localized: Attack Damage Taken -{0}%
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411322716532736
+    m_Localized: 'On card use, -1
+
+      Effect of that card -{0}%'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411324381671424
+    m_Localized: 'If Doubt remains at player turn end
+
+      Great Oz gains Authority'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411343583195136
+    m_Localized: 'Doubt Resolved
+
+      Weakens Phantom Veil and reduces Authority
+      at the start of Phase 2'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411344149426176
+    m_Localized: 'Phase 1: Strengthen next skill, then remove
+
+      Phase 2: +1
+      at enemy turn start,
+
+      strengthen attack skills, then -1'
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

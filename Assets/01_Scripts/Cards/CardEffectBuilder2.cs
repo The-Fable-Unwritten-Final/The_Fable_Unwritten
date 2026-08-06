@@ -44,6 +44,7 @@ public static class CardEffectBuilder2
             "Slash" => CardType.Slash,
             "Strike" => CardType.Strike,
             "Defense" => CardType.Defense,
+            "Taboo" => CardType.Taboo,
             _ => throw new Exception($"Unknown CardType string: {value}")
         };
     }

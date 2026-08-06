@@ -55,13 +55,13 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1049329414144
-    m_Localized: At the start of the turn, take damage equal to the value, then after
-      activation the value is halved
+    m_Localized: At the start of your turn, take {0}damage, then reduce the Burn
+      value by 1
     m_Metadata:
       m_Items: []
   - m_Id: 1055549566976
-    m_Localized: At the start of the turn, take damage equal to the value, then after
-      activation the value is halved
+    m_Localized: Attack damage is reduced by {0}. Frozen is removed at the end of
+      the turn
     m_Metadata:
       m_Items: []
   - m_Id: 1057327951872
@@ -70,29 +70,42 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1063862677504
-    m_Localized: Increases the value of buff effects and, if none exist, applies
-      to the next buffeffect
+    m_Localized: 'Reduce the cost of the next card by 1 for every {0} Active
+
+      Consume
+      1 {0} Active per 1 cost reduced'
     m_Metadata:
       m_Items: []
   - m_Id: 1064479240192
-    m_Localized: Take damage equal to the value at the end of the turn
+    m_Localized: 'At the end of the turn, take {0} damage based on Sin
+
+      Then
+      remove all Sin'
     m_Metadata:
       m_Items: []
   - m_Id: 1065179688960
-    m_Localized: Reduces the value of debuff effects and, if none exist, applies
-      to the next debuff effect
+    m_Localized: 'Reduces harmful effects received by {0} based on the Penance value,
+
+      then
+      removes all Penance'
     m_Metadata:
       m_Items: []
   - m_Id: 1065762697216
-    m_Localized: Strike cards deal additional damage equal to the value
+    m_Localized: 'At {0} or more Scar, remove all Scar when attacked and
+
+      gets
+      an additional {1} damage each time attacked this turn'
     m_Metadata:
       m_Items: []
   - m_Id: 1149493587968
-    m_Localized: Has a chance to prevent action for 1 turn
+    m_Localized: '{0}% chance to become unable to act for 1 turn'
     m_Metadata:
       m_Items: []
   - m_Id: 1150806405120
-    m_Localized: Redirects enemy attacks to self and reduces damage taken
+    m_Localized: 'Taunt enemies, reducing damage taken by {0},
+
+      then remove
+      Guard.'
     m_Metadata:
       m_Items: []
   - m_Id: 1151422967808
@@ -148,7 +161,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3283756789760
-    m_Localized: Always have it in hand at the start of battle
+    m_Localized: Always have it in hand at the start of battle (up to 3)
     m_Metadata:
       m_Items: []
   - m_Id: 3284348186624
@@ -201,20 +214,20 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 4155010199552
-    m_Localized: Draw 1 card, and increase healing received this turn by 30%.
+    m_Localized: Draw 1 card, and increase healing received this turn by  {0}%
     m_Metadata:
       m_Items: []
   - m_Id: 4155647733760
     m_Localized: "On the next attack, increase allies\u2019 Attack and Defense by
-      the amount of <link=sin><color=purple>Sin</color></link> applied."
+      the amount of <link=sin><color=purple>Sin</color></link> applied"
     m_Metadata:
       m_Items: []
   - m_Id: 4156859887616
-    m_Localized: The next attack deals 100% increased damage.
+    m_Localized: The next attack deals {0}% increased damage
     m_Metadata:
       m_Items: []
   - m_Id: 4180851306496
-    m_Localized: Maximum HP increases by 20%, and gain 15 Guard.
+    m_Localized: Maximum HP increases by {0}%, and gain {1} Guard
     m_Metadata:
       m_Items: []
   references:

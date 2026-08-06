@@ -20,7 +20,8 @@ public enum CardType
     baptism = 5,
     Slash = 6,
     Strike = 7,
-    Defense = 8
+    Defense = 8,
+    Taboo = 9
 }
 
 public enum BuffStatType
