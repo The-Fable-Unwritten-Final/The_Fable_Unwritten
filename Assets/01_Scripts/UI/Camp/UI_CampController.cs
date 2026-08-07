@@ -11,7 +11,6 @@ public class UI_CampController : MonoBehaviour
 {
     [Header("Background")]
     [SerializeField] Image background;
-    [SerializeField] Sprite[] campBackgrounds;
 
     [Header("Character Interactions")]
     [SerializeField] private CampCharSelection[] campCharSelections; // 4명의 캐릭터 (0=Kyla, 1=Sophia, 2=Leon, 3=Dorothy)
@@ -26,7 +25,6 @@ public class UI_CampController : MonoBehaviour
 
     private void Start()
     {
-        SetBackground();
         ProgressDataManager.Instance.IsNewStage = false;
 
         completedCharacterCount = 0;
@@ -139,21 +137,6 @@ public class UI_CampController : MonoBehaviour
             'D' => 3, // Dorothy
             _ => 0    // 기본값
         };
-    }
-
-    // 스테이지에 따른 백그라운드 설정
-    private void SetBackground()
-    {
-        int stageIndex = ProgressDataManager.Instance.StageIndex;
-
-        if (stageIndex >= 2 && stageIndex <= 4)
-        {
-            int index = stageIndex - 2; // 2스테이지 = 0번 인덱스
-            if (index >= 0 && index < campBackgrounds.Length)
-            {
-                background.sprite = campBackgrounds[index];
-            }
-        }
     }
 
     /// <summary>

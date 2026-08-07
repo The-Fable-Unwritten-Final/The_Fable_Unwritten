@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
+using DG.Tweening;
 
 /// <summary>
 /// 캠프 씬에서 단일 캐릭터의 상호작용 관리
@@ -39,10 +41,27 @@ public class CampCharSelection : MonoBehaviour
     private Coroutine typeWriterCoroutine; // TypeWriter 코루틴 참조
     private bool isTypeWriterActive = false; // TypeWriter 실행 중 플래그
     private string currentFullText = ""; // 현재 표시 중인 전체 텍스트
+    
+    // 호버 효과 제어
+    private bool hoverEnabled = true; // 호버 효과 활성화 여부
+    private Vector3 restButtonInitialScale = Vector3.one; // 휴식 버튼 초기 스케일
+    private Vector3 maintenanceButtonInitialScale = Vector3.one; // 정비 버튼 초기 스케일
 
     private void Start()
     {
+        // 휴식 버튼에 호버 이벤트 추가 및 초기 스케일 저장
+        if (restButton != null)
+        {
+            restButtonInitialScale = restButton.transform.localScale;
+            AddHoverEffectToButton(restButton, true);
+        }
 
+        // 정비 버튼에 호버 이벤트 추가 및 초기 스케일 저장
+        if (maintenanceButton != null)
+        {
+            maintenanceButtonInitialScale = maintenanceButton.transform.localScale;
+            AddHoverEffectToButton(maintenanceButton, false);
+        }
     }
 
     /// <summary>
@@ -251,24 +270,39 @@ public class CampCharSelection : MonoBehaviour
     }
 
     /// <summary>
-    /// 상호작용 버튼 비활성화 (휴식, 정비)
+    /// 상호작용 버튼 비활성화 (휴식, 정비) - DOTween 스케일 애니메이션
     /// </summary>
     private void DisableInteractionButtons()
     {
+        // 호버 효과 비활성화 (비활성화 애니메이션에 영향 받지 않도록)
+        hoverEnabled = false;
+
         if (restButton != null)
-            restButton.SetActive(false);
+        {
+            restButton.transform.DOScale(0f, 0.3f).OnComplete(() => restButton.SetActive(false));
+        }
         if (maintenanceButton != null)
-            maintenanceButton.SetActive(false);
+        {
+            maintenanceButton.transform.DOScale(0f, 0.3f).OnComplete(() => maintenanceButton.SetActive(false));
+        }
     }
 
     /// <summary>
-    /// 스토리 버튼 활성화/비활성화
+    /// 스토리 버튼 활성화/비활성화 - DOTween 스케일 애니메이션
     /// </summary>
     public void SetStoryButtonActive(bool active)
     {
         if (storyButton != null)
         {
-            storyButton.SetActive(active);
+            if (active)
+            {
+                storyButton.SetActive(true);
+                storyButton.transform.DOScale(0.5f, 0.3f);
+            }
+            else
+            {
+                storyButton.transform.DOScale(0f, 0.3f).OnComplete(() => storyButton.SetActive(false));
+            }
         }
     }
 
@@ -279,5 +313,51 @@ public class CampCharSelection : MonoBehaviour
     {
         isRested = false;
         selectedCardsToRemove.Clear();
+    }
+
+    /// <summary>
+    /// 버튼에 호버 효과 추가
+    /// </summary>
+    private void AddHoverEffectToButton(GameObject button, bool isRestButton)
+    {
+        EventTrigger trigger = button.GetComponent<EventTrigger>();
+        if (trigger == null)
+        {
+            trigger = button.AddComponent<EventTrigger>();
+        }
+
+        // PointerEnter 이벤트 추가
+        EventTrigger.Entry entryEnter = new EventTrigger.Entry();
+        entryEnter.eventID = EventTriggerType.PointerEnter;
+        entryEnter.callback.AddListener((data) => OnButtonHoverEnter(button, isRestButton));
+        trigger.triggers.Add(entryEnter);
+
+        // PointerExit 이벤트 추가
+        EventTrigger.Entry entryExit = new EventTrigger.Entry();
+        entryExit.eventID = EventTriggerType.PointerExit;
+        entryExit.callback.AddListener((data) => OnButtonHoverExit(button, isRestButton));
+        trigger.triggers.Add(entryExit);
+    }
+
+    /// <summary>
+    /// 버튼 호버 Enter - 스케일 1.1배로 확대
+    /// </summary>
+    private void OnButtonHoverEnter(GameObject button, bool isRestButton)
+    {
+        if (!hoverEnabled) return;
+
+        Vector3 initialScale = isRestButton ? restButtonInitialScale : maintenanceButtonInitialScale;
+        button.transform.DOScale(initialScale * 1.1f, 0.2f);
+    }
+
+    /// <summary>
+    /// 버튼 호버 Exit - 초기 스케일로 복구
+    /// </summary>
+    private void OnButtonHoverExit(GameObject button, bool isRestButton)
+    {
+        if (!hoverEnabled) return;
+
+        Vector3 initialScale = isRestButton ? restButtonInitialScale : maintenanceButtonInitialScale;
+        button.transform.DOScale(initialScale, 0.2f);
     }
 }

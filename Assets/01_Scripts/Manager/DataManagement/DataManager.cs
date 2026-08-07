@@ -43,6 +43,7 @@ public class DataManager : MonoSingleton<DataManager>
     [SerializeField] public List<CampTalkData> campTalkDataList = new(); // 조건에 따른 캠프 대화 데이터 목록
     // 백그라운드 이미지 데이터 + 전투용 배경
     Dictionary<int, Sprite> stageBackgrounds;
+    Dictionary<int, Sprite> campBackgrounds;
     Dictionary<int, Sprite> battleCamImages;
     // 카드 해금 레시피 가져오기
     public List<UnlockRecipe> LoadedRecipes { get; set; }
@@ -71,6 +72,7 @@ public class DataManager : MonoSingleton<DataManager>
         enemySpawnData = StageSpawnSetCSVParser.LoadEnemySpawnSet() ?? new();
         allRandomEvents = RandomEventJsonLoader.LoadAllEvents() ?? new();
         stageBackgrounds = LoadBackgrounds() ?? new();
+        campBackgrounds = LoadCampBackgrounds() ?? new();
         battleCamImages = LoadCombatCamImg() ?? new();
         InitEnemySkillDictionary();
         InitDialogueTriggers();
@@ -203,6 +205,13 @@ public class DataManager : MonoSingleton<DataManager>
     public Sprite GetBackground(int stageIndex)
     {
         return stageBackgrounds.TryGetValue(stageIndex, out var sprite) ? sprite : null;
+    }
+    /// <summary>
+    /// 특정 스테이지에 해당하는 캠프 배경 이미지 반환
+    /// </summary>
+    public Sprite GetCampBackground(int stageIndex)
+    {
+        return campBackgrounds.TryGetValue(stageIndex, out var sprite) ? sprite : null;
     }
     public Sprite GetBattleCamImage(int stageIndex)
     {
@@ -346,6 +355,23 @@ public class DataManager : MonoSingleton<DataManager>
     Dictionary<int, Sprite> LoadBackgrounds()
     {
         var sprites = Resources.LoadAll<Sprite>("BackGround");
+        var dic = new Dictionary<int, Sprite>();
+
+        foreach (var sprite in sprites)
+        {
+            string[] parts = sprite.name.Split('_');
+            // 스테이지 숫자와 1대1 대응 예) 1스테이지 배경 == bg_1, 2스테이지 배경 == bg_2
+            if (parts.Length > 1 && int.TryParse(parts[1], out int stage))
+            {
+                dic[stage] = sprite;
+            }
+        }
+        return dic;
+    }
+    // 캠프씬에서, 플레이어 행동시 등장할, 캠프 배경 이미지
+    Dictionary<int, Sprite> LoadCampBackgrounds()
+    {
+        var sprites = Resources.LoadAll<Sprite>("CampBackground");
         var dic = new Dictionary<int, Sprite>();
 
         foreach (var sprite in sprites)
