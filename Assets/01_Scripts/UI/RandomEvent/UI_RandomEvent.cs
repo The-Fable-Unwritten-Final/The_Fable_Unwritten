@@ -25,8 +25,8 @@ public class UI_RandomEvent : MonoBehaviour
     [SerializeField] float typingSpeed;
     [SerializeField] float minFontSize = 20f;
     [SerializeField] float maxFontSize = 30f;
-    [SerializeField] int maxLinesPerPage = 15;
-    [SerializeField] int lineThresholdForPagination = 18;
+    [SerializeField] int maxLinesPerPage = 18;
+    [SerializeField] int lineThresholdForPagination = 25;
 
     private RandomEventData currentData;
     private List<int> results;
@@ -83,7 +83,7 @@ public class UI_RandomEvent : MonoBehaviour
     }
 
     /// <summary>
-    /// 텍스트를 페이지 단위로 분할 (18줄 이상이면 15줄+a로 자르기)
+    /// 텍스트를 페이지 단위로 분할 (25줄 이상이면 18줄+a로 자르기)
     /// 실제 렌더링되는 줄 수를 기준으로 분할
     /// </summary>
     private List<string> SplitTextIntoPages(string fullText)
@@ -95,7 +95,7 @@ public class UI_RandomEvent : MonoBehaviour
         Canvas.ForceUpdateCanvases();
         int totalVisualLines = descriptionTxt.textInfo.lineCount;
 
-        // 18줄 이하이면 그대로 반환
+        // 25줄 이하이면 그대로 반환
         if (totalVisualLines <= lineThresholdForPagination)
         {
             pages.Add(fullText);
@@ -112,7 +112,7 @@ public class UI_RandomEvent : MonoBehaviour
             currentPage += line + "\n";
             currentLineCount++;
 
-            // maxLinesPerPage(15줄)에 도달했는지 확인
+            // maxLinesPerPage(18줄)에 도달했는지 확인
             descriptionTxt.text = currentPage;
             Canvas.ForceUpdateCanvases();
             int currentVisualLines = descriptionTxt.textInfo.lineCount;

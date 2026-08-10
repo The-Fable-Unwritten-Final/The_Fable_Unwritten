@@ -1237,10 +1237,10 @@ MonoBehaviour:
   optionTxt_a: {fileID: 423188112}
   optionTxt_b: {fileID: 2111925679}
   typingSpeed: 0.03
-  minFontSize: 24
-  maxFontSize: 40
-  maxLinesPerPage: 15
-  lineThresholdForPagination: 18
+  minFontSize: 20
+  maxFontSize: 30
+  maxLinesPerPage: 18
+  lineThresholdForPagination: 25
 --- !u!1 &810705219
 GameObject:
   m_ObjectHideFlags: 0
@@ -2215,9 +2215,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1543212733}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -400, y: 522.1}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 353.9, y: 522.1}
   m_SizeDelta: {x: 640.00977, y: 95.092285}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1672112644
@@ -2820,8 +2820,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -400, y: 402.49}
-  m_SizeDelta: {x: 800, y: 587.61}
+  m_AnchoredPosition: {x: -400, y: 505.26727}
+  m_SizeDelta: {x: 800, y: 690.3873}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2138451851
 MonoBehaviour:
@@ -2860,7 +2860,13 @@ MonoBehaviour:
     \r\n\r \r\r\n\uB208\uBCF4\uB77C\uAC00 \uC870\uAE08\uC529 \uC7A6\uC544\uB4E4 \uBB34\uB835,
     \r\n\r\uADF8 \uC790\uB9AC\uC5D0 \uC18C\uB140\uC758 \uBAA8\uC2B5\uC740 \uC774\uBBF8
     \uC0AC\uB77C\uC9C0\uACE0 \uC5C6\uC5C8\uB2E4. \r\n\r\uC791\uC740 \uB208\uC1A1\uC774\uB4E4\uB9CC\uC774
-    \uD5C8\uACF5\uC744 \uB9F4\uB3CC\uC558\uB2E4. \r"
+    \uD5C8\uACF5\uC744 \uB9F4\uB3CC\uC558\uB2E4. \r\n\uB208\uBCF4\uB77C\uAC00 \uC870\uAE08\uC529
+    \uC7A6\uC544\uB4E4 \uBB34\uB835, \r\n\r\uADF8 \uC790\uB9AC\uC5D0 \uC18C\uB140\uC758
+    \uBAA8\uC2B5\uC740 \uC774\uBBF8 \uC0AC\uB77C\uC9C0\uACE0 \uC5C6\uC5C8\uB2E4.
+    \r\n\r\uC791\uC740 \uB208\uC1A1\uC774\uB4E4\uB9CC\uC774 \uD5C8\uACF5\uC744 \uB9F4\uB3CC\uC558\uB2E4.
+    \r\n\uB208\uBCF4\uB77C\uAC00 \uC870\uAE08\uC529 \uC7A6\uC544\uB4E4 \uBB34\uB835,
+    \r\n\r\uADF8 \uC790\uB9AC\uC5D0 \uC18C\uB140\uC758 \uBAA8\uC2B5\uC740 \uC774\uBBF8
+    \uC0AC\uB77C\uC9C0\uACE0 \uC5C6\uC5C8\uB2E4. \r"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d8556fd1a640a5c4188fdf04e64f706b, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 24b2b217f7983264ca09cf43e9727588, type: 2}
@@ -2887,7 +2893,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22.5
+  m_fontSize: 21.4
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2899,7 +2905,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 15
+  m_lineSpacing: 10
   m_lineSpacingMax: 0
   m_paragraphSpacing: -15
   m_charWidthMaxAdj: 0
