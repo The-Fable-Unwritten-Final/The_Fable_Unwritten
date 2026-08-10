@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using TMPro;
+using DG.Tweening;
 
 
 /// 1. 휴식 OR 정비 선택지가 존재한다
@@ -15,6 +17,7 @@ public class UI_CampController : MonoBehaviour
     [Header("Character Interactions")]
     [SerializeField] private CampCharSelection[] campCharSelections; // 4명의 캐릭터 (0=Kyla, 1=Sophia, 2=Leon, 3=Dorothy)
     [SerializeField] private CampTalkController campTalkController; // 캠프 대화 컨트롤러
+    [SerializeField] private GameObject healText; // 체력 회복 텍스트
 
     private int completedCharacterCount = 0;
     private const int REQUIRED_CHARACTERS = 3; // 3명의 플레이어블 캐릭터만 필요
@@ -22,6 +25,7 @@ public class UI_CampController : MonoBehaviour
 
     private int storyCharacterIndex = -1; // ? 버튼을 표시할 캐릭터 인덱스
     private CampTalkData currentSelectedTalkData; // 현재 선택된 대화 (? 버튼 대상)
+    private Sequence healTextSequence; // 회복 텍스트 애니메이션 Sequence
 
     private void Start()
     {
@@ -47,6 +51,12 @@ public class UI_CampController : MonoBehaviour
 
     private void OnDestroy()
     {
+        // 회복 텍스트 애니메이션 Kill
+        if (healTextSequence != null)
+        {
+            healTextSequence.Kill();
+        }
+
         if (campCharSelections != null)
         {
             for (int i = 0; i < campCharSelections.Length; i++)
@@ -159,6 +169,59 @@ public class UI_CampController : MonoBehaviour
     {
         yield return new WaitForSeconds(EXIT_DELAY);
         ExitCampScene();
+    }
+
+    /// <summary>
+    /// 회복 텍스트 애니메이션 표시
+    /// 1.5초간 위로 올라가면서 투명해지는 효과
+    /// </summary>
+    public void ShowHealTextAnimation(Transform characterTransform)
+    {
+        if (healText == null) return;
+
+        // 1. 회복 텍스트를 캐릭터 위치에 배치
+        RectTransform healTextRect = healText.GetComponent<RectTransform>();
+        RectTransform characterRect = characterTransform.GetComponent<RectTransform>();
+        
+        if (healTextRect != null && characterRect != null)
+        {
+            // CampCharSelection의 anchoredPosition을 healText에 적용
+            healTextRect.anchoredPosition = characterRect.anchoredPosition;
+        }
+
+        // 2. 회복 텍스트 활성화 및 초기 색상 설정
+        healText.SetActive(true);
+        TextMeshProUGUI tmpText = healText.GetComponent<TextMeshProUGUI>();
+        if (tmpText != null)
+        {
+            Color color = tmpText.color;
+            color.a = 1f;
+            tmpText.color = color;
+        }
+
+        // 3. 기존 애니메이션 Sequence Kill
+        if (healTextSequence != null)
+        {
+            healTextSequence.Kill();
+        }
+
+        // 4. DOTween 애니메이션: 1.5초간 위로 올라가면서 투명해지는 효과
+        healTextSequence = DOTween.Sequence();
+        
+        // 위치 애니메이션: Y축으로 100만큼 위로 이동
+        healTextSequence.Join(healTextRect.transform.DOLocalMove(new Vector3(healTextRect.transform.localPosition.x, healTextRect.transform.localPosition.y + 100f, 0), 1.5f).SetEase(Ease.OutQuad));
+        
+        // 투명도 애니메이션: 0으로 변경
+        if (tmpText != null)
+        {
+            healTextSequence.Join(tmpText.DOFade(0f, 1.5f).SetEase(Ease.InQuad));
+        }
+        
+        // 애니메이션 완료 후 비활성화
+        healTextSequence.OnComplete(() =>
+        {
+            healText.SetActive(false);
+        });
     }
 
     /// <summary>

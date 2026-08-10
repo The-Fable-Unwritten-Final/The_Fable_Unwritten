@@ -24,6 +24,7 @@ public class CampCharSelection : MonoBehaviour
 
     [Header("Dialog System")]
     [SerializeField] private CampTalkController campTalkController; // 캠프 대화 컨트롤러
+    private UI_CampController campController; // 캠프 컨트롤러 참조
 
     [Header("Dialogue UI")]
     [SerializeField] private TextMeshProUGUI dialogueText; // 대화 텍스트 표시
@@ -49,6 +50,12 @@ public class CampCharSelection : MonoBehaviour
 
     private void Start()
     {
+        // 캠프 컨트롤러 참조 가져오기
+        if (campController == null)
+        {
+            campController = GetComponentInParent<UI_CampController>();
+        }
+
         // 휴식 버튼에 호버 이벤트 추가 및 초기 스케일 저장
         if (restButton != null)
         {
@@ -74,11 +81,17 @@ public class CampCharSelection : MonoBehaviour
         // 1. 캐릭터 모션 재생 (잠에 빠지는 모션)
         PlayRestAnimation();
 
-        // 2. 휴식 선택 상태 표시 (체력 회복은 씬 종료 시에 일괄 처리)
+        // 2. 회복 텍스트 애니메이션 표시
+        if (campController != null)
+        {
+            campController.ShowHealTextAnimation(transform);
+        }
+
+        // 3. 휴식 선택 상태 표시 (체력 회복은 씬 종료 시에 일괄 처리)
         isRested = true;
         selectedCardsToRemove.Clear();
 
-        // 3. 상호작용 완료 표시
+        // 4. 상호작용 완료 표시
         MarkCharacterInteractionComplete();
     }
 
