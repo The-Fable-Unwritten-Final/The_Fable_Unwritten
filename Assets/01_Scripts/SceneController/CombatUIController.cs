@@ -4,11 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
+using DG.Tweening;
 
 public class CombatUIController : MonoBehaviour
 {
     [SerializeField] CardDisplay cardDisplay; // 카드 디스플레이
     [SerializeField] BattleFlowController battleFlow;
+    [SerializeField] GameObject playerTurnUI; // 플레이어 턴 UI 텍스트
+    [SerializeField] GameObject enemyTurnUI; // 적 턴 UI 텍스트
+
+    private Sequence playerTurnUISequence; // 플레이어 턴 UI Sequence
+    private Sequence enemyTurnUISequence; // 적 턴 UI Sequence
 
     private void Awake()
     {
@@ -33,6 +40,16 @@ public class CombatUIController : MonoBehaviour
     }
     private void OnDisable()
     {
+        // 턴 UI Sequence Kill
+        if (playerTurnUISequence != null)
+        {
+            playerTurnUISequence.Kill();
+        }
+        if (enemyTurnUISequence != null)
+        {
+            enemyTurnUISequence.Kill();
+        }
+
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
     }
 
@@ -102,5 +119,95 @@ public class CombatUIController : MonoBehaviour
     public void MoveCardsWhenExitSceneTransition()
     {
         cardDisplay.MoveCardsWhenExitScene();
+    }
+    
+    /// <summary>
+    /// 플레이어 턴 UI 표시 (alpha: 0 → 1 → 0)
+    /// </summary>
+    public void ShowPlayerTurnUI()
+    {
+        if (playerTurnUI == null) return;
+
+        TextMeshProUGUI playerTmpText = playerTurnUI.GetComponent<TextMeshProUGUI>();
+        if (playerTmpText == null) return;
+
+        // 적 턴 UI가 진행 중이면 즉시 alpha 0으로 설정
+        if (enemyTurnUISequence != null)
+        {
+            enemyTurnUISequence.Kill();
+            TextMeshProUGUI enemyTmpText = enemyTurnUI.GetComponent<TextMeshProUGUI>();
+            if (enemyTmpText != null)
+            {
+                Color enemyColor = enemyTmpText.color;
+                enemyColor.a = 0f;
+                enemyTmpText.color = enemyColor;
+            }
+        }
+
+        // 기존 애니메이션 Kill
+        if (playerTurnUISequence != null)
+        {
+            playerTurnUISequence.Kill();
+        }
+
+        playerTurnUI.SetActive(true);
+        Color playerColor = playerTmpText.color;
+        playerColor.a = 0f;
+        playerTmpText.color = playerColor;
+
+        // Sequence 생성: 0 → 1 (0.5초) → 대기 (1초) → 1 → 0 (0.5초)
+        playerTurnUISequence = DOTween.Sequence();
+        playerTurnUISequence.Append(playerTmpText.DOFade(1f, 0.5f).SetEase(Ease.InOutQuad));
+        playerTurnUISequence.AppendInterval(1f);
+        playerTurnUISequence.Append(playerTmpText.DOFade(0f, 0.5f).SetEase(Ease.InOutQuad));
+        playerTurnUISequence.OnComplete(() =>
+        {
+            playerTurnUI.SetActive(false);
+        });
+    }
+
+    /// <summary>
+    /// 적 턴 UI 표시 (alpha: 0 → 1 → 0)
+    /// </summary>
+    public void ShowEnemyTurnUI()
+    {
+        if (enemyTurnUI == null) return;
+
+        TextMeshProUGUI enemyTmpText = enemyTurnUI.GetComponent<TextMeshProUGUI>();
+        if (enemyTmpText == null) return;
+
+        // 플레이어 턴 UI가 진행 중이면 즉시 alpha 0으로 설정
+        if (playerTurnUISequence != null)
+        {
+            playerTurnUISequence.Kill();
+            TextMeshProUGUI playerTmpText = playerTurnUI.GetComponent<TextMeshProUGUI>();
+            if (playerTmpText != null)
+            {
+                Color playerColor = playerTmpText.color;
+                playerColor.a = 0f;
+                playerTmpText.color = playerColor;
+            }
+        }
+
+        // 기존 애니메이션 Kill
+        if (enemyTurnUISequence != null)
+        {
+            enemyTurnUISequence.Kill();
+        }
+
+        enemyTurnUI.SetActive(true);
+        Color enemyColor = enemyTmpText.color;
+        enemyColor.a = 0f;
+        enemyTmpText.color = enemyColor;
+
+        // Sequence 생성: 0 → 1 (0.5초) → 대기 (1초) → 1 → 0 (0.5초)
+        enemyTurnUISequence = DOTween.Sequence();
+        enemyTurnUISequence.Append(enemyTmpText.DOFade(1f, 0.5f).SetEase(Ease.InOutQuad));
+        enemyTurnUISequence.AppendInterval(1f);
+        enemyTurnUISequence.Append(enemyTmpText.DOFade(0f, 0.5f).SetEase(Ease.InOutQuad));
+        enemyTurnUISequence.OnComplete(() =>
+        {
+            enemyTurnUI.SetActive(false);
+        });
     }
 }

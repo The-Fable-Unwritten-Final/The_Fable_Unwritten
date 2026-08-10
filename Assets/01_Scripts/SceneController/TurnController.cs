@@ -152,6 +152,7 @@ public class TurnController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.4f);
         SetTurnState(TurnState.PlayerTurn); // 플레이어 턴으로
+        GameManager.Instance.combatUIController.ShowPlayerTurnUI(); // 플레이어 턴 UI 표시
         StyleManager.Instance.isStartOfTurnCard = true; // 턴 시작후 첫 행동 플래그 설정
         // 매 턴 시작 시 호출될 문체 효과들
         StyleManager.Instance.ApplyStunToAllAllies(battleFlow.playerParty);
@@ -169,6 +170,7 @@ public class TurnController : MonoBehaviour
         // 카드 초과 체크하고 초과시 카드 버리기 요청.
         if (!GameManager.Instance.cardDiscardController.CheckCountOk()) return; // 만약 카드수량이 초과시 return.
         SetTurnState(TurnState.EndPlayerTurn); // 플레이어 턴 종료
+        GameManager.Instance.combatUIController.ShowEnemyTurnUI(); // 적 턴 UI 표시
         // 턴 종료 버튼 비활성화
         if (TurnButton != null)
             TurnButton.OnTurnEnd(); // 버튼 UI 업데이트 (텍스트 숨기고 인터렉션 끄기)
@@ -205,3 +207,4 @@ public class TurnController : MonoBehaviour
     public void Onaction() { if (!onAction) onAction = true; }
     public void OffAction() { if (onAction) onAction = false; }
 }
+
