@@ -321,10 +321,11 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         cardName.text = cardData.cardName; // 카드 이름 설정
         cardCost.text = cardData.GetEffectiveCost().ToString(); // 카드 코스트 설정
         
-        // 캠프 씬에서는 caster 정보가 없으므로 플레이스홀더 {숫자}를 ?로 치환
+        // ---캠프 씬에서는 caster 정보가 없으므로 플레이스홀더 {숫자}를 ?로 치환---
+        // null을 대입 시 기본값 출력으로 변경됨
         string description = cardData.cardText;
-        description = Regex.Replace(description, @"\{\d+\}", "?");
-        cardDescription.text = description;
+        //description = Regex.Replace(description, @"\{\d+\}", "?");
+        cardDescription.text = cardData.GetFormattedCardText(null);
     }
     public void SetOriginalPos()// 덱 최초 세팅 시점, 카드 추가 혹은 감소시 위치 초기화.
     {
