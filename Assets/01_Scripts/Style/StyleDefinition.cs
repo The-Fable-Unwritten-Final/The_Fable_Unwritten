@@ -23,6 +23,9 @@ public class StyleDefinition : ScriptableObject
     public Sprite buttonSprite;             // 문체 선택 버튼에 사용되는 이미지 (UI에서 문체 선택 버튼에 표시될 이미지)
     public Sprite buttonIconSprite;         // 문체 선택 버튼에 사용되는 아이콘 이미지
     public Sprite currentStyleSprite;       // 현재 문체를 보여주는 UI의 이미지
+    public Sprite krNameSprite;            // 문체 이름을 보여주는 UI의 이미지 (한글)
+    public Sprite enNameSprite;            // 문체 이름을 보여주는 UI의 이미지 (영문)
+    public Sprite jpNameSprite;            // 문체 이름을 보여주는 UI의 이미지 (일문)
     [Tooltip("문체 등급 => 1: 상급, 2: 중급, 3: 하급")]
     public StyleRank rank = StyleRank.High; // 등급 (1 == 상급, 2 == 중급, 3 == 하급 문체)
     public int maxPlusLevel = 3;             // 최대 +강화 단계 (고정 1단계 or 3단계 까지)

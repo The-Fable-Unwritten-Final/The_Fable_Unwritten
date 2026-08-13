@@ -8,6 +8,13 @@ using System.Text;
 
 public static class LocaleDataManager
 {
+    public enum SystemLocale
+    {
+        English,
+        Korean,
+        Japanese
+    }
+
     private static Dictionary<string, string[]> _cardTable = new Dictionary<string, string[]>();
     private static Dictionary<string, string[]> _randomEventTable = new Dictionary<string, string[]>();
     private static Dictionary<string, string[]> _randomEventEffectTable = new Dictionary<string, string[]>();
@@ -152,6 +159,23 @@ public static class LocaleDataManager
         {
             var locale = LocalizationSettings.SelectedLocale ?? LocalizationSettings.AvailableLocales.Locales[0];
             return locale.Identifier.Code.Split('-')[0].ToLower();
+        }
+    }
+
+    public static SystemLocale CurrentLocale
+    {
+        get
+        {
+            string langCode = CurrentLanguageCode;
+            switch (langCode)
+            {
+                case "ko":
+                    return SystemLocale.Korean;
+                case "ja":
+                    return SystemLocale.Japanese;
+                default:
+                    return SystemLocale.English;
+            }
         }
     }
 

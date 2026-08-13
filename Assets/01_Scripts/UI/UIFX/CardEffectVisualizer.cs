@@ -18,7 +18,7 @@ public class CardEffectVisualizer : MonoBehaviour
     public bool enhanceTriggered = false; // 강화 효과가 트리거 되었는지 확인용(강화 상태에서, Use 상태로 전환시 이곳에서 트리거 실행.)
 
     [SerializeField] GameObject cardReadyFX; // 카드 준비 효과 (노란 테두리)
-    [SerializeField] GameObject cardReadyOnChainFX; // 카드 연계 준비 효과 (초록(노+파) 테두리)
+    [SerializeField] GameObject cardReadyOnChainFX; // 카드 연계 준비 효과 (초록(노+파) 테두리) =>> 그냥 파란 테두리를 유지하는 방향으로 변경
     [SerializeField] GameObject cardCanChainFX; // 카드 연계 가능 효과 (얇은 노란 테두리)
     [SerializeField] GameObject cardChainFX; // 카드 연계 효과 (파란 테두리)
 

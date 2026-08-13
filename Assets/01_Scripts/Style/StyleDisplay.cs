@@ -19,6 +19,7 @@ public class StyleDisplay : MonoBehaviour // 기존 팝업 방식(basepopup 상�
     [SerializeField] Image curStyleIcon; // 현재 문체를 표시하는 UI의 아이콘
     [SerializeField] Image curStyleUI; // 현재 문체를 표시하는 UI의 테두리
     [SerializeField] TextMeshProUGUI curName;
+    [SerializeField] Image curNameImage; // 현재 문체 이름 이미지 (한글, 영문, 일문)
     [SerializeField] TextMeshProUGUI curFlav;
     //[SerializeField] TextMeshProUGUI curEff1;
     //[SerializeField] TextMeshProUGUI curEff2;
@@ -320,16 +321,7 @@ public class StyleDisplay : MonoBehaviour // 기존 팝업 방식(basepopup 상�
             }
         }
 
-        // 현재 문체를 표시하는 UI 업데이트
-        if (StyleManager.Instance.CurrentState != null)
-        {
-            var currentDef = DataManager.Instance.styleDefs.Find(def => def.styleId == StyleManager.Instance.CurrentState.styleId);
-            if (currentDef != null)
-            {
-                curStyleIcon.sprite = currentDef.buttonIconSprite; // 현재 문체 아이콘 업데이트
-                curStyleUI.sprite = currentDef.currentStyleSprite; // 현재 문체 UI 테두리 업데이트
-            }
-        }
+        // 현재 문체 UI는 UpdateCurrentStyle()의 _ApplyCurrentStyleChanges()에서 애니메이션과 함께 업데이트됨
 
         UpdatePage();
     }
@@ -381,12 +373,143 @@ public class StyleDisplay : MonoBehaviour // 기존 팝업 방식(basepopup 상�
     } 
     public void UpdateCurrentStyle(StyleDefinition sty) // 현재 문체 표시 부분의(중단 UI 전부) 정보 업데이트
     {
-        curName.text = LocaleDataManager.GetLocalizedStyleEffect(sty.displayName);
+        StartCoroutine(UpdateCurrentStyleWithAnimation(sty));
+    }
+
+    private IEnumerator UpdateCurrentStyleWithAnimation(StyleDefinition sty)
+    {
+        // 4개 오브젝트의 RectTransform 가져오기
+        RectTransform curStyleUIRect = curStyleUI.GetComponent<RectTransform>();
+        RectTransform upgrSprite1Rect = upgrSprite1.GetComponent<RectTransform>();
+        RectTransform upgrSprite2Rect = upgrSprite2.GetComponent<RectTransform>();
+
+        RectTransform[] targetRects = new RectTransform[] 
+        {
+            curStyleUIRect,
+            upgrSprite1Rect,
+            upgrSprite2Rect
+        };
+
+        // 현재 위치 저장
+        Vector2[] originalPositions = new Vector2[targetRects.Length];
+        for (int i = 0; i < targetRects.Length; i++)
+        {
+            originalPositions[i] = targetRects[i].anchoredPosition;
+        }
+
+        // 부모의 LayoutGroup 임시 비활성화 (자동 업데이트 방지)
+        LayoutGroup[] parentLayoutGroups = new LayoutGroup[targetRects.Length];
+        for (int i = 0; i < targetRects.Length; i++)
+        {
+            if (targetRects[i].parent != null)
+            {
+                parentLayoutGroups[i] = targetRects[i].parent.GetComponent<LayoutGroup>();
+                if (parentLayoutGroups[i] != null)
+                    parentLayoutGroups[i].enabled = false;
+            }
+        }
+
+        // 1. 왼쪽으로 화면 밖으로 이동
+        float animationDuration = 0.8f;
+        // 원래 위치에서 더 왼쪽으로 충분히 나가기 (원래 위치 - 1000)
+        float screenOffsetX = originalPositions[0].x - 1000f;
+
+        foreach (var rect in targetRects)
+        {
+            rect.DOAnchorPosX(screenOffsetX, animationDuration).SetEase(Ease.Linear);
+        }
+
+        // 절반 시간 대기 (0.4초) - 이 동안 화면 밖으로 이동 중
+        yield return new WaitForSeconds(animationDuration / 2f);
+
+        // 2. 화면 밖에서 시각적 변경 수행
+        _ApplyCurrentStyleChanges(sty);
+
+        // 남은 절반 시간 대기 (0.4초) - 계속 이동하다가 완전히 화면 밖으로
+        yield return new WaitForSeconds(animationDuration / 2f);
+
+        // 3. 원래 위치로 복귀 (Linear: 일정한 속도)
+        for (int i = 0; i < targetRects.Length; i++)
+        {
+            targetRects[i].DOAnchorPosX(originalPositions[i].x, animationDuration).SetEase(Ease.Linear);
+        }
+
+        // 애니메이션 완료 대기
+        yield return new WaitForSeconds(animationDuration);
+
+        // 부모의 LayoutGroup 다시 활성화
+        for (int i = 0; i < parentLayoutGroups.Length; i++)
+        {
+            if (parentLayoutGroups[i] != null)
+                parentLayoutGroups[i].enabled = true;
+        }
+    }
+
+    private void _ApplyCurrentStyleChanges(StyleDefinition sty)
+    {
+        // 현재 문체 아이콘 및 UI 테두리 업데이트
+        curStyleIcon.sprite = sty.buttonIconSprite;
+        curStyleUI.sprite = sty.currentStyleSprite;
+
+        // 로케일에 따른 현재 문체 이름 이미지 업데이트
+        Sprite targetSprite = null;
+        switch (LocaleDataManager.CurrentLocale)
+        {
+            case LocaleDataManager.SystemLocale.Korean:
+                targetSprite = sty.krNameSprite;
+                break;
+            case LocaleDataManager.SystemLocale.Japanese:
+                targetSprite = sty.jpNameSprite;
+                break;
+            case LocaleDataManager.SystemLocale.English:
+            default:
+                targetSprite = sty.enNameSprite;
+                break;
+        }
+        
+        curNameImage.sprite = targetSprite;
+        
+        // 스프라이트 크기를 너비 범위 내에서 조정 (종횡비 유지)
+        if (targetSprite != null)
+        {
+            float minWidth, maxWidth;
+            
+            // 로케일별로 다른 너비 범위 설정
+            switch (LocaleDataManager.CurrentLocale)
+            {
+                case LocaleDataManager.SystemLocale.Korean:
+                    minWidth = 240f;
+                    maxWidth = 240f;  // 고정값
+                    break;
+                case LocaleDataManager.SystemLocale.Japanese:
+                    minWidth = 255f;
+                    maxWidth = 275f;
+                    break;
+                case LocaleDataManager.SystemLocale.English:
+                default:
+                    minWidth = 280f;
+                    maxWidth = 300f;
+                    break;
+            }
+            
+            float spriteWidth = targetSprite.rect.width;
+            float spriteHeight = targetSprite.rect.height;
+            
+            float targetWidth = Mathf.Clamp(spriteWidth, minWidth, maxWidth);
+            float aspectRatio = spriteHeight / spriteWidth;
+            float targetHeight = targetWidth * aspectRatio;
+            
+            curNameImage.GetComponent<RectTransform>().sizeDelta = new Vector2(targetWidth, targetHeight);
+        }
+
+        // 플레이버 텍스트 업데이트
         curFlav.text = LocaleDataManager.GetLocalizedStyleEffect(sty.description);
 
+        // 첫 번째 강화 효과 (Plus)
         //curEff1.text = GetValueFullTextEff(sty, sty.plusEffectDescription, true);
         upgrEff1.text = GetValueFullTextUpgraded(sty, sty.plusEffectDescription, true);
         Eff1Ink.text = sty.plusTiers[sty.currentPlus - 1].cost.ToString();
+        
         if (sty.currentPlus == sty.maxPlusLevel)
         {
             upgrSprite1.sprite = FullUpgradeButtomImage;
@@ -406,10 +529,11 @@ public class StyleDisplay : MonoBehaviour // 기존 팝업 방식(basepopup 상�
             Eff1InkImage.SetActive(true);
         }
 
-
+        // 두 번째 강화 효과 (Minus)
         //curEff2.text = GetValueFullTextEff(sty, sty.minusEffectEffectDesc, false);
         upgrEff2.text = GetValueFullTextUpgraded(sty, sty.minusEffectEffectDesc, false);
         Eff2Ink.text = sty.minusTiers[sty.currentMinus - 1].cost.ToString();
+        
         if (sty.currentMinus == sty.maxMinusLevel)
         {
             upgrSprite2.sprite = FullUpgradeButtomImage;

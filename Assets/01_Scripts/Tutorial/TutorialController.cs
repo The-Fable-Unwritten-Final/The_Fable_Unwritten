@@ -49,26 +49,32 @@ public class TutorialController : MonoBehaviour
         }
         else if (stage == 1 && col == 1 && scene == SceneNameData.StageScene)
         {
-            ShowTutorial(2);
+            ShowTutorial(2); // >> 문체의 효과에 대한 짧은 설명 (1-1 끝낸 후 출력)
         }
         else if (stage == 1 && col == 2 && scene == SceneNameData.CombatScene)
         {
-            ShowTutorial(3);
-            ShowTutorial(4);
+            // 1-2 전투 시작 시 출력
+            //ShowTutorial(3);
+            // // 지금은 스탠스 내용인데, 이걸 제거 후, 상태 이상 아이콘들을 보여 주며
+            // 대상 체력바 하단에 등장하는 상태이상은 마우스를 올리면 상세 내용이 확인 가능함을 통보.
+            // 3은 스킵하고, 4를 수정해서 사용
+            ShowTutorial(4); 
         }
         else if (stage == 1 && col == 3 && scene == SceneNameData.CombatScene)
         {
-            ShowTutorial(5);
+            ShowTutorial(5); // 카드 체인 강화 효과 설명인데 테두리 발광 이미지와 함께하는 추가 설명이 필요해 보임
+            // 색상에 따른 체인 설명.(현재 선택중인 카드 색상~~ 오렌지, 사용 시 강화되는 카드 ~~ 보라색,현재 강화 상태인 카드 ~~~ 파란색 색상 기반 예시 설명)
         }
         else if (stage == 2 && pmd.IsNewStage && scene == SceneNameData.StageScene)
         {
-            ShowTutorial(6);
+            ShowTutorial(6); // 각 노드들에 대한 간단한 설명으로 변경하기
+
             ProgressDataManager.Instance.IsSecondGame = true; // 튜토리얼 스테이지 클리어 판정 
             ProgressDataManager.Instance.SaveProgress(true); // 클리어 판정 save
         }
         else if (pmd.IsNewCamp && scene == SceneNameData.CampScene)
         {
-            ShowTutorial(7);
+            ShowTutorial(7); // 캠프의 각 요소들에 대한 설명
         }
         else
         {

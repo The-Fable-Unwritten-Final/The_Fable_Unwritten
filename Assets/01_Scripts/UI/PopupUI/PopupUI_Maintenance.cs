@@ -240,14 +240,14 @@ public class PopupUI_Maintenance : BasePopupUI
         RectTransform copyRect = cardCopyObject.GetComponent<RectTransform>();
         if (copyRect != null)
         {
-            // 초기 위치: y축은 화면 밖 아래, x축은 0 (부모 기준)
-            copyRect.anchoredPosition = new Vector2(0f, -1000f);
+            // 초기 위치: y축은 최종 위치에서 약 150 위, x축은 0 (부모 기준)
+            copyRect.anchoredPosition = new Vector2(0f, 150f);
             
             // 스케일 설정
             copyRect.localScale = Vector3.one * 2.66f;
             
-            // DOTween으로 최종 위치로 이동 (0, 0)
-            copyRect.DOAnchorPos(Vector2.zero, 0.5f).SetEase(Ease.OutCubic);
+            // DOTween으로 최종 위치로 이동 (0, 0) - 1초에 걸쳐 이동
+            copyRect.DOAnchorPos(Vector2.zero, 1f).SetEase(Ease.OutCubic);
         }
 
         // #313114를 Color로 변환
