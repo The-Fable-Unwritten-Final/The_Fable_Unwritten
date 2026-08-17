@@ -90,9 +90,9 @@ public class PopupUI_CombatReward : BasePopupUI
                     ProgressDataManager.Instance.UnlockRandomStyle(); // 앤딩 클리어시 랜덤 문체 해금
 
                     // 앤딩 처음인경우
-                    if (!ProgressDataManager.Instance.ProgressTutorial.Contains(9))
+                    if (!ProgressDataManager.Instance.ProgressTutorial.Contains(7))
                     {
-                        GameManager.Instance.tutorialController.ShowTutorial(9);
+                        GameManager.Instance.tutorialController.ShowTutorial(7);
                         ProgressDataManager.Instance.ResetProgress();
                         return;
                     }

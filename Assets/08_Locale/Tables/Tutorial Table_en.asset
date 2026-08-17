@@ -32,77 +32,70 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 168156475392
-    m_Localized: '
+    m_Localized: 'Click a character icon at the top to view
+
+      the cards currently
+      held by that character
 
 
-      Mana and cards are refilled at the start of each turn.
+      Cost is restored and your Cards in hand are
 
-      Click
-      the icon at the top left to check your character''s deck.'
+      refilled
+      at the start of each turn.'
     m_Metadata:
       m_Items: []
   - m_Id: 186011627520
-    m_Localized: 'You can view unlocked cards through "Dorothy''s Book" at the top
-      right.
-
-      You can also adjust the volume or return to the title screen
-      from the settings menu during an adventure.'
+    m_Localized: "In the upper-right corner map button \nlets you view your current
+      progress on the minimap,\nwith Card book and Settings buttons beside it\n\nAt
+      the writing style button,\nyou can use Ink obtained from battles to upgrade
+      abilities"
     m_Metadata:
       m_Items: []
   - m_Id: 200611999744
-    m_Localized: "\nEach character has two \"stances\".\nYou can freely switch stances
-      each turn as long as you haven\u2019t used that character's cards yet.\nYou
-      can check each stance's effects by hovering over the button."
+    m_Localized: 
     m_Metadata:
       m_Items: []
   - m_Id: 4084201959424
-    m_Localized: '
+    m_Localized: ': Attack and Defense
 
-      : Attack and Defense
+      : In Guard state,  immune to damage
 
-      : In Guard state,  immune to
-      damage
+      :
+      In Stunned state, cannot act
 
-      : In Stunned state, cannot act'
+      : Buffs or Debuffs'
     m_Metadata:
       m_Items: []
   - m_Id: 3748351455232
-    m_Localized: 'Cards have various effects.
+    m_Localized: 'Cards and enemies can have various effects
 
-      Effects currently applied to
-      a character are shown below their health bar.'
+      Effects affecting
+      a target are displayed below its HP bar'
     m_Metadata:
       m_Items: []
   - m_Id: 220631412736
-    m_Localized: 'You can view usable cards through "Dorothy''s Book" at the top
-      right.
+    m_Localized: 'The types of nodes available at each stage are as follows
 
-      You can also adjust the volume and select the resolution from
-      the settings menu.
 
-      You can return to the title screen during an adventure
-      as well.'
+      Battle:
+      Fight enemies to obtain <color=blue>Ink</color>
+
+      Rest: Recover <color=orange>damage
+      taken in battle and remove cards</color>
+
+      Event: Gain <color=green> buffs/debuffs</color>
+      through unexpected event
+
+      Elite: Encounter <color=red>powerful enemies</color>
+      designated for each stage'
     m_Metadata:
       m_Items: []
   - m_Id: 232937500672
-    m_Localized: 'You can view usable cards through "Dorothy''s Book" at the top
-      right.
-
-      You can also adjust the volume and select the resolution from
-      the settings menu.
-
-      You can return to the title screen during an adventure
-      as well.'
+    m_Localized: 55
     m_Metadata:
       m_Items: []
   - m_Id: 243196768256
-    m_Localized: 'You can unlock new cards each time you start a new adventure.
-
-      Use
-      the loot you earned in battle to unlock cards of the type you want.
-
-      Buttons
-      for card types that can''t be unlocked will appear blacked out.'
+    m_Localized: 
     m_Metadata:
       m_Items: []
   - m_Id: 276424044544
@@ -112,22 +105,51 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 592599068672
-    m_Localized: '<sprite=1>   : Flame          <sprite=2>   : Frost           <sprite=0>  
-      : Nature
+    m_Localized: 'Card Types
 
-      <sprite=4>   : Prayer         <sprite=5>   : Holy Power    
-      <sprite=3>   : Baptism
+      <sprite=1>: Flame          <sprite=2>: Frost          
+      <sprite=0>: Nature
 
-      <sprite=7>   : Slash          <sprite=8>   :
-      Strike         <sprite=6>   : Guard'
+      <sprite=4>: Prayer     <sprite=5>: Holy Power    
+      <sprite=3>: Baptism
+
+      <sprite=7>: Slash          <sprite=8>: Strike        
+      <sprite=6>: Guard'
     m_Metadata:
       m_Items: []
   - m_Id: 891279650816
-    m_Localized: 'Each type of card has a corresponding type that enhances its effect
-      when linked.
+    m_Localized: 'Each card type has a corresponding type
 
-      Cards that are eligible for combo effects are marked with
-      a special border effect.'
+      that enhances effects
+      when used in sequence.
+
+
+      current and synergy targets are highlighted
+      with a glowing effect.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 137299751189622784
+    m_Localized: Card Cost
+    m_Metadata:
+      m_Items: []
+  - m_Id: 137299789169045504
+    m_Localized: Card Type
+    m_Metadata:
+      m_Items: []
+  - m_Id: 137299819850379264
+    m_Localized: Card Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 137334034759430144
+    m_Localized: Currently selected card
+    m_Metadata:
+      m_Items: []
+  - m_Id: 137334370354081792
+    m_Localized: Enhanced card
+    m_Metadata:
+      m_Items: []
+  - m_Id: 137334331632267264
+    m_Localized: "Card enhanced when \nthe selected card is used"
     m_Metadata:
       m_Items: []
   references:

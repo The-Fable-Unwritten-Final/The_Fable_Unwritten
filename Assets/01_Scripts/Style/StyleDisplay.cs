@@ -410,7 +410,7 @@ public class StyleDisplay : MonoBehaviour // 기존 팝업 방식(basepopup 상�
         }
 
         // 1. 왼쪽으로 화면 밖으로 이동
-        float animationDuration = 0.8f;
+        float animationDuration = 0.75f;
         // 원래 위치에서 더 왼쪽으로 충분히 나가기 (원래 위치 - 1000)
         float screenOffsetX = originalPositions[0].x - 1000f;
 
@@ -419,14 +419,14 @@ public class StyleDisplay : MonoBehaviour // 기존 팝업 방식(basepopup 상�
             rect.DOAnchorPosX(screenOffsetX, animationDuration).SetEase(Ease.Linear);
         }
 
-        // 절반 시간 대기 (0.4초) - 이 동안 화면 밖으로 이동 중
-        yield return new WaitForSeconds(animationDuration / 2f);
+        // 4/5 시간 대기  - 이 동안 화면 밖으로 이동 중
+        yield return new WaitForSeconds(animationDuration*4 / 5f);
 
         // 2. 화면 밖에서 시각적 변경 수행
         _ApplyCurrentStyleChanges(sty);
 
-        // 남은 절반 시간 대기 (0.4초) - 계속 이동하다가 완전히 화면 밖으로
-        yield return new WaitForSeconds(animationDuration / 2f);
+        // 남은 1/5 시간 대기  - 계속 이동하다가 완전히 화면 밖으로
+        yield return new WaitForSeconds(animationDuration / 5f);
 
         // 3. 원래 위치로 복귀 (Linear: 일정한 속도)
         for (int i = 0; i < targetRects.Length; i++)
