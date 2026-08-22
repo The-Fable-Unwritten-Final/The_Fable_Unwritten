@@ -175,21 +175,23 @@ public class UI_CampController : MonoBehaviour
     /// 회복 텍스트 애니메이션 표시
     /// 1.5초간 위로 올라가면서 투명해지는 효과
     /// </summary>
-    public void ShowHealTextAnimation(Transform characterTransform)
+    public void ShowHealTextAnimation(Transform b,Transform characterTransform)
     {
         if (healText == null) return;
 
-        // 1. 회복 텍스트를 캐릭터 위치에 배치
         RectTransform healTextRect = healText.GetComponent<RectTransform>();
         RectTransform characterRect = characterTransform.GetComponent<RectTransform>();
         
         if (healTextRect != null && characterRect != null)
         {
-            // CampCharSelection의 anchoredPosition을 healText에 적용
-            healTextRect.anchoredPosition = characterRect.anchoredPosition;
+            // 1. healText의 부모를 characterTransform(CampCharSelection)으로 설정
+            healTextRect.SetParent(b);
+            
+            // 2. healFX의 위치에 배치 (characterRect의 localPosition 사용)
+            healTextRect.localPosition = characterRect.localPosition;
         }
 
-        // 2. 회복 텍스트 활성화 및 초기 색상 설정
+        // 3. 회복 텍스트 활성화 및 초기 색상 설정
         healText.SetActive(true);
         TextMeshProUGUI tmpText = healText.GetComponent<TextMeshProUGUI>();
         if (tmpText != null)
@@ -199,13 +201,13 @@ public class UI_CampController : MonoBehaviour
             tmpText.color = color;
         }
 
-        // 3. 기존 애니메이션 Sequence Kill
+        // 4. 기존 애니메이션 Sequence Kill
         if (healTextSequence != null)
         {
             healTextSequence.Kill();
         }
 
-        // 4. DOTween 애니메이션: 1.5초간 위로 올라가면서 투명해지는 효과
+        // 5. DOTween 애니메이션: 1.5초간 위로 올라가면서 투명해지는 효과
         healTextSequence = DOTween.Sequence();
         
         // 위치 애니메이션: Y축으로 100만큼 위로 이동

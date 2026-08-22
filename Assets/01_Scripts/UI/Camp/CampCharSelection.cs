@@ -30,6 +30,9 @@ public class CampCharSelection : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dialogueText; // 대화 텍스트 표시
     [SerializeField] private GameObject dialogueBox; // 대화 박스 (선택사항)
 
+    [Header("FX")]
+    [SerializeField] private GameObject healFX; // 회복 FX 효과
+
     // 캐릭터 상호작용 완료
     public System.Action OnCharacterInteractionComplete;
     
@@ -84,7 +87,10 @@ public class CampCharSelection : MonoBehaviour
         // 2. 회복 텍스트 애니메이션 표시
         if (campController != null)
         {
-            campController.ShowHealTextAnimation(transform);
+            Animator heal = healFX.GetComponent<Animator>();
+            heal.SetTrigger("Heal");
+
+            campController.ShowHealTextAnimation(this.transform,healFX.transform);
         }
 
         // 3. 휴식 선택 상태 표시 (체력 회복은 씬 종료 시에 일괄 처리)

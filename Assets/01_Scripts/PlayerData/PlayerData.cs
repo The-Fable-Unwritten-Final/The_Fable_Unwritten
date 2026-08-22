@@ -17,6 +17,7 @@ public class PlayerData : ScriptableObject
     public string CharacterName; //캐릭터이름
     public Sprite Icon; //Icon
 
+    private float defaultMaxHP = 30f;
     [SerializeField] private float _maxHP;  //최대 체력
     public float MaxHP
     {
@@ -108,5 +109,15 @@ public class PlayerData : ScriptableObject
     public void ResetCurCard()
     {
         FirstTimeUsedType = null;
+    }
+    public void SetToDefaultMaxHP()
+    {
+        MaxHP = defaultMaxHP;
+    }
+    public void AddMaxHP(float amount)
+    {
+        MaxHP += amount;
+        currentHP += amount; // 최대 체력 증가 시 현재 체력도 함께 증가
+        currentHP = Mathf.Min(currentHP, MaxHP); // 현재 체력을 최대 체력 이하로 유지
     }
 }

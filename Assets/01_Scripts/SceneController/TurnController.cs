@@ -190,7 +190,7 @@ public class TurnController : MonoBehaviour
         if (TurnButton != null)
             TurnButton.OnBattleEnd(); // 버튼 UI 업데이트 (텍스트 숨기고 인터렉션 끄기)
         // 결과창 팝업을 띄우기 (승패 결과는 battleflowCon 에서 가져올 수 있음 win <<)
-        UIManager.Instance.PopupRewardUI();
+        StartCoroutine(WaitAndPopupReward());
         // 데이터 처리
         if (isWin) // 승리 시 처리
         {
@@ -202,6 +202,12 @@ public class TurnController : MonoBehaviour
         }
         EventEffectManager.Instance.EndNextCombat();
         SetTurnState(TurnState.GameEnd); // 전투 종료
+    }
+
+    private IEnumerator WaitAndPopupReward()
+    {
+        yield return new WaitForSeconds(2f);
+        UIManager.Instance.PopupRewardUI();
     }
 
     public void Onaction() { if (!onAction) onAction = true; }

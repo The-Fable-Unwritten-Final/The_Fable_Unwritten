@@ -214,7 +214,6 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
                 }
             }
 
-            Debug.Log("[ProgressDataManager] 저장된 플레이어 효과 복원 완료");
         }
         catch (System.Exception ex)
         {
@@ -294,7 +293,6 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
                 Debug.Log($"[ProgressDataManager] {pc.playerData.CharacterName} 상태 백업 (HP: {battleEntryHPBackup[characterID]}, TickEffect: {tickEffectBackup.Count}, InstanceEffect: {instanceEffectBackup.Count})");
             }
 
-            Debug.Log("[ProgressDataManager] 전투 입장 시점의 모든 플레이어 상태 백업 완료");
         }
         catch (System.Exception ex)
         {
@@ -338,7 +336,6 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
                 }
             }
 
-            Debug.Log("[ProgressDataManager] 전투 입장 시점의 플레이어 상태 복원 완료");
         }
         catch (System.Exception ex)
         {
@@ -699,6 +696,10 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         maxInkAmount = 10;
         IsEndingClear = false;  // 엔딩 클리어 상태 초기화        // 카드 해금, 문체 해금, 캐릭터 해금 초기화
         unlockedCards.Clear();
+        foreach(var cha in PlayerDatas)
+        {
+            cha.SetToDefaultMaxHP(); // 캐릭터 최대 체력 초기화
+        }
         unlockedCharacterIDs.Clear();
         InitializeDefaultStyleUnlock();
 
@@ -864,6 +865,10 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         currentDefID = 1;
         inkAmount = 0;
         maxInkAmount = 10;
+        foreach(var cha in PlayerDatas)
+        {
+            cha.SetToDefaultMaxHP(); // 캐릭터 최대 체력 초기화
+        }
 
         // 해금 정보는 보존
         // unlockedCards.Clear();  보존
@@ -877,7 +882,6 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         SaveProgress(true);
         LoadProgress();
 
-        Debug.Log("[ProgressDataManager] 게임 데이터 초기화 완료 - 새 게임을 시작합니다! (해금 정보 보존됨)");
     }
 
     public void InitializePlayerData()      //아예 초기 데이터로 완전 초기화
