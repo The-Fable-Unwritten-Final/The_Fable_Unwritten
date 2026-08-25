@@ -33,6 +33,10 @@ public class UI_CampController : MonoBehaviour
 
         completedCharacterCount = 0;
 
+        // 디버그: 캠프 씬 진입 시 현재 상태 확인
+        var setting = ProgressDataManager.Instance;
+        Debug.Log($"[CampController] 진입 시 - StageCleared: {setting.StageCleared}, CurrentNode: {setting.CurrentNode?.type}, VisitedNodes.Count: {setting.VisitedNodes.Count}");
+
         // 각 CampCharSelection에 완료 이벤트 등록
         if (campCharSelections != null)
         {
@@ -260,6 +264,36 @@ public class UI_CampController : MonoBehaviour
                 }
             }
         }
+        
+        // 현재 노드 클리어 상태 업데이트
+        var setting = ProgressDataManager.Instance;
+        // 캠프는 "스테이지 클리어"가 아니므로 StageCleared는 false로 유지
+        // (첫 번째 노드는 이미 VisitedNodes에 저장되어 있음)
+        setting.StageCleared = false;
+        setting.RetryFromStart = false;  // ← 중요: 캠프에서 돌아올 때 복구 가능하도록 설정
+        
+        // IsNewStage 판정 (보스 또는 특정 조건)
+        if (setting.CurrentNode.type == NodeType.Boss || 
+            (setting.StageIndex == 1 && setting.CurrentNode.columnIndex == 3))
+        {
+            setting.IsNewStage = true;
+        }
+        else
+        {
+            setting.IsNewStage = false;
+        }
+        
+        // 캠프 상호작용 완료 후 CurrentNode를 null로 설정 (다음 노드 선택 가능하도록)
+        setting.CurrentNode = null;
+        // 스테이지 상태 저장
+        if (setting.SavedStageData != null)
+        {
+            setting.SaveStageState(setting.SavedStageData, setting.VisitedNodes);
+        }
+        
+        // 변경된 데이터 저장
+        ProgressDataManager.Instance.SaveProgress(true);
+       
         UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
     }
 

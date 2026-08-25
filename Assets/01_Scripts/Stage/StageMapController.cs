@@ -68,7 +68,6 @@ public class StageMapController : MonoBehaviour
             {
                 var lastVisited = stageSetting.VisitedNodes.LastOrDefault();
                 bool wasLastColumnNode = stageSetting.SavedStageData.columns[^1].Contains(lastVisited); // 보스 노드 방문 여부
-
                 // 보스 노드 클리어면 다음 스테이지
                 if (wasLastColumnNode)
                 {
@@ -93,8 +92,6 @@ public class StageMapController : MonoBehaviour
             visitedNodes.Clear();           
             visitedNodes.AddRange(stageSetting.VisitedNodes);
             stageIndex = stageSetting.StageIndex;
-            stageSetting.StageCleared = false;
-
             try
             {
                 mapRenderer.Render(stageData, OnNodeClicked);

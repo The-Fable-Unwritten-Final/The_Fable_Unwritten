@@ -186,7 +186,7 @@ public class CampCharSelection : MonoBehaviour
     /// <summary>
     /// TypeWriter 효과 - 텍스트를 문자 하나씩 표시
     /// </summary>
-    private IEnumerator TypeWriterEffect(string text, float charDelay = 0.1f) // 기본 딜레이 0.1초 >> 변경 가능
+    private IEnumerator TypeWriterEffect(string text, float charDelay = 0.2f) // 기본 딜레이 0.1초 >> 변경 가능
     {
         if (dialogueText == null) yield break;
 
