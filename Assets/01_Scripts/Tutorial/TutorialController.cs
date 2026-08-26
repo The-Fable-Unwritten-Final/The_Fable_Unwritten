@@ -78,7 +78,7 @@ public class TutorialController : MonoBehaviour
         }
         else
         {
-            Debug.Log("No tutorial condition matched");
+            //Debug.Log("No tutorial condition matched");
         }
     }
 

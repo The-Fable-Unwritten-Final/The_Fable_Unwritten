@@ -24,13 +24,13 @@ public class CampTalkController : MonoBehaviour
         if (isDialogueActive && Input.GetKeyDown(KeyCode.Space))
         {
             bool wasSkipped = false;
-            
+
             // TypeWriter 실행 중이면 스킵
             if (currentSpeakerIndex >= 0 && campCharSelections[currentSpeakerIndex] != null)
             {
                 wasSkipped = campCharSelections[currentSpeakerIndex].SkipTypeWriter();
             }
-            
+
             // 텍스트가 출력중 스킵을 누를 시, 전체 텍스트 표기. 텍스트가 이미 다 출력되었을때 스킵을 누를 시, 다음 대화로 진행
             if (!wasSkipped)
             {
@@ -42,7 +42,8 @@ public class CampTalkController : MonoBehaviour
 
     /// <summary>
     /// CSV key에서 캐릭터 코드 파싱
-    /// 예: "Camp_OT_01_01_K" → K (Kayla=0)
+    /// 예: "Camp_OT_01_01_K" → K (Kayla=0) << 여기서 OT는 공통 대화이고,
+    /// 굳이 OT를 붙히는 이유는 코드상의 분류는 없지만, 파일상에서 대화의 인덱스를 나누기 위함 정도의 차이, 약간은 귀찮겠지만 이 방식대로 하는게 헷갈리는 경우는 적을듯.
     /// </summary>
     private int GetSpeakerIndexFromKey(string csvKey)
     {
@@ -63,7 +64,7 @@ public class CampTalkController : MonoBehaviour
 
     /// <summary>
     /// 다음 대화 라인 표시
-    /// CSV key의 마지막 캐릭터 코드에서 话者 결정
+    /// CSV key의 마지막 캐릭터 코드에서 결정
     /// 예: "Camp_OT_01_01_K" → Kayla가 말함
     /// </summary>
     public void ShowNextDialogueLine()
