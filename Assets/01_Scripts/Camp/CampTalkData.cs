@@ -21,6 +21,9 @@ public class CampTalkData : ScriptableObject
     
     [Header("스테이지: 2,3,4 //// 랜덤 이벤트: 이벤트의 ID")]
     public int conditionValue;
+    [Header(" 연계 랜덤 이벤트인 경우 추가로 이벤트의 ID를 입력")]
+    public int conditionValue2;
+
 
     [Header("대화 텍스트 Key 순서 직접 입력")]
     public List<string> keyTextSerial = new();
@@ -40,7 +43,7 @@ public class CampTalkData : ScriptableObject
 
             ConditionType.BeforeEvent => !pdm.HasUsedRandomEvent(conditionValue),
 
-            ConditionType.AfterEvent => pdm.HasUsedRandomEvent(conditionValue),
+            ConditionType.AfterEvent => pdm.HasUsedRandomEvent(conditionValue) && (conditionValue2 == 0 || pdm.HasUsedRandomEvent(conditionValue2)),
 
             _ => false
         };
