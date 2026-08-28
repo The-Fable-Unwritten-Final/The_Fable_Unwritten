@@ -25,7 +25,7 @@ public class UI_PlayerInfo : MonoBehaviour
 
     [Header("CardInfo")]
     [SerializeField] GameObject currentDeck;
-    [SerializeField] GameObject cardPrefap;
+    [SerializeField] GameObject cardBasePrefab;
     [SerializeField] Transform cardsRoot;
 
     private Dictionary<CharacterClass, TextMeshProUGUI> charInfoText;
@@ -129,11 +129,22 @@ public class UI_PlayerInfo : MonoBehaviour
 
         foreach (var card in deck)
         {
-            var go = Instantiate(cardPrefap, cardsRoot);
-            var cardUI = go.GetComponent<CampCard>();
-            var onclick = go.GetComponent<Button>();
-
-            cardUI.SetCard(card);
+            var go = Instantiate(cardBasePrefab, cardsRoot);
+            
+            // CardInHand를 사용해서 UI 요소 업데이트만 수행
+            CardInHand cardInHand = go.GetComponent<CardInHand>();
+            if (cardInHand != null)
+            {
+                cardInHand.cardData = card;
+                cardInHand.UpdateCardImage();
+                cardInHand.UpdateCardInfoOnlyUI();
+            }
+            
+            // CardInHand 컴포넌트 제거 (이벤트 핸들러 비활성화)
+            if (cardInHand != null)
+            {
+                DestroyImmediate(cardInHand);
+            }
         }
 
         // 애널리틱스

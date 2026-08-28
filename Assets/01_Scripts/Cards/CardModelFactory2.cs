@@ -29,7 +29,7 @@ public static class CardModelFactory2
         card.keywords = data.keywords != null ? new List<string>(data.keywords) : new List<string>();
 
         // ===== 비주얼 =====
-        card.illustration = LoadSpriteSafe($"Cards/Illustration/{data.illustration}", data.illustration);
+        card.illustration = LoadSpriteSafe($"Cards/Illustration/illust_{data.index}", $"illust_{data.index}"); // data.illustration의 string 값이 아니라 index 기반으로 가져오게 변경
         card.chClass = LoadSpriteSafe($"Cards/Class/class_{data.@class}", $"class_{data.@class}");
         card.cardType = LoadMultipleSprite($"Cards/Type", $"type_{data.type}");
         card.cardImage = data.cardframe;
