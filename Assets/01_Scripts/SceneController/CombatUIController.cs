@@ -13,6 +13,7 @@ public class CombatUIController : MonoBehaviour
     [SerializeField] BattleFlowController battleFlow;
     [SerializeField] GameObject playerTurnUI; // 플레이어 턴 UI 텍스트
     [SerializeField] GameObject enemyTurnUI; // 적 턴 UI 텍스트
+    public  IdleActivateInfo SidePopupUI; // 사이드 팝업 UI
 
     private Sequence playerTurnUISequence; // 플레이어 턴 UI Sequence
     private Sequence enemyTurnUISequence; // 적 턴 UI Sequence
