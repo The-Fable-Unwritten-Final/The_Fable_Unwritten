@@ -134,4 +134,53 @@ public class EnemySpawner : MonoBehaviour
             }
         }
     }
+
+    public Enemy SpawnEnemyToEmptySlot(int enemyId)
+    {
+        var enemyParty = GameManager.Instance.turnController.battleFlow.enemyParty;
+        var enemyDataContainer = DataManager.Instance.enemyDataContainer;
+
+        var originalData = enemyDataContainer.GetData(enemyId);
+        if (originalData == null)
+        {
+            Debug.LogWarning($"[EnemySpawner] EnemyData 없음. ID: {enemyId}");
+            return null;
+        }
+
+        for (int i = 0; i < enemySlots.Length; i++)
+        {
+            // 현재 전투 파티 기준으로 빈 슬롯인지 확인
+            if (enemyParty[i] != null && enemyParty[i].IsAlive())
+                continue;
+
+            var slot = enemySlots[i];
+            var enemy = slot.GetComponent<Enemy>();
+
+            if (enemy == null)
+                continue;
+
+            var copyData = ScriptableObject.Instantiate(originalData);
+            copyData.SkillList = originalData.SkillList
+                .Select(skill => skill.Clone())
+                .ToList();
+
+            enemy.SetData(copyData);
+
+            slot.gameObject.SetActive(true);
+
+            enemyParty[i] = enemy;
+
+            // 전투 도중 생성이므로 전투 시작 초기화도 직접 호출
+            enemy.OnBattleStart();
+
+            Debug.Log(
+                $"[EnemySpawner] {copyData.EnemyName} 소환 / Slot {i}"
+            );
+
+            return enemy;
+        }
+
+        Debug.LogWarning("[EnemySpawner] 빈 적 슬롯이 없습니다.");
+        return null;
+    }
 }

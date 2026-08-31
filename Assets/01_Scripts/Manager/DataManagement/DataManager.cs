@@ -45,6 +45,7 @@ public class DataManager : MonoSingleton<DataManager>
     Dictionary<int, Sprite> stageBackgrounds;
     Dictionary<int, Sprite> campBackgrounds;
     Dictionary<int, Sprite> battleCamImages;
+
     // 카드 해금 레시피 가져오기
     public List<UnlockRecipe> LoadedRecipes { get; set; }
 
@@ -222,14 +223,14 @@ public class DataManager : MonoSingleton<DataManager>
     /// </summary>
     private void InitEnemySkillDictionary()
     {
-        TextAsset csvText = Resources.Load<TextAsset>("ExternalFiles/EnemyAct");
+        TextAsset csvText = Resources.Load<TextAsset>("ExternalFiles/EnemyActV2");
         if (csvText == null)
         {
             Debug.LogError("[DataManager] EnemyAct.csv를 Resources/ExternalFiles/ 에서 찾을 수 없습니다.");
             return;
         }
 
-        List<EnemyAct> parsedActs = EnemyActCSVParser.ParseEnemyAct(csvText.text);
+        List<EnemyAct> parsedActs = EnemyActCSVParser.ParseEnemyActV2(csvText.text);
         enemyActDict.Clear();
 
         foreach (var act in parsedActs)

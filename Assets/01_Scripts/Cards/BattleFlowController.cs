@@ -124,6 +124,8 @@ public class BattleFlowController : MonoBehaviour
             }
         }
 
+        IdealRealizationManager.Instance?.ResetBattleState();
+
         // 전투 입장 시점의 상태 백업 (타이틀에서 돌아올 때 이 상태로 복원됨)
         ProgressDataManager.Instance.BackupBattleEntryState();
 
@@ -186,6 +188,12 @@ public class BattleFlowController : MonoBehaviour
         // 문체 효과 적용 => 턴 시작시 마나 보유량 변환
         currentMana = StyleManager.Instance.ModifySupplyManaAtStartOfTurn(currentMana);
 
+        foreach (var enemy in enemyParty)
+        {
+            if (enemy is Enemy e && e.IsAlive())
+                e.Mechanic?.OnPlayerTurnStart();
+        }
+
         foreach (var player in playerParty)
         {
             if (player is PlayerController pc && pc.IsAlive())
@@ -220,17 +228,39 @@ public class BattleFlowController : MonoBehaviour
     /// <param name="target">타겟</param>
     public void UseCard(CardModel card, IStatusReceiver caster, List<IStatusReceiver> targets)
     {
-        if (!card.IsUsable(currentMana) || !caster.IsAlive())      //사용 가능하지 않거나 적 또는 사용자가 죽어 있다면 생략하기
-        {
+        if (card == null || caster == null || !caster.IsAlive())
             return;
+
+        if (caster is PlayerController pcCaster)
+        {
+            if (pcCaster.IsTemporarilyAbsent)
+                return;
+
+            if (!pcCaster.CanActThisTurn())
+                return;
         }
 
-        if (caster is PlayerController pcCaster && !pcCaster.CanActThisTurn())
+        PlayerController sophia = playerParty.OfType<PlayerController>().FirstOrDefault(p => p.IsAlive() && p.ChClass == CharacterClass.Sophia);
+
+        int baseEffectiveCost = card.GetEffectiveCost();
+        int activationDiscount = 0;
+
+        if (sophia != null)
+            activationDiscount = sophia.GetActivationDiscountForCard(card);
+
+        int actualCost = Mathf.Max(0,baseEffectiveCost - activationDiscount);
+
+
+        if (currentMana < actualCost)
             return;
 
+        if (sophia != null && activationDiscount > 0)
+        {
+            sophia.ConsumeActivation(activationDiscount);
+        }
 
-        int actualCost = card.GetEffectiveCost();
-        currentMana -= actualCost; // 할인된 코스트 차감
+        currentMana -= actualCost;
+
         // 문체 효과 적용 //
         var styleManager = StyleManager.Instance;
         if (styleManager.isFirstTurnCard)
@@ -272,7 +302,19 @@ public class BattleFlowController : MonoBehaviour
 
         //todo : 이후 카드에 따라 attack type 다르게 만들기
         card.Play(caster, targets, card.index); // 카드 효과 실행
-                                                // 포텐셜 게이지 연동
+
+        if (caster is PlayerController playerCaster)
+        {
+            foreach (var enemy in enemyParty)
+            {
+                if (enemy is Enemy e && e.IsAlive())
+                {
+                    e.Mechanic?.OnCardUsed(playerCaster, card, targets, activationDiscount);
+                }
+            }
+        }
+
+        // 포텐셜 게이지 연동
         NotifyAllPlayersCardUsed(caster);
         // 임시 카메라 줌 인 아웃 효과 추가 (이후 캐릭터의 모션이 추가되면, 해당 모션의 시작과 끝에 맞춰 줌 인 아웃 재설정)
 
@@ -339,6 +381,18 @@ public class BattleFlowController : MonoBehaviour
                 }
             }
         }
+
+        foreach (var enemy in enemyParty)
+        {
+            if (enemy == null || !enemy.IsAlive())
+                continue;
+
+            enemy.ClearScarBurst();
+
+            if (enemy is Enemy e)
+                e.Mechanic?.OnPlayerTurnEnd();
+        }
+
         currentTurn = TurnState.EnemyTurn;          //적 턴으로 이행
     }
 
@@ -360,13 +414,20 @@ public class BattleFlowController : MonoBehaviour
     {
         foreach (var player in playerParty)
         {
+            if (!player.IsAlive())
+                continue;
+
+            player.ClearScarBurst();
+
             if (player is PlayerController pc && pc.IsAlive())
                 pc.OnTurnEnd();
 
             player.Deck.DiscardUnmaintainedCardsAtTurnEnd();
         }
 
-        foreach (var enemy in enemyParty)
+        var currentEnemies = new List<IStatusReceiver>(enemyParty);
+
+        foreach (var enemy in currentEnemies)
         {
             if (enemy is Enemy e && e.IsAlive())
                 e.OnTurnEnd();
@@ -562,6 +623,14 @@ public class BattleFlowController : MonoBehaviour
 
         if (characterMap.TryGetValue(caster, out var casterController))
         {
+            // 그롤리에게 삼켜진 캐릭터
+            if (casterController is PlayerController pc &&
+                pc.IsTemporarilyAbsent)
+            {
+                Debug.Log($"[BattleFlow] {pc.ChClass} 실종 상태 → 카드 사용 불가");
+                return;
+            }
+
             List<IStatusReceiver> targets = AutoChooseTargets(card.targetType, card.characterClass, card.targetCount, target);
 
             if (targets.Count > 0)

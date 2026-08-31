@@ -15,8 +15,8 @@ MonoBehaviour:
   idNum: 10
   enemyName: Wolf
   exp: 5
-  maxHP: 10
-  currentHP: 10
+  maxHP: 12
+  currentHP: 12
   aTKValue: 0
   dEFValue: 0
   stun: 0
@@ -32,9 +32,12 @@ MonoBehaviour:
     shadowOffset: {x: -0.024, y: 0.081}
   type: 0
   skillList:
-  - skillIndex: 100
+  - skillIndex: 101
     damage: 4
-    percentage: 1
+    percentage: 6
+  - skillIndex: 102
+    damage: 4
+    percentage: 4
   illust: illust1_0
   currentStance: 1
   animationController: {fileID: 9100000, guid: 74d331f4eb162fa41a300fd5bcdcc0fb, type: 2}

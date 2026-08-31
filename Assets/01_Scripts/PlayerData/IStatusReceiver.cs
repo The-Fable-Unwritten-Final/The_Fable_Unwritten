@@ -10,6 +10,17 @@ public enum CardEffectType { Damage, Heal, Buff, Debuff, Conditional, Chain }
 public enum CharacterClass { Sophia, Kayla, Leon, Enemy }
 public enum StancType { None, Seek, Insight, Mercy, Discipline, Rush, Defense }
 public enum TargetType { None = 0, Ally = 1, Enemy = 2 }
+public enum IdealRealizationType
+{
+    SophiaVisionary,
+    SophiaAlchemist,
+
+    KaylaSacredFlame,
+    KaylaJudge,
+
+    LeonLionheart,
+    LeonShadowWarrior
+}
 public enum CardType
 {
     Fire = 0,
@@ -50,6 +61,16 @@ public enum BuffStatType
     IronBlood,              //철혈 (레온 이상실현)(피해 전가, 받는 피해 반)
     Exposed,                 //노출 (레온 이상실현)(받피증 2배)
     Undying,                //체력 1 남기기
+
+    // Enemy V2
+    Reflect,
+    Mark,
+    AssaultReady,
+    ShieldTactic,
+    Combo,
+    TargetMark,
+    Formation,
+    Hap
 }
 
 // ===== 카드 키워드 (CSV index 10~18) =====
@@ -98,7 +119,9 @@ public interface IStatusReceiver
     void PlayAttackAnimation(int input, Action onHitTiming = null);
     void PlayHitAnimation();
     void CameraActionPlay();                   //행동시 카메라의 줌인 액션 연출.
+    float ApplyScarAttackBonus(float baseDamage);
 
+    void ClearScarBurst();
 
     Transform CachedTransform { get; }
     DmgBarDisplay dmgBar { get; }
@@ -112,6 +135,7 @@ public interface IStatusReceiver
     public Transform HeadPoint { get; }
     public Transform OverheadPoint { get; }
     public Transform AheadPoint { get; }
+
 
 }
 
