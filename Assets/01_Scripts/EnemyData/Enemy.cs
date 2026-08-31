@@ -251,14 +251,6 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         if (effect == null)
             return;
 
-        // 활성은 소피아 전용, 죄악은 카일라 전용
-        // Enemy에게는 적용되지 않음
-        if (effect.statType == BuffStatType.Activate ||
-            effect.statType == BuffStatType.Crime)
-        {
-            return;
-        }
-
         if (hasResist &&
             Debuff.IsDebuff(effect.statType, effect.value))
         {
@@ -411,7 +403,11 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         var crime = instantEffects.Find(e => e.statType == BuffStatType.Crime);
         if (crime == null || crime.value <= 0) return;
 
-        TakeTrueDamage(crime.value);
+        float damage = crime.value;
+
+        instantEffects.Remove(crime);
+
+        TakeTrueDamage(damage);
     }
 
     public float ApplyFreezePenalty(float baseDamage)

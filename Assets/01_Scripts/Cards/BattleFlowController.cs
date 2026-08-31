@@ -384,7 +384,12 @@ public class BattleFlowController : MonoBehaviour
 
         foreach (var enemy in enemyParty)
         {
-            if (enemy is Enemy e && e.IsAlive())
+            if (enemy == null || !enemy.IsAlive())
+                continue;
+
+            enemy.ClearScarBurst();
+
+            if (enemy is Enemy e)
                 e.Mechanic?.OnPlayerTurnEnd();
         }
 
@@ -409,6 +414,11 @@ public class BattleFlowController : MonoBehaviour
     {
         foreach (var player in playerParty)
         {
+            if (!player.IsAlive())
+                continue;
+
+            player.ClearScarBurst();
+
             if (player is PlayerController pc && pc.IsAlive())
                 pc.OnTurnEnd();
 

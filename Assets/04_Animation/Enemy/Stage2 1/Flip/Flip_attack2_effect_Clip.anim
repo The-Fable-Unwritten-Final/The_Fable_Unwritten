@@ -109,8 +109,42 @@ AnimationClip:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
   m_ClipBindingConstant:
-    genericBindings: []
-    pptrCurveMapping: []
+    genericBindings:
+    - serializedVersion: 2
+      path: 0
+      attribute: 3305885265
+      script: {fileID: 0}
+      typeID: 212
+      customType: 0
+      isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
+    - serializedVersion: 2
+      path: 0
+      attribute: 0
+      script: {fileID: 0}
+      typeID: 212
+      customType: 23
+      isPPtrCurve: 1
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
+    pptrCurveMapping:
+    - {fileID: 6231639543590640172, guid: 2bc9902bca7a61542b7dbda231b7b0c9, type: 3}
+    - {fileID: -8476626110521840288, guid: 2bc9902bca7a61542b7dbda231b7b0c9, type: 3}
+    - {fileID: 3691588616292783731, guid: 2bc9902bca7a61542b7dbda231b7b0c9, type: 3}
+    - {fileID: 6958329513430363136, guid: 2bc9902bca7a61542b7dbda231b7b0c9, type: 3}
+    - {fileID: -2112198890154072936, guid: 2bc9902bca7a61542b7dbda231b7b0c9, type: 3}
+    - {fileID: -5294376876318161154, guid: 2bc9902bca7a61542b7dbda231b7b0c9, type: 3}
+    - {fileID: 5350173026913376504, guid: 2bc9902bca7a61542b7dbda231b7b0c9, type: 3}
+    - {fileID: -8537516627383772675, guid: 2bc9902bca7a61542b7dbda231b7b0c9, type: 3}
+    - {fileID: 5374635445131763752, guid: 2bc9902bca7a61542b7dbda231b7b0c9, type: 3}
+    - {fileID: 6611868896811182507, guid: 2bc9902bca7a61542b7dbda231b7b0c9, type: 3}
+    - {fileID: -854186429913009027, guid: 2bc9902bca7a61542b7dbda231b7b0c9, type: 3}
+    - {fileID: 919733089806227446, guid: 2bc9902bca7a61542b7dbda231b7b0c9, type: 3}
+    - {fileID: 1208737559413851174, guid: 2bc9902bca7a61542b7dbda231b7b0c9, type: 3}
+    - {fileID: -2133327468506135247, guid: 2bc9902bca7a61542b7dbda231b7b0c9, type: 3}
+    - {fileID: -7798046227224101341, guid: 2bc9902bca7a61542b7dbda231b7b0c9, type: 3}
+    - {fileID: -7798046227224101341, guid: 2bc9902bca7a61542b7dbda231b7b0c9, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -121,7 +155,7 @@ AnimationClip:
     m_Level: 0
     m_CycleOffset: 0
     m_HasAdditiveReferencePose: 0
-    m_LoopTime: 1
+    m_LoopTime: 0
     m_LoopBlend: 0
     m_LoopBlendOrientation: 0
     m_LoopBlendPositionY: 0

@@ -15,8 +15,8 @@ MonoBehaviour:
   idNum: 23
   enemyName: Marnas
   exp: 10
-  maxHP: 100
-  currentHP: 100
+  maxHP: 130
+  currentHP: 130
   aTKValue: 0
   dEFValue: 0
   stun: 0
@@ -32,18 +32,15 @@ MonoBehaviour:
     shadowOffset: {x: 0.07, y: -0.37}
   type: 1
   skillList:
-  - skillIndex: 100
+  - skillIndex: 231
     damage: 15
-    percentage: 35
-  - skillIndex: 102
+    percentage: 50
+  - skillIndex: 232
     damage: 6
-    percentage: 60
-  - skillIndex: 107
+    percentage: 30
+  - skillIndex: 233
     damage: 9
-    percentage: 85
-  - skillIndex: 112
-    damage: 0
-    percentage: 100
+    percentage: 20
   illust: illust2_3
   currentStance: 1
   animationController: {fileID: 9100000, guid: 80863e53f866cb04e866ca9a958e4fc8, type: 2}

@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     public bool IsDeathPending => isDeathPending;
 
+    private bool scarBurstActive = false;
+    private bool scarTriggeredThisTurn = false;
 
     [SerializeField] private Transform footpoint;
     [SerializeField] private Transform bodypoint;
@@ -72,6 +74,9 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         skipTurnThisRound = false;
         burnIncreasedDuringOpponentTurn = false;
         guardRedirectPending = false;
+
+        scarBurstActive = false;
+        scarTriggeredThisTurn = false;
 
         hasBlock = false;
         hasResist = false;
@@ -277,7 +282,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     public void ApplyStatusEffect(StatusEffect effect)
     {
-        Debug.Log($"call {effect.statType}, {effect.value}");
         if (effect == null) return;
 
         // 디버프 저항
@@ -343,10 +347,13 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
                     // 5) 실제 저장
                     var existing = instantEffects.Find(e => e.statType == incoming.statType);
+
+                    float maxValue = incoming.statType == BuffStatType.Scar ? 50f : 999f;
+
                     if (existing != null)
                     {
                         float before = existing.value;
-                        existing.value = Mathf.Clamp(existing.value + incoming.value, 0, 999);
+                        existing.value = Mathf.Clamp(existing.value + incoming.value, 0f, maxValue);
                         existing.isMaintain = existing.isMaintain || incoming.isMaintain;
 
                         if (incoming.statType == BuffStatType.Burn &&
@@ -361,7 +368,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
                         instantEffects.Add(new InstanceEffect
                         {
                             statType = incoming.statType,
-                            value = Mathf.Clamp(incoming.value, 0, 999),
+                            value = Mathf.Clamp(incoming.value, 0, maxValue),
                             isMaintain = incoming.isMaintain
                         });
 
@@ -903,10 +910,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     public void ApplyCrimeOnTurnEnd()
     {
-        // 죄악은 카일라 전용
-        if (ChClass != CharacterClass.Kayla)
-            return;
-
         var crime = instantEffects.Find(
             e => e.statType == BuffStatType.Crime
         );
@@ -924,17 +927,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         Debug.Log(
             $"[Crime] 카일라 죄악 {damage} 피해 / 죄악 제거"
         );
-    }
-
-    public float ApplyScarBonus(float baseDamage)
-    {
-        var scar = instantEffects.Find(e => e.statType == BuffStatType.Scar);
-        if (scar == null || scar.value <= 0)
-            return baseDamage;
-
-        float finalDamage = baseDamage + scar.value;
-        scar.value = 0; // 발동 후 초기화
-        return finalDamage;
     }
 
     public bool TryTriggerStun()
@@ -979,28 +971,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             guard.value = 0;
 
         guardRedirectPending = false;
-    }
-
-    /// <summary>
-    /// 출혈 수치 적용
-    /// </summary>
-    /// <param name="baseDamage"></param>
-    /// <returns></returns>
-    public float ApplyBleedBonus(float baseDamage)
-    {
-        var bleed = instantEffects.Find(e => e.statType == BuffStatType.Scar);
-        if (bleed != null && bleed.value > 0)
-        {
-            Debug.Log($"[Bleed] {playerData.CharacterName} 추가 피해 {bleed.value}");
-            baseDamage += bleed.value;
-
-            if (!bleed.isMaintain)
-            {
-                bleed.value = 0;
-            }
-        }
-
-        return baseDamage;
     }
 
     public bool TryTriggerGuardRedirect(out PlayerController redirectTarget)
@@ -1271,5 +1241,39 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             $"활성 {consumeAmount} 소비 / " +
             $"잔여 활성 {(activate != null ? activate.value : 0)}"
         );
+    }
+
+    public float ApplyScarAttackBonus(float baseDamage)
+    {
+        if (scarBurstActive) return baseDamage + 10f;
+
+        // 같은 턴 재발동 방지
+        if (scarTriggeredThisTurn) return baseDamage;
+
+        var scar = instantEffects.Find(e => e.statType == BuffStatType.Scar);
+
+        if (scar == null || scar.value < 50f) return baseDamage;
+
+        // 상처 50 발동
+        instantEffects.Remove(scar);
+
+        scarBurstActive = true;
+        scarTriggeredThisTurn = true;
+
+        Debug.Log($"[Scar] {playerData.CharacterName} " + $"상처 발동 / 공격 피해 +10");
+
+        // 발동시킨 공격부터 +10
+        return baseDamage + 10f;
+    }
+
+    public void ClearScarBurst()
+    {
+        scarBurstActive = false;
+        scarTriggeredThisTurn = false;
+    }
+
+    public void ModifyPotential(int value)
+    {
+        // 여기만 현재 StanceSystem의 실제 게이지 변경 함수에 연결
     }
 }

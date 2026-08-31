@@ -43,7 +43,12 @@ public class DamageEffect : CardEffectBase
         {
             if (target == null || !target.IsAlive()) continue;
 
-            float result = target.TakeDamage(attackerAtk);
+            // 이번 타격에 실제로 들어갈 공격 피해
+            float finalAttackDamage = attackerAtk;
+
+            finalAttackDamage = target.ApplyScarAttackBonus(finalAttackDamage);
+
+            float result = target.TakeDamage(finalAttackDamage);
 
             if (target is Enemy enemy)
             {
@@ -52,7 +57,7 @@ public class DamageEffect : CardEffectBase
                     Attacker = caster,
                     Target = target,
                     SourceCard = card,
-                    RawDamage = attackerAtk,
+                    RawDamage = finalAttackDamage,
                     FinalDamage = result,
                     IsAttackDamage = true,
                     IsTrueDamage = false,

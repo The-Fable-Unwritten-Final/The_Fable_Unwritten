@@ -15,31 +15,38 @@ MonoBehaviour:
   idNum: 35
   enemyName: Luciel
   exp: 15
-  maxHP: 280
-  currentHP: 280
+  maxHP: 370
+  currentHP: 370
   aTKValue: 0
   dEFValue: 0
   stun: 0
   blind: 0
   block: 0
   note: 
+  anchorData:
+    footPoint: {x: 0, y: 0}
+    bodyPoint: {x: 0, y: 0}
+    headPoint: {x: 0, y: 0}
+    overheadPoint: {x: 0, y: 0}
+    aheadPoint: {x: 0, y: 0}
+    shadowOffset: {x: 0, y: 0}
   type: 2
   skillList:
-  - skillIndex: 100
+  - skillIndex: 351
     damage: 15
-    percentage: 15
-  - skillIndex: 104
+    percentage: 35
+  - skillIndex: 352
     damage: 6
     percentage: 30
-  - skillIndex: 105
+  - skillIndex: 353
     damage: 4
-    percentage: 50
-  - skillIndex: 115
+    percentage: 20
+  - skillIndex: 354
     damage: -10
-    percentage: 80
-  - skillIndex: 116
+    percentage: 15
+  - skillIndex: 355
     damage: -6
-    percentage: 100
+    percentage: 0
   illust: illust3_5
   currentStance: 1
   animationController: {fileID: 9100000, guid: f03a74ddb8f43ce498b203497ad3ec0c, type: 2}
