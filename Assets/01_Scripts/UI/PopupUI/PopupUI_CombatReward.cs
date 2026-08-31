@@ -20,6 +20,9 @@ public class PopupUI_CombatReward : BasePopupUI
     [SerializeField] Button confirmButton;
     [SerializeField] RectTransform[] rewardCardSlots; // 카드 보상 3개
     [SerializeField] TextMeshProUGUI[] hpRewardText; // 체력 보상 3개
+    [SerializeField] Image[] rewardCardImages; // 카드 보상 캐릭터 아이콘
+    [SerializeField] Sprite[] characterIcons; // 캐릭터 아이콘 (0: 소피아, 1: 카일라, 2: 레온)
+
 
     private CardModel selectedRewardCard; // 보상 선택 카드
     private List<CardModel> rewardCardCandidates = new(); // 보상 후보 카드 리스트
@@ -326,6 +329,43 @@ public class PopupUI_CombatReward : BasePopupUI
             int hpIncrease = CalculateHPIncrease(selectedCard);
             HPRewardTextUpdate(i, selectedCard, hpIncrease);
 
+            // 캐릭터 아이콘 설정 및 크기 조정
+            int cardIndex = selectedCard.index;
+            int characterIconIndex = -1;
+            
+            if (cardIndex >= 1000 && cardIndex < 2000)
+            {
+                // 소피아 (1000번대)
+                characterIconIndex = 0;
+            }
+            else if (cardIndex >= 2000 && cardIndex < 3000)
+            {
+                // 카일라 (2000번대)
+                characterIconIndex = 1;
+            }
+            else if (cardIndex >= 3000 && cardIndex < 4000)
+            {
+                // 레온 (3000번대)
+                characterIconIndex = 2;
+            }
+            
+            if (characterIconIndex >= 0 && characterIconIndex < characterIcons.Length && 
+                i < rewardCardImages.Length && rewardCardImages[i] != null)
+            {
+                Sprite charIcon = characterIcons[characterIconIndex];
+                rewardCardImages[i].sprite = charIcon;
+                
+                // Sprite의 이미지 크기에 맞게 RectTransform 크기 조정
+                if (charIcon != null && charIcon.rect.width > 0 && charIcon.rect.height > 0)
+                {
+                    RectTransform iconRect = rewardCardImages[i].GetComponent<RectTransform>();
+                    if (iconRect != null)
+                    {
+                        iconRect.sizeDelta = new Vector2(charIcon.rect.width, charIcon.rect.height);
+                    }
+                }
+            }
+
             // Button 이벤트: 카드 선택 + confirmButton 활성화
             cardBtn.onClick.AddListener(() => OnRewardCardSelected(selectedCard, cardRect));
 
@@ -388,16 +428,16 @@ public class PopupUI_CombatReward : BasePopupUI
         {
             case "ja":
                 // 일본어: "キャラ名のHP @増加"
-                text = $"{characterName}のHP {hpIncrease}増加";
+                text = $"{characterName}の<color=green>HP {hpIncrease}増加</color>";
                 break;
             case "en":
                 // 영어: "Character Name's HP increases by @"
-                text = $"{characterName}'s HP increases by {hpIncrease}";
+                text = $"{characterName}'s <color=green>HP increases by {hpIncrease}</color>";
                 break;
             case "ko":
             default:
                 // 한국어: "캐릭터명 체력 @증가"
-                text = $"{characterName}의 체력 {hpIncrease}증가";
+                text = $"{characterName}의 <color=green>체력 {hpIncrease}증가</color>";
                 break;
         }
 

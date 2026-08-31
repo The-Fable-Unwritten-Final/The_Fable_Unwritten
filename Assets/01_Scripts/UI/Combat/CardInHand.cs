@@ -25,6 +25,8 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     [SerializeField] Image cardCostImage; // 카드 코스트 이미지
     [SerializeField] Image cardTypeImage; // 카드 타입 이미지
     [SerializeField] Image cardCharImage; // 카드 캐릭터 이미지
+    [SerializeField] Image shade1;
+    [SerializeField] Image shade2; 
     [SerializeField] TextMeshProUGUI cardCost; // 카드 코스트
     [SerializeField] TextMeshProUGUI cardName; // 카드 이름
     [SerializeField] TextMeshProUGUI cardDescription; // 카드 설명
@@ -254,6 +256,8 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         seq.Join(cardImage.DOFade(0f, 0.4f).SetEase(Ease.OutSine));
         seq.Join(cardTypeImage.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(cardCharImage.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(shade1.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(shade2.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(cardName.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(cardCost.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(cardDescription.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
