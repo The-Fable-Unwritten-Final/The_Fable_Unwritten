@@ -54,6 +54,7 @@ public class TurnController : MonoBehaviour
     {
         OnStartPlayerTurn += battleFlow.ExecutePlayerTurn;
         //OnStartPlayerTurn += cardDisplay.CardArrange; // 카드 배치 초기화
+        OnEndPlayerTurn += battleFlow.EndPlayerTurn;
 
         StartCoroutine(AtStartGame()); // 게임 시작 후 1초 후에 플레이어 턴으로
     }

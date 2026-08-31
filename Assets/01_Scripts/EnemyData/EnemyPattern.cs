@@ -30,7 +30,7 @@ public static class EnemyPattern
         if (enemyComponent.IsStunned())
             yield break;
 
-        var skill = ChooseSkill(enemyComponent);
+        var skill = enemyComponent.Mechanic?.GetForcedSkill() ?? ChooseSkill(enemyComponent);
         if (skill == null)
         {
             Debug.LogWarning($"[EnemyPattern] {enemyComponent.enemyData.EnemyName}의 스킬 데이터 없음.");
@@ -201,6 +201,7 @@ public static class EnemyPattern
             {
                 if (target == null) continue;
                 if (!target.IsAlive()) continue;
+                if (target is PlayerController pc && pc.IsTemporarilyAbsent) continue;
 
                 if ((target.ChClass == CharacterClass.Leon && actData.target_front) ||
                 (target.ChClass == CharacterClass.Sophia && actData.target_center) ||

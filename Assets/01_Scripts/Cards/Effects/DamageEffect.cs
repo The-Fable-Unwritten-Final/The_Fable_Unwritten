@@ -45,6 +45,23 @@ public class DamageEffect : CardEffectBase
 
             float result = target.TakeDamage(attackerAtk);
 
+            if (target is Enemy enemy)
+            {
+                var context = new DamageContext
+                {
+                    Attacker = caster,
+                    Target = target,
+                    SourceCard = card,
+                    RawDamage = attackerAtk,
+                    FinalDamage = result,
+                    IsAttackDamage = true,
+                    IsTrueDamage = false,
+                    HitIndex = 0
+                };
+
+                enemy.Mechanic?.OnDamaged(context);
+            }
+
             var dmgData =  new DmgTextData
             {
                 Text = $"{Mathf.RoundToInt(result)}",

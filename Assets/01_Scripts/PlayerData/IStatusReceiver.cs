@@ -10,6 +10,17 @@ public enum CardEffectType { Damage, Heal, Buff, Debuff, Conditional, Chain }
 public enum CharacterClass { Sophia, Kayla, Leon, Enemy }
 public enum StancType { None, Seek, Insight, Mercy, Discipline, Rush, Defense }
 public enum TargetType { None = 0, Ally = 1, Enemy = 2 }
+public enum IdealRealizationType
+{
+    SophiaVisionary,
+    SophiaAlchemist,
+
+    KaylaSacredFlame,
+    KaylaJudge,
+
+    LeonLionheart,
+    LeonShadowWarrior
+}
 public enum CardType
 {
     Fire = 0,
