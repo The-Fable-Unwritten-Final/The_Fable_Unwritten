@@ -660,10 +660,22 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         VisitedNodes.Clear();
         CurrentTheme = default;
 
+        // 모든 문체의 진행도 및 잠금 상태 초기화
+        unlockedStyles.Clear();
         foreach (StyleDefinition st in StyleManager.Instance.StyleDic.Values)
         {
             st.ResetProgress(); // 진행도 1로 초기화
+            st.isUnlocked = false; // 잠금 상태 초기화
         }
+
+        // 기본 해금 문체 설정 (1,2,3,4,5,6)
+        UnlockStyle(1);
+        UnlockStyle(2);
+        UnlockStyle(3);
+        UnlockStyle(4);
+        UnlockStyle(5);
+        UnlockStyle(6);
+
         if (StyleManager.Instance.StyleDic.TryGetValue(0, out var chaos))
         {
             // 혼돈 문체 초기화
@@ -694,14 +706,15 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         currentDefID = 1;
         inkAmount = 0;
         maxInkAmount = 10;
-        IsEndingClear = false;  // 엔딩 클리어 상태 초기화        // 카드 해금, 문체 해금, 캐릭터 해금 초기화
+        IsEndingClear = false;  // 엔딩 클리어 상태 초기화
+        
+        // 카드 해금, 캐릭터 해금 초기화
         unlockedCards.Clear();
         foreach(var cha in PlayerDatas)
         {
             cha.SetToDefaultMaxHP(); // 캐릭터 최대 체력 초기화
         }
         unlockedCharacterIDs.Clear();
-        InitializeDefaultStyleUnlock();
 
         PlayerPrefs.DeleteKey("ProgressSaveData");
 
@@ -1165,8 +1178,11 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     /// '특정 문체 ID'를 해금 처리
     /// </summary>
     /// <param name="styleId">해금할 문체 ID </param>
-    public void UnlockStyle(int styleId)
+    /// <returns>해금된 StyleDefinition</returns>
+    public StyleDefinition UnlockStyle(int styleId)
     {
+        StyleDefinition unlockedStyle = null;
+        
         if (!unlockedStyles.Contains(styleId))
         {
             unlockedStyles.Add(styleId);
@@ -1175,8 +1191,15 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
             if (StyleManager.Instance != null && StyleManager.Instance.StyleDic.TryGetValue(styleId, out var style))
             {
                 style.isUnlocked = true;
+                unlockedStyle = style;
             }
         }
+        else if (StyleManager.Instance != null && StyleManager.Instance.StyleDic.TryGetValue(styleId, out var style))
+        {
+            unlockedStyle = style;
+        }
+
+        return unlockedStyle;
     }
     /// <summary>
     /// 게임 클리어 시 잠금 상태의 '랜덤한 문체 하나'를 잠금 해제
@@ -1195,7 +1218,13 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
         int randomIndex = UnityEngine.Random.Range(0, lockstyles.Count);
         int styleId = lockstyles[randomIndex];
-        UnlockStyle(styleId);
+        StyleDefinition unlockedStyle = UnlockStyle(styleId);
+
+        if (unlockedStyle != null)
+        {
+            // 문체 잠금 해제 알림 사이드 팝업 UI 호출
+            GameManager.Instance.combatUIController.SidePopupUI.CallUnlockInfo(LocaleDataManager.GetLocalizedStyleEffect(unlockedStyle.name));
+        }
     }
 
     private void OnApplicationQuit()
