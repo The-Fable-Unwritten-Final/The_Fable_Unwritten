@@ -41,7 +41,7 @@ public class MarnasMechanic : EnemyMechanicBase
     }
     public override float ModifyStat(BuffStatType statType, float value)
     {
-        if (statType == BuffStatType.Defense && runeShell > 0)
+        if (statType == BuffStatType.Defend && runeShell > 0)
             value += 2;
 
         if (statType == BuffStatType.Attack && forceTidalWave)

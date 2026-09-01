@@ -602,7 +602,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
             return 0;
         }
 
-        float reduced = amount - ModifyStat(BuffStatType.Defense, 0f);
+        float reduced = amount - ModifyStat(BuffStatType.Defend, 0f);
         reduced = Mathf.Max(reduced, 0);
 
         currentHP = Mathf.Max(0, currentHP - reduced);
@@ -726,7 +726,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public float GetBuffDef()
     {
-        return ModifyStat(BuffStatType.Defense, 0f);
+        return ModifyStat(BuffStatType.Defend, 0f);
     }
 
     public void TryFinalizeDeath()

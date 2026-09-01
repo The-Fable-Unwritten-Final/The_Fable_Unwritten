@@ -29,7 +29,7 @@ public class BattleFlowController : MonoBehaviour
 
     public List<IStatusReceiver> enemyParty = new List<IStatusReceiver> { null, null, null };
 
-    public int startMana = 4; //시작 마나
+    public int startMana = 5; //시작 마나
     public int currentMana;   //현재 마나
 
     public Dictionary<CharacterClass, DeckModel> decksByCharacter = new();     //캐릭터 마다의 사용, 미사용, 핸드 덱
@@ -662,7 +662,9 @@ public class BattleFlowController : MonoBehaviour
         if (!card.IsUsable(currentMana)) return false;
         if (!card.CanBeUsedBy(caster.ChClass)) return false;
         if (!card.IsTargetValid(caster, target)) return false;
-        if (caster.IsStunned()) return false; // 스턴 상태면 사용 불가
+
+        if (caster is PlayerController pc && !pc.CanActThisTurn())
+            return false;
 
         foreach (var effect in card.effects)        //버릴 카드 부족하면 사용 불가
         {

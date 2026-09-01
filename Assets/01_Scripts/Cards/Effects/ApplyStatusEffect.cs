@@ -11,7 +11,7 @@ public class ApplyStatusEffect : CardEffectBase
     public BuffStatType statType;
     public float value;
     public int duration;
-    public int? target;
+    public int target = -1;
 
     /// <summary>
     /// 시전자가 타겟에게 버프/디버프를 줌
@@ -53,7 +53,7 @@ public class ApplyStatusEffect : CardEffectBase
                 break;
 
             case 4:
-            case null:
+            case -1:
             default:
                 filteredTargets.AddRange(targets); break;
         }
@@ -140,7 +140,7 @@ public class ApplyStatusEffect : CardEffectBase
 
     private string GetStatusEffectText(BuffStatType statType, float value)
     {
-        bool useSignedFormat = statType is BuffStatType.Attack or BuffStatType.Defense;
+        bool useSignedFormat = statType is BuffStatType.Attack or BuffStatType.Defend;
 
         string valueText = useSignedFormat? value 
             switch
@@ -156,7 +156,7 @@ public class ApplyStatusEffect : CardEffectBase
         return statType switch
         {
             BuffStatType.Attack => valueText,
-            BuffStatType.Defense => valueText,
+            BuffStatType.Defend => valueText,
             BuffStatType.Bless => valueText,
             BuffStatType.Crime => valueText,
             BuffStatType.Penance => valueText,
@@ -177,7 +177,7 @@ public class ApplyStatusEffect : CardEffectBase
         return statType switch
         {
             BuffStatType.Attack => value > 0 ? DmgTextType.AttackBuff : DmgTextType.AttackDebuff,
-            BuffStatType.Defense => value > 0 ? DmgTextType.DefenseBuff : DmgTextType.DefenseDebuff,
+            BuffStatType.Defend => value > 0 ? DmgTextType.DefenseBuff : DmgTextType.DefenseDebuff,
             
             // 이름이 동일한 것들
             BuffStatType.Burn => DmgTextType.Burn,
@@ -203,7 +203,7 @@ public static class Buff
         return type switch
         {
             BuffStatType.Attack => value > 0,
-            BuffStatType.Defense => value > 0,
+            BuffStatType.Defend => value > 0,
             BuffStatType.Guard or BuffStatType.Bless or BuffStatType.Penance => true,
             _ => false
         };
@@ -217,7 +217,7 @@ public static class Debuff
         return type switch
         {
             BuffStatType.Attack => value < 0,
-            BuffStatType.Defense => value < 0,
+            BuffStatType.Defend => value < 0,
             BuffStatType.Guard or BuffStatType.Bless or BuffStatType.Penance=> false,
             _ => true
         };
@@ -228,7 +228,7 @@ public static class Debuff
         BuffStatType[] candidates = new BuffStatType[]
         {
             BuffStatType.Attack,
-            BuffStatType.Defense,
+            BuffStatType.Defend,
             BuffStatType.Burn,
             BuffStatType.Freeze,
             BuffStatType.Scar,
@@ -249,7 +249,7 @@ public static class Debuff
                 result.value = -1;
                 result.duration = 1;
                 break;
-            case BuffStatType.Defense:
+            case BuffStatType.Defend:
                 result.value = -1;
                 result.duration = 1;
                 break;

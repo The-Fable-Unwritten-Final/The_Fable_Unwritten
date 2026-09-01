@@ -308,7 +308,7 @@ public static class EnemyPattern
                 return;
 
             case EnemyEffectType.Defense:
-                ApplyTickEffect(target,BuffStatType.Defense,value);
+                ApplyTickEffect(target,BuffStatType.Defend,value);
                 return;
 
 
@@ -702,4 +702,5 @@ public static class EnemyPattern
 
         return 0;
     }
+
 }

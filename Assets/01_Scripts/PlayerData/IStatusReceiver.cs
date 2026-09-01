@@ -40,7 +40,7 @@ public enum BuffStatType
     None,                   // 기본값
 
     Attack,                 // 공격력 증가, 감소
-    Defense,                // 방어력 증가, 감소
+    Defend,                // 방어력 증가, 감소
 
     Burn,                   // 화상 (턴 시작 시 피해)
     Freeze,                 // 빙결 (공격력 % 감소)

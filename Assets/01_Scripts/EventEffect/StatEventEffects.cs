@@ -54,7 +54,7 @@ public class StatEventEffects : EventEffects
                     {
                         chars.ApplyStatusEffect(new TickEffect
                         {
-                            statType = BuffStatType.Defense,
+                            statType = BuffStatType.Defend,
                             value = def,
                             duration = 1000 // 전투 동안 유지되도록 높게
                         });
@@ -98,7 +98,7 @@ public class StatEventEffects : EventEffects
                     {
                         chars.ApplyStatusEffect(new TickEffect
                         {
-                            statType = BuffStatType.Defense,
+                            statType = BuffStatType.Defend,
                             value = def,
                             duration = 1000 // 전투 동안 유지되도록 높게
                         });
@@ -142,7 +142,7 @@ public class StatEventEffects : EventEffects
                     {
                         chars.ApplyStatusEffect(new TickEffect
                         {
-                            statType = BuffStatType.Defense,
+                            statType = BuffStatType.Defend,
                             value = def,
                             duration = 1000 // 전투 동안 유지되도록 높게
                         });

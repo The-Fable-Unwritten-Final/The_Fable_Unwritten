@@ -68,7 +68,7 @@ public static class CardEffectBuilder2
         return value switch
         {
             "atk" => BuffStatType.Attack,
-            "def" => BuffStatType.Defense,
+            "def" => BuffStatType.Defend,
             "burn" => BuffStatType.Burn,
             "freeze" => BuffStatType.Freeze,
             "active" => BuffStatType.Activate,

@@ -433,7 +433,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             ConsumeGuard(); // 발동 후 초기화
         }
 
-        float reduced = amount - ModifyStat(BuffStatType.Defense, 0f);
+        float reduced = amount - ModifyStat(BuffStatType.Defend, 0f);
         reduced = Mathf.Max(reduced, 1f);
 
         if (playerData.currentStance == StancType.Defense)
@@ -764,7 +764,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         float defTotal = 0;
         foreach (var effect in tickEffects)
         {
-            if (effect.statType == BuffStatType.Defense)
+            if (effect.statType == BuffStatType.Defend)
                 defTotal += effect.value;
         }
         return defTotal;
@@ -1040,7 +1040,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
                 pc.ApplyStatusEffect(new InstanceEffect
                 {
-                    statType = BuffStatType.Defense,
+                    statType = BuffStatType.Defend,
                     value = sinAmount,
                     isMaintain = false
                 });
@@ -1270,10 +1270,5 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     {
         scarBurstActive = false;
         scarTriggeredThisTurn = false;
-    }
-
-    public void ModifyPotential(int value)
-    {
-        // 여기만 현재 StanceSystem의 실제 게이지 변경 함수에 연결
     }
 }
