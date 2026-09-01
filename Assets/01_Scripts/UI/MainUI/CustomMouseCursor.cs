@@ -45,11 +45,11 @@ public class CustomMouseCursor : MonoBehaviour
         {
             case CursorState.Idle:
                 cursorImage.sprite = idleTexture;
-                cursorUI.pivot = new Vector2(0.29f, 0.83f);
+                //cursorUI.pivot = new Vector2(0.29f, 0.83f);
                 break;
             case CursorState.Hover:
                 cursorImage.sprite = hoverTexture;
-                cursorUI.pivot = new Vector2(0.425f, 0.71f);
+                //cursorUI.pivot = new Vector2(0.425f, 0.71f);
                 break;
         }
     }
