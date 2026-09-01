@@ -159,7 +159,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -137, y: -50}
+  m_AnchoredPosition: {x: -137, y: -53}
   m_SizeDelta: {x: 90, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &16261664
@@ -251,7 +251,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 775687693, guid: 3eff774fe32218f4dab1ca7ad61e9b9f, type: 3}
+  m_Sprite: {fileID: -1792900624, guid: 3eff774fe32218f4dab1ca7ad61e9b9f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3956,7 +3956,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -237, y: -55}
-  m_SizeDelta: {x: 80, y: 64}
+  m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1649628334
 MonoBehaviour:
@@ -4047,7 +4047,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 173244429, guid: 3eff774fe32218f4dab1ca7ad61e9b9f, type: 3}
+  m_Sprite: {fileID: 1469859176, guid: 3eff774fe32218f4dab1ca7ad61e9b9f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4430,7 +4430,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -347, y: -55}
-  m_SizeDelta: {x: 85, y: 64}
+  m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1853512655
 MonoBehaviour:
@@ -4521,7 +4521,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -399440836, guid: 3eff774fe32218f4dab1ca7ad61e9b9f, type: 3}
+  m_Sprite: {fileID: 776253612, guid: 3eff774fe32218f4dab1ca7ad61e9b9f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6161,6 +6161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetScale: 1.08
+  UIImage: {fileID: 0}
 --- !u!114 &2519659767519142405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8375,6 +8376,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetScale: 1.08
+  UIImage: {fileID: 0}
 --- !u!224 &6949859208471407546
 RectTransform:
   m_ObjectHideFlags: 0

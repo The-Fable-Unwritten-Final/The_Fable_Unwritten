@@ -7,10 +7,9 @@ using TMPro;
 public class PopupUI_UnlockCard : BasePopupUI
 {
     [SerializeField] private Image cardIllust;
-    [SerializeField] private Image cardType;
-    [SerializeField] private Image character;
-    [SerializeField] private TextMeshProUGUI cardName;
-    [SerializeField] private TextMeshProUGUI cardDesc;
+    [SerializeField] private Image CardFrame;
+    [SerializeField] private CardInHand cardinhand;
+
 
     public override void Open()
     {
@@ -26,12 +25,17 @@ public class PopupUI_UnlockCard : BasePopupUI
             return;
         }
 
-        cardIllust.sprite = model.illustration;
-        cardType.sprite = model.cardType;
-        character.sprite = model.chClass;
-        cardName.text = model.cardName;
-        cardDesc.text = model.cardText;
-
+        // CardInHand를 사용해서 UI 요소 업데이트
+        if (cardinhand != null)
+        {
+            // 카드 데이터 설정 (이미지, 이름, 비용, 설명)
+            cardinhand.cardData = model;
+            cardinhand.UpdateCardImage();
+            cardinhand.UpdateCardInfoOnlyUI();
+            
+            // CardInHand 컴포넌트 제거 (이벤트 핸들러 비활성화)
+            DestroyImmediate(cardinhand);
+        }
     }
     
     public void OnConfirmUnlock()
