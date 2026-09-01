@@ -16,13 +16,13 @@ public interface IEnemyMechanic
 
     void OnBurnDamageTaken(float damage);
 
-    void OnCardUsed(
-     PlayerController caster,
-     CardModel card,
-     IReadOnlyList<IStatusReceiver> targets,
-     int activationDiscount);
+    void OnCardUsed(PlayerController caster, CardModel card, IReadOnlyList<IStatusReceiver> targets, int activationDiscount);
 
     EnemySkill GetForcedSkill();
 
     float ModifyStat(BuffStatType statType, float value);
+
+    bool SkipNormalActionThisTurn { get; }
+
+    int ModifySkillEffectValue(IStatusReceiver target, EnemyEffectType effectType, EnemyEffectTarget targetType, int value);
 }

@@ -118,28 +118,27 @@ public class CardModel : ScriptableObject
             {
                 foreach (var t in targets)
                 {
-
-                    if (!DataManager.Instance.CardEffects.TryGetValue(skillEffectName, out var animInfo))
-                        continue;
-
-                    if (animInfo.animationType == AnimationType.Projectile)
+                    if (DataManager.Instance.CardEffects.TryGetValue(skillEffectName, out var animInfo))
                     {
-                        GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
-                            skillEffectName,
-                            caster,
-                            t,
-                            1,
-                            () =>
-                            {
-                                if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
-                                    t.PlayHitAnimation();
+                        if (animInfo.animationType == AnimationType.Projectile)
+                        {
+                            GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
+                                skillEffectName,
+                                caster,
+                                t,
+                                1,
+                                () =>
+                                {
+                                    if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
+                                        t.PlayHitAnimation();
 
-                                ApplyEffectsToTarget(caster, t, targets, fixedIsEnhanced);
-                            }
-                        );
-                    }
-                    else
-                    {
+                                    ApplyEffectsToTarget(caster, t, targets, fixedIsEnhanced);
+                                }
+                            );
+
+                            continue;
+                        }
+
                         GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(
                             skillEffectName,
                             caster,
@@ -147,12 +146,16 @@ public class CardModel : ScriptableObject
                             false,
                             1
                         );
-
-                        if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
-                            t.PlayHitAnimation();
-
-                        ApplyEffectsToTarget(caster, t, targets, fixedIsEnhanced);
                     }
+                    else
+                    {
+                        Debug.LogWarning($"[CardAnim] 스킬 이펙트 없음: 카드={cardName}, effect={skillEffectName}");
+                    }
+
+                    if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
+                        t.PlayHitAnimation();
+
+                    ApplyEffectsToTarget(caster, t, targets, fixedIsEnhanced);
                 }
             }
             else
@@ -375,8 +378,8 @@ public class CardModel : ScriptableObject
             case MultiplyBuffEffect multiplyBuffEffect:
                 return multiplyBuffEffect.value.ToString();
 
-            case HealByBlessEffect healByBlessEffect:
-                return healByBlessEffect.value.ToString();
+            case HealByPenanceEffect healByPenanceEffect:
+                return healByPenanceEffect.value.ToString();
 
             case NoBlessConsumeEffect noBlessConsumeEffect:
                 return noBlessConsumeEffect.value.ToString();

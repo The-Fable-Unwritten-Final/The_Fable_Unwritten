@@ -19,6 +19,9 @@ public class IzkalMechanic : EnemyMechanicBase
     private bool usedStormThisTurn;
     private bool phase2Pending;
 
+    private bool skipNormalAction;
+    public override bool SkipNormalActionThisTurn => skipNormalAction;
+
     private readonly List<CardType> currentRunes = new();
 
     // 2페이즈용
@@ -26,6 +29,8 @@ public class IzkalMechanic : EnemyMechanicBase
     private int iceTrace;
     private int natureTrace;
     private CardType lastTraceType;
+
+
 
     public override void OnBattleStart()
     {
@@ -101,6 +106,7 @@ public class IzkalMechanic : EnemyMechanicBase
     public override void OnEnemyTurnStart()
     {
         usedStormThisTurn = false;
+        skipNormalAction = false;
 
         // 50% 이하 진입 후 다음 적 턴 시작
         if (phase2Pending)
@@ -112,6 +118,7 @@ public class IzkalMechanic : EnemyMechanicBase
         if (stormCountdown <= 0)
         {
             UseRuneStorm();
+            skipNormalAction = true;
         }
     }
 

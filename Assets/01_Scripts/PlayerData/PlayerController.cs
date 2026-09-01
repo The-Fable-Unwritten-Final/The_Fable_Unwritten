@@ -77,9 +77,12 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         scarBurstActive = false;
         scarTriggeredThisTurn = false;
+        justTriggeredStanceThisTurn = false;
 
         hasBlock = false;
         hasResist = false;
+
+        potentialChargeLockTurn = 0;
 
         tickEffects.Clear();
         instantEffects.Clear();
@@ -117,9 +120,14 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         // Freeze는 턴 종료 시 초기화
         ClearInstantEffect(BuffStatType.Freeze);
+        justTriggeredStanceThisTurn = false;
+        stanceSystem?.OnTurnEnd();
 
         playerData.ResetCurCard();
         statusDisplay?.PlayerUpdateUI();
+
+        if (potentialChargeLockTurn > 0)
+            potentialChargeLockTurn--;
     }
 
     private void ClearInstantEffect(BuffStatType type)
@@ -184,10 +192,11 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         if (GameManager.Instance?.turnController?.battleFlow == null)
             return;
 
-        StanceEffectHandler.TriggerStanceEffect(this, GameManager.Instance.turnController.battleFlow);
+        var battleFlow = GameManager.Instance.turnController.battleFlow;
+
+        StanceEffectHandler.TriggerStanceEffect(this, battleFlow);
+        battleFlow.TryAutoCastPotentialCards(this);
     }
-
-
 
     public event System.Action OnTargetableChanged; // 타겟 가능 여부 변경 이벤트
 
@@ -249,10 +258,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     public void TakeTrueDamage(float damage)
     {
-        //Debug.Log($"{playerData.CharacterName}가 {damage}의 트루데미지를 받음! 현재 체력: {playerData.currentHP}");
-        // 문체 효과 적용
         damage = StyleManager.Instance.GetOnComingDamageModify(this, this, damage);
-        currentHP -= damage;
 
         var dmg = new DmgTextData
         {
@@ -263,13 +269,14 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             isWeakened = false
         };
 
-        this.dmgTextQueue.InitPrint(dmg);
+        dmgTextQueue.InitPrint(dmg);
 
         playerData.currentHP = Mathf.Max(0, playerData.currentHP - damage);
 
         if (!IsAlive())
         {
-            isDeathPending = true;
+            if (!TryConsumeUndying())
+                isDeathPending = true;
         }
     }
 
@@ -445,9 +452,10 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         playerData.currentHP = Mathf.Max(0, playerData.currentHP - reduced);
 
-        if(!IsAlive())
+        if (!IsAlive())
         {
-            isDeathPending = true;
+            if (!TryConsumeUndying())
+                isDeathPending = true;
         }
 
         return reduced;
@@ -911,7 +919,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public void ApplyCrimeOnTurnEnd()
     {
         var crime = instantEffects.Find(
-            e => e.statType == BuffStatType.Crime
+            e => e.statType == BuffStatType.Sin
         );
 
         if (crime == null || crime.value <= 0)
@@ -1006,6 +1014,9 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// </summary>
     public void NotifyCardUsed(bool isSelf)
     {
+        if (potentialChargeLockTurn > 0 && !isSelf)
+            return;
+
         stanceSystem?.OnAllyUsedCard(isSelf);
     }
 
@@ -1270,5 +1281,25 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     {
         scarBurstActive = false;
         scarTriggeredThisTurn = false;
+    }
+
+    private bool TryConsumeUndying()
+    {
+        var undying = instantEffects.Find(e => e.statType == BuffStatType.Undying && e.value > 0);
+        if (undying == null) return false;
+
+        undying.value -= 1;
+
+        if (undying.value <= 0)
+            instantEffects.Remove(undying);
+
+        playerData.currentHP = 1f;
+        isDeathPending = false;
+
+        statusDisplay?.PlayerUpdateUI();
+
+        Debug.Log($"[Undying] {playerData.CharacterName} 치명타 방지 / HP 1");
+
+        return true;
     }
 }

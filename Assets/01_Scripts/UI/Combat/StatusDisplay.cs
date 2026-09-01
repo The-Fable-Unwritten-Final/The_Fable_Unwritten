@@ -217,7 +217,7 @@ public class StatusDisplay : MonoBehaviour
             BuffStatType.Activate => 4,
             BuffStatType.Bless => 5,
             BuffStatType.Penance => 6,
-            BuffStatType.Crime => 7,
+            BuffStatType.Sin => 7,
             BuffStatType.Scar => 8,
             _ => 100
         };

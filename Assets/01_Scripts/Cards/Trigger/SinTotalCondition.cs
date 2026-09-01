@@ -8,20 +8,11 @@ public class SinTotalCondition : TriggerCondition
 
     public override bool IsConditionMet(IStatusReceiver caster, List<IStatusReceiver> target)
     {
-        if (target == null) return false;
+        if (caster is not PlayerController pc)
+            return false;
 
-        float total = 0f;
-
-        foreach (var t in target)
-        {
-            if (t is Enemy enemy)
-            {
-                total += enemy.GetEffectValue(BuffStatType.Crime);
-            }
-        }
-
-        return total >= requiredValue;
+        return pc.GetEffectValue(BuffStatType.Sin) >= requiredValue;
     }
 
-    public override string Description => $"적 전체의 죄악 합이 {requiredValue} 이상일 때";
+    public override string Description => $"죄악이 {requiredValue} 이상일 때";
 }

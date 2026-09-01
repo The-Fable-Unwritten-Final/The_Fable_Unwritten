@@ -14,8 +14,17 @@ public static class EnemyPattern
             Debug.LogError("[EnemyPattern] 전달된 IStatusReceiver는 Enemy가 아닙니다.");
             yield break;
         }
+        
+        if (!enemyComponent.IsAlive())
+        {
+            enemyComponent.TryFinalizeDeath();
+            yield break;
+        }
 
         if (enemyComponent.IsStunned())
+            yield break;
+
+        if (enemyComponent.Mechanic?.SkipNormalActionThisTurn == true)
             yield break;
 
         var skill = enemyComponent.Mechanic?.GetForcedSkill() ?? ChooseSkill(enemyComponent);
@@ -225,11 +234,16 @@ public static class EnemyPattern
         if (actData.arg_target1 == EnemyEffectTarget.SkillTarget)
         {
             int value = ResolveEffectValue(caster, target, actData, actData.arg1);
+            value = caster.Mechanic?.ModifySkillEffectValue(target, actData.arg_effect1,actData.arg_target1,value) ?? value;
             ApplyV2Effect(caster, target, actData.arg_effect1, value);
         }
 
         if (actData.arg_target2 == EnemyEffectTarget.SkillTarget)
-            ApplyV2Effect(caster, target, actData.arg_effect2, actData.arg2);
+        {
+            int value = actData.arg2;
+            value = caster.Mechanic?.ModifySkillEffectValue(target, actData.arg_effect2,actData.arg_target2,value) ?? value;
+            ApplyV2Effect(caster, target, actData.arg_effect2, value);
+        }
     }
 
     private static void ApplyNonSkillTargetEffects(Enemy caster,EnemyAct actData)
@@ -333,7 +347,7 @@ public static class EnemyPattern
                 return;
 
             case EnemyEffectType.Crime:
-                ApplyInstanceEffect(target, BuffStatType.Crime, value);
+                ApplyInstanceEffect(target, BuffStatType.Sin, value);
                 return;
 
             case EnemyEffectType.Penance:
