@@ -13,7 +13,7 @@ public class ConditionalEffect : CardEffectBase
     {
         if (condition != null && condition.IsConditionMet(caster, targets))
         {
-            effectIfTrue?.Apply(caster, targets);
+            effectIfTrue?.Apply(caster, targets, isEnhanced);
         }
     }
 

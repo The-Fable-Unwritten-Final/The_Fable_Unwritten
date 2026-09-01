@@ -1,0 +1,2583 @@
+{
+  "data": [
+    {
+      "index": 1000,
+      "cost": 1,
+      "illustration": "illust_0",
+      "name": "Card_Name_1000",
+      "text": "Card_Text_1000",
+      "type": 0,
+      "class": 0,
+      "cardframe": "frame_0",
+      "target_type": 2,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_1000",
+      "skilleffect": "1나비불ef_100x100",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 8
+        },
+        {
+          "type": "burn",
+          "value": 3,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Seek"
+            ]
+          },
+          "result": {
+            "type": "damagePercent",
+            "value": 50
+          }
+        }
+      ],
+      "switchType": "Insight"
+    },
+    {
+      "index": 1001,
+      "cost": 1,
+      "illustration": "illust_18",
+      "name": "Card_Name_1001",
+      "text": "Card_Text_1001",
+      "type": 0,
+      "class": 0,
+      "cardframe": "frame_0",
+      "target_type": 1,
+      "target_num": 3,
+      "note": "작은 불씨-확률 A",
+      "flavortext": "Card_Flav_1001",
+      "skilleffect": "2정화의불꽃ef_75x75",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "atk",
+          "value": 1,
+          "target": 3
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "enemyHasStatus",
+            "value": [
+              "burn"
+            ]
+          },
+          "result": {
+            "type": "atk",
+            "value": 2,
+            "target": 3
+          }
+        }
+      ]
+    },
+    {
+      "index": 1002,
+      "cost": 2,
+      "illustration": "illust_29",
+      "name": "Card_Name_1002",
+      "text": "Card_Text_1002",
+      "type": 0,
+      "class": 0,
+      "cardframe": "frame_0",
+      "target_type": 2,
+      "target_num": 1,
+      "note": "작은 불씨-확률 B",
+      "flavortext": "Card_Flav_1002",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "self_damage",
+          "value": 3
+        },
+        {
+          "type": "damage",
+          "value": 13
+        },
+        {
+          "type": "burn",
+          "value": 3,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "potentialGte",
+            "value": [
+              "50"
+            ]
+          },
+          "result": {
+            "type": "damage",
+            "value": 13
+          }
+        }
+      ]
+    },
+    {
+      "index": 1003,
+      "cost": 1,
+      "illustration": "illust_10",
+      "name": "Card_Name_1003",
+      "text": "Card_Text_1003",
+      "type": 1,
+      "class": 0,
+      "cardframe": "frame_1",
+      "target_type": 2,
+      "target_num": 2,
+      "note": "",
+      "flavortext": "Card_Flav_1003",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 3
+        },
+        {
+          "type": "freeze",
+          "value": 2,
+          "target": 4
+        },
+        {
+          "type": "applyDamage",
+          "value": 2
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Insight"
+            ]
+          },
+          "result": {
+            "type": "duplicate",
+            "value": 1
+          }
+        }
+      ],
+      "keywords": [
+        "Copy"
+      ]
+    },
+    {
+      "index": 1004,
+      "cost": 2,
+      "illustration": "illust_30",
+      "name": "Card_Name_1004",
+      "text": "Card_Text_1004",
+      "type": 1,
+      "class": 0,
+      "cardframe": "frame_1",
+      "target_type": 2,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_1004",
+      "skilleffect": "5서리대지ef1_150x75, 5서리대지ef2_150x75",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "self_damage",
+          "value": 2
+        },
+        {
+          "type": "damage",
+          "value": 11
+        },
+        {
+          "type": "freeze",
+          "value": 4,
+          "target": 4
+        }
+      ],
+      "switchType": "Insight"
+    },
+    {
+      "index": 1005,
+      "cost": 2,
+      "illustration": "illust_27",
+      "name": "Card_Name_1005",
+      "text": "Card_Text_1005",
+      "type": 1,
+      "class": 0,
+      "cardframe": "frame_1",
+      "target_type": 1,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_1005",
+      "skilleffect": "6서리방벽ef_75x75",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "def",
+          "value": 6,
+          "target": 3
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "justAfterSpecificStance",
+            "value": [
+              "Insight"
+            ]
+          },
+          "result": {
+            "type": "def",
+            "value": 12,
+            "target": 3
+          }
+        }
+      ]
+    },
+    {
+      "index": 1006,
+      "cost": 0,
+      "illustration": "illust_6",
+      "name": "Card_Name_1006",
+      "text": "Card_Text_1006",
+      "type": 2,
+      "class": 0,
+      "cardframe": "frame_3",
+      "target_type": 1,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_1006",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "reduceNextCardCost",
+          "value": 1
+        },
+        {
+          "type": "atk",
+          "value": -1,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "potentialGte",
+            "value": [
+              "80"
+            ]
+          },
+          "result": {
+            "type": "reduceCost",
+            "value": 2
+          }
+        }
+      ]
+    },
+    {
+      "index": 1007,
+      "cost": 1,
+      "illustration": "illust_15",
+      "name": "Card_Name_1007",
+      "text": "Card_Text_1007",
+      "type": 2,
+      "class": 0,
+      "cardframe": "frame_3",
+      "target_type": 0,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_1007",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "heal",
+          "value": 5
+        }
+      ],
+      "switchType": "Seek"
+    },
+    {
+      "index": 1008,
+      "cost": 3,
+      "illustration": "illust_9",
+      "name": "Card_Name_1008",
+      "text": "Card_Text_1008",
+      "type": 2,
+      "class": 0,
+      "cardframe": "frame_3",
+      "target_type": 2,
+      "target_num": 3,
+      "note": "방치된 고서-선택지 1",
+      "flavortext": "Card_Flav_1008",
+      "skilleffect": "",
+      "evolveCount": 8,
+      "evolveTarget": 1108,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 10
+        },
+        {
+          "type": "active",
+          "value": 10,
+          "target": 0
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "usedAnyCardType",
+            "value": [
+              "Fire",
+              "Ice"
+            ]
+          },
+          "result": {
+            "type": "damage",
+            "value": 3
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "justAfterStance",
+            "value": []
+          },
+          "result": {
+            "type": "damagePercent",
+            "value": 50
+          }
+        }
+      ]
+    },
+    {
+      "index": 1009,
+      "cost": 1,
+      "illustration": "",
+      "name": "Card_Name_1009",
+      "text": "Card_Text_1009",
+      "type": 0,
+      "class": 0,
+      "cardframe": "frame_0",
+      "target_type": 2,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_1009",
+      "skilleffect": "10불안정한 결정ef_100x100",
+      "evolveCount": 8,
+      "evolveTarget": 1109,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 6
+        },
+        {
+          "type": "burn",
+          "value": 2,
+          "target": 4
+        }
+      ],
+      "switchType": "Random"
+    },
+    {
+      "index": 1010,
+      "cost": 1,
+      "illustration": "",
+      "name": "Card_Name_1010",
+      "text": "Card_Text_1010",
+      "type": 2,
+      "class": 0,
+      "cardframe": "frame_3",
+      "target_type": 1,
+      "target_num": 1,
+      "note": "커다란 도서관-선택지 1",
+      "flavortext": "Card_Flav_1010",
+      "skilleffect": "11마력의 서ef_100x100",
+      "evolveCount": 8,
+      "evolveTarget": 1110,
+      "effects": [
+        {
+          "type": "draw",
+          "value": 1
+        },
+        {
+          "type": "reduceDrawnCardCost",
+          "value": 1
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Seek"
+            ]
+          },
+          "result": {
+            "type": "draw",
+            "value": 2
+          }
+        }
+      ],
+      "keywords": [
+        "Exhaust"
+      ]
+    },
+    {
+      "index": 1011,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_1011",
+      "text": "Card_Text_1011",
+      "type": 2,
+      "class": 0,
+      "cardframe": "frame_3",
+      "target_type": 2,
+      "target_num": 3,
+      "note": "희미한 소리-선택지 2",
+      "flavortext": "Card_Flav_1011",
+      "skilleffect": "",
+      "evolveCount": 8,
+      "evolveTarget": 1111,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 8
+        },
+        {
+          "type": "active",
+          "value": 10,
+          "target": 0
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Insight"
+            ]
+          },
+          "result": {
+            "type": "damage",
+            "value": 8
+          }
+        }
+      ],
+      "switchType": "Seek"
+    },
+    {
+      "index": 1108,
+      "cost": 3,
+      "illustration": "",
+      "name": "Card_Name_1108",
+      "text": "Card_Text_1108",
+      "type": 2,
+      "class": 0,
+      "cardframe": "frame_3",
+      "target_type": 2,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_1108",
+      "skilleffect": "",
+      "evolveCount": 6,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 16
+        },
+        {
+          "type": "active",
+          "value": 20,
+          "target": 0
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "justAfterStance",
+            "value": []
+          },
+          "result": {
+            "type": "damagePercent",
+            "value": 50
+          }
+        }
+      ]
+    },
+    {
+      "index": 1109,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_1109",
+      "text": "Card_Text_1109",
+      "type": 0,
+      "class": 0,
+      "cardframe": "frame_0",
+      "target_type": 2,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_1109",
+      "skilleffect": "14폭열ef_125x250",
+      "evolveCount": 6,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 9
+        },
+        {
+          "type": "burn",
+          "value": 3,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "enemyStatusStackGte",
+            "value": [
+              "burn",
+              "10"
+            ]
+          },
+          "result": {
+            "type": "damage",
+            "value": 9
+          }
+        }
+      ]
+    },
+    {
+      "index": 1110,
+      "cost": 1,
+      "illustration": "",
+      "name": "Card_Name_1110",
+      "text": "Card_Text_1110",
+      "type": 2,
+      "class": 0,
+      "cardframe": "frame_3",
+      "target_type": 1,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_1110",
+      "skilleffect": "",
+      "evolveCount": 6,
+      "evolveTarget": 1210,
+      "effects": [
+        {
+          "type": "draw",
+          "value": 1
+        },
+        {
+          "type": "reduceRandomCardCostByFrozenEnemyCount",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "index": 1111,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_1111",
+      "text": "Card_Text_1111",
+      "type": 2,
+      "class": 0,
+      "cardframe": "frame_3",
+      "target_type": 2,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_1111",
+      "skilleffect": "",
+      "evolveCount": 6,
+      "evolveTarget": 1211,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 9
+        },
+        {
+          "type": "active",
+          "value": 10,
+          "target": 0
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "usedAllCardTypes",
+            "value": [
+              "Fire",
+              "Ice"
+            ]
+          },
+          "result": {
+            "type": "damage",
+            "value": 9
+          }
+        }
+      ]
+    },
+    {
+      "index": 1210,
+      "cost": 3,
+      "illustration": "",
+      "name": "Card_Name_1210",
+      "text": "Card_Text_1210",
+      "type": 2,
+      "class": 0,
+      "cardframe": "frame_3",
+      "target_type": 2,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_1210",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 12
+        },
+        {
+          "type": "active",
+          "value": 20,
+          "target": 0
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Seek"
+            ]
+          },
+          "result": {
+            "type": "damagePercent",
+            "value": 50
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Insight"
+            ]
+          },
+          "result": {
+            "type": "freeze",
+            "value": 2
+          }
+        }
+      ]
+    },
+    {
+      "index": 1211,
+      "cost": 4,
+      "illustration": "",
+      "name": "Card_Name_1211",
+      "text": "Card_Text_1211",
+      "type": 2,
+      "class": 0,
+      "cardframe": "frame_3",
+      "target_type": 2,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_1211",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 16
+        },
+        {
+          "type": "burn",
+          "value": 5,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "potentialTriggered",
+            "value": []
+          },
+          "result": {
+            "type": "autoCast",
+            "value": 1
+          }
+        },
+        {
+          "type": "lockPotentialCharge",
+          "value": 2
+        }
+      ],
+      "keywords": [
+        "Exhaust"
+      ]
+    },
+    {
+      "index": 1300,
+      "cost": 1,
+      "illustration": "illust_32",
+      "name": "Card_Name_1300",
+      "text": "Card_Text_1300",
+      "type": 9,
+      "class": 0,
+      "cardframe": "frame_0",
+      "target_type": 2,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_1300",
+      "skilleffect": "19불안정한 혼합물ef_100x100",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "self_damage",
+          "value": 2
+        },
+        {
+          "type": "damage",
+          "value": 5
+        },
+        {
+          "type": "burn",
+          "value": 1,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "potentialGte",
+            "value": [
+              "80"
+            ]
+          },
+          "result": {
+            "type": "damage",
+            "value": 5
+          }
+        }
+      ],
+      "keywords": [
+        "Exhaust"
+      ]
+    },
+    {
+      "index": 1301,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_1301",
+      "text": "Card_Text_1301",
+      "type": 9,
+      "class": 0,
+      "cardframe": "frame_0",
+      "target_type": 2,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_1301",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 10
+        },
+        {
+          "type": "burn",
+          "value": 3,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Seek"
+            ]
+          },
+          "result": {
+            "type": "damagePercent",
+            "value": 50
+          }
+        }
+      ],
+      "keywords": [
+        "Exhaust"
+      ]
+    },
+    {
+      "index": 1302,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_1302",
+      "text": "Card_Text_1302",
+      "type": 9,
+      "class": 0,
+      "cardframe": "frame_1",
+      "target_type": 2,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_1302",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 10
+        },
+        {
+          "type": "freeze",
+          "value": 4,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Insight"
+            ]
+          },
+          "result": {
+            "type": "damage",
+            "value": 10
+          }
+        }
+      ],
+      "keywords": [
+        "Exhaust"
+      ]
+    },
+    {
+      "index": 1303,
+      "cost": 1,
+      "illustration": "",
+      "name": "Card_Name_1303",
+      "text": "Card_Text_1303",
+      "type": 9,
+      "class": 0,
+      "cardframe": "frame_3",
+      "target_type": 1,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_1303",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "atk",
+          "value": 2,
+          "target": 3
+        },
+        {
+          "type": "active",
+          "value": 10,
+          "target": 0
+        }
+      ],
+      "keywords": [
+        "Exhaust"
+      ],
+      "switchType": "Random"
+    },
+    {
+      "index": 1400,
+      "cost": 3,
+      "illustration": "",
+      "name": "Card_Name_1400",
+      "text": "Card_Text_1400",
+      "type": 0,
+      "class": 0,
+      "cardframe": "frame_0",
+      "target_type": 2,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_1400",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 15
+        },
+        {
+          "type": "burn",
+          "value": 4,
+          "target": 4
+        },
+        {
+          "type": "triggerOppositeStanceEffect",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "index": 2000,
+      "cost": 1,
+      "illustration": "illust_12",
+      "name": "Card_Name_2000",
+      "text": "Card_Text_2000",
+      "type": 3,
+      "class": 1,
+      "cardframe": "frame_4",
+      "target_type": 1,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_2000",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "atk",
+          "value": 2,
+          "target": 3
+        },
+        {
+          "type": "bless",
+          "value": 1,
+          "target": 3
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Discipline"
+            ]
+          },
+          "result": {
+            "type": "penance",
+            "value": 1,
+            "target": 3
+          }
+        }
+      ]
+    },
+    {
+      "index": 2001,
+      "cost": 2,
+      "illustration": "illust_21",
+      "name": "Card_Name_2001",
+      "text": "Card_Text_2001",
+      "type": 3,
+      "class": 1,
+      "cardframe": "frame_4",
+      "target_type": 0,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_2001",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "atk",
+          "value": 2,
+          "target": 1
+        },
+        {
+          "type": "reduceNextCardCost",
+          "value": 1,
+          "owner": "kayla"
+        },
+        {
+          "type": "bless",
+          "value": 1,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "potentialGte",
+            "value": [
+              "50"
+            ]
+          },
+          "result": {
+            "type": "reduceCost",
+            "value": 1
+          }
+        }
+      ]
+    },
+    {
+      "index": 2002,
+      "cost": 1,
+      "illustration": "illust_1",
+      "name": "Card_Name_2002",
+      "text": "Card_Text_2002",
+      "type": 4,
+      "class": 1,
+      "cardframe": "frame_6",
+      "target_type": 2,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_2002",
+      "skilleffect": "3생츄어리ef_200x200",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 7
+        },
+        {
+          "type": "sin",
+          "value": 2,
+          "target": 1
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Discipline"
+            ]
+          },
+          "result": {
+            "type": "damage",
+            "value": 7
+          }
+        }
+      ]
+    },
+    {
+      "index": 2003,
+      "cost": 2,
+      "illustration": "illust_8",
+      "name": "Card_Name_2003",
+      "text": "Card_Text_2003",
+      "type": 4,
+      "class": 1,
+      "cardframe": "frame_6",
+      "target_type": 2,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_2003",
+      "skilleffect": "4응보의 빛ef_100x250",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 8
+        },
+        {
+          "type": "sin",
+          "value": 2,
+          "target": 1
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "usedCardType",
+            "value": [
+              "Baptism"
+            ]
+          },
+          "result": {
+            "type": "damagePercent",
+            "value": 50
+          }
+        }
+      ]
+    },
+    {
+      "index": 2004,
+      "cost": 1,
+      "illustration": "illust_3",
+      "name": "Card_Name_2004",
+      "text": "Card_Text_2004",
+      "type": 5,
+      "class": 1,
+      "cardframe": "frame_7",
+      "target_type": 1,
+      "target_num": 3,
+      "note": "방치된 고서-선택지 2",
+      "flavortext": "Card_Flav_2004",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "heal",
+          "value": 6
+        },
+        {
+          "type": "penance",
+          "value": 1,
+          "target": 3
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Mercy"
+            ]
+          },
+          "result": {
+            "type": "heal",
+            "value": 4
+          }
+        }
+      ],
+      "switchType": "Discipline"
+    },
+    {
+      "index": 2005,
+      "cost": 2,
+      "illustration": "illust_31",
+      "name": "Card_Name_2005",
+      "text": "Card_Text_2005",
+      "type": 5,
+      "class": 1,
+      "cardframe": "frame_7",
+      "target_type": 1,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_2005",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "heal",
+          "value": 9
+        },
+        {
+          "type": "penance",
+          "value": 2,
+          "target": 3
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "sinTotalGte",
+            "value": [
+              "5"
+            ]
+          },
+          "result": {
+            "type": "heal",
+            "value": 5
+          }
+        }
+      ]
+    },
+    {
+      "index": 2006,
+      "cost": 2,
+      "illustration": "illust_17",
+      "name": "Card_Name_2006",
+      "text": "Card_Text_2006",
+      "type": 5,
+      "class": 1,
+      "cardframe": "frame_7",
+      "target_type": 1,
+      "target_num": 1,
+      "note": "전투의 잔향-선택지 2",
+      "flavortext": "Card_Flav_2006",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "heal",
+          "value": 6
+        },
+        {
+          "type": "draw",
+          "value": 1
+        },
+        {
+          "type": "penance",
+          "value": 1,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Mercy"
+            ]
+          },
+          "result": {
+            "type": "heal",
+            "value": 9
+          }
+        }
+      ]
+    },
+    {
+      "index": 2007,
+      "cost": 1,
+      "illustration": "",
+      "name": "Card_Name_2007",
+      "text": "Card_Text_2007",
+      "type": 3,
+      "class": 1,
+      "cardframe": "frame_4",
+      "target_type": 1,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_2007",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "atk",
+          "value": 1,
+          "target": 3
+        },
+        {
+          "type": "def",
+          "value": 1,
+          "target": 3
+        },
+        {
+          "type": "bless",
+          "value": 2,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "justAfterStance",
+            "value": []
+          },
+          "result": {
+            "type": "def",
+            "value": 2,
+            "target": 4
+          }
+        }
+      ]
+    },
+    {
+      "index": 2008,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_2008",
+      "text": "Card_Text_2008",
+      "type": 4,
+      "class": 1,
+      "cardframe": "frame_6",
+      "target_type": 2,
+      "target_num": 3,
+      "note": "거울의 방-선택지 2",
+      "flavortext": "Card_Flav_2008",
+      "skilleffect": "9믿음의균열_200x200",
+      "evolveCount": 8,
+      "evolveTarget": 2108,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 6
+        },
+        {
+          "type": "sin",
+          "value": 3,
+          "target": 1
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "sinTotalGte",
+            "value": [
+              "8"
+            ]
+          },
+          "result": {
+            "type": "damagePercent",
+            "value": 100
+          }
+        }
+      ],
+      "switchType": "Mercy"
+    },
+    {
+      "index": 2009,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_2009",
+      "text": "Card_Text_2009",
+      "type": 4,
+      "class": 1,
+      "cardframe": "frame_6",
+      "target_type": 2,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_2009",
+      "skilleffect": "10속죄의 빛_125x250",
+      "evolveCount": 8,
+      "evolveTarget": 2109,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 12
+        },
+        {
+          "type": "sin",
+          "value": 4,
+          "target": 1
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Discipline"
+            ]
+          },
+          "result": {
+            "type": "damage",
+            "value": 12
+          }
+        }
+      ]
+    },
+    {
+      "index": 2010,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_2010",
+      "text": "Card_Text_2010",
+      "type": 5,
+      "class": 1,
+      "cardframe": "frame_7",
+      "target_type": 1,
+      "target_num": 3,
+      "note": "커다란 도서관-선택지 2",
+      "flavortext": "Card_Flav_2010",
+      "skilleffect": "",
+      "evolveCount": 8,
+      "evolveTarget": 2110,
+      "effects": [
+        {
+          "type": "heal",
+          "value": 8
+        },
+        {
+          "type": "penance",
+          "value": 1,
+          "target": 3
+        }
+      ],
+      "switchType": "Discipline"
+    },
+    {
+      "index": 2011,
+      "cost": 1,
+      "illustration": "",
+      "name": "Card_Name_2011",
+      "text": "Card_Text_2011",
+      "type": 3,
+      "class": 1,
+      "cardframe": "frame_4",
+      "target_type": 1,
+      "target_num": 3,
+      "note": "희미한 소리-선택지 1",
+      "flavortext": "Card_Flav_2011",
+      "skilleffect": "",
+      "evolveCount": 8,
+      "evolveTarget": 2111,
+      "effects": [
+        {
+          "type": "def",
+          "value": 4,
+          "target": 3
+        },
+        {
+          "type": "bless",
+          "value": 2,
+          "target": 3
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Mercy"
+            ]
+          },
+          "result": {
+            "type": "def",
+            "value": 6
+          }
+        }
+      ]
+    },
+    {
+      "index": 2108,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_2108",
+      "text": "Card_Text_2108",
+      "type": 4,
+      "class": 1,
+      "cardframe": "frame_6",
+      "target_type": 1,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_2108",
+      "skilleffect": "",
+      "evolveCount": 6,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "atk",
+          "value": 2,
+          "target": 3
+        },
+        {
+          "type": "sin",
+          "value": 2,
+          "target": 1
+        }
+      ],
+      "switchType": "Mercy"
+    },
+    {
+      "index": 2109,
+      "cost": 3,
+      "illustration": "",
+      "name": "Card_Name_2109",
+      "text": "Card_Text_2109",
+      "type": 4,
+      "class": 1,
+      "cardframe": "frame_6",
+      "target_type": 2,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_2109",
+      "skilleffect": "",
+      "evolveCount": 6,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 14
+        },
+        {
+          "type": "sin",
+          "value": 5,
+          "target": 1
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "sinTotalGte",
+            "value": [
+              "5"
+            ]
+          },
+          "result": {
+            "type": "damage",
+            "value": 14
+          }
+        }
+      ]
+    },
+    {
+      "index": 2110,
+      "cost": 4,
+      "illustration": "",
+      "name": "Card_Name_2110",
+      "text": "Card_Text_2110",
+      "type": 5,
+      "class": 1,
+      "cardframe": "frame_7",
+      "target_type": 1,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_2110",
+      "skilleffect": "",
+      "evolveCount": 6,
+      "evolveTarget": 2210,
+      "effects": [
+        {
+          "type": "heal",
+          "value": 12
+        },
+        {
+          "type": "penance",
+          "value": 2,
+          "target": 3
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "potentialTriggered",
+            "value": []
+          },
+          "result": {
+            "type": "autoCast",
+            "value": 1
+          }
+        },
+        {
+          "type": "lockPotentialCharge",
+          "value": 2
+        }
+      ],
+      "keywords": [
+        "Exhaust"
+      ]
+    },
+    {
+      "index": 2111,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_2111",
+      "text": "Card_Text_2111",
+      "type": 3,
+      "class": 1,
+      "cardframe": "frame_4",
+      "target_type": 1,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_2111",
+      "skilleffect": "",
+      "evolveCount": 6,
+      "evolveTarget": 2211,
+      "effects": [
+        {
+          "type": "multiplyBless",
+          "value": 2
+        },
+        {
+          "type": "bless",
+          "value": 2,
+          "target": 4
+        }
+      ],
+      "switchType": "Mercy"
+    },
+    {
+      "index": 2210,
+      "cost": 3,
+      "illustration": "",
+      "name": "Card_Name_2210",
+      "text": "Card_Text_2210",
+      "type": 5,
+      "class": 1,
+      "cardframe": "frame_7",
+      "target_type": 1,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_2210",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "heal",
+          "value": 6
+        },
+        {
+          "type": "healByPenance",
+          "value": 4
+        }
+      ]
+    },
+    {
+      "index": 2211,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_2211",
+      "text": "Card_Text_2211",
+      "type": 3,
+      "class": 1,
+      "cardframe": "frame_4",
+      "target_type": 1,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_2211",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "bless",
+          "value": 1,
+          "target": 3
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Mercy"
+            ]
+          },
+          "result": {
+            "type": "bless",
+            "value": 2
+          }
+        }
+      ]
+    },
+    {
+      "index": 2300,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_2300",
+      "text": "Card_Text_2300",
+      "type": 9,
+      "class": 1,
+      "cardframe": "frame_7",
+      "target_type": 1,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_2300",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "multiplyBuff",
+          "value": 3
+        },
+        {
+          "type": "bless",
+          "value": 3,
+          "target": 4
+        }
+      ],
+      "keywords": [
+        "Exhaust"
+      ]
+    },
+    {
+      "index": 2301,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_2301",
+      "text": "Card_Text_2301",
+      "type": 9,
+      "class": 1,
+      "cardframe": "frame_6",
+      "target_type": 2,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_2301",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "removeDebuffFromEnemy",
+          "value": 1
+        },
+        {
+          "type": "damageByRemovedDebuffSumMultiplier",
+          "value": 3
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Discipline"
+            ]
+          },
+          "result": {
+            "type": "damagePercent",
+            "value": 50
+          }
+        }
+      ],
+      "keywords": [
+        "Exhaust"
+      ]
+    },
+    {
+      "index": 2400,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_2400",
+      "text": "Card_Text_2400",
+      "type": 3,
+      "class": 1,
+      "cardframe": "frame_4",
+      "target_type": 1,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_2400",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "heal",
+          "value": 8
+        },
+        {
+          "type": "bless",
+          "value": 3,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Mercy"
+            ]
+          },
+          "result": {
+            "type": "bless",
+            "value": 1
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Discipline"
+            ]
+          },
+          "result": {
+            "type": "penance",
+            "value": 2
+          }
+        }
+      ]
+    },
+    {
+      "index": 3000,
+      "cost": 1,
+      "illustration": "illust_2",
+      "name": "Card_Name_3000",
+      "text": "Card_Text_3000",
+      "type": 6,
+      "class": 2,
+      "cardframe": "frame_8",
+      "target_type": 2,
+      "target_num": 1,
+      "note": "거울의 방-선택지 1",
+      "flavortext": "Card_Flav_3000",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 6
+        },
+        {
+          "type": "scar",
+          "value": 10,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Rush"
+            ]
+          },
+          "result": {
+            "type": "damage",
+            "value": 6
+          }
+        }
+      ]
+    },
+    {
+      "index": 3001,
+      "cost": 2,
+      "illustration": "illust_24",
+      "name": "Card_Name_3001",
+      "text": "Card_Text_3001",
+      "type": 6,
+      "class": 2,
+      "cardframe": "frame_8",
+      "target_type": 2,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_3001",
+      "skilleffect": "leon_hit_effect_1_150x25, leon_hit_effect_2_150x100",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 4
+        },
+        {
+          "type": "scar",
+          "value": 5,
+          "target": 4
+        },
+        {
+          "type": "applyDamage",
+          "value": 2
+        }
+      ],
+      "keywords": [
+        "Copy"
+      ]
+    },
+    {
+      "index": 3002,
+      "cost": 1,
+      "illustration": "illust_20",
+      "name": "Card_Name_3002",
+      "text": "Card_Text_3002",
+      "type": 7,
+      "class": 2,
+      "cardframe": "frame_9",
+      "target_type": 2,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_3002",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 5
+        },
+        {
+          "type": "stun",
+          "value": 2,
+          "target": 4
+        },
+        {
+          "type": "reduceNextCardCost",
+          "value": 1,
+          "owner": "leon"
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Rush"
+            ]
+          },
+          "result": {
+            "type": "stun",
+            "value": 3
+          }
+        }
+      ]
+    },
+    {
+      "index": 3003,
+      "cost": 1,
+      "illustration": "illust_4",
+      "name": "Card_Name_3003",
+      "text": "Card_Text_3003",
+      "type": 7,
+      "class": 2,
+      "cardframe": "frame_9",
+      "target_type": 2,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_3003",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 4
+        },
+        {
+          "type": "draw",
+          "value": 1
+        },
+        {
+          "type": "stun",
+          "value": 2,
+          "target": 4
+        }
+      ],
+      "switchType": "Defense"
+    },
+    {
+      "index": 3004,
+      "cost": 1,
+      "illustration": "illust_25",
+      "name": "Card_Name_3004",
+      "text": "Card_Text_3004",
+      "type": 7,
+      "class": 2,
+      "cardframe": "frame_9",
+      "target_type": 2,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_3004",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 4
+        },
+        {
+          "type": "stun",
+          "value": 2,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Rush"
+            ]
+          },
+          "result": {
+            "type": "damagePercent",
+            "value": 100
+          }
+        }
+      ]
+    },
+    {
+      "index": 3005,
+      "cost": 1,
+      "illustration": "illust_7",
+      "name": "Card_Name_3005",
+      "text": "Card_Text_3005",
+      "type": 8,
+      "class": 2,
+      "cardframe": "frame_11",
+      "target_type": 0,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_3005",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "def",
+          "value": 2,
+          "target": 2
+        },
+        {
+          "type": "draw",
+          "value": 1
+        },
+        {
+          "type": "guard",
+          "value": 3,
+          "target": 2
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Defense"
+            ]
+          },
+          "result": {
+            "type": "def",
+            "value": 4,
+            "target": 2
+          }
+        }
+      ]
+    },
+    {
+      "index": 3006,
+      "cost": 1,
+      "illustration": "illust_14",
+      "name": "Card_Name_3006",
+      "text": "Card_Text_3006",
+      "type": 8,
+      "class": 2,
+      "cardframe": "frame_11",
+      "target_type": 0,
+      "target_num": 1,
+      "note": "전사의 흔적-선택지 1",
+      "flavortext": "Card_Flav_3006",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "def",
+          "value": 4,
+          "target": 2
+        },
+        {
+          "type": "guard",
+          "value": 8,
+          "target": 2
+        }
+      ],
+      "switchType": "Defense"
+    },
+    {
+      "index": 3007,
+      "cost": 2,
+      "illustration": "illust_28",
+      "name": "Card_Name_3007",
+      "text": "Card_Text_3007",
+      "type": 8,
+      "class": 2,
+      "cardframe": "frame_11",
+      "target_type": 1,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_3007",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "def",
+          "value": 4,
+          "target": 2
+        },
+        {
+          "type": "guard",
+          "value": 7,
+          "target": 2
+        },
+        {
+          "type": "atk",
+          "value": 3,
+          "target": 3
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Defense"
+            ]
+          },
+          "result": {
+            "type": "def",
+            "value": 6,
+            "target": 3
+          }
+        }
+      ]
+    },
+    {
+      "index": 3008,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_3008",
+      "text": "Card_Text_3008",
+      "type": 7,
+      "class": 2,
+      "cardframe": "frame_9",
+      "target_type": 2,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_3008",
+      "skilleffect": "",
+      "evolveCount": 8,
+      "evolveTarget": 3108,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 10
+        },
+        {
+          "type": "stun",
+          "value": 4,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "justAfterStanceEffect",
+            "value": []
+          },
+          "result": {
+            "type": "damage",
+            "value": 10
+          }
+        }
+      ]
+    },
+    {
+      "index": 3009,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_3009",
+      "text": "Card_Text_3009",
+      "type": 8,
+      "class": 2,
+      "cardframe": "frame_11",
+      "target_type": 0,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_3009",
+      "skilleffect": "",
+      "evolveCount": 8,
+      "evolveTarget": 3109,
+      "effects": [
+        {
+          "type": "def",
+          "value": 8,
+          "target": 2
+        },
+        {
+          "type": "guard",
+          "value": 10,
+          "target": 2
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "potentialGte",
+            "value": [
+              "80"
+            ]
+          },
+          "result": {
+            "type": "def",
+            "value": 12,
+            "target": 2
+          }
+        }
+      ]
+    },
+    {
+      "index": 3010,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_3010",
+      "text": "Card_Text_3010",
+      "type": 7,
+      "class": 2,
+      "cardframe": "frame_9",
+      "target_type": 2,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_3010",
+      "skilleffect": "",
+      "evolveCount": 8,
+      "evolveTarget": 3110,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 8
+        },
+        {
+          "type": "stun",
+          "value": 3,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Rush"
+            ]
+          },
+          "result": {
+            "type": "damagePercent",
+            "value": 100
+          }
+        }
+      ],
+      "switchType": "Defense"
+    },
+    {
+      "index": 3011,
+      "cost": 1,
+      "illustration": "",
+      "name": "Card_Name_3011",
+      "text": "Card_Text_3011",
+      "type": 6,
+      "class": 2,
+      "cardframe": "frame_8",
+      "target_type": 2,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_3011",
+      "skilleffect": "leon_hit_effect_1_150x25, leon_hit_effect_2_150x100",
+      "evolveCount": 8,
+      "evolveTarget": 3111,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 7
+        },
+        {
+          "type": "scar",
+          "value": 10,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "enemyHasStatus",
+            "value": [
+              "scar"
+            ]
+          },
+          "result": {
+            "type": "damage",
+            "value": 4
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Rush"
+            ]
+          },
+          "result": {
+            "type": "damage",
+            "value": 3
+          }
+        }
+      ]
+    },
+    {
+      "index": 3108,
+      "cost": 3,
+      "illustration": "",
+      "name": "Card_Name_3108",
+      "text": "Card_Text_3108",
+      "type": 7,
+      "class": 2,
+      "cardframe": "frame_9",
+      "target_type": 2,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_3108",
+      "skilleffect": "",
+      "evolveCount": 6,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 12
+        },
+        {
+          "type": "stun",
+          "value": 3,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "justAfterStance",
+            "value": []
+          },
+          "result": {
+            "type": "damagePercent",
+            "value": 50
+          }
+        }
+      ]
+    },
+    {
+      "index": 3109,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_3109",
+      "text": "Card_Text_3109",
+      "type": 8,
+      "class": 2,
+      "cardframe": "frame_11",
+      "target_type": 0,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_3109",
+      "skilleffect": "14철의수호자_ef_100x100",
+      "evolveCount": 6,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "def",
+          "value": 6,
+          "target": 2
+        },
+        {
+          "type": "guard",
+          "value": 8,
+          "target": 2
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Defense"
+            ]
+          },
+          "result": {
+            "type": "def",
+            "value": 4,
+            "target": 3
+          }
+        }
+      ]
+    },
+    {
+      "index": 3110,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_3110",
+      "text": "Card_Text_3110",
+      "type": 7,
+      "class": 2,
+      "cardframe": "frame_9",
+      "target_type": 2,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_3110",
+      "skilleffect": "15바람가르기_ef_150x150",
+      "evolveCount": 6,
+      "evolveTarget": 3210,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 12
+        },
+        {
+          "type": "stun",
+          "value": 4,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "enemyHasStatus",
+            "value": [
+              "stun"
+            ]
+          },
+          "result": {
+            "type": "damage",
+            "value": 12
+          }
+        }
+      ]
+    },
+    {
+      "index": 3111,
+      "cost": 2,
+      "illustration": "",
+      "name": "Card_Name_3111",
+      "text": "Card_Text_3111",
+      "type": 6,
+      "class": 2,
+      "cardframe": "frame_8",
+      "target_type": 2,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_3111",
+      "skilleffect": "leon_hit_effect_1_150x25, leon_hit_effect_2_150x100",
+      "evolveCount": 6,
+      "evolveTarget": 3211,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 7
+        },
+        {
+          "type": "scar",
+          "value": 10,
+          "target": 4
+        },
+        {
+          "type": "scar",
+          "value": 10,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Rush"
+            ]
+          },
+          "result": {
+            "type": "scar",
+            "value": 10,
+            "target": 4
+          }
+        }
+      ]
+    },
+    {
+      "index": 3210,
+      "cost": 3,
+      "illustration": "",
+      "name": "Card_Name_3210",
+      "text": "Card_Text_3210",
+      "type": 7,
+      "class": 2,
+      "cardframe": "frame_9",
+      "target_type": 2,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_3210",
+      "skilleffect": "17_ef_100x150",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "truedamage",
+          "value": 18
+        },
+        {
+          "type": "stun",
+          "value": 5,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "justAfterStance",
+            "value": []
+          },
+          "result": {
+            "type": "damagePercent",
+            "value": 50
+          }
+        }
+      ]
+    },
+    {
+      "index": 3211,
+      "cost": 3,
+      "illustration": "",
+      "name": "Card_Name_3211",
+      "text": "Card_Text_3211",
+      "type": 6,
+      "class": 2,
+      "cardframe": "frame_8",
+      "target_type": 2,
+      "target_num": 3,
+      "note": "",
+      "flavortext": "Card_Flav_3211",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 10
+        },
+        {
+          "type": "scar",
+          "value": 5,
+          "target": 4
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "isStance",
+            "value": [
+              "Rush"
+            ]
+          },
+          "result": {
+            "type": "damage",
+            "value": 10
+          }
+        }
+      ]
+    },
+    {
+      "index": 3400,
+      "cost": 3,
+      "illustration": "",
+      "name": "Card_Name_3400",
+      "text": "Card_Text_3400",
+      "type": 8,
+      "class": 2,
+      "cardframe": "frame_11",
+      "target_type": 0,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "Card_Flav_3400",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": [
+        {
+          "type": "def",
+          "value": 10,
+          "target": 2
+        },
+        {
+          "type": "guard",
+          "value": 10,
+          "target": 2
+        },
+        {
+          "type": "undying",
+          "value": 1,
+          "duration": 1,
+          "target": 2
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "trigger": "justAfterStance",
+            "value": []
+          },
+          "result": {
+            "type": "def",
+            "value": 4,
+            "target": 2
+          }
+        }
+      ]
+    },
+    {
+      "index": 4000,
+      "cost": 0,
+      "illustration": "",
+      "name": "Card_Name_4000",
+      "text": "Card_Text_4000",
+      "type": 9,
+      "class": 0,
+      "cardframe": "",
+      "target_type": 0,
+      "target_num": 1,
+      "note": "",
+      "flavortext": "",
+      "skilleffect": "",
+      "evolveCount": 0,
+      "evolveTarget": 0,
+      "effects": []
+    }
+  ]
+}

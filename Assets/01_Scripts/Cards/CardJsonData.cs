@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,6 +17,12 @@ public class CardJsonData
     public string note;
     public string flavortext;
     public string skilleffect;
+
+    public int evolveCount;
+    public int evolveTarget;
+    public List<string> keywords;
+    public string switchType;
+
     public List<CardEffect> effects;
 }
 
@@ -28,6 +33,9 @@ public class CardEffect
     public int value;
     public int duration;
     public int target;
+
+    public string owner;
+
     public EffectCondition condition;
     public ResultEffect result;
 }
@@ -36,7 +44,7 @@ public class CardEffect
 public class EffectCondition
 {
     public string trigger;
-    public List<int> value;
+    public List<string> value;
 }
 
 [System.Serializable]
@@ -47,4 +55,3 @@ public class ResultEffect
     public int duration;
     public int target;
 }
-

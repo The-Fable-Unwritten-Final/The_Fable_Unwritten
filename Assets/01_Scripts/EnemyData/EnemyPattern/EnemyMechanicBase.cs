@@ -42,4 +42,11 @@ public abstract class EnemyMechanicBase : IEnemyMechanic
     {
         return value;
     }
+
+    public virtual bool SkipNormalActionThisTurn => false;
+
+    public virtual int ModifySkillEffectValue(IStatusReceiver target, EnemyEffectType effectType, EnemyEffectTarget targetType, int value)
+    {
+        return value;
+    }
 }

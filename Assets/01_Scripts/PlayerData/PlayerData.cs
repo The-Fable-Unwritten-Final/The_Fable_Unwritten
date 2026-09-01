@@ -120,4 +120,32 @@ public class PlayerData : ScriptableObject
         currentHP += amount; // 최대 체력 증가 시 현재 체력도 함께 증가
         currentHP = Mathf.Min(currentHP, MaxHP); // 현재 체력을 최대 체력 이하로 유지
     }
+
+    public void EvolveCardIndexes(int cardIndex, int evolveTarget)
+    {
+        if (currentDeckIndexes == null)
+            return;
+
+        for (int i = 0; i < currentDeckIndexes.Count; i++)
+        {
+            if (currentDeckIndexes[i] == cardIndex)
+                currentDeckIndexes[i] = evolveTarget;
+        }
+
+        if (currentDeck != null)
+        {
+            for (int i = 0; i < currentDeck.Count; i++)
+            {
+                if (currentDeck[i] != null && currentDeck[i].index == cardIndex)
+                {
+                    var evolvedCard = DataManager.Instance.AllCards.Find(c => c.index == evolveTarget);
+
+                    if (evolvedCard != null)
+                        currentDeck[i] = evolvedCard;
+                }
+            }
+        }
+
+        Debug.Log($"[CardEvolve] 모험 덱 갱신 {cardIndex} -> {evolveTarget}");
+    }
 }

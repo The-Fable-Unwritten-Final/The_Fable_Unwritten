@@ -19,16 +19,20 @@ public static class CardModelFactory
         card.targetCount = data.target_num;
         card.targetType = (TargetType)data.target_type;
         card.note = data.note;
+        card.keywords = data.keywords != null
+            ? new List<string>(data.keywords)
+            : new List<string>(); card.switchType = data.switchType;
+        card.evolveCount = data.evolveCount;
+        card.evolveTarget = data.evolveTarget;
+
         card.FlavorText = LocaleDataManager.GetLocalizedCard(data.flavortext);
 
         // 리소스에서 Sprite 할당
-        card.illustration = LoadSprite($"Cards/Illustration/{data.illustration}");
-        card.chClass = LoadSprite($"Cards/Class/class_{data.@class}");
+        card.illustration = LoadSprite($"Cards/Illustration/illust_{data.index}"); card.chClass = LoadSprite($"Cards/Class/class_{data.@class}");
         card.cardType = LoadSprite($"Cards/Type", $"type_{data.type}");
         card.cardImage = data.cardframe;
         card.cardFrame = LoadSprite($"Cards/Frame/{data.cardframe}");
-        card.effects = effects;
-
+        card.effects = effects != null ? new List<CardEffectBase>(effects) : new List<CardEffectBase>();
         card.skillEffectName = data.skilleffect;
         return card;
     }

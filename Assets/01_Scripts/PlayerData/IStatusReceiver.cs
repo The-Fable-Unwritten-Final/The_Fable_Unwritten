@@ -27,12 +27,12 @@ public enum CardType
     Ice = 1,
     Nature = 2,
     Pray = 3,
-    Holy = 4,
+    Taboo = 4,
     baptism = 5,
     Slash = 6,
     Strike = 7,
     Defense = 8,
-    Taboo = 9
+    Ideal = 9
 }
 
 public enum BuffStatType
@@ -47,7 +47,7 @@ public enum BuffStatType
     Activate,              // 활성 (속성 상태이상 증폭)
 
     Bless,                  // 축복 (이로운 효과 증폭)
-    Crime,                  // 죄악
+    Sin,                  // 죄악
     Penance,                // 참회
 
     // 레온 - 물리

@@ -39,12 +39,12 @@ public static class CardEffectBuilder2
             "Ice" => CardType.Ice,
             "Nature" => CardType.Nature,
             "Prayer" => CardType.Pray,
-            "Holy" => CardType.Holy,
+            "Taboo" => CardType.Taboo,
             "Baptism" => CardType.baptism,
             "Slash" => CardType.Slash,
             "Strike" => CardType.Strike,
             "Defense" => CardType.Defense,
-            "Taboo" => CardType.Taboo,
+            "Ideal" => CardType.Ideal,
             _ => throw new Exception($"Unknown CardType string: {value}")
         };
     }
@@ -74,8 +74,7 @@ public static class CardEffectBuilder2
             "active" => BuffStatType.Activate,
             "activate" => BuffStatType.Activate,
             "bless" => BuffStatType.Bless,
-            "sin" => BuffStatType.Crime,
-            "crime" => BuffStatType.Crime,
+            "sin" => BuffStatType.Sin,
             "penance" => BuffStatType.Penance,
             "grace" => BuffStatType.Penance,
             "scar" => BuffStatType.Scar,
@@ -256,7 +255,7 @@ public static class CardEffectBuilder2
 
             case "healByBless":
                 {
-                    var e = ScriptableObject.CreateInstance<HealByBlessEffect>();
+                    var e = ScriptableObject.CreateInstance<HealByPenanceEffect>();
                     e.value = effectData.value;
                     effect = e;
                     break;
