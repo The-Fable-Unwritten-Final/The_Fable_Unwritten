@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
-using System.Linq;
 
 public enum TurnState { PlayerTurn, EnemyTurn } //적 턴인지 아군 턴인지 판별자
 
@@ -281,8 +282,11 @@ public class BattleFlowController : MonoBehaviour
         if (targets == null || targets.Count == 0)
         {
             int count = Mathf.Max(1, card.targetCount);
-            targets = AutoChooseTargets(card.targetType, card.characterClass, count, targets[0]);
+            targets = AutoChooseTargets(card.targetType, card.characterClass, count, null);
         }
+
+        if (targets == null || targets.Count == 0)
+            return;
 
         //Debug.Log($"{caster.ChClass} 가 {card.cardName} 사용 → {string.Join(", ", targets.ConvertAll(t => t.ChClass.ToString()))}, cost : {actualCost}");
 
@@ -739,7 +743,8 @@ public class BattleFlowController : MonoBehaviour
                         result = candidates;
                         break;
                     default:
-                        result.Add(originTarget);
+                        if (originTarget != null)
+                            result.Add(originTarget);
                         break;
 
                 }
@@ -779,9 +784,10 @@ public class BattleFlowController : MonoBehaviour
         }
         else
         {
-            List<IStatusReceiver> candidates = pool.FindAll(p => p != null && p.IsAlive()&& p != originTarget);
+            List<IStatusReceiver> candidates = pool.FindAll(p => p != null && p.IsAlive() && p != originTarget);
 
-            result.Add(originTarget);
+            if (originTarget != null && originTarget.IsAlive())
+                result.Add(originTarget);
 
             while (result.Count < targetNum && candidates.Count > 0)
             {
@@ -849,5 +855,58 @@ public class BattleFlowController : MonoBehaviour
             foreach (var card in player.Deck.Hand)
                 card.isEnhanced = false;
         }
+    }
+    public void TryAutoCastPotentialCards(PlayerController caster)
+    {
+        if (caster == null || !caster.IsAlive())
+            return;
+
+        var cards = caster.Deck.Hand.ToList();
+
+        foreach (var card in cards)
+        {
+            if (card == null) continue;
+
+            foreach (var effect in card.effects)
+            {
+                if (effect is not ConditionalEffect conditional)
+                    continue;
+
+                if (conditional.condition is not PotentialTriggeredCondition)
+                    continue;
+
+                if (conditional.effectIfTrue is not AutoCastEffect autoCast)
+                    continue;
+
+                for (int i = 0; i < autoCast.count; i++)
+                    AutoUseCard(card, caster);
+
+                break;
+            }
+        }
+    }
+
+    private void AutoUseCard(CardModel card, IStatusReceiver caster)
+    {
+        if (card == null || caster == null || !caster.IsAlive())
+            return;
+
+        var targets = AutoChooseTargets(
+            card.targetType,
+            card.characterClass,
+            card.targetCount,
+            null
+        );
+
+        if (targets == null || targets.Count == 0)
+            return;
+
+        BattleLogManager.Instance.card = card;
+
+        card.Play(caster, targets, card.index);
+
+        BattleLogManager.Instance.RegisterCardUse(caster, card);
+
+        RefreshAllDeckEnhanced();
     }
 }

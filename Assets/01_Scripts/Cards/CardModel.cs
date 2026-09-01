@@ -378,8 +378,8 @@ public class CardModel : ScriptableObject
             case MultiplyBuffEffect multiplyBuffEffect:
                 return multiplyBuffEffect.value.ToString();
 
-            case HealByBlessEffect healByBlessEffect:
-                return healByBlessEffect.value.ToString();
+            case HealByPenanceEffect healByPenanceEffect:
+                return healByPenanceEffect.value.ToString();
 
             case NoBlessConsumeEffect noBlessConsumeEffect:
                 return noBlessConsumeEffect.value.ToString();

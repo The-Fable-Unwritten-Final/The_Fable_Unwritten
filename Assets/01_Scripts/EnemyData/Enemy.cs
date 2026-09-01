@@ -221,6 +221,12 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         if (burnDamage > 0)
             mechanic?.OnBurnDamageTaken(burnDamage);
 
+        if (!IsAlive())
+        {
+            TryFinalizeDeath();
+            return;
+        }
+
         if (TryTriggerStun())
             skipTurnThisRound = true;
 
@@ -400,7 +406,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public void ApplyCrimeOnTurnEnd()
     {
-        var crime = instantEffects.Find(e => e.statType == BuffStatType.Crime);
+        var crime = instantEffects.Find(e => e.statType == BuffStatType.Sin);
         if (crime == null || crime.value <= 0) return;
 
         float damage = crime.value;

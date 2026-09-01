@@ -9,7 +9,7 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
     public static readonly Dictionary<CardType, List<CardType>> comboTable = new()   //연계 Dictionary
     {
         { CardType.Ice,      new List<CardType>{CardType.Strike } }, // 빙결 → 타격
-        { CardType.Nature,   new List < CardType > { CardType.Holy } },  // 자연 → 성력
+        { CardType.Nature,   new List < CardType > { CardType.Taboo } },  // 자연 → 성력
         { CardType.baptism,     new List < CardType > { CardType.Defense } }, // 세례 → 방어
         { CardType.Pray,    new List < CardType > { CardType.Nature} },    // 기도 → 자연
         { CardType.Slash,   new List < CardType > { CardType.Fire } },   // 참격 → 화염

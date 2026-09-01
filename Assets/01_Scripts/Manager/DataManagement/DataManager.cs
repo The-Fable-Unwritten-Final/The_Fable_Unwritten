@@ -142,7 +142,8 @@ public class DataManager : MonoSingleton<DataManager>
     {
         // allCards 로 이쪽의 데이터를 플레이어의 덱과 공유중.
         //allCards = CardDatabaseLoader.LoadAll("ExternalFiles/Cards");
-        allCards = CardDatabaseLoader.LoadAllNew("ExternalFiles/cards");
+        //allCards = CardDatabaseLoader.LoadAllNew("ExternalFiles/cards");
+        allCards = CardDatabaseLoader.LoadAll("ExternalFiles/CardDataFinal");
         cardLookup.Clear();
         foreach (var card in allCards)
         {

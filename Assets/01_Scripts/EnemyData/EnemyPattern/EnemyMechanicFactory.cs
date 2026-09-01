@@ -11,8 +11,9 @@ public static class EnemyMechanicFactory
             23 => new MarnasMechanic(),
             24 => new ParmanoMechanic(),
             25 => new IzkalMechanic(),
+            33 => new EluaMechanic(),
             34 => new GrollyMechanic(),
-
+            
 
             _ => null
         };

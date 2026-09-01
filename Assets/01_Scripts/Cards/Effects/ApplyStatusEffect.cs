@@ -158,7 +158,7 @@ public class ApplyStatusEffect : CardEffectBase
             BuffStatType.Attack => valueText,
             BuffStatType.Defend => valueText,
             BuffStatType.Bless => valueText,
-            BuffStatType.Crime => valueText,
+            BuffStatType.Sin => valueText,
             BuffStatType.Penance => valueText,
             BuffStatType.Burn => valueText,
             BuffStatType.Freeze => string.IsNullOrEmpty(valueText) ? "" : $"{valueText}%",
@@ -187,7 +187,7 @@ public class ApplyStatusEffect : CardEffectBase
             BuffStatType.Guard => DmgTextType.Guard,
             BuffStatType.Scar => DmgTextType.Scar,
             BuffStatType.Stun => DmgTextType.Stun,
-            BuffStatType.Crime => DmgTextType.Crime,
+            BuffStatType.Sin => DmgTextType.Crime,
             BuffStatType.Activate => DmgTextType.Activate,
             
             _ => DmgTextType.Normal,
@@ -218,7 +218,7 @@ public static class Debuff
         {
             BuffStatType.Attack => value < 0,
             BuffStatType.Defend => value < 0,
-            BuffStatType.Guard or BuffStatType.Bless or BuffStatType.Penance=> false,
+            BuffStatType.Guard or BuffStatType.Bless or BuffStatType.Penance=> false, BuffStatType.Undying => false,
             _ => true
         };
     }

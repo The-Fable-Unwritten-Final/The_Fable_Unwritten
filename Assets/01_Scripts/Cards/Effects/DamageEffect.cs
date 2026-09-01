@@ -19,31 +19,36 @@ public class DamageEffect : CardEffectBase
     /// <param name="target">타겟</param>
     public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
+        ApplyWithMultiplier(caster, targets, 1f, isEnhanced);
+    }
+
+    public void ApplyWithMultiplier(IStatusReceiver caster, List<IStatusReceiver> targets, float multiplier, bool? isEnhanced = null)
+    {
         if (targets == null || targets.Count == 0) return;
 
-        // 공격자는 자신의 공격력만 고려
         float attackerAtk = caster.ModifyStat(BuffStatType.Attack, amount);
         var card = BattleLogManager.Instance.card;
         bool stanceBoosted = false;
         bool stanceWeakened = false;
 
+        attackerAtk = isEnhanced == true ? attackerAtk * 1.5f : attackerAtk;
 
-        attackerAtk = (isEnhanced == true) ? attackerAtk * 1.5f : attackerAtk;
         if (caster is PlayerController pc)
         {
-            (attackerAtk, stanceBoosted, stanceWeakened) = StanceHelper.ApplyStanceToDamage(pc, attackerAtk, card.type);
+            (attackerAtk, stanceBoosted, stanceWeakened) =
+                StanceHelper.ApplyStanceToDamage(pc, attackerAtk, card.type);
         }
 
+        // 조건부 피해 배율
+        attackerAtk *= multiplier;
+
         attackerAtk = Mathf.Round(attackerAtk);
-        // 문체 효과 적용
         attackerAtk = StyleManager.Instance.GetDamageGiveModify(caster, null, card, attackerAtk);
 
-        // target은 받은 amount에서 방어력을 적용해서 처리
         foreach (var target in targets)
         {
             if (target == null || !target.IsAlive()) continue;
 
-            // 이번 타격에 실제로 들어갈 공격 피해
             float finalAttackDamage = attackerAtk;
 
             finalAttackDamage = target.ApplyScarAttackBonus(finalAttackDamage);
@@ -67,7 +72,7 @@ public class DamageEffect : CardEffectBase
                 enemy.Mechanic?.OnDamaged(context);
             }
 
-            var dmgData =  new DmgTextData
+            var dmgData = new DmgTextData
             {
                 Text = $"{Mathf.RoundToInt(result)}",
                 type = DmgTextType.Normal,
@@ -77,8 +82,6 @@ public class DamageEffect : CardEffectBase
             };
 
             target.dmgTextQueue.InitPrint(dmgData);
-
-            //Debug.Log($"[피해 처리] {caster.ChClass} -> {target.ChClass} : {attackerAtk} 공격력으로 타격");
         }
     }
 

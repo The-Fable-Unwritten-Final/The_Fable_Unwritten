@@ -78,35 +78,37 @@ public class NewCardEffectBuilder : MonoBehaviour
                 break;
 
             case "atk":
-            case "def":// ToDo : 상태이상 추가하기
+            case "def":
             case "burn":
             case "freeze":
-            case "activate":
-            case "purify":
+            case "active":
             case "bless":
-            case "grace":
-            case "bleed":
+            case "sin":
+            case "penance":
+            case "scar":
             case "stun":
             case "guard":
+            case "undying":
                 var buff = Load<ApplyStatusEffect>("ApplyBuff");
-                
+
                 buff.statType = effectData.type switch
                 {
                     "atk" => BuffStatType.Attack,
                     "def" => BuffStatType.Defend,
                     "burn" => BuffStatType.Burn,
                     "freeze" => BuffStatType.Freeze,
-                    "activate" => BuffStatType.Activate,
-                    "purify" => BuffStatType.Penance,
+                    "active" => BuffStatType.Activate,
                     "bless" => BuffStatType.Bless,
-                    "grace" => BuffStatType.Crime,
-                    "bleed" => BuffStatType.Scar,
+                    "sin" => BuffStatType.Sin,
+                    "penance" => BuffStatType.Penance,
+                    "scar" => BuffStatType.Scar,
                     "stun" => BuffStatType.Stun,
                     "guard" => BuffStatType.Guard,
+                    "undying" => BuffStatType.Undying,
                     _ => BuffStatType.None
                 };
 
-                buff.value = effectData.value;      //턴 지속이 아니니 duration 필요 없음.(턴 지속 디벞 추가 시 추가)
+                buff.value = effectData.value;
                 buff.target = effectData.target;
                 effect = buff;
                 break;
@@ -124,9 +126,26 @@ public class NewCardEffectBuilder : MonoBehaviour
                 break;
 
             case "reduceCost":
+            case "reduceNextCardCost":
                 var cost = Load<ReduceNextCardCostEffect>("ReduceNextCardCostEffect");
                 cost.amount = effectData.value;
-                cost.target = effectData.target;
+
+                if (string.IsNullOrEmpty(effectData.owner))
+                {
+                    cost.allParty = true;
+                }
+                else
+                {
+                    cost.allParty = false;
+                    cost.target = effectData.owner.ToLower() switch
+                    {
+                        "sophia" => 0,
+                        "kayla" => 1,
+                        "leon" => 2,
+                        _ => null
+                    };
+                }
+
                 effect = cost;
                 break;
 
@@ -134,6 +153,77 @@ public class NewCardEffectBuilder : MonoBehaviour
                 var blind = Load<BlindEffect>("BlindEffect");
                 blind.blockedStance = (StancType)effectData.target;
                 effect = blind;
+                break;
+
+            case "damagePercent":
+                var damagePercent = Load<DamagePercentEffect>("DamagePercentEffect");
+                damagePercent.percent = effectData.value;
+                effect = damagePercent;
+                break;
+
+            case "reduceDrawnCardCost":
+                var drawnCost = Load<ReduceDrawnCardCostEffect>("ReduceDrawnCardCostEffect");
+                drawnCost.amount = effectData.value;
+                effect = drawnCost;
+                break;
+
+            case "reduceRandomCardCostByFrozenEnemyCount":
+                var frozenCost = Load<ReduceRandomCardCostByFrozenEnemyCountEffect>("ReduceRandomCardCostByFrozenEnemyCountEffect");
+                frozenCost.amountPerEnemy = effectData.value;
+                effect = frozenCost;
+                break;
+
+            case "truedamage":
+                var trueDamage = Load<TrueDamageEffect>("TrueDamageEffect");
+                trueDamage.amount = effectData.value;
+                effect = trueDamage;
+                break;
+
+            case "multiplyBless":
+                var multiplyBless = Load<MultiplyBlessEffect>("MultiplyBlessEffect");
+                multiplyBless.value = effectData.value;
+                effect = multiplyBless;
+                break;
+
+            case "multiplyBuff":
+                var multiplyBuff = Load<MultiplyBuffEffect>("MultiplyBuffEffect");
+                multiplyBuff.value = effectData.value;
+                effect = multiplyBuff;
+                break;
+
+            case "healByPenance":
+                var healByPenance = Load<HealByPenanceEffect>("HealByPenanceEffect");
+                healByPenance.value = effectData.value;
+                effect = healByPenance;
+                break;
+
+            case "removeDebuffFromEnemy":
+                var removeDebuff = Load<RemoveDebuffFromEnemyEffect>("RemoveDebuffFromEnemyEffect");
+                removeDebuff.value = effectData.value;
+                effect = removeDebuff;
+                break;
+
+            case "damageByRemovedDebuffSumMultiplier":
+                var removedDamage = Load<DamageByRemovedDebuffSumMultiplierEffect>("DamageByRemovedDebuffSumMultiplierEffect");
+                removedDamage.multiplier = effectData.value;
+                effect = removedDamage;
+                break;
+
+            case "triggerOppositeStanceEffect":
+                var oppositeStance = Load<TriggerOppositeStanceEffect>("TriggerOppositeStanceEffect");
+                effect = oppositeStance;
+                break;
+
+            case "autoCast":
+                var autoCast = Load<AutoCastEffect>("AutoCastEffect");
+                autoCast.count = effectData.value;
+                effect = autoCast;
+                break;
+
+            case "lockPotentialCharge":
+                var lockPotential = Load<LockPotentialChargeEffect>("LockPotentialChargeEffect");
+                lockPotential.turns = effectData.value;
+                effect = lockPotential;
                 break;
 
             case "conditional":
@@ -148,35 +238,83 @@ public class NewCardEffectBuilder : MonoBehaviour
                 {
                     case "isUsedParticularCard":
                         var used = ScriptableObject.CreateInstance<UsedCardCondition>();
-                        used.cardIndices = values;
+                        used.cardIndices = values.ConvertAll(v => ParseInt(v));
                         condition = used;
                         break;
 
                     case "isUsedCard":
                     case "isUsedAllCard":
+                    case "usedCardType":
+                    case "usedAnyCardType":
+                    case "usedAllCardTypes":
                         var typeCond = ScriptableObject.CreateInstance<CurrentCardTypeCondition>();
-                        typeCond.requiredTypes = values.ConvertAll(v => (CardType)v);
-                        typeCond.isAnd = trigger == "isUsedAllCard";
+                        typeCond.requiredTypes = ParseCardTypes(values);
+                        typeCond.isAnd = trigger == "isUsedAllCard" || trigger == "usedAllCardTypes";
                         condition = typeCond;
                         break;
 
                     case "isDrawCard":
                         var drawCond = ScriptableObject.CreateInstance<DrawnCardCondition>();
-                        drawCond.requiredTypes = values.ConvertAll(v => (CardType)v);
+                        drawCond.requiredTypes = ParseCardTypes(values);
                         condition = drawCond;
                         break;
 
                     case "isUnusedCard":
                         var unused = ScriptableObject.CreateInstance<NotCurrentCardTypeCondition>();
-                        unused.forbiddenTypes = values.ConvertAll(v=> (CardType)v);
+                        unused.forbiddenTypes = ParseCardTypes(values);
                         condition = unused;
                         break;
 
                     case "isStance":
                         var stance = ScriptableObject.CreateInstance<StanceCondition>();
-                        stance.requiredStance = (StancType)values[0];
+                        stance.requiredStance = ParseStance(values[0]);
                         condition = stance;
                         break;
+
+                    case "enemyHasStatus":
+                        var enemyStatus = ScriptableObject.CreateInstance<EnemyHasStatusCondition>();
+                        enemyStatus.statusType = ParseStatus(values[0]);
+                        condition = enemyStatus;
+                        break;
+
+                    case "enemyStatusStackGte":
+                        var enemyStack = ScriptableObject.CreateInstance<EnemyStatusStackCondition>();
+                        enemyStack.statusType = ParseStatus(values[0]);
+                        enemyStack.requiredStack = ParseInt(values[1]);
+                        condition = enemyStack;
+                        break;
+
+                    case "potentialGte":
+                        var potential = ScriptableObject.CreateInstance<PotentialCondition>();
+                        potential.potentialGauge = ParseInt(values[0]) / 10;
+                        condition = potential;
+                        break;
+
+
+                    case "potentialTriggered":
+                        condition = ScriptableObject.CreateInstance<PotentialTriggeredCondition>();
+                        break;
+
+                    case "justAfterStance":
+                        condition = ScriptableObject.CreateInstance<JustAfterStanceCondition>();
+                        break;
+
+                    case "justAfterSpecificStance":
+                        var specificStance = ScriptableObject.CreateInstance<JustAfterSpecificStanceCondition>();
+                        specificStance.requiredStance = ParseStance(values[0]);
+                        condition = specificStance;
+                        break;
+
+                    case "justAfterStanceEffect":
+                        condition = ScriptableObject.CreateInstance<JustAfterStanceEffectCondition>();
+                        break;
+
+                    case "sinTotalGte":
+                        var sin = ScriptableObject.CreateInstance<SinTotalCondition>();
+                        sin.requiredValue = ParseInt(values[0]);
+                        condition = sin;
+                        break;
+
 
                     default:
                         Debug.LogWarning($"[CardEffectBuilder] 알 수 없는 조건 트리거: {trigger}");
@@ -222,5 +360,61 @@ public class NewCardEffectBuilder : MonoBehaviour
             return null;
         }
         return Object.Instantiate(asset);
+    }
+
+    private static List<CardType> ParseCardTypes(List<string> values)
+    {
+        var result = new List<CardType>();
+
+        if (values == null)
+            return result;
+
+        foreach (var value in values)
+        {
+            if (System.Enum.TryParse(value, true, out CardType type))
+                result.Add(type);
+            else
+                Debug.LogWarning($"[CardEffectBuilder] 알 수 없는 CardType: {value}");
+        }
+
+        return result;
+    }
+
+    private static StancType ParseStance(string value)
+    {
+        if (System.Enum.TryParse(value, true, out StancType stance))
+            return stance;
+
+        Debug.LogWarning($"[CardEffectBuilder] 알 수 없는 StancType: {value}");
+        return default;
+    }
+
+    private static int ParseInt(string value)
+    {
+        if (int.TryParse(value, out int result))
+            return result;
+
+        Debug.LogWarning($"[CardEffectBuilder] 숫자 변환 실패: {value}");
+        return 0;
+    }
+
+    private static BuffStatType ParseStatus(string value)
+    {
+        return value.ToLower() switch
+        {
+            "atk" => BuffStatType.Attack,
+            "def" => BuffStatType.Defend,
+            "burn" => BuffStatType.Burn,
+            "freeze" => BuffStatType.Freeze,
+            "active" => BuffStatType.Activate,
+            "bless" => BuffStatType.Bless,
+            "sin" => BuffStatType.Sin,
+            "penance" => BuffStatType.Penance,
+            "scar" => BuffStatType.Scar,
+            "stun" => BuffStatType.Stun,
+            "guard" => BuffStatType.Guard,
+            "undying" => BuffStatType.Undying,
+            _ => BuffStatType.None
+        };
     }
 }

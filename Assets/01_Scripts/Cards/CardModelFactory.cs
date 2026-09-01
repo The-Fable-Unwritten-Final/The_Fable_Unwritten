@@ -19,6 +19,11 @@ public static class CardModelFactory
         card.targetCount = data.target_num;
         card.targetType = (TargetType)data.target_type;
         card.note = data.note;
+        card.keywords = data.keywords ?? new List<string>();
+        card.switchType = data.switchType;
+        card.evolveCount = data.evolveCount;
+        card.evolveTarget = data.evolveTarget;
+
         card.FlavorText = LocaleDataManager.GetLocalizedCard(data.flavortext);
 
         // 리소스에서 Sprite 할당
