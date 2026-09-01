@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class BattleLogManager : MonoSingleton<BattleLogManager>
 {
+    private Dictionary<int, int> cardEvolveUseCounts = new();
 
     public static readonly Dictionary<CardType, List<CardType>> comboTable = new()   //연계 Dictionary
     {
@@ -71,8 +72,35 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
         UsedCardsForStage.AddLast(log);
         UsedCardsForBattle.AddLast(log);
         UsedCardsForCurrent.AddLast(log);
-    }
 
+        RegisterCardEvolveUse(user, card);
+    }
+    private void RegisterCardEvolveUse(IStatusReceiver user, CardModel card)
+    {
+        if (card.evolveCount <= 0 || card.evolveTarget <= 0)
+            return;
+
+        if (!cardEvolveUseCounts.ContainsKey(card.index))
+            cardEvolveUseCounts[card.index] = 0;
+
+        cardEvolveUseCounts[card.index]++;
+
+        Debug.Log(
+            $"[CardEvolve] {card.cardName} " +
+            $"{cardEvolveUseCounts[card.index]}/{card.evolveCount}"
+        );
+
+        if (cardEvolveUseCounts[card.index] < card.evolveCount)
+            return;
+
+        cardEvolveUseCounts.Remove(card.index);
+
+        if (user is PlayerController pc)
+        {
+            pc.Deck.EvolveAllCards(card.index, card.evolveTarget);
+            pc.playerData.EvolveCardIndexes(card.index, card.evolveTarget);
+        }
+    }
 
 
     /// <summary>
@@ -188,6 +216,7 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
     public void ResetForRun()
     {
         KaylaDamage = 0f;
+        cardEvolveUseCounts.Clear();
         ResetForBattle();
     }
 
