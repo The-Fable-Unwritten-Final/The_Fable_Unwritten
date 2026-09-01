@@ -134,8 +134,7 @@ public class CardModel : ScriptableObject
                                 if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
                                     t.PlayHitAnimation();
 
-                                foreach (var effect in effects)
-                                    effect.Apply(caster, new List<IStatusReceiver> { t }, fixedIsEnhanced);
+                                ApplyEffectsToTarget(caster, t, targets, fixedIsEnhanced);
                             }
                         );
                     }
@@ -152,8 +151,7 @@ public class CardModel : ScriptableObject
                         if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
                             t.PlayHitAnimation();
 
-                        foreach (var effect in effects)
-                            effect.Apply(caster, new List<IStatusReceiver> { t }, fixedIsEnhanced);
+                        ApplyEffectsToTarget(caster, t, targets, fixedIsEnhanced);
                     }
                 }
             }
@@ -164,8 +162,7 @@ public class CardModel : ScriptableObject
                     if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
                         t.PlayHitAnimation();
 
-                    foreach (var effect in effects)
-                        effect.Apply(caster, new List<IStatusReceiver> { t }, fixedIsEnhanced);
+                    ApplyEffectsToTarget(caster, t, targets, fixedIsEnhanced);
                 }
             }
         });
@@ -465,5 +462,21 @@ public class CardModel : ScriptableObject
     public void SetMaintain(bool value)
     {
         isMaintain = value;
+    }
+
+    private void ApplyEffectsToTarget(IStatusReceiver caster, IStatusReceiver target, List<IStatusReceiver> allTargets, bool fixedIsEnhanced)
+    {
+        foreach (var effect in effects)
+        {
+            if (effect is ApplyStatusEffect statusEffect && statusEffect.target >= 0 && statusEffect.target <= 3)
+            {
+                if (target != allTargets[0])
+                    continue;
+
+                effect.Apply(caster, allTargets, fixedIsEnhanced);
+                continue;
+            }
+            effect.Apply(caster, new List<IStatusReceiver> { target }, fixedIsEnhanced);
+        }
     }
 }

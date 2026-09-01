@@ -93,7 +93,7 @@ public class NewCardEffectBuilder : MonoBehaviour
                 buff.statType = effectData.type switch
                 {
                     "atk" => BuffStatType.Attack,
-                    "def" => BuffStatType.Defense,
+                    "def" => BuffStatType.Defend,
                     "burn" => BuffStatType.Burn,
                     "freeze" => BuffStatType.Freeze,
                     "activate" => BuffStatType.Activate,

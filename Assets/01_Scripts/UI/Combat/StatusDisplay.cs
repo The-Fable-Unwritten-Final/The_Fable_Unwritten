@@ -117,7 +117,7 @@ public class StatusDisplay : MonoBehaviour
             if (effect == null || effect.value <= 0)
                 continue;
 
-            if (effect.statType == BuffStatType.Attack || effect.statType == BuffStatType.Defense)
+            if (effect.statType == BuffStatType.Attack || effect.statType == BuffStatType.Defend)
                 continue;
 
             if (mergedInstant.ContainsKey(effect.statType))
@@ -161,7 +161,7 @@ public class StatusDisplay : MonoBehaviour
         }
 
         // 3. Defense 표시
-        int defValue = Mathf.RoundToInt(receiver.GetEffectValue(BuffStatType.Defense));
+        int defValue = Mathf.RoundToInt(receiver.GetEffectValue(BuffStatType.Defend));
         if (defValue != 0)
         {
             Sprite defIcon = defValue > 0 ? defUpIcon : defDownIcon;
@@ -170,7 +170,7 @@ public class StatusDisplay : MonoBehaviour
             {
                 results.Add(new StatusDisplayEntry
                 {
-                    type = BuffStatType.Defense,
+                    type = BuffStatType.Defend,
                     value = Mathf.Abs(defValue),
                     icon = defIcon,
                     hideNumber = false,

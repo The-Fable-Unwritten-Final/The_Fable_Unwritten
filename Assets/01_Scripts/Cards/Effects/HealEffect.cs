@@ -10,7 +10,7 @@ using UnityEngine;
 public class HealEffect : CardEffectBase
 {
     public float amount;    //힐량
-    public float target;
+    public int target = -1;
 
     /// <summary>
     /// 실제로 힐이 진행될 코드
@@ -20,7 +20,7 @@ public class HealEffect : CardEffectBase
     public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
         //스탯 변경 적용 후
-        float finalHeal = caster.ModifyStat(BuffStatType.Defense, amount);
+        float finalHeal = caster.ModifyStat(BuffStatType.Defend, amount);
         finalHeal = (isEnhanced == true) ? finalHeal * 1.5f : finalHeal;
 
         bool stanceBoosted = false;
@@ -53,6 +53,7 @@ public class HealEffect : CardEffectBase
                     HealAndDisplay(slot.frontSlot);
                 break;
             case 3:
+            case -1:
             default:
                 foreach(var target in targets)
                 {

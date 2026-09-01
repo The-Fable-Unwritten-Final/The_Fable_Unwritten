@@ -83,7 +83,7 @@ public static class StanceHelper
         switch (caster.playerData.currentStance)
         {
             case StancType.Mercy:
-                if (value > 0 && (type == BuffStatType.Attack || type == BuffStatType.Defense))
+                if (value > 0 && (type == BuffStatType.Attack || type == BuffStatType.Defend))
                     return value + 1;
                 if (value < 0)
                     return value + 1; // 예: -2 → -1
@@ -91,7 +91,7 @@ public static class StanceHelper
 
             case StancType.Discipline:
                 // judge: 디버프 강화 (-1 → -2), 버프 약화 (+1 → 0)
-                if (value > 0 && (type == BuffStatType.Attack || type == BuffStatType.Defense))
+                if (value > 0 && (type == BuffStatType.Attack || type == BuffStatType.Defend))
                     return Mathf.Max(value - 1, 0);
                 if (value < 0)
                     return value - 1; // 예: -1 → -2
