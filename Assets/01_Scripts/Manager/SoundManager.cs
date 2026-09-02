@@ -103,10 +103,18 @@ public class SoundManager : MonoSingleton<SoundManager>
         {
             if (bgmSource.clip == clip) return;
 
-            bgmSource.Stop();
-            bgmSource.clip = clip;
-            bgmSource.volume = bgmVolume;
-            bgmSource.Play();
+            // 현재 재생 중인 BGM과 다르면 페이드 적용, 같으면 즉시 재생
+            if (bgmSource.clip != null)
+            {
+                ChangeBGMWithFade(category, key, 1f);  // 1초 페이드
+            }
+            else
+            {
+                bgmSource.Stop();
+                bgmSource.clip = clip;
+                bgmSource.volume = bgmVolume;
+                bgmSource.Play();
+            }
             return;
         }
 
@@ -117,10 +125,18 @@ public class SoundManager : MonoSingleton<SoundManager>
         {
             if (bgmSource.clip == defaultClip) return;
 
-            bgmSource.Stop();
-            bgmSource.clip = defaultClip;
-            bgmSource.volume = bgmVolume;
-            bgmSource.Play();
+            // 디폴트도 페이드 적용
+            if (bgmSource.clip != null)
+            {
+                ChangeBGMWithFade(SoundCategory.BGM, 0, 1f);
+            }
+            else
+            {
+                bgmSource.Stop();
+                bgmSource.clip = defaultClip;
+                bgmSource.volume = bgmVolume;
+                bgmSource.Play();
+            }
         }
         else
         {
