@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1452,6 +1452,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f1fd2abdd27be849977ce4589f19c88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  visualRoot: {fileID: 721223337}
   footPoint: {fileID: 981216699}
   bodyPoint: {fileID: 711468066}
   headPoint: {fileID: 1160002344}
@@ -6591,6 +6592,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f1fd2abdd27be849977ce4589f19c88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  visualRoot: {fileID: 546388546}
   footPoint: {fileID: 219748516}
   bodyPoint: {fileID: 130218207}
   headPoint: {fileID: 1929614343}
@@ -11036,6 +11038,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f1fd2abdd27be849977ce4589f19c88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  visualRoot: {fileID: 1725370772}
   footPoint: {fileID: 441079793}
   bodyPoint: {fileID: 1851560373}
   headPoint: {fileID: 566935552}

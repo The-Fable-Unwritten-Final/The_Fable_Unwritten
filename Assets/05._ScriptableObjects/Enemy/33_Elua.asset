@@ -24,6 +24,7 @@ MonoBehaviour:
   block: 0
   note: 
   anchorData:
+    visualOffset: {x: 0, y: -1}
     footPoint: {x: 0, y: 0}
     bodyPoint: {x: 0, y: 0}
     headPoint: {x: 0, y: 0}
@@ -43,7 +44,7 @@ MonoBehaviour:
     percentage: 20
   illust: illust3_3
   currentStance: 1
-  animationController: {fileID: 9100000, guid: aab4e345029bbfe4db01d2daff742f32, type: 2}
+  animationController: {fileID: 9100000, guid: 6e290926ab8e8004b86bbbbde89246cf, type: 2}
   AttackSkillEffect: fanfx1_spellcast_C_large_yellow
   AllySkillEffect: fanfx2_cure_large_yellow
   TopStance: 0.5

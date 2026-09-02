@@ -295,16 +295,29 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         UpdateCardImage();// 카드 이미지 업데이트
         UpdatCardInfo();// 카드 정보 업데이트
     }
-    public void UpdateCardImage()//카드의 일러스트,사용캐릭터,카드타입
+    public void UpdateCardImage()
     {
-        if(cardData.illustration == null)
-            Debug.LogError($"[CardInHand] 카드 일러스트가 설정되지 않았습니다. 카드 이름: {cardData.cardName}");// 카드 데이터 SO쪽에서 resources 파일을 통해 이미지 업데이트를 하지 못했을때.
+        if (cardData.illustration == null)
+        {
+            cardImage.sprite = null;
+            cardImage.gameObject.SetActive(false);
 
-        cardImage.sprite = cardData.illustration; // 카드 이미지 설정
-        illustCover.sprite = cardData.illustration; // 카드 일러스트 설정
-        cardTypeImage.sprite = cardData.cardType; // 카드 타입 이미지 설정
-        cardCharImage.sprite = cardData.chClass; // 카드 캐릭터 이미지 설정
+            illustCover.sprite = null;
+            illustCover.gameObject.SetActive(false);
+        }
+        else
+        {
+            cardImage.gameObject.SetActive(true);
+            illustCover.gameObject.SetActive(true);
+
+            cardImage.sprite = cardData.illustration;
+            illustCover.sprite = cardData.illustration;
+        }
+
+        cardTypeImage.sprite = cardData.cardType;
+        cardCharImage.sprite = cardData.chClass;
     }
+
     /// <summary>
     /// 카드 description, cost, name 설명 업데이트.
     /// </summary>
