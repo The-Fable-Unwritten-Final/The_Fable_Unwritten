@@ -77,12 +77,12 @@ public class SoundManager : MonoSingleton<SoundManager>
         var theme = ProgressDataManager.Instance.CurrentTheme;
 
 
-        if (scene.name == SceneNameData.CombatScene &&
+        /*if (scene.name == SceneNameData.CombatScene &&
         node != null && node.type == NodeType.Boss)
         {
             PlayBossBGMByTheme(theme);
-        }
-        else if (sceneToBGMKey.TryGetValue(scene.name, out var bgmKey))
+        } else*/ 
+        if (sceneToBGMKey.TryGetValue(scene.name, out var bgmKey))
         {
             if (scene.name == SceneNameData.RandomEventScene) return; // 랜덤 이벤트는 별도의 BGM 출력 방식 사용
             PlayBGM(SoundCategory.BGM, bgmKey);
@@ -191,6 +191,7 @@ public class SoundManager : MonoSingleton<SoundManager>
 
     public void PlayBossBGMByTheme(StageTheme theme)
     {
+        // 보스 전용 BGM 사용 안함
         PlayBGM(SoundCategory.BossBGM, (int)theme);
     }
 
@@ -203,7 +204,7 @@ public class SoundManager : MonoSingleton<SoundManager>
         if (scene.name == SceneNameData.CombatScene &&
             node != null && node.type == NodeType.Boss)
         {
-            PlayBossBGMByTheme(theme);
+            //PlayBossBGMByTheme(theme);
         }
         else if (sceneToBGMKey.TryGetValue(scene.name, out var bgmKey))
         {
@@ -223,6 +224,35 @@ public class SoundManager : MonoSingleton<SoundManager>
 
         var source = Instance.GetSoundSource();
         source.Play(clip, Instance.sfxVolume, Instance.sfxPitchVariance);
+    }
+
+    /// <summary>
+    /// 딜레이가 적용된 효과음 사용 매서드
+    /// </summary>
+    public void PlaySFX(SoundCategory category, int key, float delay)
+    {
+        if (Instance.isMuted) return;
+        if (!Instance.sfxClips.TryGetValue(category, out var dict) || !dict.TryGetValue(key, out var clip)) return;
+
+        if (delay > 0)
+        {
+            Instance.StartCoroutine(Instance.PlaySFXDelayed(category, key, clip, delay));
+        }
+        else
+        {
+            var source = Instance.GetSoundSource();
+            source.Play(clip, Instance.sfxVolume, Instance.sfxPitchVariance);
+        }
+    }
+
+    private IEnumerator PlaySFXDelayed(SoundCategory category, int key, AudioClip clip, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (isMuted) yield break;
+
+        var source = GetSoundSource();
+        source.Play(clip, sfxVolume, sfxPitchVariance);
     }
 
     private SoundSource GetSoundSource()
