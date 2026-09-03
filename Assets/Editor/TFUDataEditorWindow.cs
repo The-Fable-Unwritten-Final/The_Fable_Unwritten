@@ -1111,6 +1111,12 @@ public class TFUDataEditorWindow : EditorWindow
 
         GUILayout.Label("카드", EditorStyles.boldLabel);
 
+        if (GUILayout.Button("CSV 반영", GUILayout.Width(70)))
+        {
+            CardTableImporter.Import();
+            RefreshCards();
+        }
+
         if (GUILayout.Button("새로고침", GUILayout.Width(70)))
             RefreshCards();
 
