@@ -157,10 +157,8 @@ public static class EnemyActCSVParser
                     // 특수 기믹
                     specialLogic = ParseEnum(
                         t, 18, EnemySpecialLogic.None),
-/*
-                    // 연출
                     skilleffect = ParseString(t, 19),
-
+/*
                     // 사운드
                     soundIndex = ParseInt(t, 20),
                     soundDelay = ParseFloat(t, 21)

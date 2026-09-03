@@ -62,13 +62,10 @@ public static class EnemyPattern
         bool hitTriggered = false;
         int pendingImpacts = 0;
 
-        Debug.Log($"[EnemySkill] 시작 index={actData.index}, attackType={attackType}");
 
         caster.PlayAttackAnimation(attackType,
             () =>
             {
-                Debug.Log($"[EnemySkill] 애니메이션 콜백 index={actData.index}");
-
                 if (hitTriggered)
                     return;
 
@@ -83,12 +80,10 @@ public static class EnemyPattern
 
                     pendingImpacts++;
 
-                    Debug.Log($"[EnemySkill] Impact 시작 index={actData.index}, pending={pendingImpacts}");
 
                     PlayV2Impact(caster, actData, target, 
                         () =>
                         {
-                            Debug.Log($"[EnemySkill] Impact 완료 index={actData.index}");
 
                             if (target.IsAlive() && target.ChClass != CharacterClass.Enemy)
                                 target.PlayHitAnimation();
@@ -103,11 +98,7 @@ public static class EnemyPattern
 
         yield return new WaitUntil(() => hitTriggered);
 
-        Debug.Log($"[EnemySkill] hitTriggered 통과 index={actData.index}");
-
         yield return new WaitUntil(() => pendingImpacts <= 0);
-
-        Debug.Log($"[EnemySkill] pendingImpacts 통과 index={actData.index}");
 
         yield return new WaitForSeconds(0.3f);
 
@@ -449,9 +440,9 @@ public static class EnemyPattern
         string effectName = !string.IsNullOrEmpty(actData.skilleffect) ? actData.skilleffect : target.ChClass == 
             CharacterClass.Enemy ? caster.enemyData.AllySkillEffect : caster.enemyData.AttackSkillEffect;
 
-
         if (string.IsNullOrEmpty(effectName))
         {
+            Debug.LogWarning($"[EnemyEffect] effectName 비어있음: {actData.index}");
             onImpact?.Invoke();
             return;
         }
@@ -465,6 +456,7 @@ public static class EnemyPattern
 
         if (!DataManager.Instance.CardEffects.TryGetValue(effectName,out var animInfo) || animInfo == null)
         {
+            Debug.LogWarning($"[EnemyEffect] CardEffects에서 찾지 못함: '{effectName}'");
             onImpact?.Invoke();
             return;
         }

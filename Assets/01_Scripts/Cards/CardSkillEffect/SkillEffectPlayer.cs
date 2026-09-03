@@ -15,11 +15,7 @@ public class SkillEffectPlayer : MonoBehaviour
     private EffectAnimation currentAnim;
     private List<Sprite> frames;
 
-    public void Play(
-        EffectAnimation animInfo,
-        float totalDuration,
-        bool flipX = false,
-        Action onHitFrame = null)
+    public void Play(EffectAnimation animInfo,float totalDuration,bool flipX = false,Action onHitFrame = null)
     {
         if (animInfo == null)
         {
@@ -36,6 +32,10 @@ public class SkillEffectPlayer : MonoBehaviour
 
         if (animInfo.playMode == EffectPlayMode.AnimationClip && animInfo.animationClip != null)
         {
+            //풀링 방식으로 변경 시 초기화 넣어둘 것.
+            transform.localScale *= 2f;
+            ApplyPivotCorrection(animInfo);
+
             PlayAnimatorClip(animInfo, onHitFrame);
             return;
         }
@@ -69,8 +69,7 @@ public class SkillEffectPlayer : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        Debug.Log($"[Effect] BaseController: {baseController}");
-        Debug.Log($"[Effect] Override Clip: {animInfo.animationClip}");
+
 
         AnimatorOverrideController overrideController =
             new AnimatorOverrideController(baseController);
@@ -114,5 +113,41 @@ public class SkillEffectPlayer : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         callback?.Invoke();
+    }
+
+    private void ApplyPivotCorrection(EffectAnimation animInfo)
+    {
+        Sprite sprite = animInfo.referenceSprite;
+
+        if (sprite == null)
+            return;
+
+        float ppu = sprite.pixelsPerUnit;
+        Vector2 pivot = sprite.pivot;
+        Rect rect = sprite.rect;
+
+        Vector3 localCorrection = Vector3.zero;
+
+        switch (animInfo.animationType)
+        {
+            case AnimationType.OnBottomTarget:
+                localCorrection = new Vector3(
+                    (pivot.x - rect.width * 0.5f) / ppu,
+                    pivot.y / ppu,
+                    0f);
+                break;
+
+            case AnimationType.OnTarget:
+            case AnimationType.OnHeadPoint:
+            case AnimationType.OnOverheadPoint:
+            case AnimationType.OnAheadPoint:
+                localCorrection = new Vector3(
+                    (pivot.x - rect.width * 0.5f) / ppu,
+                    (pivot.y - rect.height * 0.5f) / ppu,
+                    0f);
+                break;
+        }
+
+        transform.position += transform.TransformVector(localCorrection);
     }
 }
