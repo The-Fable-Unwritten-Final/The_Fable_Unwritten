@@ -679,14 +679,19 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         if (resetAttackRoutine != null)
             StopCoroutine(resetAttackRoutine);
 
-        resetAttackRoutine = StartCoroutine(ResetAttackParam(1.5f));
+        resetAttackRoutine = StartCoroutine(ResetAttackParam());
     }
 
-    private IEnumerator ResetAttackParam(float delay)
+    private IEnumerator ResetAttackParam()
     {
+        yield return null;
+
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        float delay = stateInfo.length;
+
         yield return new WaitForSeconds(delay);
+
         animator.SetInteger("Attack", -1);
-        currentAttackHitCallback = null;
         resetAttackRoutine = null;
     }
 

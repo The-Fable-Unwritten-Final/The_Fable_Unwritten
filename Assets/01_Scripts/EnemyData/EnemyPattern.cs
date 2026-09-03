@@ -57,20 +57,24 @@ public static class EnemyPattern
     }
 
 
-    private static IEnumerator ExecuteV2Skill(Enemy caster,EnemyAct actData,List<IStatusReceiver> skillTargets,int attackType)
+    private static IEnumerator ExecuteV2Skill(Enemy caster, EnemyAct actData, List<IStatusReceiver> skillTargets, int attackType)
     {
         bool hitTriggered = false;
         int pendingImpacts = 0;
 
+        Debug.Log($"[EnemySkill] 시작 index={actData.index}, attackType={attackType}");
+
         caster.PlayAttackAnimation(attackType,
             () =>
             {
+                Debug.Log($"[EnemySkill] 애니메이션 콜백 index={actData.index}");
+
                 if (hitTriggered)
                     return;
 
                 hitTriggered = true;
 
-                ApplyNonSkillTargetEffects(caster,actData);
+                ApplyNonSkillTargetEffects(caster, actData);
 
                 foreach (var target in skillTargets)
                 {
@@ -79,13 +83,17 @@ public static class EnemyPattern
 
                     pendingImpacts++;
 
-                    PlayV2Impact(caster,target,
+                    Debug.Log($"[EnemySkill] Impact 시작 index={actData.index}, pending={pendingImpacts}");
+
+                    PlayV2Impact(caster, actData, target, 
                         () =>
                         {
-                            if (target.IsAlive())
+                            Debug.Log($"[EnemySkill] Impact 완료 index={actData.index}");
+
+                            if (target.IsAlive() && target.ChClass != CharacterClass.Enemy)
                                 target.PlayHitAnimation();
 
-                            ApplySkillTargetEffects(caster,target,actData);
+                            ApplySkillTargetEffects(caster, target, actData);
                             pendingImpacts--;
                         }
                     );
@@ -95,13 +103,16 @@ public static class EnemyPattern
 
         yield return new WaitUntil(() => hitTriggered);
 
+        Debug.Log($"[EnemySkill] hitTriggered 통과 index={actData.index}");
+
         yield return new WaitUntil(() => pendingImpacts <= 0);
+
+        Debug.Log($"[EnemySkill] pendingImpacts 통과 index={actData.index}");
 
         yield return new WaitForSeconds(0.3f);
 
         FinalizeDeaths();
     }
-
 
     private static float DetermineEffectScale(EnemyType type)
     {
@@ -433,9 +444,11 @@ public static class EnemyPattern
     }
 
 
-    private static void PlayV2Impact(Enemy caster,IStatusReceiver target,Action onImpact)
+    private static void PlayV2Impact(Enemy caster, EnemyAct actData, IStatusReceiver target,Action onImpact)
     {
-        string effectName =target.ChClass == CharacterClass.Enemy ? caster.enemyData.AllySkillEffect : caster.enemyData.AttackSkillEffect;
+        string effectName = !string.IsNullOrEmpty(actData.skilleffect) ? actData.skilleffect : target.ChClass == 
+            CharacterClass.Enemy ? caster.enemyData.AllySkillEffect : caster.enemyData.AttackSkillEffect;
+
 
         if (string.IsNullOrEmpty(effectName))
         {

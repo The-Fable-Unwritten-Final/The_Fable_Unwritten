@@ -43,6 +43,11 @@ public class EnemyAct
     // 일반 데이터만으로 처리하기 어려운 전용 기믹
     public EnemySpecialLogic specialLogic;
 
+    public string skilleffect;
+
+    public int soundIndex;
+    public float soundDelay;
+
 
     // =========================================================
     // Legacy
