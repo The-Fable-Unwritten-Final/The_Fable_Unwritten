@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Card Effects/RepeatEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/RepeatEffect")]
 public class RepeatEffect : CardEffectBase
 {
     public int repeatCount = 1;

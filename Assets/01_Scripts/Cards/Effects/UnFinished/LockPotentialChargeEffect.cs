@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Card Effects/LockPotentialChargeEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/LockPotentialChargeEffect")]
 public class LockPotentialChargeEffect : CardEffectBase
 {
     public int turns = 1;

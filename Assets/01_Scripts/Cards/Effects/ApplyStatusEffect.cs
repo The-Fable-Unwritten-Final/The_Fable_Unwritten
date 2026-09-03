@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 버프/다버프 할당 코드
 /// </summary>
-[CreateAssetMenu(menuName = "CardEffect/ApplyBuff")]
+[CreateAssetMenu(menuName = "Cards/Effects/ApplyBuff")]
 public class ApplyStatusEffect : CardEffectBase
 {
     public BuffStatType statType;

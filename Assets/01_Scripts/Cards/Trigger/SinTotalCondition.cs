@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CardEffects/Conditions/SinTotalCondition")]
+[CreateAssetMenu(menuName = "Cards/Conditions/SinTotalCondition")]
 public class SinTotalCondition : TriggerCondition
 {
     public int requiredValue;

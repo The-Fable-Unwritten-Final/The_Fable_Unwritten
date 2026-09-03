@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CardEffect/HealByPenanceEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/HealByPenanceEffect")]
 public class HealByPenanceEffect : CardEffectBase
 {
     public int value;

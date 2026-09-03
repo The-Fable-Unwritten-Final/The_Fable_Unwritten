@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+[CreateAssetMenu(menuName = "Cards/Conditions/PreviousCardTypeCondition")]
 
 /// <summary>
 /// 전 턴에 특정 타입 카드를 사용하였는지 검사하는 클래스

@@ -7,7 +7,7 @@ using static UnityEngine.GraphicsBuffer;
 /// <summary>
 /// 데미지 코드
 /// </summary>
-[CreateAssetMenu(menuName = "CardEffect/DamageEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/DamageEffect")]
 public class DamageEffect : CardEffectBase
 {
     public float amount;    //기본 데미지

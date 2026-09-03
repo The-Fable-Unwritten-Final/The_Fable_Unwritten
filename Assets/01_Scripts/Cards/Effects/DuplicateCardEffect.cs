@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CardEffect/DuplicateCardEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/DuplicateCardEffect")]
 
 public class DuplicateCardEffect : CardEffectBase
 {

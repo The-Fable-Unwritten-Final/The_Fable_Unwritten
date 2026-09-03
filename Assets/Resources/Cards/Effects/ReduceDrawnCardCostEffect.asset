@@ -9,15 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d99085e4860989e40ba273fad6060564, type: 3}
-  m_Name: Enemy
+  m_Script: {fileID: 11500000, guid: 1670e5387390b4a47bf89bacd7b89119, type: 3}
+  m_Name: ReduceDrawnCardCostEffect
   m_EditorClassIdentifier: 
-  iDNum: 2
-  enemyName: enemy
-  hP: 30
-  healthValue: 0
-  aTK: 3
-  aTKValue: 0
-  dEF: 0
-  dEFValue: 0
-  currentStance: 0
+  amount: 0

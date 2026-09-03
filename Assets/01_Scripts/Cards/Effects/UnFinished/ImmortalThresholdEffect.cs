@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CardEffects/ImmortalThresholdEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/ImmortalThresholdEffect")]
 public class ImmortalThresholdEffect : CardEffectBase
 {
     public int minHp = 1;

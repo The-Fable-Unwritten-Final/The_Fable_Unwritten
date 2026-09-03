@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static PlayerData;
 
-[CreateAssetMenu(menuName = "CardEffects/Conditions/JustAfterSpecificStanceCondition")]
+[CreateAssetMenu(menuName = "Cards/Conditions/JustAfterSpecificStanceCondition")]
 public class JustAfterSpecificStanceCondition : TriggerCondition
 {
     public StancType requiredStance;

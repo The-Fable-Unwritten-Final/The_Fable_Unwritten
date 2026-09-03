@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CardEffect/Ideal Realization")]
+[CreateAssetMenu(menuName = "Cards/Effects/Ideal Realization")]
 public class IdealRealizationCardEffect : CardEffectBase
 {
     public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)

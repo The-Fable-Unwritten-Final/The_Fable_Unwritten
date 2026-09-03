@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Card Effects/DamagePercentEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/DamagePercentEffect")]
 public class DamagePercentEffect : CardEffectBase
 {
     public int percent;
