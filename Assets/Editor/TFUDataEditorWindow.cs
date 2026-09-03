@@ -384,6 +384,12 @@ public class TFUDataEditorWindow : EditorWindow
 
         GUILayout.Label("적", EditorStyles.boldLabel);
 
+        if (GUILayout.Button("CSV 반영", GUILayout.Width(70)))
+        {
+            EnemyTableImporter.Import();
+            RefreshEnemies();
+        }
+
         if (GUILayout.Button("새로고침", GUILayout.Width(70)))
             RefreshEnemies();
 
@@ -717,6 +723,12 @@ public class TFUDataEditorWindow : EditorWindow
         EditorGUILayout.BeginHorizontal();
 
         GUILayout.Label("적 스킬", EditorStyles.boldLabel);
+
+        if (GUILayout.Button("CSV 반영", GUILayout.Width(70)))
+        {
+            EnemySkillTableImporter.Import();
+            RefreshEnemySkills();
+        }
 
         if (GUILayout.Button("새로고침", GUILayout.Width(70)))
             RefreshEnemySkills();
@@ -1098,6 +1110,12 @@ public class TFUDataEditorWindow : EditorWindow
         EditorGUILayout.BeginHorizontal();
 
         GUILayout.Label("카드", EditorStyles.boldLabel);
+
+        if (GUILayout.Button("CSV 반영", GUILayout.Width(70)))
+        {
+            CardTableImporter.Import();
+            RefreshCards();
+        }
 
         if (GUILayout.Button("새로고침", GUILayout.Width(70)))
             RefreshCards();
