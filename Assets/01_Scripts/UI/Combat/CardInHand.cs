@@ -133,7 +133,9 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
         rect.DOAnchorPos(targetPos, 0.4f).SetEase(Ease.OutSine);
 
-
+        // SFX 출력
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 104);
+        //SoundManager.Instance.PlaySFX(SoundCategory.UI, 4);
         // 카드의 사용 가능 타겟 표시
         cardDisplay.TargetArrowDisplay();
         // 연계 가능한 카드들을 canchain으로
@@ -402,7 +404,9 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public void OnPointerDown(PointerEventData eventData)
     {
         SoundManager.Instance.PlaySFX(SoundCategory.UI, 4);
+        //SoundManager.Instance.PlaySFX(SoundCategory.SFX, 104);
     }
+
 }
 
 
