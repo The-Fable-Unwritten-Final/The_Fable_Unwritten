@@ -384,6 +384,12 @@ public class TFUDataEditorWindow : EditorWindow
 
         GUILayout.Label("적", EditorStyles.boldLabel);
 
+        if (GUILayout.Button("CSV 반영", GUILayout.Width(70)))
+        {
+            EnemyTableImporter.Import();
+            RefreshEnemies();
+        }
+
         if (GUILayout.Button("새로고침", GUILayout.Width(70)))
             RefreshEnemies();
 
