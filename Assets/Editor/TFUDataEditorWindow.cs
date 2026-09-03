@@ -724,6 +724,12 @@ public class TFUDataEditorWindow : EditorWindow
 
         GUILayout.Label("적 스킬", EditorStyles.boldLabel);
 
+        if (GUILayout.Button("CSV 반영", GUILayout.Width(70)))
+        {
+            EnemySkillTableImporter.Import();
+            RefreshEnemySkills();
+        }
+
         if (GUILayout.Button("새로고침", GUILayout.Width(70)))
             RefreshEnemySkills();
 
