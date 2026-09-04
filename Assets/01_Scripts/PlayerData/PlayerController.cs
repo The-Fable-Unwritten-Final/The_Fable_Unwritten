@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public bool hasBlock = false;           //방어막 획득 여부
 
     [SerializeField] private PotentialBarUI potentialBarUI;
+    [SerializeField] private StanceIconDisplay stanceIconDisplay;
     public bool hasResist { get; set; } = false;          //상태이상 디버프 저항 여부
     private bool isTargetable;              //타겟 가능 여부
 
@@ -97,6 +98,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         potentialBarUI?.Bind(this);
         potentialBarUI?.Refresh();
+
+        stanceIconDisplay?.UpdateIcon(playerData.currentStance);
     }
 
     public void OnTurnStart()
@@ -184,6 +187,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     private void HandleStanceChanged(StancType newStance)
     {
+        stanceIconDisplay?.UpdateIcon(newStance);
+
         Debug.Log($"[{playerData.CharacterName}] Stance Changed -> {newStance}");
     }
 
@@ -611,9 +616,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     
     public void ChangeStance(StancType Stance) //StancUI 함수
     {
-        StancType stance = Stance;
-        playerData.currentStance = stance;
-        stanceSystem?.ChangeStance(stance);
+        stanceSystem?.ChangeStance(Stance);
     }
 
     public void CameraActionPlay()

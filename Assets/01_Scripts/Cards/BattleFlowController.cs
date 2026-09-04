@@ -147,21 +147,21 @@ public class BattleFlowController : MonoBehaviour
                 switch(pc.playerData.IDNum)
                 {
                     case 0:
-                        if (pc.playerData.currentStance == StancType.None)
+                        if (!(pc.playerData.currentStance == StancType.Insight))
                         {
-                            pc.playerData.currentStance = StancType.Seek;
+                            pc.ChangeStance(StancType.Seek);
                         }
                         break;
                     case 1:
-                        if (pc.playerData.currentStance == StancType.None)
+                        if (!(pc.playerData.currentStance == StancType.Discipline))
                         {
-                            pc.playerData.currentStance = StancType.Mercy;
+                            pc.ChangeStance(StancType.Mercy);
                         }
                         break;
                     case 2:
-                        if (pc.playerData.currentStance == StancType.None)
+                        if (!(pc.playerData.currentStance == StancType.Defense))
                         {
-                            pc.playerData.currentStance = StancType.Rush;
+                            pc.ChangeStance(StancType.Rush);
                         }
                         break;
                     default:
