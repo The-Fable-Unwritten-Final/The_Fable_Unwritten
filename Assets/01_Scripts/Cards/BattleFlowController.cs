@@ -507,6 +507,11 @@ public class BattleFlowController : MonoBehaviour
 
     public void CheckBattleEnd()
     {
+        bool hasPendingEnemyDeath = enemyParty.OfType<Enemy>().Any(e => e != null && e.IsDeathPending);
+
+        if (hasPendingEnemyDeath)
+            return;
+
         bool allPlayersDead = playerParty.TrueForAll(p => !p.IsAlive());
         bool allEnemiesDead = enemyParty.TrueForAll(p => !p?.IsAlive() ?? true);
 

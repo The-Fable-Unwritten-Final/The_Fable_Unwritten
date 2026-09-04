@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     private bool isDead = false;
     private bool isDeathPending = false;
+    private bool isDeathPlaying = false;
 
     private IEnemyMechanic mechanic;
     public IEnemyMechanic Mechanic => mechanic;
@@ -162,6 +163,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
         isDead = false;
         isDeathPending = false;
+        isDeathPlaying = false;
 
         SetMechanic(EnemyMechanicFactory.Create(this));
     }
@@ -718,8 +720,22 @@ public class Enemy : MonoBehaviour, IStatusReceiver
                 .Append(trans.DOLocalMoveX(0f, 0.05f));
 
             animator.SetBool("Hit", true);
-            GameManager.Instance.StartCoroutine(ResetBool("Hit", 1f));
+            GameManager.Instance.StartCoroutine(ResetHit(1f));
         }
+    }
+
+    private IEnumerator ResetHit(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (this == null)
+            yield break;
+
+        if (animator != null)
+            animator.SetBool("Hit", false);
+
+        if (isDeathPending)
+            TryFinalizeDeath();
     }
 
     private IEnumerator ResetBool(string param, float delay)
@@ -743,15 +759,59 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     public void TryFinalizeDeath()
     {
 
-        if (!isDeathPending || isDead) return;
+        if (!isDeathPending || isDead || isDeathPlaying)
+            return;
+
+        StartCoroutine(PlayDeathAnimation());
+    }
+
+    private IEnumerator PlayDeathAnimation()
+    {
+        isDeathPlaying = true;
+
+        if (hitShakeSequence != null && hitShakeSequence.IsActive())
+            hitShakeSequence.Kill();
+
+        Transform trans = animator != null ? animator.transform : null;
+
+        if (trans != null)
+        {
+            Vector3 pos = trans.localPosition;
+            pos.x = 0f;
+            trans.localPosition = pos;
+        }
+
+        if (animator != null)
+        {
+            animator.SetBool("Hit", false);
+            animator.SetBool("Death", true);
+
+            // Animator가 Death State로 넘어갈 시간을 줌
+            yield return null;
+
+            float timeout = 1f;
+
+            while (!animator.GetCurrentAnimatorStateInfo(0).IsName("Death") &&
+                  timeout > 0f)
+            {
+                timeout -= Time.deltaTime;
+                yield return null;
+            }
+
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Death"))
+            {
+                while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+                    yield return null;
+            }
+        }
 
         isDead = true;
         isDeathPending = false;
-
-        // 몬스터의 죽음의 경우는 카메라 펀치 효과 재생 하지 않음
-        //GameManager.Instance.combatCameraController.CameraPunchHard(); 
+        isDeathPlaying = false;
 
         gameObject.SetActive(false);
+
+        GameManager.Instance?.turnController?.battleFlow?.CheckBattleEnd();
     }
 
     public void ClearScarBurst() 
