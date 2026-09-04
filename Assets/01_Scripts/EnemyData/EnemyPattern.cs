@@ -57,10 +57,11 @@ public static class EnemyPattern
     }
 
 
-    private static IEnumerator ExecuteV2Skill(Enemy caster,EnemyAct actData,List<IStatusReceiver> skillTargets,int attackType)
+    private static IEnumerator ExecuteV2Skill(Enemy caster, EnemyAct actData, List<IStatusReceiver> skillTargets, int attackType)
     {
         bool hitTriggered = false;
         int pendingImpacts = 0;
+
 
         caster.PlayAttackAnimation(attackType,
             () =>
@@ -70,7 +71,7 @@ public static class EnemyPattern
 
                 hitTriggered = true;
 
-                ApplyNonSkillTargetEffects(caster,actData);
+                ApplyNonSkillTargetEffects(caster, actData);
 
                 foreach (var target in skillTargets)
                 {
@@ -79,13 +80,15 @@ public static class EnemyPattern
 
                     pendingImpacts++;
 
-                    PlayV2Impact(caster,target,
+
+                    PlayV2Impact(caster, actData, target, 
                         () =>
                         {
-                            if (target.IsAlive())
+
+                            if (target.IsAlive() && target.ChClass != CharacterClass.Enemy)
                                 target.PlayHitAnimation();
 
-                            ApplySkillTargetEffects(caster,target,actData);
+                            ApplySkillTargetEffects(caster, target, actData);
                             pendingImpacts--;
                         }
                     );
@@ -101,7 +104,6 @@ public static class EnemyPattern
 
         FinalizeDeaths();
     }
-
 
     private static float DetermineEffectScale(EnemyType type)
     {
@@ -433,12 +435,14 @@ public static class EnemyPattern
     }
 
 
-    private static void PlayV2Impact(Enemy caster,IStatusReceiver target,Action onImpact)
+    private static void PlayV2Impact(Enemy caster, EnemyAct actData, IStatusReceiver target,Action onImpact)
     {
-        string effectName =target.ChClass == CharacterClass.Enemy ? caster.enemyData.AllySkillEffect : caster.enemyData.AttackSkillEffect;
+        string effectName = !string.IsNullOrEmpty(actData.skilleffect) ? actData.skilleffect : target.ChClass == 
+            CharacterClass.Enemy ? caster.enemyData.AllySkillEffect : caster.enemyData.AttackSkillEffect;
 
         if (string.IsNullOrEmpty(effectName))
         {
+            Debug.LogWarning($"[EnemyEffect] effectName 비어있음: {actData.index}");
             onImpact?.Invoke();
             return;
         }
@@ -452,6 +456,7 @@ public static class EnemyPattern
 
         if (!DataManager.Instance.CardEffects.TryGetValue(effectName,out var animInfo) || animInfo == null)
         {
+            Debug.LogWarning($"[EnemyEffect] CardEffects에서 찾지 못함: '{effectName}'");
             onImpact?.Invoke();
             return;
         }

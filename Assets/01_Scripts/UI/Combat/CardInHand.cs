@@ -133,7 +133,9 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
         rect.DOAnchorPos(targetPos, 0.4f).SetEase(Ease.OutSine);
 
-
+        // SFX 출력
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 104);
+        //SoundManager.Instance.PlaySFX(SoundCategory.UI, 4);
         // 카드의 사용 가능 타겟 표시
         cardDisplay.TargetArrowDisplay();
         // 연계 가능한 카드들을 canchain으로
@@ -295,7 +297,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         UpdateCardImage();// 카드 이미지 업데이트
         UpdatCardInfo();// 카드 정보 업데이트
     }
-    public void UpdateCardImage()//카드의 일러스트,사용캐릭터,카드타입
+    public void UpdateCardImage()
     {
         if (cardData.illustration == null)
         {
@@ -317,6 +319,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         cardTypeImage.sprite = cardData.cardType;
         cardCharImage.sprite = cardData.chClass;
     }
+
     /// <summary>
     /// 카드 description, cost, name 설명 업데이트.
     /// </summary>
@@ -401,7 +404,9 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public void OnPointerDown(PointerEventData eventData)
     {
         SoundManager.Instance.PlaySFX(SoundCategory.UI, 4);
+        //SoundManager.Instance.PlaySFX(SoundCategory.SFX, 104);
     }
+
 }
 
 

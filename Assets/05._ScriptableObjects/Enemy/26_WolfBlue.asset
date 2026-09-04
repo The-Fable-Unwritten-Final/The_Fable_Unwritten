@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d99085e4860989e40ba273fad6060564, type: 3}
+  m_Name: 26_WolfBlue
+  m_EditorClassIdentifier: 
+  idNum: 26
+  enemyName: WolfBlue
+  exp: 0
+  maxHP: 12
+  currentHP: 0
+  aTKValue: 0
+  dEFValue: 0
+  stun: 0
+  blind: 0
+  block: 0
+  note: 
+  anchorData:
+    visualOffset: {x: 0, y: 0}
+    footPoint: {x: 0, y: 0}
+    bodyPoint: {x: 0, y: 0}
+    headPoint: {x: 0, y: 0}
+    overheadPoint: {x: 0, y: 0}
+    aheadPoint: {x: 0, y: 0}
+    shadowOffset: {x: 0, y: 0}
+  type: 0
+  skillList:
+  - skillIndex: 101
+    damage: 0
+    percentage: 60
+  - skillIndex: 102
+    damage: 0
+    percentage: 40
+  illust: 
+  currentStance: 0
+  animationController: {fileID: 0}
+  AttackSkillEffect: 
+  AllySkillEffect: 
+  TopStance: 0
+  MiddleStance: 0
+  BottomStance: 0
+  loot: 

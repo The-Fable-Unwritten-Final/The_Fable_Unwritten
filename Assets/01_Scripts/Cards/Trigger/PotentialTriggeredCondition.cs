@@ -1,5 +1,7 @@
 
 using System.Collections.Generic;
+using UnityEngine;
+[CreateAssetMenu(menuName = "Cards/Conditions/PotentialTriggeredCondition")]
 
 public class PotentialTriggeredCondition : TriggerCondition
 {

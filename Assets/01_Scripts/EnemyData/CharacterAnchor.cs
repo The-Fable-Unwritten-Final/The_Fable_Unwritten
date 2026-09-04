@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class CharacterAnchorController : MonoBehaviour
 {
+
+    [SerializeField] private Transform visualRoot;
+
     [SerializeField] private Transform footPoint;
     [SerializeField] private Transform bodyPoint;
     [SerializeField] private Transform headPoint;
@@ -18,6 +21,11 @@ public class CharacterAnchorController : MonoBehaviour
 
     public void Apply(CharacterAnchorOffsetData data)
     {
+        if (visualRoot != null)
+        {
+            visualRoot.localPosition = new Vector3(data.visualOffset.x,data.visualOffset.y,visualRoot.localPosition.z);
+        }
+
         footPoint.localPosition = data.footPoint;
         bodyPoint.localPosition = data.bodyPoint;
         headPoint.localPosition = data.headPoint;
@@ -34,6 +42,8 @@ public class CharacterAnchorController : MonoBehaviour
 [System.Serializable]
 public struct CharacterAnchorOffsetData
 {
+    public Vector2 visualOffset;
+
     public Vector2 footPoint;
     public Vector2 bodyPoint;
     public Vector2 headPoint;

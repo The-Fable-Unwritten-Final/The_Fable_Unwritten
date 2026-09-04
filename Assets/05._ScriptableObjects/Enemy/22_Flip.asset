@@ -24,6 +24,7 @@ MonoBehaviour:
   block: 0
   note: 
   anchorData:
+    visualOffset: {x: 0, y: -1.2}
     footPoint: {x: 0, y: -0.3}
     bodyPoint: {x: 0, y: 0}
     headPoint: {x: 0, y: 0.2}
@@ -33,14 +34,14 @@ MonoBehaviour:
   type: 0
   skillList:
   - skillIndex: 221
-    damage: 8
+    damage: 0
     percentage: 60
   - skillIndex: 222
-    damage: 6
+    damage: 0
     percentage: 40
-  illust: illust2_2
+  illust: 22_220_idle
   currentStance: 1
-  animationController: {fileID: 9100000, guid: 4ada6316960798a4cb4a3019bceb7afc, type: 2}
+  animationController: {fileID: 9100000, guid: ca62ff4f2a2b52b4985939ed5510a9da, type: 2}
   AttackSkillEffect: fanfx1_magic_puff_A_large_blue
   AllySkillEffect: 
   TopStance: 0.2

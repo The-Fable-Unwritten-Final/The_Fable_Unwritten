@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CardEffects/RemoveDebuffFromEnemyEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/RemoveDebuffFromEnemyEffect")]
 public class RemoveDebuffFromEnemyEffect : CardEffectBase
 {
     public int value = 1;

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Card Effects/AutoCastEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/AutoCastEffect")]
 public class AutoCastEffect : CardEffectBase
 {
     public int count = 1;

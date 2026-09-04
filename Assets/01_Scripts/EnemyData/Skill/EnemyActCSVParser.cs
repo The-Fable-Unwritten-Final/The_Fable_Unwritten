@@ -156,7 +156,13 @@ public static class EnemyActCSVParser
 
                     // 특수 기믹
                     specialLogic = ParseEnum(
-                        t, 18, EnemySpecialLogic.None)
+                        t, 18, EnemySpecialLogic.None),
+                    skilleffect = ParseString(t, 19),
+/*
+                    // 사운드
+                    soundIndex = ParseInt(t, 20),
+                    soundDelay = ParseFloat(t, 21)
+*/
                 };
 
                 list.Add(act);
@@ -251,5 +257,28 @@ public static class EnemyActCSVParser
         );
 
         return defaultValue;
+    }
+
+    private static string ParseString(string[] tokens, int index)
+    {
+        if (index >= tokens.Length)
+            return "";
+
+        return tokens[index].Trim();
+    }
+
+    private static float ParseFloat(string[] tokens, int index)
+    {
+        if (index >= tokens.Length)
+            return 0f;
+
+        string value = tokens[index].Trim();
+
+        if (string.IsNullOrWhiteSpace(value))
+            return 0f;
+
+        return float.TryParse(value, out float result)
+            ? result
+            : 0f;
     }
 }

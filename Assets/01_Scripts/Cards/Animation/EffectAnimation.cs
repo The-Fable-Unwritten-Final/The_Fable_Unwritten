@@ -18,6 +18,35 @@ public class EffectAnimation : ScriptableObject
     [Header("Animation Clip 방식")]
     public AnimationClip animationClip;
     public float clipHitTime = -1f;
+
+    [HideInInspector]
+    public Sprite referenceSprite;
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        referenceSprite = null;
+
+        if (animationClip == null)
+            return;
+
+        var bindings = UnityEditor.AnimationUtility.GetObjectReferenceCurveBindings(animationClip);
+
+        foreach (var binding in bindings)
+        {
+            var keyframes = UnityEditor.AnimationUtility.GetObjectReferenceCurve(animationClip, binding);
+
+            if (keyframes == null || keyframes.Length == 0)
+                continue;
+
+            if (keyframes[0].value is Sprite sprite)
+            {
+                referenceSprite = sprite;
+                break;
+            }
+        }
+    }
+#endif
 }
 
 public enum AnimationType       //추후 적용 애니메이션

@@ -24,6 +24,7 @@ MonoBehaviour:
   block: 0
   note: 
   anchorData:
+    visualOffset: {x: 0, y: -1.1}
     footPoint: {x: 0, y: 0}
     bodyPoint: {x: 0, y: 0}
     headPoint: {x: 0, y: 0}
@@ -33,14 +34,14 @@ MonoBehaviour:
   type: 0
   skillList:
   - skillIndex: 321
-    damage: 6
+    damage: 0
     percentage: 60
   - skillIndex: 322
-    damage: -6
+    damage: 0
     percentage: 40
-  illust: illust3_2
+  illust: 32_320_idle
   currentStance: 1
-  animationController: {fileID: 9100000, guid: b8f34755a55061c4596ec7eabc6b325b, type: 2}
+  animationController: {fileID: 9100000, guid: efd71380a22061a4ba4788490f279d8c, type: 2}
   AttackSkillEffect: fanfx1_magic_burst_A_large_yellow
   AllySkillEffect: fanfx2_cure_large_yellow
   TopStance: 0.6

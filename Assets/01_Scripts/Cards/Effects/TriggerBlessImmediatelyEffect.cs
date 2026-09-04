@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CardEffects/TriggerBlessImmediatelyEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/TriggerBlessImmediatelyEffect")]
 public class TriggerBlessImmediatelyEffect : CardEffectBase
 {
     public int value = 1;

@@ -59,8 +59,6 @@ public class UI_RandomEvent : MonoBehaviour
         {
             InitUI(currentData);
         }
-
-        SoundManager.Instance.PlayBGM(SoundCategory.RandomEventBGM, currentData.index); // 랜덤 이벤트 BGM 재생
     }
     private void GetSavedEvent()
     {

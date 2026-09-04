@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CardEffect/DamageByRemovedDebuffSumMultiplierEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/DamageByRemovedDebuffSumMultiplierEffect")]
 public class DamageByRemovedDebuffSumMultiplierEffect : CardEffectBase
 {
     public int multiplier;

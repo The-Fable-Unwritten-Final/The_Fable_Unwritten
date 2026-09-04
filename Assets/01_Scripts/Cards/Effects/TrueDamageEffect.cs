@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CardEffect/TrueDamageEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/TrueDamageEffect")]
 public class TrueDamageEffect : CardEffectBase
 {
     public float amount;

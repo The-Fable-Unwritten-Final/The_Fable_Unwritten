@@ -24,6 +24,7 @@ MonoBehaviour:
   block: 0
   note: 
   anchorData:
+    visualOffset: {x: 0, y: -1.05}
     footPoint: {x: 0, y: -0.5}
     bodyPoint: {x: 0, y: 0.5}
     headPoint: {x: 0, y: 0.9}
@@ -33,17 +34,17 @@ MonoBehaviour:
   type: 1
   skillList:
   - skillIndex: 241
-    damage: 10
+    damage: 0
     percentage: 50
   - skillIndex: 242
-    damage: 6
+    damage: 0
     percentage: 30
   - skillIndex: 243
     damage: 0
     percentage: 20
-  illust: illust2_4
+  illust: 24_240_idle
   currentStance: 1
-  animationController: {fileID: 9100000, guid: fbcd9c40c9d48854c9db59688c3bedf1, type: 2}
+  animationController: {fileID: 9100000, guid: 02fd884864797a5469f5dcb061771551, type: 2}
   AttackSkillEffect: pj2_lightning_orb_large_blue
   AllySkillEffect: 
   TopStance: 0.5
