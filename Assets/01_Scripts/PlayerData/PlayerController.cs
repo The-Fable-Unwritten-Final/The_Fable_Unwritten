@@ -56,6 +56,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     private bool isTemporarilyAbsent = false;
     public bool IsTemporarilyAbsent => isTemporarilyAbsent;
 
+    [SerializeField] private CharacterAnchorController anchorController;
+
     public bool CanParticipateInBattle()
     {
         return IsAlive() && !isTemporarilyAbsent;
