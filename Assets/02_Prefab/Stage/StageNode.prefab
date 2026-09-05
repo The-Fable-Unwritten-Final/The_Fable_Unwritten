@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 6458214164449784344}
   - component: {fileID: 7104334890019791776}
   - component: {fileID: -534573039632865352}
+  - component: {fileID: -7026241237044161282}
   m_Layer: 5
   m_Name: StageNode
   m_TagString: Untagged
@@ -225,3 +226,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stanceButton: {fileID: 0}
+--- !u!114 &-7026241237044161282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5334812594238698168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 369be2b26ee4e7f49b30585b81b1e343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundCat: 10
+  key: 203

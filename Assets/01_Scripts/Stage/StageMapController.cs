@@ -190,7 +190,6 @@ public class StageMapController : MonoBehaviour
         // 노드 클릭 시 저장
         pdm.IsStageScene = false;
         pdm.SaveProgress(true);
-        SoundManager.Instance.PlaySFX(SoundCategory.Button, 1);
 
         int stageIndex = pdm.StageIndex;
         int columnIndex = clicked.columnIndex;
