@@ -405,7 +405,12 @@ public class BattleFlowController : MonoBehaviour
     /// </summary>
     public void ExecuteEnemyTurn(Action onEnemyTurnComplete)
     {
-        if (isBattleEnded) return;
+        if (isBattleEnded)
+        {
+            onEnemyTurnComplete?.Invoke();
+            return;
+        }
+
         StartCoroutine(EnemyTurnCoroutine(() =>
         {
             onEnemyTurnComplete?.Invoke();

@@ -27,6 +27,9 @@ public static class EnemySkillTableImporter
         public int arg2;
 
         public string effect;
+
+        public List<int> soundIndexes = new();
+        public List<float> soundDelays = new();
     }
 
     private struct ParsedEffect
@@ -132,6 +135,9 @@ public static class EnemySkillTableImporter
             // 기존 테이블의 effect 컬럼
             row.effect = Get(t, 11);
 
+            row.soundIndexes = ParseIntList(Get(t, 14));
+            row.soundDelays = ParseFloatList(Get(t, 15));
+
             result.Add(row);
         }
 
@@ -169,7 +175,10 @@ public static class EnemySkillTableImporter
 
             specialLogic = EnemySpecialLogic.None,
 
-            skilleffect = row.effect
+            skilleffect = row.effect,
+
+            soundIndexes = new List<int>(row.soundIndexes),
+            soundDelays = new List<float>(row.soundDelays)
         };
 
         ResolveGeneralEffects(act, row);
@@ -935,7 +944,8 @@ public static class EnemySkillTableImporter
             "index,target_type,target_num,target_front,target_center,target_back," +
             "arg_effect1,arg1,arg_target1,arg_effect2,arg2,arg_target2," +
             "use_condition,use_condition_value,value_modifier,modifier_status," +
-            "modifier_value,modifier_condition_value,special_logic,effect"
+            "modifier_value,modifier_condition_value,special_logic,effect," +
+            "soundIndexes,soundDelays"
         );
 
         foreach (EnemyAct act in acts)
@@ -983,7 +993,31 @@ public static class EnemySkillTableImporter
 
             act.specialLogic.ToString(),
 
-            EscapeCsv(act.skilleffect)
+            act.specialLogic.ToString(),
+
+            EscapeCsv(act.skilleffect),
+            EscapeCsv(JoinIntList(act.soundIndexes)),
+            EscapeCsv(JoinFloatList(act.soundDelays))
+        );
+    }
+
+    private static string JoinIntList(List<int> values)
+    {
+        if (values == null || values.Count == 0)
+            return "";
+
+        return string.Join(",", values);
+    }
+
+    private static string JoinFloatList(List<float> values)
+    {
+        if (values == null || values.Count == 0)
+            return "";
+
+        return string.Join(
+            ",",
+            values.ConvertAll(v => v.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)
+            )
         );
     }
 
@@ -1019,9 +1053,7 @@ public static class EnemySkillTableImporter
 
             if (c == '"')
             {
-                if (quoted &&
-                   i + 1 < line.Length &&
-                   line[i + 1] == '"')
+                if (quoted && i + 1 < line.Length && line[i + 1] == '"')
                 {
                     current += '"';
                     i++;
@@ -1049,9 +1081,7 @@ public static class EnemySkillTableImporter
         return result;
     }
 
-    private static string Get(
-        List<string> values,
-        int index)
+    private static string Get(List<string> values, int index)
     {
         if (index < 0 || index >= values.Count)
             return "";
@@ -1059,29 +1089,60 @@ public static class EnemySkillTableImporter
         return values[index].Trim();
     }
 
-    private static int ParseInt(
-        List<string> values,
-        int index)
+    private static int ParseInt(List<string> values, int index)
     {
-        int.TryParse(
-            Get(values, index),
-            out int result
-        );
+        int.TryParse(Get(values, index),out int result);
 
         return result;
     }
 
-    private static bool ParseBool(
-        List<string> values,
-        int index)
+    private static bool ParseBool(List<string> values, int index)
     {
         string value = Get(values, index);
 
-        return value == "1" ||
-               value.Equals(
-                   "true",
-                   StringComparison.OrdinalIgnoreCase
-               );
+        return value == "1" || value.Equals("true",StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static List<int> ParseIntList(string value)
+    {
+        List<int> result = new();
+
+        if (string.IsNullOrWhiteSpace(value))
+            return result;
+
+        string[] split = value.Split(',');
+
+        foreach (string item in split)
+        {
+            if (int.TryParse(item.Trim(), out int parsed))
+                result.Add(parsed);
+        }
+
+        return result;
+    }
+
+    private static List<float> ParseFloatList(string value)
+    {
+        List<float> result = new();
+
+        if (string.IsNullOrWhiteSpace(value))
+            return result;
+
+        string[] split = value.Split(',');
+
+        foreach (string item in split)
+        {
+            if (float.TryParse(
+                item.Trim(),
+                System.Globalization.NumberStyles.Float,
+                System.Globalization.CultureInfo.InvariantCulture,
+                out float parsed))
+            {
+                result.Add(parsed);
+            }
+        }
+
+        return result;
     }
 }
 #endif
