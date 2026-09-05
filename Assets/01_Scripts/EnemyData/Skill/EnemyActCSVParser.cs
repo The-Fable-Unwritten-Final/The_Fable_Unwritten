@@ -24,7 +24,7 @@ public static class EnemyActCSVParser
                 continue;
 
             string line = lines[i].TrimEnd('\r');
-            string[] t = line.Split(',');
+            List<string> t = ParseCsvLine(line);
 
             if (!TryParseInt(t, 0, out int index))
                 continue;
@@ -155,14 +155,11 @@ public static class EnemyActCSVParser
                     modifierConditionValue = ParseInt(t, 17),
 
                     // 특수 기믹
-                    specialLogic = ParseEnum(
-                        t, 18, EnemySpecialLogic.None),
+                    specialLogic = ParseEnum(t, 18, EnemySpecialLogic.None),
                     skilleffect = ParseString(t, 19),
-/*
-                    // 사운드
-                    soundIndex = ParseInt(t, 20),
-                    soundDelay = ParseFloat(t, 21)
-*/
+
+                    soundIndexes = ParseIntList(ParseString(t, 20)),
+                    soundDelays = ParseFloatList(ParseString(t, 21))
                 };
 
                 list.Add(act);
@@ -267,18 +264,163 @@ public static class EnemyActCSVParser
         return tokens[index].Trim();
     }
 
-    private static float ParseFloat(string[] tokens, int index)
+    private static List<string> ParseCsvLine(string line)
     {
-        if (index >= tokens.Length)
-            return 0f;
+        List<string> result = new();
+        bool quoted = false;
+        string current = "";
+
+        for (int i = 0; i < line.Length; i++)
+        {
+            char c = line[i];
+
+            if (c == '"')
+            {
+                if (quoted &&
+                   i + 1 < line.Length &&
+                   line[i + 1] == '"')
+                {
+                    current += '"';
+                    i++;
+                }
+                else
+                {
+                    quoted = !quoted;
+                }
+
+                continue;
+            }
+
+            if (c == ',' && !quoted)
+            {
+                result.Add(current);
+                current = "";
+                continue;
+            }
+
+            current += c;
+        }
+
+        result.Add(current);
+
+        return result;
+    }
+
+    private static int ParseInt(List<string> tokens, int index)
+    {
+        if (index >= tokens.Count)
+            return 0;
 
         string value = tokens[index].Trim();
 
         if (string.IsNullOrWhiteSpace(value))
-            return 0f;
+            return 0;
 
-        return float.TryParse(value, out float result)
+        return int.TryParse(value, out int result)
             ? result
-            : 0f;
+            : 0;
+    }
+
+    private static bool TryParseInt(
+        List<string> tokens,
+        int index,
+        out int result)
+    {
+        result = 0;
+
+        if (index >= tokens.Count)
+            return false;
+
+        return int.TryParse(tokens[index].Trim(), out result);
+    }
+
+    private static bool ParseBool(List<string> tokens, int index)
+    {
+        if (index >= tokens.Count)
+            return false;
+
+        string value = tokens[index].Trim();
+
+        if (value == "1")
+            return true;
+
+        if (value == "0")
+            return false;
+
+        return bool.TryParse(value, out bool result) && result;
+    }
+
+    private static T ParseEnum<T>(
+        List<string> tokens,
+        int index,
+        T defaultValue)
+        where T : struct
+    {
+        if (index >= tokens.Count)
+            return defaultValue;
+
+        string value = tokens[index].Trim();
+
+        if (string.IsNullOrWhiteSpace(value))
+            return defaultValue;
+
+        if (Enum.TryParse(value, true, out T result))
+            return result;
+
+        Debug.LogWarning(
+            $"[EnemyActCSVParser] {typeof(T).Name} 변환 실패: '{value}'"
+        );
+
+        return defaultValue;
+    }
+
+    private static string ParseString(List<string> tokens, int index)
+    {
+        if (index >= tokens.Count)
+            return "";
+
+        return tokens[index].Trim();
+    }
+
+    private static List<int> ParseIntList(string value)
+    {
+        List<int> result = new();
+
+        if (string.IsNullOrWhiteSpace(value))
+            return result;
+
+        string[] split = value.Split(',');
+
+        foreach (string item in split)
+        {
+            if (int.TryParse(item.Trim(), out int parsed))
+                result.Add(parsed);
+        }
+
+        return result;
+    }
+
+    private static List<float> ParseFloatList(string value)
+    {
+        List<float> result = new();
+
+        if (string.IsNullOrWhiteSpace(value))
+            return result;
+
+        string[] split = value.Split(',');
+
+        foreach (string item in split)
+        {
+            if (float.TryParse(
+                item.Trim(),
+                System.Globalization.NumberStyles.Float,
+                System.Globalization.CultureInfo.InvariantCulture,
+                out float parsed))
+            {
+                result.Add(parsed);
+            }
+        }
+
+        return result;
     }
 }

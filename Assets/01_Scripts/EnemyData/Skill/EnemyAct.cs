@@ -45,8 +45,8 @@ public class EnemyAct
 
     public string skilleffect;
 
-    public int soundIndex;
-    public float soundDelay;
+    public List<int> soundIndexes;
+    public List<float> soundDelays;
 
 
     // =========================================================
