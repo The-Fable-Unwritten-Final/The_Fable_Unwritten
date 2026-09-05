@@ -259,6 +259,7 @@ public class UI_CampController : MonoBehaviour
                     foreach (var card in cardsToRemove)
                     {
                         character.currentDeck.Remove(card);
+                        GameManager.Instance.analyticsLogger.LogCardRemoveInfo(card.index); // 애널리틱스 기록
                     }
                     character.UpdateCurrentDeckIndexes();
                 }
