@@ -122,6 +122,10 @@ public class TurnController : MonoBehaviour
         yield return new WaitUntil(() => isDone);
 
         yield return new WaitForSeconds(0.5f); // 텀 살짝 주고
+
+        if (turnState == TurnState.GameEnd)
+            yield break;
+
         SetTurnState(TurnState.StartPlayerTurn); // 다음 턴
     }
 
@@ -167,6 +171,8 @@ public class TurnController : MonoBehaviour
     {
         //playerturn일 떄만 다음 턴 진행 가능
         if (turnState != TurnState.PlayerTurn) return;
+        if (onAction) return;
+
         SoundManager.Instance.PlaySFX(SoundCategory.Button, 0); // 기본 버튼 사운드
         // 카드 초과 체크하고 초과시 카드 버리기 요청.
         if (!GameManager.Instance.cardDiscardController.CheckCountOk()) return; // 만약 카드수량이 초과시 return.
