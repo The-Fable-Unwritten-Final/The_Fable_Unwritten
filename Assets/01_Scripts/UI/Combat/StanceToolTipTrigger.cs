@@ -12,10 +12,7 @@ public class StanceTooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointe
 
         string stance = owner.StanceSystem.CurrentStance.ToString();
 
-        StatusTooltipUI.Instance.Show(
-            stance,
-            eventData.position
-        );
+        StatusTooltipUI.Instance.Show(stance,eventData.position);
     }
 
     public void OnPointerExit(PointerEventData eventData)
