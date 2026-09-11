@@ -51,10 +51,10 @@ public class SoundManager : MonoSingleton<SoundManager>
 
         { SceneNameData.TitleScene, 0 },
         { SceneNameData.SubTitleScene, 0 },
-        { SceneNameData.RandomEventScene, 1 },
         { SceneNameData.StageScene, 1 },
         { SceneNameData.CampScene, 2 },
         { SceneNameData.CombatScene, 3 },
+        { SceneNameData.RandomEventScene, 4},
     };
 
 
@@ -95,7 +95,25 @@ public class SoundManager : MonoSingleton<SoundManager>
         } else*/
         if (sceneToBGMKey.TryGetValue(scene.name, out var bgmKey))
         {
-            PlayBGM(SoundCategory.BGM, bgmKey);
+            if (bgmKey == 3)
+            {
+                switch (ProgressDataManager.Instance.CurrentNode?.type)
+                {
+                    case NodeType.NormalBattle:
+                        PlayBGM(SoundCategory.BGM, 31); // 보스 전투 BGM
+                        return;
+                    case NodeType.EliteBattle:
+                        PlayBGM(SoundCategory.BGM, 32); // 엘리트 전투 BGM
+                        return;
+                    case NodeType.Boss: // 추후 5스테이지 작업 끝나면 여기서 한번 더 분기 생성
+                        PlayBGM(SoundCategory.BGM, 33); // 보스 전투 BGM
+                        return;
+                }
+            }
+            else
+            {
+                PlayBGM(SoundCategory.BGM, bgmKey);
+            }
         }
 
         if (scene.name == SceneNameData.CombatScene)
