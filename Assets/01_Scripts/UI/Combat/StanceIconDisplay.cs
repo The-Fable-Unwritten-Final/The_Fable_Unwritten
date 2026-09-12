@@ -16,6 +16,11 @@ public class StanceIconDisplay : MonoBehaviour
     [Header("Leon")]
     [SerializeField] private Sprite rushIcon;
     [SerializeField] private Sprite defenseIcon;
+    private void Awake()
+    {
+        if (icon != null)
+            icon.enabled = false;
+    }
 
     public void UpdateIcon(StancType stance)
     {

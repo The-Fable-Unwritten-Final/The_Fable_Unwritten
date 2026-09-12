@@ -40,19 +40,19 @@ public class HealEffect : CardEffectBase
 
         switch (target)
         {
-            case 0:
+            case 1:
                 if(slot.middleSlot.IsAlive())
                     HealAndDisplay(slot.middleSlot);
                 break;
-            case 1:
+            case 2:
                 if (slot.backSlot.IsAlive())
                     HealAndDisplay(slot.backSlot);
                 break;
-            case 2:
+            case 3:
                 if (slot.frontSlot.IsAlive())
                     HealAndDisplay(slot.frontSlot);
                 break;
-            case 3:
+            case 0:
             case -1:
             default:
                 foreach(var target in targets)
