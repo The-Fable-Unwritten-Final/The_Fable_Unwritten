@@ -147,6 +147,11 @@ public class PopupUI_CombatReward : BasePopupUI
                     {
                         CharHPAdd(targetCharacter, hpIncrease);
                     }
+
+                    // 카드 보상 선택 애널리틱스 기록
+                    int cardCount = targetCharacter.currentDeck.Count(c => c.index == selectedRewardCard.index);
+                    GameManager.Instance.analyticsLogger.LogSelectCardInfo(selectedRewardCard.index,cardCount);
+
                 }
                 
                 setting.RetryFromStart = false;
