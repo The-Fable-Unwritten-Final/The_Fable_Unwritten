@@ -1,9 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class BasePopupUI : MonoBehaviour
 {
+    public Button backGround;
+    private void Awake()
+    {
+        if (backGround != null)
+        {
+            // 별도의 설정을 하지 않은 모든 팝업 UI는 뒷 배경을 클릭하면 닫히도록 설정
+            backGround.onClick.AddListener(Close);
+        }
+    }
+
     public virtual void Open()
     {
         Stack<BasePopupUI> popStack = UIManager.Instance.popupStack;
