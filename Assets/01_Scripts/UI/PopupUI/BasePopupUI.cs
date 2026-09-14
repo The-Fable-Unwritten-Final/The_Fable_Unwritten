@@ -6,17 +6,31 @@ using UnityEngine.UI;
 public abstract class BasePopupUI : MonoBehaviour
 {
     public Button backGround;
-    private void Awake()
+    private bool isListenerRegistered = false;
+
+    private void OnEnable()
     {
-        if (backGround != null)
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 102); // 팝업 활성화 시 사운드
+    }
+    private void OnDisable()
+    {
+        // 팝업 비활성화 시 사운드
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 103);
+    }
+
+    private void RegisterBackgroundListener()
+    {
+        if (backGround != null && !isListenerRegistered)
         {
             // 별도의 설정을 하지 않은 모든 팝업 UI는 뒷 배경을 클릭하면 닫히도록 설정
             backGround.onClick.AddListener(Close);
+            isListenerRegistered = true;
         }
     }
 
     public virtual void Open()
     {
+        RegisterBackgroundListener();
         Stack<BasePopupUI> popStack = UIManager.Instance.popupStack;
 
         if (popStack.Count > 0)
@@ -46,4 +60,6 @@ public abstract class BasePopupUI : MonoBehaviour
 
         gameObject.SetActive(false);
     }
+
+    
 }

@@ -23,6 +23,7 @@ public class CampTalkController : MonoBehaviour
         // Space 키로 다음 대화 진행
         if (isDialogueActive && Input.GetKeyDown(KeyCode.Space))
         {
+            SoundManager.Instance.PlaySFX(SoundCategory.SFX, 102);
             bool wasSkipped = false;
 
             // TypeWriter 실행 중이면 스킵

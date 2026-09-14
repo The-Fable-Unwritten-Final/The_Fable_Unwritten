@@ -114,11 +114,12 @@ public class UI_MainTitle : MonoBehaviour
     {
         // 저장하고 나가기
         ProgressDataManager.Instance.SaveProgress(true);
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 101);
         Application.Quit();
     }
 
     public void OnClickButtonSound()
     {
-        SoundManager.Instance.PlaySFX(SoundCategory.Button, 0); // 기본 버튼 사운드
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 101);
     }
 }

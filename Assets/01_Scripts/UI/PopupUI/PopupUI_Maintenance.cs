@@ -157,6 +157,7 @@ public class PopupUI_Maintenance : BasePopupUI
             // 클로저 문제 방지 위해 로컬 변수 사용
             CardModel cardData = card;
             cardBtn.onClick.AddListener(() => OnCardSelected(cardData, cardBtn));
+            cardBtn.onClick.AddListener(() => SoundManager.Instance.PlaySFX(SoundCategory.SFX, 101));
 
             cardButtons.Add(cardBtn);
         }
@@ -312,7 +313,7 @@ public class PopupUI_Maintenance : BasePopupUI
         }
 
         burnAnimation.SetTrigger("Burn");
-
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 503); // 제거 사운드 재생
         // 기존 코루틴이 있으면 중지
         if (burnCoroutine != null)
         {

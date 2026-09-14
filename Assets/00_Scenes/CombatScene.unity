@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -670,6 +670,7 @@ MonoBehaviour:
   headpoint: {fileID: 1654612101}
   overheadpoint: {fileID: 1418590712}
   aheadpoint: {fileID: 102226778}
+  anchorController: {fileID: 0}
   hpBarDisplay: {fileID: 3565488262354688568}
   dmgBarDisplay: {fileID: 1634073424}
   targetArrow: {fileID: 4322107113203982984}
@@ -2452,6 +2453,7 @@ GameObject:
   - component: {fileID: 539502523}
   - component: {fileID: 539502522}
   - component: {fileID: 539502521}
+  - component: {fileID: 539502525}
   m_Layer: 5
   m_Name: MiniMap
   m_TagString: Untagged
@@ -2585,6 +2587,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 539502519}
   m_CullTransparentMesh: 1
+--- !u!114 &539502525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 539502519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 369be2b26ee4e7f49b30585b81b1e343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundCat: 10
+  key: 101
+  clickCooldown: 0.3
+  playOnce: 0
 --- !u!1 &544696361
 GameObject:
   m_ObjectHideFlags: 0
@@ -2871,6 +2889,7 @@ MonoBehaviour:
   headpoint: {fileID: 668295094}
   overheadpoint: {fileID: 1028194933}
   aheadpoint: {fileID: 523951846}
+  anchorController: {fileID: 0}
   hpBarDisplay: {fileID: 2629051018129821340}
   dmgBarDisplay: {fileID: 1628950801}
   targetArrow: {fileID: 1242386048}
@@ -6053,6 +6072,7 @@ GameObject:
   - component: {fileID: 996639400}
   - component: {fileID: 996639399}
   - component: {fileID: 996639398}
+  - component: {fileID: 996639402}
   m_Layer: 5
   m_Name: Book
   m_TagString: Untagged
@@ -6186,6 +6206,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 996639396}
   m_CullTransparentMesh: 1
+--- !u!114 &996639402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996639396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 369be2b26ee4e7f49b30585b81b1e343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundCat: 10
+  key: 101
+  clickCooldown: 0.3
+  playOnce: 0
 --- !u!1001 &997976995
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6832,6 +6868,7 @@ GameObject:
   - component: {fileID: 1027908683}
   - component: {fileID: 1027908682}
   - component: {fileID: 1027908681}
+  - component: {fileID: 1027908685}
   m_Layer: 5
   m_Name: Setting
   m_TagString: Untagged
@@ -6965,6 +7002,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1027908679}
   m_CullTransparentMesh: 1
+--- !u!114 &1027908685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1027908679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 369be2b26ee4e7f49b30585b81b1e343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundCat: 10
+  key: 101
+  clickCooldown: 0.3
+  playOnce: 0
 --- !u!1 &1028194932
 GameObject:
   m_ObjectHideFlags: 0
@@ -11794,6 +11847,7 @@ MonoBehaviour:
   headpoint: {fileID: 13337782}
   overheadpoint: {fileID: 979249891}
   aheadpoint: {fileID: 1380380083}
+  anchorController: {fileID: 0}
   hpBarDisplay: {fileID: 3615750389766941839}
   dmgBarDisplay: {fileID: 1219395581}
   targetArrow: {fileID: 125084246}
