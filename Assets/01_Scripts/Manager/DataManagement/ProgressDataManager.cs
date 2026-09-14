@@ -9,6 +9,16 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
 {
     public const int MAX_ITEM_COUNT = 4;       //현재 전리품의 최종 개수
 
+    /// <summary>
+    /// 기본 해금 카드 덱 (DataManager와 동기화 유지)
+    /// </summary>
+    private static readonly HashSet<int> DefaultUnlockedCards = new() 
+    { 
+        1000, 1003, 1004, 1005, 1006, 1007, 1009, 1010, 
+        2000, 2001, 2002, 2003, 2004, 2005, 2006, 2008, 2009, 
+        3000, 3001, 3004, 3006, 3009, 3011 
+    };
+
     [Header("기본 플레이어 파티 데이터")]
     [SerializeField] private PlayerPartySO defaultPlayerParty;
     [SerializeField]public List<PlayerData> PlayerDatas { get; private set; } = new();  //게임에 적용할 플레이어 데이터들.
@@ -559,7 +569,21 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
         EventEffectManager.Instance.LoadEventEffectsData(untillNextCombat, untillNextStage, untillEndAdventure);
 
-        unlockedCards = data.unlockedCardIndexes.ToHashSet();
+        // 저장된 해금 카드 로드 + 존재하지 않는 카드 필터링
+        var loadedUnlockedCards = data.unlockedCardIndexes.ToHashSet();
+        
+        // DataManager에 실제로 존재하는 카드만 유효한 것으로 판단
+        var validCardIndices = new HashSet<int>(DataManager.Instance.AllCards.Select(c => c.index));
+        
+        // 존재하지 않는 카드는 unlockedCards에서 제거 (저장 데이터는 유지)
+        var invalidCards = loadedUnlockedCards.Where(c => !validCardIndices.Contains(c)).ToList();
+        if (invalidCards.Count > 0)
+        {
+            Debug.LogWarning($"[ProgressDataManager] DB에 없는 카드의 해금 상태 해제: {string.Join(", ", invalidCards)}");
+            loadedUnlockedCards.RemoveWhere(c => !validCardIndices.Contains(c));
+        }
+        
+        unlockedCards = loadedUnlockedCards;
 
         for (int i = 0; i < Mathf.Min(itemCounts.Length, data.itemCounts.Length); i++)
             itemCounts[i] = data.itemCounts[i];
