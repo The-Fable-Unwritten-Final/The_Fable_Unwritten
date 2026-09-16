@@ -65,7 +65,7 @@ public class DataManager : MonoSingleton<DataManager>
     //private static readonly HashSet<int> DefaultUnlockedCards = new() { 1000, 1004, 1009, 2000, 2001, 2002, 3000, 3001, 3004 };
     // 활용 가능한 카드들이 너무 부족하기에, 랜덤 이벤트로 해금 가능한 카드들을 일시적으로 전부 해금하여 사용 가능한 상태로 제공하고, 추후 정식 출시 단계에서 롤백.
     private static readonly HashSet<int> DefaultUnlockedCards
-    = new() { 1000, 1003, 1004, 1005, 1006, 1007, 1009, 1010, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2008, 2009, 3000, 3001, 3004, 3006, 3009, 3011 };
+    = new() { 1000, 1003, 1004, 1005, 1006, 1007, 1009, 1010, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2008, 2009, 3000, 3001, 3002, 3004, 3006, 3009, 3011 };
     protected override void Awake()
     {
         base.Awake();
