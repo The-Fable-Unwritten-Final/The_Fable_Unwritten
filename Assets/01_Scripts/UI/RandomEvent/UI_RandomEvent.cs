@@ -132,32 +132,26 @@ public class UI_RandomEvent : MonoBehaviour
     }
 
     /// <summary>
-    /// 텍스트 양에 따라 최적의 폰트 크기 계산 (적용 중 X)
+    /// 텍스트가 완전히 표시되었을 때 AutoSize가 계산할 폰트 크기를 미리 구하기
     /// </summary>
-    private float CalculateOptimalFontSize(string text) // 현재 컴포넌트의 autoSize 사용중이라 미적용
+    private float GetAutoSizeFontSize(string text)
     {
         if (string.IsNullOrEmpty(text))
             return maxFontSize;
 
-        // 줄 수 계산
-        int lineCount = descriptionTxt.textInfo.lineCount;
-        // 문자 수 계산
-        int charCount = text.Length;
+        // 임시로 텍스트 설정
+        descriptionTxt.text = text;
+        descriptionTxt.enableAutoSizing = true;
+        Canvas.ForceUpdateCanvases();
 
-        // 줄 수에 따른 폰트 크기 계산 (선형 감소)
-        float sizeByLineCount = maxFontSize - (lineCount - 1) * 1.5f;
+        // AutoSize가 계산한 최종 폰트 크기 저장
+        float finalSize = descriptionTxt.fontSize;
 
-        // 문자 수에 따른 폰트 크기 계산
-        float sizeByCharCount = maxFontSize - (charCount / 100f) * 2f;
+        // AutoSizing 비활성화
+        descriptionTxt.enableAutoSizing = false;
+        descriptionTxt.text = "";
 
-        // 더 작은 값을 선택
-        float calculatedSize = Mathf.Min(sizeByLineCount, sizeByCharCount);
-
-        int extraSize = 0;
-        if (descriptionPages.Count >= 2) extraSize = 3; // 임시 크기 보정
-
-        // 최소/최대 범위 내로 제한
-        return Mathf.Clamp(calculatedSize, minFontSize, maxFontSize) + extraSize;
+        return finalSize;
     }
 
     private void InitUI(RandomEventData data)
@@ -256,9 +250,10 @@ public class UI_RandomEvent : MonoBehaviour
         currentDescriptionPage = pageIndex;
         string pageText = descriptionPages[pageIndex];
 
-        // 최적 폰트 크기 계산 및 설정 (현재 컴포넌트의 autoSize 사용중이라 미적용)
-        float optimalFontSize = CalculateOptimalFontSize(pageText);
-        descriptionTxt.fontSize = optimalFontSize;
+        // 이 페이지 텍스트가 완전히 표시되었을 때 AutoSize가 계산할 폰트 크기를 미리 구하기
+        float autoSizeFontSize = GetAutoSizeFontSize(pageText);
+        descriptionTxt.fontSize = autoSizeFontSize;
+        descriptionTxt.enableAutoSizing = false; // 타이핑 중 자동 재계산 방지
 
         var customEffect = descriptionTxt.GetComponent<TMPCustomEffect>();
         if (customEffect != null)
@@ -392,9 +387,10 @@ public class UI_RandomEvent : MonoBehaviour
         currentDescriptionPage = pageIndex;
         string pageText = descriptionPages[pageIndex];
 
-        // 최적 폰트 크기 계산 및 설정 (현재 컴포넌트의 autoSize 사용중이라 미적용)
-        float optimalFontSize = CalculateOptimalFontSize(pageText);
-        descriptionTxt.fontSize = optimalFontSize;
+        // 이 페이지 텍스트가 완전히 표시되었을 때 AutoSize가 계산할 폰트 크기를 미리 구하기
+        float autoSizeFontSize = GetAutoSizeFontSize(pageText);
+        descriptionTxt.fontSize = autoSizeFontSize;
+        descriptionTxt.enableAutoSizing = false; // 타이핑 중 자동 재계산 방지
 
         var customEffect = descriptionTxt.GetComponent<TMPCustomEffect>();
         if (customEffect != null)
