@@ -55,6 +55,39 @@ public static class EnemyPattern
 
         yield return ExecuteV2Skill(enemyComponent,actData,targets,attackType);
     }
+    private static void PlaySkillSounds(EnemyAct actData)
+    {
+        if (actData.soundIndexes == null || actData.soundIndexes.Count == 0)
+        {
+            Debug.Log($"[EnemySFX] Skill {actData.index} - 사운드 데이터 없음");
+            return;
+        }
+
+        Debug.Log(
+            $"[EnemySFX] Skill {actData.index} - " +
+            $"SoundCount: {actData.soundIndexes.Count}, " +
+            $"DelayCount: {(actData.soundDelays != null ? actData.soundDelays.Count : 0)}"
+        );
+
+        for (int i = 0; i < actData.soundIndexes.Count; i++)
+        {
+            float delay = 0f;
+
+            if (actData.soundDelays != null && i < actData.soundDelays.Count)
+                delay = actData.soundDelays[i];
+
+            Debug.Log(
+                $"[EnemySFX] Skill {actData.index} - " +
+                $"[{i}] SoundIndex: {actData.soundIndexes[i]}, Delay: {delay:F2}s"
+            );
+
+            SoundManager.Instance.PlaySFX(
+                SoundCategory.Enemy,
+                actData.soundIndexes[i],
+                delay
+            );
+        }
+    }
 
 
     private static IEnumerator ExecuteV2Skill(Enemy caster, EnemyAct actData, List<IStatusReceiver> skillTargets, int attackType)
@@ -62,6 +95,7 @@ public static class EnemyPattern
         bool hitTriggered = false;
         int pendingImpacts = 0;
 
+        PlaySkillSounds(actData);
 
         caster.PlayAttackAnimation(attackType,
             () =>
@@ -446,11 +480,6 @@ public static class EnemyPattern
             onImpact?.Invoke();
             return;
         }
-
-        if (target == caster)
-            SoundManager.Instance.PlaySFX(SoundCategory.Enemy,0);
-        else
-            SoundManager.Instance.PlaySFX(SoundCategory.Enemy,caster.enemyData.IDNum);
 
         float scaleFactor =DetermineEffectScale(caster.enemyData.type);
 

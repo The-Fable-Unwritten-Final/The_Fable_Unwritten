@@ -147,21 +147,21 @@ public class BattleFlowController : MonoBehaviour
                 switch(pc.playerData.IDNum)
                 {
                     case 0:
-                        if (pc.playerData.currentStance == StancType.None)
+                        if (!(pc.playerData.currentStance == StancType.Insight))
                         {
-                            pc.playerData.currentStance = StancType.Seek;
+                            pc.ChangeStance(StancType.Seek);
                         }
                         break;
                     case 1:
-                        if (pc.playerData.currentStance == StancType.None)
+                        if (!(pc.playerData.currentStance == StancType.Discipline))
                         {
-                            pc.playerData.currentStance = StancType.Mercy;
+                            pc.ChangeStance(StancType.Mercy);
                         }
                         break;
                     case 2:
-                        if (pc.playerData.currentStance == StancType.None)
+                        if (!(pc.playerData.currentStance == StancType.Defense))
                         {
-                            pc.playerData.currentStance = StancType.Rush;
+                            pc.ChangeStance(StancType.Rush);
                         }
                         break;
                     default:
@@ -405,7 +405,12 @@ public class BattleFlowController : MonoBehaviour
     /// </summary>
     public void ExecuteEnemyTurn(Action onEnemyTurnComplete)
     {
-        if (isBattleEnded) return;
+        if (isBattleEnded)
+        {
+            onEnemyTurnComplete?.Invoke();
+            return;
+        }
+
         StartCoroutine(EnemyTurnCoroutine(() =>
         {
             onEnemyTurnComplete?.Invoke();
@@ -507,6 +512,11 @@ public class BattleFlowController : MonoBehaviour
 
     public void CheckBattleEnd()
     {
+        bool hasPendingEnemyDeath = enemyParty.OfType<Enemy>().Any(e => e != null && e.IsDeathPending);
+
+        if (hasPendingEnemyDeath)
+            return;
+
         bool allPlayersDead = playerParty.TrueForAll(p => !p.IsAlive());
         bool allEnemiesDead = enemyParty.TrueForAll(p => !p?.IsAlive() ?? true);
 

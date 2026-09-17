@@ -102,9 +102,7 @@ public class PopupUI_CombatReward : BasePopupUI
             // 리워드 로드 + 텍스트 표시
             confirmButton.onClick.RemoveAllListeners();
             confirmButton.onClick.AddListener(() =>
-            {
-                SoundManager.Instance.PlaySFX(SoundCategory.Button, 0); // 기본 버튼 사운드
-                
+            {               
                 // 선택된 보상 카드를 해당 캐릭터의 덱에 추가
                 if (selectedRewardCard != null)
                 {
@@ -147,6 +145,11 @@ public class PopupUI_CombatReward : BasePopupUI
                     {
                         CharHPAdd(targetCharacter, hpIncrease);
                     }
+
+                    // 카드 보상 선택 애널리틱스 기록
+                    int cardCount = targetCharacter.currentDeck.Count(c => c.index == selectedRewardCard.index);
+                    GameManager.Instance.analyticsLogger.LogSelectCardInfo(selectedRewardCard.index,cardCount);
+
                 }
                 
                 setting.RetryFromStart = false;
@@ -368,6 +371,7 @@ public class PopupUI_CombatReward : BasePopupUI
 
             // Button 이벤트: 카드 선택 + confirmButton 활성화
             cardBtn.onClick.AddListener(() => OnRewardCardSelected(selectedCard, cardRect));
+            cardBtn.onClick.AddListener(() => SoundManager.Instance.PlaySFX(SoundCategory.SFX, 101));
 
             rewardCardButtons.Add(cardBtn);
             rewardCardRectTransforms.Add(cardRect);

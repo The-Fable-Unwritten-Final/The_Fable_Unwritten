@@ -9,6 +9,16 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
 {
     public const int MAX_ITEM_COUNT = 4;       //현재 전리품의 최종 개수
 
+    /// <summary>
+    /// 기본 해금 카드 덱 (DataManager와 동기화 유지)
+    /// </summary>
+    private static readonly HashSet<int> DefaultUnlockedCards = new() 
+    { 
+        1000, 1003, 1004, 1005, 1006, 1007, 1009, 1010, 
+        2000, 2001, 2002, 2003, 2004, 2005, 2006, 2008, 2009, 
+        3000, 3001, 3004, 3006, 3009, 3011 
+    };
+
     [Header("기본 플레이어 파티 데이터")]
     [SerializeField] private PlayerPartySO defaultPlayerParty;
     [SerializeField]public List<PlayerData> PlayerDatas { get; private set; } = new();  //게임에 적용할 플레이어 데이터들.
@@ -70,13 +80,17 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     public List<GraphNode> VisitedNodes { get; private set; } = new();  // 플레이어가 진행한 노드 리스트
     public StageTheme CurrentTheme { get; private set; }  // 진행 테마 저장용
     public int SavedEnemySetIndex { get; set; }           // 진행 에너미 세트 저장용
-    public int SavedRandomEvent { get; set; }             // 저장용 랜던이밴트 인덱스
+    public int SavedRandomEvent { get; set; }             // 저장용 랜벤이밴트 인덱스
     public int CurrentExp { get; set; }                 //현재까지 얻은 Exp;
     public bool IsNewCamp { get; set; }                 // 첫 야영지 확인용 (첫 캠프에만 튜토리얼)
     public bool IsSecondGame { get; set; }                  // 새로하기 확인용 (완전 처음 일때 false / 이후 새로하기 일때 true)
     public bool IsEndingClear { get; set; }                 // 엔딩봤을 경우
     // 설정 데이터
     public Vector2Int[] resolutions = new Vector2Int[1];
+
+    // 애널리틱스 정보
+    public int battleCount { get; set; } = 0; // 전투 횟수
+    public int turnCount { get; set; } = 0; // 현재 턴 수
 
     protected override void Awake()
     {
@@ -389,6 +403,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
         data.unlockedCardIndexes = unlockedCards.ToList();
         data.itemCounts = itemCounts.ToArray();
+        data.battleCount = battleCount;  // 전투 횟수 저장
         if(safe)
         {
             // 플레이어 데이터 저장 + 현재 적용된 버프/디버프 정보
@@ -554,10 +569,26 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
 
         EventEffectManager.Instance.LoadEventEffectsData(untillNextCombat, untillNextStage, untillEndAdventure);
 
-        unlockedCards = data.unlockedCardIndexes.ToHashSet();
+        // 저장된 해금 카드 로드 + 존재하지 않는 카드 필터링
+        var loadedUnlockedCards = data.unlockedCardIndexes.ToHashSet();
+        
+        // DataManager에 실제로 존재하는 카드만 유효한 것으로 판단
+        var validCardIndices = new HashSet<int>(DataManager.Instance.AllCards.Select(c => c.index));
+        
+        // 존재하지 않는 카드는 unlockedCards에서 제거 (저장 데이터는 유지)
+        var invalidCards = loadedUnlockedCards.Where(c => !validCardIndices.Contains(c)).ToList();
+        if (invalidCards.Count > 0)
+        {
+            Debug.LogWarning($"[ProgressDataManager] DB에 없는 카드의 해금 상태 해제: {string.Join(", ", invalidCards)}");
+            loadedUnlockedCards.RemoveWhere(c => !validCardIndices.Contains(c));
+        }
+        
+        unlockedCards = loadedUnlockedCards;
 
         for (int i = 0; i < Mathf.Min(itemCounts.Length, data.itemCounts.Length); i++)
             itemCounts[i] = data.itemCounts[i];
+
+        battleCount = data.battleCount;  // 전투 횟수 로드
 
         ApplySaveToPlayerDatas(data.playerSaves);
         InitializePlayerManagerWithLoadedData(DataManager.Instance.AllCards);
@@ -624,6 +655,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     /// </summary>
     public void FullResetProgress()
     {
+        battleCount = 0;  // 전투 횟수 리셋
         GameStartType = GameStartType.New;
         BattleLogManager.Instance.ResetGameLog();
         untillNextCombat.Clear();
@@ -725,8 +757,22 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     /// <summary>
     /// 튜토리얼을 끝낸 이후 new game 시 호출 및 저장 (카드 해금, 문체 해금의 경우 보존)
     /// </summary>
-    public void ResetProgress() 
+    public void ResetProgress()
     {
+        // 애널리틱스
+        int sophiaMaxHP = 0; int kylaMaxHP = 0; int leonMaxHP = 0;
+
+        foreach (var player in PlayerDatas)
+        {
+            if (player.IDNum == 0) sophiaMaxHP = (int)player.MaxHP;      // 소피아
+            else if (player.IDNum == 1) kylaMaxHP = (int)player.MaxHP;  // 카일라
+            else if (player.IDNum == 2) leonMaxHP = (int)player.MaxHP;   // 레온
+        }
+
+        GameManager.Instance.analyticsLogger.LogCharMaxHPInfo(sophiaMaxHP, kylaMaxHP, leonMaxHP);
+        GameManager.Instance.analyticsLogger.LogRunEndInfo(2,StageIndex,battleCount);
+        GameManager.Instance.analyticsLogger.LogBattleEndInfo(SavedEnemySetIndex, 2,turnCount, BattleLogManager.Instance.UsedCardsForGame.Count);
+        // 데이터 초기화
         GameStartType = GameStartType.New;
         BattleLogManager.Instance.ResetGameLog();
         untillNextCombat.Clear();
@@ -791,6 +837,11 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         currentDefID = 1;
         inkAmount = 0;
         maxInkAmount = 10;
+        foreach(var cha in PlayerDatas)
+        {
+            cha.SetToDefaultMaxHP(); // 캐릭터 최대 체력 초기화
+        }
+        battleCount = 0;  // 전투 횟수 리셋
         PlayerPrefs.DeleteKey("ProgressSaveData");
         SaveProgress(true);
         // 저장된 데이터 다시 로드하여 메모리에 반영
@@ -882,6 +933,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         {
             cha.SetToDefaultMaxHP(); // 캐릭터 최대 체력 초기화
         }
+        battleCount = 0;  // 전투 횟수 리셋
 
         // 해금 정보는 보존
         // unlockedCards.Clear();  보존
@@ -1299,8 +1351,8 @@ public class ProgressSaveData
     public List<int> unlockedCardIndexes = new();
     public int[] itemCounts = new int[ProgressDataManager.MAX_ITEM_COUNT];
     public List<int> unlockedCharacterIDs = new(); // 저장용 필드 (HashSet -> List 직렬화)
-
     public Vector2Int[] resolutions;
+    public int battleCount = 0; // 애널리틱스: 전투 횟수
 
     [System.Serializable] public class IdealCounterEntry { public string key; public int value; }
 

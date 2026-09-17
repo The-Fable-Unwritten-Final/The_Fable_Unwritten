@@ -135,8 +135,30 @@ public static class LocaleDataManager
         // 카드 툴팁 : "Card Tooltip"
         // UI 로컬 : "Locale Table"
         // 이상 실현 텍스트 : "Idle Table"
-        var table = LocalizationSettings.StringDatabase.GetTable(tableName);
-        return table.GetEntry(key).LocalizedValue;
+        
+        try
+        {
+            var table = LocalizationSettings.StringDatabase.GetTable(tableName);
+            if (table == null)
+            {
+                Debug.LogWarning($"[LocaleDataManager] StringTable not found: {tableName}");
+                return $"#{tableName}_{key}";
+            }
+
+            var entry = table.GetEntry(key);
+            if (entry == null)
+            {
+                Debug.LogWarning($"[LocaleDataManager] Entry not found in table {tableName}: {key}");
+                return $"#{tableName}_{key}";
+            }
+
+            return entry.LocalizedValue;
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[LocaleDataManager] Error getting localized string from table {tableName}, key {key}: {ex.Message}");
+            return $"#{tableName}_{key}";
+        }
     }
 
     private static string GetLocalizedStringFromDict(Dictionary<string, string[]> dict, string key)

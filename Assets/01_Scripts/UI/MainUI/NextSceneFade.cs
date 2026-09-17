@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class NextSceneFade : MonoBehaviour
 {
-    public Image fadeImage; // 검정 이미지
+    public Image fadeImage; // 잉크 덮는 이미지
+    public Image blackImage; // 검정 페이드 인 아웃 이미지
     public float fadeDuration = 1f;
 
     void Awake()
@@ -22,6 +23,7 @@ public class NextSceneFade : MonoBehaviour
     /// <param name="nextSceneName">해당 씬 이름 string</param>
     public void StartSceneTransition(string nextSceneName)
     {
+        blackImage.raycastTarget = true;
         fadeImage.raycastTarget = true;
         StartCoroutine(Transition(nextSceneName));
     }
@@ -29,8 +31,24 @@ public class NextSceneFade : MonoBehaviour
     IEnumerator Transition(string nextScene)
     {
         IfCombatScene();
-        // 페이드 아웃
-        yield return StartCoroutine(InkCover(0f, 1f));
+        
+        // 현재 씬 이름 가져오기
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        
+        // 현재 씬 or 이동할 씬 이름이 "TitleScene" 또는 "SubTitleScene"인 경우 검정 페이드 인/아웃 사용
+        bool isTitleSceneTransition = (currentSceneName == "TitleScene" || currentSceneName == "SubTitleScene" ||
+                                       nextScene == "TitleScene" || nextScene == "SubTitleScene");
+        
+        if (isTitleSceneTransition)
+        {
+            // 검정 페이드 인/아웃 사용
+            yield return StartCoroutine(Fade(0f, 1f));
+        }
+        else
+        {
+            // 잉크 커버 효과 사용
+            yield return StartCoroutine(InkCover(0f, 1f));
+        }
 
         // 씬 비동기 로드 (0.9까지 진행)
         AsyncOperation async = SceneManager.LoadSceneAsync(nextScene);
@@ -55,28 +73,37 @@ public class NextSceneFade : MonoBehaviour
         {
             var popup = UIManager.Instance.popupStack.Peek();
             popup.Close(); // 열려있는 팝업 닫기.
-        } 
+        }
 
-        // 페이드 인
-        yield return StartCoroutine(InkCover(1f, 0f));
-
+        if (isTitleSceneTransition)
+        {
+            // 검정 페이드 인
+            yield return StartCoroutine(Fade(1f, 0f));
+        }
+        else
+        {
+            // 잉크 커버 페이드 인
+            yield return StartCoroutine(InkCover(1f, 0f));
+        }
+        
+        blackImage.raycastTarget = false;
         fadeImage.raycastTarget = false;
     }
 
     IEnumerator Fade(float from, float to)
     {
         float elapsed = 0f;
-        Color c = fadeImage.color;
+        Color c = blackImage.color;
 
         while (elapsed < fadeDuration)
         {
             elapsed += Time.deltaTime;
             float alpha = Mathf.Lerp(from, to, elapsed / fadeDuration);
-            fadeImage.color = new Color(c.r, c.g, c.b, alpha);
+            blackImage.color = new Color(c.r, c.g, c.b, alpha);
             yield return null;
         }
 
-        fadeImage.color = new Color(c.r, c.g, c.b, to);
+        blackImage.color = new Color(c.r, c.g, c.b, to);
     }
 
     IEnumerator InkCover(float from, float to, float duration = 1.5f)

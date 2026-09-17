@@ -58,9 +58,6 @@ public class ReadingPanel : BaseCampPanel
             cardUI.SetCard(card);
             onclick.onClick.AddListener(() => ShowBook(characterClass, card));
         }
-
-        // 애널리틱스
-        GameManager.Instance.analyticsLogger.LogCampActInfo((int)characterClass + 1);
     }
 
     // 현재 캐릭터의 보유 카드 확인

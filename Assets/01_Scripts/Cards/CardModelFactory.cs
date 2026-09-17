@@ -34,6 +34,8 @@ public static class CardModelFactory
         card.cardFrame = LoadSprite($"Cards/Frame/{data.cardframe}");
         card.effects = effects != null ? new List<CardEffectBase>(effects) : new List<CardEffectBase>();
         card.skillEffectName = data.skilleffect;
+        card.soundIndexes = data.soundIndexes != null ? new List<int>(data.soundIndexes) : new List<int>();
+        card.soundDelays = data.soundDelays != null ? new List<float>(data.soundDelays) : new List<float>();
         return card;
     }
 

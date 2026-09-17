@@ -57,6 +57,9 @@ public class CardModel : ScriptableObject
     public int evolveCount;
     public int evolveTarget;
 
+    public List<int> soundIndexes;
+    public List<float> soundDelays;
+
     private void OnEnable()
     {
         isMaintain = true;
@@ -114,6 +117,8 @@ public class CardModel : ScriptableObject
             if (hitTriggered) return;
             hitTriggered = true;
 
+            PlayCardSounds();
+
             if (!string.IsNullOrEmpty(skillEffectName) && targets.Count > 0)
             {
                 foreach (var t in targets)
@@ -170,7 +175,7 @@ public class CardModel : ScriptableObject
             }
         });
 
-        SoundManager.Instance.PlaySFX(SoundCategory.Card, (int)type);
+       // SoundManager.Instance.PlaySFX(SoundCategory.Card, (int)type);
 
         yield return new WaitUntil(() => hitTriggered);
         yield return new WaitForSeconds(0.9f);
@@ -480,6 +485,33 @@ public class CardModel : ScriptableObject
                 continue;
             }
             effect.Apply(caster, new List<IStatusReceiver> { target }, fixedIsEnhanced);
+        }
+    }
+
+    private void PlayCardSounds()
+    {
+        if (soundIndexes == null || soundIndexes.Count == 0)
+        {
+            Debug.Log($"[CardSFX] Card {index} - 사운드 데이터 없음");
+            return;
+        }
+
+        Debug.Log($"[CardSFX] Card {index} - " + $"SoundCount: {soundIndexes.Count}, " + $"DelayCount: {(soundDelays != null ? soundDelays.Count : 0)}");
+
+        for (int i = 0; i < soundIndexes.Count; i++)
+        {
+            float delay = 0f;
+
+            if (soundDelays != null && i < soundDelays.Count)
+                delay = soundDelays[i];
+
+            Debug.Log($"[CardSFX] Card {index} - " + $"[{i}] SoundIndex: {soundIndexes[i]}, Delay: {delay:F2}s");
+
+            SoundManager.Instance.PlaySFX(
+                SoundCategory.Card,
+                soundIndexes[i],
+                delay
+            );
         }
     }
 }

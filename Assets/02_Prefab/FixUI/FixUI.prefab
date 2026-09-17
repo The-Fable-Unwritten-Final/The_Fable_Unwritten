@@ -753,6 +753,7 @@ GameObject:
   - component: {fileID: 250342578227488452}
   - component: {fileID: 1564337223625743509}
   - component: {fileID: 201756551310112076}
+  - component: {fileID: 3630237027018652906}
   m_Layer: 5
   m_Name: Char_Btn
   m_TagString: Untagged
@@ -886,6 +887,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stanceButton: {fileID: 0}
+--- !u!114 &3630237027018652906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3672793994770264625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 369be2b26ee4e7f49b30585b81b1e343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundCat: 10
+  key: 101
+  clickCooldown: 1
+  playOnce: 0
 --- !u!1 &3804508184850317035
 GameObject:
   m_ObjectHideFlags: 0
@@ -2318,6 +2335,7 @@ GameObject:
   - component: {fileID: 2925481582408296420}
   - component: {fileID: 7524248294959127748}
   - component: {fileID: 7328948113561696239}
+  - component: {fileID: 5374913744258169241}
   m_Layer: 5
   m_Name: Char_Btn
   m_TagString: Untagged
@@ -2451,6 +2469,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stanceButton: {fileID: 0}
+--- !u!114 &5374913744258169241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8614615807789845520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 369be2b26ee4e7f49b30585b81b1e343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundCat: 10
+  key: 101
+  clickCooldown: 1
+  playOnce: 0
 --- !u!1 &8906485494474445382
 GameObject:
   m_ObjectHideFlags: 0
@@ -2511,6 +2545,7 @@ GameObject:
   - component: {fileID: 5574192517183645176}
   - component: {fileID: 6081768010544106650}
   - component: {fileID: 7137774081824784073}
+  - component: {fileID: 1409361000369155371}
   m_Layer: 5
   m_Name: Char_Btn
   m_TagString: Untagged
@@ -2644,3 +2679,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stanceButton: {fileID: 0}
+--- !u!114 &1409361000369155371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8925281279691260503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 369be2b26ee4e7f49b30585b81b1e343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundCat: 10
+  key: 101
+  clickCooldown: 1
+  playOnce: 0

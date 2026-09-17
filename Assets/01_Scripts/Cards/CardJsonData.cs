@@ -24,6 +24,9 @@ public class CardJsonData
     public string switchType;
 
     public List<CardEffect> effects;
+
+    public List<int> soundIndexes;
+    public List<float> soundDelays;
 }
 
 [System.Serializable]

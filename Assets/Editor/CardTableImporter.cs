@@ -35,6 +35,9 @@ public static class CardTableImporter
         public int evolveCount;
 
         public string note;
+
+        public List<int> soundIndexes = new();
+        public List<float> soundDelays = new();
     }
 
     [Serializable]
@@ -193,11 +196,15 @@ public static class CardTableImporter
                 evolveCount = GetInt(values, columns, "evolveCount"),
 
                 note = Get(values, columns, "note")
+
+
             };
 
-            row.keywordTypes = ParseList(
-                Get(values, columns, "keywordTypes")
-            );
+            row.keywordTypes = ParseList(Get(values, columns, "keywordTypes"));
+            row.soundIndexes = ParseIntList(Get(values, columns, "soundIndexes")
+);
+
+            row.soundDelays = ParseFloatList(Get(values, columns, "soundDelays"));
 
             rows.Add(row);
         }
@@ -222,6 +229,48 @@ public static class CardTableImporter
 
             if (!result.ContainsKey(key))
                 result.Add(key, i);
+        }
+
+        return result;
+    }
+
+    private static List<int> ParseIntList(string value)
+    {
+        List<int> result = new();
+
+        if (string.IsNullOrWhiteSpace(value))
+            return result;
+
+        string[] split = value.Split(',');
+
+        foreach (string item in split)
+        {
+            if (int.TryParse(item.Trim(), out int parsed))
+                result.Add(parsed);
+        }
+
+        return result;
+    }
+
+    private static List<float> ParseFloatList(string value)
+    {
+        List<float> result = new();
+
+        if (string.IsNullOrWhiteSpace(value))
+            return result;
+
+        string[] split = value.Split(',');
+
+        foreach (string item in split)
+        {
+            if (float.TryParse(
+                item.Trim(),
+                System.Globalization.NumberStyles.Float,
+                System.Globalization.CultureInfo.InvariantCulture,
+                out float parsed))
+            {
+                result.Add(parsed);
+            }
         }
 
         return result;
@@ -381,6 +430,9 @@ public static class CardTableImporter
         card.keywords = row.keywordTypes;
         card.switchType = row.switchType;
         card.note = row.note;
+
+        card.soundIndexes = new List<int>(row.soundIndexes);
+        card.soundDelays = new List<float>(row.soundDelays);
 
         // illustration은 기존 JSON 값 유지
 

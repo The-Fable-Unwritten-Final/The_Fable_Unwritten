@@ -84,6 +84,7 @@ public class TutorialController : MonoBehaviour
 
     public void ShowTutorial(int index)
     {
+        GameManager.Instance.analyticsLogger.LogTutorialStep(index); // 애널리틱스 기록
 
 #if !UNITY_EDITOR
         if (ProgressDataManager.Instance.ProgressTutorial.Contains(index) ||
@@ -92,17 +93,11 @@ public class TutorialController : MonoBehaviour
 
         ProgressDataManager.Instance.AddProgressTutorial(index);
         brulImg.SetActive(true);
-        Debug.Log($"Showing tutorial {index}: {tutorials[index].name}");
         var obj = tutorials[index];
 
         obj.gameObject.SetActive(true);
-        Debug.Log($"Tutorial {index} activated, firstTutorial: {obj.firstTutorial}");
 
-        if (obj.EmphasizeObject == null) 
-        {
-            Debug.Log($"Tutorial {index} EmphasizeObject is null - returning early");
-            return;
-        }
+        if (obj.EmphasizeObject == null) return;
 
         for (int i = 0; i < obj.EmphasizeObject.Length; i++)
         {

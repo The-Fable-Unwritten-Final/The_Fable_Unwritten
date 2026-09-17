@@ -104,6 +104,41 @@ public class CardDisplay : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 카드 상호작용 가능 여부를 검증하는 공통 함수
+    /// </summary>
+    public bool CanInteractCard()
+    {
+        if (GameManager.Instance == null || GameManager.Instance.turnController == null)
+            return false;
+
+        if (GameManager.Instance.turnController.turnState == TurnController.TurnState.EnemyTurn)
+            return false;
+
+        if (GameManager.Instance.turnController.onAction)
+            return false;
+
+        return true;
+    }
+
+    /// <summary>
+    /// 현재 드래그 중인 카드를 설정 (OnBeginDrag에서만 호출)
+    /// </summary>
+    public void SetCurrentCard(CardInHand card)
+    {
+        currentCard = card;
+        isOnDrag = true;
+    }
+
+    /// <summary>
+    /// 현재 드래그 중인 카드를 안전하게 해제
+    /// </summary>
+    public void ClearCurrentCard()
+    {
+        currentCard = null;
+        isOnDrag = false;
+    }
+
     void UpdateLineRenderer()// 화살표 선
     {
         if (cardsInHand.Count == 0 || currentCard == null) return;

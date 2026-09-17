@@ -2,22 +2,37 @@
     {
         "category": "BGM",
         "key": 0,
-        "sound": "LOOP_Two Lovers"
+        "sound": "BGM_Title"
     },
     {
         "category": "BGM",
         "key": 1,
-        "sound": "LOOP_Quest for Magic (live)"
+        "sound": "BGM_Stage_Common"
     },
     {
         "category": "BGM",
         "key": 2,
-        "sound": "LOOP_Harmonic Lullaby"
+        "sound": "BGM_Camp"
     },
     {
         "category": "BGM",
-        "key": 3,
-        "sound": "LOOP_Trouble In Paradise"
+        "key": 31,
+        "sound": "BGM_Battle_Normal"
+    },
+    {
+        "category": "BGM",
+        "key": 32,
+        "sound": "BGM_Battle_Elite"
+    },
+    {
+        "category": "BGM",
+        "key": 33,
+        "sound": "BGM_Battle_Boss"
+    },
+    {
+        "category": "BGM",
+        "key": 4,
+        "sound": "BGM_RandomEvent_Common_2"
     },
     {
         "category": "SubBGM",
@@ -185,6 +200,86 @@
         "sound": "sword-block-the-ballad-of-blades-257226"
     },
     {
+        "category": "Card",
+        "key": 701,
+        "sound": "7-1"
+    },
+    {
+        "category": "Card",
+        "key": 702,
+        "sound": "7-2"
+    },
+    {
+        "category": "Card",
+        "key": 703,
+        "sound": "7-3.2R"
+    },
+    {
+        "category": "Card",
+        "key": 704,
+        "sound": "7-4"
+    },
+    {
+        "category": "Card",
+        "key": 705,
+        "sound": "7-5"
+    },
+    {
+        "category": "Card",
+        "key": 706,
+        "sound": "7-6R"
+    },
+    {
+        "category": "Card",
+        "key": 707,
+        "sound": "7-7R"
+    },
+    {
+        "category": "Card",
+        "key": 708,
+        "sound": "7-8R"
+    },
+    {
+        "category": "Card",
+        "key": 709,
+        "sound": "7-9R"
+    },
+    {
+        "category": "Card",
+        "key": 710,
+        "sound": "7-10R"
+    },
+    {
+        "category": "Card",
+        "key": 711,
+        "sound": "7-11"
+    },
+    {
+        "category": "Card",
+        "key": 712,
+        "sound": "7-12"
+    },
+    {
+        "category": "Card",
+        "key": 713,
+        "sound": "7-13"
+    },
+    {
+        "category": "Card",
+        "key": 714,
+        "sound": "7-14"
+    },
+    {
+        "category": "Card",
+        "key": 715,
+        "sound": "7-15"
+    },
+    {
+        "category": "Card",
+        "key": 716,
+        "sound": "7-16R"
+    },
+    {
         "category": "Enemy",
         "key": 10,
         "sound": "wolf-growls-at-maurice-and-philippe-with-his-teeth-193235"
@@ -260,9 +355,159 @@
         "sound": "power-up-type-1-230548"
     },
     {
+        "category": "Enemy",
+        "key": 801,
+        "sound": "8-1"
+    },
+    {
+        "category": "Enemy",
+        "key": 802,
+        "sound": "8-2"
+    },
+    {
+        "category": "Enemy",
+        "key": 803,
+        "sound": "8-3"
+    },
+    {
+        "category": "Enemy",
+        "key": 804,
+        "sound": "8-4"
+    },
+    {
+        "category": "Enemy",
+        "key": 805,
+        "sound": "8-5"
+    },
+    {
+        "category": "Enemy",
+        "key": 806,
+        "sound": "8-4"
+    },
+    {
+        "category": "Enemy",
+        "key": 807,
+        "sound": "8-7"
+    },
+    {
+        "category": "Enemy",
+        "key": 808,
+        "sound": "8-8"
+    },
+    {
+        "category": "Enemy",
+        "key": 809,
+        "sound": "8-9"
+    },
+    {
+        "category": "Enemy",
+        "key": 810,
+        "sound": "8-10"
+    },
+    {
+        "category": "Enemy",
+        "key": 811,
+        "sound": "8-11"
+    },
+    {
+        "category": "Enemy",
+        "key": 812,
+        "sound": "8-12"
+    },
+    {
+        "category": "Enemy",
+        "key": 813,
+        "sound": "8-13"
+    },
+    {
+        "category": "Enemy",
+        "key": 814,
+        "sound": "8-14"
+    },
+    {
+        "category": "Enemy",
+        "key": 815,
+        "sound": "8-15"
+    },
+    {
+        "category": "Enemy",
+        "key": 816,
+        "sound": "8-15"
+    },
+    {
+        "category": "Enemy",
+        "key": 817,
+        "sound": "8-15"
+    },
+    {
+        "category": "Enemy",
+        "key": 818,
+        "sound": "8-15"
+    },
+    {
+        "category": "Enemy",
+        "key": 819,
+        "sound": "8-15"
+    },
+    {
+        "category": "Enemy",
+        "key": 820,
+        "sound": "8-20"
+    },
+    {
+        "category": "Enemy",
+        "key": 821,
+        "sound": "8-21"
+    },
+    {
+        "category": "Enemy",
+        "key": 822,
+        "sound": "8-22"
+    },
+    {
+        "category": "Enemy",
+        "key": 823,
+        "sound": "8-23"
+    },
+    {
+        "category": "Enemy",
+        "key": 824,
+        "sound": "8-24"
+    },
+    {
+        "category": "Enemy",
+        "key": 825,
+        "sound": "8-25"
+    },
+    {
+        "category": "Enemy",
+        "key": 826,
+        "sound": "8-26"
+    },
+    {
+        "category": "Enemy",
+        "key": 827,
+        "sound": "8-27"
+    },
+    {
         "category": "Button",
         "key": 0,
         "sound": "book-closing-48311"
+    },
+    {
+        "category": "SFX",
+        "key": 101,
+        "sound": "1-1.2R"
+    },
+    {
+        "category": "SFX",
+        "key": 102,
+        "sound": "1-2.2R"
+    },
+    {
+        "category": "SFX",
+        "key": 103,
+        "sound": "1-3.2R"
     },
     {
         "category": "SFX",
@@ -276,7 +521,22 @@
     },
     {
         "category": "SFX",
+        "key": 202,
+        "sound": "2-2.2R"
+    },
+    {
+        "category": "SFX",
         "key": 203,
         "sound": "2-3R"
+    },
+    {
+        "category": "SFX",
+        "key": 301,
+        "sound": "3-1"
+    },
+    {
+        "category": "SFX",
+        "key": 503,
+        "sound": "5-3.2R"
     }
 ]
