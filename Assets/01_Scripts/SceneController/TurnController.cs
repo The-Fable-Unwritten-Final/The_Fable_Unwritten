@@ -135,17 +135,19 @@ public class TurnController : MonoBehaviour
     }
     IEnumerator AtStartGame()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
+        battleFlow.StartBattle();
+
+        yield return new WaitForSeconds(0.3f);
         // 데이터 처리
         ProgressDataManager.Instance.turnCount = 0; // 전투 시작 시 턴 수 초기화
         cardDisplay.CardArrange(); // 카드 배치 초기화
         EventEffectManager.Instance.PlayNextCombat();
         EventEffectManager.Instance.PlayNextStage();
         EventEffectManager.Instance.PlayEndAdventure();
+        
         yield return new WaitForSeconds(0.2f);
-
         cardDisplay.deckInitComplete = true; // 덱 이닛 완료
-        battleFlow.StartBattle();
         StyleManager.Instance.isFirstTurnCard = true; // 전투 시작 후 첫 턴 플래그 설정
         // 전투 시작 직후 관련 문체 효과 호출 //
         var randomAlly = battleFlow.GetRandomAliveParty();
