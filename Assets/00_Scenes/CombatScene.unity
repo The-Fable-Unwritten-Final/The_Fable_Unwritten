@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3326,6 +3326,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 602294312}
+  ownerClass: 0
+  spriteScale: 0.05
   seekIcon: {fileID: 1880937687, guid: 8d000893f7f3afe4ea08f94c6e5948bd, type: 3}
   insightIcon: {fileID: 1656583778, guid: 8d000893f7f3afe4ea08f94c6e5948bd, type: 3}
   mercyIcon: {fileID: -1799387395, guid: 8d000893f7f3afe4ea08f94c6e5948bd, type: 3}
@@ -5598,6 +5600,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 919398950}
+  ownerClass: 1
+  spriteScale: 0.05
   seekIcon: {fileID: 1880937687, guid: 8d000893f7f3afe4ea08f94c6e5948bd, type: 3}
   insightIcon: {fileID: 1656583778, guid: 8d000893f7f3afe4ea08f94c6e5948bd, type: 3}
   mercyIcon: {fileID: -1799387395, guid: 8d000893f7f3afe4ea08f94c6e5948bd, type: 3}
@@ -11715,6 +11719,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 1846114833}
+  ownerClass: 2
+  spriteScale: 0.05
   seekIcon: {fileID: 1880937687, guid: 8d000893f7f3afe4ea08f94c6e5948bd, type: 3}
   insightIcon: {fileID: 1656583778, guid: 8d000893f7f3afe4ea08f94c6e5948bd, type: 3}
   mercyIcon: {fileID: -1799387395, guid: 8d000893f7f3afe4ea08f94c6e5948bd, type: 3}

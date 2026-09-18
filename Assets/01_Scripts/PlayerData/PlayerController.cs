@@ -606,6 +606,9 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         // 캐릭터가 활성화될 때 버튼도 활성화
         if (stanceToggleButton != null)
             stanceToggleButton.gameObject.SetActive(true);
+
+        if (playerData != null)
+            stanceIconDisplay?.UpdateIcon(playerData.currentStance);
     }
 
     private void OnDisable()
@@ -613,9 +616,11 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         // 캐릭터가 비활성화될 때 버튼도 비활성화
         if (stanceToggleButton != null)
             stanceToggleButton.gameObject.SetActive(false);
+
+        stanceIconDisplay?.HideIcon();
     }
 
-    
+
     public void ChangeStance(StancType Stance) //StancUI 함수
     {
         stanceSystem?.ChangeStance(Stance);
@@ -790,6 +795,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     {
         if (statusDisplay != null)
             statusDisplay.gameObject.SetActive(false);
+
+        stanceIconDisplay?.HideIcon();
     }
 
     public void ShowStatusUI()
@@ -798,6 +805,9 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         if (statusDisplay != null)
             statusDisplay.gameObject.SetActive(true);
+
+        if (playerData != null)
+            stanceIconDisplay?.UpdateIcon(playerData.currentStance);
     }
 
     //발동 시 사라져야 하는 경우
