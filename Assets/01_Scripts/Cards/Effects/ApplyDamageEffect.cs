@@ -25,11 +25,6 @@ public class ApplyDamageEffect : CardEffectBase
         bool stanceBoosted = false;
         bool stanceWeakened = false;
 
-        if (caster is PlayerController pc)
-        {
-            (totalDamage, stanceBoosted, stanceWeakened) = StanceHelper.ApplyStanceToDamage(pc, totalDamage, card.type);
-        }
-
         // 문체 효과 적용
         totalDamage = StyleManager.Instance.GetDamageGiveModify(caster, null, card, totalDamage);
 

@@ -26,9 +26,6 @@ public class HealEffect : CardEffectBase
         bool stanceBoosted = false;
         bool stanceWeakened = false;
 
-        if (caster is PlayerController pc)
-            (finalHeal, stanceBoosted, stanceWeakened) = StanceHelper.ApplyStanceToHeal(pc, finalHeal);
-
         var slot = GameManager.Instance.turnController.battleFlow;
 
         finalHeal = Mathf.Round(finalHeal);

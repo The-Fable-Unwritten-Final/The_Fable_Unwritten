@@ -33,12 +33,6 @@ public class DamageEffect : CardEffectBase
 
         attackerAtk = isEnhanced == true ? attackerAtk * 1.5f : attackerAtk;
 
-        if (caster is PlayerController pc)
-        {
-            (attackerAtk, stanceBoosted, stanceWeakened) =
-                StanceHelper.ApplyStanceToDamage(pc, attackerAtk, card.type);
-        }
-
         // 조건부 피해 배율
         attackerAtk *= multiplier;
 
