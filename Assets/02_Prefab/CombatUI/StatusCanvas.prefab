@@ -84,7 +84,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &4988671790068265198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,6 +247,32 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: 055e9e39695b4674186968a38a135079, type: 3}
   - type: Scroll
     icon: {fileID: 21300000, guid: 88014168f944a3444972950063b04fa0, type: 3}
+  - type: Predation
+    icon: {fileID: 21300000, guid: 3b4a678cede39e544b917fe50e8f1eec, type: 3}
+  - type: Swallowed
+    icon: {fileID: 21300000, guid: 54a1abbb186567a48aa0ae7363e41e4c, type: 3}
+  - type: Soprano
+    icon: {fileID: 21300000, guid: f55ba29be463f9246bc672d97cd9abb4, type: 3}
+  - type: MezzoSoprano
+    icon: {fileID: 21300000, guid: adf5be897967516469479623ddb717c0, type: 3}
+  - type: Alto
+    icon: {fileID: 21300000, guid: 1e8d2350ecfe270469cbcb928e467ada, type: 3}
+  - type: UnreadRune
+    icon: {fileID: 21300000, guid: e51fb75e4793a2a40aeccb557552ed2c, type: 3}
+  - type: RuneStorm
+    icon: {fileID: 21300000, guid: 3c5ad58f4111cf84b84cf793587e1926, type: 3}
+  - type: CurrentRuneFire
+    icon: {fileID: 21300000, guid: 610bee6c383851347b66afd00950eb62, type: 3}
+  - type: CurrentRuneIce
+    icon: {fileID: 21300000, guid: f52af7c5175bd954499efdd94cb0e90d, type: 3}
+  - type: CurrentRuneNature
+    icon: {fileID: 21300000, guid: 71488e9af11dac0408396a4bbd8daa63, type: 3}
+  - type: RuneTraceFire
+    icon: {fileID: 21300000, guid: 9907af6662337944cac8d983fb2a7b28, type: 3}
+  - type: RuneTraceIce
+    icon: {fileID: 21300000, guid: 9907af6662337944cac8d983fb2a7b28, type: 3}
+  - type: RuneTraceNature
+    icon: {fileID: 21300000, guid: 9907af6662337944cac8d983fb2a7b28, type: 3}
 --- !u!1001 &279669692842406824
 PrefabInstance:
   m_ObjectHideFlags: 0

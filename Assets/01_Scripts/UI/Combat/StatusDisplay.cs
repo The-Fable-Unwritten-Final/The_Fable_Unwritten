@@ -18,7 +18,7 @@ public class StatusDisplay : MonoBehaviour
         public BuffStatType type;
         public string tooltipType;
         public int value;
-        public int[] tooltipArgs;
+        public object[] tooltipArgs;
 
         public Sprite icon;
         public bool hideNumber;

@@ -62,7 +62,7 @@ public class StatusSlot : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void Bind(string keywordType, Sprite icon, int value, int[] tooltipArgs, bool rotateForNegative = false, bool hideNumber = false)
+    public void Bind(string keywordType, Sprite icon, int value, object[] tooltipArgs, bool rotateForNegative = false, bool hideNumber = false)
     {
         if (iconImage != null)
         {
@@ -78,12 +78,10 @@ public class StatusSlot : MonoBehaviour
 
         if (triggerText != null)
         {
-            object[] args = tooltipArgs != null ? System.Array.ConvertAll(tooltipArgs, x => (object)x) : System.Array.Empty<object>();
-
             foreach (var trigger in triggerText)
             {
                 if (trigger != null)
-                    trigger.SetKeyword(keywordType, args);
+                    trigger.SetKeyword(keywordType, tooltipArgs);
             }
         }
 

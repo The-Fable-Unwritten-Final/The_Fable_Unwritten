@@ -136,9 +136,18 @@ public static class TooltipKeyMapper
 
             // Izkal
             "UnreadRune" => "Type_Name_25_01",
+
             "CurrentRune" => "Type_Name_25_02",
+            "CurrentRuneFire" => "Type_Name_25_02",
+            "CurrentRuneIce" => "Type_Name_25_02",
+            "CurrentRuneNature" => "Type_Name_25_02",
+
             "RuneStorm" => "Type_Name_25_03",
+
             "RuneTrace" => "Type_Name_25_04",
+            "RuneTraceFire" => "Type_Name_25_04",
+            "RuneTraceIce" => "Type_Name_25_04",
+            "RuneTraceNature" => "Type_Name_25_04",
 
             // Luciel
             "Agape" => "Type_Name_35_01",
@@ -204,9 +213,18 @@ public static class TooltipKeyMapper
 
             // Izkal
             "UnreadRune" => "Type_Text_25_01",
+
             "CurrentRune" => "Type_Text_25_02",
+            "CurrentRuneFire" => "Type_Text_25_02",
+            "CurrentRuneIce" => "Type_Text_25_02",
+            "CurrentRuneNature" => "Type_Text_25_02",
+
             "RuneStorm" => "Type_Text_25_03",
+
             "RuneTrace" => "Type_Text_25_04",
+            "RuneTraceFire" => "Type_Text_25_04",
+            "RuneTraceIce" => "Type_Text_25_04",
+            "RuneTraceNature" => "Type_Text_25_04",
 
             // Luciel
             "Agape" => "Type_Text_35_01",
@@ -235,9 +253,18 @@ public static class TooltipKeyMapper
             "Alto" => "Elite Table",
 
             "UnreadRune" => "Elite Table",
+
             "CurrentRune" => "Elite Table",
+            "CurrentRuneFire" => "Elite Table",
+            "CurrentRuneIce" => "Elite Table",
+            "CurrentRuneNature" => "Elite Table",
+
             "RuneStorm" => "Elite Table",
+
             "RuneTrace" => "Elite Table",
+            "RuneTraceFire" => "Elite Table",
+            "RuneTraceIce" => "Elite Table",
+            "RuneTraceNature" => "Elite Table",
 
             "Agape" => "Elite Table",
             "DivineVeil" => "Elite Table",
