@@ -17,8 +17,9 @@ public class StatusDisplay : MonoBehaviour
     {
         public BuffStatType type;
         public string tooltipType;
-
         public int value;
+        public int[] tooltipArgs;
+
         public Sprite icon;
         public bool hideNumber;
         public int priority;
@@ -42,7 +43,12 @@ public class StatusDisplay : MonoBehaviour
     [Header("Options")]
     [SerializeField] private int maxVisibleCount = 9;
 
+    [Header("Mechanic Icons")]
+    [SerializeField]
+    private List<MechanicIconBinding> mechanicIconBindings = new List<MechanicIconBinding>();
+
     private Dictionary<BuffStatType, StatusIconBinding> iconMap;
+    private Dictionary<string, Sprite> mechanicIconMap;
 
     private PlayerController player;
     private Enemy enemy;
@@ -52,6 +58,7 @@ public class StatusDisplay : MonoBehaviour
         player = GetComponentInParent<PlayerController>();
         enemy = GetComponentInParent<Enemy>();
         BuildIconMap();
+        BuildMechanicIconMap();
     }
 
     private void BuildIconMap()
@@ -68,6 +75,22 @@ public class StatusDisplay : MonoBehaviour
         }
     }
 
+    private void BuildMechanicIconMap()
+    {
+        mechanicIconMap = new Dictionary<string, Sprite>();
+
+        foreach (var binding in mechanicIconBindings)
+        {
+            if (binding == null ||
+                string.IsNullOrEmpty(binding.type) ||
+                binding.icon == null)
+                continue;
+
+            if (!mechanicIconMap.ContainsKey(binding.type))
+                mechanicIconMap.Add(binding.type, binding.icon);
+        }
+    }
+
     public void PlayerUpdateUI()
     {
         if (player == null) return;
@@ -80,11 +103,7 @@ public class StatusDisplay : MonoBehaviour
         Refresh(enemy.tickEffects, enemy.instantEffects, enemy.hasBlock, enemy);
     }
 
-    private void Refresh(
-        List<TickEffect> tickEffects,
-        List<InstanceEffect> instantEffects,
-        bool hasBlock,
-        IStatusReceiver receiver)
+    private void Refresh(List<TickEffect> tickEffects, List<InstanceEffect> instantEffects, bool hasBlock, IStatusReceiver receiver)
     {
         ClearAllSlots();
 
@@ -94,15 +113,22 @@ public class StatusDisplay : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            slots[i].Bind(entries[i].tooltipType, entries[i].icon, entries[i].value, hideNumber: entries[i].hideNumber);
+            var entry = entries[i];
+
+            // 기믹 툴팁
+            if (entry.tooltipArgs != null)
+            {
+                slots[i].Bind(entry.tooltipType, entry.icon, entry.value, entry.tooltipArgs, hideNumber: entry.hideNumber);
+            }
+            // 기존 상태이상 툴팁
+            else
+            {
+                slots[i].Bind(entry.tooltipType, entry.icon, entry.value, hideNumber: entry.hideNumber);
+            }
         }
     }
 
-    private List<StatusDisplayEntry> BuildEntries(
-        List<TickEffect> tickEffects,
-        List<InstanceEffect> instantEffects,
-        bool hasBlock,
-        IStatusReceiver receiver)
+    private List<StatusDisplayEntry> BuildEntries(List<TickEffect> tickEffects, List<InstanceEffect> instantEffects, bool hasBlock, IStatusReceiver receiver)
     {
         List<StatusDisplayEntry> results = new List<StatusDisplayEntry>();
 
@@ -193,6 +219,29 @@ public class StatusDisplay : MonoBehaviour
             });
         }
 
+        if (receiver is Enemy targetEnemy && targetEnemy.Mechanic != null)
+        {
+            var mechanicStatuses = targetEnemy.Mechanic.GetDisplayStatuses();
+
+            foreach (var status in mechanicStatuses)
+            {
+                if (!mechanicIconMap.TryGetValue(status.type, out var mechanicIcon))
+                    continue;
+
+                results.Add(new StatusDisplayEntry
+                {
+                    type = BuffStatType.None,
+                    tooltipType = status.type,
+                    value = status.value,
+                    tooltipArgs = status.tooltipArgs,
+
+                    icon = mechanicIcon,
+                    hideNumber = status.hideNumber,
+                    priority = status.priority
+                });
+            }
+        }
+
         return results
             .OrderBy(x => x.priority)
             .ThenBy(x => x.type.ToString())
@@ -232,4 +281,11 @@ public class StatusDisplay : MonoBehaviour
                 slot.Clear();
         }
     }
+}
+
+[Serializable]
+public class MechanicIconBinding
+{
+    public string type;
+    public Sprite icon;
 }

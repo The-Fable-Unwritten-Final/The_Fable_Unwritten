@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class ParmanoMechanic : EnemyMechanicBase
 {
@@ -105,5 +106,20 @@ public class ParmanoMechanic : EnemyMechanicBase
 
         if (flip != null)
             Debug.Log("[Parmano] Flip 1마리 소환");
+    }
+
+    public override IReadOnlyList<EnemyMechanicDisplayData> GetDisplayStatuses()
+    {
+        return new[]
+        {
+            new EnemyMechanicDisplayData(
+                "Scroll",
+                scroll,                  // 아이콘 숫자: 0 → 1 → 2 → 3
+                false,
+                30,
+                MaxScroll,               // Tooltip {0}
+                Mathf.RoundToInt(ExecutionDamage) // Tooltip {1}
+            )
+        };
     }
 }

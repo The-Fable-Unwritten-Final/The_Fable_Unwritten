@@ -26,11 +26,13 @@ public class StatusTooltipUI : MonoSingleton<StatusTooltipUI>
         if (panel == null || titleText == null || descText == null)
             return;
 
+        string tableName = TooltipKeyMapper.GetTableName(keywordType);
+
         string nameKey = TooltipKeyMapper.GetNameKey(keywordType);
         string descKey = TooltipKeyMapper.GetDescKey(keywordType);
 
-        string title = LocaleDataManager.GetLocalizedStringTable("Card Tooltip", nameKey);
-        string desc = LocaleDataManager.GetLocalizedStringTable("Card Tooltip", descKey);
+        string title = LocaleDataManager.GetLocalizedStringTable(tableName, nameKey);
+        string desc = LocaleDataManager.GetLocalizedStringTable(tableName, descKey);
 
         if (args != null && args.Length > 0)
         {
@@ -117,6 +119,34 @@ public static class TooltipKeyMapper
             "Rush" => "Stance_Name_5",
             "Defense" => "Stance_Name_6",
 
+            // Marnas
+            "RuneShell" => "Type_Name_23_01",
+
+            // Parmano
+            "Scroll" => "Type_Name_24_01",
+
+            // Grolly
+            "Predation" => "Type_Name_34_01",
+            "Swallowed" => "Type_Name_34_02",
+
+            // Elua
+            "Soprano" => "Type_Name_33_01",
+            "MezzoSoprano" => "Type_Name_33_02",
+            "Alto" => "Type_Name_33_03",
+
+            // Izkal
+            "UnreadRune" => "Type_Name_25_01",
+            "CurrentRune" => "Type_Name_25_02",
+            "RuneStorm" => "Type_Name_25_03",
+            "RuneTrace" => "Type_Name_25_04",
+
+            // Luciel
+            "Agape" => "Type_Name_35_01",
+            "DivineVeil" => "Type_Name_35_02",
+            "Devotion" => "Type_Name_35_03",
+            "Obsession" => "Type_Name_35_04",
+            "Balance" => "Type_Name_35_05",
+
             _ => keywordType
         };
     }
@@ -157,8 +187,66 @@ public static class TooltipKeyMapper
             "Rush" => "Stance_Text_5",
             "Defense" => "Stance_Text_6",
 
+            // Marnas
+            "RuneShell" => "Type_Text_23_01",
+
+            // Parmano
+            "Scroll" => "Type_Text_24_01",
+
+            // Grolly
+            "Predation" => "Type_Text_34_01",
+            "Swallowed" => "Type_Text_34_02",
+
+            // Elua
+            "Soprano" => "Type_Text_33_01",
+            "MezzoSoprano" => "Type_Text_33_02",
+            "Alto" => "Type_Text_33_03",
+
+            // Izkal
+            "UnreadRune" => "Type_Text_25_01",
+            "CurrentRune" => "Type_Text_25_02",
+            "RuneStorm" => "Type_Text_25_03",
+            "RuneTrace" => "Type_Text_25_04",
+
+            // Luciel
+            "Agape" => "Type_Text_35_01",
+            "DivineVeil" => "Type_Text_35_02",
+            "Devotion" => "Type_Text_35_03",
+            "Obsession" => "Type_Text_35_04",
+            "Balance" => "Type_Text_35_05",
 
             _ => keywordType
+        };
+    }
+
+    public static string GetTableName(string keywordType)
+    {
+        return keywordType switch
+        {
+            // Enemy Mechanic
+            "RuneShell" => "Elite Table",
+            "Scroll" => "Elite Table",
+
+            "Predation" => "Elite Table",
+            "Swallowed" => "Elite Table",
+
+            "Soprano" => "Elite Table",
+            "MezzoSoprano" => "Elite Table",
+            "Alto" => "Elite Table",
+
+            "UnreadRune" => "Elite Table",
+            "CurrentRune" => "Elite Table",
+            "RuneStorm" => "Elite Table",
+            "RuneTrace" => "Elite Table",
+
+            "Agape" => "Elite Table",
+            "DivineVeil" => "Elite Table",
+            "Devotion" => "Elite Table",
+            "Obsession" => "Elite Table",
+            "Balance" => "Elite Table",
+
+            // 기존 상태이상은 그대로
+            _ => "Card Tooltip"
         };
     }
 }

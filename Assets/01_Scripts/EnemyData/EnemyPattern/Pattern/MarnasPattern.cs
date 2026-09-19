@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
@@ -6,6 +7,9 @@ public class MarnasMechanic : EnemyMechanicBase
 {
     private const int MaxRuneShell = 3;
     private const int TidalWaveSkillIndex = 233;
+
+    private const int RuneShellDefendBonus = 2;
+    private const int TidalWaveAttackBonus = 2;
 
     private int runeShell;
     private bool forceTidalWave;
@@ -42,10 +46,10 @@ public class MarnasMechanic : EnemyMechanicBase
     public override float ModifyStat(BuffStatType statType, float value)
     {
         if (statType == BuffStatType.Defend && runeShell > 0)
-            value += 2;
+            value += RuneShellDefendBonus;
 
         if (statType == BuffStatType.Attack && forceTidalWave)
-            value += 2;
+            value += TidalWaveAttackBonus;
 
         return value;
     }
@@ -68,5 +72,23 @@ public class MarnasMechanic : EnemyMechanicBase
 
         runeShell = MaxRuneShell;
         forceTidalWave = false;
+    }
+
+    public override IReadOnlyList<EnemyMechanicDisplayData> GetDisplayStatuses()
+    {
+        if (runeShell <= 0)
+            return System.Array.Empty<EnemyMechanicDisplayData>();
+
+        return new[]
+        {
+            new EnemyMechanicDisplayData(
+                "RuneShell",
+                runeShell,
+                false,
+                30,
+                RuneShellDefendBonus,
+                TidalWaveAttackBonus
+            )
+        };
     }
 }

@@ -25,4 +25,6 @@ public interface IEnemyMechanic
     bool SkipNormalActionThisTurn { get; }
 
     int ModifySkillEffectValue(IStatusReceiver target, EnemyEffectType effectType, EnemyEffectTarget targetType, int value);
+
+    IReadOnlyList<EnemyMechanicDisplayData> GetDisplayStatuses();
 }
