@@ -214,6 +214,12 @@ public class NewCardEffectBuilder : MonoBehaviour
                 effect = oppositeStance;
                 break;
 
+            case "repeat":
+                var repeat = Load<RepeatEffect>("RepeatEffect");
+                repeat.repeatCount = effectData.value;
+                effect = repeat;
+                break;
+
             case "autoCast":
                 var autoCast = Load<AutoCastEffect>("AutoCastEffect");
                 autoCast.count = effectData.value;

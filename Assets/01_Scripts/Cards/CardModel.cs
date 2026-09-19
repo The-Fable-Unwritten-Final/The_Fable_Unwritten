@@ -474,18 +474,77 @@ public class CardModel : ScriptableObject
 
     private void ApplyEffectsToTarget(IStatusReceiver caster, IStatusReceiver target, List<IStatusReceiver> allTargets, bool fixedIsEnhanced)
     {
-        foreach (var effect in effects)
+        List<IStatusReceiver> currentTargets = new List<IStatusReceiver> { target };
+        // 기본 1회 + RepeatEffect가 지정한 총 적용 횟수
+        int totalApplyCount = GetRepeatCount(caster, currentTargets);
+
+        for (int repeat = 0; repeat < totalApplyCount; repeat++)
         {
-            if (effect is ApplyStatusEffect statusEffect && statusEffect.target >= 0 && statusEffect.target <= 3)
+            foreach (var effect in effects)
             {
-                if (target != allTargets[0])
+                // 최상위 RepeatEffect는 실행하지 않음
+                if (effect is RepeatEffect)
                     continue;
 
-                effect.Apply(caster, allTargets, fixedIsEnhanced);
+                // RepeatEffect만 담고 있는 ConditionalEffect도
+                // 이미 위에서 반복 횟수 계산에 사용했으므로 실행하지 않음
+                if (effect is ConditionalEffect conditional &&
+                    conditional.effectIfTrue is RepeatEffect)
+                {
+                    continue;
+                }
+
+                if (effect is ApplyStatusEffect statusEffect &&
+                    statusEffect.target >= 0 &&
+                    statusEffect.target <= 3)
+                {
+                    if (target != allTargets[0])
+                        continue;
+
+                    effect.Apply(caster, allTargets, fixedIsEnhanced);
+                    continue;
+                }
+
+                effect.Apply(caster, currentTargets, fixedIsEnhanced);
+            }
+        }
+    }
+
+    private int GetRepeatCount(
+    IStatusReceiver caster,
+    List<IStatusReceiver> targets)
+    {
+        int totalApplyCount = 1;
+
+        foreach (var effect in effects)
+        {
+            // 무조건 Repeat
+            if (effect is RepeatEffect repeatEffect)
+            {
+                totalApplyCount = Mathf.Max(
+                    totalApplyCount,
+                    repeatEffect.repeatCount
+                );
+
                 continue;
             }
-            effect.Apply(caster, new List<IStatusReceiver> { target }, fixedIsEnhanced);
+
+            // Conditional → Repeat
+            if (effect is ConditionalEffect conditional &&
+                conditional.effectIfTrue is RepeatEffect conditionalRepeat)
+            {
+                if (conditional.condition != null &&
+                    conditional.condition.IsConditionMet(caster, targets))
+                {
+                    totalApplyCount = Mathf.Max(
+                        totalApplyCount,
+                        conditionalRepeat.repeatCount
+                    );
+                }
+            }
         }
+
+        return totalApplyCount;
     }
 
     private void PlayCardSounds()
