@@ -180,6 +180,8 @@ public class CardModel : ScriptableObject
         yield return new WaitUntil(() => hitTriggered);
         yield return new WaitForSeconds(0.9f);
 
+        ApplySwitchType(caster);
+
         GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
 
         GameManager.Instance.turnController.OffAction();
@@ -482,15 +484,12 @@ public class CardModel : ScriptableObject
         {
             foreach (var effect in effects)
             {
-                // 최상위 RepeatEffect는 실행하지 않음
-                if (effect is RepeatEffect)
-                    continue;
-
-                // RepeatEffect만 담고 있는 ConditionalEffect도
-                // 이미 위에서 반복 횟수 계산에 사용했으므로 실행하지 않음
-                if (effect is ConditionalEffect conditional &&
-                    conditional.effectIfTrue is RepeatEffect)
+                if (effect is DamageEffect damageEffect)
                 {
+                    float multiplier = GetDamageMultiplier(caster, currentTargets);
+
+                    damageEffect.ApplyWithMultiplier(caster,currentTargets,multiplier,fixedIsEnhanced);
+
                     continue;
                 }
 
@@ -572,5 +571,51 @@ public class CardModel : ScriptableObject
                 delay
             );
         }
+    }
+
+    private float GetDamageMultiplier(IStatusReceiver caster, List<IStatusReceiver> targets)
+    {
+        float multiplier = 1f;
+
+        foreach (var effect in effects)
+        {
+            if (effect is DamagePercentEffect damagePercent)
+            {
+                multiplier += damagePercent.percent / 100f;
+                Debug.Log($"[DamagePercent] 일반 증가: {damagePercent.percent}% / 최종 배율={multiplier}");
+            }
+            else if (effect is ConditionalEffect conditional && conditional.effectIfTrue is DamagePercentEffect conditionalDamagePercent)
+            {
+                bool conditionMet = conditional.condition != null && conditional.condition.IsConditionMet(caster, targets);
+
+                Debug.Log($"[DamagePercent] 조건부 발견 / " + $"조건={conditional.condition?.GetType().Name} / " +$"결과={conditionMet} / " + $"증가량={conditionalDamagePercent.percent}%");
+                if (conditionMet)
+                {
+                    multiplier += conditionalDamagePercent.percent / 100f;
+                }
+            }
+        }
+        Debug.Log($"[DamagePercent] 최종 배율 = {multiplier}");
+
+        return multiplier;
+    }
+
+    private void ApplySwitchType(IStatusReceiver caster)
+    {
+        if (caster == null || string.IsNullOrEmpty(switchType))
+            return;
+
+        if (!System.Enum.TryParse<StancType>(
+                switchType,
+                true,
+                out var targetStance))
+        {
+            Debug.LogWarning(
+                $"[Card SwitchType] 변환 실패 / Card={index} / switchType={switchType}"
+            );
+            return;
+        }
+
+        caster.ChangeStance(targetStance);
     }
 }
