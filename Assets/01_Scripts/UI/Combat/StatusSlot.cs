@@ -32,7 +32,7 @@ public class StatusSlot : MonoBehaviour
             foreach (var trigger in triggerText)
             {
                 if (trigger != null)
-                    trigger.SetKeyword(keywordType);
+                    trigger.SetKeyword(keywordType, value);
             }
         }
 

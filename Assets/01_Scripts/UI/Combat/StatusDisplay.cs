@@ -16,6 +16,8 @@ public class StatusDisplay : MonoBehaviour
     private struct StatusDisplayEntry
     {
         public BuffStatType type;
+        public string tooltipType;
+
         public int value;
         public Sprite icon;
         public bool hideNumber;
@@ -92,12 +94,7 @@ public class StatusDisplay : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            slots[i].Bind(
-                entries[i].type.ToString(),
-                entries[i].icon,
-                entries[i].value,
-                hideNumber: entries[i].hideNumber
-            );
+            slots[i].Bind(entries[i].tooltipType, entries[i].icon, entries[i].value, hideNumber: entries[i].hideNumber);
         }
     }
 
@@ -134,6 +131,7 @@ public class StatusDisplay : MonoBehaviour
             results.Add(new StatusDisplayEntry
             {
                 type = pair.Key,
+                tooltipType = pair.Key.ToString(),
                 value = pair.Value,
                 icon = binding.icon,
                 hideNumber = binding.hideNumber,
@@ -152,6 +150,8 @@ public class StatusDisplay : MonoBehaviour
                 results.Add(new StatusDisplayEntry
                 {
                     type = BuffStatType.Attack,
+                    tooltipType = atkValue > 0 ? "AttackUp" : "AttackDown",
+
                     value = Mathf.Abs(atkValue),
                     icon = atkIcon,
                     hideNumber = false,
@@ -171,6 +171,7 @@ public class StatusDisplay : MonoBehaviour
                 results.Add(new StatusDisplayEntry
                 {
                     type = BuffStatType.Defend,
+                    tooltipType = defValue > 0 ? "DefendUp" : "DefendDown",
                     value = Mathf.Abs(defValue),
                     icon = defIcon,
                     hideNumber = false,

@@ -21,7 +21,7 @@ public class StatusTooltipUI : MonoSingleton<StatusTooltipUI>
         Hide();
     }
 
-    public void Show(string keywordType, Vector2 screenPos)
+    public void Show(string keywordType, Vector2 screenPos, params object[] args)
     {
         if (panel == null || titleText == null || descText == null)
             return;
@@ -29,11 +29,31 @@ public class StatusTooltipUI : MonoSingleton<StatusTooltipUI>
         string nameKey = TooltipKeyMapper.GetNameKey(keywordType);
         string descKey = TooltipKeyMapper.GetDescKey(keywordType);
 
-        titleText.text = LocaleDataManager.GetLocalizedStringTable("Card Tooltip", nameKey);
-        descText.text = LocaleDataManager.GetLocalizedStringTable("Card Tooltip", descKey);
+        string title = LocaleDataManager.GetLocalizedStringTable("Card Tooltip", nameKey);
+        string desc = LocaleDataManager.GetLocalizedStringTable("Card Tooltip", descKey);
+
+        if (args != null && args.Length > 0)
+        {
+            try
+            {
+                desc = string.Format(desc, args);
+            }
+            catch (System.FormatException)
+            {
+                Debug.LogWarning(
+                    $"[StatusTooltipUI] Tooltip Format 실패 " +
+                    $"keyword={keywordType}, desc={desc}, args={args.Length}"
+                );
+            }
+        }
+
+        titleText.text = title;
+        descText.text = desc;
 
         panel.SetActive(true);
         panel.transform.SetAsLastSibling();
+
+        Canvas.ForceUpdateCanvases();
 
         Vector2 pos = screenPos;
 
@@ -47,6 +67,8 @@ public class StatusTooltipUI : MonoSingleton<StatusTooltipUI>
             pos.y = height;
 
         panelRect.position = pos;
+
+
     }
 
     public void Hide()
@@ -63,6 +85,11 @@ public static class TooltipKeyMapper
     {
         return keywordType switch
         {
+            "AttackUp" => "Type_Name_11",
+            "DefendUp" => "Type_Name_12",
+            "AttackDown" => "Type_Name_13",
+            "DefendDown" => "Type_Name_14",
+
             "Burn" => "Type_Name_1",
             "Freeze" => "Type_Name_2",
             "Activate" => "Type_Name_3",
@@ -98,6 +125,11 @@ public static class TooltipKeyMapper
     {
         return keywordType switch
         {
+            "AttackUp" => "Type_Text_11",
+            "DefendUp" => "Type_Text_12",
+            "AttackDown" => "Type_Text_13",
+            "DefendDown" => "Type_Text_14",
+
             "Burn" => "Type_Text_1",
             "Freeze" => "Type_Text_2",
             "Activate" => "Type_Text_4",
@@ -124,6 +156,7 @@ public static class TooltipKeyMapper
             "Discipline" => "Stance_Text_4",
             "Rush" => "Stance_Text_5",
             "Defense" => "Stance_Text_6",
+
 
             _ => keywordType
         };
