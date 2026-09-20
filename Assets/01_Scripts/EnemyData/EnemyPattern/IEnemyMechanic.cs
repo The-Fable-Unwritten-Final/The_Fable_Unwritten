@@ -32,4 +32,6 @@ public interface IEnemyMechanic
     void OnSkillResolved(EnemySkill skill, EnemyAct actData);
 
     float ModifyIncomingAttackDamage(float damage);
+
+    float ModifySkillWeight(EnemySkill skill, float baseWeight);
 }
