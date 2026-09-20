@@ -40,8 +40,10 @@ public static class EnemyPattern
             Debug.LogWarning($"[EnemyPattern] 스킬 {skill.skillIndex}에 대한 act 데이터가 없습니다.");
             yield break;
         }
+        enemyComponent.Mechanic?.OnSkillSelected(skill, actData);
 
         var targets = ChooseTargetsFromActData(actData,enemyComponent);
+
         targets ??= new List<IStatusReceiver>();
         yield return new WaitForSeconds(0.3f);
 
@@ -54,6 +56,8 @@ public static class EnemyPattern
         }
 
         yield return ExecuteV2Skill(enemyComponent,actData,targets,attackType);
+
+        enemyComponent.Mechanic?.OnSkillResolved(skill, actData);
     }
     private static void PlaySkillSounds(EnemyAct actData)
     {
@@ -215,8 +219,6 @@ public static class EnemyPattern
 
         return targets;
     }
-
-
     private static EnemySkill ChooseSkill(Enemy enemy)
     {
         var skills = enemy.enemyData.SkillList;
@@ -225,44 +227,43 @@ public static class EnemyPattern
             return null;
 
         float total = 0f;
-        var validSkills = new List<EnemySkill>();
+        var validSkills = new List<(EnemySkill skill, float weight)>();
 
         foreach (var skill in skills)
         {
             if (skill == null)
                 continue;
 
-            if (skill.percentage <= 0f)
-                continue;
-
-            if (!DataManager.Instance.EnemyActDict.TryGetValue(skill.skillIndex,out var actData))
+            if (!DataManager.Instance.EnemyActDict.TryGetValue(skill.skillIndex, out var actData))
                 continue;
 
             if (!CanUseSkill(enemy, actData))
                 continue;
 
-            // useCondition 처리는 다음 단계에서 추가
-            validSkills.Add(skill);
+            float weight = enemy.Mechanic?.ModifySkillWeight(skill, skill.percentage) ?? skill.percentage;
 
-            total += skill.percentage;
+            if (weight <= 0f)
+                continue;
+
+            validSkills.Add((skill, weight));
+            total += weight;
         }
 
         if (validSkills.Count == 0 || total <= 0f)
             return null;
 
-        float rand = Random.Range(0f,total);
-
+        float rand = Random.Range(0f, total);
         float cumulative = 0f;
 
-        foreach (var skill in validSkills)
+        foreach (var entry in validSkills)
         {
-            cumulative += skill.percentage;
+            cumulative += entry.weight;
 
             if (rand < cumulative)
-                return skill;
+                return entry.skill;
         }
 
-        return validSkills[^1];
+        return validSkills[^1].skill;
     }
 
     private static void ApplySkillTargetEffects(Enemy caster, IStatusReceiver target, EnemyAct actData)
@@ -306,19 +307,25 @@ public static class EnemyPattern
         switch (targetType)
         {
             case EnemyEffectTarget.Self:
-                ApplyV2Effect(caster,caster,effectType,value);
+            {
+                int modifiedValue = caster.Mechanic?.ModifySkillEffectValue(caster, effectType, targetType, value) ?? value;
+                ApplyV2Effect(caster, caster, effectType, modifiedValue);
                 return;
-
+            }
             case EnemyEffectTarget.Allies:
+            {
                 foreach (var ally in GameManager.Instance.turnController.battleFlow.enemyParty)
                 {
                     if (ally == null || !ally.IsAlive())
                         continue;
-
-                    ApplyV2Effect(caster,ally,effectType,value);
+    
+                    int modifiedValue = caster.Mechanic?.ModifySkillEffectValue(ally,effectType,targetType,value) ?? value;
+                    ApplyV2Effect(caster, ally, effectType, modifiedValue);
                 }
-                return;
 
+                return;
+            }
+                
             case EnemyEffectTarget.LowestHpAlly:
                 ApplyToLowestHpAlly(caster,effectType,value);
                 return;
@@ -671,7 +678,11 @@ public static class EnemyPattern
         }
 
         if (lowest != null)
-            ApplyV2Effect(caster, lowest, effectType, value);
+        {
+            int modifiedValue = caster.Mechanic?.ModifySkillEffectValue(lowest, effectType, EnemyEffectTarget.LowestHpAlly, value) ?? value;
+
+            ApplyV2Effect(caster, lowest, effectType, modifiedValue);
+        }
     }
 
     private static bool CanUseSkill(Enemy caster,EnemyAct actData)

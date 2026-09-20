@@ -638,14 +638,25 @@ public class BattleFlowController : MonoBehaviour
         if (characterMap.TryGetValue(caster, out var casterController))
         {
             // 그롤리에게 삼켜진 캐릭터
-            if (casterController is PlayerController pc &&
-                pc.IsTemporarilyAbsent)
+            if (casterController is PlayerController pc && pc.IsTemporarilyAbsent)
             {
                 Debug.Log($"[BattleFlow] {pc.ChClass} 실종 상태 → 카드 사용 불가");
                 return;
             }
 
-            List<IStatusReceiver> targets = AutoChooseTargets(card.targetType, card.characterClass, card.targetCount, target);
+            TargetType targetType = card.targetType;
+
+            if (CanUseAgapeReverseTarget(card) && target != null)
+            {
+                bool targetEnemy = target.ChClass == CharacterClass.Enemy;
+
+                if ((card.type == CardType.Pray || card.type == CardType.baptism) && targetEnemy)
+                    targetType = TargetType.Enemy;
+                else if (card.type == CardType.Taboo && !targetEnemy)
+                    targetType = TargetType.Ally;
+            }
+
+            List<IStatusReceiver> targets = AutoChooseTargets(targetType, card.characterClass, card.targetCount, target);
 
             if (targets.Count > 0)
             {
@@ -669,13 +680,33 @@ public class BattleFlowController : MonoBehaviour
         characterMap.TryGetValue(character, out var characterObj);
         return characterObj;
     }
+    private bool IsAgapeReverseTargetValid(CardModel card, IStatusReceiver target)
+    {
+        if (card == null || target == null)
+            return false;
+
+        bool targetEnemy = target.ChClass == CharacterClass.Enemy;
+
+        if (card.type == CardType.Pray || card.type == CardType.baptism)
+            return targetEnemy;
+
+        if (card.type == CardType.Taboo)
+            return !targetEnemy;
+
+        return false;
+    }
 
     public bool CanUseCard(CardModel card, IStatusReceiver caster, IStatusReceiver target, int currentMana)
     {
         if (caster == null || target == null || card == null) return false;
         if (!card.IsUsable(currentMana)) return false;
         if (!card.CanBeUsedBy(caster.ChClass)) return false;
-        if (!card.IsTargetValid(caster, target)) return false;
+        bool validTarget = card.IsTargetValid(caster, target);
+
+        if (!validTarget && CanUseAgapeReverseTarget(card))
+            validTarget = IsAgapeReverseTargetValid(card, target);
+
+        if (!validTarget) return false;
 
         if (caster is PlayerController pc && !pc.CanActThisTurn())
             return false;
@@ -718,6 +749,30 @@ public class BattleFlowController : MonoBehaviour
 
         return null;
     }
+
+    public bool HasLucielAgape()
+    {
+        foreach (var enemy in enemyParty)
+        {
+            if (enemy is Enemy e && e.IsAlive() && e.Mechanic is LucielMechanic)
+                return true;
+        }
+
+        return false;
+    }
+    private bool CanUseAgapeReverseTarget(CardModel card)
+    {
+        if (card == null || card.characterClass != CharacterClass.Kayla)
+            return false;
+
+        if (!HasLucielAgape() || card.targetType == TargetType.None)
+            return false;
+
+        return card.type == CardType.Pray ||
+               card.type == CardType.baptism ||
+               card.type == CardType.Taboo;
+    }
+
 
 
     /// <summary>

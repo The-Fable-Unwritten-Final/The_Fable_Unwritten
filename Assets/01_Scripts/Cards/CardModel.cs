@@ -1,6 +1,7 @@
 using DG.Tweening.Core.Easing;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
@@ -479,6 +480,7 @@ public class CardModel : ScriptableObject
         List<IStatusReceiver> currentTargets = new List<IStatusReceiver> { target };
         // 기본 1회 + RepeatEffect가 지정한 총 적용 횟수
         int totalApplyCount = GetRepeatCount(caster, currentTargets);
+        bool reversedTaboo = IsReversedTaboo(allTargets);
 
         for (int repeat = 0; repeat < totalApplyCount; repeat++)
         {
@@ -487,8 +489,7 @@ public class CardModel : ScriptableObject
                 if (effect is DamageEffect damageEffect)
                 {
                     float multiplier = GetDamageMultiplier(caster, currentTargets);
-
-                    damageEffect.ApplyWithMultiplier(caster,currentTargets,multiplier,fixedIsEnhanced);
+                    damageEffect.ApplyWithMultiplier(caster,currentTargets,multiplier,fixedIsEnhanced, reversedTaboo);
 
                     continue;
                 }
@@ -617,5 +618,18 @@ public class CardModel : ScriptableObject
         }
 
         caster.ChangeStance(targetStance);
+    }
+
+    private bool IsReversedTaboo(List<IStatusReceiver> targets)
+    {
+        if (characterClass != CharacterClass.Kayla || type != CardType.Taboo)
+            return false;
+
+        var battleFlow = GameManager.Instance.turnController.battleFlow;
+
+        if (!battleFlow.HasLucielAgape())
+            return false;
+
+        return targets.Any(x => x != null && x.ChClass != CharacterClass.Enemy);
     }
 }

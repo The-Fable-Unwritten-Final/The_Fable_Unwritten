@@ -22,7 +22,7 @@ public class DamageEffect : CardEffectBase
         ApplyWithMultiplier(caster, targets, 1f, isEnhanced);
     }
 
-    public void ApplyWithMultiplier(IStatusReceiver caster, List<IStatusReceiver> targets, float multiplier, bool? isEnhanced = null)
+    public void ApplyWithMultiplier(IStatusReceiver caster, List<IStatusReceiver> targets, float multiplier, bool? isEnhanced = null, bool reversedTaboo = false)
     {
         if (targets == null || targets.Count == 0) return;
 
@@ -32,8 +32,6 @@ public class DamageEffect : CardEffectBase
         bool stanceWeakened = false;
 
         attackerAtk = isEnhanced == true ? attackerAtk * 1.5f : attackerAtk;
-
-        // 조건부 피해 배율
         attackerAtk *= multiplier;
 
         attackerAtk = Mathf.Round(attackerAtk);
@@ -44,10 +42,19 @@ public class DamageEffect : CardEffectBase
             if (target == null || !target.IsAlive()) continue;
 
             float finalAttackDamage = attackerAtk;
-
             finalAttackDamage = target.ApplyScarAttackBonus(finalAttackDamage);
 
-            float result = target.TakeDamage(finalAttackDamage);
+            if (target is Enemy targetEnemy && targetEnemy.Mechanic != null)
+                finalAttackDamage = targetEnemy.Mechanic.ModifyIncomingAttackDamage(finalAttackDamage);
+
+            float result;
+
+            if (reversedTaboo && target is PlayerController player)
+                result = player.TakeDamage(finalAttackDamage, 0.5f, true);
+            else if (target is Enemy e)
+                result = e.TakeDamage(finalAttackDamage, true);
+            else
+                result = target.TakeDamage(finalAttackDamage);
 
             if (target is Enemy enemy)
             {

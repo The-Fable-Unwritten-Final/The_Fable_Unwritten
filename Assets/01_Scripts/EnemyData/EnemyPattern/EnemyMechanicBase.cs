@@ -47,4 +47,11 @@ public abstract class EnemyMechanicBase : IEnemyMechanic
     {
         return EmptyDisplayStatuses;
     }
+
+    public virtual void OnSkillSelected(EnemySkill skill, EnemyAct actData) { }
+    public virtual void OnSkillResolved(EnemySkill skill, EnemyAct actData) { }
+
+    public virtual float ModifyIncomingAttackDamage(float damage) => damage;
+
+    public virtual float ModifySkillWeight(EnemySkill skill, float baseWeight) => baseWeight;
 }

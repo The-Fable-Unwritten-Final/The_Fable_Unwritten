@@ -1317,4 +1317,48 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         return true;
     }
+
+    public float TakeDamage(float amount, float finalMultiplier, bool floorFinalDamage)
+    {
+        if (hasBlock)
+        {
+            hasBlock = false;
+            return 0;
+        }
+
+        amount = StyleManager.Instance.GetOnComingDamageModify(this, this, amount);
+
+        if (HasGuardValue())
+        {
+            amount = Mathf.Max(0, amount - GetGuardValue());
+            ConsumeGuard();
+        }
+
+        float reduced = amount - ModifyStat(BuffStatType.Defend, 0f);
+        reduced = Mathf.Max(reduced, 1f);
+
+        if (playerData.currentStance == StancType.Defense)
+            reduced *= 0.5f;
+        else if (playerData.currentStance == StancType.Rush)
+            reduced *= 2f;
+
+        reduced = Mathf.Round(reduced);
+
+        if (finalMultiplier != 1f)
+        {
+            reduced *= finalMultiplier;
+            reduced = floorFinalDamage ? Mathf.Floor(reduced) : Mathf.Round(reduced);
+            reduced = Mathf.Max(reduced, 1f);
+        }
+
+        playerData.currentHP = Mathf.Max(0, playerData.currentHP - reduced);
+
+        if (!IsAlive())
+        {
+            if (!TryConsumeUndying())
+                isDeathPending = true;
+        }
+
+        return reduced;
+    }
 }
