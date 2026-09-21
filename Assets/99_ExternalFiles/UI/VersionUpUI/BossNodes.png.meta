@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f519183a150ef334b900c1ba4e5a514e
+guid: 65b4264628a8b8b42b222a56a1201938
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -134,18 +134,84 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: BossNodes_0
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 526
+        width: 386
+        height: 455
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 992e4586c2219b544924e59be5a1ff5b
+      internalID: -2044519533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BossNodes_1
+      rect:
+        serializedVersion: 2
+        x: 582
+        y: 587
+        width: 368
+        height: 374
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 10ba1266ce61fc640b97b32ace54065c
+      internalID: 935914069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BossNodes_2
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 58
+        width: 300
+        height: 383
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 557fc2d474a8dc2439fc4df4675f0528
+      internalID: -1825259937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 4d813f73827f6704a96cf269b11dc8de
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      BossNodes_0: -2044519533
+      BossNodes_1: 935914069
+      BossNodes_2: -1825259937
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

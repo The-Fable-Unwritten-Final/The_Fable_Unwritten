@@ -65,15 +65,17 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1057327951872
-    m_Localized: Increases the value of all next applied status effects and is removed
-      after activation
+    m_Localized: 'Reduce the cost of the next card by 1 for every 10 Active
+
+      Consume
+      10 Active per 1 cost reduced'
     m_Metadata:
       m_Items: []
   - m_Id: 1063862677504
-    m_Localized: 'Reduce the cost of the next card by 1 for every {0} Active
+    m_Localized: 'Increase the value of the next buff effect by {0}
 
-      Consume
-      1 {0} Active per 1 cost reduced'
+      Then
+      remove Bless'
     m_Metadata:
       m_Items: []
   - m_Id: 1064479240192
@@ -91,10 +93,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1065762697216
-    m_Localized: 'At {0} or more Scar, remove all Scar when attacked and
+    m_Localized: 'At 50 or more Scar, remove all Scar when attacked and
 
       gets
-      an additional {1} damage each time attacked this turn'
+      an additional 10 damage each time attacked this turn'
     m_Metadata:
       m_Items: []
   - m_Id: 1149493587968
@@ -214,7 +216,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 4155010199552
-    m_Localized: Draw 1 card, and increase healing received this turn by  {0}%
+    m_Localized: Draw 1 card, and increase healing received this turn by 30%
     m_Metadata:
       m_Items: []
   - m_Id: 4155647733760
@@ -223,11 +225,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 4156859887616
-    m_Localized: The next attack deals {0}% increased damage
+    m_Localized: The next attack deals 100% increased damage
     m_Metadata:
       m_Items: []
   - m_Id: 4180851306496
-    m_Localized: Maximum HP increases by {0}%, and gain {1} Guard
+    m_Localized: Maximum HP increases by 20%, and gain 15 Guard
     m_Metadata:
       m_Items: []
   - m_Id: 77843956182298624
