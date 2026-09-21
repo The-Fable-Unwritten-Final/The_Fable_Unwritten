@@ -166,6 +166,9 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         isDeathPlaying = false;
 
         SetMechanic(EnemyMechanicFactory.Create(this));
+
+        float scale = data.IDNum == 25 ? 1.7f : 2f;
+        anchorController.SetVisualScale(scale);
     }
 
     public void ChangeStance(StancType stance)

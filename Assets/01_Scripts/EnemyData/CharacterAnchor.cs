@@ -37,6 +37,13 @@ public class CharacterAnchorController : MonoBehaviour
             shadowRoot.localPosition = data.footPoint + data.shadowOffset;
         }
     }
+
+    public void SetVisualScale(float scale)
+    {
+        if (visualRoot == null) return;
+
+        visualRoot.localScale = new Vector3(scale, scale, 1f);
+    }
 }
 
 [System.Serializable]
