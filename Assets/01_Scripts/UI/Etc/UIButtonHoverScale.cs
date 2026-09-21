@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.EventSystems;
-using Microsoft.Unity.VisualStudio.Editor;
 
 public class UIButtonHoverScale : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
