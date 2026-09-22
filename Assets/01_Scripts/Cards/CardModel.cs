@@ -92,20 +92,36 @@ public class CardModel : ScriptableObject
 
     private IEnumerator PlayWithAnimation(IStatusReceiver caster, List<IStatusReceiver> targets, bool fixedIsEnhanced, int attackType)
     {
+        // 필수 매니저들 null 체크
+        if (GameManager.Instance == null || GameManager.Instance.turnController == null)
+        {
+            Debug.LogError("[CardModel] GameManager 또는 TurnController가 null입니다");
+            yield break;
+        }
+
         GameManager.Instance.turnController.Onaction();
 
         // 카메라 연출
         float totalDuration = 2f;
-        GameManager.Instance.combatCameraController.PlayCombatCamera(caster, targets, totalDuration);
+        if (GameManager.Instance.combatCameraController != null)
+        {
+            GameManager.Instance.combatCameraController.PlayCombatCamera(caster, targets, totalDuration);
+        }
         
         List<IStatusReceiver> allCharacters = new List<IStatusReceiver>();
-        allCharacters.AddRange(GameManager.Instance.turnController.battleFlow.playerParty);
-        allCharacters.AddRange(GameManager.Instance.turnController.battleFlow.enemyParty);
-
-        foreach (var ch in allCharacters)
+        if (GameManager.Instance.turnController.battleFlow != null)
         {
-            if (ch is PlayerController pc && !targets.Contains(pc) && pc != caster)
-                pc.HideStatusUI();
+            allCharacters.AddRange(GameManager.Instance.turnController.battleFlow.playerParty);
+            allCharacters.AddRange(GameManager.Instance.turnController.battleFlow.enemyParty);
+        }
+
+        if (allCharacters != null && allCharacters.Count > 0)
+        {
+            foreach (var ch in allCharacters)
+            {
+                if (ch is PlayerController pc && !targets.Contains(pc) && pc != caster)
+                    pc.HideStatusUI();
+            }
         }
 
         yield return new WaitForSeconds(0.2f);
@@ -113,6 +129,11 @@ public class CardModel : ScriptableObject
         bool hitTriggered = false;
 
         var cast = caster.AsPlayer();
+        if (cast == null)
+        {
+            Debug.LogError("[CardModel] Caster를 PlayerController로 변환할 수 없습니다");
+            yield break;
+        }
         cast.PlayAttackAnimation(attackType, type,() =>
         {
             if (hitTriggered) return;
@@ -120,10 +141,19 @@ public class CardModel : ScriptableObject
 
             PlayCardSounds();
 
+            // GameManager 또는 필수 컴포넌트가 null인 경우 안전하게 처리
+            if (GameManager.Instance == null || GameManager.Instance.turnController?.battleFlow?.effectManage == null)
+            {
+                Debug.LogWarning("[CardModel] 게임 매니저 컴포넌트가 없어서 이펙트를 재생할 수 없습니다");
+                return;
+            }
+
             if (!string.IsNullOrEmpty(skillEffectName) && targets.Count > 0)
             {
                 foreach (var t in targets)
                 {
+                    if (t == null) continue;
+
                     if (DataManager.Instance.CardEffects.TryGetValue(skillEffectName, out var animInfo))
                     {
                         if (animInfo.animationType == AnimationType.Projectile)
@@ -135,7 +165,7 @@ public class CardModel : ScriptableObject
                                 1,
                                 () =>
                                 {
-                                    if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
+                                    if (t != null && effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
                                         t.PlayHitAnimation();
 
                                     ApplyEffectsToTarget(caster, t, targets, fixedIsEnhanced);
@@ -158,7 +188,7 @@ public class CardModel : ScriptableObject
                         Debug.LogWarning($"[CardAnim] 스킬 이펙트 없음: 카드={cardName}, effect={skillEffectName}");
                     }
 
-                    if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
+                    if (t != null && effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
                         t.PlayHitAnimation();
 
                     ApplyEffectsToTarget(caster, t, targets, fixedIsEnhanced);
@@ -168,6 +198,8 @@ public class CardModel : ScriptableObject
             {
                 foreach (var t in targets)
                 {
+                    if (t == null) continue;
+
                     if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
                         t.PlayHitAnimation();
 
@@ -183,22 +215,37 @@ public class CardModel : ScriptableObject
 
         ApplySwitchType(caster);
 
-        GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
+        if (GameManager.Instance != null && GameManager.Instance.combatUIController != null)
+        {
+            GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
+        }
 
-        GameManager.Instance.turnController.OffAction();
-        GameManager.Instance.turnController.battleFlow.CheckBattleEnd();
+        if (GameManager.Instance != null && GameManager.Instance.turnController != null)
+        {
+            GameManager.Instance.turnController.OffAction();
+            if (GameManager.Instance.turnController.battleFlow != null)
+            {
+                GameManager.Instance.turnController.battleFlow.CheckBattleEnd();
+            }
+        }
 
         yield return new WaitForSeconds(0.7f);
 
-        foreach (var ch in allCharacters)
+        if (allCharacters != null && allCharacters.Count > 0)
         {
-            if (ch is PlayerController pc && !targets.Contains(pc) && pc != caster)
-                pc.ShowStatusUI();
-        }
+            foreach (var ch in allCharacters)
+            {
+                if (ch is PlayerController pc && !targets.Contains(pc) && pc != caster)
+                    pc.ShowStatusUI();
+            }
 
-        foreach(var ch in allCharacters)
-        {
-            ch.TryFinalizeDeath();
+            foreach(var ch in allCharacters)
+            {
+                if (ch != null)
+                {
+                    ch.TryFinalizeDeath();
+                }
+            }
         }
     }
 
