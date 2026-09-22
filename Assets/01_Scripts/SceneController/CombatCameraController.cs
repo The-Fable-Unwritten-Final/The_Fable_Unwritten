@@ -63,15 +63,15 @@ public class CombatCameraController : MonoBehaviour
             {
                 if (t is PlayerController player)
                 {
-                    player.spriteRenderer.sortingOrder = -1;
+                    player.spriteRenderer.sortingOrder = 0;
                     if(caster is Enemy e)
-                        e.spriteRenderer.sortingOrder = -1;
+                        e.spriteRenderer.sortingOrder = 0;
                 }
                 else if (t is Enemy enemy)
                 {
-                    enemy.spriteRenderer.sortingOrder = -1;
+                    enemy.spriteRenderer.sortingOrder = 0;
                     if (caster is PlayerController p)
-                        p.spriteRenderer.sortingOrder = -1;
+                        p.spriteRenderer.sortingOrder = 0;
                 }
             }
         }
@@ -124,13 +124,13 @@ public class CombatCameraController : MonoBehaviour
                 .DOFade(0f, combatTransitionTime) // 알파 0으로
                 .onComplete = () =>
                 {
-                    player.spriteRenderer.sortingOrder = -1;
+                    player.spriteRenderer.sortingOrder = 0;
                     foreach (var t in target)
                     {
                         var mono = t as MonoBehaviour;
 
                         if (mono != null)
-                            mono.GetComponentInChildren<SpriteRenderer>().sortingOrder = -1;
+                            mono.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
                     }
                 };
         }
@@ -156,10 +156,10 @@ public class CombatCameraController : MonoBehaviour
                 {
                     foreach (var t in target)
                     {
-                        enemy.spriteRenderer.sortingOrder = -1;
+                        enemy.spriteRenderer.sortingOrder = 0;
                         if (t is PlayerController p)
                         {
-                            p.spriteRenderer.sortingOrder = -1;
+                            p.spriteRenderer.sortingOrder = 0;
                         }
                     }
                 };
