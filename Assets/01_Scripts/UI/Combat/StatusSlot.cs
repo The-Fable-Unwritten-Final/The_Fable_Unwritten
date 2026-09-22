@@ -32,7 +32,7 @@ public class StatusSlot : MonoBehaviour
             foreach (var trigger in triggerText)
             {
                 if (trigger != null)
-                    trigger.SetKeyword(keywordType);
+                    trigger.SetKeyword(keywordType, value);
             }
         }
 
@@ -60,6 +60,32 @@ public class StatusSlot : MonoBehaviour
         }
 
         gameObject.SetActive(false);
+    }
+
+    public void Bind(string keywordType, Sprite icon, int value, object[] tooltipArgs, bool rotateForNegative = false, bool hideNumber = false)
+    {
+        if (iconImage != null)
+        {
+            iconImage.sprite = icon;
+            iconImage.enabled = icon != null;
+            iconImage.rectTransform.localRotation = rotateForNegative ? Quaternion.Euler(0f, 0f, 180f) : Quaternion.identity;
+        }
+
+        if (valueText != null)
+        {
+            valueText.text = hideNumber ? string.Empty : Mathf.Abs(value).ToString();
+        }
+
+        if (triggerText != null)
+        {
+            foreach (var trigger in triggerText)
+            {
+                if (trigger != null)
+                    trigger.SetKeyword(keywordType, tooltipArgs);
+            }
+        }
+
+        gameObject.SetActive(true);
     }
 
 }

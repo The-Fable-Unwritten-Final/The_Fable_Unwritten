@@ -1059,8 +1059,8 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         // 선행 조건 이벤트가 있으면 해당 이벤트를 이미 진행했을 경우에만 등장
         // result에 63(NodeTeleportEventEffect)이 있으면 IsEndingClear가 true일 때만 등장
             .Where(x =>
-                //(x.theme == theme || x.theme == 0) &&                        // 테마 일치
-                (x.theme  == 0)&&                                               // 얼리 액세스 기준으로는 공통 이벤트만 등장하도록 고정
+                (x.theme == theme || x.theme == 0) &&                        // 테마 일치
+                x.index != 10009 && x.index != 20002 &&                      // 특정 이벤트 제외 (추후 변경 예정인 10009, 20002의 경우 임시로 제외)
                 !usedRandomEvent.Contains(x.index) &&                        // 미사용
                 (x.index / 1000) % 10 == 0 &&                               // 천의 자리 0
                 (x.prerequisiteEventIndex == 0 ||                           // (스토리 선행)조건 없거나

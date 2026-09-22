@@ -25,4 +25,13 @@ public interface IEnemyMechanic
     bool SkipNormalActionThisTurn { get; }
 
     int ModifySkillEffectValue(IStatusReceiver target, EnemyEffectType effectType, EnemyEffectTarget targetType, int value);
+
+    IReadOnlyList<EnemyMechanicDisplayData> GetDisplayStatuses();
+
+    void OnSkillSelected(EnemySkill skill, EnemyAct actData);
+    void OnSkillResolved(EnemySkill skill, EnemyAct actData);
+
+    float ModifyIncomingAttackDamage(float damage);
+
+    float ModifySkillWeight(EnemySkill skill, float baseWeight);
 }

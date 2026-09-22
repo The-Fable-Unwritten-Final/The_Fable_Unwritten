@@ -166,6 +166,9 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         isDeathPlaying = false;
 
         SetMechanic(EnemyMechanicFactory.Create(this));
+
+        float scale = data.IDNum == 25 ? 1.7f : 2f;
+        anchorController.SetVisualScale(scale);
     }
 
     public void ChangeStance(StancType stance)
@@ -623,6 +626,29 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         return reduced;
     }
 
+
+    public float TakeDamage(float amount, bool isAttackDamage)
+    {
+        if (hasBlock)
+        {
+            hasBlock = false;
+            return 0;
+        }
+
+        float reduced = amount - ModifyStat(BuffStatType.Defend, 0f);
+        reduced = Mathf.Max(reduced, 0);
+
+        if (isAttackDamage)
+            reduced = mechanic?.ModifyIncomingAttackDamage(reduced) ?? reduced;
+
+        currentHP = Mathf.Max(0, currentHP - reduced);
+
+        if (!IsAlive())
+            isDeathPending = true;
+
+        return reduced;
+    }
+
     public void GrantBlock()
     {
         hasBlock = true;
@@ -818,5 +844,10 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     { 
         scarBurstActive = false; 
         scarTriggeredThisTurn = false; 
+    }
+
+    public void UpdateStatusUI()
+    {
+        statusDisplay?.EnemyUpdateUI();
     }
 }

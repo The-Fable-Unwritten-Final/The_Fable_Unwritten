@@ -7,6 +7,20 @@ public class IzkalMechanic : EnemyMechanicBase
     private const int Phase1MaxRune = 10;
     private const int Phase2MaxRune = 12;
     private const int StormCountdownStart = 2;
+
+    private const int BaseDecode = 2;
+    private const int MaxActivationDecode = 2;
+
+    private const int BurnDamagePerDecode = 5;
+    private const int MaxBurnDecode = 2;
+
+    private const int TraceRequirement = 3;
+
+    private const int FireTraceDamageReduction = 4;
+    private const int IceTraceStatusRemoveCount = 1;
+    private const int NatureTraceActivateBonus = 10;
+    private const int NatureTraceDrawCount = 1;
+
     private bool grantNatureRewardNextPlayerTurn;
 
     private const int LifeOathSkillIndex = 255;
@@ -78,12 +92,12 @@ public class IzkalMechanic : EnemyMechanicBase
             new InstanceEffect
             {
                 statType = BuffStatType.Activate,
-                value = 10,
+                value = NatureTraceActivateBonus,
                 isMaintain = false
             }
         );
 
-        sophia.Deck.Draw(1);
+        sophia.Deck.Draw(NatureTraceDrawCount);
 
         Debug.Log(
             "[Izkal] 자연 판독 흔적 보상 / 활성 10 + 카드 1장"
@@ -219,9 +233,9 @@ public class IzkalMechanic : EnemyMechanicBase
 
     private void ResolveRuneReading(CardType type, int runeIndex, int activationDiscount)
     {
-        int activationDecode = Mathf.Min(2, activationDiscount);
+        int activationDecode = Mathf.Min(MaxActivationDecode, activationDiscount);
 
-        int totalDecode = 2 + activationDecode;
+        int totalDecode = BaseDecode + activationDecode;
 
         int before = unreadRune;
 
@@ -330,17 +344,9 @@ public class IzkalMechanic : EnemyMechanicBase
         float damage = Mathf.Max(0f, baseDamage - freeze);
 
         // 상태이상 판정용 룬
-        int freezeRuneReduce =
-            Mathf.Min(
-                2,
-                Mathf.FloorToInt(freeze / 3f)
-            );
+        int freezeRuneReduce = Mathf.Min(2, Mathf.FloorToInt(freeze / 3f));
 
-        int effectiveRune =
-            Mathf.Max(
-                0,
-                remainingRune - freezeRuneReduce
-            );
+        int effectiveRune = Mathf.Max(0, remainingRune - freezeRuneReduce);
 
         CardType? dominantTrace = null;
 
@@ -350,8 +356,7 @@ public class IzkalMechanic : EnemyMechanicBase
         // 2페이즈 화염 흔적
         if (dominantTrace == CardType.Fire)
         {
-            damage =
-                Mathf.Max(0f, damage - 4f);
+            damage = Mathf.Max(0f, damage - FireTraceDamageReduction);
         }
 
         foreach (var player in battleFlow.playerParty)
@@ -362,11 +367,7 @@ public class IzkalMechanic : EnemyMechanicBase
 
             pc.TakeDamage(damage);
 
-            ApplyStormStatus(
-                pc,
-                effectiveRune,
-                dominantTrace
-            );
+            ApplyStormStatus(pc, effectiveRune, dominantTrace);
         }
 
         // 자연 흔적 보상 예약
@@ -387,22 +388,12 @@ public class IzkalMechanic : EnemyMechanicBase
 
     private CardType? GetDominantTrace()
     {
-        int total =
-            fireTrace +
-            iceTrace +
-            natureTrace;
+        int total = fireTrace + iceTrace + natureTrace;
 
-        if (total < 3)
+        if (total < TraceRequirement)
             return null;
 
-        int max =
-            Mathf.Max(
-                fireTrace,
-                Mathf.Max(
-                    iceTrace,
-                    natureTrace
-                )
-            );
+        int max = Mathf.Max(fireTrace, Mathf.Max(iceTrace, natureTrace));
 
         List<CardType> tied = new();
 
@@ -447,8 +438,7 @@ public class IzkalMechanic : EnemyMechanicBase
 
         // 얼음 흔적:
         // 가장 위험한 상태 딱 하나 제거
-        if (phase2 &&
-            dominantTrace == CardType.Ice)
+        if (phase2 && dominantTrace == CardType.Ice)
         {
             if (applyScar)
                 applyScar = false;
@@ -526,11 +516,7 @@ public class IzkalMechanic : EnemyMechanicBase
 
     public override void OnBurnDamageTaken(float damage)
     {
-        int reduce =
-            Mathf.Min(
-                2,
-                Mathf.FloorToInt(damage / 5f)
-            );
+        int reduce = Mathf.Min(MaxBurnDecode, Mathf.FloorToInt(damage / BurnDamagePerDecode));
 
         if (reduce <= 0)
             return;
@@ -577,5 +563,105 @@ public class IzkalMechanic : EnemyMechanicBase
             $"예고 {stormCountdown} / " +
             $"현재 룬: {string.Join(", ", currentRunes)}"
         );
+    }
+
+    public override IReadOnlyList<EnemyMechanicDisplayData> GetDisplayStatuses()
+    {
+        List<EnemyMechanicDisplayData> statuses = new();
+
+        // 미해독 룬
+        statuses.Add(
+            new EnemyMechanicDisplayData(
+                "UnreadRune",
+                unreadRune,
+                false,
+                30,
+                BaseDecode,
+                MaxActivationDecode,
+                BurnDamagePerDecode,
+                MaxBurnDecode
+            )
+        );
+
+        // 2. 현재 룬
+        foreach (CardType rune in currentRunes)
+        {
+            statuses.Add(
+                new EnemyMechanicDisplayData(
+                    GetCurrentRuneDisplayType(rune),
+                    0,
+                    true,
+                    31
+                )
+            );
+        }
+
+        // 룬 폭풍 예고
+        statuses.Add(
+            new EnemyMechanicDisplayData(
+                "RuneStorm",
+                stormCountdown,
+                false,
+                31
+            )
+        );
+        // 4. 판독 흔적 - 2페이즈에서만 표시
+        if (phase2)
+        {
+            statuses.Add(
+                new EnemyMechanicDisplayData(
+                    "RuneTraceFire",
+                    fireTrace,
+                    false,
+                    40,
+                    TraceRequirement,
+                    FireTraceDamageReduction,
+                    IceTraceStatusRemoveCount,
+                    NatureTraceActivateBonus,
+                    NatureTraceDrawCount
+                )
+            );
+
+            statuses.Add(
+                new EnemyMechanicDisplayData(
+                    "RuneTraceIce",
+                    iceTrace,
+                    false,
+                    41,
+                    TraceRequirement,
+                    FireTraceDamageReduction,
+                    IceTraceStatusRemoveCount,
+                    NatureTraceActivateBonus,
+                    NatureTraceDrawCount
+                )
+            );
+
+            statuses.Add(
+                new EnemyMechanicDisplayData(
+                    "RuneTraceNature",
+                    natureTrace,
+                    false,
+                    42,
+                    TraceRequirement,
+                    FireTraceDamageReduction,
+                    IceTraceStatusRemoveCount,
+                    NatureTraceActivateBonus,
+                    NatureTraceDrawCount
+                )
+            );
+        }
+
+        return statuses;
+    }
+
+    private string GetCurrentRuneDisplayType(CardType rune)
+    {
+        return rune switch
+        {
+            CardType.Fire => "CurrentRuneFire",
+            CardType.Ice => "CurrentRuneIce",
+            CardType.Nature => "CurrentRuneNature",
+            _ => "CurrentRune"
+        };
     }
 }

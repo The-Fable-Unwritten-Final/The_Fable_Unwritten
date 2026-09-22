@@ -4,6 +4,34 @@ using UnityEngine;
 
 public class EluaMechanic : EnemyMechanicBase
 {
+
+    // =========================
+    // Soprano
+    // =========================
+    private const int SopranoTrioDamage = 4;
+    private const int SopranoDuetDamage = 6;
+    private const int SopranoSoloDamage = 8;
+
+    // =========================
+    // Mezzo-Soprano
+    // =========================
+    private const int MezzoTrioAttack = 1;
+    private const int MezzoTrioDefend = 1;
+
+    private const int MezzoDuetDefend = 2;
+
+    private const int MezzoSoloAttack = 2;
+    private const int MezzoSoloDefend = 2;
+
+    // =========================
+    // Alto
+    // =========================
+    private const int AltoTrioHeal = 4;
+    private const int AltoDuetHeal = 8;
+
+    private const int AltoSoloHeal = 12;
+    private const int AltoSoloDefend = 1;
+
     private enum VoiceType
     {
         Soprano,
@@ -107,9 +135,9 @@ public class EluaMechanic : EnemyMechanicBase
     {
         float damage = aliveCount switch
         {
-            3 => 4f,
-            2 => 6f,
-            _ => 8f
+            3 => SopranoTrioDamage,
+            2 => SopranoDuetDamage,
+            _ => SopranoSoloDamage
         };
 
         foreach (var player in battleFlow.playerParty)
@@ -132,8 +160,8 @@ public class EluaMechanic : EnemyMechanicBase
         {
             foreach (var elua in aliveEluas)
             {
-                ApplyTick(elua, BuffStatType.Defend, 1);
-                ApplyTick(elua, BuffStatType.Attack, 1);
+                ApplyTick(elua, BuffStatType.Defend, MezzoTrioDefend);
+                ApplyTick(elua, BuffStatType.Attack, MezzoTrioAttack);
             }
 
             Debug.Log("[Elua] 메조 / 합창 / 전체 방어 +1, 공격 +1");
@@ -143,14 +171,14 @@ public class EluaMechanic : EnemyMechanicBase
         if (aliveCount == 2)
         {
             foreach (var elua in aliveEluas)
-                ApplyTick(elua, BuffStatType.Defend, 2);
+                ApplyTick(elua, BuffStatType.Defend, MezzoDuetDefend);
 
             Debug.Log("[Elua] 메조 / 2중창 / 전체 방어 +2");
             return;
         }
 
-        ApplyTick(singer, BuffStatType.Defend, 2);
-        ApplyTick(singer, BuffStatType.Attack, 2);
+        ApplyTick(singer, BuffStatType.Defend, MezzoSoloDefend);
+        ApplyTick(singer, BuffStatType.Attack, MezzoSoloAttack);
 
         Debug.Log("[Elua] 메조 / 독창 / 자신 방어 +2, 공격 +2");
     }
@@ -172,14 +200,14 @@ public class EluaMechanic : EnemyMechanicBase
                 .OrderBy(e => e.currentHP)
                 .FirstOrDefault();
 
-            lowest?.Heal(8);
+            lowest?.Heal(AltoDuetHeal);
 
             Debug.Log("[Elua] 알토 / 2중창 / 최저 체력 회복 8");
             return;
         }
 
         singer.Heal(12);
-        ApplyTick(singer, BuffStatType.Defend, 1);
+        ApplyTick(singer, BuffStatType.Defend, AltoSoloDefend);
 
         Debug.Log("[Elua] 알토 / 독창 / 자신 회복 12, 방어 +1");
     }
@@ -194,5 +222,130 @@ public class EluaMechanic : EnemyMechanicBase
                 duration = 2
             }
         );
+    }
+
+    public override IReadOnlyList<EnemyMechanicDisplayData> GetDisplayStatuses()
+    {
+        int aliveCount = GetAliveEluaCount();
+
+        if (aliveCount <= 0)
+            return System.Array.Empty<EnemyMechanicDisplayData>();
+
+        string formationText = GetFormationText(aliveCount);
+        string effectText = GetVoiceEffectText(aliveCount);
+
+        string type = voice switch
+        {
+            VoiceType.Soprano => "Soprano",
+            VoiceType.Mezzo => "MezzoSoprano",
+            VoiceType.Alto => "Alto",
+            _ => null
+        };
+
+        if (string.IsNullOrEmpty(type))
+            return System.Array.Empty<EnemyMechanicDisplayData>();
+
+        return new[]
+        {
+            new EnemyMechanicDisplayData(
+                type,
+                0,
+                true,
+                30,
+                formationText, // 최종 Tooltip {0}
+                effectText     // 최종 Tooltip {1}
+            )
+        };
+    }
+
+    private int GetAliveEluaCount()
+    {
+        return battleFlow.enemyParty.OfType<Enemy>().Count(e => e != null && e.IsAlive() && e.Mechanic is EluaMechanic);
+    }
+
+    private string GetFormationText(int aliveCount)
+    {
+        string key = aliveCount switch
+        {
+            3 => "Type_Name_33_04", // 트리오
+            2 => "Type_Name_33_05", // 듀엣
+            _ => "Type_Name_33_06"  // 솔로
+        };
+
+        return LocaleDataManager.GetLocalizedStringTable(
+            "Elite Table",
+            key
+        );
+    }
+
+    private string GetVoiceEffectText(int aliveCount)
+    {
+        string key;
+        object[] args;
+
+        switch (voice)
+        {
+            case VoiceType.Soprano:
+                key = aliveCount switch
+                {
+                    3 => "Type_Text_33_04",
+                    2 => "Type_Text_33_05",
+                    _ => "Type_Text_33_06"
+                };
+
+                args = new object[]
+                {
+                aliveCount switch
+                {
+                    3 => SopranoTrioDamage,
+                    2 => SopranoDuetDamage,
+                    _ => SopranoSoloDamage
+                }
+                };
+                break;
+
+            case VoiceType.Mezzo:
+                if (aliveCount == 3)
+                {
+                    key = "Type_Text_33_07";
+                    args = new object[] { MezzoTrioAttack, MezzoTrioDefend };
+                }
+                else if (aliveCount == 2)
+                {
+                    key = "Type_Text_33_08";
+                    args = new object[] { MezzoDuetDefend };
+                }
+                else
+                {
+                    key = "Type_Text_33_09";
+                    args = new object[] {  MezzoSoloAttack, MezzoSoloDefend };
+                }
+                break;
+
+            case VoiceType.Alto:
+                if (aliveCount == 3)
+                {
+                    key = "Type_Text_33_10";
+                    args = new object[] { AltoTrioHeal };
+                }
+                else if (aliveCount == 2)
+                {
+                    key = "Type_Text_33_11";
+                    args = new object[] { AltoDuetHeal };
+                }
+                else
+                {
+                    key = "Type_Text_33_12";
+                    args = new object[] {  AltoSoloHeal, AltoSoloDefend };
+                }
+                break;
+
+            default:
+                return string.Empty;
+        }
+
+        string text = LocaleDataManager.GetLocalizedStringTable("Elite Table", key);
+
+        return string.Format(text, args);
     }
 }

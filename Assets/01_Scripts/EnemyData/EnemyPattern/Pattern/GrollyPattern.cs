@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class GrollyMechanic : EnemyMechanicBase
 {
@@ -137,5 +138,32 @@ public class GrollyMechanic : EnemyMechanicBase
         devour = 0;
 
         Debug.Log($"[Grolly] {target.ChClass} 뱉기");
+    }
+
+    public override IReadOnlyList<EnemyMechanicDisplayData> GetDisplayStatuses()
+    {
+        // 아무도 삼키지 않은 상태
+        if (swallowedPlayer == null)
+            return System.Array.Empty<EnemyMechanicDisplayData>();
+
+        return new[]
+        {
+            // 현재 포식 수치
+            new EnemyMechanicDisplayData(
+                "Predation",
+                devour,
+                false,
+                30,
+                MaxDevour
+            ),
+
+            // 플레이어를 삼킨 상태
+            new EnemyMechanicDisplayData(
+                "Swallowed",
+                0,
+                true,
+                31
+            )
+        };
     }
 }

@@ -4,10 +4,9 @@ public abstract class EnemyMechanicBase : IEnemyMechanic
 {
     protected Enemy owner;
     protected BattleFlowController battleFlow;
+    private static readonly IReadOnlyList<EnemyMechanicDisplayData> EmptyDisplayStatuses = new List<EnemyMechanicDisplayData>();
 
-    public virtual void Initialize(
-        Enemy owner,
-        BattleFlowController battleFlow)
+    public virtual void Initialize(Enemy owner, BattleFlowController battleFlow)
     {
         this.owner = owner;
         this.battleFlow = battleFlow;
@@ -23,13 +22,7 @@ public abstract class EnemyMechanicBase : IEnemyMechanic
 
     public virtual void OnDamaged(DamageContext context) { }
 
-    public virtual void OnCardUsed(
-        PlayerController caster,
-        CardModel card,
-        IReadOnlyList<IStatusReceiver> targets,
-        int activationDiscount)
-    {
-    }
+    public virtual void OnCardUsed(PlayerController caster, CardModel card, IReadOnlyList<IStatusReceiver> targets, int activationDiscount) { }
 
     public virtual void OnBurnDamageTaken(float damage) { }
 
@@ -49,4 +42,16 @@ public abstract class EnemyMechanicBase : IEnemyMechanic
     {
         return value;
     }
+
+    public virtual IReadOnlyList<EnemyMechanicDisplayData> GetDisplayStatuses()
+    {
+        return EmptyDisplayStatuses;
+    }
+
+    public virtual void OnSkillSelected(EnemySkill skill, EnemyAct actData) { }
+    public virtual void OnSkillResolved(EnemySkill skill, EnemyAct actData) { }
+
+    public virtual float ModifyIncomingAttackDamage(float damage) => damage;
+
+    public virtual float ModifySkillWeight(EnemySkill skill, float baseWeight) => baseWeight;
 }

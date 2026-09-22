@@ -581,30 +581,47 @@ public class CardDisplay : MonoBehaviour
         CardModel model = currentCard.cardData;
         BattleFlowController btc = GameManager.Instance.turnController.battleFlow;
 
-        if (model.effects != null && model.effects.Count > 0)
+        if (model.effects == null || model.effects.Count == 0)
+            return;
+
+        Debug.Log($"[Agape Target] card={model.cardName}, class={model.characterClass}, type={model.type}, targetType={model.targetType}, luciel={btc.HasLucielAgape()}");
+
+        bool agapeReverse = btc.HasLucielAgape() &&
+                            model.characterClass == CharacterClass.Kayla &&
+                            model.targetType != TargetType.None &&
+                            (model.type == CardType.Pray || model.type == CardType.baptism || model.type == CardType.Taboo);
+        Debug.Log($"[Agape Target] reverse={agapeReverse}");
+        if (agapeReverse)
         {
-            // model의 target type에 따라 화살표 표시
-            switch (model.targetType)
+            btc.playerParty.ForEach(x =>
             {
-                // 자기 자신에게만 적용되는 효과
-                case TargetType.None:
-                    var self = btc.playerParty.FirstOrDefault(x => x.ChClass == model.characterClass);
-                    if (self != null) self.IsTargetable = true; // 자기 자신 에게만 화살표 표시
-                    break;
+                if (x != null && x.IsAlive())
+                    x.IsTargetable = true;
+            });
 
-                // 아군을 대상으로 적용 가능한 효과
-                case TargetType.Ally:
-                    btc.playerParty.ForEach(x => x.IsTargetable = true); // 모든 캐릭터의 화살표 활성화
-                    break;
+            btc.enemyParty.ForEach(x =>
+            {
+                if (x != null && x.IsAlive())
+                    x.IsTargetable = true;
+            });
 
-                // 적을 대상으로 적용 가능한 효과
-                case TargetType.Enemy:
-                    btc.enemyParty.ForEach(x => { if (x != null) x.IsTargetable = true; }); // 모든 몬스터의 화살표 활성화 (null 예외 처리)
-                    break;
+            return;
+        }
 
-                default:
-                    break;
-            }
+        switch (model.targetType)
+        {
+            case TargetType.None:
+                var self = btc.playerParty.FirstOrDefault(x => x.ChClass == model.characterClass);
+                if (self != null) self.IsTargetable = true;
+                break;
+
+            case TargetType.Ally:
+                btc.playerParty.ForEach(x => x.IsTargetable = true);
+                break;
+
+            case TargetType.Enemy:
+                btc.enemyParty.ForEach(x => { if (x != null) x.IsTargetable = true; });
+                break;
         }
     }
 

@@ -1,6 +1,7 @@
 using DG.Tweening.Core.Easing;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
@@ -179,6 +180,8 @@ public class CardModel : ScriptableObject
 
         yield return new WaitUntil(() => hitTriggered);
         yield return new WaitForSeconds(0.9f);
+
+        ApplySwitchType(caster);
 
         GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
 
@@ -474,18 +477,74 @@ public class CardModel : ScriptableObject
 
     private void ApplyEffectsToTarget(IStatusReceiver caster, IStatusReceiver target, List<IStatusReceiver> allTargets, bool fixedIsEnhanced)
     {
+        List<IStatusReceiver> currentTargets = new List<IStatusReceiver> { target };
+        // 기본 1회 + RepeatEffect가 지정한 총 적용 횟수
+        int totalApplyCount = GetRepeatCount(caster, currentTargets);
+        bool reversedTaboo = IsReversedTaboo(allTargets);
+
+        for (int repeat = 0; repeat < totalApplyCount; repeat++)
+        {
+            foreach (var effect in effects)
+            {
+                if (effect is DamageEffect damageEffect)
+                {
+                    float multiplier = GetDamageMultiplier(caster, currentTargets);
+                    damageEffect.ApplyWithMultiplier(caster,currentTargets,multiplier,fixedIsEnhanced, reversedTaboo);
+
+                    continue;
+                }
+
+                if (effect is ApplyStatusEffect statusEffect &&
+                    statusEffect.target >= 0 &&
+                    statusEffect.target <= 3)
+                {
+                    if (target != allTargets[0])
+                        continue;
+
+                    effect.Apply(caster, allTargets, fixedIsEnhanced);
+                    continue;
+                }
+
+                effect.Apply(caster, currentTargets, fixedIsEnhanced);
+            }
+        }
+    }
+
+    private int GetRepeatCount(
+    IStatusReceiver caster,
+    List<IStatusReceiver> targets)
+    {
+        int totalApplyCount = 1;
+
         foreach (var effect in effects)
         {
-            if (effect is ApplyStatusEffect statusEffect && statusEffect.target >= 0 && statusEffect.target <= 3)
+            // 무조건 Repeat
+            if (effect is RepeatEffect repeatEffect)
             {
-                if (target != allTargets[0])
-                    continue;
+                totalApplyCount = Mathf.Max(
+                    totalApplyCount,
+                    repeatEffect.repeatCount
+                );
 
-                effect.Apply(caster, allTargets, fixedIsEnhanced);
                 continue;
             }
-            effect.Apply(caster, new List<IStatusReceiver> { target }, fixedIsEnhanced);
+
+            // Conditional → Repeat
+            if (effect is ConditionalEffect conditional &&
+                conditional.effectIfTrue is RepeatEffect conditionalRepeat)
+            {
+                if (conditional.condition != null &&
+                    conditional.condition.IsConditionMet(caster, targets))
+                {
+                    totalApplyCount = Mathf.Max(
+                        totalApplyCount,
+                        conditionalRepeat.repeatCount
+                    );
+                }
+            }
         }
+
+        return totalApplyCount;
     }
 
     private void PlayCardSounds()
@@ -513,5 +572,64 @@ public class CardModel : ScriptableObject
                 delay
             );
         }
+    }
+
+    private float GetDamageMultiplier(IStatusReceiver caster, List<IStatusReceiver> targets)
+    {
+        float multiplier = 1f;
+
+        foreach (var effect in effects)
+        {
+            if (effect is DamagePercentEffect damagePercent)
+            {
+                multiplier += damagePercent.percent / 100f;
+                Debug.Log($"[DamagePercent] 일반 증가: {damagePercent.percent}% / 최종 배율={multiplier}");
+            }
+            else if (effect is ConditionalEffect conditional && conditional.effectIfTrue is DamagePercentEffect conditionalDamagePercent)
+            {
+                bool conditionMet = conditional.condition != null && conditional.condition.IsConditionMet(caster, targets);
+
+                Debug.Log($"[DamagePercent] 조건부 발견 / " + $"조건={conditional.condition?.GetType().Name} / " +$"결과={conditionMet} / " + $"증가량={conditionalDamagePercent.percent}%");
+                if (conditionMet)
+                {
+                    multiplier += conditionalDamagePercent.percent / 100f;
+                }
+            }
+        }
+        Debug.Log($"[DamagePercent] 최종 배율 = {multiplier}");
+
+        return multiplier;
+    }
+
+    private void ApplySwitchType(IStatusReceiver caster)
+    {
+        if (caster == null || string.IsNullOrEmpty(switchType))
+            return;
+
+        if (!System.Enum.TryParse<StancType>(
+                switchType,
+                true,
+                out var targetStance))
+        {
+            Debug.LogWarning(
+                $"[Card SwitchType] 변환 실패 / Card={index} / switchType={switchType}"
+            );
+            return;
+        }
+
+        caster.ChangeStance(targetStance);
+    }
+
+    private bool IsReversedTaboo(List<IStatusReceiver> targets)
+    {
+        if (characterClass != CharacterClass.Kayla || type != CardType.Taboo)
+            return false;
+
+        var battleFlow = GameManager.Instance.turnController.battleFlow;
+
+        if (!battleFlow.HasLucielAgape())
+            return false;
+
+        return targets.Any(x => x != null && x.ChClass != CharacterClass.Enemy);
     }
 }

@@ -147,7 +147,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1193932238848
-    m_Localized: Contrast {0}
+    m_Localized: Preparation {0}
     m_Metadata:
       m_Items: []
   - m_Id: 1201599426560
@@ -457,28 +457,44 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 411244798947328
-    m_Localized: Last Leon card type in this turn
+    m_Localized: 'Increases by the card''s Cost when same type is used (Max 2)
+
+      Counter
+      an enemy attack of the same type
+
+      For different types, spend 2 Preparation
+      to counter
+
+      Remove at enemy turn end'
     m_Metadata:
       m_Items: []
   - m_Id: 411245340012544
-    m_Localized: 'Below {0}: Counter failure +1
+    m_Localized: 'Min 0, Max {0}
 
-      At {0}: Counter failure strengthens
-      skill and set it to {1}
+      Below {0}: Counter failure >> Use skill,
+      then +1
 
-      [Proof of Bare Hands] strengthens based on value'
+      At {0}: Counter failure >> Strengthen skill, then change to
+      {1}
+
+      Phase 1 counter success
+
+      Phase 2 Opening recovery success
+      >> -1'
     m_Metadata:
       m_Items: []
   - m_Id: 411245860106240
-    m_Localized: 'Removed when a Leon card of the same type is used,
+    m_Localized: 'Until the end of the next player turn,
 
-      before
-      the end of the next player turn
+      remove on attacked
+      by the same type
 
-      On removal success, reduce Mastery by
-      {0}
+      On success, Mastery -{0}
 
-      on failure, increase Mastery by {1}'
+      On failure, Mastery
+      +{1}
+
+'
     m_Metadata:
       m_Items: []
   - m_Id: 411322070609920

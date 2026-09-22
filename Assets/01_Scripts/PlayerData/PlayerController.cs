@@ -469,6 +469,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     }
 
 
+
+
     /// <summary>
     /// 체력 회복 (grace 수치 만큼 추가)
     /// </summary>
@@ -606,6 +608,9 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         // 캐릭터가 활성화될 때 버튼도 활성화
         if (stanceToggleButton != null)
             stanceToggleButton.gameObject.SetActive(true);
+
+        if (playerData != null)
+            stanceIconDisplay?.UpdateIcon(playerData.currentStance);
     }
 
     private void OnDisable()
@@ -613,9 +618,11 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         // 캐릭터가 비활성화될 때 버튼도 비활성화
         if (stanceToggleButton != null)
             stanceToggleButton.gameObject.SetActive(false);
+
+        stanceIconDisplay?.HideIcon();
     }
 
-    
+
     public void ChangeStance(StancType Stance) //StancUI 함수
     {
         stanceSystem?.ChangeStance(Stance);
@@ -790,6 +797,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     {
         if (statusDisplay != null)
             statusDisplay.gameObject.SetActive(false);
+
+        stanceIconDisplay?.HideIcon();
     }
 
     public void ShowStatusUI()
@@ -798,6 +807,9 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         if (statusDisplay != null)
             statusDisplay.gameObject.SetActive(true);
+
+        if (playerData != null)
+            stanceIconDisplay?.UpdateIcon(playerData.currentStance);
     }
 
     //발동 시 사라져야 하는 경우
@@ -1306,5 +1318,49 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         Debug.Log($"[Undying] {playerData.CharacterName} 치명타 방지 / HP 1");
 
         return true;
+    }
+
+    public float TakeDamage(float amount, float finalMultiplier, bool floorFinalDamage)
+    {
+        if (hasBlock)
+        {
+            hasBlock = false;
+            return 0;
+        }
+
+        amount = StyleManager.Instance.GetOnComingDamageModify(this, this, amount);
+
+        if (HasGuardValue())
+        {
+            amount = Mathf.Max(0, amount - GetGuardValue());
+            ConsumeGuard();
+        }
+
+        float reduced = amount - ModifyStat(BuffStatType.Defend, 0f);
+        reduced = Mathf.Max(reduced, 1f);
+
+        if (playerData.currentStance == StancType.Defense)
+            reduced *= 0.5f;
+        else if (playerData.currentStance == StancType.Rush)
+            reduced *= 2f;
+
+        reduced = Mathf.Round(reduced);
+
+        if (finalMultiplier != 1f)
+        {
+            reduced *= finalMultiplier;
+            reduced = floorFinalDamage ? Mathf.Floor(reduced) : Mathf.Round(reduced);
+            reduced = Mathf.Max(reduced, 1f);
+        }
+
+        playerData.currentHP = Mathf.Max(0, playerData.currentHP - reduced);
+
+        if (!IsAlive())
+        {
+            if (!TryConsumeUndying())
+                isDeathPending = true;
+        }
+
+        return reduced;
     }
 }

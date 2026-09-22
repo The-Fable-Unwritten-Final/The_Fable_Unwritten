@@ -95,14 +95,32 @@ public class UI_MainTitle : MonoBehaviour
 
     private void SetSaveGameButton()
     {
-        if (ProgressDataManager.Instance.StageIndex == 0 ||
-            !ProgressDataManager.Instance.RetryFromStart) return;
-
-        // 버튼 비활성화 및 글자 선명도 조정
-        saveGame.GetComponent<Button>().interactable = false;
+        // 이어하기 가능 조건: CurrentNode가 null이 아니고, 스테이지 씬이 아닐 때
+        var currentNode = ProgressDataManager.Instance.CurrentNode;
+        var isStageScene = ProgressDataManager.Instance.IsStageScene;
+        var stageIndex = ProgressDataManager.Instance.StageIndex;
+        var retryFromStart = ProgressDataManager.Instance.RetryFromStart;
+        
+        Debug.Log($"[SetSaveGameButton] CurrentNode={currentNode}, IsStageScene={isStageScene}, StageIndex={stageIndex}, RetryFromStart={retryFromStart}");
+        
+        Button btn = saveGame.GetComponent<Button>();
         TextMeshProUGUI tmp = saveGame.GetComponentInChildren<TextMeshProUGUI>();
         Color c = tmp.color;
-        c.a = 140f / 255f;
+        
+        // 이어하기 가능: CurrentNode가 존재하고 스테이지 씬이 아닐 때
+        if (currentNode != null && !isStageScene) 
+        {
+            Debug.Log("[SetSaveGameButton] 이어하기 가능 → 버튼 활성화");
+            btn.interactable = true;
+            c.a = 1f;  // 밝은 상태
+        }
+        else
+        {
+            Debug.Log("[SetSaveGameButton] 이어하기 불가능 → 버튼 비활성화");
+            btn.interactable = false;
+            c.a = 140f / 255f;  // 흐린 상태
+        }
+        
         tmp.color = c;
     }
     private void OnClickUnlockCard()
