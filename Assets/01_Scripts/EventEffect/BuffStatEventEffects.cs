@@ -95,6 +95,9 @@ public class BuffStatEventEffects : EventEffects
             text = this.text,
             eventType = this.eventType,
             duration = this.duration,
+            sophia = this.sophia,
+            kyla = this.kyla,
+            leon = this.leon,
             buffStatType = this.buffStatType,
             buffStatValue = this.buffStatValue,
             buffStatDuration = this.buffStatDuration

@@ -46,6 +46,9 @@ public class StageMapController : MonoBehaviour
         backGround.sprite = DataManager.Instance.GetBackground(stageIndex);
         stageTitleText.text = LocaleDataManager.GetLocalizedStringTable("Locale Table", $"StageTitle_{stageIndex}");
 
+        // 스테이지씬에 진입했으므로 CurrentNode 초기화 (다음 노드 선택 가능하도록)
+        pd.CurrentNode = null;
+        
         pd.SaveProgress(true);
     }
 

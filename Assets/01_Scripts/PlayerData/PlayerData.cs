@@ -74,6 +74,9 @@ public class PlayerData : ScriptableObject
         currentDeckIndexes = new List<int>();
         foreach (var card in currentDeck)
             currentDeckIndexes.Add(card.index);
+        
+        // 오름차순으로 정렬 (1000 < 1001 < 1002...)
+        currentDeckIndexes.Sort();
     }
 
     // 로드 시 인덱스 기반으로 덱 구성

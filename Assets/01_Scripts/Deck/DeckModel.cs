@@ -232,32 +232,51 @@ public class DeckModel
     /// </summary>
     public void ApplyPersistentDiscountToAllCards(int amount)
     {
-        foreach (var card in hand)
-            if (ShouldApplyPersistentDiscount(card))
+        // 같은 카드 인덱스에 한 번만 적용하기 위해 추적
+        HashSet<int> processedCardIndices = new();
+        
+        // 세 리스트의 모든 카드를 순회
+        var allCards = new List<CardModel>();
+        allCards.AddRange(hand);
+        allCards.AddRange(unusedDeck);
+        allCards.AddRange(usedDeck);
+        
+        foreach (var card in allCards)
+        {
+            // 아직 처리되지 않은 카드 인덱스인 경우에만 적용
+            if (!processedCardIndices.Contains(card.index) && 
+                ShouldApplyPersistentDiscount(card))
+            {
                 card.ApplyPersistentDiscount(amount);
-        foreach (var card in unusedDeck)
-            if (ShouldApplyPersistentDiscount(card))
-                card.ApplyPersistentDiscount(amount);
-        foreach (var card in usedDeck)
-            if (ShouldApplyPersistentDiscount(card))
-                card.ApplyPersistentDiscount(amount);
+                processedCardIndices.Add(card.index); // 이 인덱스는 처리됨으로 표시
+            }
+        }
     }
     /// <summary>
     ///  '특정 타입'의 카드 대상 할인 적용
     /// </summary>
     public void ApplyPersistentDiscountByCardType(CardType targetType, int amount)
     {
-        foreach (var card in hand)
-            if (card.type == targetType && ShouldApplyPersistentDiscount(card))
-                card.ApplyPersistentDiscount(amount);
+        // 같은 카드 인덱스에 한 번만 적용하기 위해 추적
+        HashSet<int> processedCardIndices = new();
         
-        foreach (var card in unusedDeck)
-            if (card.type == targetType && ShouldApplyPersistentDiscount(card))
-                card.ApplyPersistentDiscount(amount);
+        // 세 리스트의 모든 카드를 순회
+        var allCards = new List<CardModel>();
+        allCards.AddRange(hand);
+        allCards.AddRange(unusedDeck);
+        allCards.AddRange(usedDeck);
         
-        foreach (var card in usedDeck)
-            if (card.type == targetType && ShouldApplyPersistentDiscount(card))
+        foreach (var card in allCards)
+        {
+            // 해당 타입이고, 아직 처리되지 않은 카드 인덱스인 경우에만 적용
+            if (card.type == targetType && 
+                !processedCardIndices.Contains(card.index) && 
+                ShouldApplyPersistentDiscount(card))
+            {
                 card.ApplyPersistentDiscount(amount);
+                processedCardIndices.Add(card.index); // 이 인덱스는 처리됨으로 표시
+            }
+        }
     }
 
     public void DiscardUnmaintainedCardsAtTurnEnd()

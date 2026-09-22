@@ -21,6 +21,15 @@ public class GameManager : MonoSingleton<GameManager>
         base.Awake();
     }
 
+    private void Update()
+    {
+        // Ctrl + 9 누르면 스테이지 클리어 (심의용 빠른 테스트 기능, 텐키리스 대응)
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            OnTestStageClear();
+        }
+    }
+
     async void Start()
     {
         await UnityServices.InitializeAsync();
@@ -75,5 +84,52 @@ public class GameManager : MonoSingleton<GameManager>
     public void UnRegisterTutorialController()
     {
         tutorialController = null;
+    }
+
+    /// <summary>
+    /// 테스트용 스테이지 클리어 (Ctrl + 9)
+    /// </summary>
+    private void OnTestStageClear()
+    {
+        var setting = ProgressDataManager.Instance;
+        setting.RetryFromStart = false;
+        setting.StageCleared = true;
+
+        // 1 스테이지 클리어 후, 실패 시 2스테이지부터 시작하게 설정
+        if (setting.StageIndex == 1)
+        {
+            if (setting.VisitedNodes.Count > 0)
+            {
+                var lasVisitde = setting.VisitedNodes[setting.VisitedNodes.Count - 1];
+                var lasColum = setting.SavedStageData.columns[^1];
+
+                if (lasColum.Contains(lasVisitde))
+                {
+                    setting.MinStageIndex = 2;
+                }
+            }
+        }
+
+        if (setting.CurrentNode != null)
+        {
+            if (setting.CurrentNode.type == NodeType.Boss ||
+                    (setting.StageIndex == 1 && setting.CurrentNode.columnIndex == 3))
+            {
+                setting.IsNewStage = true;
+            }
+            else
+            {
+                setting.IsNewStage = false;
+            }
+
+            if (setting.CurrentNode.type == NodeType.EliteBattle)
+            {
+                setting.EliteClear(setting.CurrentTheme);
+            }
+        }
+
+        ProgressDataManager.Instance.SavedEnemySetIndex = -1; // 랜덤 에너미 셋 초기화
+
+        UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
     }
 }

@@ -75,6 +75,7 @@ public class PopupUI_CombatReward : BasePopupUI
                         if (targetCharacter != null && targetCharacter.currentDeck != null)
                         {
                             targetCharacter.currentDeck.Add(rewardCard);
+                            targetCharacter.UpdateCurrentDeckIndexes(); // ← 인덱스 동기화
                             Debug.Log($"[PopupUI_CombatReward] {targetCharacter.CharacterName}의 덱에 카드 {cardIndex} 추가");
                         }
                     }
@@ -106,7 +107,7 @@ public class PopupUI_CombatReward : BasePopupUI
             {               
                 // 선택된 보상 카드를 해당 캐릭터의 덱에 추가
                 if (selectedRewardCard != null)
-                {
+                {         
                     PlayerData targetCharacter = null;
                     int cardIndex = selectedRewardCard.index;
                     
@@ -125,16 +126,16 @@ public class PopupUI_CombatReward : BasePopupUI
                     {
                         // 레온 (3000번대) - PlayerDatas[2]
                         targetCharacter = setting.PlayerDatas.FirstOrDefault(p => p.CharacterClass == CharacterClass.Leon);
-                    }
-                    
+                    }                   
                     // 대상 캐릭터의 덱에 카드 추가
                     if (targetCharacter != null && targetCharacter.currentDeck != null)
                     {
                         targetCharacter.currentDeck.Add(selectedRewardCard);
+                        targetCharacter.UpdateCurrentDeckIndexes(); // 인덱스도 동기화
                     }
                     else
                     {
-                        Debug.LogWarning($"[PopupUI_CombatReward] 카드 인덱스 {cardIndex}에 해당하는 캐릭터를 찾을 수 없습니다.");
+                        Debug.LogWarning($"[PopupUI_CombatReward] 카드 추가 실패! 카드인덱스: {cardIndex}, 캐릭터: {targetCharacter?.CharacterName ?? "null"}, 덱: {(targetCharacter?.currentDeck != null ? "있음" : "없음")}");
                     }
                     
                     // 해금 카드 목록에도 추가 (이미 해금되었지만 명시적으로)
@@ -182,6 +183,9 @@ public class PopupUI_CombatReward : BasePopupUI
                     setting.EliteClear(setting.CurrentTheme);
                 }
                 ProgressDataManager.Instance.SavedEnemySetIndex = -1; // 랜덤 에너미 셋 초기화
+
+                // 카드 보상 데이터 저장
+                ProgressDataManager.Instance.SaveProgress(true);
 
                 gameObject.SetActive(false);
                 
