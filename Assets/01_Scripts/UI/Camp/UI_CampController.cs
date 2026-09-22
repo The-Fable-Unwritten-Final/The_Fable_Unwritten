@@ -284,16 +284,17 @@ public class UI_CampController : MonoBehaviour
             setting.IsNewStage = false;
         }
         
-        // 캠프 상호작용 완료 후 CurrentNode를 null로 설정 (다음 노드 선택 가능하도록)
-        setting.CurrentNode = null;
         // 스테이지 상태 저장
         if (setting.SavedStageData != null)
         {
             setting.SaveStageState(setting.SavedStageData, setting.VisitedNodes);
         }
         
-        // 변경된 데이터 저장
+        // 변경된 데이터 저장 (CurrentNode가 유효한 상태에서 저장해야 함)
         ProgressDataManager.Instance.SaveProgress(true);
+        
+        // 저장 완료 후 캠프 상호작용 완료 표시 (다음 노드 선택 가능하도록)
+        setting.CurrentNode = null;
        
         UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
     }

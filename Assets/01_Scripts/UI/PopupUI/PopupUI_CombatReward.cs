@@ -29,6 +29,7 @@ public class PopupUI_CombatReward : BasePopupUI
     private List<Button> rewardCardButtons = new(); // 보상 카드 버튼 리스트
     private List<RectTransform> rewardCardRectTransforms = new(); // 보상 카드 RectTransform 리스트 (애니메이션용)
     private List<Vector3> initialCardPositions = new(); // 카드의 초기 위치 저장
+    private List<GameObject> instantiatedCardObjects = new(); // 생성된 카드 프리팹 객체들 (정리용)
 
     private void OnEnable()
     {
@@ -243,6 +244,16 @@ public class PopupUI_CombatReward : BasePopupUI
 
     private void GenerateRewardCards()
     {
+        // 이전 보상 카드 프리팹들만 제거 (미리 배치된 아이콘/텍스트는 유지)
+        foreach (var cardObj in instantiatedCardObjects)
+        {
+            if (cardObj != null)
+            {
+                DestroyImmediate(cardObj);
+            }
+        }
+        instantiatedCardObjects.Clear();
+
         // 1. 해금된 카드 중에서 중복 없이 3개 선택
         var unlockedCardList = new List<int>(DataManager.Instance.AllCards
             .Where(card => card.isUnlocked)
@@ -285,6 +296,7 @@ public class PopupUI_CombatReward : BasePopupUI
         {
             GameObject cardObj = Instantiate(cardPrefab);
             cardObj.transform.SetParent(rewardCardSlots[i], false);
+            instantiatedCardObjects.Add(cardObj); // ← 생성된 카드 기록
             RectTransform cardRect = cardObj.GetComponent<RectTransform>();
             
             // 스케일과 위치 설정
@@ -499,6 +511,16 @@ public class PopupUI_CombatReward : BasePopupUI
                 cardRect.localRotation = Quaternion.identity;
             }
         }
+        
+        // 생성된 카드 프리팹 정리
+        foreach (var cardObj in instantiatedCardObjects)
+        {
+            if (cardObj != null)
+            {
+                DestroyImmediate(cardObj);
+            }
+        }
+        instantiatedCardObjects.Clear();
     }
 
     /// <summary>

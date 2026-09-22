@@ -60,8 +60,10 @@ public class UI_MainTitle : MonoBehaviour
     public void OnClickSaveGame()
     {
         var currentNode = ProgressDataManager.Instance.CurrentNode;
+        var savedStageData = ProgressDataManager.Instance.SavedStageData;
 
-        if (currentNode == null || ProgressDataManager.Instance.IsStageScene)
+        // currentNode와 savedStageData 둘 다 없거나 스테이지 씬일 때만 진행 불가
+        if ((currentNode == null && savedStageData == null) || ProgressDataManager.Instance.IsStageScene)
         {
             UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
             return;
@@ -72,6 +74,16 @@ public class UI_MainTitle : MonoBehaviour
         
         // 전투 입장 시점의 상태 복원 (진행 중 저장된 상태 무시)
         ProgressDataManager.Instance.RestoreBattleEntryState();
+
+        // LoadProgress 후 CurrentNode 갱신
+        currentNode = ProgressDataManager.Instance.CurrentNode;
+
+        // currentNode가 null인 경우 (스테이지맵에서 노드 미선택 상태에서 저장)
+        if (currentNode == null)
+        {
+            UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
+            return;
+        }
 
         switch (currentNode.type)
         {
@@ -95,20 +107,21 @@ public class UI_MainTitle : MonoBehaviour
 
     private void SetSaveGameButton()
     {
-        // 이어하기 가능 조건: CurrentNode가 null이 아니고, 스테이지 씬이 아닐 때
+        // 이어하기 가능 조건: (CurrentNode 또는 SavedStageData가 있음) && 스테이지 씬이 아닐 때
         var currentNode = ProgressDataManager.Instance.CurrentNode;
+        var savedStageData = ProgressDataManager.Instance.SavedStageData;
         var isStageScene = ProgressDataManager.Instance.IsStageScene;
         var stageIndex = ProgressDataManager.Instance.StageIndex;
         var retryFromStart = ProgressDataManager.Instance.RetryFromStart;
         
-        Debug.Log($"[SetSaveGameButton] CurrentNode={currentNode}, IsStageScene={isStageScene}, StageIndex={stageIndex}, RetryFromStart={retryFromStart}");
+        Debug.Log($"[SetSaveGameButton] CurrentNode={currentNode}, SavedStageData={savedStageData}, IsStageScene={isStageScene}, StageIndex={stageIndex}, RetryFromStart={retryFromStart}");
         
         Button btn = saveGame.GetComponent<Button>();
         TextMeshProUGUI tmp = saveGame.GetComponentInChildren<TextMeshProUGUI>();
         Color c = tmp.color;
         
-        // 이어하기 가능: CurrentNode가 존재하고 스테이지 씬이 아닐 때
-        if (currentNode != null && !isStageScene) 
+        // 이어하기 가능: (CurrentNode 또는 SavedStageData 존재) && 스테이지 씬이 아닐 때
+        if ((currentNode != null || savedStageData != null) && !isStageScene) 
         {
             Debug.Log("[SetSaveGameButton] 이어하기 가능 → 버튼 활성화");
             btn.interactable = true;

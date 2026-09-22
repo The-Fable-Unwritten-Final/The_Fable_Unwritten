@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -574,12 +574,6 @@ PrefabInstance:
 --- !u!224 &85861743 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7965062648606448989, guid: 6a8a8b7577625024db1742592b6ef6a5,
-    type: 3}
-  m_PrefabInstance: {fileID: 85861742}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &85861744 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3672793994770264625, guid: 6a8a8b7577625024db1742592b6ef6a5,
     type: 3}
   m_PrefabInstance: {fileID: 85861742}
   m_PrefabAsset: {fileID: 0}
@@ -16467,7 +16461,7 @@ PrefabInstance:
         type: 3}
       propertyPath: emphasizeObject.Array.data[1]
       value: 
-      objectReference: {fileID: 85861744}
+      objectReference: {fileID: 6659323909349252914}
     - target: {fileID: 7358748927269794262, guid: 146a876e7721c264bbd81c2783216639,
         type: 3}
       propertyPath: emphasizeObject.Array.data[2]
@@ -16633,6 +16627,11 @@ PrefabInstance:
         type: 3}
       propertyPath: tutorials.Array.data[9]
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8315731337692748681, guid: 146a876e7721c264bbd81c2783216639,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8572424478197305988, guid: 146a876e7721c264bbd81c2783216639,
         type: 3}
