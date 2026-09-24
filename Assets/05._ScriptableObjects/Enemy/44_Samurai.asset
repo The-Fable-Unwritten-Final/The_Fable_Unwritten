@@ -15,8 +15,8 @@ MonoBehaviour:
   idNum: 44
   enemyName: Samurai
   exp: 0
-  maxHP: 110
-  currentHP: 0
+  maxHP: 132
+  currentHP: 132
   aTKValue: 0
   dEFValue: 0
   stun: 0
@@ -24,13 +24,13 @@ MonoBehaviour:
   block: 0
   note: 
   anchorData:
-    visualOffset: {x: 0, y: 0}
-    footPoint: {x: 0, y: 0}
-    bodyPoint: {x: 0, y: 0}
-    headPoint: {x: 0, y: 0}
-    overheadPoint: {x: 0, y: 0}
+    visualOffset: {x: 0, y: -1.1}
+    footPoint: {x: 0, y: -0.5}
+    bodyPoint: {x: 0, y: 0.65}
+    headPoint: {x: 0, y: 1.1}
+    overheadPoint: {x: 0, y: 1.5}
     aheadPoint: {x: 0, y: 0}
-    shadowOffset: {x: 0, y: 0}
+    shadowOffset: {x: -0.3, y: 0}
   type: 1
   skillList:
   - skillIndex: 441
