@@ -15,8 +15,8 @@ MonoBehaviour:
   idNum: 43
   enemyName: KoreanWarrior
   exp: 0
-  maxHP: 120
-  currentHP: 0
+  maxHP: 144
+  currentHP: 144
   aTKValue: 0
   dEFValue: 0
   stun: 0
@@ -24,13 +24,13 @@ MonoBehaviour:
   block: 0
   note: 
   anchorData:
-    visualOffset: {x: 0, y: 0}
-    footPoint: {x: 0, y: 0}
-    bodyPoint: {x: 0, y: 0}
-    headPoint: {x: 0, y: 0}
-    overheadPoint: {x: 0, y: 0}
+    visualOffset: {x: 0, y: -1.6}
+    footPoint: {x: 0, y: -0.5}
+    bodyPoint: {x: 0, y: 0.3}
+    headPoint: {x: -0.1, y: 0.9}
+    overheadPoint: {x: -0.1, y: 1.4}
     aheadPoint: {x: 0, y: 0}
-    shadowOffset: {x: 0, y: 0}
+    shadowOffset: {x: -0.6, y: -0.1}
   type: 1
   skillList:
   - skillIndex: 431
@@ -44,7 +44,7 @@ MonoBehaviour:
     percentage: 20
   illust: 
   currentStance: 0
-  animationController: {fileID: 0}
+  animationController: {fileID: 9100000, guid: 0113bb6514d786549a937a8500ca5a0d, type: 2}
   AttackSkillEffect: 
   AllySkillEffect: 
   TopStance: 0

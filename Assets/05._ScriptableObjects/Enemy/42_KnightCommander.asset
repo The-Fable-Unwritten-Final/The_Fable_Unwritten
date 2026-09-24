@@ -15,8 +15,8 @@ MonoBehaviour:
   idNum: 42
   enemyName: KnightCommander
   exp: 0
-  maxHP: 120
-  currentHP: 0
+  maxHP: 208
+  currentHP: 208
   aTKValue: 0
   dEFValue: 0
   stun: 0
@@ -24,13 +24,13 @@ MonoBehaviour:
   block: 0
   note: 
   anchorData:
-    visualOffset: {x: 0, y: 0}
-    footPoint: {x: 0, y: 0}
-    bodyPoint: {x: 0, y: 0}
-    headPoint: {x: 0, y: 0}
-    overheadPoint: {x: 0, y: 0}
+    visualOffset: {x: -0.4, y: -1.45}
+    footPoint: {x: 0, y: -0.5}
+    bodyPoint: {x: -0.5, y: 1}
+    headPoint: {x: -0.5, y: 1.7}
+    overheadPoint: {x: 0, y: 2.3}
     aheadPoint: {x: 0, y: 0}
-    shadowOffset: {x: 0, y: 0}
+    shadowOffset: {x: -0.7, y: 0}
   type: 1
   skillList:
   - skillIndex: 421
@@ -44,7 +44,7 @@ MonoBehaviour:
     percentage: 20
   illust: 
   currentStance: 0
-  animationController: {fileID: 0}
+  animationController: {fileID: 9100000, guid: ca0e5dce1efc08845ab809e0ed8e8729, type: 2}
   AttackSkillEffect: 
   AllySkillEffect: 
   TopStance: 0

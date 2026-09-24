@@ -694,14 +694,15 @@ public class Enemy : MonoBehaviour, IStatusReceiver
                 hpBarDisplay.FollowTarget(sr);
         }
     }
-
     public void PlayAttackAnimation(int attackType, Action onHitTiming = null)
     {
-        if (animator == null)
+        if (animator == null || animator.runtimeAnimatorController == null)
+        {
+            onHitTiming?.Invoke();
             return;
+        }
 
         currentAttackHitCallback = onHitTiming;
-
         animator.SetInteger("Attack", attackType);
 
         if (resetAttackRoutine != null)
