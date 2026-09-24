@@ -24,13 +24,13 @@ MonoBehaviour:
   block: 0
   note: 
   anchorData:
-    visualOffset: {x: 0, y: 0}
-    footPoint: {x: 0, y: 0}
+    visualOffset: {x: 0, y: -2.3}
+    footPoint: {x: 0, y: -0.5}
     bodyPoint: {x: 0, y: 0}
-    headPoint: {x: 0, y: 0}
-    overheadPoint: {x: 0, y: 0}
-    aheadPoint: {x: 0, y: 0}
-    shadowOffset: {x: 0, y: 0}
+    headPoint: {x: 0, y: 0.5}
+    overheadPoint: {x: 0, y: 0.65}
+    aheadPoint: {x: 0, y: -0.9}
+    shadowOffset: {x: 0.01, y: 0.079}
   type: 0
   skillList:
   - skillIndex: 111
@@ -44,7 +44,7 @@ MonoBehaviour:
     percentage: 20
   illust: 
   currentStance: 0
-  animationController: {fileID: 0}
+  animationController: {fileID: 9100000, guid: b7d81fc0fcfe2aa49958389e66cb2db1, type: 2}
   AttackSkillEffect: 
   AllySkillEffect: 
   TopStance: 0
