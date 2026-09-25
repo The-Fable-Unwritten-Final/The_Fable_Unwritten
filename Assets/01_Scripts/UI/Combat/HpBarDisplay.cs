@@ -62,7 +62,7 @@ public class HpBarDisplay : MonoBehaviour
     public void SetHpBar(float hp, float maxHp)
     {
         if (hpBar == null) return;
-        hpBar.fillAmount = hp / maxHp;
+        hpBar.fillAmount = maxHp > 0 ? hp / maxHp : 0f;
 
         if (hpText != null)
             hpText.text = Mathf.FloorToInt(hp).ToString() + "/" + Mathf.FloorToInt(maxHp).ToString();
@@ -72,9 +72,17 @@ public class HpBarDisplay : MonoBehaviour
     {
         if (hpBar == null) return;
 
-        float targetFill = hp / maxHp;
+        float targetFill = maxHp > 0 ? hp / maxHp : 0f;
 
-        hpText.text = Mathf.FloorToInt(hp).ToString() + "/" + Mathf.FloorToInt(maxHp).ToString();
+        if (hpText != null)
+            hpText.text = Mathf.FloorToInt(hp).ToString() + "/" + Mathf.FloorToInt(maxHp).ToString();
+
+        if (!isActiveAndEnabled || !gameObject.activeInHierarchy)
+        {
+            hpBar.fillAmount = targetFill;
+            changeHpCoroutine = null;
+            return;
+        }
 
         if (changeHpCoroutine != null)
             StopCoroutine(changeHpCoroutine);
