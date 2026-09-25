@@ -141,6 +141,7 @@ public class UI_RandomEvent : MonoBehaviour
 
         // 임시로 텍스트 설정
         descriptionTxt.text = text;
+        descriptionTxt.fontSize = maxFontSize; // 이전 폰트 크기를 초기화
         descriptionTxt.enableAutoSizing = true;
         Canvas.ForceUpdateCanvases();
 
@@ -405,6 +406,11 @@ public class UI_RandomEvent : MonoBehaviour
         // 마지막 페이지에서만 결과 텍스트 표시
         if (pageIndex == descriptionPages.Count - 1)
         {
+            // 결과 텍스트의 폰트 크기도 미리 계산하여 설정
+            float resultTextFontSize = GetAutoSizeFontSize(resultText);
+            optionTxt_b.fontSize = resultTextFontSize;
+            optionTxt_b.enableAutoSizing = false;
+            
             yield return StartCoroutine(TypeText(optionTxt_b, resultText));
         }
 
