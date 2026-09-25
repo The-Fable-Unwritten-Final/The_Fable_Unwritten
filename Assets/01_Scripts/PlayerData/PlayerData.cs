@@ -17,7 +17,8 @@ public class PlayerData : ScriptableObject
     public string CharacterName; //캐릭터이름
     public Sprite Icon; //Icon
 
-    private float defaultMaxHP = 30f;
+    [SerializeField] private float defaultMaxHP = 30f;
+    public float DefaultMaxHp { get => defaultMaxHP; set { defaultMaxHP = value; } }
     [SerializeField] private float _maxHP;  //최대 체력
     public float MaxHP
     {

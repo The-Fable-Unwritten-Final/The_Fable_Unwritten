@@ -236,9 +236,9 @@ public class TFUDataEditorWindow : EditorWindow
     {
         EditorGUILayout.LabelField("기본 스탯", EditorStyles.boldLabel);
 
-        selectedPlayer.MaxHP = EditorGUILayout.FloatField(
+        selectedPlayer.DefaultMaxHp = EditorGUILayout.FloatField(
             "Max HP",
-            selectedPlayer.MaxHP
+            selectedPlayer.DefaultMaxHp
         );
 
         selectedPlayer.ATK = EditorGUILayout.FloatField(
