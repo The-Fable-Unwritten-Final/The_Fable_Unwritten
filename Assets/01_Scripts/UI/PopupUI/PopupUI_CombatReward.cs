@@ -76,7 +76,6 @@ public class PopupUI_CombatReward : BasePopupUI
                         {
                             targetCharacter.currentDeck.Add(rewardCard);
                             targetCharacter.UpdateCurrentDeckIndexes(); // ← 인덱스 동기화
-                            Debug.Log($"[PopupUI_CombatReward] {targetCharacter.CharacterName}의 덱에 카드 {cardIndex} 추가");
                         }
                     }
                 }

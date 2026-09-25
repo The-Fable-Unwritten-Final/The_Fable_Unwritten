@@ -93,9 +93,14 @@ public class PlayerData : ScriptableObject
         currentDeck = new List<CardModel>();
         foreach (var index in currentDeckIndexes)
         {
-            var card = cardPool.Find(c => c.index == index);
-            if (card != null)
-                currentDeck.Add(card);
+            var cardTemplate = cardPool.Find(c => c.index == index);
+            if (cardTemplate != null)
+            {
+                // ScriptableObject는 Instantiate()로 복사본을 만들어야 함
+                // 그래야 같은 카드 여러 장이 독립적인 temporaryCostModifier를 가짐
+                var cardCopy = UnityEngine.Object.Instantiate(cardTemplate);
+                currentDeck.Add(cardCopy);
+            }
         }
     }
     //체력 초기화 용

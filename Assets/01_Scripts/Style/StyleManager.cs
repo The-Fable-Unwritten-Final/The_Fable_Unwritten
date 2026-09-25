@@ -191,6 +191,7 @@ public class StyleManager : MonoSingleton<StyleManager>
                 list.AddRange(def.minusTiers[i].effects);
         }
 
+
         return list;
     }
 
@@ -211,7 +212,7 @@ public class StyleManager : MonoSingleton<StyleManager>
                 if (eff.callTime != EffectCallTime.OnStartOfBattle) continue;
                 if (eff.target == EffectTarget.FirstCardCost)
                 {
-                    cost = card.manaCost; // 각 카드의 원본 비용만큼 할인
+                    cost = (int)eff.value; // value 값  할인
                 }
             }
             return Mathf.Max(0, cost);

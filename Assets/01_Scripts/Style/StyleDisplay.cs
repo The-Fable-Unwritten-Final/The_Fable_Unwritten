@@ -84,9 +84,19 @@ public class StyleDisplay : MonoBehaviour // 기존 팝업 방식(basepopup 상�
         StyleEffect eff;
 
         if (isPlus)
-            eff = sty.plusTiers[sty.currentPlus - 1].effects[0];
+        {
+            if (sty.currentPlus <= 0 || sty.currentPlus > sty.plusTiers.Count) return "";
+            var tier = sty.plusTiers[sty.currentPlus - 1];
+            if (tier?.effects == null || tier.effects.Count == 0) return "";
+            eff = tier.effects[0];
+        }
         else
-            eff = sty.minusTiers[sty.currentMinus - 1].effects[0];
+        {
+            if (sty.currentMinus <= 0 || sty.currentMinus > sty.minusTiers.Count) return "";
+            var tier = sty.minusTiers[sty.currentMinus - 1];
+            if (tier?.effects == null || tier.effects.Count == 0) return "";
+            eff = tier.effects[0];
+        }
 
         switch (eff.operation)
         {
@@ -144,7 +154,10 @@ public class StyleDisplay : MonoBehaviour // 기존 팝업 방식(basepopup 상�
 
         if (isPlus)
         {
-            eff = sty.plusTiers[sty.currentPlus - 1].effects[0];
+            if (sty.currentPlus <= 0 || sty.currentPlus > sty.plusTiers.Count) return "";
+            var tier = sty.plusTiers[sty.currentPlus - 1];
+            if (tier?.effects == null || tier.effects.Count == 0) return "";
+            eff = tier.effects[0];
             if (sty.plusTiers.Count > sty.currentPlus) // 최대 강화가 아닌 경우
             {
                 isFullUpgrade = false;
@@ -152,7 +165,10 @@ public class StyleDisplay : MonoBehaviour // 기존 팝업 방식(basepopup 상�
         }
         else
         {
-            eff = sty.minusTiers[sty.currentMinus - 1].effects[0];
+            if (sty.currentMinus <= 0 || sty.currentMinus > sty.minusTiers.Count) return "";
+            var tier = sty.minusTiers[sty.currentMinus - 1];
+            if (tier?.effects == null || tier.effects.Count == 0) return "";
+            eff = tier.effects[0];
             if (sty.minusTiers.Count > sty.currentMinus) // 최대 강화가 아닌 경우
             {
                 isFullUpgrade = false;
@@ -508,7 +524,8 @@ public class StyleDisplay : MonoBehaviour // 기존 팝업 방식(basepopup 상�
         // 첫 번째 강화 효과 (Plus)
         //curEff1.text = GetValueFullTextEff(sty, sty.plusEffectDescription, true);
         upgrEff1.text = GetValueFullTextUpgraded(sty, sty.plusEffectDescription, true);
-        Eff1Ink.text = sty.plusTiers[sty.currentPlus - 1].cost.ToString();
+        if (sty.currentPlus > 0 && sty.currentPlus <= sty.plusTiers.Count)
+            Eff1Ink.text = sty.plusTiers[sty.currentPlus - 1].cost.ToString();
         
         if (sty.currentPlus == sty.maxPlusLevel)
         {
@@ -532,7 +549,8 @@ public class StyleDisplay : MonoBehaviour // 기존 팝업 방식(basepopup 상�
         // 두 번째 강화 효과 (Minus)
         //curEff2.text = GetValueFullTextEff(sty, sty.minusEffectEffectDesc, false);
         upgrEff2.text = GetValueFullTextUpgraded(sty, sty.minusEffectEffectDesc, false);
-        Eff2Ink.text = sty.minusTiers[sty.currentMinus - 1].cost.ToString();
+        if (sty.currentMinus > 0 && sty.currentMinus <= sty.minusTiers.Count)
+            Eff2Ink.text = sty.minusTiers[sty.currentMinus - 1].cost.ToString();
         
         if (sty.currentMinus == sty.maxMinusLevel)
         {
