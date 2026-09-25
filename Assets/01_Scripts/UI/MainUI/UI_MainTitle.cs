@@ -16,6 +16,10 @@ public class UI_MainTitle : MonoBehaviour
     private void Start()
     {
         StartCoroutine(ShowTitle());
+        
+        // 타이틀 씬에서는 IsStageScene을 false로 설정 (이어하기 버튼 활성화 조건)
+        ProgressDataManager.Instance.IsStageScene = false;
+        
         SetSaveGameButton();
     }
 
