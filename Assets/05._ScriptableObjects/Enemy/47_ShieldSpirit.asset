@@ -15,8 +15,8 @@ MonoBehaviour:
   idNum: 47
   enemyName: ShieldSpirit
   exp: 0
-  maxHP: 65
-  currentHP: 0
+  maxHP: 136
+  currentHP: 136
   aTKValue: 0
   dEFValue: 0
   stun: 0
@@ -24,13 +24,13 @@ MonoBehaviour:
   block: 0
   note: 
   anchorData:
-    visualOffset: {x: 0, y: 0}
-    footPoint: {x: 0, y: 0}
+    visualOffset: {x: -0.1, y: -1.05}
+    footPoint: {x: 0, y: -0.5}
     bodyPoint: {x: 0, y: 0}
-    headPoint: {x: 0, y: 0}
-    overheadPoint: {x: 0, y: 0}
+    headPoint: {x: 0, y: 0.3}
+    overheadPoint: {x: 0, y: 0.7}
     aheadPoint: {x: 0, y: 0}
-    shadowOffset: {x: 0, y: 0}
+    shadowOffset: {x: -0.3, y: 0}
   type: 0
   skillList:
   - skillIndex: 471

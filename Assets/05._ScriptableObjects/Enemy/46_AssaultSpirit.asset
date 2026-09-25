@@ -16,7 +16,7 @@ MonoBehaviour:
   enemyName: AssaultSpirit
   exp: 0
   maxHP: 70
-  currentHP: 0
+  currentHP: 70
   aTKValue: 0
   dEFValue: 0
   stun: 0
@@ -24,13 +24,13 @@ MonoBehaviour:
   block: 0
   note: 
   anchorData:
-    visualOffset: {x: 0, y: 0}
-    footPoint: {x: 0, y: 0}
-    bodyPoint: {x: 0, y: 0}
-    headPoint: {x: 0, y: 0}
-    overheadPoint: {x: 0, y: 0}
+    visualOffset: {x: -0.2, y: -1.3}
+    footPoint: {x: 0, y: -0.5}
+    bodyPoint: {x: 0, y: 0.4}
+    headPoint: {x: -0.3, y: 0.8}
+    overheadPoint: {x: -0.3, y: 1.1}
     aheadPoint: {x: 0, y: 0}
-    shadowOffset: {x: 0, y: 0}
+    shadowOffset: {x: -0.5, y: -0.05}
   type: 0
   skillList:
   - skillIndex: 461
@@ -41,7 +41,7 @@ MonoBehaviour:
     percentage: 40
   illust: 
   currentStance: 0
-  animationController: {fileID: 0}
+  animationController: {fileID: 9100000, guid: f653ff12c5483a641aad8e4f73b877c2, type: 2}
   AttackSkillEffect: 
   AllySkillEffect: 
   TopStance: 0
