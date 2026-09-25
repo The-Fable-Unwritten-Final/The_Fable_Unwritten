@@ -669,17 +669,20 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public void PlayAttackAnimation(int attackType, Action onHitTiming = null)
     {
         if (animator == null)
+        {
+            onHitTiming?.Invoke();
             return;
+        }
 
         currentAttackHitCallback = onHitTiming;
-
         animator.SetInteger("Attack", attackType);
 
         if (resetAttackRoutine != null)
             StopCoroutine(resetAttackRoutine);
 
-        resetAttackRoutine = StartCoroutine(ResetAttackParam(1.5f));
+        resetAttackRoutine = StartCoroutine(ResetAttackParam());
     }
+
 
     public void PlayAttackAnimation(int cardIndex, CardType cardType, Action onHitTiming = null)
     {
@@ -688,6 +691,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         PlayAttackAnimation(finalAttackType, onHitTiming);
     }
+
 
     private bool HasAttackAnimation(int attackType)
     {
@@ -705,13 +709,26 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         return false;
     }
 
-    private IEnumerator ResetAttackParam(float delay)
+    private IEnumerator ResetAttackParam()
     {
-        yield return new WaitForSeconds(delay);
-        animator.SetInteger("Attack", -1);
-        currentAttackHitCallback = null;
+        yield return null;
+
+        while (animator != null)
+        {
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+            if (!animator.IsInTransition(0) && stateInfo.normalizedTime >= 1f)
+                break;
+
+            yield return null;
+        }
+
+        if (animator != null)
+            animator.SetInteger("Attack", -1);
+
         resetAttackRoutine = null;
     }
+
 
     // 애니메이션 이벤트에서 호출할 함수
     public void OnAttackHitEvent()
