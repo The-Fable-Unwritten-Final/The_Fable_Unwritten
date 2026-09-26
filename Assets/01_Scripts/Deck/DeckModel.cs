@@ -232,9 +232,6 @@ public class DeckModel
     /// </summary>
     public void ApplyPersistentDiscountToAllCards(int amount)
     {
-        // 같은 카드 인덱스에 한 번만 적용하기 위해 추적
-        HashSet<int> processedCardIndices = new();
-        
         // 세 리스트의 모든 카드를 순회
         var allCards = new List<CardModel>();
         allCards.AddRange(hand);
@@ -243,12 +240,10 @@ public class DeckModel
         
         foreach (var card in allCards)
         {
-            // 아직 처리되지 않은 카드 인덱스인 경우에만 적용
-            if (!processedCardIndices.Contains(card.index) && 
-                ShouldApplyPersistentDiscount(card))
+            // 각 카드는 독립적인 복사본이므로 모두에 할인 적용
+            if (ShouldApplyPersistentDiscount(card))
             {
                 card.ApplyPersistentDiscount(amount);
-                processedCardIndices.Add(card.index); // 이 인덱스는 처리됨으로 표시
             }
         }
     }
@@ -257,9 +252,6 @@ public class DeckModel
     /// </summary>
     public void ApplyPersistentDiscountByCardType(CardType targetType, int amount)
     {
-        // 같은 카드 인덱스에 한 번만 적용하기 위해 추적
-        HashSet<int> processedCardIndices = new();
-        
         // 세 리스트의 모든 카드를 순회
         var allCards = new List<CardModel>();
         allCards.AddRange(hand);
@@ -268,13 +260,11 @@ public class DeckModel
         
         foreach (var card in allCards)
         {
-            // 해당 타입이고, 아직 처리되지 않은 카드 인덱스인 경우에만 적용
+            // 해당 타입이고, 각 카드는 독립적인 복사본이므로 모두에 할인 적용
             if (card.type == targetType && 
-                !processedCardIndices.Contains(card.index) && 
                 ShouldApplyPersistentDiscount(card))
             {
                 card.ApplyPersistentDiscount(amount);
-                processedCardIndices.Add(card.index); // 이 인덱스는 처리됨으로 표시
             }
         }
     }
