@@ -631,6 +631,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
                 match.MaxHP = save.maxHP;
                 match.currentHP = save.currentHP;
                 match.currentDeckIndexes = new List<int>(save.currentDeckIndexes);
+                Debug.Log($"[ApplySaveToPlayerDatas] {match.CharacterClass}: currentDeckIndexes 로드됨 (개수: {match.currentDeckIndexes.Count})");
 
                 // 플레이어의 저장된 버프/디버프 효과를 캐시에 저장
                 if (save.tickEffectsData != null && save.tickEffectsData.Count > 0)
