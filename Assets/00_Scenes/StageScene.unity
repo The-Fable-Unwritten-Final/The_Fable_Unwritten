@@ -1348,6 +1348,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 713258299}
   m_CullTransparentMesh: 1
+--- !u!114 &797609071 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2206531233092666384, guid: 6a8a8b7577625024db1742592b6ef6a5,
+    type: 3}
+  m_PrefabInstance: {fileID: 8696811864464230988}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &803408998
 GameObject:
   m_ObjectHideFlags: 0
@@ -2539,6 +2551,12 @@ MonoBehaviour:
   references:
     version: 2
     RefIds: []
+--- !u!224 &1371589640 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2558095131753562740, guid: 6a8a8b7577625024db1742592b6ef6a5,
+    type: 3}
+  m_PrefabInstance: {fileID: 8696811864464230988}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1394202186
 GameObject:
   m_ObjectHideFlags: 0
@@ -9001,6 +9019,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1774875860}
     m_Modifications:
+    - target: {fileID: 4096001098545073985, guid: 6a8a8b7577625024db1742592b6ef6a5,
+        type: 3}
+      propertyPath: cardsRoot
+      value: 
+      objectReference: {fileID: 1371589640}
+    - target: {fileID: 4096001098545073985, guid: 6a8a8b7577625024db1742592b6ef6a5,
+        type: 3}
+      propertyPath: cardScrollRect
+      value: 
+      objectReference: {fileID: 797609071}
     - target: {fileID: 6658074611719272411, guid: 6a8a8b7577625024db1742592b6ef6a5,
         type: 3}
       propertyPath: m_Name
@@ -9107,7 +9135,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3804508184850317035, guid: 6a8a8b7577625024db1742592b6ef6a5, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6a8a8b7577625024db1742592b6ef6a5, type: 3}
