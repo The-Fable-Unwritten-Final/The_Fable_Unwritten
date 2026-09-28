@@ -37,7 +37,10 @@ public class UI_RandomEvent : MonoBehaviour
     private int currentDescriptionPage = 0;
     private TextMeshProUGUI nextPageIndicatorText;
     private bool isLoadingPage = false;
-    private Coroutine pageIndicatorAnimationCoroutine;    private string currentResultText = ""; // 결과 페이지의 결과 텍스트 저장
+    private Coroutine pageIndicatorAnimationCoroutine;
+    private Coroutine currentTypingCoroutine; // 현재 타이핑 코루틴 추적
+    private bool skipTyping = false; // 타이핑 즉시 완료 플래그
+    private string currentResultText = ""; // 결과 페이지의 결과 텍스트 저장
     private bool isResultPage = false; // 결과 페이지 여부
     private void Start()
     {
@@ -349,23 +352,28 @@ public class UI_RandomEvent : MonoBehaviour
     }
 
     /// <summary>
-    /// descriptionTxt 클릭 이벤트 (다음 페이지로 이동)
+    /// descriptionTxt 클릭 이벤트 (타이핑 중이면 즉시 완료, 완료 후면 다음 페이지로 이동)
     /// </summary>
     private void OnDescriptionButtonClicked()
     {
+        // 타이핑 중이면 즉시 완료 (현재 페이지의 모든 텍스트 표시)
         if (isLoadingPage)
-            return;
+        {
+            skipTyping = true;
+            return; // 다음 페이지로 이동하지 않음
+        }
 
+        // 타이핑이 완료된 후 클릭 시 다음 페이지로 이동
         if (currentDescriptionPage < descriptionPages.Count - 1)
         {
             if (isResultPage)
             {
-                // 결과 페이지
+                // 결과 페이지로 이동
                 StartCoroutine(DisplayDescriptionPageForResult(currentDescriptionPage + 1, currentResultText));
             }
             else
             {
-                // 초기 페이지
+                // 일반 페이지로 이동
                 StartCoroutine(DisplayDescriptionPage(currentDescriptionPage + 1));
             }
         }
@@ -425,8 +433,22 @@ public class UI_RandomEvent : MonoBehaviour
     private IEnumerator TypeText(TextMeshProUGUI textUI, string fullText)
     {
         textUI.text = "";
+        
+        if (skipTyping)
+        {
+            textUI.text = fullText;
+            skipTyping = false;
+            yield break;
+        }
+        
         foreach (var c in fullText)
         {
+            if (skipTyping)
+            {
+                textUI.text = fullText;
+                skipTyping = false;
+                yield break;
+            }
             textUI.text += c;
             yield return new WaitForSeconds(typingSpeed);
         }
@@ -440,8 +462,30 @@ public class UI_RandomEvent : MonoBehaviour
         textUI.text = "";
         int charCount = parsedText.Length;
         
+        if (skipTyping)
+        {
+            textUI.text = parsedText;
+            if (customEffect != null)
+            {
+                customEffect.SetGradientText(rawText);
+            }
+            skipTyping = false;
+            yield break;
+        }
+        
         for (int i = 0; i < charCount; i++)
         {
+            if (skipTyping)
+            {
+                textUI.text = parsedText;
+                if (customEffect != null)
+                {
+                    customEffect.SetGradientText(rawText);
+                }
+                skipTyping = false;
+                yield break;
+            }
+            
             textUI.text += parsedText[i];
             
             // 매 글자마다 부분적으로 이펙트 적용 (타이핑 진행 상황 유지)
