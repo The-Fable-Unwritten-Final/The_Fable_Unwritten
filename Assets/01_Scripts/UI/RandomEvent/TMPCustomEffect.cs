@@ -173,12 +173,12 @@ public class TMPCustomEffect : MonoBehaviour
 
         if (colorType.Contains("gr_SB"))// 스카이 블루
             ApplyHorizontalGradient(tag.start, tag.end, Color.blue, Color.cyan, 1, 5);
-        else if (colorType.Contains("gr_B") && !colorType.Contains("gr_RBW"))// 블루
-            ApplyHorizontalGradient(tag.start, tag.end, Color.blue, Color.blue, 1, 5);
-        else if (colorType.Contains("gr_R") && !colorType.Contains("gr_RBW"))// 레드
-            ApplyHorizontalGradient(tag.start, tag.end, Color.white, Color.red, 1, 5);
-        else if (colorType.Contains("gr_O"))// 오렌지
-            ApplyHorizontalGradient(tag.start, tag.end, new Color(1f, 0.7f, 0f), new Color(1f, 0.3f, 0f), 1, 5);
+        else if (colorType.Contains("gr_B") && !colorType.Contains("gr_RBW"))// 블루 (R 63, G 72, B 46)
+            ApplyHorizontalGradient(tag.start, tag.end, new Color(63f/255f, 72f/255f, 46f/255f), new Color(63f/255f, 72f/255f, 46f/255f), 1, 5);
+        else if (colorType.Contains("gr_R") && !colorType.Contains("gr_RBW"))// 레드 (R 136, G 51, B 35)
+            ApplyHorizontalGradient(tag.start, tag.end, Color.white, new Color(136f/255f, 51f/255f, 35f/255f), 1, 5);
+        else if (colorType.Contains("gr_O"))// 오렌지 (짙은 오렌지)
+            ApplyHorizontalGradient(tag.start, tag.end, new Color(1f, 0.55f, 0f), new Color(1f, 0.2f, 0f), 1, 5);
         else if (colorType.Contains("gr_Y"))// 옐로우
             ApplyHorizontalGradient(tag.start, tag.end, Color.white, Color.yellow, 1, 5);
         else if (colorType.Contains("gr_P"))// 퍼플

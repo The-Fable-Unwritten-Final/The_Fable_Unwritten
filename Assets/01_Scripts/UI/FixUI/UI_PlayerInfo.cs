@@ -27,6 +27,10 @@ public class UI_PlayerInfo : MonoBehaviour
     [SerializeField] GameObject currentDeck;
     [SerializeField] GameObject cardBasePrefab;
     [SerializeField] Transform cardsRoot;
+    [SerializeField] ScrollRect cardScrollRect;
+    [SerializeField] float mouseWheelScrollSpeed = 30f; // 마우스 휠 스크롤 속도
+    [SerializeField] int cardsPerRow = 7; // 한 줄당 카드 개수
+    [SerializeField] int maxVisibleRows = 2; // 최대 표시 줄 수
 
     private Dictionary<CharacterClass, TextMeshProUGUI> charInfoText;
     private Dictionary<CharacterClass, Image> charhpBar;
@@ -34,6 +38,7 @@ public class UI_PlayerInfo : MonoBehaviour
     private Coroutine changeHpCoroutine_Sho;
     private Coroutine changeHpCoroutine_Ky;
     private Coroutine changeHpCoroutine_Le;
+    private bool isCardPanelActive = false;
 
     private void Start()
     {
@@ -55,6 +60,11 @@ public class UI_PlayerInfo : MonoBehaviour
         UpdatePlayerInfoUI();
 
         RegisterHpUpdateEvent();
+    }
+
+    private void Update()
+    {
+        // 카드 패널이 활성화되어 있고 마우스 스크롤 시
     }
 
     void OnDisable()
@@ -113,6 +123,7 @@ public class UI_PlayerInfo : MonoBehaviour
     public void OnClickCardExept()
     {
         currentDeck.SetActive(false);
+        isCardPanelActive = false;
     }
 
     /// <summary>
@@ -122,8 +133,12 @@ public class UI_PlayerInfo : MonoBehaviour
     {
         OnClickButtonSound();
         currentDeck.SetActive(true);
+        isCardPanelActive = true;
 
         ClearCards();
+
+        // GridLayoutGroup 설정
+        SetupCardGridLayout();
 
         var deck = CurrentCharacterDeck(characterClass);
 
@@ -147,8 +162,141 @@ public class UI_PlayerInfo : MonoBehaviour
             }
         }
 
+        // 레이아웃 강제 재계산
+        Canvas.ForceUpdateCanvases();
+
+        // LayoutElement 업데이트: Content 높이 재설정
+        LayoutElement layoutElement = cardsRoot.GetComponent<LayoutElement>();
+        if (layoutElement != null)
+        {
+            float newHeight = CalculateContentHeight();
+            layoutElement.preferredHeight = newHeight;
+        }
+
+        // Content 높이 직접 설정 (중요!)
+        RectTransform contentRect = cardsRoot.GetComponent<RectTransform>();
+        if (contentRect != null)
+        {
+            float calculatedHeight = CalculateContentHeight();
+            contentRect.sizeDelta = new Vector2(contentRect.sizeDelta.x, calculatedHeight);
+        }
+
+        // 스크롤 위치 초기화 (카드 추가 후)
+        if (cardScrollRect != null)
+        {
+            cardScrollRect.verticalNormalizedPosition = 1f; // 맨 위부터 시작
+        }
+        else
+        {
+            Debug.LogError("cardScrollRect is NULL!");
+        }
+
         // 애널리틱스
         GameManager.Instance.analyticsLogger.LogDeckButtonClick((int)characterClass + 1);
+    }
+
+    /// <summary>
+    /// 카드 그리드 레이아웃 설정 (7열 고정)
+    /// </summary>
+    private void SetupCardGridLayout()
+    {
+        // cardsRoot null 체크
+        if (cardsRoot == null)
+        {
+            Debug.LogError("cardsRoot is not assigned");
+            return;
+        }
+
+        // 1. GridLayoutGroup 설정
+        GridLayoutGroup gridLayout = cardsRoot.GetComponent<GridLayoutGroup>();
+        if (gridLayout == null)
+        {
+            gridLayout = cardsRoot.gameObject.AddComponent<GridLayoutGroup>();
+        }
+
+        // 중요: cellSize와 spacing 명시적 설정
+        gridLayout.cellSize = new Vector2(75f, 135f);  // 카드 크기 (폭 75, 높이 135)
+        gridLayout.spacing = new Vector2(150f, 280f);  // 카드 간 간격
+        gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        gridLayout.constraintCount = cardsPerRow; // 7열 고정
+        gridLayout.startAxis = GridLayoutGroup.Axis.Horizontal;
+        gridLayout.startCorner = GridLayoutGroup.Corner.UpperLeft;
+        gridLayout.childAlignment = TextAnchor.UpperLeft; // 자식 정렬: 왼쪽 위
+
+        // 2. Viewport 높이 설정 (2줄 크기)
+        RectTransform viewportRect = cardScrollRect.viewport as RectTransform;
+        if (viewportRect != null)
+        {
+            float viewportHeight = 2 * 135f + 280f - 40f;  // 정확히 2줄만 표시되도록 조정 (510px)
+            viewportRect.sizeDelta = new Vector2(viewportRect.sizeDelta.x, viewportHeight);
+        }
+
+        // 3. Content의 RectTransform 설정
+        RectTransform contentRect = cardsRoot.GetComponent<RectTransform>();
+        if (contentRect != null)
+        {
+            contentRect.anchorMin = new Vector2(0, 1);
+            contentRect.anchorMax = new Vector2(1, 1);
+            contentRect.pivot = new Vector2(0, 1);  // 왼쪽 위를 기준점으로 (중요!)
+            contentRect.offsetMin = new Vector2(0, 0);
+            contentRect.offsetMax = new Vector2(0, 0);
+            
+            // Content 너비를 Viewport 너비와 동일하게 설정
+            if (viewportRect != null)
+            {
+                contentRect.sizeDelta = new Vector2(viewportRect.sizeDelta.x, contentRect.sizeDelta.y);
+            }
+        }
+
+        // 4. LayoutElement 추가: Content 높이 동적 조정 (필수!)
+        LayoutElement layoutElement = cardsRoot.GetComponent<LayoutElement>();
+        if (layoutElement == null)
+        {
+            layoutElement = cardsRoot.gameObject.AddComponent<LayoutElement>();
+        }
+        layoutElement.preferredHeight = CalculateContentHeight();
+        layoutElement.preferredWidth = -1; // 너비는 자동
+
+        // Content 높이 직접 설정
+        if (contentRect != null)
+        {
+            float calculatedHeight = CalculateContentHeight();
+            contentRect.sizeDelta = new Vector2(contentRect.sizeDelta.x, calculatedHeight);
+        }
+
+        // 5. ScrollRect 설정
+        if (cardScrollRect != null)
+        {
+            cardScrollRect.horizontal = false;           // 수평 스크롤 비활성화
+            cardScrollRect.vertical = true;              // 수직 스크롤 활성화
+            cardScrollRect.movementType = ScrollRect.MovementType.Clamped; // 끝에서 멈춤
+            cardScrollRect.elasticity = 0.01f;           // 탄성 거의 없음 (되돌아오지 않음)
+            cardScrollRect.scrollSensitivity = 0f;       // 마우스 휠 비활성화
+            cardScrollRect.inertia = false;              // 관성 비활성화 (드래그 후 즉시 멈춤)
+            
+            // Content 할당
+            if (cardScrollRect.content != cardsRoot)
+            {
+                cardScrollRect.content = (RectTransform)cardsRoot;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Content의 높이 계산 (카드 개수에 따라 동적 조정)
+    /// </summary>
+    private float CalculateContentHeight()
+    {
+        int totalCards = cardsRoot.childCount;
+        if (totalCards == 0) return 0;
+
+        int rowCount = Mathf.CeilToInt((float)totalCards / cardsPerRow);
+        float cardHeight = 135f;   // cellSize.y와 일치
+        float spacingY = 280f;     // spacing.y와 일치
+        
+        // 1줄, 2줄: 100 / 3줄 이상: (rowCount - 2) * (cardHeight + spacing) + 70
+        float totalHeight = rowCount <= 2 ? 100f : (rowCount - 2) * (cardHeight + spacingY) + 70f;
+        return totalHeight;
     }
 
     // 현재 캐릭터의 보유 카드 확인

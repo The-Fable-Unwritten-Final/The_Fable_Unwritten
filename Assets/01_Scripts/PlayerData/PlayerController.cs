@@ -578,7 +578,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         deckModel = new DeckModel();
 
-        if (data.currentDeck == null || data.currentDeck.Count != 5)
+        if (data.currentDeck == null)
             data.ResetDeckIndexesToDefault();
 
         data.LoadDeckFromIndexes(DataManager.Instance.AllCards);
