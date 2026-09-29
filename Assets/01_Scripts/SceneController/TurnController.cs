@@ -20,7 +20,10 @@ public class TurnController : MonoBehaviour
     public TurnState turnState = TurnState.GameStart; // 현재 턴 상태
     [SerializeField] CardDisplay cardDisplay; // 카드 디스플레이
     public BattleFlowController battleFlow;
-    [SerializeField] TurnEndButtonControl TurnButton; 
+    [SerializeField] TurnEndButtonControl TurnButton;
+
+    [Header("Debug")]
+    [SerializeField] private bool autoStartBattle = true;
 
     // 턴의 각 상태 진입시 호출되는 이벤트
     /// <summary>
@@ -52,6 +55,9 @@ public class TurnController : MonoBehaviour
     }
     private void Start()
     {
+        if (!autoStartBattle)
+            return;
+
         OnStartPlayerTurn += battleFlow.ExecutePlayerTurn;
         //OnStartPlayerTurn += cardDisplay.CardArrange; // 카드 배치 초기화
         OnEndPlayerTurn += battleFlow.EndPlayerTurn;

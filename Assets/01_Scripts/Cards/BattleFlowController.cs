@@ -24,7 +24,8 @@ public class BattleFlowController : MonoBehaviour
     public TextMeshProUGUI Mana;
     [SerializeField] private OnUseSkillBlack skillFocusEffect; // 스킬 포커스 효과
 
-
+    [Header("Debug")]
+    [SerializeField] private bool autoStartBattle = true;
     public List<IStatusReceiver> playerParty { get; private set; } = new();
 
     public List<IStatusReceiver> enemyParty = new List<IStatusReceiver> { null, null, null };
@@ -48,6 +49,9 @@ public class BattleFlowController : MonoBehaviour
     //임시 inspector 확인용
     private void Start()
     {
+        if (!autoStartBattle)
+            return;
+
         totalExp = 0;
         isWin = 0;
         SetupPredefinedPlayerSlots();
@@ -371,17 +375,8 @@ public class BattleFlowController : MonoBehaviour
             if (player.IsAlive())
             {
 
-                var hand = player.Deck.Hand;
-                if (hand.Count > DeckModel.startSize)
-                {
-                    Debug.LogWarning($"{player.ChClass} 카드가 3장을 초과합니다. 버릴 카드 선택이 필요합니다.");
+                player.Deck.DiscardUnmaintainedCardsAtTurnEnd();
 
-                    // todo: 외부에서 선택한 카드 전달 필요 Todisacrd
-                    // 여기선 임시로 가장 뒤의 카드부터 자동으로 버린다고 가정
-                    List<CardModel> toDiscard = new(hand);
-                    toDiscard.Reverse();
-                    player.Deck.DiscardHandToThree(toDiscard);
-                }
             }
         }
 
@@ -417,7 +412,6 @@ public class BattleFlowController : MonoBehaviour
         }));
     }
 
-
     private void AfterEnemyTurn()
     {
         foreach (var player in playerParty)
@@ -430,7 +424,6 @@ public class BattleFlowController : MonoBehaviour
             if (player is PlayerController pc && pc.IsAlive())
                 pc.OnTurnEnd();
 
-            player.Deck.DiscardUnmaintainedCardsAtTurnEnd();
         }
 
         var currentEnemies = new List<IStatusReceiver>(enemyParty);
@@ -973,4 +966,28 @@ public class BattleFlowController : MonoBehaviour
 
         RefreshAllDeckEnhanced();
     }
+
+
+    ////디버그용
+    public void InitializeDebugPlayers()
+    {
+        playerParty.Clear();
+
+        SetupDebugPlayer(frontSlot);
+        SetupDebugPlayer(middleSlot);
+        SetupDebugPlayer(backSlot);
+
+        Initialize();
+    }
+
+    private void SetupDebugPlayer(PlayerController player)
+    {
+        if (player == null || player.playerData == null)
+            return;
+
+        player.Setup(player.playerData);
+        playerParty.Add(player);
+    }
+
+    ///디버그용
 }

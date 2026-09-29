@@ -17,10 +17,10 @@ public class PlayerData : ScriptableObject
     public string CharacterName; //캐릭터이름
     public Sprite Icon; //Icon
 
-    [SerializeField] private float defaultMaxHP = 30f;
-    public float DefaultMaxHp { get => defaultMaxHP; set { defaultMaxHP = value; } }
-    [SerializeField] private float _maxHP;  //최대 체력
-    public float MaxHP
+    [SerializeField] private int defaultMaxHP = 30;
+    public int DefaultMaxHp { get => defaultMaxHP; set { defaultMaxHP = value; } }
+    [SerializeField] private int _maxHP;  //최대 체력
+    public int MaxHP
     {
         get => _maxHP;
         set
@@ -30,8 +30,8 @@ public class PlayerData : ScriptableObject
         }
     }
 
-    [SerializeField] private float _currentHP;   //현재 체력
-    public float currentHP
+    [SerializeField] private int _currentHP;   //현재 체력
+    public int currentHP
     {
         get => _currentHP;
         set
@@ -41,8 +41,8 @@ public class PlayerData : ScriptableObject
         }
     }
 
-    public float ATK; //공격력
-    public float DEF; //방어력
+    public int ATK; //공격력
+    public int DEF; //방어력
     public CharacterClass CharacterClass => (CharacterClass)IDNum;
 
 
@@ -123,7 +123,7 @@ public class PlayerData : ScriptableObject
     {
         MaxHP = defaultMaxHP;
     }
-    public void AddMaxHP(float amount)
+    public void AddMaxHP(int amount)
     {
         MaxHP += amount;
         currentHP += amount; // 최대 체력 증가 시 현재 체력도 함께 증가

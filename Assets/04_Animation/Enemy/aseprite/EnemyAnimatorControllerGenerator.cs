@@ -41,21 +41,47 @@ public static class EnemyAnimatorControllerGenerator
         // *_idle.anim을 기준으로 적 이름 추출
         // =========================================
 
-        var idleClips = clips
-            .Where(c =>
-                c.name.EndsWith("_idle",
-                    System.StringComparison.OrdinalIgnoreCase))
-            .ToList();
+        var enemyNames = clips
+         .Select(c =>
+         {
+             string name = c.name;
+
+             if (name.EndsWith("_idle",
+                 System.StringComparison.OrdinalIgnoreCase))
+             {
+                 return name.Substring(
+                     0,
+                     name.Length - "_idle".Length
+                 );
+             }
+
+             if (name.EndsWith("_idle1",
+                 System.StringComparison.OrdinalIgnoreCase))
+             {
+                 return name.Substring(
+                     0,
+                     name.Length - "_idle1".Length
+                 );
+             }
+
+             return null;
+         })
+         .Where(name => !string.IsNullOrEmpty(name))
+         .Distinct(System.StringComparer.OrdinalIgnoreCase)
+         .ToList();
+
 
         int generatedCount = 0;
 
-        foreach (AnimationClip idleClip in idleClips)
+        foreach (string enemyName in enemyNames)
         {
-            string enemyName =
-                idleClip.name.Substring(
-                    0,
-                    idleClip.name.Length - "_idle".Length
-                );
+            // _idle 우선, 없으면 _idle1
+            AnimationClip idleClip =
+                FindClip(clips, $"{enemyName}_idle")
+                ?? FindClip(clips, $"{enemyName}_idle1");
+
+            if (idleClip == null)
+                continue;
 
             GenerateController(
                 enemyName,
@@ -86,7 +112,8 @@ public static class EnemyAnimatorControllerGenerator
         // =========================================
 
         AnimationClip hitClip =
-            FindClip(allClips, $"{enemyName}_hit");
+     FindClip(allClips, $"{enemyName}_hit")
+     ?? FindClip(allClips, $"{enemyName}_hit1");
 
         AnimationClip deathClip =
             FindClip(allClips, $"{enemyName}_death");
@@ -112,35 +139,19 @@ public static class EnemyAnimatorControllerGenerator
         // Controller 생성
         // =========================================
 
-        string controllerPath =
-            $"{ControllerFolder}/{enemyName}.controller";
+        string controllerPath = $"{ControllerFolder}/{enemyName}.controller";
 
-        AnimatorController controller =
-            AssetDatabase.LoadAssetAtPath<AnimatorController>(
-                controllerPath
-            );
+        AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath);
 
-        if (controller == null)
+        if (controller != null)
         {
-            controller =
-                AnimatorController.CreateAnimatorControllerAtPath(
-                    controllerPath
-                );
+            Debug.Log($"[EnemyAnimatorGenerator] {enemyName} : " + "기존 Controller 존재 → 생성 제외");
+            return;
         }
 
-        SetupController(
-            controller,
-            enemyName,
-            idleClip,
-            hitClip,
-            deathClip,
-            attackClips
-        );
+        controller = AnimatorController.CreateAnimatorControllerAtPath(controllerPath);
 
-        Debug.Log(
-            $"[EnemyAnimatorGenerator] {enemyName} 생성 완료 " +
-            $"Attack Count = {attackClips.Count}"
-        );
+        SetupController(controller,enemyName,idleClip,hitClip,deathClip,attackClips);
     }
 
 

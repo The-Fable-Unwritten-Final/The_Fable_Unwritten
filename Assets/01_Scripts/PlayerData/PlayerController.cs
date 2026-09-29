@@ -278,7 +278,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         dmgTextQueue.InitPrint(dmg);
 
-        playerData.currentHP = Mathf.Max(0, playerData.currentHP - damage);
+        playerData.currentHP = (int)Mathf.Max(0, playerData.currentHP - damage);
 
         if (!IsAlive())
         {
@@ -457,7 +457,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         reduced = Mathf.Round(reduced);
 
-        playerData.currentHP = Mathf.Max(0, playerData.currentHP - reduced);
+        playerData.currentHP = (int)Mathf.Max(0, playerData.currentHP - reduced);
 
         if (!IsAlive())
         {
@@ -477,7 +477,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// <param name="amount">회복량</param>
     public void Heal(float amount)
     {
-        playerData.currentHP = Mathf.Min(playerData.MaxHP, playerData.currentHP + amount);
+        int finalHeal = Mathf.RoundToInt(amount);
+        currentHP = Mathf.Min(maxHP, currentHP + finalHeal);
     }
 
     /// <summary>
@@ -644,13 +645,13 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     }
 
     // 최대 체력
-    public float maxHP
+    public int maxHP
     {
         get => playerData.MaxHP;
         set => playerData.MaxHP = value;
     }
     //현재 체력
-    public float currentHP
+    public int currentHP
     {
         get => playerData.currentHP;
         set => playerData.currentHP = value;
@@ -1217,7 +1218,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         float before = currentHP;
 
-        currentHP = Mathf.Max(1f, currentHP - damage);
+        currentHP = (int)Mathf.Max(1f, currentHP - damage);
 
         float actualDamage = before - currentHP;
 
@@ -1327,7 +1328,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         if (undying.value <= 0)
             instantEffects.Remove(undying);
 
-        playerData.currentHP = 1f;
+        playerData.currentHP = 1;
         isDeathPending = false;
 
         statusDisplay?.PlayerUpdateUI();
@@ -1370,7 +1371,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             reduced = Mathf.Max(reduced, 1f);
         }
 
-        playerData.currentHP = Mathf.Max(0, playerData.currentHP - reduced);
+        playerData.currentHP = (int)Mathf.Max(0, playerData.currentHP - reduced);
 
         if (!IsAlive())
         {

@@ -45,7 +45,7 @@ public class CardModel : ScriptableObject
     public List<CardEffectBase> effects = new();    //어떤 효과를 가졌는지
 
     [Header("Skill Effect")]
-    public string skillEffectName;   // 스킬 이펙트 이름
+    public List<string> skillEffectName = new();   // 스킬 이펙트 이름
 
     public bool isUnlocked = true;              //카드가 해금 되었는지
 
@@ -63,7 +63,7 @@ public class CardModel : ScriptableObject
 
     private void OnEnable()
     {
-        isMaintain = true;
+        isMaintain = false;
         isOneUse = false;
     }
 
@@ -134,8 +134,12 @@ public class CardModel : ScriptableObject
             Debug.LogError("[CardModel] Caster를 PlayerController로 변환할 수 없습니다");
             yield break;
         }
+        Debug.Log($"[CardAnim] PlayAttackAnimation 시작 / Card={index} / Type={type}");
+
         cast.PlayAttackAnimation(attackType, type,() =>
         {
+            Debug.Log($"[CardAnim] Hit Callback 도착 / Card={index}");
+
             if (hitTriggered) return;
             hitTriggered = true;
 
@@ -148,50 +152,65 @@ public class CardModel : ScriptableObject
                 return;
             }
 
-            if (!string.IsNullOrEmpty(skillEffectName) && targets.Count > 0)
+            if (skillEffectName != null && skillEffectName.Count > 0 && targets.Count > 0)
             {
                 foreach (var t in targets)
                 {
                     if (t == null) continue;
 
-                    if (DataManager.Instance.CardEffects.TryGetValue(skillEffectName, out var animInfo))
+                    bool hasProjectile = false;
+
+                    foreach (var effectName in skillEffectName)
                     {
-                        if (animInfo.animationType == AnimationType.Projectile)
-                        {
-                            GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
-                                skillEffectName,
-                                caster,
-                                t,
-                                1,
-                                () =>
-                                {
-                                    if (t != null && effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
-                                        t.PlayHitAnimation();
-
-                                    ApplyEffectsToTarget(caster, t, targets, fixedIsEnhanced);
-                                }
-                            );
-
+                        if (string.IsNullOrEmpty(effectName))
                             continue;
+
+                        Debug.Log($"[EffectCheck] Card={index} / Name={cardName} / SkillEffect={effectName} / Exists={DataManager.Instance.CardEffects.ContainsKey(effectName)}");
+
+                        if (DataManager.Instance.CardEffects.TryGetValue(effectName, out var animInfo))
+                        {
+                            if (animInfo.animationType == AnimationType.Projectile)
+                            {
+                                hasProjectile = true;
+
+                                GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
+                                    effectName,
+                                    caster,
+                                    t,
+                                    1,
+                                    () =>
+                                    {
+                                        if (t != null && effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
+                                            t.PlayHitAnimation();
+
+                                        ApplyEffectsToTarget(caster, t, targets, fixedIsEnhanced);
+                                    }
+                                );
+                            }
+                            else
+                            {
+                                GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(
+                                    effectName,
+                                    caster,
+                                    t,
+                                    false,
+                                    1
+                                );
+                            }
                         }
-
-                        GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(
-                            skillEffectName,
-                            caster,
-                            t,
-                            false,
-                            1
-                        );
+                        else
+                        {
+                            Debug.LogWarning($"[CardAnim] 스킬 이펙트 없음: 카드={cardName}, effect={effectName}");
+                        }
                     }
-                    else
+
+                    if (!hasProjectile)
                     {
-                        Debug.LogWarning($"[CardAnim] 스킬 이펙트 없음: 카드={cardName}, effect={skillEffectName}");
+                        if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
+                            t.PlayHitAnimation();
+
+                        ApplyEffectsToTarget(caster, t, targets, fixedIsEnhanced);
                     }
-
-                    if (t != null && effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
-                        t.PlayHitAnimation();
-
-                    ApplyEffectsToTarget(caster, t, targets, fixedIsEnhanced);
                 }
             }
             else
@@ -470,7 +489,7 @@ public class CardModel : ScriptableObject
         clone.effects = new List<CardEffectBase>(effects);
 
         clone.isEnhanced = false;
-        clone.isMaintain = true;
+        clone.isMaintain = false;
         clone.isOneUse = false;
 
         clone.temporaryCostModifier = 0;
@@ -480,7 +499,7 @@ public class CardModel : ScriptableObject
         return clone;
     }
 
-    public void InitializeRuntimeState(bool oneUse = false, bool maintain = true, bool enhanced = false)
+    public void InitializeRuntimeState(bool oneUse = false, bool maintain = false, bool enhanced = false)
     {
         isOneUse = oneUse;
         isMaintain = maintain;

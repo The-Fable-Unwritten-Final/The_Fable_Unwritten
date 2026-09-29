@@ -281,38 +281,23 @@ public class DeckModel
 
     public void DiscardUnmaintainedCardsAtTurnEnd()
     {
-        List<CardModel> toRemove = new();
+        List<CardModel> toDiscard = new();
 
         // 핸드 검사
         foreach (var card in hand)
         {
             if (!card.isMaintain)
             {
-                toRemove.Add(card);
+                toDiscard.Add(card);
             }
         }
 
-        foreach (var card in toRemove)
+        foreach (var card in toDiscard)
         {
             GameManager.Instance.combatUIController.ThrowCard(card);
+            Discard(card);
             Debug.Log($"[Deck] 유지되지 않는 카드 {card.cardName} 핸드에서 제거");
         }
-
-        // 사용 덱 검사
-        toRemove.Clear();
-        foreach (var card in usedDeck)
-        {
-            if (!card.isMaintain)
-                toRemove.Add(card);
-        }
-
-        foreach (var card in toRemove)
-        {
-            usedDeck.Remove(card);
-            GameObject.Destroy(card);
-            Debug.Log($"[Deck] 유지되지 않는 카드 {card.cardName} 사용 덱에서 제거");
-        }
-
     }
 
     public bool AddToHandRightmost(CardModel card, bool updateUI = true)

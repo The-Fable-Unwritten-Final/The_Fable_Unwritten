@@ -503,8 +503,10 @@ public static class EnemyPattern
             return;
         }
 
-        GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(effectName,caster,target,true,scaleFactor);
-        onImpact?.Invoke();
+        bool flipX = effectName != "20_201_effect";
+        GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(effectName, caster, target, flipX, scaleFactor);
+
+        onImpact?.Invoke(); onImpact?.Invoke();
     }
 
 

@@ -38,7 +38,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
     private Dictionary<int, List<InstanceEffectData>> cachedInstanceEffects = new(); // 캐릭터ID -> InstanceEffect 리스트
 
     // 전투 입장 시점의 상태 백업 (전투에서 나갔다가 복귀할 때 사용)
-    private Dictionary<int, float> battleEntryHPBackup = new(); // 캐릭터ID -> 전투 입장 시 HP
+    private Dictionary<int, int> battleEntryHPBackup = new(); // 캐릭터ID -> 전투 입장 시 HP
     private Dictionary<int, List<TickEffectData>> battleEntryTickEffectsBackup = new(); // 캐릭터ID -> 전투 입장 시 TickEffect
     private Dictionary<int, List<InstanceEffectData>> battleEntryInstanceEffectsBackup = new(); // 캐릭터ID -> 전투 입장 시 InstanceEffect
 
@@ -340,7 +340,7 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
             foreach (var kvp in battleEntryHPBackup)
             {
                 int characterID = kvp.Key;
-                float hp = kvp.Value;
+                int hp = kvp.Value;
 
                 var playerData = PlayerDatas.FirstOrDefault(p => p.IDNum == characterID);
                 if (playerData != null)
@@ -1399,8 +1399,8 @@ public class StageThemePair
 public class PlayerSaveData
 {
     public int id;
-    public float maxHP;
-    public float currentHP;
+    public int maxHP;
+    public int currentHP;
     public List<int> currentDeckIndexes = new();
     public List<TickEffectData> tickEffectsData = new();       // 플레이어에게 적용된 TickEffect들
     public List<InstanceEffectData> instanceEffectsData = new(); // 플레이어에게 적용된 InstanceEffect들

@@ -13,7 +13,7 @@ public static class AsepriteAnimationBatchTool
 
     // .aseprite들이 들어있는 최상위 폴더
     private const string SourceFolder =
-        "Assets/04_Animation/Enemy/aseprite";
+        "Assets/04_Animation/Enemy/aseprite/Stage4";
 
     // 생성된 .anim 저장 폴더
     private const string OutputFolder =

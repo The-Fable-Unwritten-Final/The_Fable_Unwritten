@@ -33,7 +33,7 @@ public static class CardModelFactory
         card.cardImage = data.cardframe;
         card.cardFrame = LoadSprite($"Cards/Frame/{data.cardframe}");
         card.effects = effects != null ? new List<CardEffectBase>(effects) : new List<CardEffectBase>();
-        card.skillEffectName = data.skilleffect;
+        card.skillEffectName = ParseSkillEffects(data.skilleffect);
         card.soundIndexes = data.soundIndexes != null ? new List<int>(data.soundIndexes) : new List<int>();
         card.soundDelays = data.soundDelays != null ? new List<float>(data.soundDelays) : new List<float>();
         return card;
@@ -65,5 +65,24 @@ public static class CardModelFactory
             spriteCache[cacheKey] = sprite;
             
         return sprite;
+    }
+
+    private static List<string> ParseSkillEffects(string skillEffect)
+    {
+        if (string.IsNullOrWhiteSpace(skillEffect))
+            return new List<string>();
+
+        string[] split = skillEffect.Split(',');
+        List<string> result = new List<string>();
+
+        foreach (var effectName in split)
+        {
+            string trimmed = effectName.Trim();
+
+            if (!string.IsNullOrEmpty(trimmed))
+                result.Add(trimmed);
+        }
+
+        return result;
     }
 }

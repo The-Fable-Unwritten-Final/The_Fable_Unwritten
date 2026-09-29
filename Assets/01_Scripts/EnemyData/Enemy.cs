@@ -585,7 +585,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public void Heal(float amount)
     {
-        enemyData.CurrentHP = Mathf.Min(enemyData.MaxHP, enemyData.CurrentHP + amount);
+        enemyData.CurrentHP = (int)Mathf.Min(enemyData.MaxHP, enemyData.CurrentHP + amount);
         Debug.Log($"{enemyData.EnemyName} 회복: {amount}, 현재 체력: {enemyData.CurrentHP}");
     }
 
@@ -597,7 +597,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     public void TakeTrueDamage(float damage)
     {
         damage = StyleManager.Instance.GetDamageGiveModify(this, this, BattleLogManager.Instance.card, damage);
-        currentHP = Mathf.Max(0, currentHP - damage);
+        currentHP = (int)Mathf.Max(0, currentHP - damage);
         
         if (!IsAlive())
         {
@@ -616,7 +616,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         float reduced = amount - ModifyStat(BuffStatType.Defend, 0f);
         reduced = Mathf.Max(reduced, 0);
 
-        currentHP = Mathf.Max(0, currentHP - reduced);
+        currentHP = (int)Mathf.Max(0, currentHP - reduced);
 
         if(!IsAlive())
         {
@@ -641,7 +641,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         if (isAttackDamage)
             reduced = mechanic?.ModifyIncomingAttackDamage(reduced) ?? reduced;
 
-        currentHP = Mathf.Max(0, currentHP - reduced);
+        currentHP = (int)Mathf.Max(0, currentHP - reduced);
 
         if (!IsAlive())
             isDeathPending = true;
@@ -667,13 +667,13 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         // GameManager.Instance.combatCameraController.CameraZoomInAction(transform);
     }
 
-    public float maxHP
+    public int maxHP
     {
         get => enemyData.MaxHP;
         set => enemyData.MaxHP = value;
     }
 
-    public float currentHP
+    public int currentHP
     {
         get => enemyData.CurrentHP;
         set => enemyData.CurrentHP = value;

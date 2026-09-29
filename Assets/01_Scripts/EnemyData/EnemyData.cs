@@ -16,9 +16,9 @@ public class EnemyData : ScriptableObject
 
     public int exp;
 
-    [SerializeField] private float maxHP;
+    [SerializeField] private int maxHP;
 
-    public float MaxHP
+    public int MaxHP
     {
         get => maxHP;
         set
@@ -28,8 +28,8 @@ public class EnemyData : ScriptableObject
         }
     }
 
-    [SerializeField] private float currentHP;
-    public float CurrentHP
+    [SerializeField] private int currentHP;
+    public int CurrentHP
     {
         get => currentHP;
         set

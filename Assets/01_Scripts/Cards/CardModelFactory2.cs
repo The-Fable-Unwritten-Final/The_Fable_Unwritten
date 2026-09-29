@@ -39,8 +39,7 @@ public static class CardModelFactory2
         card.effects = effects != null ? new List<CardEffectBase>(effects) : new List<CardEffectBase>();
 
         // ===== 연출 =====
-        card.skillEffectName = data.skilleffect;
-
+        card.skillEffectName = ParseSkillEffects(data.skilleffect);
         return card;
     }
 
@@ -74,5 +73,23 @@ public static class CardModelFactory2
             spriteCache[cacheKey] = sprite;
             
         return sprite;
+    }
+    private static List<string> ParseSkillEffects(string skillEffect)
+    {
+        if (string.IsNullOrWhiteSpace(skillEffect))
+            return new List<string>();
+
+        string[] split = skillEffect.Split(',');
+        List<string> result = new List<string>();
+
+        foreach (var effectName in split)
+        {
+            string trimmed = effectName.Trim();
+
+            if (!string.IsNullOrEmpty(trimmed))
+                result.Add(trimmed);
+        }
+
+        return result;
     }
 }

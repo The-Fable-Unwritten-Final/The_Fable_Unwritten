@@ -13,7 +13,7 @@ public static class EnemyTableImporter
         public string name;
         public int type;
         public string art;
-        public float hp;
+        public int hp;
 
         public int[] skillIndexes = new int[5];
         public int[] skillPercents = new int[5];
@@ -78,7 +78,7 @@ public static class EnemyTableImporter
             row.name = Get(t, 1);
             row.type = ParseInt(t, 2);
             row.art = Get(t, 3);
-            row.hp = ParseFloat(t, 4);
+            row.hp = ParseInt(t, 4);
 
             row.skillIndexes[0] = ParseInt(t, 5);
             row.skillPercents[0] = ParseInt(t, 6);
