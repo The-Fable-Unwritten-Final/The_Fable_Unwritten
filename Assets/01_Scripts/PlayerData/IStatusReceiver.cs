@@ -135,6 +135,7 @@ public interface IStatusReceiver
     public Transform HeadPoint { get; }
     public Transform OverheadPoint { get; }
     public Transform AheadPoint { get; }
+    public Transform AheadmidPoint { get; }
 
 
 }

@@ -12,12 +12,13 @@ public class CharacterAnchorController : MonoBehaviour
     [SerializeField] private Transform aheadPoint;
 
     [SerializeField] private Transform shadowRoot;
-
+    [SerializeField] private Transform aheadMidPoint;
     public Transform FootPoint => footPoint;
     public Transform BodyPoint => bodyPoint;
     public Transform HeadPoint => headPoint;
     public Transform OverheadPoint => overheadPoint;
     public Transform AheadPoint => aheadPoint;
+    public Transform AheadMidPoint => aheadMidPoint;
 
     public void Apply(CharacterAnchorOffsetData data)
     {
@@ -31,6 +32,9 @@ public class CharacterAnchorController : MonoBehaviour
         headPoint.localPosition = data.headPoint;
         overheadPoint.localPosition = data.overheadPoint;
         aheadPoint.localPosition = data.aheadPoint;
+
+        if (aheadMidPoint != null)
+            aheadMidPoint.localPosition = data.aheadMidPoint;
 
         if (shadowRoot != null)
         {
@@ -56,6 +60,6 @@ public struct CharacterAnchorOffsetData
     public Vector2 headPoint;
     public Vector2 overheadPoint;
     public Vector2 aheadPoint;
-
+    public Vector3 aheadMidPoint;
     public Vector2 shadowOffset;
 }

@@ -236,105 +236,105 @@
             "soundIndexes": [],
             "soundDelays": []
         },
-        {
-            "index": 1003,
-            "cost": 1,
-            "illustration": "illust_10",
-            "name": "Card_Name_1003",
-            "text": "Card_Text_1003",
-            "type": 1,
-            "class": 0,
-            "cardframe": "frame_1",
-            "target_type": 2,
-            "target_num": 2,
-            "note": "",
-            "flavortext": "Card_Flav_1003",
-            "skilleffect": "",
-            "evolveCount": 0,
-            "evolveTarget": 0,
-            "keywords": [
-                "Copy"
-            ],
-            "switchType": "Insight",
-            "effects": [
-                {
-                    "type": "damage",
-                    "value": 3,
-                    "duration": 0,
-                    "target": 0,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "",
-                        "value": []
-                    },
-                    "result": {
-                        "type": "",
-                        "value": 0,
-                        "duration": 0,
-                        "target": 0
-                    }
-                },
-                {
-                    "type": "freeze",
-                    "value": 2,
-                    "duration": 0,
-                    "target": 4,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "",
-                        "value": []
-                    },
-                    "result": {
-                        "type": "",
-                        "value": 0,
-                        "duration": 0,
-                        "target": 0
-                    }
-                },
-                {
-                    "type": "applyDamage",
-                    "value": 2,
-                    "duration": 0,
-                    "target": 0,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "",
-                        "value": []
-                    },
-                    "result": {
-                        "type": "",
-                        "value": 0,
-                        "duration": 0,
-                        "target": 0
-                    }
-                },
-                {
-                    "type": "conditional",
-                    "value": 0,
-                    "duration": 0,
-                    "target": 0,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "isStance",
-                        "value": [
-                            "Insight"
-                        ]
-                    },
-                    "result": {
-                        "type": "duplicate",
-                        "value": 1,
-                        "duration": 0,
-                        "target": 0
-                    }
-                }
-            ],
-            "soundIndexes": [
-                702
-            ],
-            "soundDelays": [
-                1.4299999475479127
-            ]
-        },
+      {
+        "index": 1003,
+        "cost": 1,
+        "illustration": "illust_10",
+        "name": "Card_Name_1003",
+        "text": "Card_Text_1003",
+        "type": 1,
+        "class": 0,
+        "cardframe": "frame_1",
+        "target_type": 2,
+        "target_num": 2,
+        "note": "",
+        "flavortext": "Card_Flav_1003",
+        "skilleffect": "4얼음 파편ef1_125x125, 4얼음 파편ef2_50x50",
+        "evolveCount": 0,
+        "evolveTarget": 0,
+        "keywords": [
+          "Copy"
+        ],
+        "switchType": "Insight",
+        "effects": [
+          {
+            "type": "damage",
+            "value": 3,
+            "duration": 0,
+            "target": 0,
+            "owner": "",
+            "condition": {
+              "trigger": "",
+              "value": []
+            },
+            "result": {
+              "type": "",
+              "value": 0,
+              "duration": 0,
+              "target": 0
+            }
+          },
+          {
+            "type": "freeze",
+            "value": 2,
+            "duration": 0,
+            "target": 4,
+            "owner": "",
+            "condition": {
+              "trigger": "",
+              "value": []
+            },
+            "result": {
+              "type": "",
+              "value": 0,
+              "duration": 0,
+              "target": 0
+            }
+          },
+          {
+            "type": "applyDamage",
+            "value": 2,
+            "duration": 0,
+            "target": 0,
+            "owner": "",
+            "condition": {
+              "trigger": "",
+              "value": []
+            },
+            "result": {
+              "type": "",
+              "value": 0,
+              "duration": 0,
+              "target": 0
+            }
+          },
+          {
+            "type": "conditional",
+            "value": 0,
+            "duration": 0,
+            "target": 0,
+            "owner": "",
+            "condition": {
+              "trigger": "isStance",
+              "value": [
+                "Insight"
+              ]
+            },
+            "result": {
+              "type": "duplicate",
+              "value": 1,
+              "duration": 0,
+              "target": 0
+            }
+          }
+        ],
+        "soundIndexes": [
+          702
+        ],
+        "soundDelays": [
+          1.4299999475479127
+        ]
+      },
         {
             "index": 1004,
             "cost": 2,
@@ -600,100 +600,100 @@
                 0.8799999952316284
             ]
         },
-        {
-            "index": 1008,
-            "cost": 3,
-            "illustration": "illust_9",
-            "name": "Card_Name_1008",
-            "text": "Card_Text_1008",
-            "type": 2,
-            "class": 0,
-            "cardframe": "frame_3",
-            "target_type": 2,
-            "target_num": 3,
-            "note": "방치된 고서-선택지 1",
-            "flavortext": "Card_Flav_1008",
-            "skilleffect": "",
-            "evolveCount": 8,
-            "evolveTarget": 1108,
-            "keywords": [],
-            "switchType": "",
-            "effects": [
-                {
-                    "type": "damage",
-                    "value": 12,
-                    "duration": 0,
-                    "target": 0,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "",
-                        "value": []
-                    },
-                    "result": {
-                        "type": "",
-                        "value": 0,
-                        "duration": 0,
-                        "target": 0
-                    }
-                },
-                {
-                    "type": "active",
-                    "value": 10,
-                    "duration": 0,
-                    "target": 0,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "",
-                        "value": []
-                    },
-                    "result": {
-                        "type": "",
-                        "value": 0,
-                        "duration": 0,
-                        "target": 0
-                    }
-                },
-                {
-                    "type": "conditional",
-                    "value": 0,
-                    "duration": 0,
-                    "target": 0,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "usedAnyCardType",
-                        "value": [
-                            "Fire",
-                            "Ice"
-                        ]
-                    },
-                    "result": {
-                        "type": "damage",
-                        "value": 3,
-                        "duration": 0,
-                        "target": 0
-                    }
-                },
-                {
-                    "type": "conditional",
-                    "value": 0,
-                    "duration": 0,
-                    "target": 0,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "justAfterStance",
-                        "value": []
-                    },
-                    "result": {
-                        "type": "damagePercent",
-                        "value": 50,
-                        "duration": 0,
-                        "target": 0
-                    }
-                }
-            ],
-            "soundIndexes": [],
-            "soundDelays": []
-        },
+      {
+        "index": 1008,
+        "cost": 3,
+        "illustration": "illust_9",
+        "name": "Card_Name_1008",
+        "text": "Card_Text_1008",
+        "type": 2,
+        "class": 0,
+        "cardframe": "frame_3",
+        "target_type": 2,
+        "target_num": 3,
+        "note": "방치된 고서-선택지 1",
+        "flavortext": "Card_Flav_1008",
+        "skilleffect": "",
+        "evolveCount": 8,
+        "evolveTarget": 1108,
+        "keywords": [],
+        "switchType": "",
+        "effects": [
+          {
+            "type": "damage",
+            "value": 12,
+            "duration": 0,
+            "target": 0,
+            "owner": "",
+            "condition": {
+              "trigger": "",
+              "value": []
+            },
+            "result": {
+              "type": "",
+              "value": 0,
+              "duration": 0,
+              "target": 0
+            }
+          },
+          {
+            "type": "active",
+            "value": 10,
+            "duration": 0,
+            "target": 0,
+            "owner": "",
+            "condition": {
+              "trigger": "",
+              "value": []
+            },
+            "result": {
+              "type": "",
+              "value": 0,
+              "duration": 0,
+              "target": 0
+            }
+          },
+          {
+            "type": "conditional",
+            "value": 0,
+            "duration": 0,
+            "target": 0,
+            "owner": "",
+            "condition": {
+              "trigger": "usedAnyCardType",
+              "value": [
+                "Fire",
+                "Ice"
+              ]
+            },
+            "result": {
+              "type": "damage",
+              "value": 3,
+              "duration": 0,
+              "target": 0
+            }
+          },
+          {
+            "type": "conditional",
+            "value": 0,
+            "duration": 0,
+            "target": 0,
+            "owner": "",
+            "condition": {
+              "trigger": "justAfterStance",
+              "value": []
+            },
+            "result": {
+              "type": "damagePercent",
+              "value": 50,
+              "duration": 0,
+              "target": 0
+            }
+          }
+        ],
+        "soundIndexes": [],
+        "soundDelays": []
+      },
         {
             "index": 1009,
             "cost": 1,
@@ -913,161 +913,161 @@
             "soundIndexes": [],
             "soundDelays": []
         },
-        {
-            "index": 1108,
-            "cost": 3,
-            "illustration": "",
-            "name": "Card_Name_1108",
-            "text": "Card_Text_1108",
-            "type": 2,
-            "class": 0,
-            "cardframe": "frame_3",
-            "target_type": 2,
-            "target_num": 3,
-            "note": "",
-            "flavortext": "Card_Flav_1108",
-            "skilleffect": "",
-            "evolveCount": 6,
-            "evolveTarget": 0,
-            "keywords": [],
-            "switchType": "",
-            "effects": [
-                {
-                    "type": "damage",
-                    "value": 16,
-                    "duration": 0,
-                    "target": 0,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "",
-                        "value": []
-                    },
-                    "result": {
-                        "type": "",
-                        "value": 0,
-                        "duration": 0,
-                        "target": 0
-                    }
-                },
-                {
-                    "type": "active",
-                    "value": 20,
-                    "duration": 0,
-                    "target": 0,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "",
-                        "value": []
-                    },
-                    "result": {
-                        "type": "",
-                        "value": 0,
-                        "duration": 0,
-                        "target": 0
-                    }
-                },
-                {
-                    "type": "conditional",
-                    "value": 0,
-                    "duration": 0,
-                    "target": 0,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "justAfterStance",
-                        "value": []
-                    },
-                    "result": {
-                        "type": "damagePercent",
-                        "value": 50,
-                        "duration": 0,
-                        "target": 0
-                    }
-                }
-            ],
-            "soundIndexes": [],
-            "soundDelays": []
-        },
-        {
-            "index": 1109,
-            "cost": 2,
-            "illustration": "",
-            "name": "Card_Name_1109",
-            "text": "Card_Text_1109",
-            "type": 0,
-            "class": 0,
-            "cardframe": "frame_0",
-            "target_type": 2,
-            "target_num": 3,
-            "note": "",
-            "flavortext": "Card_Flav_1109",
-            "skilleffect": "14폭열ef_125x250",
-            "evolveCount": 6,
-            "evolveTarget": 0,
-            "keywords": [],
-            "switchType": "",
-            "effects": [
-                {
-                    "type": "damage",
-                    "value": 9,
-                    "duration": 0,
-                    "target": 0,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "",
-                        "value": []
-                    },
-                    "result": {
-                        "type": "",
-                        "value": 0,
-                        "duration": 0,
-                        "target": 0
-                    }
-                },
-                {
-                    "type": "burn",
-                    "value": 3,
-                    "duration": 0,
-                    "target": 4,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "",
-                        "value": []
-                    },
-                    "result": {
-                        "type": "",
-                        "value": 0,
-                        "duration": 0,
-                        "target": 0
-                    }
-                },
-                {
-                    "type": "conditional",
-                    "value": 0,
-                    "duration": 0,
-                    "target": 0,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "enemyStatusStackGte",
-                        "value": [
-                            "burn",
-                            "10"
-                        ]
-                    },
-                    "result": {
-                        "type": "repeat",
-                        "value": 2,
-                        "duration": 0,
-                        "target": 0
-                    }
-                }
-            ],
-            "soundIndexes": [
-                701
-            ],
-            "soundDelays": [
-                0.7400000095367432
-            ]
-        },
+      {
+        "index": 1108,
+        "cost": 3,
+        "illustration": "",
+        "name": "Card_Name_1108",
+        "text": "Card_Text_1108",
+        "type": 2,
+        "class": 0,
+        "cardframe": "frame_3",
+        "target_type": 2,
+        "target_num": 3,
+        "note": "",
+        "flavortext": "Card_Flav_1108",
+        "skilleffect": "13원소 폭발ef_100x100",
+        "evolveCount": 6,
+        "evolveTarget": 0,
+        "keywords": [],
+        "switchType": "",
+        "effects": [
+          {
+            "type": "damage",
+            "value": 16,
+            "duration": 0,
+            "target": 0,
+            "owner": "",
+            "condition": {
+              "trigger": "",
+              "value": []
+            },
+            "result": {
+              "type": "",
+              "value": 0,
+              "duration": 0,
+              "target": 0
+            }
+          },
+          {
+            "type": "active",
+            "value": 20,
+            "duration": 0,
+            "target": 0,
+            "owner": "",
+            "condition": {
+              "trigger": "",
+              "value": []
+            },
+            "result": {
+              "type": "",
+              "value": 0,
+              "duration": 0,
+              "target": 0
+            }
+          },
+          {
+            "type": "conditional",
+            "value": 0,
+            "duration": 0,
+            "target": 0,
+            "owner": "",
+            "condition": {
+              "trigger": "justAfterStance",
+              "value": []
+            },
+            "result": {
+              "type": "damagePercent",
+              "value": 50,
+              "duration": 0,
+              "target": 0
+            }
+          }
+        ],
+        "soundIndexes": [],
+        "soundDelays": []
+      },
+      {
+        "index": 1109,
+        "cost": 2,
+        "illustration": "",
+        "name": "Card_Name_1109",
+        "text": "Card_Text_1109",
+        "type": 0,
+        "class": 0,
+        "cardframe": "frame_0",
+        "target_type": 2,
+        "target_num": 3,
+        "note": "",
+        "flavortext": "Card_Flav_1109",
+        "skilleffect": "14폭열ef_125x215",
+        "evolveCount": 6,
+        "evolveTarget": 0,
+        "keywords": [],
+        "switchType": "",
+        "effects": [
+          {
+            "type": "damage",
+            "value": 9,
+            "duration": 0,
+            "target": 0,
+            "owner": "",
+            "condition": {
+              "trigger": "",
+              "value": []
+            },
+            "result": {
+              "type": "",
+              "value": 0,
+              "duration": 0,
+              "target": 0
+            }
+          },
+          {
+            "type": "burn",
+            "value": 3,
+            "duration": 0,
+            "target": 4,
+            "owner": "",
+            "condition": {
+              "trigger": "",
+              "value": []
+            },
+            "result": {
+              "type": "",
+              "value": 0,
+              "duration": 0,
+              "target": 0
+            }
+          },
+          {
+            "type": "conditional",
+            "value": 0,
+            "duration": 0,
+            "target": 0,
+            "owner": "",
+            "condition": {
+              "trigger": "enemyStatusStackGte",
+              "value": [
+                "burn",
+                "10"
+              ]
+            },
+            "result": {
+              "type": "repeat",
+              "value": 2,
+              "duration": 0,
+              "target": 0
+            }
+          }
+        ],
+        "soundIndexes": [
+          701
+        ],
+        "soundDelays": [
+          0.7400000095367432
+        ]
+      },
         {
             "index": 1110,
             "cost": 1,
@@ -1493,88 +1493,88 @@
                 0.9800000190734863
             ]
         },
-        {
-            "index": 1301,
-            "cost": 0,
-            "illustration": "",
-            "name": "Card_Name_1301",
-            "text": "Card_Text_1301",
-            "type": 9,
-            "class": 0,
-            "cardframe": "frame_0",
-            "target_type": 2,
-            "target_num": 3,
-            "note": "",
-            "flavortext": "Card_Flav_1301",
-            "skilleffect": "",
-            "evolveCount": 0,
-            "evolveTarget": 0,
-            "keywords": [
-                "Exhaust"
-            ],
-            "switchType": "",
-            "effects": [
-                {
-                    "type": "damage",
-                    "value": 16,
-                    "duration": 0,
-                    "target": 0,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "",
-                        "value": []
-                    },
-                    "result": {
-                        "type": "",
-                        "value": 0,
-                        "duration": 0,
-                        "target": 0
-                    }
-                },
-                {
-                    "type": "burn",
-                    "value": 4,
-                    "duration": 0,
-                    "target": 4,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "",
-                        "value": []
-                    },
-                    "result": {
-                        "type": "",
-                        "value": 0,
-                        "duration": 0,
-                        "target": 0
-                    }
-                },
-                {
-                    "type": "conditional",
-                    "value": 0,
-                    "duration": 0,
-                    "target": 0,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "isStance",
-                        "value": [
-                            "Seek"
-                        ]
-                    },
-                    "result": {
-                        "type": "damagePercent",
-                        "value": 50,
-                        "duration": 0,
-                        "target": 0
-                    }
-                }
-            ],
-            "soundIndexes": [
-                701
-            ],
-            "soundDelays": [
-                0.8799999952316284
-            ]
-        },
+      {
+        "index": 1301,
+        "cost": 0,
+        "illustration": "",
+        "name": "Card_Name_1301",
+        "text": "Card_Text_1301",
+        "type": 9,
+        "class": 0,
+        "cardframe": "frame_0",
+        "target_type": 2,
+        "target_num": 3,
+        "note": "",
+        "flavortext": "Card_Flav_1301",
+        "skilleffect": "20급조 폭열식ef_200x200",
+        "evolveCount": 0,
+        "evolveTarget": 0,
+        "keywords": [
+          "Exhaust"
+        ],
+        "switchType": "",
+        "effects": [
+          {
+            "type": "damage",
+            "value": 16,
+            "duration": 0,
+            "target": 0,
+            "owner": "",
+            "condition": {
+              "trigger": "",
+              "value": []
+            },
+            "result": {
+              "type": "",
+              "value": 0,
+              "duration": 0,
+              "target": 0
+            }
+          },
+          {
+            "type": "burn",
+            "value": 4,
+            "duration": 0,
+            "target": 4,
+            "owner": "",
+            "condition": {
+              "trigger": "",
+              "value": []
+            },
+            "result": {
+              "type": "",
+              "value": 0,
+              "duration": 0,
+              "target": 0
+            }
+          },
+          {
+            "type": "conditional",
+            "value": 0,
+            "duration": 0,
+            "target": 0,
+            "owner": "",
+            "condition": {
+              "trigger": "isStance",
+              "value": [
+                "Seek"
+              ]
+            },
+            "result": {
+              "type": "damagePercent",
+              "value": 50,
+              "duration": 0,
+              "target": 0
+            }
+          }
+        ],
+        "soundIndexes": [
+          701
+        ],
+        "soundDelays": [
+          0.8799999952316284
+        ]
+      },
         {
             "index": 1302,
             "cost": 0,

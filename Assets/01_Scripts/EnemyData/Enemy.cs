@@ -56,6 +56,9 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     [SerializeField] private Transform headpoint;
     [SerializeField] private Transform overheadpoint;
     [SerializeField] private Transform aheadpoint;
+    [SerializeField] private Transform aheadmidpoint;
+
+
 
     public Transform FootPoint => anchorController.FootPoint;
     public Transform BodyPoint => anchorController.BodyPoint;
@@ -63,6 +66,8 @@ public class Enemy : MonoBehaviour, IStatusReceiver
     public Transform OverheadPoint => anchorController.OverheadPoint;
 
     public Transform AheadPoint => anchorController.AheadPoint;
+
+    public Transform AheadmidPoint => anchorController.AheadMidPoint;
 
 
     public event System.Action OnTargetableChanged;
@@ -80,6 +85,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
 
     private Sequence hitShakeSequence;
+    private Vector3 visualBasePosition;
     private StatusDisplay statusDisplay;
 
     [SerializeField] public List<TickEffect> tickEffects = new();
@@ -141,6 +147,11 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
         if (animator == null)
             animator = GetComponent<Animator>();
+
+
+        if (animator != null)
+            visualBasePosition = animator.transform.localPosition;
+
 
         if (enemyData.animationController != null && animator != null)
             animator.runtimeAnimatorController = enemyData.animationController;
@@ -732,23 +743,29 @@ public class Enemy : MonoBehaviour, IStatusReceiver
 
     public void PlayHitAnimation()
     {
-        if (animator != null)
-        {
-            // 이전 진동 효과 취소
-            if (hitShakeSequence != null && hitShakeSequence.IsActive())
-            {
-                hitShakeSequence.Kill();
-            }
-            // Visual의 Transform을 기준으로, 피격시 진동 효과 재생
-            Transform trans = animator.transform;
-            hitShakeSequence = DOTween.Sequence()
-                .Append(trans.DOLocalMoveX(-0.1f, 0.05f))
-                .Append(trans.DOLocalMoveX(0.1f, 0.1f))
-                .Append(trans.DOLocalMoveX(0f, 0.05f));
+        if (animator == null)
+            return;
 
-            animator.SetBool("Hit", true);
-            GameManager.Instance.StartCoroutine(ResetHit(1f));
+        Transform trans = animator.transform;
+
+        if (hitShakeSequence != null && hitShakeSequence.IsActive())
+        {
+            hitShakeSequence.Kill();
+            trans.localPosition = visualBasePosition;
         }
+
+        hitShakeSequence = DOTween.Sequence()
+            .Append(trans.DOLocalMoveX(visualBasePosition.x - 0.1f, 0.05f))
+            .Append(trans.DOLocalMoveX(visualBasePosition.x + 0.1f, 0.1f))
+            .Append(trans.DOLocalMoveX(visualBasePosition.x, 0.05f))
+            .OnComplete(() =>
+            {
+                trans.localPosition = visualBasePosition;
+                hitShakeSequence = null;
+            });
+
+        animator.SetBool("Hit", true);
+        GameManager.Instance.StartCoroutine(ResetHit(1f));
     }
 
     private IEnumerator ResetHit(float delay)
@@ -802,11 +819,7 @@ public class Enemy : MonoBehaviour, IStatusReceiver
         Transform trans = animator != null ? animator.transform : null;
 
         if (trans != null)
-        {
-            Vector3 pos = trans.localPosition;
-            pos.x = 0f;
-            trans.localPosition = pos;
-        }
+            trans.localPosition = visualBasePosition;
 
         if (animator != null)
         {

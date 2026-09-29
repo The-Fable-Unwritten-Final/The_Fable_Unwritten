@@ -32,8 +32,6 @@ public class SkillEffectPlayer : MonoBehaviour
 
         if (animInfo.playMode == EffectPlayMode.AnimationClip && animInfo.animationClip != null)
         {
-            //풀링 방식으로 변경 시 초기화 넣어둘 것.
-            transform.localScale *= 2f;
             ApplyPivotCorrection(animInfo);
 
             PlayAnimatorClip(animInfo, onHitFrame);
@@ -141,6 +139,7 @@ public class SkillEffectPlayer : MonoBehaviour
             case AnimationType.OnHeadPoint:
             case AnimationType.OnOverheadPoint:
             case AnimationType.OnAheadPoint:
+            case AnimationType.OnAheadMidPoint:
                 localCorrection = new Vector3(
                     (pivot.x - rect.width * 0.5f) / ppu,
                     (pivot.y - rect.height * 0.5f) / ppu,

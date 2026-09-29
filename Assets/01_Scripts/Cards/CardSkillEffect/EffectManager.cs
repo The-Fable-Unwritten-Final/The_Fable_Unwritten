@@ -34,6 +34,7 @@ public class EffectManager : MonoBehaviour
             case AnimationType.OnTarget:
             case AnimationType.OnHeadPoint:
             case AnimationType.OnOverheadPoint:
+            case AnimationType.OnAheadMidPoint:
             case AnimationType.Looping:
             case AnimationType.AOE:
             default:
@@ -58,7 +59,10 @@ public class EffectManager : MonoBehaviour
         SkillEffectPlayer effectInstance =
             Instantiate(effectPrefab, position, Quaternion.identity, effectRoot);
 
-        effectInstance.transform.localScale *= scaleFactor;
+        Vector3 scale = effectInstance.transform.localScale;
+        scale.x *= scaleFactor * animInfo.scale.x;
+        scale.y *= scaleFactor * animInfo.scale.y;
+        effectInstance.transform.localScale = scale;
 
         SpriteRenderer sr = effectInstance.GetComponent<SpriteRenderer>();
         if (sr != null)
@@ -107,7 +111,10 @@ public class EffectManager : MonoBehaviour
         SkillEffectPlayer projectile =
             Instantiate(effectPrefab, start, Quaternion.identity, effectRoot);
 
-        projectile.transform.localScale *= scaleFactor;
+        Vector3 scale = projectile.transform.localScale;
+        scale.x *= scaleFactor * animInfo.scale.x;
+        scale.y *= scaleFactor * animInfo.scale.y;
+        projectile.transform.localScale = scale;
 
         SpriteRenderer sr = projectile.GetComponent<SpriteRenderer>();
         if (sr != null)
@@ -169,6 +176,7 @@ public class EffectManager : MonoBehaviour
             AnimationType.OnHeadPoint => target.HeadPoint.position,
             AnimationType.OnOverheadPoint => target.OverheadPoint.position,
             AnimationType.OnAheadPoint => target.AheadPoint.position,
+            AnimationType.OnAheadMidPoint => target.AheadmidPoint.position,
 
             AnimationType.Projectile => target.BodyPoint.position,
             AnimationType.Looping => target.BodyPoint.position,

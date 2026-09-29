@@ -3927,6 +3927,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 460572001}
   m_CullTransparentMesh: 1
+--- !u!1 &476667674
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 476667675}
+  m_Layer: 7
+  m_Name: AHeadMidPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &476667675
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 476667674}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2143676256}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &491944245
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5513,6 +5544,7 @@ Transform:
   - {fileID: 2023091874}
   - {fileID: 1874255402}
   - {fileID: 1344733762}
+  - {fileID: 1570298351}
   - {fileID: 187470670}
   - {fileID: 87677199}
   - {fileID: 37492650}
@@ -5580,6 +5612,7 @@ MonoBehaviour:
   headpoint: {fileID: 2023091874}
   overheadpoint: {fileID: 1874255402}
   aheadpoint: {fileID: 1344733762}
+  aheadmidpoint: {fileID: 1570298351}
   anchorController: {fileID: 0}
   hpBarDisplay: {fileID: 1653562027}
   dmgBarDisplay: {fileID: 187470672}
@@ -5655,6 +5688,7 @@ MonoBehaviour:
   overheadPoint: {fileID: 1554731197}
   aheadPoint: {fileID: 1947207932}
   shadowRoot: {fileID: 1831578848}
+  aheadMidPoint: {fileID: 0}
 --- !u!114 &682968856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5710,6 +5744,7 @@ MonoBehaviour:
   headpoint: {fileID: 1783984503}
   overheadpoint: {fileID: 1554731197}
   aheadpoint: {fileID: 1947207932}
+  aheadmidpoint: {fileID: 0}
   hpBarDisplay: {fileID: 518405632}
   dmgBarDisplay: {fileID: 1860176104}
   targetArrow: {fileID: 1587350207}
@@ -6601,6 +6636,7 @@ MonoBehaviour:
   headpoint: {fileID: 673827875}
   overheadpoint: {fileID: 2052499242}
   aheadpoint: {fileID: 737179166}
+  aheadmidpoint: {fileID: 0}
   hpBarDisplay: {fileID: 1325982493}
   dmgBarDisplay: {fileID: 1646010410}
   targetArrow: {fileID: 400915449}
@@ -6629,6 +6665,7 @@ MonoBehaviour:
   overheadPoint: {fileID: 2052499242}
   aheadPoint: {fileID: 737179166}
   shadowRoot: {fileID: 2053441801}
+  aheadMidPoint: {fileID: 0}
 --- !u!4 &774007159
 Transform:
   m_ObjectHideFlags: 0
@@ -8146,6 +8183,7 @@ MonoBehaviour:
   overheadPoint: {fileID: 1407858096}
   aheadPoint: {fileID: 528772720}
   shadowRoot: {fileID: 1372485330}
+  aheadMidPoint: {fileID: 0}
 --- !u!114 &867399608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8201,6 +8239,7 @@ MonoBehaviour:
   headpoint: {fileID: 1303953890}
   overheadpoint: {fileID: 1407858096}
   aheadpoint: {fileID: 528772720}
+  aheadmidpoint: {fileID: 0}
   hpBarDisplay: {fileID: 883927878}
   dmgBarDisplay: {fileID: 1497768784}
   targetArrow: {fileID: 2073864723}
@@ -8736,6 +8775,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9733c37595316724e8453e454e0f85ec, type: 3}
+--- !u!1 &914231257
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 914231258}
+  m_Layer: 7
+  m_Name: AHeadMidPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &914231258
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914231257}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1844074645}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &944123125
 GameObject:
   m_ObjectHideFlags: 0
@@ -11584,6 +11654,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6ad7ba5908af75e409eb954642828dd5, type: 3}
+--- !u!1 &1570298350
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1570298351}
+  m_Layer: 7
+  m_Name: AHeadMidPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1570298351
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1570298350}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 674964953}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1580426244
 GameObject:
   m_ObjectHideFlags: 0
@@ -12923,6 +13024,7 @@ Transform:
   - {fileID: 822897380}
   - {fileID: 520504221}
   - {fileID: 996958030}
+  - {fileID: 914231258}
   - {fileID: 301394}
   - {fileID: 491944246}
   - {fileID: 1828261581}
@@ -12990,6 +13092,7 @@ MonoBehaviour:
   headpoint: {fileID: 822897380}
   overheadpoint: {fileID: 520504221}
   aheadpoint: {fileID: 996958030}
+  aheadmidpoint: {fileID: 914231258}
   anchorController: {fileID: 0}
   hpBarDisplay: {fileID: 114119748}
   dmgBarDisplay: {fileID: 301395}
@@ -15446,6 +15549,7 @@ MonoBehaviour:
   headpoint: {fileID: 1120015516}
   overheadpoint: {fileID: 1265300937}
   aheadpoint: {fileID: 1328461696}
+  aheadmidpoint: {fileID: 476667675}
   anchorController: {fileID: 0}
   hpBarDisplay: {fileID: 2058252795}
   dmgBarDisplay: {fileID: 2074447494}
@@ -15491,6 +15595,7 @@ Transform:
   - {fileID: 1120015516}
   - {fileID: 1265300937}
   - {fileID: 1328461696}
+  - {fileID: 476667675}
   - {fileID: 2074447493}
   - {fileID: 815779889}
   - {fileID: 136682860}

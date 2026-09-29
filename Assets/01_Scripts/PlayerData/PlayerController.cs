@@ -46,12 +46,17 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     [SerializeField] private Transform headpoint;
     [SerializeField] private Transform overheadpoint;
     [SerializeField] private Transform aheadpoint;
+    [SerializeField] private Transform aheadmidpoint;
+
 
     public Transform FootPoint => footpoint;
     public Transform BodyPoint => bodypoint;
     public Transform HeadPoint => headpoint;
     public Transform OverheadPoint => overheadpoint;
     public Transform AheadPoint => aheadpoint;
+
+    public Transform AheadmidPoint => aheadmidpoint;
+
 
     private bool isTemporarilyAbsent = false;
     public bool IsTemporarilyAbsent => isTemporarilyAbsent;
@@ -687,6 +692,12 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     public void PlayAttackAnimation(int cardIndex, CardType cardType, Action onHitTiming = null)
     {
+        if (cardIndex == 1010)
+        {
+            onHitTiming?.Invoke();
+            return;
+        }
+
         int fallbackAttackType = ((int)cardType) % 3;
         int finalAttackType = HasAttackAnimation(cardIndex) ? cardIndex : fallbackAttackType;
 
@@ -741,23 +752,26 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     //피격 애니메이션 호출 시
     public void PlayHitAnimation()
     {
-        if (animator != null)
-        {
-            // 이전 진동 효과 취소
-            if (hitShakeSequence != null && hitShakeSequence.IsActive())
-            {
-                hitShakeSequence.Kill();
-            }
-            // Visual의 Transform을 기준으로, 피격시 진동 효과 재생
-            Transform trans = animator.transform;
-            hitShakeSequence = DOTween.Sequence()
-                .Append(trans.DOLocalMoveX(-0.1f, 0.05f))
-                .Append(trans.DOLocalMoveX(0.1f, 0.1f))
-                .Append(trans.DOLocalMoveX(0f, 0.05f));
+        if (animator == null)
+            return;
 
-            animator.SetBool("Hit", true);
-            GameManager.Instance.StartCoroutine(ResetBool("Hit", 1.2f));
-        }
+        if (hitShakeSequence != null && hitShakeSequence.IsActive())
+            hitShakeSequence.Kill();
+
+        Transform trans = animator.transform;
+        Vector3 originalPos = trans.localPosition;
+
+        hitShakeSequence = DOTween.Sequence()
+            .Append(trans.DOLocalMoveX(originalPos.x - 0.1f, 0.05f))
+            .Append(trans.DOLocalMoveX(originalPos.x + 0.1f, 0.1f))
+            .Append(trans.DOLocalMoveX(originalPos.x, 0.05f))
+            .OnComplete(() =>
+            {
+                trans.localPosition = originalPos;
+            });
+
+        animator.SetBool("Hit", true);
+        GameManager.Instance.StartCoroutine(ResetBool("Hit", 1.2f));
     }
 
     private IEnumerator ResetBool(string param, float delay)
@@ -1375,7 +1389,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         if (!IsAlive())
         {
-            if (!TryConsumeUndying())
+            if (!TryConsumeUndying()) 
                 isDeathPending = true;
         }
 
