@@ -15,7 +15,7 @@ MonoBehaviour:
   idNum: 30
   enemyName: Teddyheart
   exp: 5
-  maxHP: 90
+  maxHP: 72
   currentHP: 90
   aTKValue: 0
   dEFValue: 0
@@ -30,15 +30,16 @@ MonoBehaviour:
     headPoint: {x: 0, y: 0}
     overheadPoint: {x: 0, y: 0}
     aheadPoint: {x: 0, y: 0}
+    aheadMidPoint: {x: 0, y: 0, z: 0}
     shadowOffset: {x: 0, y: 0}
   type: 0
   skillList:
   - skillIndex: 301
     damage: 0
-    percentage: 50
+    percentage: 35
   - skillIndex: 302
     damage: 0
-    percentage: 50
+    percentage: 65
   illust: 30_300_idle
   currentStance: 1
   animationController: {fileID: 9100000, guid: 84b79a37339dae84b808acad9b4454c3, type: 2}
@@ -48,3 +49,7 @@ MonoBehaviour:
   MiddleStance: 0.6
   BottomStance: 0.2
   loot: 02000000
+  hpScale2: 1.4
+  damageHealScale2: 1.2
+  hpScale3: 1.8
+  damageHealScale3: 1.4

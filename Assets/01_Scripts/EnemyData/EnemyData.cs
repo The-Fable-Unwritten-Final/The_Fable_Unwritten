@@ -89,20 +89,60 @@ public class EnemyData : ScriptableObject
     // 스킬 모두 삭제
     public void ClearSkills() => skillList.Clear();
 
-/*    /// <summary>
-    /// 스테이지에 따라 체력 및 스킬 공격력 변화 함수.
-    /// </summary>
-    /// <param name="stage"></param>
-    public void UpgradeEnemybyStage(int stage)
-    {                                           //현재 코드가 원래의 enemydata를 그대로 사용하는 것이 아니라 복제 후 사용하는 것이기 때문에 본래 데이터를 가지고 사용하지 않도록 만들었다.
-        MaxHP = MaxHP * (1 + (stage - 1) * hpScale);
 
-        foreach(var skill in skillList)
+    [Header("Stage Scaling")]
+    [SerializeField] private float hpScale2 = 1f;
+    [SerializeField] private float damageHealScale2 = 1f;
+    [SerializeField] private float hpScale3 = 1f;
+    [SerializeField] private float damageHealScale3 = 1f;
+
+    public float HpScale2
+    {
+        get => hpScale2;
+        set => hpScale2 = value;
+    }
+
+    public float DamageHealScale2
+    {
+        get => damageHealScale2;
+        set => damageHealScale2 = value;
+    }
+
+    public float HpScale3
+    {
+        get => hpScale3;
+        set => hpScale3 = value;
+    }
+
+    public float DamageHealScale3
+    {
+        get => damageHealScale3;
+        set => damageHealScale3 = value;
+    }
+
+    [System.NonSerialized]
+    public float CurrentDamageHealScale = 1f;
+
+    public void ApplyStageScale(int stage)
+    {
+        float hpScale = 1f;
+        CurrentDamageHealScale = 1f;
+
+        switch (stage)
         {
-            skill.damage = skill.damage * (1 + (stage - 1) * damageScale);
+            case 3:
+                hpScale = HpScale2;
+                CurrentDamageHealScale = DamageHealScale2;
+                break;
+
+            case 4:
+                hpScale = HpScale3;
+                CurrentDamageHealScale = DamageHealScale3;
+                break;
         }
 
-    }*/
+        MaxHP = Mathf.RoundToInt(MaxHP * hpScale);
+    }
 }
 
 [System.Serializable]

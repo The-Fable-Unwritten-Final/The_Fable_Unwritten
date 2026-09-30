@@ -15,7 +15,7 @@ MonoBehaviour:
   idNum: 42
   enemyName: KnightCommander
   exp: 0
-  maxHP: 208
+  maxHP: 100
   currentHP: 208
   aTKValue: 0
   dEFValue: 0
@@ -30,19 +30,20 @@ MonoBehaviour:
     headPoint: {x: -0.5, y: 1.7}
     overheadPoint: {x: 0, y: 2.3}
     aheadPoint: {x: 0, y: 0}
+    aheadMidPoint: {x: 0, y: 0, z: 0}
     shadowOffset: {x: -0.7, y: 0}
   type: 1
   skillList:
   - skillIndex: 421
     damage: 0
-    percentage: 50
+    percentage: 60
   - skillIndex: 422
     damage: 0
-    percentage: 30
+    percentage: 15
   - skillIndex: 423
     damage: 0
-    percentage: 20
-  illust: 
+    percentage: 25
+  illust: KnightCommander_idle
   currentStance: 0
   animationController: {fileID: 9100000, guid: ca0e5dce1efc08845ab809e0ed8e8729, type: 2}
   AttackSkillEffect: 
@@ -51,3 +52,7 @@ MonoBehaviour:
   MiddleStance: 0
   BottomStance: 0
   loot: 
+  hpScale2: 1.4
+  damageHealScale2: 1.15
+  hpScale3: 1.8
+  damageHealScale3: 1.3

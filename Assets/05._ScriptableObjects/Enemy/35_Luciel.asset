@@ -15,7 +15,7 @@ MonoBehaviour:
   idNum: 35
   enemyName: Luciel
   exp: 15
-  maxHP: 370
+  maxHP: 180
   currentHP: 370
   aTKValue: 0
   dEFValue: 0
@@ -30,21 +30,22 @@ MonoBehaviour:
     headPoint: {x: 0, y: 0}
     overheadPoint: {x: 0, y: 0}
     aheadPoint: {x: 0, y: 0}
+    aheadMidPoint: {x: 0, y: 0, z: 0}
     shadowOffset: {x: 0, y: 0}
   type: 2
   skillList:
   - skillIndex: 351
     damage: 0
-    percentage: 35
+    percentage: 50
   - skillIndex: 352
     damage: 0
-    percentage: 30
+    percentage: 20
   - skillIndex: 353
     damage: 0
-    percentage: 20
+    percentage: 10
   - skillIndex: 354
     damage: 0
-    percentage: 15
+    percentage: 20
   - skillIndex: 355
     damage: 0
     percentage: 0
@@ -57,3 +58,7 @@ MonoBehaviour:
   MiddleStance: 0.4
   BottomStance: 0.3
   loot: 020000000100000003000000
+  hpScale2: 1.5
+  damageHealScale2: 1.15
+  hpScale3: 1.9
+  damageHealScale3: 1.3

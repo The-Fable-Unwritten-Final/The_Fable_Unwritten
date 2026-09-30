@@ -15,7 +15,7 @@ MonoBehaviour:
   idNum: 48
   enemyName: SpearSpirit
   exp: 0
-  maxHP: 66
+  maxHP: 24
   currentHP: 66
   aTKValue: 0
   dEFValue: 0
@@ -30,6 +30,7 @@ MonoBehaviour:
     headPoint: {x: -0.15, y: 0.25}
     overheadPoint: {x: -0.15, y: 0.7}
     aheadPoint: {x: 0, y: 0}
+    aheadMidPoint: {x: 0, y: 0, z: 0}
     shadowOffset: {x: -0.5, y: -0.1}
   type: 0
   skillList:
@@ -39,7 +40,7 @@ MonoBehaviour:
   - skillIndex: 482
     damage: 0
     percentage: 40
-  illust: 
+  illust: SpearSpirit_idle
   currentStance: 0
   animationController: {fileID: 9100000, guid: 622b9177a120355498aecc4101f0661a, type: 2}
   AttackSkillEffect: 
@@ -48,3 +49,7 @@ MonoBehaviour:
   MiddleStance: 0
   BottomStance: 0
   loot: 
+  hpScale2: 1.35
+  damageHealScale2: 1.15
+  hpScale3: 1.75
+  damageHealScale3: 1.3

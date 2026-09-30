@@ -15,6 +15,11 @@ public static class EnemyTableImporter
         public string art;
         public int hp;
 
+        public float hpScale2;
+        public float damageHealScale2;
+        public float hpScale3;
+        public float damageHealScale3;
+
         public int[] skillIndexes = new int[5];
         public int[] skillPercents = new int[5];
     }
@@ -80,20 +85,25 @@ public static class EnemyTableImporter
             row.art = Get(t, 3);
             row.hp = ParseInt(t, 4);
 
-            row.skillIndexes[0] = ParseInt(t, 5);
-            row.skillPercents[0] = ParseInt(t, 6);
+            row.hpScale2 = ParseScale(t, 5);
+            row.damageHealScale2 = ParseScale(t, 6);
+            row.hpScale3 = ParseScale(t, 7);
+            row.damageHealScale3 = ParseScale(t, 8);
 
-            row.skillIndexes[1] = ParseInt(t, 7);
-            row.skillPercents[1] = ParseInt(t, 8);
+            row.skillIndexes[0] = ParseInt(t, 9);
+            row.skillPercents[0] = ParseInt(t, 10);
 
-            row.skillIndexes[2] = ParseInt(t, 9);
-            row.skillPercents[2] = ParseInt(t, 10);
+            row.skillIndexes[1] = ParseInt(t, 11);
+            row.skillPercents[1] = ParseInt(t, 12);
 
-            row.skillIndexes[3] = ParseInt(t, 11);
-            row.skillPercents[3] = ParseInt(t, 12);
+            row.skillIndexes[2] = ParseInt(t, 13);
+            row.skillPercents[2] = ParseInt(t, 14);
 
-            row.skillIndexes[4] = ParseInt(t, 13);
-            row.skillPercents[4] = ParseInt(t, 14);
+            row.skillIndexes[3] = ParseInt(t, 15);
+            row.skillPercents[3] = ParseInt(t, 16);
+
+            row.skillIndexes[4] = ParseInt(t, 17);
+            row.skillPercents[4] = ParseInt(t, 18);
 
             result.Add(row);
         }
@@ -165,6 +175,12 @@ public static class EnemyTableImporter
             enemy.type = (EnemyType)row.type;
             enemy.MaxHP = row.hp;
             enemy.illust = row.art;
+
+            enemy.HpScale2 = row.hpScale2;
+            enemy.DamageHealScale2 = row.damageHealScale2;
+            enemy.HpScale3 = row.hpScale3;
+            enemy.DamageHealScale3 = row.damageHealScale3;
+
 
             ApplySkills(enemy, row);
 
@@ -368,6 +384,14 @@ public static class EnemyTableImporter
             fileName = fileName.Replace(c, '_');
 
         return fileName;
+    }
+
+    private static float ParseScale(List<string> values, int index)
+    {
+        if (!float.TryParse(Get(values, index), out float result))
+            return 1f;
+
+        return result;
     }
 }
 #endif

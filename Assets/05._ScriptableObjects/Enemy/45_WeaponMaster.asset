@@ -15,7 +15,7 @@ MonoBehaviour:
   idNum: 45
   enemyName: WeaponMaster
   exp: 0
-  maxHP: 330
+  maxHP: 240
   currentHP: 0
   aTKValue: 0
   dEFValue: 0
@@ -30,25 +30,26 @@ MonoBehaviour:
     headPoint: {x: 0, y: 1.1}
     overheadPoint: {x: 0, y: 1.55}
     aheadPoint: {x: 0, y: 0}
+    aheadMidPoint: {x: 0, y: 0, z: 0}
     shadowOffset: {x: -0.5, y: -0.1}
   type: 2
   skillList:
   - skillIndex: 451
     damage: 0
-    percentage: 30
+    percentage: 35
   - skillIndex: 452
     damage: 0
-    percentage: 15
+    percentage: 20
   - skillIndex: 453
     damage: 0
-    percentage: 30
+    percentage: 25
   - skillIndex: 454
     damage: 0
     percentage: 15
   - skillIndex: 455
     damage: 0
-    percentage: 10
-  illust: 
+    percentage: 5
+  illust: Weapon Master_idle
   currentStance: 0
   animationController: {fileID: 9100000, guid: 5c1fd5a0af982674c96cafd7310a0423, type: 2}
   AttackSkillEffect: 
@@ -57,3 +58,7 @@ MonoBehaviour:
   MiddleStance: 0
   BottomStance: 0
   loot: 
+  hpScale2: 1.5
+  damageHealScale2: 1.2
+  hpScale3: 1.9
+  damageHealScale3: 1.4

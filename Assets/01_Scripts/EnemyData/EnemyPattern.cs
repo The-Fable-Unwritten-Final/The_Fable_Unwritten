@@ -348,12 +348,21 @@ public static class EnemyPattern
             // =====================================================
 
             case EnemyEffectType.Damage:
-                target.TakeDamage(value);
-                return;
+                {
+                    int scaledValue = Mathf.RoundToInt(value * caster.enemyData.CurrentDamageHealScale);
+
+                    target.TakeDamage(scaledValue);
+                    return;
+                }
+
 
             case EnemyEffectType.Heal:
-                target.Heal(value);
-                return;
+                {
+                    int scaledValue = Mathf.RoundToInt(value * caster.enemyData.CurrentDamageHealScale);
+
+                    target.Heal(scaledValue); return;
+                }
+
 
 
             // =====================================================
@@ -506,7 +515,7 @@ public static class EnemyPattern
         bool flipX = effectName != "20_201_effect";
         GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(effectName, caster, target, flipX, scaleFactor);
 
-        onImpact?.Invoke(); onImpact?.Invoke();
+        onImpact?.Invoke();
     }
 
 

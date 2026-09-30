@@ -30,15 +30,16 @@ MonoBehaviour:
     headPoint: {x: 0, y: 0.2}
     overheadPoint: {x: 0, y: 0.35}
     aheadPoint: {x: -0.7, y: 0}
+    aheadMidPoint: {x: 0, y: 0, z: 0}
     shadowOffset: {x: -0.024, y: 0.081}
   type: 0
   skillList:
   - skillIndex: 101
     damage: 0
-    percentage: 60
+    percentage: 75
   - skillIndex: 102
     damage: 0
-    percentage: 40
+    percentage: 25
   illust: 10_100_idle
   currentStance: 1
   animationController: {fileID: 9100000, guid: 095459c2358c9004eb25335ca049e2ab, type: 2}
@@ -48,3 +49,7 @@ MonoBehaviour:
   MiddleStance: 0.4
   BottomStance: 0.3
   loot: 00000000
+  hpScale2: 1
+  damageHealScale2: 1
+  hpScale3: 1
+  damageHealScale3: 1

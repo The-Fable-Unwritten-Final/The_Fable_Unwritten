@@ -15,7 +15,7 @@ MonoBehaviour:
   idNum: 47
   enemyName: ShieldSpirit
   exp: 0
-  maxHP: 136
+  maxHP: 32
   currentHP: 136
   aTKValue: 0
   dEFValue: 0
@@ -30,16 +30,17 @@ MonoBehaviour:
     headPoint: {x: 0, y: 0.3}
     overheadPoint: {x: 0, y: 0.7}
     aheadPoint: {x: 0, y: 0}
+    aheadMidPoint: {x: 0, y: 0, z: 0}
     shadowOffset: {x: -0.3, y: 0}
   type: 0
   skillList:
   - skillIndex: 471
     damage: 0
-    percentage: 60
+    percentage: 40
   - skillIndex: 472
     damage: 0
-    percentage: 40
-  illust: 
+    percentage: 60
+  illust: ShieldSpirit_idle
   currentStance: 0
   animationController: {fileID: 9100000, guid: 76a390e29de359740a985e31cfff837f, type: 2}
   AttackSkillEffect: 
@@ -48,3 +49,7 @@ MonoBehaviour:
   MiddleStance: 0
   BottomStance: 0
   loot: 
+  hpScale2: 1.4
+  damageHealScale2: 1.15
+  hpScale3: 1.8
+  damageHealScale3: 1.3

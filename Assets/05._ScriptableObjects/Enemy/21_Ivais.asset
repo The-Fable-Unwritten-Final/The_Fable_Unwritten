@@ -30,6 +30,7 @@ MonoBehaviour:
     headPoint: {x: 0, y: 0.5}
     overheadPoint: {x: 0, y: 0.7}
     aheadPoint: {x: 0, y: -0.3}
+    aheadMidPoint: {x: 0, y: 0, z: 0}
     shadowOffset: {x: -0.079, y: 0.025}
   type: 0
   skillList:
@@ -48,3 +49,7 @@ MonoBehaviour:
   MiddleStance: 0.2
   BottomStance: 0.2
   loot: 01000000
+  hpScale2: 1.35
+  damageHealScale2: 1.2
+  hpScale3: 1.75
+  damageHealScale3: 1.4

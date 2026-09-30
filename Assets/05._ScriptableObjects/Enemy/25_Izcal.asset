@@ -15,7 +15,7 @@ MonoBehaviour:
   idNum: 25
   enemyName: Izcal
   exp: 15
-  maxHP: 260
+  maxHP: 240
   currentHP: 260
   aTKValue: 0
   dEFValue: 0
@@ -30,21 +30,22 @@ MonoBehaviour:
     headPoint: {x: 0, y: 1.4}
     overheadPoint: {x: 0, y: 2.2}
     aheadPoint: {x: -2, y: 0.6}
+    aheadMidPoint: {x: 0, y: 0, z: 0}
     shadowOffset: {x: -0.02, y: 0.01}
   type: 2
   skillList:
   - skillIndex: 251
     damage: 0
-    percentage: 30
+    percentage: 35
   - skillIndex: 252
     damage: 0
-    percentage: 20
+    percentage: 10
   - skillIndex: 253
     damage: 0
     percentage: 25
   - skillIndex: 254
     damage: 0
-    percentage: 15
+    percentage: 20
   - skillIndex: 255
     damage: 0
     percentage: 10
@@ -57,3 +58,7 @@ MonoBehaviour:
   MiddleStance: 0.4
   BottomStance: 0.3
   loot: 010000000200000003000000
+  hpScale2: 1.5
+  damageHealScale2: 1.15
+  hpScale3: 1.9
+  damageHealScale3: 1.3

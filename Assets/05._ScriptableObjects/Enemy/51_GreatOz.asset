@@ -15,7 +15,7 @@ MonoBehaviour:
   idNum: 51
   enemyName: GreatOz
   exp: 0
-  maxHP: 330
+  maxHP: 400
   currentHP: 0
   aTKValue: 0
   dEFValue: 0
@@ -30,21 +30,22 @@ MonoBehaviour:
     headPoint: {x: 0, y: 0}
     overheadPoint: {x: 0, y: 0}
     aheadPoint: {x: 0, y: 0}
+    aheadMidPoint: {x: 0, y: 0, z: 0}
     shadowOffset: {x: 0, y: 0}
   type: 2
   skillList:
   - skillIndex: 511
     damage: 0
-    percentage: 35
+    percentage: 45
   - skillIndex: 512
     damage: 0
     percentage: 25
   - skillIndex: 513
     damage: 0
-    percentage: 25
+    percentage: 20
   - skillIndex: 514
     damage: 0
-    percentage: 15
+    percentage: 10
   - skillIndex: 515
     damage: 0
     percentage: 0
@@ -57,3 +58,7 @@ MonoBehaviour:
   MiddleStance: 0
   BottomStance: 0
   loot: 
+  hpScale2: 1
+  damageHealScale2: 1
+  hpScale3: 1
+  damageHealScale3: 1

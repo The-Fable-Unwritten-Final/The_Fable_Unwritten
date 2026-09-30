@@ -15,7 +15,7 @@ MonoBehaviour:
   idNum: 44
   enemyName: Samurai
   exp: 0
-  maxHP: 132
+  maxHP: 120
   currentHP: 132
   aTKValue: 0
   dEFValue: 0
@@ -30,19 +30,20 @@ MonoBehaviour:
     headPoint: {x: 0, y: 1.1}
     overheadPoint: {x: 0, y: 1.5}
     aheadPoint: {x: 0, y: 0}
+    aheadMidPoint: {x: 0, y: 0, z: 0}
     shadowOffset: {x: -0.3, y: 0}
   type: 1
   skillList:
   - skillIndex: 441
     damage: 0
-    percentage: 50
+    percentage: 20
   - skillIndex: 442
     damage: 0
-    percentage: 30
+    percentage: 50
   - skillIndex: 443
     damage: 0
-    percentage: 20
-  illust: 
+    percentage: 30
+  illust: Oni_idle
   currentStance: 0
   animationController: {fileID: 9100000, guid: e39707e4d3c8b4a43b6b723e6c3b58f5, type: 2}
   AttackSkillEffect: 
@@ -51,3 +52,7 @@ MonoBehaviour:
   MiddleStance: 0
   BottomStance: 0
   loot: 
+  hpScale2: 1.4
+  damageHealScale2: 1.15
+  hpScale3: 1.8
+  damageHealScale3: 1.3

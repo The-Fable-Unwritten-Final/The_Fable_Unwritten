@@ -15,7 +15,7 @@ MonoBehaviour:
   idNum: 34
   enemyName: Grolly
   exp: 10
-  maxHP: 130
+  maxHP: 110
   currentHP: 130
   aTKValue: 0
   dEFValue: 0
@@ -30,19 +30,20 @@ MonoBehaviour:
     headPoint: {x: 0, y: 0}
     overheadPoint: {x: 0, y: 0}
     aheadPoint: {x: 0, y: 0}
+    aheadMidPoint: {x: 0, y: 0, z: 0}
     shadowOffset: {x: 0, y: 0}
   type: 1
   skillList:
   - skillIndex: 341
-    damage: 15
-    percentage: 50
+    damage: 0
+    percentage: 60
   - skillIndex: 342
-    damage: 7
+    damage: 0
     percentage: 30
   - skillIndex: 343
-    damage: -12
-    percentage: 20
-  illust: illust3_4
+    damage: 0
+    percentage: 10
+  illust: 34_340_idle
   currentStance: 1
   animationController: {fileID: 9100000, guid: 87ea5ac8e55e4b74480707a53cebd126, type: 2}
   AttackSkillEffect: fx3_bite_large_violet
@@ -51,3 +52,7 @@ MonoBehaviour:
   MiddleStance: 0.3
   BottomStance: 0.5
   loot: 0200000000000000
+  hpScale2: 1.4
+  damageHealScale2: 1.2
+  hpScale3: 1.8
+  damageHealScale3: 1.4

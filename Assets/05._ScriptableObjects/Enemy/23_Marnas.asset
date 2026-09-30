@@ -15,7 +15,7 @@ MonoBehaviour:
   idNum: 23
   enemyName: Marnas
   exp: 10
-  maxHP: 130
+  maxHP: 120
   currentHP: 130
   aTKValue: 0
   dEFValue: 0
@@ -30,18 +30,19 @@ MonoBehaviour:
     headPoint: {x: 0, y: 0.5}
     overheadPoint: {x: 0, y: 0.7}
     aheadPoint: {x: -0.75, y: 0}
+    aheadMidPoint: {x: 0, y: 0, z: 0}
     shadowOffset: {x: 0.07, y: -0.37}
   type: 1
   skillList:
   - skillIndex: 231
     damage: 0
-    percentage: 50
+    percentage: 60
   - skillIndex: 232
     damage: 0
-    percentage: 30
+    percentage: 15
   - skillIndex: 233
     damage: 0
-    percentage: 20
+    percentage: 25
   illust: 23_230_idle
   currentStance: 1
   animationController: {fileID: 9100000, guid: ca1d8abc933a2b643bbf583c3dadf129, type: 2}
@@ -51,3 +52,7 @@ MonoBehaviour:
   MiddleStance: 0.3
   BottomStance: 0.5
   loot: 0100000000000000
+  hpScale2: 1.4
+  damageHealScale2: 1.2
+  hpScale3: 1.8
+  damageHealScale3: 1.4

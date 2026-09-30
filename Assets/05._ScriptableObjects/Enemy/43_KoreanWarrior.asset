@@ -15,7 +15,7 @@ MonoBehaviour:
   idNum: 43
   enemyName: KoreanWarrior
   exp: 0
-  maxHP: 144
+  maxHP: 90
   currentHP: 144
   aTKValue: 0
   dEFValue: 0
@@ -30,19 +30,20 @@ MonoBehaviour:
     headPoint: {x: -0.1, y: 0.9}
     overheadPoint: {x: -0.1, y: 1.4}
     aheadPoint: {x: 0, y: 0}
+    aheadMidPoint: {x: 0, y: 0, z: 0}
     shadowOffset: {x: -0.6, y: -0.1}
   type: 1
   skillList:
   - skillIndex: 431
     damage: 0
-    percentage: 50
+    percentage: 55
   - skillIndex: 432
     damage: 0
-    percentage: 30
+    percentage: 15
   - skillIndex: 434
     damage: 0
-    percentage: 20
-  illust: 
+    percentage: 30
+  illust: Koreanwarrior_idle1
   currentStance: 0
   animationController: {fileID: 9100000, guid: 0113bb6514d786549a937a8500ca5a0d, type: 2}
   AttackSkillEffect: 
@@ -51,3 +52,7 @@ MonoBehaviour:
   MiddleStance: 0
   BottomStance: 0
   loot: 
+  hpScale2: 1.35
+  damageHealScale2: 1.1
+  hpScale3: 1.7
+  damageHealScale3: 1.2

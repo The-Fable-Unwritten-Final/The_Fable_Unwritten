@@ -15,7 +15,7 @@ MonoBehaviour:
   idNum: 49
   enemyName: ArcherSpirit
   exp: 0
-  maxHP: 45
+  maxHP: 24
   currentHP: 0
   aTKValue: 0
   dEFValue: 0
@@ -30,16 +30,17 @@ MonoBehaviour:
     headPoint: {x: -0.1, y: 0.35}
     overheadPoint: {x: -0.1, y: 0.7}
     aheadPoint: {x: 0, y: 0}
+    aheadMidPoint: {x: 0, y: 0, z: 0}
     shadowOffset: {x: -0.08, y: 0.05}
   type: 0
   skillList:
   - skillIndex: 491
     damage: 0
-    percentage: 60
+    percentage: 65
   - skillIndex: 492
     damage: 0
-    percentage: 40
-  illust: 
+    percentage: 35
+  illust: ArcherSpirit_idle
   currentStance: 0
   animationController: {fileID: 9100000, guid: 9f17e015c9388f143a2ee307eb5eb0d3, type: 2}
   AttackSkillEffect: 
@@ -48,3 +49,7 @@ MonoBehaviour:
   MiddleStance: 0
   BottomStance: 0
   loot: 
+  hpScale2: 1.35
+  damageHealScale2: 1.2
+  hpScale3: 1.75
+  damageHealScale3: 1.4

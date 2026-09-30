@@ -105,6 +105,9 @@ public class EnemySpawner : MonoBehaviour
                 {
                     var copydata = ScriptableObject.Instantiate(origndata);
                     copydata.SkillList = origndata.SkillList.Select(skill => skill.Clone()).ToList();
+
+                    copydata.ApplyStageScale(stageIndex);
+
                     //copydata.UpgradeEnemybyStage(stageIndex);     //스테이지에 따라 HP 성장 계수 추가
 
                     enemy.SetData(copydata);
@@ -160,9 +163,9 @@ public class EnemySpawner : MonoBehaviour
                 continue;
 
             var copyData = ScriptableObject.Instantiate(originalData);
-            copyData.SkillList = originalData.SkillList
-                .Select(skill => skill.Clone())
-                .ToList();
+            copyData.SkillList = originalData.SkillList.Select(skill => skill.Clone()).ToList();
+
+            copyData.ApplyStageScale(stageIndex);
 
             enemy.SetData(copyData);
 
