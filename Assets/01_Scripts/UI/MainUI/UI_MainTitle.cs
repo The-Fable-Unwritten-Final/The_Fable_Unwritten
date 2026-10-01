@@ -11,16 +11,38 @@ public class UI_MainTitle : MonoBehaviour
     [Header("TitleSetting")]
     [SerializeField] Image title;
     [SerializeField] float titleSpeed;
+    [SerializeField] Button[] allButtons;
+    [SerializeField] TextMeshProUGUI[] allTexts;
+    [SerializeField] Image[] allImages;
     [SerializeField] GameObject saveGame;
 
     private void Start()
     {
-        StartCoroutine(ShowTitle());
-        
         // 타이틀 씬에서는 IsStageScene을 false로 설정 (이어하기 버튼 활성화 조건)
         ProgressDataManager.Instance.IsStageScene = false;
         
-        SetSaveGameButton();
+        // 텍스트와 이미지 초기 알파값을 0으로 설정 (saveGame 버튼 제외)
+        foreach(TextMeshProUGUI text in allTexts)
+        {
+            if(text != null)
+            {
+                Color textColor = text.color;
+                textColor.a = 0f;
+                text.color = textColor;
+            }
+        }
+        
+        foreach(Image img in allImages)
+        {
+            if(img != null)
+            {
+                Color imgColor = img.color;
+                imgColor.a = 0f;
+                img.color = imgColor;
+            }
+        }
+        
+        StartCoroutine(ShowTitle());
     }
 
     private IEnumerator ShowTitle()
@@ -34,6 +56,87 @@ public class UI_MainTitle : MonoBehaviour
         }
 
         title.fillAmount = 1f;
+        
+        // 텍스트와 이미지 페이드인 시작
+        StartCoroutine(FadeInUIElements());
+    }
+    
+    private IEnumerator FadeInUIElements()
+    {
+        float elapsedTime = 0f;
+        float fadeDuration = 1f;
+        
+        while(elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float alpha = Mathf.Clamp01(elapsedTime / fadeDuration);
+            
+            // 모든 텍스트의 color 알파값 변경
+            foreach(TextMeshProUGUI text in allTexts)
+            {
+                if(text != null)
+                {
+                    Color textColor = text.color;
+                    textColor.a = alpha;
+                    text.color = textColor;
+                }
+            }
+            
+            // 모든 이미지의 color 알파값 변경
+            foreach(Image img in allImages)
+            {
+                if(img != null)
+                {
+                    Color imgColor = img.color;
+                    imgColor.a = alpha;
+                    img.color = imgColor;
+                }
+            }
+            
+            yield return null;
+        }
+        
+        // 최종값으로 보장
+        foreach(TextMeshProUGUI text in allTexts)
+        {
+            if(text != null)
+            {
+                Color textColor = text.color;
+                textColor.a = 1f;
+                text.color = textColor;
+            }
+        }
+        
+        foreach(Image img in allImages)
+        {
+            if(img != null)
+            {
+                Color imgColor = img.color;
+                imgColor.a = 1f;
+                img.color = imgColor;
+            }
+        }
+
+        // 모든 버튼의 UIButtonHoverScale의 UIImageDefualtDisable을 false로 설정
+        if (allButtons != null && allButtons.Length > 0)
+        {
+            foreach (Button btn in allButtons)
+            {
+                if (btn != null)
+                {
+                    UIButtonHoverScale hoverScale = btn.GetComponent<UIButtonHoverScale>();
+                    if (hoverScale != null)
+                    {
+                        hoverScale.UIImageDefualtDisable = false;
+                    }
+                }
+            }
+        }
+        
+        // 모든 버튼을 상호작용 가능하도록 설정
+        SetAllButtonsInteractive();
+        // 페이드인 완료 후 이어하기 버튼 설정
+        SetSaveGameButton();
     }
 
     public void OnClickNewGame()
@@ -108,7 +211,15 @@ public class UI_MainTitle : MonoBehaviour
                 break;
         }
     }
-
+    private void SetAllButtonsInteractive()
+    {
+        foreach (Button btn in allButtons){
+            if (btn != null)
+            {
+                btn.interactable = true;
+            }
+        }
+    }
     private void SetSaveGameButton()
     {
         // 이어하기 가능 조건: (CurrentNode 또는 SavedStageData가 있음) && 스테이지 씬이 아닐 때
@@ -118,8 +229,6 @@ public class UI_MainTitle : MonoBehaviour
         var stageIndex = ProgressDataManager.Instance.StageIndex;
         var retryFromStart = ProgressDataManager.Instance.RetryFromStart;
         
-        Debug.Log($"[SetSaveGameButton] CurrentNode={currentNode}, SavedStageData={savedStageData}, IsStageScene={isStageScene}, StageIndex={stageIndex}, RetryFromStart={retryFromStart}");
-        
         Button btn = saveGame.GetComponent<Button>();
         TextMeshProUGUI tmp = saveGame.GetComponentInChildren<TextMeshProUGUI>();
         Color c = tmp.color;
@@ -127,13 +236,13 @@ public class UI_MainTitle : MonoBehaviour
         // 이어하기 가능: (CurrentNode 또는 SavedStageData 존재) && 스테이지 씬이 아닐 때
         if ((currentNode != null || savedStageData != null) && !isStageScene) 
         {
-            Debug.Log("[SetSaveGameButton] 이어하기 가능 → 버튼 활성화");
+            Debug.Log("[SetSaveGameButton] 이어하기 버튼 활성화");
             btn.interactable = true;
             c.a = 1f;  // 밝은 상태
         }
         else
         {
-            Debug.Log("[SetSaveGameButton] 이어하기 불가능 → 버튼 비활성화");
+            Debug.Log("[SetSaveGameButton] 이어하기 버튼 비활성화");
             btn.interactable = false;
             c.a = 140f / 255f;  // 흐린 상태
         }

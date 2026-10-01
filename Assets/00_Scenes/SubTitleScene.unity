@@ -853,8 +853,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 16777215
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -956,6 +956,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetScale: 1.02
   UIImage: {fileID: 2146136442}
+  UIImageDefualtDisable: 1
 --- !u!114 &415902872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1008,7 +1009,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 415902874}
   m_OnClick:
     m_PersistentCalls:
@@ -1539,6 +1540,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: {fileID: 1690341949}
   titleSpeed: 0.5
+  allButtons:
+  - {fileID: 1009627654}
+  - {fileID: 415902873}
+  - {fileID: 898889954}
+  - {fileID: 905643296}
+  - {fileID: 1594983172}
+  allTexts:
+  - {fileID: 1976209076}
+  - {fileID: 410303305}
+  - {fileID: 1482631267}
+  - {fileID: 1482982818}
+  - {fileID: 1356217185}
+  allImages:
+  - {fileID: 1594983173}
   saveGame: {fileID: 415902870}
 --- !u!1 &750272512
 GameObject:
@@ -2186,6 +2201,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetScale: 1.02
   UIImage: {fileID: 82217102}
+  UIImageDefualtDisable: 1
 --- !u!114 &898889953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2238,7 +2254,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 898889955}
   m_OnClick:
     m_PersistentCalls:
@@ -2361,6 +2377,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetScale: 1.02
   UIImage: {fileID: 815881057}
+  UIImageDefualtDisable: 1
 --- !u!114 &905643295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2413,7 +2430,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 905643297}
   m_OnClick:
     m_PersistentCalls:
@@ -2695,6 +2712,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetScale: 1.02
   UIImage: {fileID: 1832382986}
+  UIImageDefualtDisable: 1
 --- !u!114 &1009627653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2747,7 +2765,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1009627655}
   m_OnClick:
     m_PersistentCalls:
@@ -3101,8 +3119,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 16777215
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -3300,7 +3318,7 @@ GameObject:
   - component: {fileID: 1482631267}
   - component: {fileID: 1482631266}
   m_Layer: 5
-  m_Name: Txt_Continue
+  m_Name: Txt_Setting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3395,8 +3413,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 16777215
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -3571,8 +3589,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 16777215
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -3750,6 +3768,7 @@ GameObject:
   - component: {fileID: 1594983172}
   - component: {fileID: 1594983171}
   - component: {fileID: 1594983175}
+  - component: {fileID: 1594983176}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -3829,7 +3848,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1594983173}
   m_OnClick:
     m_PersistentCalls:
@@ -3859,7 +3878,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3900,6 +3919,19 @@ MonoBehaviour:
   key: 101
   clickCooldown: 0.3
   playOnce: 0
+--- !u!114 &1594983176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1594983169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stanceButton: {fileID: 0}
 --- !u!1 &1636804759
 GameObject:
   m_ObjectHideFlags: 0
@@ -4365,8 +4397,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 16777215
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

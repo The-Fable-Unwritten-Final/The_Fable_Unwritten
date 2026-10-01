@@ -8,11 +8,12 @@ public class UIButtonHoverScale : MonoBehaviour, IPointerEnterHandler, IPointerE
 {
     public float targetScale = 1.0f;
     public GameObject UIImage;
+    public bool UIImageDefualtDisable = true;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         transform.DOScale(targetScale, 0.15f).SetEase(Ease.OutBack);
-        if (UIImage != null)
+        if (UIImage != null && !UIImageDefualtDisable)
         {
             UIImage.SetActive(true);
         }
