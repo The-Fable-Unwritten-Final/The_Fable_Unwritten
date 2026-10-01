@@ -631,7 +631,6 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
                 match.MaxHP = save.maxHP;
                 match.currentHP = save.currentHP;
                 match.currentDeckIndexes = new List<int>(save.currentDeckIndexes);
-                Debug.Log($"[ApplySaveToPlayerDatas] {match.CharacterClass}: currentDeckIndexes 로드됨 (개수: {match.currentDeckIndexes.Count})");
 
                 // 플레이어의 저장된 버프/디버프 효과를 캐시에 저장
                 if (save.tickEffectsData != null && save.tickEffectsData.Count > 0)
@@ -741,6 +740,12 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         maxInkAmount = 10;
         IsEndingClear = false;  // 엔딩 클리어 상태 초기화
         
+        // StyleManager의 CurrentState 동기화
+        if (StyleManager.Instance.StyleDic.TryGetValue(currentDefID, out var defStyle))
+        {
+            StyleManager.Instance.SetState(defStyle.styleId, defStyle.currentPlus, defStyle.currentMinus);
+        }
+        
         // 카드 해금, 캐릭터 해금 초기화
         unlockedCards.Clear();
         foreach(var cha in PlayerDatas)
@@ -838,6 +843,11 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         currentDefID = 1;
         inkAmount = 0;
         maxInkAmount = 10;
+        
+        // StyleManager의 CurrentState 동기화
+        StyleDefinition curStyle = StyleManager.Instance.StyleDic[currentDefID];
+        StyleManager.Instance.SetState(curStyle.styleId, curStyle.currentPlus, curStyle.currentMinus);
+        
         foreach(var cha in PlayerDatas)
         {
             cha.SetToDefaultMaxHP(); // 캐릭터 최대 체력 초기화
@@ -930,6 +940,13 @@ public partial class ProgressDataManager : MonoSingleton<ProgressDataManager>
         currentDefID = 1;
         inkAmount = 0;
         maxInkAmount = 10;
+        
+        // StyleManager의 CurrentState 동기화
+        if (StyleManager.Instance.StyleDic.TryGetValue(currentDefID, out var defStyleReset))
+        {
+            StyleManager.Instance.SetState(defStyleReset.styleId, defStyleReset.currentPlus, defStyleReset.currentMinus);
+        }
+        
         foreach(var cha in PlayerDatas)
         {
             cha.SetToDefaultMaxHP(); // 캐릭터 최대 체력 초기화
