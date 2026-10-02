@@ -693,6 +693,7 @@ MonoBehaviour:
   headpoint: {fileID: 1654612101}
   overheadpoint: {fileID: 1418590712}
   aheadpoint: {fileID: 102226778}
+  aheadmidpoint: {fileID: 0}
   anchorController: {fileID: 0}
   hpBarDisplay: {fileID: 3565488262354688568}
   dmgBarDisplay: {fileID: 1634073424}
@@ -1420,6 +1421,7 @@ MonoBehaviour:
   headpoint: {fileID: 1160002344}
   overheadpoint: {fileID: 151102360}
   aheadpoint: {fileID: 2118885999}
+  aheadmidpoint: {fileID: 0}
   hpBarDisplay: {fileID: 118312048259346877}
   dmgBarDisplay: {fileID: 326686467}
   targetArrow: {fileID: 469035930}
@@ -1484,6 +1486,7 @@ MonoBehaviour:
   overheadPoint: {fileID: 151102360}
   aheadPoint: {fileID: 2118885999}
   shadowRoot: {fileID: 2145562382}
+  aheadMidPoint: {fileID: 0}
 --- !u!114 &260082002 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5149937877872546870, guid: e21a97a85c31a3e43a6ba1ca58e3dd77,
@@ -2912,6 +2915,7 @@ MonoBehaviour:
   headpoint: {fileID: 668295094}
   overheadpoint: {fileID: 1028194933}
   aheadpoint: {fileID: 523951846}
+  aheadmidpoint: {fileID: 0}
   anchorController: {fileID: 0}
   hpBarDisplay: {fileID: 2629051018129821340}
   dmgBarDisplay: {fileID: 1628950801}
@@ -4400,12 +4404,12 @@ PrefabInstance:
     - target: {fileID: 3482326527405091765, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -0.15
       objectReference: {fileID: 0}
     - target: {fileID: 3482326527405091765, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.952
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 3482326527405091765, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
@@ -4591,6 +4595,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7982970883520614422, guid: 772888bd0d1114e46a3663e11850a20f,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8117357583987156442, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
@@ -5230,12 +5239,12 @@ PrefabInstance:
     - target: {fileID: 3482326527405091765, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -0.15
       objectReference: {fileID: 0}
     - target: {fileID: 3482326527405091765, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.952
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 3482326527405091765, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
@@ -6580,12 +6589,12 @@ PrefabInstance:
     - target: {fileID: 3482326527405091765, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -0.15
       objectReference: {fileID: 0}
     - target: {fileID: 3482326527405091765, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.952
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 3482326527405091765, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
@@ -6772,6 +6781,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7982970883520614422, guid: 772888bd0d1114e46a3663e11850a20f,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8117357583987156442, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -6889,6 +6903,7 @@ MonoBehaviour:
   headpoint: {fileID: 1929614343}
   overheadpoint: {fileID: 1727127516}
   aheadpoint: {fileID: 585595498}
+  aheadmidpoint: {fileID: 0}
   hpBarDisplay: {fileID: 289690891190480063}
   dmgBarDisplay: {fileID: 1560934504}
   targetArrow: {fileID: 959486187}
@@ -6932,6 +6947,7 @@ MonoBehaviour:
   overheadPoint: {fileID: 1727127516}
   aheadPoint: {fileID: 585595498}
   shadowRoot: {fileID: 1039837557}
+  aheadMidPoint: {fileID: 0}
 --- !u!1 &1027908679
 GameObject:
   m_ObjectHideFlags: 0
@@ -8550,12 +8566,12 @@ PrefabInstance:
     - target: {fileID: 3482326527405091765, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -0.15
       objectReference: {fileID: 0}
     - target: {fileID: 3482326527405091765, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.952
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 3482326527405091765, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
@@ -8741,6 +8757,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7982970883520614422, guid: 772888bd0d1114e46a3663e11850a20f,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8117357583987156442, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
@@ -9279,12 +9300,12 @@ PrefabInstance:
     - target: {fileID: 3482326527405091765, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -0.15
       objectReference: {fileID: 0}
     - target: {fileID: 3482326527405091765, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.952
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 3482326527405091765, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
@@ -9470,6 +9491,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7982970883520614422, guid: 772888bd0d1114e46a3663e11850a20f,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8117357583987156442, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
@@ -11331,6 +11357,7 @@ MonoBehaviour:
   headpoint: {fileID: 566935552}
   overheadpoint: {fileID: 508338137}
   aheadpoint: {fileID: 1622515848}
+  aheadmidpoint: {fileID: 0}
   hpBarDisplay: {fileID: 4039711242319734793}
   dmgBarDisplay: {fileID: 46784155}
   targetArrow: {fileID: 1267231373}
@@ -11395,6 +11422,7 @@ MonoBehaviour:
   overheadPoint: {fileID: 508338137}
   aheadPoint: {fileID: 1622515848}
   shadowRoot: {fileID: 1951813231}
+  aheadMidPoint: {fileID: 0}
 --- !u!1 &1773216951
 GameObject:
   m_ObjectHideFlags: 0
@@ -11926,6 +11954,7 @@ MonoBehaviour:
   headpoint: {fileID: 13337782}
   overheadpoint: {fileID: 979249891}
   aheadpoint: {fileID: 1380380083}
+  aheadmidpoint: {fileID: 0}
   anchorController: {fileID: 0}
   hpBarDisplay: {fileID: 3615750389766941839}
   dmgBarDisplay: {fileID: 1219395581}
@@ -12719,6 +12748,7 @@ MonoBehaviour:
   effectManage: {fileID: 2101769382}
   Mana: {fileID: 753105239}
   skillFocusEffect: {fileID: 1794328331}
+  autoStartBattle: 1
   startMana: 4
   currentMana: 0
   totalExp: 0
@@ -21048,12 +21078,12 @@ PrefabInstance:
     - target: {fileID: 3482326527405091765, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -0.18
       objectReference: {fileID: 0}
     - target: {fileID: 3482326527405091765, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.952
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 3482326527405091765, guid: 772888bd0d1114e46a3663e11850a20f,
         type: 3}

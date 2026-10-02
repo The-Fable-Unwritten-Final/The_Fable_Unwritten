@@ -107,6 +107,9 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         potentialBarUI?.Refresh();
 
         stanceIconDisplay?.UpdateIcon(playerData.currentStance);
+
+        if (animator != null)
+            animator.SetBool("IsDie", false);
     }
 
     public void OnTurnStart()
@@ -1201,7 +1204,13 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         GameManager.Instance.combatCameraController.CameraPunchHard();
 
-        gameObject.SetActive(false);
+        HideStatusUI();
+
+        if (stanceToggleButton != null)
+            stanceToggleButton.gameObject.SetActive(false);
+
+        if (animator != null)
+            animator.SetBool("IsDie", true);
     }
 
     public void SetTemporarilyAbsent(bool absent)
