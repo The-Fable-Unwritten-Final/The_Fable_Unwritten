@@ -11,10 +11,13 @@ public class UI_PlayerInfo : MonoBehaviour
     [Header("Info")]
 
     [SerializeField] Image shopiaHpBar;
+    [SerializeField] Image shopiaHpBarInner;
     [SerializeField] TextMeshProUGUI sophiaHp;
     [SerializeField] Image kylaHpBar;
+    [SerializeField] Image kylaHpBarInner;
     [SerializeField] TextMeshProUGUI kylaHp;
     [SerializeField] Image leonHpBar;
+    [SerializeField] Image leonHpBarInner;
     [SerializeField] TextMeshProUGUI leonHp;
     [SerializeField] TextMeshProUGUI currentExp;
 
@@ -34,6 +37,7 @@ public class UI_PlayerInfo : MonoBehaviour
 
     private Dictionary<CharacterClass, TextMeshProUGUI> charInfoText;
     private Dictionary<CharacterClass, Image> charhpBar;
+    private Dictionary<CharacterClass, Image> charhpBarInner;
     private Dictionary<CharacterClass, Action<float, float>> hpChangedHandlers = new();
     private Coroutine changeHpCoroutine_Sho;
     private Coroutine changeHpCoroutine_Ky;
@@ -54,6 +58,13 @@ public class UI_PlayerInfo : MonoBehaviour
             { CharacterClass.Sophia, shopiaHpBar },
             { CharacterClass.Kayla, kylaHpBar },
             { CharacterClass.Leon, leonHpBar }
+        };
+
+        charhpBarInner = new Dictionary<CharacterClass, Image>
+        {
+            { CharacterClass.Sophia, shopiaHpBarInner },
+            { CharacterClass.Kayla, kylaHpBarInner },
+            { CharacterClass.Leon, leonHpBarInner }
         };
 
         SetEndingBadge();
@@ -349,6 +360,26 @@ public class UI_PlayerInfo : MonoBehaviour
     {
         if (hpBar == null) return;
 
+        float hpPercent = (hp / maxHp) * 100f;
+        Color barColor = hpPercent > 30f ? new Color(0.49f, 0.70f, 0f, 1f) : new Color(0.682f, 0f, 0f, 1f); // #7DB200 or #AE0000
+        Color barColorInner = hpPercent > 30f ? new Color(0.49f, 0.70f, 0f, 0.38f) : new Color(0.682f, 0f, 0f, 0.38f); // #7DB200 or #AE0000 with alpha 0.38
+        Color textColor = hpPercent > 30f ? new Color(0.373f, 0.518f, 0.024f, 1f) : new Color(0.682f, 0f, 0f, 1f); // #5F8406 or #AE0000
+
+        // 배경 색상 적용
+        hpBar.color = barColor;
+
+        // 내부 체력바 색상 적용 (알파값 0.38)
+        if (charhpBarInner.TryGetValue(character, out var hpBarInner))
+        {
+            hpBarInner.color = barColorInner;
+        }
+
+        // 텍스트 색상 적용
+        if (charInfoText.TryGetValue(character, out var textObj))
+        {
+            textObj.color = textColor;
+        }
+
         float targetFill = hp / maxHp;
 
         // 애니메이션 없이 바로 적용
@@ -387,7 +418,7 @@ public class UI_PlayerInfo : MonoBehaviour
         }
     }
 
-    private IEnumerator AnimateHpBarChange(Image hpBar,float targetFill, float duration)
+    private IEnumerator AnimateHpBarChange(Image hpBar, float targetFill, float duration)
     {
         float startFill = hpBar.fillAmount;
         float elapsed = 0f;
