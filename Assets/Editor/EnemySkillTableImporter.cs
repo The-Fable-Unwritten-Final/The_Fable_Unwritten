@@ -993,8 +993,6 @@ public static class EnemySkillTableImporter
 
             act.specialLogic.ToString(),
 
-            act.specialLogic.ToString(),
-
             EscapeCsv(act.skilleffect),
             EscapeCsv(JoinIntList(act.soundIndexes)),
             EscapeCsv(JoinFloatList(act.soundDelays))
