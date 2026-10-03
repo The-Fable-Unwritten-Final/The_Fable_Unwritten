@@ -108,7 +108,7 @@ public static class EnemyActCSVParser
                 continue;
 
             string line = lines[i].TrimEnd('\r');
-            string[] t = line.Split(',');
+            List<string> t = ParseCsvLine(line);
 
             if (!TryParseInt(t, 0, out int index))
                 continue;

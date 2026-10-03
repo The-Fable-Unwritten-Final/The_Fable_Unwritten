@@ -773,8 +773,22 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
                 trans.localPosition = originalPos;
             });
 
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = new Color(1f, 0f, 0f, 0.45f);
+            GameManager.Instance.StartCoroutine(ResetHitColor(0.15f));
+        }
+
         animator.SetBool("Hit", true);
-        GameManager.Instance.StartCoroutine(ResetBool("Hit", 1.2f));
+        GameManager.Instance.StartCoroutine(ResetBool("Hit", 0.5f));
+    }
+
+    private IEnumerator ResetHitColor(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (this != null && spriteRenderer != null)
+            spriteRenderer.color = Color.white;
     }
 
     private IEnumerator ResetBool(string param, float delay)

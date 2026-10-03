@@ -286,7 +286,6 @@ public class DeckModel
         {
             GameManager.Instance.combatUIController.ThrowCard(card);
             Discard(card);
-            Debug.Log($"[Deck] 유지되지 않는 카드 {card.cardName} 핸드에서 제거");
         }
     }
 

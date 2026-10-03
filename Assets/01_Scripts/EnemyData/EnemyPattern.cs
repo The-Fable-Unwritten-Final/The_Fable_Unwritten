@@ -497,9 +497,9 @@ public static class EnemyPattern
             return;
         }
 
-        float scaleFactor =DetermineEffectScale(caster.enemyData.type);
+        float scaleFactor = DetermineEffectScale(caster.enemyData.type);
 
-        if (!DataManager.Instance.CardEffects.TryGetValue(effectName,out var animInfo) || animInfo == null)
+        if (!DataManager.Instance.CardEffects.TryGetValue(effectName, out var animInfo) || animInfo == null)
         {
             Debug.LogWarning($"[EnemyEffect] CardEffects에서 찾지 못함: '{effectName}'");
             onImpact?.Invoke();
