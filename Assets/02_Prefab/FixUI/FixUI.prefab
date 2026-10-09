@@ -228,7 +228,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.68235296, g: 0, b: 0, a: 0.3882353}
+  m_Color: {r: 0.49019608, g: 0.69803923, b: 0, a: 0.3882353}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -790,14 +790,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.49019608, g: 0.69803923, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1900140236, guid: 8d000893f7f3afe4ea08f94c6e5948bd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5d3098420dd8f9c46a2f44f3ddfabcec, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1015,68 +1015,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3800227957368206253}
   m_CullTransparentMesh: 1
---- !u!1 &3804508184850317035
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3271474383246504281}
-  - component: {fileID: 1119367065989602198}
-  m_Layer: 5
-  m_Name: Cards
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &3271474383246504281
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3804508184850317035}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.3, y: 1.3, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7635532641563305172}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 224}
-  m_SizeDelta: {x: 1200, y: 400}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1119367065989602198
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3804508184850317035}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 4
-  m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
 --- !u!1 &3925221443852227473
 GameObject:
   m_ObjectHideFlags: 0
@@ -1270,14 +1208,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.49019608, g: 0.69803923, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1871640721, guid: 8d000893f7f3afe4ea08f94c6e5948bd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5d3098420dd8f9c46a2f44f3ddfabcec, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1345,7 +1283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.7686275, b: 0, a: 0.3882353}
+  m_Color: {r: 0.49019608, g: 0.69803923, b: 0, a: 0.3882353}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1484,8 +1422,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190254
-  m_fontColor: {r: 0.68235296, g: 0, b: 0, a: 1}
+    rgba: 4278617183
+  m_fontColor: {r: 0.37254903, g: 0.5176471, b: 0.023529412, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1602,14 +1540,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.4901961, g: 0.69803923, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -993206680, guid: 8d000893f7f3afe4ea08f94c6e5948bd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5d3098420dd8f9c46a2f44f3ddfabcec, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2088,7 +2026,6 @@ RectTransform:
   m_Children:
   - {fileID: 285794091105152472}
   - {fileID: 5438132318621211536}
-  - {fileID: 3271474383246504281}
   m_Father: {fileID: 7965062648606448989}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2171,8 +2108,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278488244
-  m_fontColor: {r: 0.7075472, g: 0.54770124, b: 0.01668743, a: 1}
+    rgba: 4278617183
+  m_fontColor: {r: 0.37254903, g: 0.5176471, b: 0.023529412, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2370,10 +2307,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shopiaHpBar: {fileID: 1848079851930431124}
+  shopiaHpBarInner: {fileID: 4968460059123205591}
   sophiaHp: {fileID: 5122376784915151532}
   kylaHpBar: {fileID: 3829217160868946536}
+  kylaHpBarInner: {fileID: 617171304954794982}
   kylaHp: {fileID: 1805755548562308538}
   leonHpBar: {fileID: 1826386720206641364}
+  leonHpBarInner: {fileID: 3341135646690614953}
   leonHp: {fileID: 240664411926361873}
   currentExp: {fileID: 7940905016145741551}
   courageBadge: {fileID: 6424775245940838938}
@@ -2382,8 +2322,8 @@ MonoBehaviour:
   currentDeck: {fileID: 6160092484357416919}
   cardBasePrefab: {fileID: 2673795626237749687, guid: 45073b34f4e19b543af3c912c1fc5e50,
     type: 3}
-  cardsRoot: {fileID: 3271474383246504281}
-  cardScrollRect: {fileID: 0}
+  cardsRoot: {fileID: 2558095131753562740}
+  cardScrollRect: {fileID: 2206531233092666384}
   mouseWheelScrollSpeed: 30
   cardsPerRow: 7
   maxVisibleRows: 2

@@ -12,10 +12,10 @@ public class CampBackgroundSet : MonoBehaviour
     {
         int stageIndex = ProgressDataManager.Instance.StageIndex;
         
-        // 6, 7, 8, 9, 10 스테이지를 1~5로 매핑
+        // 6, 7, 8, 9 스테이지를 2~5로 매핑
         if (stageIndex >= 6)
         {
-            stageIndex = stageIndex - 5;  // 6→1, 7→2, 8→3, 9→4, 10→5
+            stageIndex = stageIndex - 4;  // 6>2, 7>3, 8>4, 9>5
         }
         
         // 캠프 배경 설정
@@ -25,10 +25,7 @@ public class CampBackgroundSet : MonoBehaviour
         Debug.Log($"Texture: {sprite.texture}");
         Debug.Log($"Bounds: {sprite.bounds}");
         
-        // 모닥불 반사광 색 변경 (2,4,5 쪽 스테이지는 파란 배경이라 파란 반사광 재생)
-        if(stageIndex == 2 || stageIndex == 4 || stageIndex == 5 || stageIndex == 7 || stageIndex == 9 || stageIndex == 10)
-        {
-            fireFlareAnimator.SetBool("IsBlueFlare", true);
-        }
+        // 모닥불 반사광 색 변경 (모든 스테이지에서 휴식 씬은 파란 배경으로 설정)
+        fireFlareAnimator.SetBool("IsBlueFlare", true);
     }
 }
