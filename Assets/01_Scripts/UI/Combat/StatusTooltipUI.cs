@@ -11,6 +11,10 @@ public class StatusTooltipUI : MonoSingleton<StatusTooltipUI>
 
     private RectTransform panelRect;
 
+    [SerializeField] private float verticalPadding = 20f;
+    [SerializeField] private float titleDescSpacing = 10f;
+    [SerializeField] private float minHeight = 60f;
+
     private void Awake()
     {
         panelRect = panel.GetComponent<RectTransform>();
@@ -56,6 +60,8 @@ public class StatusTooltipUI : MonoSingleton<StatusTooltipUI>
         panel.transform.SetAsLastSibling();
 
         Canvas.ForceUpdateCanvases();
+        UpdatePanelSize();
+        Canvas.ForceUpdateCanvases();
 
         Vector2 pos = screenPos;
 
@@ -77,6 +83,36 @@ public class StatusTooltipUI : MonoSingleton<StatusTooltipUI>
     {
         if (panel != null)
             panel.SetActive(false);
+    }
+
+    private void UpdatePanelSize()
+    {
+        Canvas.ForceUpdateCanvases();
+
+        float titleHeight = titleText.GetPreferredValues(
+            titleText.text,
+            titleText.rectTransform.rect.width,
+            0f
+        ).y;
+
+        float descHeight = descText.GetPreferredValues(
+            descText.text,
+            descText.rectTransform.rect.width,
+            0f
+        ).y;
+
+        titleText.rectTransform.SetSizeWithCurrentAnchors(
+            RectTransform.Axis.Vertical, titleHeight
+        );
+
+        descText.rectTransform.SetSizeWithCurrentAnchors(
+            RectTransform.Axis.Vertical, descHeight
+        );
+
+        float height = verticalPadding * 2f + titleHeight + titleDescSpacing + descHeight;
+        height = Mathf.Max(minHeight, height);
+
+        panelRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
     }
 }
 
@@ -275,5 +311,7 @@ public static class TooltipKeyMapper
             // 기존 상태이상은 그대로
             _ => "Card Tooltip"
         };
+
+
     }
 }
