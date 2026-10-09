@@ -367,19 +367,6 @@ public class BattleFlowController : MonoBehaviour
     /// </summary>
     public void EndPlayerTurn()
     {
-        foreach (var player in playerParty)
-        {
-            /*player.Deck.DiscardHand();  // 손패 전체 버리기
-
-            GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();*/
-            if (player.IsAlive())
-            {
-
-                player.Deck.DiscardUnmaintainedCardsAtTurnEnd();
-
-            }
-        }
-
         foreach (var enemy in enemyParty)
         {
             if (enemy == null || !enemy.IsAlive())
@@ -420,10 +407,11 @@ public class BattleFlowController : MonoBehaviour
                 continue;
 
             player.ClearScarBurst();
+        
+            player.Deck.DiscardUnmaintainedCardsAtTurnEnd();
 
             if (player is PlayerController pc && pc.IsAlive())
                 pc.OnTurnEnd();
-
         }
 
         var currentEnemies = new List<IStatusReceiver>(enemyParty);

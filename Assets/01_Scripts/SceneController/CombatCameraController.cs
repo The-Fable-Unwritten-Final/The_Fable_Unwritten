@@ -28,6 +28,11 @@ public class CombatCameraController : MonoBehaviour
     public Coroutine combatCameraCoroutine; // 특수 모션 카메라 줌인 효과시
 
 
+    [SerializeField, Range(0f, 1f)] private float dimBrightness = 0.35f;
+
+    private readonly Dictionary<SpriteRenderer, Color> originalColors = new();
+    private readonly Dictionary<SpriteRenderer, int> originalSortingOrders = new();
+
     private void Awake()
     {
         GameManager.Instance.RegisterCombatCamera(this);
@@ -55,120 +60,58 @@ public class CombatCameraController : MonoBehaviour
     /// <param name="time">행동을 진행하는 시간</param>
     public void PlayCombatCamera(IStatusReceiver caster, List<IStatusReceiver> target, float time)
     {
-        if(combatCameraCoroutine != null) // 이미 카메라 효과가 진행중인 경우
+        if (combatCameraCoroutine != null)
         {
             StopCoroutine(combatCameraCoroutine);
             combatCameraCoroutine = null;
-            foreach (var t in target)
-            {
-                if (t is PlayerController player)
-                {
-                    player.spriteRenderer.sortingOrder = 0;
-                    if(caster is Enemy e)
-                        e.spriteRenderer.sortingOrder = 0;
-                }
-                else if (t is Enemy enemy)
-                {
-                    enemy.spriteRenderer.sortingOrder = 0;
-                    if (caster is PlayerController p)
-                        p.spriteRenderer.sortingOrder = 0;
-                }
-            }
         }
+
+        colorRestoreTween?.Kill();
+        colorRestoreTween = null;
+
+        combatBackgroundMaterial.DOKill();
+        RestoreSortingOrders();
+        RestoreCharacterColors();
+
         combatCameraCoroutine = StartCoroutine(PlayCombatCameraCoroutine(caster, target, time));
     }
+
     IEnumerator PlayCombatCameraCoroutine(IStatusReceiver caster, List<IStatusReceiver> target, float time)
     {
-        // 추후 확장성(행동시 대상 이동등)을 고려해, caster로 구분.
-
-        if (caster is PlayerController player) // 시전자가 플레이어 진영
+        if (!(caster is PlayerController) && !(caster is Enemy))
         {
-            /*
-            Vector3 playerPos = player.transform.position; // 플레이어 위치 저장
-            Vector3 targetPos = playerGoPos; // 플레이어를 이동시킬 위치
+            Debug.LogError($"[CombatCameraController] 잘못된 캐스터 타입: {caster?.GetType()}");
+            combatCameraCoroutine = null;
+            yield break;
+        }
 
-            // 객체 이동 + 카메라 줌인 액션 조정
-            if (target[0] is Enemy)// 몬스터 대상 행동
-            {
-                CameraZoomInAction(time,true);// 카메라 줌인(몬스터 방향)
-                player.transform.DOMove(targetPos, combatTransitionTime); // 플레이어 이동
-            }
-            else
-            {
-                CameraZoomInAction(time,false);// 카메라 줌인(플레이어 방향)
-            }
-            */ //카메라 액션 비활성화
+        // 시전자와 타겟을 제외한 캐릭터 어둡게 처리
+        SetCharacterDim(caster, target);
 
-            //0.3초동안 전투배경 alpha값 페이드인
-            combatBackgroundMaterial.DOFade(1f, combatTransitionTime); // 알파 1로
+        // 기존 전투 배경 페이드
+        combatBackgroundMaterial.DOFade(1f, combatTransitionTime);
 
-            // sortingOrder 설정
-            player.spriteRenderer.sortingOrder = 1;
+        // 시전자와 타겟을 전면으로 이동
+        SetForeground(caster);
+
+        if (target != null)
+        {
             foreach (var t in target)
-            {
-                var mono = t as MonoBehaviour;
-
-                if(mono!= null)
-                    mono.GetComponentInChildren<SpriteRenderer>().sortingOrder = 1;
-            }
-
-            yield return new WaitForSeconds(time);
-
-            /*
-            if (target[0] is Enemy)
-                player.transform.DOMove(playerPos, combatTransitionTime); // 플레이어 원래 위치로 이동
-            */ //카메라 액션 비활성화
-            
-            //0.2초동안 전투배경 alpha값 페이드 아웃 + 페이드 아웃에 맞춰 sortingOrder 조정
-            combatBackgroundMaterial
-                .DOFade(0f, combatTransitionTime) // 알파 0으로
-                .onComplete = () =>
-                {
-                    player.spriteRenderer.sortingOrder = 0;
-                    foreach (var t in target)
-                    {
-                        var mono = t as MonoBehaviour;
-
-                        if (mono != null)
-                            mono.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
-                    }
-                };
+                SetForeground(t);
         }
-        else if (caster is Enemy enemy) // 시전자가 몬스터 진영
-        {
-            //0.3초동안 전투배경 alpha값 페이드인
-            combatBackgroundMaterial.DOFade(1f, combatTransitionTime); // 알파 1로
-            enemy.spriteRenderer.sortingOrder = 1;
-            foreach (var t in target)
-            {
-                if (t is PlayerController p)
-                {
-                    p.spriteRenderer.sortingOrder = 1;
-                }
-            }
-            //caster
-            yield return new WaitForSeconds(time);
 
-            //0.2초동안 전투배경 alpha값 페이드아웃
-            combatBackgroundMaterial
-                .DOFade(0f, combatTransitionTime) // 알파 0으로
-                .onComplete = () =>
-                {
-                    foreach (var t in target)
-                    {
-                        enemy.spriteRenderer.sortingOrder = 0;
-                        if (t is PlayerController p)
-                        {
-                            p.spriteRenderer.sortingOrder = 0;
-                        }
-                    }
-                };
-        }
-        else
-        {
-            Debug.LogError($"[CombatCameraController] 잘못된 캐스터 타입: {caster.GetType()}");
-            yield return null;
-        }
+        yield return new WaitForSeconds(time);
+
+        // 전투 배경 원상복구
+        yield return combatBackgroundMaterial
+            .DOFade(0f, combatTransitionTime)
+            .WaitForCompletion();
+
+        RestoreSortingOrders();
+        RestoreCharacterColors();
+
+        Debug.Log("[CombatCamera] Fade Restore Complete");
+        combatCameraCoroutine = null;
     }
     // 몬스터의 공격 애니메이션의 싱크에 맞춰서 공격시점에서 >> 데미지 적용 + 카메라 액션을 하기에, 매개변수로 받는 형식이 아니라 체력에 적용을 해주는 시점에서 각각의 메서드(CameraPunch)를 상황에 맞게 호출 형식으로 변경.
     public void CameraPunch()
@@ -216,5 +159,92 @@ public class CombatCameraController : MonoBehaviour
 
         yield return new WaitForSeconds(time);
         mainCam.enabled = true;
+    }
+
+    private void SetCharacterDim(IStatusReceiver caster, List<IStatusReceiver> targets)
+    {
+        foreach (var player in players)
+        {
+            if (player == null || player.spriteRenderer == null) continue;
+            if (ReferenceEquals(player, caster) || (targets != null && targets.Contains(player))) continue;
+
+            DimSprite(player.spriteRenderer);
+        }
+
+        foreach (var enemy in enemies)
+        {
+            if (enemy == null || enemy.spriteRenderer == null) continue;
+            if (ReferenceEquals(enemy, caster) || (targets != null && targets.Contains(enemy))) continue;
+
+            DimSprite(enemy.spriteRenderer);
+        }
+    }
+
+    private void DimSprite(SpriteRenderer sr)
+    {
+        if (!originalColors.ContainsKey(sr))
+        {
+            Color or = sr.color;
+            or.a = 1f;
+            originalColors.Add(sr, or);
+        }
+        sr.DOKill();
+
+        Color original = originalColors[sr];
+        Color dimColor = new Color(
+            original.r * dimBrightness,
+            original.g * dimBrightness,
+            original.b * dimBrightness,
+            original.a
+        );
+
+        sr.DOColor(dimColor, combatTransitionTime);
+    }
+    private Tween colorRestoreTween;
+
+    private void RestoreCharacterColors()
+    {
+        colorRestoreTween?.Kill();
+        colorRestoreTween = null;
+
+        foreach (var pair in originalColors)
+        {
+            if (pair.Key == null) continue;
+
+            pair.Key.DOKill();
+            pair.Key.color = pair.Value;
+
+            Debug.Log($"[CombatCamera] Restore {pair.Key.name}: {pair.Key.color}");
+        }
+
+        originalColors.Clear();
+    }
+
+    private void SetForeground(IStatusReceiver receiver)
+    {
+        SpriteRenderer sr = null;
+
+        if (receiver is PlayerController player)
+            sr = player.spriteRenderer;
+        else if (receiver is Enemy enemy)
+            sr = enemy.spriteRenderer;
+
+        if (sr == null) return;
+
+        if (!originalSortingOrders.ContainsKey(sr))
+            originalSortingOrders.Add(sr, sr.sortingOrder);
+
+        sr.sortingOrder = 1;
+    }
+
+    private void RestoreSortingOrders()
+    {
+        foreach (var pair in originalSortingOrders)
+        {
+            if (pair.Key != null)
+                pair.Key.sortingOrder = pair.Value;
+        }
+
+        originalSortingOrders.Clear();
     }
 }
