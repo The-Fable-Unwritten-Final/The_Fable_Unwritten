@@ -84,7 +84,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &4988671790068265198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,10 +236,10 @@ MonoBehaviour:
   - type: 11
     icon: {fileID: 21300000, guid: b13446c6132239c408de8736fdd12075, type: 3}
     hideNumber: 0
-  atkUpIcon: {fileID: 1018658577, guid: 7c1ad1895609c6740a0ba607f908d1e9, type: 3}
-  atkDownIcon: {fileID: 670882, guid: 7c1ad1895609c6740a0ba607f908d1e9, type: 3}
-  defUpIcon: {fileID: -938177777, guid: 7c1ad1895609c6740a0ba607f908d1e9, type: 3}
-  defDownIcon: {fileID: 466428696, guid: 7c1ad1895609c6740a0ba607f908d1e9, type: 3}
+  atkUpIcon: {fileID: 21300000, guid: dd42683ec204b924b92073eb287c433f, type: 3}
+  atkDownIcon: {fileID: 21300000, guid: f8058f79bc1158d4ea0f75e83942ba3b, type: 3}
+  defUpIcon: {fileID: 21300000, guid: 8143b8370687b194aa96bcb75d1a719d, type: 3}
+  defDownIcon: {fileID: 21300000, guid: 4df3bb548177e1d44b848dae32eac38b, type: 3}
   blockIcon: {fileID: 0}
   maxVisibleCount: 16
   mechanicIconBindings:

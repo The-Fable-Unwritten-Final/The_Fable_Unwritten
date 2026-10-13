@@ -3409,86 +3409,86 @@
             "soundIndexes": [],
             "soundDelays": []
         },
-        {
-            "index": 3000,
-            "cost": 1,
-            "illustration": "illust_2",
-            "name": "Card_Name_3000",
-            "text": "Card_Text_3000",
-            "type": 6,
-            "class": 2,
-            "cardframe": "frame_8",
-            "target_type": 2,
-            "target_num": 1,
-            "note": "거울의 방-선택지 1",
-            "flavortext": "Card_Flav_3000",
-            "skilleffect": "",
-            "evolveCount": 0,
-            "evolveTarget": 0,
-            "keywords": [],
-            "switchType": "",
-            "effects": [
-                {
-                    "type": "damage",
-                    "value": 6,
-                    "duration": 0,
-                    "target": 0,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "",
-                        "value": []
-                    },
-                    "result": {
-                        "type": "",
-                        "value": 0,
-                        "duration": 0,
-                        "target": 0
-                    }
-                },
-                {
-                    "type": "scar",
-                    "value": 10,
-                    "duration": 0,
-                    "target": 4,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "",
-                        "value": []
-                    },
-                    "result": {
-                        "type": "",
-                        "value": 0,
-                        "duration": 0,
-                        "target": 0
-                    }
-                },
-                {
-                    "type": "conditional",
-                    "value": 0,
-                    "duration": 0,
-                    "target": 0,
-                    "owner": "",
-                    "condition": {
-                        "trigger": "isStance",
-                        "value": [
-                            "Rush"
-                        ]
-                    },
-                    "result": {
-                        "type": "repeat",
-                        "value": 2,
-                        "duration": 0,
-                        "target": 0
-                    }
-                }
-            ],
-            "soundIndexes": [
-                712
-            ],
-            "soundDelays": [
-                0.14000000059604646
-            ]
-        },
+      {
+        "index": 3000,
+        "cost": 1,
+        "illustration": "illust_2",
+        "name": "Card_Name_3000",
+        "text": "Card_Text_3000",
+        "type": 6,
+        "class": 2,
+        "cardframe": "frame_8",
+        "target_type": 2,
+        "target_num": 1,
+        "note": "거울의 방-선택지 1",
+        "flavortext": "Card_Flav_3000",
+        "skilleffect": "0베기ef2_150x100",
+        "evolveCount": 0,
+        "evolveTarget": 0,
+        "keywords": [],
+        "switchType": "",
+        "effects": [
+          {
+            "type": "damage",
+            "value": 6,
+            "duration": 0,
+            "target": 0,
+            "owner": "",
+            "condition": {
+              "trigger": "",
+              "value": []
+            },
+            "result": {
+              "type": "",
+              "value": 0,
+              "duration": 0,
+              "target": 0
+            }
+          },
+          {
+            "type": "scar",
+            "value": 10,
+            "duration": 0,
+            "target": 4,
+            "owner": "",
+            "condition": {
+              "trigger": "",
+              "value": []
+            },
+            "result": {
+              "type": "",
+              "value": 0,
+              "duration": 0,
+              "target": 0
+            }
+          },
+          {
+            "type": "conditional",
+            "value": 0,
+            "duration": 0,
+            "target": 0,
+            "owner": "",
+            "condition": {
+              "trigger": "isStance",
+              "value": [
+                "Rush"
+              ]
+            },
+            "result": {
+              "type": "repeat",
+              "value": 2,
+              "duration": 0,
+              "target": 0
+            }
+          }
+        ],
+        "soundIndexes": [
+          712
+        ],
+        "soundDelays": [
+          0.14000000059604646
+        ]
+      },
         {
             "index": 3001,
             "cost": 2,
