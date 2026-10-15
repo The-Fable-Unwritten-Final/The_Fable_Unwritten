@@ -127,11 +127,16 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         // 드래그 중인 다른 카드가 있으면 이 카드 상호작용 불가능
         if (cardDisplay.isOnDrag && cardDisplay.currentCard != this) return;
         
-        isPointerOver = true; // 마우스 포인터가 카드 위에 있는 상태로 설정
-        
+        // 상호작용 가능 여부 체크
         if (GameManager.Instance == null || GameManager.Instance.turnController == null) return;
         if (GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 상호작용 불가능
-        if(cardState == CardState.None) return; // 상태가 None인 경우 상호작용 불가능
+        if(cardState == CardState.None) 
+        {
+            isPointerOver = false; // CardArrange 중일 때도 포인터 상태는 업데이트
+            return;
+        }
+        
+        isPointerOver = true; // 마우스 포인터가 카드 위에 있는 상태로 설정
 
         // 드래그 중이 아닐 때만 currentCard 업데이트
         if (!cardDisplay.isOnDrag)
@@ -266,6 +271,7 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
         // 카드 사용 실패 - 원래 위치로 돌아가기
         cardState = CardState.None; // 임시로 None 상태로 설정
+        isPointerOver = false; // [방법 1] 포인터 상태 강제 리셋
         rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine);
 
         // 이펙트 초기화
@@ -281,10 +287,28 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             // 다시 한번 검증 (카드가 삭제되었을 수도 있음)
             if (this == null || cardDisplay == null) return;
 
-            // 현재 카드가 이 카드인 경우만 해제
-            if (cardDisplay.currentCard == this)
+            // [방법 2] 포인터가 카드 위에 있는지 재확인
+            bool pointerOverCard = RectTransformUtility.RectangleContainsScreenPoint(
+                rect, Input.mousePosition, null);
+            
+            // 포인터가 없으면 강제 리셋
+            if (!pointerOverCard)
             {
-                cardDisplay.ClearCurrentCard();
+                isPointerOver = false;
+                if (cardDisplay.currentCard == this)
+                {
+                    cardDisplay.currentCard = null;
+                }
+                ResetSiblingIndex();
+                // 이미 원래 위치로 돌아가는 애니메이션이 진행 중이므로 추가 호출 불필요
+            }
+            else
+            {
+                // 포인터가 카드 위에 있으면 현재 카드 설정
+                if (!cardDisplay.isOnDrag)
+                {
+                    cardDisplay.currentCard = this;
+                }
             }
 
             // 마나 상태에 따라 상태 업데이트
@@ -301,6 +325,10 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     public void FXOnUse()
     {
+        // 핵심: FXOnUse 진행 중 OnPointerEnter() 호출 방지
+        cardState = CardState.None;
+        isPointerOver = false;
+        
         DG.Tweening.Sequence seq = DOTween.Sequence();
 
         // 첫 단계: frameCover, illustCover 반투명하게
@@ -337,6 +365,9 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         // 마지막 단계: 오브젝트 제거 및 정렬
         seq.OnComplete(() =>
         {
+            // [방법 1] 카드 제거 전 포인터 상태 강제 리셋
+            isPointerOver = false;
+
             // UIParticle 정리 (재생 종료 후)
             if (effectVisualizer != null)
             {

@@ -339,15 +339,20 @@ public class CardDisplay : MonoBehaviour
         // 카드 사용 가능 조건 체크
 
         //카드 사용 시도
-        if(!GameManager.Instance.combatUIController.UsedCard(currentCard.cardData,target))
+        var cardToUse = currentCard; // 참조 저장
+        
+        if(!GameManager.Instance.combatUIController.UsedCard(cardToUse.cardData,target))
         {
             // 만약 카드 사용이 실패 했다면, 상태 복구.
             currentCard.SetCardState(CardInHand.CardState.CanDrag);// 카드 상태를 CanDrag로 복구.
             currentCard.ResetSiblingIndex();// 카드 순서 원래대로 복구.
             return;
         }
-        cardsInHand.Remove(currentCard);// 카드 사용.
-        currentCard.FXOnUse();// 카드 사용 이펙트 재생.(destroy + cardArrange 보유)
+        
+        // 핵심: CardStatusUpdate 호출 BEFORE에 리스트에서 제거 (SetCardCanDrag()에서 제외)
+        cardsInHand.Remove(cardToUse);// 카드 사용 - UsedCard() 이후 즉시 제거
+        ClearCurrentCard(); // currentCard 참조 해제
+        cardToUse.FXOnUse();// 카드 사용 이펙트 재생.(destroy + cardArrange 보유)
         //Destroy(currentCard.gameObject);// 카드 삭제.
         //CardArrange();
     }
