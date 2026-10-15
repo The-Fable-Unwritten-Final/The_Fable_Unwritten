@@ -400,17 +400,33 @@ public class CardDisplay : MonoBehaviour
         for(int i = 0; i < cardsInHand.Count; i++)
         {
             // 만약 update 호출전 새로운 카드를 드래그 하였을 때의 예외처리. + 여기에 실제로 드래그 중이 아닌데 이전 값이 남아있을 경우의 && 예외처리
-            if (cardsInHand[i].GetCardState() == CardState.OnDrag && Input.GetMouseButtonDown(0)) return;
+            if (cardsInHand[i].GetCardState() == CardState.OnDrag && Input.GetMouseButtonDown(0)) continue;
 
             if (cardsInHand[i].cardData.IsUsable(GameManager.Instance.turnController.battleFlow.currentMana))// 현재 보유 마나를 가져와, 사용 가능한지 확인. (사용 가능시 CanDrag, 불가능시 CanMouseOver)
             {
-                if (cardsInHand[i].GetCardState() == CardState.CanDiscard) return;
+                if (cardsInHand[i].GetCardState() == CardState.CanDiscard) continue;
                 cardsInHand[i].SetCardState(CardInHand.CardState.CanDrag);// 카드 상태를 CanDrag로 변경
             }
             else
             {
-                if (cardsInHand[i].GetCardState() == CardState.CanDiscard) return;
+                if (cardsInHand[i].GetCardState() == CardState.CanDiscard) continue;
                 cardsInHand[i].SetCardState(CardInHand.CardState.CanMouseOver);// 카드 상태를 CanMouseOver로 변경
+            }
+        }
+
+        // 안전장치: 모든 카드가 None 상태에 갇혔으면 강제 복구
+        if (cardsInHand.All(card => card.GetCardState() == CardState.None))
+        {
+            for (int i = 0; i < cardsInHand.Count; i++)
+            {
+                if (cardsInHand[i].cardData.IsUsable(GameManager.Instance.turnController.battleFlow.currentMana))
+                {
+                    cardsInHand[i].SetCardState(CardInHand.CardState.CanDrag);
+                }
+                else
+                {
+                    cardsInHand[i].SetCardState(CardInHand.CardState.CanMouseOver);
+                }
             }
         }
     }
@@ -660,45 +676,41 @@ public class CardDisplay : MonoBehaviour
     }
     private IEnumerator RepeatSetCardCanDrag()
     {
-        bool isreset = false;
-
         while (true)
         {
-            // 현재 드래그 중일 경우 continue;
-            if (currentCard != null)
+            // 현재 드래그 중일 경우 continue
+            if (currentCard != null && currentCard.GetCardState() == CardState.OnDrag)
             {
-                if (currentCard.GetCardState() == CardState.OnDrag)
+                yield return new WaitForEndOfFrame();
+                continue;
+            }
+
+            // 마우스 버튼 누르는 순간만 스킵
+            if (Input.GetMouseButtonDown(0))
+            {
+                yield return new WaitForEndOfFrame();
+                continue;
+            }
+
+            // 항상 SetCardCanDrag() 호출 - 상태 업데이트 유지
+            SetCardCanDrag();
+
+            yield return new WaitForEndOfFrame();
+
+            // 위치 재정렬 (DOTween 진행 중이면 스킵)
+            for (int i = 0; i < cardsInHand.Count; i++)
+            {
+                RectTransform cardRect = cardsInHand[i].GetComponent<RectTransform>();
+
+                if (DOTween.IsTweening(cardRect)) continue; // 애니메이션 진행 중이면 건너뛰기
+
+                // 마우스 올린 카드가 아니고 잘못된 위치에 있으면 수정
+                if (!cardsInHand[i].isPointerOver && cardRect.position != (Vector3)cardsInHand[i].originalPos)
                 {
-                    yield return new WaitForEndOfFrame();
-                    continue;
+                    cardRect.DOAnchorPos(cardsInHand[i].originalPos, 0.1f);
                 }
             }
 
-            // 간단한 상호작용 시의 경우, 최초 1회만 상태 업데이트
-            if (Input.GetMouseButtonDown(0) || cardsInHand.Any(x => x.isPointerOver))
-            {
-                isreset = false; // 카드의 상태가 한번 변경되면 다시 리셋 트리거 세팅.
-                yield return new WaitForEndOfFrame();
-                continue; // 조건에 해당될시 아래 내용 스킵.
-            }
-            if (!isreset)
-            {
-                SetCardCanDrag();
-                //CardArrange();
-                yield return new WaitForEndOfFrame();
-                for (int i = 0; i < cardsInHand.Count; i++)
-                {
-                    RectTransform cardRect = cardsInHand[i].GetComponent<RectTransform>();
-
-                    if (DOTween.IsTweening(cardRect)) continue; // 현재 카드가 이동 중이라면 아래의 재정렬 무시.
-
-                    if (!cardsInHand[i].isPointerOver && cardRect.position != (Vector3)cardsInHand[i].originalPos) // 마우스를 올린 카드가 아님 + 잘못된 위치에 있을경우
-                    {
-                        cardRect.DOAnchorPos(cardsInHand[i].originalPos, 0.1f); // 원래 위치로 보내기
-                        isreset = true;
-                    }
-                }
-            }
             yield return new WaitForEndOfFrame();
         }
     }
