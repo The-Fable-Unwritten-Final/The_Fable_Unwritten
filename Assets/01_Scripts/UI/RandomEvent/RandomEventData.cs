@@ -9,6 +9,7 @@ public class RandomEventData
 {
     public int index;
     public int repeatIndex; // 반복 이벤트시 실행될 연속 인덱스
+    public int prerequisiteEventIndex; // 선행 조건 이벤트 (0이면 조건 없음)
     public StageTheme theme;
     public string title;
     public string illustration;

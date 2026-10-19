@@ -50,16 +50,20 @@ public class CombatLightingController : MonoBehaviour
                     ColorUtility.TryParseHtmlString("#FFC877", out targetColor);
                     break;
                 case LightingState.bg_2:
-                    ColorUtility.TryParseHtmlString("#80CFC8", out targetColor);
+                    ColorUtility.TryParseHtmlString("#FFC877", out targetColor);
+                    //ColorUtility.TryParseHtmlString("#80CFC8", out targetColor);
                     break;
                 case LightingState.bg_3:
-                    ColorUtility.TryParseHtmlString("#6FA2AB", out targetColor);
+                    ColorUtility.TryParseHtmlString("#FFC877", out targetColor);
+                    //ColorUtility.TryParseHtmlString("#6FA2AB", out targetColor);
                     break;
                 case LightingState.bg_4:
-                    ColorUtility.TryParseHtmlString("#FFEFAF", out targetColor);
+                    ColorUtility.TryParseHtmlString("#FFC877", out targetColor);
+                    //ColorUtility.TryParseHtmlString("#FFEFAF", out targetColor);
                     break;
                 case LightingState.bg_5:
-                    ColorUtility.TryParseHtmlString("#D3FFCE", out targetColor);
+                    ColorUtility.TryParseHtmlString("#FFC877", out targetColor);
+                    //ColorUtility.TryParseHtmlString("#D3FFCE", out targetColor);
                     break;
             }
             mainLight.color = targetColor;

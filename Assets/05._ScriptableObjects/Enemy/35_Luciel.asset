@@ -15,37 +15,50 @@ MonoBehaviour:
   idNum: 35
   enemyName: Luciel
   exp: 15
-  maxHP: 280
-  currentHP: 280
+  maxHP: 180
+  currentHP: 370
   aTKValue: 0
   dEFValue: 0
   stun: 0
   blind: 0
   block: 0
   note: 
+  anchorData:
+    visualOffset: {x: 0, y: -1.1}
+    footPoint: {x: 0, y: 0}
+    bodyPoint: {x: 0, y: 0}
+    headPoint: {x: 0, y: 0}
+    overheadPoint: {x: 0, y: 0}
+    aheadPoint: {x: 0, y: 0}
+    aheadMidPoint: {x: 0, y: 0, z: 0}
+    shadowOffset: {x: 0, y: 0}
   type: 2
   skillList:
-  - skillIndex: 100
-    damage: 15
-    percentage: 15
-  - skillIndex: 104
-    damage: 6
-    percentage: 30
-  - skillIndex: 105
-    damage: 4
+  - skillIndex: 351
+    damage: 0
     percentage: 50
-  - skillIndex: 115
-    damage: -10
-    percentage: 80
-  - skillIndex: 116
-    damage: -6
-    percentage: 100
-  illust: illust3_5
+  - skillIndex: 352
+    damage: 0
+    percentage: 20
+  - skillIndex: 353
+    damage: 0
+    percentage: 10
+  - skillIndex: 354
+    damage: 0
+    percentage: 20
+  - skillIndex: 355
+    damage: 0
+    percentage: 0
+  illust: 35_350_idle
   currentStance: 1
-  animationController: {fileID: 9100000, guid: f03a74ddb8f43ce498b203497ad3ec0c, type: 2}
+  animationController: {fileID: 9100000, guid: 27801754184942b41bf655c53cd168c2, type: 2}
   AttackSkillEffect: fx3_lightning_aura_large_yellow
   AllySkillEffect: fanfx2_cure_large_yellow
   TopStance: 0.3
   MiddleStance: 0.4
   BottomStance: 0.3
   loot: 020000000100000003000000
+  hpScale2: 1.5
+  damageHealScale2: 1.15
+  hpScale3: 1.9
+  damageHealScale3: 1.3

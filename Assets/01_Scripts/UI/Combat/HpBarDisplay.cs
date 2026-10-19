@@ -6,8 +6,10 @@ using UnityEngine.UI;
 
 public class HpBarDisplay : MonoBehaviour
 {
+    [SerializeField] private bool isPlayerHpBar;
     [Header("References")]
     [SerializeField] private Image hpBar;
+    [SerializeField] private Image hpBarBack;
     [SerializeField] private TextMeshProUGUI hpText;
 
     [Header("Follow Settings")]
@@ -19,6 +21,7 @@ public class HpBarDisplay : MonoBehaviour
 
     private Transform targetTransform;
     private SpriteRenderer targetRenderer;
+    private CanvasGroup canvasGroup;
 
     // 플레이어 데이터 연결
     public void BindPlayerData(PlayerData data)
@@ -61,19 +64,54 @@ public class HpBarDisplay : MonoBehaviour
     public void SetHpBar(float hp, float maxHp)
     {
         if (hpBar == null) return;
-        hpBar.fillAmount = hp / maxHp;
+
+        // 플레이어 HP 바일 경우에만 색상 변경
+        if (isPlayerHpBar)
+        {
+            float hpPercent = maxHp > 0 ? (hp / maxHp) * 100f : 0f;
+            Color barColor = hpPercent > 30f ? new Color(0.49f, 0.70f, 0f, 1f) : new Color(0.682f, 0f, 0f, 1f); // #7DB200 or #AE0000
+            Color barBackColor = hpPercent > 30f ? new Color(0.337f, 0.463f, 0.043f, 1f) : new Color(0.325f, 0f, 0f, 1f); // #56760B or #530000
+            
+            hpBar.color = barColor;
+            
+            if (hpBarBack != null)
+                hpBarBack.color = barBackColor;
+        }
+
+        hpBar.fillAmount = maxHp > 0 ? hp / maxHp : 0f;
 
         if (hpText != null)
-            hpText.text = Mathf.FloorToInt(hp).ToString();
+            hpText.text = Mathf.FloorToInt(hp).ToString() + "/" + Mathf.FloorToInt(maxHp).ToString();
     }
 
     public void ChangeHpBar(float hp, float maxHp)
     {
         if (hpBar == null) return;
 
-        float targetFill = hp / maxHp;
+        // 플레이어 HP 바일 경우에만 색상 변경
+        if (isPlayerHpBar)
+        {
+            float hpPercent = maxHp > 0 ? (hp / maxHp) * 100f : 0f;
+            Color barColor = hpPercent > 30f ? new Color(0.49f, 0.70f, 0f, 1f) : new Color(0.682f, 0f, 0f, 1f); // #7DB200 or #AE0000
+            Color barBackColor = hpPercent > 30f ? new Color(0.337f, 0.463f, 0.043f, 1f) : new Color(0.325f, 0f, 0f, 1f); // #56760B or #530000
+            
+            hpBar.color = barColor;
+            
+            if (hpBarBack != null)
+                hpBarBack.color = barBackColor;
+        }
 
-        hpText.text = hp.ToString() + "/" + maxHp.ToString();
+        float targetFill = maxHp > 0 ? hp / maxHp : 0f;
+
+        if (hpText != null)
+            hpText.text = Mathf.FloorToInt(hp).ToString() + "/" + Mathf.FloorToInt(maxHp).ToString();
+
+        if (!isActiveAndEnabled || !gameObject.activeInHierarchy)
+        {
+            hpBar.fillAmount = targetFill;
+            changeHpCoroutine = null;
+            return;
+        }
 
         if (changeHpCoroutine != null)
             StopCoroutine(changeHpCoroutine);
@@ -102,6 +140,34 @@ public class HpBarDisplay : MonoBehaviour
     {
         targetTransform = spriteRenderer.transform;
         targetRenderer = spriteRenderer;
+    }
+
+    /// <summary>
+    /// HP 바와 텍스트의 가시성 조절 (CanvasGroup 사용)
+    /// </summary>
+    public void SetHPBarVisible(bool isVisible)
+    {
+        if (canvasGroup == null)
+        {
+            canvasGroup = GetComponent<CanvasGroup>();
+            if (canvasGroup == null)
+            {
+                canvasGroup = gameObject.AddComponent<CanvasGroup>();
+            }
+        }
+
+        canvasGroup.alpha = isVisible ? 1f : 0f;
+
+        // hpText 가시성 처리
+        if (hpText != null)
+        {
+            CanvasGroup textCanvasGroup = hpText.GetComponent<CanvasGroup>();
+            if (textCanvasGroup == null)
+            {
+                textCanvasGroup = hpText.gameObject.AddComponent<CanvasGroup>();
+            }
+            textCanvasGroup.alpha = isVisible ? 1f : 0f;
+        }
     }
 
     /*void LateUpdate()

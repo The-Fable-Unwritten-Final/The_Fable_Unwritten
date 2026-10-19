@@ -1,6 +1,7 @@
 
-using UnityEngine;
 using System;
+using System.Net;
+using UnityEngine;
 
 /// <summary>
 /// 공통 enum(효과 타입, 캐릭터, 스킬 타입, 버프) 
@@ -9,17 +10,29 @@ public enum CardEffectType { Damage, Heal, Buff, Debuff, Conditional, Chain }
 public enum CharacterClass { Sophia, Kayla, Leon, Enemy }
 public enum StancType { None, Seek, Insight, Mercy, Discipline, Rush, Defense }
 public enum TargetType { None = 0, Ally = 1, Enemy = 2 }
+public enum IdealRealizationType
+{
+    SophiaVisionary,
+    SophiaAlchemist,
+
+    KaylaSacredFlame,
+    KaylaJudge,
+
+    LeonLionheart,
+    LeonShadowWarrior
+}
 public enum CardType
 {
     Fire = 0,
     Ice = 1,
     Nature = 2,
     Pray = 3,
-    Holy = 4,
+    Taboo = 4,
     baptism = 5,
     Slash = 6,
     Strike = 7,
-    Defense = 8
+    Defense = 8,
+    Ideal = 9
 }
 
 public enum BuffStatType
@@ -27,14 +40,14 @@ public enum BuffStatType
     None,                   // 기본값
 
     Attack,                 // 공격력 증가, 감소
-    Defense,                // 방어력 증가, 감소
+    Defend,                // 방어력 증가, 감소
 
     Burn,                   // 화상 (턴 시작 시 피해)
     Freeze,                 // 빙결 (공격력 % 감소)
     Activate,              // 활성 (속성 상태이상 증폭)
 
     Bless,                  // 축복 (이로운 효과 증폭)
-    Crime,                  // 죄악
+    Sin,                  // 죄악
     Penance,                // 참회
 
     // 레온 - 물리
@@ -48,6 +61,16 @@ public enum BuffStatType
     IronBlood,              //철혈 (레온 이상실현)(피해 전가, 받는 피해 반)
     Exposed,                 //노출 (레온 이상실현)(받피증 2배)
     Undying,                //체력 1 남기기
+
+    // Enemy V2
+    Reflect,
+    Mark,
+    AssaultReady,
+    ShieldTactic,
+    Combo,
+    TargetMark,
+    Formation,
+    Hap
 }
 
 // ===== 카드 키워드 (CSV index 10~18) =====
@@ -72,8 +95,8 @@ public interface IStatusReceiver
 {
     CharacterClass ChClass { get; set; }          //자신의 캐릭터 이름을 가져옴
     DeckModel Deck { get; }                         //캐릭터의 덱을 가져옴
-    float maxHP { get; set; }                            //최대 체력
-    float currentHP { get; set; }                        //현재 체력
+    int maxHP { get; set; }                            //최대 체력
+    int currentHP { get; set; }                        //현재 체력
     void UpdateHpStatus();                        //체력 상태 업데이트 (currentHp, maxHp 변수에 실제 데이터값 받아오기)
     void ApplyStatusEffect(StatusEffect effect);     // 버프, 디버프 적용
     float ModifyStat(BuffStatType statType, float baseValue); // 버프 기반 수치 계산
@@ -87,8 +110,8 @@ public interface IStatusReceiver
     bool hasResist { get; set; }         //상태이상 디버프 저항 여부
     bool HasEffect(BuffStatType type);   //해당 버프/디버프 있는지 확인
     float GetEffectValue(BuffStatType type); //해당 버프/디버프 얼마나 있는지 확인
-
-
+    bool IsDeathPending { get; }
+    void TryFinalizeDeath();
 
     void ChangeStance(StancType stance);
 
@@ -96,7 +119,9 @@ public interface IStatusReceiver
     void PlayAttackAnimation(int input, Action onHitTiming = null);
     void PlayHitAnimation();
     void CameraActionPlay();                   //행동시 카메라의 줌인 액션 연출.
+    float ApplyScarAttackBonus(float baseDamage);
 
+    void ClearScarBurst();
 
     Transform CachedTransform { get; }
     DmgBarDisplay dmgBar { get; }
@@ -104,6 +129,15 @@ public interface IStatusReceiver
     bool IsTargetable { get; set; }                     // 타겟 가능 여부
     event Action OnTargetableChanged;       // 타겟 가능 여부 변경 이벤트
     public DmgBarQueueHandler dmgTextQueue { get; }
+
+    public Transform FootPoint { get; }
+    public Transform BodyPoint { get; }
+    public Transform HeadPoint { get; }
+    public Transform OverheadPoint { get; }
+    public Transform AheadPoint { get; }
+    public Transform AheadmidPoint { get; }
+
+
 }
 
 public static class StatusReceiverExtentions

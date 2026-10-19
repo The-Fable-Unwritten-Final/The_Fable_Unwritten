@@ -14,11 +14,11 @@ public class IdealRealizationEffect : CardEffectBase
             if (target is not PlayerController pc)
                 continue;
 
-            if (!IdealRealizationManager.Instance.TryUseIdeal(pc))
+            /*if (!IdealRealizationManager.Instance.TryUseIdeal(pc))
             {
                 Debug.Log($"[IdealRealizationEffect] {pc.playerData.CharacterName} 은(는) 발동 가능한 이상실현이 없음");
                 continue;
-            }
+            }*/
 
             switch (pc.playerData.currentStance)
             {

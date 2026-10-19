@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CardEffects/Conditions/PotentialCondition")]
+[CreateAssetMenu(menuName = "Cards/Conditions/PotentialCondition")]
 public class PotentialCondition : TriggerCondition
 {
     public int potentialGauge;

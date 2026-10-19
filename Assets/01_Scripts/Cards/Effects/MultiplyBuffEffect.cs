@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CardEffects/MultiplyBuffEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/MultiplyBuffEffect")]
 public class MultiplyBuffEffect : CardEffectBase
 {
     public int value = 2;

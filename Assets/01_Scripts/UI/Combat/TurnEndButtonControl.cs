@@ -56,6 +56,15 @@ public class TurnEndButtonControl : MonoBehaviour
                 button.interactable = true;
         });
     }
+    public void OnBattleEnd()
+    {
+        // 버튼을 Dotween을 사용해 현재 위치에서 PosX 좌표 400 으로 이동
+        ((RectTransform)transform).DOAnchorPosX(hiddenPosition.x, 0.8f).SetEase(Ease.InOutSine).OnStart(() =>
+        {
+            if (button != null)
+                button.interactable = false;
+        });
+    }
     public void TurnOffText()
     {
         if (turnEndButtonText != null)

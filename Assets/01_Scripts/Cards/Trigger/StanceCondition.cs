@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static StancValue;
+[CreateAssetMenu(menuName = "Cards/Conditions/StanceCondition")]
 
 public class StanceCondition : TriggerCondition
 {

@@ -19,17 +19,23 @@ public static class CardModelFactory
         card.targetCount = data.target_num;
         card.targetType = (TargetType)data.target_type;
         card.note = data.note;
+        card.keywords = data.keywords != null
+            ? new List<string>(data.keywords)
+            : new List<string>(); card.switchType = data.switchType;
+        card.evolveCount = data.evolveCount;
+        card.evolveTarget = data.evolveTarget;
+
         card.FlavorText = LocaleDataManager.GetLocalizedCard(data.flavortext);
 
         // 리소스에서 Sprite 할당
-        card.illustration = LoadSprite($"Cards/Illustration/{data.illustration}");
-        card.chClass = LoadSprite($"Cards/Class/class_{data.@class}");
+        card.illustration = LoadSprite($"Cards/Illustration/illust_{data.index}"); card.chClass = LoadSprite($"Cards/Class/class_{data.@class}");
         card.cardType = LoadSprite($"Cards/Type", $"type_{data.type}");
         card.cardImage = data.cardframe;
         card.cardFrame = LoadSprite($"Cards/Frame/{data.cardframe}");
-        card.effects = effects;
-
-        card.skillEffectName = data.skilleffect;
+        card.effects = effects != null ? new List<CardEffectBase>(effects) : new List<CardEffectBase>();
+        card.skillEffectName = ParseSkillEffects(data.skilleffect);
+        card.soundIndexes = data.soundIndexes != null ? new List<int>(data.soundIndexes) : new List<int>();
+        card.soundDelays = data.soundDelays != null ? new List<float>(data.soundDelays) : new List<float>();
         return card;
     }
 
@@ -59,5 +65,24 @@ public static class CardModelFactory
             spriteCache[cacheKey] = sprite;
             
         return sprite;
+    }
+
+    private static List<string> ParseSkillEffects(string skillEffect)
+    {
+        if (string.IsNullOrWhiteSpace(skillEffect))
+            return new List<string>();
+
+        string[] split = skillEffect.Split(',');
+        List<string> result = new List<string>();
+
+        foreach (var effectName in split)
+        {
+            string trimmed = effectName.Trim();
+
+            if (!string.IsNullOrEmpty(trimmed))
+                result.Add(trimmed);
+        }
+
+        return result;
     }
 }

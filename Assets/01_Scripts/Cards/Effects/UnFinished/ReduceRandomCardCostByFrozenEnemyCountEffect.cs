@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Card Effects/ReduceRandomCardCostByFrozenEnemyCountEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/ReduceRandomCardCostByFrozenEnemyCountEffect")]
 public class ReduceRandomCardCostByFrozenEnemyCountEffect : CardEffectBase
 {
     public int amountPerEnemy = 1;

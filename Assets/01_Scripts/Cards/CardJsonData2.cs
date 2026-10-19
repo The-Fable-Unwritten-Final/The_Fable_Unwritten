@@ -32,7 +32,7 @@ public class CardEffect2
     public string type;
     public int value;
     public int duration;
-    public int target;
+    public int target = -1;
     public string owner;
     public EffectCondition2 condition;
     public ResultEffect2 result;
@@ -51,6 +51,6 @@ public class ResultEffect2
     public string type;
     public int value;
     public int duration;
-    public int target;
+    public int target = -1;
 }
 

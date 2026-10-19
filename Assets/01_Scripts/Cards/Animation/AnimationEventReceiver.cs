@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 public class AnimationEventReceiver : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class AnimationEventReceiver : MonoBehaviour
     public void OnAttackHitEvent()
     {
         if (playerController != null)
+        {
             playerController.OnAttackHitEvent();
+        }
     }
 }

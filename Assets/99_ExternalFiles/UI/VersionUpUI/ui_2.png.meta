@@ -139,8 +139,8 @@ TextureImporter:
       name: ui_2_0
       rect:
         serializedVersion: 2
-        x: 86
-        y: 727
+        x: 16
+        y: 851
         width: 447
         height: 141
       alignment: 0
@@ -160,8 +160,8 @@ TextureImporter:
       name: ui_2_1
       rect:
         serializedVersion: 2
-        x: 669
-        y: 690
+        x: 566
+        y: 876
         width: 807
         height: 136
       alignment: 0
@@ -181,8 +181,8 @@ TextureImporter:
       name: ui_2_2
       rect:
         serializedVersion: 2
-        x: 95
-        y: 608
+        x: 25
+        y: 732
         width: 82
         height: 81
       alignment: 0
@@ -202,8 +202,8 @@ TextureImporter:
       name: ui_2_3
       rect:
         serializedVersion: 2
-        x: 213
-        y: 617
+        x: 143
+        y: 741
         width: 55
         height: 60
       alignment: 0
@@ -223,8 +223,8 @@ TextureImporter:
       name: ui_2_4
       rect:
         serializedVersion: 2
-        x: 321
-        y: 611
+        x: 251
+        y: 735
         width: 80
         height: 67
       alignment: 0
@@ -244,8 +244,8 @@ TextureImporter:
       name: ui_2_5
       rect:
         serializedVersion: 2
-        x: 668
-        y: 540
+        x: 565
+        y: 726
         width: 807
         height: 136
       alignment: 0
@@ -265,10 +265,10 @@ TextureImporter:
       name: ui_2_6
       rect:
         serializedVersion: 2
-        x: 113
-        y: 504
-        width: 73
-        height: 74
+        x: 43
+        y: 629
+        width: 74
+        height: 73
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -286,9 +286,9 @@ TextureImporter:
       name: ui_2_8
       rect:
         serializedVersion: 2
-        x: 252
-        y: 516
-        width: 86
+        x: 208
+        y: 640
+        width: 60
         height: 58
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -307,8 +307,8 @@ TextureImporter:
       name: ui_2_9
       rect:
         serializedVersion: 2
-        x: 418
-        y: 474
+        x: 348
+        y: 598
         width: 185
         height: 135
       alignment: 0
@@ -328,8 +328,8 @@ TextureImporter:
       name: ui_2_10
       rect:
         serializedVersion: 2
-        x: 669
-        y: 388
+        x: 566
+        y: 574
         width: 807
         height: 136
       alignment: 0
@@ -349,8 +349,8 @@ TextureImporter:
       name: ui_2_11
       rect:
         serializedVersion: 2
-        x: 668
-        y: 238
+        x: 565
+        y: 424
         width: 807
         height: 136
       alignment: 0
@@ -370,8 +370,8 @@ TextureImporter:
       name: ui_2_12
       rect:
         serializedVersion: 2
-        x: 668
-        y: 89
+        x: 565
+        y: 275
         width: 807
         height: 135
       alignment: 0
@@ -383,6 +383,48 @@ TextureImporter:
       bones: []
       spriteID: 78e1f9a79252f6d4ab349cc0b51dfd7f
       internalID: 196068331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_2_7
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 643
+        width: 22
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51d552a0f880cf140a9e9807f8c7958a
+      internalID: 981219474
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_2_13
+      rect:
+        serializedVersion: 2
+        x: 563
+        y: 133
+        width: 809
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7360e0e4d98274d4aab7f1f38ae252c1
+      internalID: 20467276
       vertices: []
       indices: 
       edges: []
@@ -403,6 +445,7 @@ TextureImporter:
       ui_2_10: -1650145410
       ui_2_11: -823501048
       ui_2_12: 196068331
+      ui_2_13: 20467276
       ui_2_2: 1763295851
       ui_2_3: -240280331
       ui_2_4: -458269301

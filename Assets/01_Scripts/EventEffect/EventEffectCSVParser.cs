@@ -43,7 +43,8 @@ public class EventEffectCSVParser : MonoBehaviour
                     healModi = ParseInt(tokens, 18),
                     buffStatType = ParseInt(tokens, 19),
                     buffStatValue = ParseInt(tokens, 20),
-                    buffStatDuration = ParseInt(tokens, 21)
+                    buffStatDuration = ParseInt(tokens, 21),
+                    inkAmount = ParseInt(tokens, 22)
                 };
 
                 list.Add(data);

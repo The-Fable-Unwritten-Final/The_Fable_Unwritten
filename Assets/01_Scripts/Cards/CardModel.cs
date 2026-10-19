@@ -1,6 +1,7 @@
 using DG.Tweening.Core.Easing;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
@@ -44,7 +45,7 @@ public class CardModel : ScriptableObject
     public List<CardEffectBase> effects = new();    //어떤 효과를 가졌는지
 
     [Header("Skill Effect")]
-    public string skillEffectName;   // 스킬 이펙트 이름
+    public List<string> skillEffectName = new();   // 스킬 이펙트 이름
 
     public bool isUnlocked = true;              //카드가 해금 되었는지
 
@@ -57,9 +58,12 @@ public class CardModel : ScriptableObject
     public int evolveCount;
     public int evolveTarget;
 
+    public List<int> soundIndexes;
+    public List<float> soundDelays;
+
     private void OnEnable()
     {
-        isMaintain = true;
+        isMaintain = false;
         isOneUse = false;
     }
 
@@ -85,74 +89,127 @@ public class CardModel : ScriptableObject
 
         GameManager.Instance.StartCoroutine(PlayWithAnimation(caster, targets, originalEnhanced, attackType));
     }
+
     private IEnumerator PlayWithAnimation(IStatusReceiver caster, List<IStatusReceiver> targets, bool fixedIsEnhanced, int attackType)
     {
+        // 필수 매니저들 null 체크
+        if (GameManager.Instance == null || GameManager.Instance.turnController == null)
+        {
+            Debug.LogError("[CardModel] GameManager 또는 TurnController가 null입니다");
+            yield break;
+        }
+
         GameManager.Instance.turnController.Onaction();
 
         // 카메라 연출
         float totalDuration = 2f;
-        GameManager.Instance.combatCameraController.PlayCombatCamera(caster, targets, totalDuration);
+        if (GameManager.Instance.combatCameraController != null)
+        {
+            GameManager.Instance.combatCameraController.PlayCombatCamera(caster, targets, totalDuration);
+        }
         
         List<IStatusReceiver> allCharacters = new List<IStatusReceiver>();
-        allCharacters.AddRange(GameManager.Instance.turnController.battleFlow.playerParty);
-        allCharacters.AddRange(GameManager.Instance.turnController.battleFlow.enemyParty);
-
-        foreach (var ch in allCharacters)
+        if (GameManager.Instance.turnController.battleFlow != null)
         {
-            if (ch is PlayerController pc && !targets.Contains(pc) && pc != caster)
-                pc.HideStatusUI();
+            allCharacters.AddRange(GameManager.Instance.turnController.battleFlow.playerParty);
+            allCharacters.AddRange(GameManager.Instance.turnController.battleFlow.enemyParty);
+        }
+
+        if (allCharacters != null && allCharacters.Count > 0)
+        {
+            foreach (var ch in allCharacters)
+            {
+                if (ch is PlayerController pc && !targets.Contains(pc) && pc != caster)
+                    pc.HideStatusUI();
+            }
         }
 
         yield return new WaitForSeconds(0.2f);
 
         bool hitTriggered = false;
 
-        caster.PlayAttackAnimation(attackType, () =>
+        var cast = caster.AsPlayer();
+        if (cast == null)
         {
+            Debug.LogError("[CardModel] Caster를 PlayerController로 변환할 수 없습니다");
+            yield break;
+        }
+        Debug.Log($"[CardAnim] PlayAttackAnimation 시작 / Card={index} / Type={type}");
+
+        cast.PlayAttackAnimation(attackType, type,() =>
+        {
+            Debug.Log($"[CardAnim] Hit Callback 도착 / Card={index}");
+
             if (hitTriggered) return;
             hitTriggered = true;
 
-            if (!string.IsNullOrEmpty(skillEffectName) && targets.Count > 0)
+            PlayCardSounds();
+
+            // GameManager 또는 필수 컴포넌트가 null인 경우 안전하게 처리
+            if (GameManager.Instance == null || GameManager.Instance.turnController?.battleFlow?.effectManage == null)
+            {
+                Debug.LogWarning("[CardModel] 게임 매니저 컴포넌트가 없어서 이펙트를 재생할 수 없습니다");
+                return;
+            }
+
+            if (skillEffectName != null && skillEffectName.Count > 0 && targets.Count > 0)
             {
                 foreach (var t in targets)
                 {
-                    float scaleFactor = DetermineEffectScale(GetEffectiveCost());
+                    if (t == null) continue;
 
-                    if (!DataManager.Instance.CardEffects.TryGetValue(skillEffectName, out var animInfo))
-                        continue;
+                    bool hasProjectile = false;
 
-                    if (animInfo.animationType == AnimationType.Projectile)
+                    foreach (var effectName in skillEffectName)
                     {
-                        GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
-                            skillEffectName,
-                            caster.CachedTransform,
-                            t.CachedTransform,
-                            scaleFactor,
-                            () =>
+                        if (string.IsNullOrEmpty(effectName))
+                            continue;
+
+                        Debug.Log($"[EffectCheck] Card={index} / Name={cardName} / SkillEffect={effectName} / Exists={DataManager.Instance.CardEffects.ContainsKey(effectName)}");
+
+                        if (DataManager.Instance.CardEffects.TryGetValue(effectName, out var animInfo))
+                        {
+                            if (animInfo.animationType == AnimationType.Projectile)
                             {
-                                if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
-                                    t.PlayHitAnimation();
+                                hasProjectile = true;
 
-                                foreach (var effect in effects)
-                                    effect.Apply(caster, new List<IStatusReceiver> { t }, fixedIsEnhanced);
+                                GameManager.Instance.turnController.battleFlow.effectManage.PlayProjectileEffect(
+                                    effectName,
+                                    caster,
+                                    t,
+                                    1,
+                                    () =>
+                                    {
+                                        if (t != null && effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
+                                            t.PlayHitAnimation();
+
+                                        ApplyEffectsToTarget(caster, t, targets, fixedIsEnhanced);
+                                    }
+                                );
                             }
-                        );
+                            else
+                            {
+                                GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(
+                                    effectName,
+                                    caster,
+                                    t,
+                                    false,
+                                    1
+                                );
+                            }
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"[CardAnim] 스킬 이펙트 없음: 카드={cardName}, effect={effectName}");
+                        }
                     }
-                    else
-                    {
-                        GameManager.Instance.turnController.battleFlow.effectManage.PlayEffect(
-                            skillEffectName,
-                            caster.CachedTransform,
-                            t.CachedTransform,
-                            false,
-                            scaleFactor
-                        );
 
+                    if (!hasProjectile)
+                    {
                         if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
                             t.PlayHitAnimation();
 
-                        foreach (var effect in effects)
-                            effect.Apply(caster, new List<IStatusReceiver> { t }, fixedIsEnhanced);
+                        ApplyEffectsToTarget(caster, t, targets, fixedIsEnhanced);
                     }
                 }
             }
@@ -160,39 +217,54 @@ public class CardModel : ScriptableObject
             {
                 foreach (var t in targets)
                 {
+                    if (t == null) continue;
+
                     if (effects.Exists(e => e.isTriggerHitAnim) && t.IsAlive())
                         t.PlayHitAnimation();
 
-                    foreach (var effect in effects)
-                        effect.Apply(caster, new List<IStatusReceiver> { t }, fixedIsEnhanced);
+                    ApplyEffectsToTarget(caster, t, targets, fixedIsEnhanced);
                 }
             }
         });
 
-        SoundManager.Instance.PlaySFX(SoundCategory.Card, (int)type);
+       // SoundManager.Instance.PlaySFX(SoundCategory.Card, (int)type);
 
         yield return new WaitUntil(() => hitTriggered);
         yield return new WaitForSeconds(0.9f);
 
-        foreach (var target in targets)
+        ApplySwitchType(caster);
+
+        if (GameManager.Instance != null && GameManager.Instance.combatUIController != null)
         {
-            if (!target.IsAlive() && target is MonoBehaviour mb && mb.gameObject.activeSelf)
+            GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
+        }
+
+        if (GameManager.Instance != null && GameManager.Instance.turnController != null)
+        {
+            GameManager.Instance.turnController.OffAction();
+            if (GameManager.Instance.turnController.battleFlow != null)
             {
-                mb.gameObject.SetActive(false);
+                GameManager.Instance.turnController.battleFlow.CheckBattleEnd();
             }
         }
 
-        GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();
-
-        GameManager.Instance.turnController.OffAction();
-        GameManager.Instance.turnController.battleFlow.CheckBattleEnd();
-
         yield return new WaitForSeconds(0.7f);
 
-        foreach (var ch in allCharacters)
+        if (allCharacters != null && allCharacters.Count > 0)
         {
-            if (ch is PlayerController pc && !targets.Contains(pc) && pc != caster)
-                pc.ShowStatusUI();
+            foreach (var ch in allCharacters)
+            {
+                if (ch is PlayerController pc && !targets.Contains(pc) && pc != caster)
+                    pc.ShowStatusUI();
+            }
+
+            foreach(var ch in allCharacters)
+            {
+                if (ch != null)
+                {
+                    ch.TryFinalizeDeath();
+                }
+            }
         }
     }
 
@@ -380,8 +452,8 @@ public class CardModel : ScriptableObject
             case MultiplyBuffEffect multiplyBuffEffect:
                 return multiplyBuffEffect.value.ToString();
 
-            case HealByBlessEffect healByBlessEffect:
-                return healByBlessEffect.value.ToString();
+            case HealByPenanceEffect healByPenanceEffect:
+                return healByPenanceEffect.value.ToString();
 
             case NoBlessConsumeEffect noBlessConsumeEffect:
                 return noBlessConsumeEffect.value.ToString();
@@ -417,7 +489,7 @@ public class CardModel : ScriptableObject
         clone.effects = new List<CardEffectBase>(effects);
 
         clone.isEnhanced = false;
-        clone.isMaintain = true;
+        clone.isMaintain = false;
         clone.isOneUse = false;
 
         clone.temporaryCostModifier = 0;
@@ -427,7 +499,7 @@ public class CardModel : ScriptableObject
         return clone;
     }
 
-    public void InitializeRuntimeState(bool oneUse = false, bool maintain = true, bool enhanced = false)
+    public void InitializeRuntimeState(bool oneUse = false, bool maintain = false, bool enhanced = false)
     {
         isOneUse = oneUse;
         isMaintain = maintain;
@@ -467,5 +539,163 @@ public class CardModel : ScriptableObject
     public void SetMaintain(bool value)
     {
         isMaintain = value;
+    }
+
+    private void ApplyEffectsToTarget(IStatusReceiver caster, IStatusReceiver target, List<IStatusReceiver> allTargets, bool fixedIsEnhanced)
+    {
+        List<IStatusReceiver> currentTargets = new List<IStatusReceiver> { target };
+        // 기본 1회 + RepeatEffect가 지정한 총 적용 횟수
+        int totalApplyCount = GetRepeatCount(caster, currentTargets);
+        bool reversedTaboo = IsReversedTaboo(allTargets);
+
+        for (int repeat = 0; repeat < totalApplyCount; repeat++)
+        {
+            foreach (var effect in effects)
+            {
+                if (effect is DamageEffect damageEffect)
+                {
+                    float multiplier = GetDamageMultiplier(caster, currentTargets);
+                    damageEffect.ApplyWithMultiplier(caster,currentTargets,multiplier,fixedIsEnhanced, reversedTaboo);
+
+                    continue;
+                }
+
+                if (effect is ApplyStatusEffect statusEffect &&
+                    statusEffect.target >= 0 &&
+                    statusEffect.target <= 3)
+                {
+                    if (target != allTargets[0])
+                        continue;
+
+                    effect.Apply(caster, allTargets, fixedIsEnhanced);
+                    continue;
+                }
+
+                effect.Apply(caster, currentTargets, fixedIsEnhanced);
+            }
+        }
+    }
+
+    private int GetRepeatCount(
+    IStatusReceiver caster,
+    List<IStatusReceiver> targets)
+    {
+        int totalApplyCount = 1;
+
+        foreach (var effect in effects)
+        {
+            // 무조건 Repeat
+            if (effect is RepeatEffect repeatEffect)
+            {
+                totalApplyCount = Mathf.Max(
+                    totalApplyCount,
+                    repeatEffect.repeatCount
+                );
+
+                continue;
+            }
+
+            // Conditional → Repeat
+            if (effect is ConditionalEffect conditional &&
+                conditional.effectIfTrue is RepeatEffect conditionalRepeat)
+            {
+                if (conditional.condition != null &&
+                    conditional.condition.IsConditionMet(caster, targets))
+                {
+                    totalApplyCount = Mathf.Max(
+                        totalApplyCount,
+                        conditionalRepeat.repeatCount
+                    );
+                }
+            }
+        }
+
+        return totalApplyCount;
+    }
+
+    private void PlayCardSounds()
+    {
+        if (soundIndexes == null || soundIndexes.Count == 0)
+        {
+            Debug.Log($"[CardSFX] Card {index} - 사운드 데이터 없음");
+            return;
+        }
+
+        Debug.Log($"[CardSFX] Card {index} - " + $"SoundCount: {soundIndexes.Count}, " + $"DelayCount: {(soundDelays != null ? soundDelays.Count : 0)}");
+
+        for (int i = 0; i < soundIndexes.Count; i++)
+        {
+            float delay = 0f;
+
+            if (soundDelays != null && i < soundDelays.Count)
+                delay = soundDelays[i];
+
+            Debug.Log($"[CardSFX] Card {index} - " + $"[{i}] SoundIndex: {soundIndexes[i]}, Delay: {delay:F2}s");
+
+            SoundManager.Instance.PlaySFX(
+                SoundCategory.Card,
+                soundIndexes[i],
+                delay
+            );
+        }
+    }
+
+    private float GetDamageMultiplier(IStatusReceiver caster, List<IStatusReceiver> targets)
+    {
+        float multiplier = 1f;
+
+        foreach (var effect in effects)
+        {
+            if (effect is DamagePercentEffect damagePercent)
+            {
+                multiplier += damagePercent.percent / 100f;
+                Debug.Log($"[DamagePercent] 일반 증가: {damagePercent.percent}% / 최종 배율={multiplier}");
+            }
+            else if (effect is ConditionalEffect conditional && conditional.effectIfTrue is DamagePercentEffect conditionalDamagePercent)
+            {
+                bool conditionMet = conditional.condition != null && conditional.condition.IsConditionMet(caster, targets);
+
+                Debug.Log($"[DamagePercent] 조건부 발견 / " + $"조건={conditional.condition?.GetType().Name} / " +$"결과={conditionMet} / " + $"증가량={conditionalDamagePercent.percent}%");
+                if (conditionMet)
+                {
+                    multiplier += conditionalDamagePercent.percent / 100f;
+                }
+            }
+        }
+        Debug.Log($"[DamagePercent] 최종 배율 = {multiplier}");
+
+        return multiplier;
+    }
+
+    private void ApplySwitchType(IStatusReceiver caster)
+    {
+        if (caster == null || string.IsNullOrEmpty(switchType))
+            return;
+
+        if (!System.Enum.TryParse<StancType>(
+                switchType,
+                true,
+                out var targetStance))
+        {
+            Debug.LogWarning(
+                $"[Card SwitchType] 변환 실패 / Card={index} / switchType={switchType}"
+            );
+            return;
+        }
+
+        caster.ChangeStance(targetStance);
+    }
+
+    private bool IsReversedTaboo(List<IStatusReceiver> targets)
+    {
+        if (characterClass != CharacterClass.Kayla || type != CardType.Taboo)
+            return false;
+
+        var battleFlow = GameManager.Instance.turnController.battleFlow;
+
+        if (!battleFlow.HasLucielAgape())
+            return false;
+
+        return targets.Any(x => x != null && x.ChClass != CharacterClass.Enemy);
     }
 }

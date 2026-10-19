@@ -9,8 +9,6 @@ public class BookCards : MonoBehaviour
     [SerializeField] Sprite emptySprite;
     [SerializeField] Image cardBack; // 카드 뒷면
     [SerializeField] Image cardIllust;
-    [SerializeField] Image cardType;
-    [SerializeField] Image cardChar;
     [SerializeField] TextMeshProUGUI cardCost;
     public TextMeshProUGUI cardNameText;
     public TextMeshProUGUI cardDesc;
@@ -25,8 +23,6 @@ public class BookCards : MonoBehaviour
         {
             cardBack.gameObject.SetActive(true);
             cardIllust.sprite = emptySprite;
-            cardType.sprite = emptySprite;
-            cardChar.sprite = emptySprite;
 
             cardCost.text = string.Empty;
             cardNameText.text = string.Empty;
@@ -37,12 +33,10 @@ public class BookCards : MonoBehaviour
         }
         cardBack.gameObject.SetActive(false); // 카드 뒷면 비활성화
         cardIllust.sprite = c.illustration;
-        cardType.sprite = c.cardType;
-        cardChar.sprite = c.chClass;
 
         cardCost.text = c.manaCost.ToString();
         cardNameText.text = c.cardName;
-        cardDesc.text = c.cardText;
+        cardDesc.text = c.GetFormattedCardText(null);
         flavorText = c.FlavorText;
         isEmpty = false;
         cardIndex = c.index; // 카드 인덱스 저장
@@ -51,8 +45,6 @@ public class BookCards : MonoBehaviour
     public void GiveCardInfo(BookCards card) // card 로 들어오는 참조값에 현재의 값 넣어주기.
     {
         card.cardIllust.sprite = cardIllust.sprite;
-        card.cardType.sprite = cardType.sprite;
-        card.cardChar.sprite = cardChar.sprite;
         card.cardCost.text = cardCost.text;
         card.cardNameText.text = cardNameText.text;
         card.cardDesc.text = cardDesc.text;

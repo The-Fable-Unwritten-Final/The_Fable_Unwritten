@@ -19,7 +19,7 @@ public class EncounterEventEffects : EventEffects
             if (foundIndex >= 0)
             {
                 ProgressDataManager.Instance.SavedEnemySetIndex = foundIndex;
-                ProgressDataManager.Instance.CurrentBattleNode.type = NodeType.NormalBattle;
+                ProgressDataManager.Instance.CurrentNode.type = NodeType.NormalBattle;
                 break;
             }
         }

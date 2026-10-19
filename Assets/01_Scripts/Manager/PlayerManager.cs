@@ -59,8 +59,10 @@ public class PlayerManager : MonoSingleton<PlayerManager>
         if (newPlayerData.currentDeckIndexes == null || newPlayerData.currentDeckIndexes.Count == 0)
         {
             newPlayerData.currentDeckIndexes = new List<int>(newPlayerData.defaultDeckIndexes);
-            newPlayerData.LoadDeckFromIndexes(cardPool);
         }
+
+        // currentDeck을 항상 재구성 (저장된 인덱스 기반으로)
+        newPlayerData.LoadDeckFromIndexes(cardPool);
 
         playerDataMap[character] = newPlayerData;
         activePlayers[character] = newPlayerData;

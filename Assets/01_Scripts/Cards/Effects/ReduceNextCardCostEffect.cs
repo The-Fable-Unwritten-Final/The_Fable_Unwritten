@@ -10,11 +10,20 @@ public class ReduceNextCardCostEffect : CardEffectBase
     public int amount;
     public bool onlyOneCard = true;
     public int? target;  //0 : sophia, 1 : kalya, 2 : leon, 3 : target, 4 : drawCard
+    public bool allParty;
 
     public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
         var flow = GameManager.Instance?.turnController.battleFlow;
         if (flow == null) return;
+        
+        if (allParty)
+        {
+            foreach (var player in flow.playerParty)
+                player.Deck.ApplyTemporaryDiscountToAllCards(amount);
+
+            return;
+        }
 
         List<IStatusReceiver> filteredTargets = new();
 

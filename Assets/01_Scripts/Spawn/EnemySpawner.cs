@@ -20,7 +20,7 @@ public class EnemySpawner : MonoBehaviour
     {
         stageIndex = ProgressDataManager.Instance.StageIndex;
         var theme = ProgressDataManager.Instance.CurrentTheme;
-        var node = ProgressDataManager.Instance.CurrentBattleNode;
+        var node = ProgressDataManager.Instance.CurrentNode;
 
         stageSpawnDatas = DataManager.Instance.GetEnemySpawnData(theme, node.type);      
 
@@ -43,7 +43,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void FixedStage1Setting(EnemyStageSpawnData stageData)
     {
-        var currentNode = ProgressDataManager.Instance.CurrentBattleNode;
+        var currentNode = ProgressDataManager.Instance.CurrentNode;
         if (currentNode == null) return;
 
         int columnIndex = currentNode.columnIndex;
@@ -105,6 +105,9 @@ public class EnemySpawner : MonoBehaviour
                 {
                     var copydata = ScriptableObject.Instantiate(origndata);
                     copydata.SkillList = origndata.SkillList.Select(skill => skill.Clone()).ToList();
+
+                    copydata.ApplyStageScale(stageIndex);
+
                     //copydata.UpgradeEnemybyStage(stageIndex);     //스테이지에 따라 HP 성장 계수 추가
 
                     enemy.SetData(copydata);
@@ -133,5 +136,54 @@ public class EnemySpawner : MonoBehaviour
                // Debug.Log($"[EnemyParty] Index {i}: null");
             }
         }
+    }
+
+    public Enemy SpawnEnemyToEmptySlot(int enemyId)
+    {
+        var enemyParty = GameManager.Instance.turnController.battleFlow.enemyParty;
+        var enemyDataContainer = DataManager.Instance.enemyDataContainer;
+
+        var originalData = enemyDataContainer.GetData(enemyId);
+        if (originalData == null)
+        {
+            Debug.LogWarning($"[EnemySpawner] EnemyData 없음. ID: {enemyId}");
+            return null;
+        }
+
+        for (int i = 0; i < enemySlots.Length; i++)
+        {
+            // 현재 전투 파티 기준으로 빈 슬롯인지 확인
+            if (enemyParty[i] != null && enemyParty[i].IsAlive())
+                continue;
+
+            var slot = enemySlots[i];
+            var enemy = slot.GetComponent<Enemy>();
+
+            if (enemy == null)
+                continue;
+
+            var copyData = ScriptableObject.Instantiate(originalData);
+            copyData.SkillList = originalData.SkillList.Select(skill => skill.Clone()).ToList();
+
+            copyData.ApplyStageScale(stageIndex);
+
+            enemy.SetData(copyData);
+
+            slot.gameObject.SetActive(true);
+
+            enemyParty[i] = enemy;
+
+            // 전투 도중 생성이므로 전투 시작 초기화도 직접 호출
+            enemy.OnBattleStart();
+
+            Debug.Log(
+                $"[EnemySpawner] {copyData.EnemyName} 소환 / Slot {i}"
+            );
+
+            return enemy;
+        }
+
+        Debug.LogWarning("[EnemySpawner] 빈 적 슬롯이 없습니다.");
+        return null;
     }
 }

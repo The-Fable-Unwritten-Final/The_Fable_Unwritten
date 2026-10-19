@@ -1,0 +1,76 @@
+﻿Key,en,ja,ko
+Type_Name_1,Burn,火傷,화상
+Type_Name_2,Freeze ,凍結,빙결
+Type_Name_3,Active,活性,활성
+Type_Name_4,Bless,祝福,축복
+Type_Name_5,Sin,罪,죄악
+Type_Name_6,Penance,懺悔,참회
+Type_Name_7,Scar,傷,상처
+Type_Name_8,Stun,スタン,기절
+Type_Name_9,Guard,守護,수호
+Type_Text_1,"At the start of your turn, take {0}damage, then reduce the Burn value by 1",ターン開始時、{0}のダメージを受け、発動後に数値が1減少する,"턴 시작 시 {0}만큼 피해를 입고, 발동 후 화상 수치 1감소"
+Type_Text_2,Attack damage is reduced by {0}. Frozen is removed at the end of the turn,攻撃ダメージが{0}減少し、ターン終了時に凍結が解除される,공격 피해가 {0}만큼 감소하며 턴 종료 시 빙결 제거
+Type_Text_3,"Reduce the cost of the next card by 1 for every 10 Active
+Consume 10 Active per 1 cost reduced","活性 10ごとに、次のカードのコスト 1減少
+コストを1減少させるごとに、活性 10を1消費する","활성 10당 다음에 사용하는 카드의 비용이 1 감소
+감소한 비용 1당 활성 10을 소모"
+Type_Text_4,"Increase the value of the next buff effect by {0}
+Then remove Bless","次に受けるバフの数値を{0}増加
+その後、祝福を解除","다음에 받는 이로운 효과의 수치가 {0}만큼 증가,
+이후 축복 제거"
+Type_Text_5,"At the end of the turn, take {0} damage based on Sin
+Then remove all Sin","ターン終了時、罪悪値{0}分のダメージを受け
+その後、罪悪値をすべて解除する","턴 종료 시 죄악 수치 {0}만큼 피해를 입는다
+이후 죄악 수치 제거"
+Type_Text_6,"Reduces harmful effects received by {0} based on the Penance value,
+then removes all Penance","受ける有害な効果を懺悔値{0}分減少させ、
+その後、懺悔値をすべて解除する","받는 해로운 효과를  참회 수치 {0}만큼 감소시키며,
+참회 수치 제거"
+Type_Text_7,"At 50 or more Scar, remove all Scar when attacked and
+gets an additional 10 damage each time attacked this turn","傷が 50以上の時 攻撃を受けると、傷がすべて解除され、
+そのターン中、攻撃を受けるたびに追加で 10ダメージを受ける","상처가 50이상일 때, 공격받으면 상처가 전부 제거되고,
+해당 턴 동안 공격당할 때마다 추가 피해 10을 받습니다."
+Type_Text_8,{0}% chance to become unable to act for 1 turn,{0}%の確率で1ターン行動不能になる,{0}% 확률로 1턴 동안 행동할 수 없게 된다
+Type_Text_9,"Taunt enemies, reducing damage taken by {0},
+then remove Guard.","敵の攻撃を自身に誘導し、
+受けるダメージを{0}減少させた後、守護が解除される。","적의 공격을 자신에게 유도하고,
+수호 수치인 {0}만큼 받는 피해를 감소시킨 후 수호가 제거됩니다."
+Keyword_Name_1,Exhaust,消滅,소멸
+Keyword_Name_2,Retain,保持,보존
+Keyword_Name_3,Vanish,消散,증발
+Keyword_Name_4,Copy,複製,복사
+Keyword_Name_5,Engage,開戦,개전
+Keyword_Name_6,Fatal,決定打,결정타
+Keyword_Name_7,Growth,成長,성장
+Keyword_Name_8,Strike,強打,강타
+Keyword_Name_9,Switch,転換,전환
+Keyword_Text_1,Removed from the deck until the end of the battle when used,"使用時, この戦闘が終了するまでデッキから除外される",사용 시 이번 전투가 끝날 때까지 덱에서 제외
+Keyword_Text_2,Retained in hand at the end of the turn,ターン終了時に手札に残る,턴 종료 시 패에 유지
+Keyword_Text_3,Removed from the deck until the end of the battle if not used,"未使用の場合, この戦闘が終了するまでデッキから除外される",미사용 시 이번 전투가 끝날 때까지 덱에서 제외
+Keyword_Text_4,Create 1 copy of this card when used,"使用時, 同じカードを1枚生成する",사용 시 동일한 카드 1장 생성
+Keyword_Text_5,Always have it in hand at the start of battle (up to 3),"戦闘開始時, 必ず持った状態で開始する（最大3枚）",전투 시작 시 반드시 패에 소지 (최대 3장)
+Keyword_Text_6,Gain a permanent upgrade until the end of the adventure when an enemy is defeated,"敵を倒すと, 冒険終了まで永続的に強化される",적 처치 시 모험 종료까지 영구 강화
+Keyword_Text_7,Evolve the card after {0} uses,{0}回使用するとカードが進化する,{0}회 사용 시 카드 진화
+Keyword_Text_8,Deal additional damage equal to the Scar value,"傷の数値分, 追加ダメージを与える",상처 수치만큼 추가 피해
+Keyword_Text_9,Change stance to {0},スタンスを {0} に変更する,스탠스를 {0}로 변경
+Stance_Name_1,Explore,探求,탐구
+Stance_Name_2,Insight,洞察,통찰
+Stance_Name_3,Mercy,慈悲,자비
+Stance_Name_4,Discipline,規律,규율
+Stance_Name_5,Charge,突撃,돌진
+Stance_Name_6,Defend,防御,수비
+Stance_Text_1,"Draw 1 card, and for 1 turn that card’s cost becomes 0.","カードを1枚ドローし, 1ターンの間そのカードのコストが0になる","카드 1장을 드로우, 1턴 동안 그 카드의 비용이 0이 된다."
+Stance_Text_2,The effect of the next card used is applied twice.,次に使用するカードの効果が2回適用される。,다음에 사용하는 카드의 효과가 2회 적용
+Stance_Text_3,"Draw 1 card, and increase healing received this turn by 30%","カードを1枚ドローし, このターンの回復量が 30%増加する","카드 1장을 드로우하고, 이번 턴 회복량이 30% 증가"
+Stance_Text_4,"On the next attack, increase allies’ Attack and Defense by the amount of <link=sin><color=purple>Sin</color></link> applied",次の攻撃時付与した <link=sin><color=purple>罪</color></link> の数値分味方の攻撃力と防御力が増加する,다음 공격 시 부여한 <link=sin><color=purple>죄악</color></link> 수치만큼 아군의 공격력과 방어력이 증가
+Stance_Text_5,The next attack deals 100% increased damage,次の攻撃のダメージが 100%増加する,다음 공격의 피해가 100% 증가
+Stance_Text_6,"Maximum HP increases by 20%, and gain 15 Guard","最大体力が 20%増加し, 守護を 15得る","최대 체력이 20% 증가하고, 수호를 15 얻는다"
+Type_Name_10,Taboo,禁忌,금기
+Type_Name_11,ATK Up,攻撃力増加,공격력 증가
+Type_Name_12,DEF Up,防御力増加,방어력 증가
+Type_Name_13,ATK Down,攻撃力減少,공격력 감소
+Type_Name_14,DEF Down,防御力減少,방어력 감소
+Type_Text_11,Increase ATK by the specified amount,攻撃力が数値分増加,해당 수치 만큼 공격력 증가
+Type_Text_12,Increase DEF by the specified amount,防御力が数値分増加,해당 수치 만큼 방어력 증가
+Type_Text_13,Reduce ATK by the specified amount,攻撃力が数値分減少,해당 수치 만큼 공격력 감소
+Type_Text_14,Reduce DEF by the specified amount,防御力が数値分減少,해당 수치 만큼 방어력 감소

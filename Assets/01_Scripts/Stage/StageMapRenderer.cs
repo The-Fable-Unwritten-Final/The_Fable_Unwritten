@@ -40,14 +40,35 @@ public class StageMapRenderer : MonoBehaviour
     /// 스테이지 노드 및 연결선을 UI에 표시 </summary>
     public void Render(StageData stage, Action<GraphNode> onClick)
     {
+        // 데이터 검증
+        if (stage == null || stage.columns == null || stage.columns.Count == 0)
+        {
+            Debug.LogError("[StageMapRenderer.Render] Invalid StageData - columns is null or empty");
+            return;
+        }
+
         nodeUIMap.Clear();
         lineInfos.Clear();
 
-        foreach (var column in stage.columns)
+        try
         {
-            foreach (var node in column)
+            foreach (var column in stage.columns)
             {
-                var go = Instantiate(nodePrefab, nodesContainer);   // 해당 노드 UI 생성
+                if (column == null || column.Count == 0)
+                {
+                    Debug.LogWarning("Column is null or empty, skipping...");
+                    continue;
+                }
+
+                foreach (var node in column)
+                {
+                    if (node == null)
+                    {
+                        Debug.LogWarning("Node is null, skipping...");
+                        continue;
+                    }
+
+                    var go = Instantiate(nodePrefab, nodesContainer);   // 해당 노드 UI 생성
                 var rt = go.GetComponent<RectTransform>();
                 rt.anchoredPosition = node.position;                // 해당 노드 위치 설정
                 nodeUIMap[node] = rt;                               // 해당 노드의 UI 위치 저장 (라인 이어주기 위해)
@@ -62,6 +83,7 @@ public class StageMapRenderer : MonoBehaviour
                 if(node.type == NodeType.Boss)
                 {
                     rt.anchoredPosition = new Vector2(BossNodeXPos, rt.anchoredPosition.y); // 보스 노드 위치 조정
+                    go.GetComponent<Button>().image.color = new Color(42f/255f, 23f/255f, 7f/255f); // 2A1707 색상
                 }
             }
         }
@@ -78,6 +100,19 @@ public class StageMapRenderer : MonoBehaviour
 
             foreach (var next in node.nextNodes)
                 {
+                    // 곡선 제어점 데이터 검증
+                    if (node.curvePointList == null || index >= node.curvePointList.Count)
+                    {
+                        Debug.LogWarning($"CurvePoint missing for node {node.id} nextNode index {index}. Regenerating...");
+                        node.SetRandomCurvePoints();
+                        
+                        if (node.curvePointList == null || index >= node.curvePointList.Count)
+                        {
+                            Debug.LogError($"CurvePoint regeneration failed for node {node.id}");
+                            continue;
+                        }
+                    }
+
                     var fromRT = nodeUIMap[node];
                     var toRT = nodeUIMap[next];
 
@@ -85,7 +120,15 @@ public class StageMapRenderer : MonoBehaviour
                     Vector2 originalToPos = toRT.anchoredPosition;
                     if (next.type == NodeType.Boss)
                     {
-                        toRT.anchoredPosition += Vector2.left * bossIconCenterOffset[bossIconIndex];                                  
+                        // bossIconCenterOffset 배열 크기 검증
+                        if (bossIconCenterOffset != null && bossIconIndex < bossIconCenterOffset.Length)
+                        {
+                            toRT.anchoredPosition += Vector2.left * bossIconCenterOffset[bossIconIndex];
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"bossIconCenterOffset[{bossIconIndex}] out of range");
+                        }
                     }
 
                     GameObject line = LineDrawer.DrawLine(node.curvePointList[index], fromRT, toRT, linesContainer, lineBasicPrefab, 55f, next.type == NodeType.Boss);
@@ -109,6 +152,11 @@ public class StageMapRenderer : MonoBehaviour
                 kvp.Value.SetAsFirstSibling();
                 break;
             }
+        }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[StageMapRenderer.Render] 렌더링 중 예외 발생:\n{ex.Message}\n{ex.StackTrace}");
         }
     }
 
@@ -270,7 +318,7 @@ public class StageMapRenderer : MonoBehaviour
             var stageNode = rt.GetComponent<StageNode>();
 
             // 지나온 노드 버튼 비활성화, 색상 초기화
-            if (visited.Contains(node))
+            if (visited.Contains(node) || node.type == NodeType.Start)
             {
                 btn.interactable = false;
                 btn.enabled = false;
@@ -283,17 +331,25 @@ public class StageMapRenderer : MonoBehaviour
             {
                 btn.enabled = true;
                 btn.interactable = true;
-                btn.image.color = Color.white;
+                // 보스 노드는 색상 변경 안 함 (Render에서 설정한 2A1707 유지)
+                if (node.type != NodeType.Boss)
+                {
+                    btn.image.color = new Color(255f/255f, 187f/255f, 129f/255f);
+                }
                 stageNode.HideClearCircle();
                 stageNode.PlayPulse();
             }
             // 그 외 노드 버튼 비활성화, 색상 흐리게
             else
             {
-                //btn.enabled = false;
+                btn.enabled = true;
                 btn.interactable = false;
                 //btn.image.color = new Color(1, 1, 1, 0.6f); 버튼 노드 불투명도 제거 요청
-                btn.image.color = Color.white;
+                // 보스 노드는 색상 변경 안 함 (Render에서 설정한 2A1707 유지)
+                if (node.type != NodeType.Boss)
+                {
+                    btn.image.color = new Color(255f/255f, 187f/255f, 129f/255f);
+                }
                 stageNode.HideClearCircle();
                 stageNode.StopPulse();
             }
@@ -314,7 +370,7 @@ public class StageMapRenderer : MonoBehaviour
             bool isCompletePath = isVisitedFrom && isVisitedTo;
 
             Color lineColor = line.color;
-            lineColor.a = isCompletePath ? 1f : 0.66f;
+            lineColor.a = isCompletePath ? 1f : 0.4f;
             line.color = lineColor;
         }
 
@@ -462,16 +518,14 @@ public class StageMapRenderer : MonoBehaviour
                 
                 // 포인트 개수에서 현재 진행도만큼만 포인트 선택
                 int totalPoints = currentPoints.Length;
-                int visiblePointCount = Mathf.Max(2, Mathf.CeilToInt(totalPoints * t));
-                
-                // 채워질 부분의 포인트 배열 생성
+                int visiblePointCount = Mathf.Min(Mathf.Max(2, Mathf.CeilToInt(totalPoints * t)), totalPoints);
                 Vector2[] filledPoints = new Vector2[visiblePointCount];
                 System.Array.Copy(currentPoints, filledPoints, visiblePointCount);
-                
+
                 lineRenderer.Points = filledPoints;
                 
                 // 색상 설정 744E19
-                Color lineColor = new Color(0.455f, 0.306f, 0.098f);
+                Color lineColor = new Color(0.302f, 0.199f, 0.055f);
                 lineRenderer.color = lineColor;
             }
 

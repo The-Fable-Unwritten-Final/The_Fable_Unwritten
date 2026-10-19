@@ -12,7 +12,10 @@ public class DmgPoolManager : MonoSingleton<DmgPoolManager>
     protected override void Awake()
     {
         base.Awake();
+    }
 
+    private void Start()
+    {
         for (int i = 0; i < poolSize; i++)
         {
             CreateNewInstance();
@@ -40,7 +43,8 @@ public class DmgPoolManager : MonoSingleton<DmgPoolManager>
 
     private DmgBarDisplay CreateNewInstance()
     {
-        var obj = Instantiate(dmgTextPrefab, transform);
+        var obj = Instantiate(dmgTextPrefab);
+        obj.transform.SetParent(transform, false);
         obj.gameObject.SetActive(false);
         pool.Enqueue(obj);
         return obj;

@@ -15,6 +15,13 @@ public class ScenePopupController : MonoBehaviour
     private void OnEnable()
     {
         SceneManager.sceneUnloaded += OnSceneUnloaded;
+        
+        // 타이틀 화면일 때 IsStageScene 리셋
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        if (currentSceneName == "TitleScene" || currentSceneName == "SubTitleScene")
+        {
+            ProgressDataManager.Instance.IsStageScene = false;
+        }
     }
     private void OnDisable()
     {

@@ -8,12 +8,20 @@ using System.Text;
 
 public static class LocaleDataManager
 {
+    public enum SystemLocale
+    {
+        English,
+        Korean,
+        Japanese
+    }
+
     private static Dictionary<string, string[]> _cardTable = new Dictionary<string, string[]>();
     private static Dictionary<string, string[]> _randomEventTable = new Dictionary<string, string[]>();
     private static Dictionary<string, string[]> _randomEventEffectTable = new Dictionary<string, string[]>();
     private static Dictionary<string, string[]> _dialogueTable = new Dictionary<string, string[]>();
     private static Dictionary<string, string[]> _styleEffectTable = new Dictionary<string, string[]>();
     private static Dictionary<string, string[]> _uiTable = new Dictionary<string, string[]>();
+    private static Dictionary<string, string[]> _campTalkTable = new Dictionary<string, string[]>(); // 캠프 대화 전용
 
     private static Dictionary<string, int> _langColumnMap = new Dictionary<string, int>()
     {
@@ -43,6 +51,13 @@ public static class LocaleDataManager
         TextAsset csv = Resources.Load<TextAsset>("ExternalFiles/StyleEffectLocaleData");
         _styleEffectTable = LoadCsvToDictionary(csv);
     }
+
+    public static void LoadCampTalkCsv()
+    {
+        TextAsset csv = Resources.Load<TextAsset>("ExternalFiles/CampTalkLocaleData");
+        _campTalkTable = LoadCsvToDictionary(csv);
+    }
+
     public static void LoadDialogueCsv(TextAsset csv)
     {
         _dialogueTable = LoadCsvToDictionary(csv);
@@ -97,10 +112,15 @@ public static class LocaleDataManager
     {
         return GetLocalizedStringFromDict(_styleEffectTable, key);
     }
-    
+
     public static string GetLocalizedDialogue(string key)
     {
         return GetLocalizedStringFromDict(_dialogueTable, key);
+    }
+
+    public static string GetLocalizedCampTalk(string key)
+    {
+        return GetLocalizedStringFromDict(_campTalkTable, key);
     }
 
     public static string GetLocalizedUI(string key)
@@ -115,8 +135,30 @@ public static class LocaleDataManager
         // 카드 툴팁 : "Card Tooltip"
         // UI 로컬 : "Locale Table"
         // 이상 실현 텍스트 : "Idle Table"
-        var table = LocalizationSettings.StringDatabase.GetTable(tableName);
-        return table.GetEntry(key).LocalizedValue;
+        
+        try
+        {
+            var table = LocalizationSettings.StringDatabase.GetTable(tableName);
+            if (table == null)
+            {
+                Debug.LogWarning($"[LocaleDataManager] StringTable not found: {tableName}");
+                return $"#{tableName}_{key}";
+            }
+
+            var entry = table.GetEntry(key);
+            if (entry == null)
+            {
+                Debug.LogWarning($"[LocaleDataManager] Entry not found in table {tableName}: {key}");
+                return $"#{tableName}_{key}";
+            }
+
+            return entry.LocalizedValue;
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[LocaleDataManager] Error getting localized string from table {tableName}, key {key}: {ex.Message}");
+            return $"#{tableName}_{key}";
+        }
     }
 
     private static string GetLocalizedStringFromDict(Dictionary<string, string[]> dict, string key)
@@ -142,6 +184,23 @@ public static class LocaleDataManager
         }
     }
 
+    public static SystemLocale CurrentLocale
+    {
+        get
+        {
+            string langCode = CurrentLanguageCode;
+            switch (langCode)
+            {
+                case "ko":
+                    return SystemLocale.Korean;
+                case "ja":
+                    return SystemLocale.Japanese;
+                default:
+                    return SystemLocale.English;
+            }
+        }
+    }
+
     /// <summary>
     /// CSV 라인에서 쉼표(및 기타 여러 조건)로 구분된 값을 분리하는 메서드
     /// </summary>
@@ -164,7 +223,7 @@ public static class LocaleDataManager
                     if (i + 1 < line.Length && line[i + 1] == '"')  // "" → "
                     {
                         current.Append('"');
-                        i++; 
+                        i++;
                     }
                     else
                     {
@@ -211,5 +270,44 @@ public static class LocaleDataManager
         // \n을 실제 줄바꿈 처리가 가능하도록 \\\n+n으로 변환.
         input = input.Replace("\\n", "\n");
         return input;
+    }
+}
+/// <summary>
+/// 텍스트 내의 <g1>...</g1>, <g2>...</g2> 형태의 그라데이션 태그를 파싱하여, 태그가 제거된 텍스트와 각 태그의 위치 정보를 반환하는 유틸리티 클래스
+/// 이를 사용하여 텍스트의 특정 부분에 그라데이션 효과를 적용할 수 있음
+/// </summary>
+public static class GradientTextParser
+{
+    public struct TagInfo
+    {
+        public int start;
+        public int end;
+        public string tag;
+    }
+
+    public static string Parse(string input, out List<TagInfo> tags)
+    {
+        List<TagInfo> capturedTags = new List<TagInfo>();
+        int offset = 0;
+
+        // 모든 종류의 태그를 지원: <tagname>...</tagname>
+        // 예: <gr_R>, <shake>, <shake_gr_R> 등
+        string result = Regex.Replace(input, @"<([a-zA-Z_][a-zA-Z0-9_]*)>(.*?)</\1>", match =>
+        {
+            string tag = match.Groups[1].Value;
+            string content = match.Groups[2].Value;
+
+            int start = match.Index - offset;
+            int end = start + content.Length - 1;
+
+            capturedTags.Add(new TagInfo { start = start, end = end, tag = tag });
+
+            offset += match.Length - content.Length;
+
+            return content;
+        });
+
+        tags = capturedTags;
+        return result;
     }
 }

@@ -17,8 +17,10 @@ public class PlayerData : ScriptableObject
     public string CharacterName; //캐릭터이름
     public Sprite Icon; //Icon
 
-    [SerializeField] private float _maxHP;  //최대 체력
-    public float MaxHP
+    [SerializeField] private int defaultMaxHP = 30;
+    public int DefaultMaxHp { get => defaultMaxHP; set { defaultMaxHP = value; } }
+    [SerializeField] private int _maxHP;  //최대 체력
+    public int MaxHP
     {
         get => _maxHP;
         set
@@ -28,8 +30,8 @@ public class PlayerData : ScriptableObject
         }
     }
 
-    [SerializeField] private float _currentHP;   //현재 체력
-    public float currentHP
+    [SerializeField] private int _currentHP;   //현재 체력
+    public int currentHP
     {
         get => _currentHP;
         set
@@ -39,8 +41,8 @@ public class PlayerData : ScriptableObject
         }
     }
 
-    public float ATK; //공격력
-    public float DEF; //방어력
+    public int ATK; //공격력
+    public int DEF; //방어력
     public CharacterClass CharacterClass => (CharacterClass)IDNum;
 
 
@@ -73,6 +75,9 @@ public class PlayerData : ScriptableObject
         currentDeckIndexes = new List<int>();
         foreach (var card in currentDeck)
             currentDeckIndexes.Add(card.index);
+        
+        // 오름차순으로 정렬 (1000 < 1001 < 1002...)
+        currentDeckIndexes.Sort();
     }
 
     // 로드 시 인덱스 기반으로 덱 구성
@@ -88,9 +93,14 @@ public class PlayerData : ScriptableObject
         currentDeck = new List<CardModel>();
         foreach (var index in currentDeckIndexes)
         {
-            var card = cardPool.Find(c => c.index == index);
-            if (card != null)
-                currentDeck.Add(card);
+            var cardTemplate = cardPool.Find(c => c.index == index);
+            if (cardTemplate != null)
+            {
+                // ScriptableObject는 Instantiate()로 복사본을 만들어야 함
+                // 그래야 같은 카드 여러 장이 독립적인 temporaryCostModifier를 가짐
+                var cardCopy = UnityEngine.Object.Instantiate(cardTemplate);
+                currentDeck.Add(cardCopy);
+            }
         }
     }
     //체력 초기화 용
@@ -108,5 +118,43 @@ public class PlayerData : ScriptableObject
     public void ResetCurCard()
     {
         FirstTimeUsedType = null;
+    }
+    public void SetToDefaultMaxHP()
+    {
+        MaxHP = defaultMaxHP;
+    }
+    public void AddMaxHP(int amount)
+    {
+        MaxHP += amount;
+        currentHP += amount; // 최대 체력 증가 시 현재 체력도 함께 증가
+        currentHP = Mathf.Min(currentHP, MaxHP); // 현재 체력을 최대 체력 이하로 유지
+    }
+
+    public void EvolveCardIndexes(int cardIndex, int evolveTarget)
+    {
+        if (currentDeckIndexes == null)
+            return;
+
+        for (int i = 0; i < currentDeckIndexes.Count; i++)
+        {
+            if (currentDeckIndexes[i] == cardIndex)
+                currentDeckIndexes[i] = evolveTarget;
+        }
+
+        if (currentDeck != null)
+        {
+            for (int i = 0; i < currentDeck.Count; i++)
+            {
+                if (currentDeck[i] != null && currentDeck[i].index == cardIndex)
+                {
+                    var evolvedCard = DataManager.Instance.AllCards.Find(c => c.index == evolveTarget);
+
+                    if (evolvedCard != null)
+                        currentDeck[i] = evolvedCard;
+                }
+            }
+        }
+
+        Debug.Log($"[CardEvolve] 모험 덱 갱신 {cardIndex} -> {evolveTarget}");
     }
 }

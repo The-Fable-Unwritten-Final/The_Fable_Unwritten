@@ -29,7 +29,7 @@ public static class CardModelFactory2
         card.keywords = data.keywords != null ? new List<string>(data.keywords) : new List<string>();
 
         // ===== 비주얼 =====
-        card.illustration = LoadSpriteSafe($"Cards/Illustration/{data.illustration}", data.illustration);
+        card.illustration = LoadSpriteSafe($"Cards/Illustration/illust_{data.index}", $"illust_{data.index}"); // data.illustration의 string 값이 아니라 index 기반으로 가져오게 변경
         card.chClass = LoadSpriteSafe($"Cards/Class/class_{data.@class}", $"class_{data.@class}");
         card.cardType = LoadMultipleSprite($"Cards/Type", $"type_{data.type}");
         card.cardImage = data.cardframe;
@@ -39,8 +39,7 @@ public static class CardModelFactory2
         card.effects = effects != null ? new List<CardEffectBase>(effects) : new List<CardEffectBase>();
 
         // ===== 연출 =====
-        card.skillEffectName = data.skilleffect;
-
+        card.skillEffectName = ParseSkillEffects(data.skilleffect);
         return card;
     }
 
@@ -74,5 +73,23 @@ public static class CardModelFactory2
             spriteCache[cacheKey] = sprite;
             
         return sprite;
+    }
+    private static List<string> ParseSkillEffects(string skillEffect)
+    {
+        if (string.IsNullOrWhiteSpace(skillEffect))
+            return new List<string>();
+
+        string[] split = skillEffect.Split(',');
+        List<string> result = new List<string>();
+
+        foreach (var effectName in split)
+        {
+            string trimmed = effectName.Trim();
+
+            if (!string.IsNullOrEmpty(trimmed))
+                result.Add(trimmed);
+        }
+
+        return result;
     }
 }

@@ -22,7 +22,7 @@ public class KalyaSanctify : IdealSkillBase
             // 최대체력이면 즉사 아님 → HP = 1
             if (Mathf.Approximately(cur, max))
             {
-                pc.currentHP = 1f;
+                pc.currentHP = 1;
                 pc.UpdateHpStatus();
 
                 // 회복/피해 텍스트 등 표시를 원하면 여기에 큐잉
@@ -30,7 +30,7 @@ public class KalyaSanctify : IdealSkillBase
             }
 
             // 반전
-            float inverted = max - cur;
+            int inverted = (int)(max - cur);
             bool decreased = inverted < cur;
             float loss = decreased ? (cur - inverted) : 0f;
 

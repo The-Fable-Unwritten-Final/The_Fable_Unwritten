@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CardEffects/MultiplyBlessEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/MultiplyBlessEffect")]
 public class MultiplyBlessEffect : CardEffectBase
 {
     public int value = 2;

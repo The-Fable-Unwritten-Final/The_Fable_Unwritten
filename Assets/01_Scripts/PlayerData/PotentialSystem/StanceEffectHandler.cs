@@ -120,7 +120,7 @@ public static class StanceEffectHandler
             case StancType.Defense:
                 if (!effectData.GuardBonusApplied)
                 {
-                    float hpBonus = player.maxHP * DEFENSE_HP_BONUS;
+                    int hpBonus = (int)(player.maxHP * DEFENSE_HP_BONUS);
                     player.maxHP += hpBonus;
                     player.currentHP += hpBonus;
 

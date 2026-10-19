@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static ReduceNextCardCostEffect;
 using System;
+using DG.Tweening;
 
 public class PlayerController : MonoBehaviour, IStatusReceiver
 {
@@ -13,6 +14,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public bool hasBlock = false;           //방어막 획득 여부
 
     [SerializeField] private PotentialBarUI potentialBarUI;
+    [SerializeField] private StanceIconDisplay stanceIconDisplay;
     public bool hasResist { get; set; } = false;          //상태이상 디버프 저항 여부
     private bool isTargetable;              //타겟 가능 여부
 
@@ -31,6 +33,41 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     // Guard 관련 (레온)
     private bool guardRedirectPending = false;
 
+    private bool isDead = false;
+    private bool isDeathPending = false;
+
+    public bool IsDeathPending => isDeathPending;
+
+    private bool scarBurstActive = false;
+    private bool scarTriggeredThisTurn = false;
+
+    [SerializeField] private Transform footpoint;
+    [SerializeField] private Transform bodypoint;
+    [SerializeField] private Transform headpoint;
+    [SerializeField] private Transform overheadpoint;
+    [SerializeField] private Transform aheadpoint;
+    [SerializeField] private Transform aheadmidpoint;
+
+
+    public Transform FootPoint => footpoint;
+    public Transform BodyPoint => bodypoint;
+    public Transform HeadPoint => headpoint;
+    public Transform OverheadPoint => overheadpoint;
+    public Transform AheadPoint => aheadpoint;
+
+    public Transform AheadmidPoint => aheadmidpoint;
+
+
+    private bool isTemporarilyAbsent = false;
+    public bool IsTemporarilyAbsent => isTemporarilyAbsent;
+
+    [SerializeField] private CharacterAnchorController anchorController;
+
+    public bool CanParticipateInBattle()
+    {
+        return IsAlive() && !isTemporarilyAbsent;
+    }
+
     private bool IsOpponentActingTurn()
     {
         var flow = GameManager.Instance?.turnController?.battleFlow;
@@ -46,8 +83,14 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         burnIncreasedDuringOpponentTurn = false;
         guardRedirectPending = false;
 
+        scarBurstActive = false;
+        scarTriggeredThisTurn = false;
+        justTriggeredStanceThisTurn = false;
+
         hasBlock = false;
         hasResist = false;
+
+        potentialChargeLockTurn = 0;
 
         tickEffects.Clear();
         instantEffects.Clear();
@@ -62,6 +105,11 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         potentialBarUI?.Bind(this);
         potentialBarUI?.Refresh();
+
+        stanceIconDisplay?.UpdateIcon(playerData.currentStance);
+
+        if (animator != null)
+            animator.SetBool("IsDie", false);
     }
 
     public void OnTurnStart()
@@ -85,9 +133,14 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         // Freeze는 턴 종료 시 초기화
         ClearInstantEffect(BuffStatType.Freeze);
+        justTriggeredStanceThisTurn = false;
+        stanceSystem?.OnTurnEnd();
 
         playerData.ResetCurCard();
         statusDisplay?.PlayerUpdateUI();
+
+        if (potentialChargeLockTurn > 0)
+            potentialChargeLockTurn--;
     }
 
     private void ClearInstantEffect(BuffStatType type)
@@ -144,6 +197,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     private void HandleStanceChanged(StancType newStance)
     {
+        stanceIconDisplay?.UpdateIcon(newStance);
+
         Debug.Log($"[{playerData.CharacterName}] Stance Changed -> {newStance}");
     }
 
@@ -152,18 +207,20 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         if (GameManager.Instance?.turnController?.battleFlow == null)
             return;
 
-        StanceEffectHandler.TriggerStanceEffect(this, GameManager.Instance.turnController.battleFlow);
+        var battleFlow = GameManager.Instance.turnController.battleFlow;
+
+        StanceEffectHandler.TriggerStanceEffect(this, battleFlow);
+        battleFlow.TryAutoCastPotentialCards(this);
     }
-
-
 
     public event System.Action OnTargetableChanged; // 타겟 가능 여부 변경 이벤트
 
     [SerializeField] private HpBarDisplay hpBarDisplay;
     [SerializeField] private DmgBarDisplay dmgBarDisplay;
-    [SerializeField] private TargetArrowDisplay targetArrow; 
+    [SerializeField] private TargetArrowDisplay targetArrow;
 
     public Animator animator;
+    private Sequence hitShakeSequence;
     public SpriteRenderer spriteRenderer;
 
     public float GetEffectValue(BuffStatType type)
@@ -216,10 +273,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
     public void TakeTrueDamage(float damage)
     {
-        //Debug.Log($"{playerData.CharacterName}가 {damage}의 트루데미지를 받음! 현재 체력: {playerData.currentHP}");
-        // 문체 효과 적용
         damage = StyleManager.Instance.GetOnComingDamageModify(this, this, damage);
-        currentHP -= damage;
 
         var dmg = new DmgTextData
         {
@@ -230,9 +284,15 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             isWeakened = false
         };
 
-        this.dmgTextQueue.Enqueue(dmg);
+        dmgTextQueue.InitPrint(dmg);
 
-        playerData.currentHP = Mathf.Max(0, playerData.currentHP - damage);
+        playerData.currentHP = (int)Mathf.Max(0, playerData.currentHP - damage);
+
+        if (!IsAlive())
+        {
+            if (!TryConsumeUndying())
+                isDeathPending = true;
+        }
     }
 
     public void BindHpBar(HpBarDisplay bar)
@@ -256,9 +316,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
                 {
                     float finalValue = tick.value;
 
-                    // Active: 다음 상태이상 수치 증가
-                    finalValue += ConsumeActiveBonusIfExists();
-
                     tickEffects.Add(new TickEffect
                     {
                         statType = tick.statType,
@@ -280,9 +337,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
                         value = inst.value,
                         isMaintain = inst.isMaintain
                     };
-
-                    // 1) Active 먼저 적용
-                    incoming.value += ConsumeActiveBonusIfExists();
 
                     bool isDebuff = Debuff.IsDebuff(incoming.statType, incoming.value);
                     bool isPositive = !isDebuff;
@@ -315,10 +369,13 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
                     // 5) 실제 저장
                     var existing = instantEffects.Find(e => e.statType == incoming.statType);
+
+                    float maxValue = incoming.statType == BuffStatType.Scar ? 50f : 999f;
+
                     if (existing != null)
                     {
                         float before = existing.value;
-                        existing.value = Mathf.Clamp(existing.value + incoming.value, 0, 999);
+                        existing.value = Mathf.Clamp(existing.value + incoming.value, 0f, maxValue);
                         existing.isMaintain = existing.isMaintain || incoming.isMaintain;
 
                         if (incoming.statType == BuffStatType.Burn &&
@@ -333,7 +390,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
                         instantEffects.Add(new InstanceEffect
                         {
                             statType = incoming.statType,
-                            value = Mathf.Clamp(incoming.value, 0, 999),
+                            value = Mathf.Clamp(incoming.value, 0, maxValue),
                             isMaintain = incoming.isMaintain
                         });
 
@@ -398,7 +455,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             ConsumeGuard(); // 발동 후 초기화
         }
 
-        float reduced = amount - ModifyStat(BuffStatType.Defense, 0f);
+        float reduced = amount - ModifyStat(BuffStatType.Defend, 0f);
         reduced = Mathf.Max(reduced, 1f);
 
         if (playerData.currentStance == StancType.Defense)
@@ -408,9 +465,19 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         reduced = Mathf.Round(reduced);
 
-        playerData.currentHP = Mathf.Max(0, playerData.currentHP - reduced);
+        playerData.currentHP = (int)Mathf.Max(0, playerData.currentHP - reduced);
+
+        if (!IsAlive())
+        {
+            if (!TryConsumeUndying())
+                isDeathPending = true;
+        }
+
         return reduced;
     }
+
+
+
 
     /// <summary>
     /// 체력 회복 (grace 수치 만큼 추가)
@@ -418,15 +485,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// <param name="amount">회복량</param>
     public void Heal(float amount)
     {
-        var grace = instantEffects.Find(e => e.statType == BuffStatType.Bless);
-        if (grace != null && grace.value > 0)
-        {
-            amount += grace.value;
-            Debug.Log($"[Grace] 회복량 증가 +{grace.value} → {amount}");
-            grace.value = 0;
-        }
-
-        playerData.currentHP = Mathf.Min(playerData.MaxHP, playerData.currentHP + amount);
+        int finalHeal = Mathf.RoundToInt(amount);
+        currentHP = Mathf.Min(maxHP, currentHP + finalHeal);
     }
 
     /// <summary>
@@ -526,14 +586,19 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         deckModel = new DeckModel();
 
-        if (data.currentDeck == null || data.currentDeck.Count != 5)
+        if (data.currentDeck == null)
             data.ResetDeckIndexesToDefault();
 
         data.LoadDeckFromIndexes(DataManager.Instance.AllCards);
         deckModel.Initialize(data.currentDeck);
 
         if (!IsAlive())
+        {
+            isDead = false;
+            isDeathPending = false;
             playerData.ReviveIfDead();
+        }
+
 
         if (hpBarDisplay != null)
             hpBarDisplay.BindPlayerData(playerData);
@@ -542,6 +607,8 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             stanceEffectData = new StanceEffectData();
 
         InitializeStanceSystem();
+
+
     }
 
     //──────── K.T.H 변경 ────────
@@ -550,6 +617,9 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         // 캐릭터가 활성화될 때 버튼도 활성화
         if (stanceToggleButton != null)
             stanceToggleButton.gameObject.SetActive(true);
+
+        if (playerData != null)
+            stanceIconDisplay?.UpdateIcon(playerData.currentStance);
     }
 
     private void OnDisable()
@@ -557,14 +627,14 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         // 캐릭터가 비활성화될 때 버튼도 비활성화
         if (stanceToggleButton != null)
             stanceToggleButton.gameObject.SetActive(false);
+
+        stanceIconDisplay?.HideIcon();
     }
 
-    
+
     public void ChangeStance(StancType Stance) //StancUI 함수
     {
-        StancType stance = Stance;
-        playerData.currentStance = stance;
-        stanceSystem?.ChangeStance(stance);
+        stanceSystem?.ChangeStance(Stance);
     }
 
     public void CameraActionPlay()
@@ -583,13 +653,13 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     }
 
     // 최대 체력
-    public float maxHP
+    public int maxHP
     {
         get => playerData.MaxHP;
         set => playerData.MaxHP = value;
     }
     //현재 체력
-    public float currentHP
+    public int currentHP
     {
         get => playerData.currentHP;
         set => playerData.currentHP = value;
@@ -608,25 +678,72 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     public void PlayAttackAnimation(int attackType, Action onHitTiming = null)
     {
         if (animator == null)
+        {
+            onHitTiming?.Invoke();
             return;
+        }
 
         currentAttackHitCallback = onHitTiming;
-
         animator.SetInteger("Attack", attackType);
 
         if (resetAttackRoutine != null)
             StopCoroutine(resetAttackRoutine);
 
-        resetAttackRoutine = StartCoroutine(ResetAttackParam(1.5f));
+        resetAttackRoutine = StartCoroutine(ResetAttackParam());
     }
 
-    private IEnumerator ResetAttackParam(float delay)
+
+    public void PlayAttackAnimation(int cardIndex, CardType cardType, Action onHitTiming = null)
     {
-        yield return new WaitForSeconds(delay);
-        animator.SetInteger("Attack", -1);
-        currentAttackHitCallback = null;
+        if (cardIndex == 1010)
+        {
+            onHitTiming?.Invoke();
+            return;
+        }
+
+        int fallbackAttackType = ((int)cardType) % 3;
+        int finalAttackType = HasAttackAnimation(cardIndex) ? cardIndex : fallbackAttackType;
+
+        PlayAttackAnimation(finalAttackType, onHitTiming);
+    }
+
+
+    private bool HasAttackAnimation(int attackType)
+    {
+        if (animator == null || animator.runtimeAnimatorController == null)
+            return false;
+
+        string clipName = $"{attackType}";
+
+        foreach (var clip in animator.runtimeAnimatorController.animationClips)
+        {
+            if (clip != null && clip.name == clipName)
+                return true;
+        }
+
+        return false;
+    }
+
+    private IEnumerator ResetAttackParam()
+    {
+        yield return null;
+
+        while (animator != null)
+        {
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+            if (!animator.IsInTransition(0) && stateInfo.normalizedTime >= 1f)
+                break;
+
+            yield return null;
+        }
+
+        if (animator != null)
+            animator.SetInteger("Attack", -1);
+
         resetAttackRoutine = null;
     }
+
 
     // 애니메이션 이벤트에서 호출할 함수
     public void OnAttackHitEvent()
@@ -638,11 +755,40 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     //피격 애니메이션 호출 시
     public void PlayHitAnimation()
     {
-        if (animator != null)
+        if (animator == null)
+            return;
+
+        if (hitShakeSequence != null && hitShakeSequence.IsActive())
+            hitShakeSequence.Kill();
+
+        Transform trans = animator.transform;
+        Vector3 originalPos = trans.localPosition;
+
+        hitShakeSequence = DOTween.Sequence()
+            .Append(trans.DOLocalMoveX(originalPos.x - 0.1f, 0.05f))
+            .Append(trans.DOLocalMoveX(originalPos.x + 0.1f, 0.1f))
+            .Append(trans.DOLocalMoveX(originalPos.x, 0.05f))
+            .OnComplete(() =>
+            {
+                trans.localPosition = originalPos;
+            });
+
+        if (spriteRenderer != null)
         {
-            animator.SetBool("Hit", true);
-            GameManager.Instance.StartCoroutine(ResetBool("Hit", 1.2f));
+            spriteRenderer.color = new Color(1f, 0f, 0f, 0.45f);
+            GameManager.Instance.StartCoroutine(ResetHitColor(0.15f));
         }
+
+        animator.SetBool("Hit", true);
+        GameManager.Instance.StartCoroutine(ResetBool("Hit", 0.5f));
+    }
+
+    private IEnumerator ResetHitColor(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (this != null && spriteRenderer != null)
+            spriteRenderer.color = Color.white;
     }
 
     private IEnumerator ResetBool(string param, float delay)
@@ -687,7 +833,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         float defTotal = 0;
         foreach (var effect in tickEffects)
         {
-            if (effect.statType == BuffStatType.Defense)
+            if (effect.statType == BuffStatType.Defend)
                 defTotal += effect.value;
         }
         return defTotal;
@@ -700,12 +846,19 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     {
         if (statusDisplay != null)
             statusDisplay.gameObject.SetActive(false);
+
+        stanceIconDisplay?.HideIcon();
     }
 
     public void ShowStatusUI()
     {
+        if (isDead || isDeathPending) return;
+
         if (statusDisplay != null)
             statusDisplay.gameObject.SetActive(true);
+
+        if (playerData != null)
+            stanceIconDisplay?.UpdateIcon(playerData.currentStance);
     }
 
     //발동 시 사라져야 하는 경우
@@ -720,26 +873,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
             }
         }
     }
-
-    /// <summary>
-    /// 화상 데미지 처리
-    /// </summary>
-    public void ApplyBurnEffect()
-    {
-        var burn = instantEffects.Find(e => e.statType == BuffStatType.Burn);
-        if (burn != null && burn.value > 0)
-        {
-            Debug.Log($"[Burn] {playerData.CharacterName} 화상 피해 {burn.value}");
-            TakeTrueDamage(burn.value);
-
-            // isMaintain 상태가 아닌 경우 초기화
-            if(!burn.isMaintain)
-            {
-                burn.value = 0;
-            }
-        }
-    }
-
 
     public void ApplyBurnOnTurnStart()
     {
@@ -756,8 +889,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         float damage = burn.value;
         TakeTrueDamage(damage);
 
-        burn.value = Mathf.Floor(burn.value / 2f);
-
+        burn.value = Mathf.Max(0f, burn.value - 1f);
         if (burn.value < 1f)
             instantEffects.Remove(burn);
     }
@@ -777,55 +909,31 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         return reduced;
     }
 
-    public void ApplyActivateBonus(BuffStatType incoming)
-    {
-        var activate = instantEffects.Find(e => e.statType == BuffStatType.Activate);
-        if (activate == null || activate.value <= 0) return;
-
-        if (incoming == BuffStatType.Burn || incoming == BuffStatType.Freeze)
-        {
-            var target = instantEffects.Find(e => e.statType == incoming);
-            if (target != null)
-            {
-                target.value = Mathf.Min(50, target.value + activate.value);
-                Debug.Log($"[Activate] {playerData.CharacterName} {incoming} 상태 강화됨: +{activate.value}");
-            }
-        }
-
-        // 활성도는 발동 후 초기화
-        activate.value = 0;
-    }
-
     /// <summary>
     /// 축복 버프 처리
     /// </summary>
     /// <param name="blessValue"></param>
     public void TryApplyBlessBonus(float blessValue)
     {
-        var targetBuff = instantEffects
-            .Where(e => e.statType != BuffStatType.Bless &&
-                        !Debuff.IsDebuff(e.statType, e.value) &&
-                        e.value > 0)
-            .OrderByDescending(e => e.value)
-            .FirstOrDefault();
+        if (blessValue <= 0)
+            return;
 
-        if (targetBuff != null)
+        var bless = instantEffects.Find(e => e.statType == BuffStatType.Bless);
+
+        if (bless != null)
         {
-            targetBuff.value += blessValue;
+            bless.value += blessValue;
         }
         else
         {
-            var bless = instantEffects.Find(e => e.statType == BuffStatType.Bless);
-            if (bless != null) bless.value += blessValue;
-            else
-            {
-                instantEffects.Add(new InstanceEffect
+            instantEffects.Add(
+                new InstanceEffect
                 {
                     statType = BuffStatType.Bless,
                     value = blessValue,
                     isMaintain = false
-                });
-            }
+                }
+            );
         }
     }
 
@@ -835,7 +943,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         if (bless == null) return;
 
         incoming.value += bless.value;
-        bless.value = 0;
+        instantEffects.Remove(bless);
     }
 
     /// <summary>
@@ -844,30 +952,24 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// <param name="purifyValue"></param>
     public void TryApplyPenanceBonus(float penanceValue)
     {
-        var targetDebuff = instantEffects
-            .Where(e => e.statType != BuffStatType.Penance &&
-                        Debuff.IsDebuff(e.statType, e.value) &&
-                        e.value > 0)
-            .OrderByDescending(e => e.value)
-            .FirstOrDefault();
+        if (penanceValue <= 0)
+            return;
 
-        if (targetDebuff != null)
+        var penance = instantEffects.Find(e => e.statType == BuffStatType.Penance);
+
+        if (penance != null)
         {
-            targetDebuff.value = Mathf.Max(0, targetDebuff.value - penanceValue);
+            penance.value += penanceValue;
         }
         else
         {
-            var penance = instantEffects.Find(e => e.statType == BuffStatType.Penance);
-            if (penance != null) penance.value += penanceValue;
-            else
-            {
-                instantEffects.Add(new InstanceEffect
-                {
+            instantEffects.Add(
+                new InstanceEffect{
                     statType = BuffStatType.Penance,
                     value = penanceValue,
                     isMaintain = false
-                });
-            }
+                }
+            );
         }
     }
 
@@ -877,41 +979,28 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         if (penance == null) return;
 
         incoming.value = Mathf.Max(0, incoming.value - penance.value);
-        penance.value = 0;
-    }
-
-    /// <summary>
-    /// 존재하는 정화 수치 적용
-    /// </summary>
-    /// <param name="incoming"></param>
-    private void TryApplyStoredPurifyIfExists(InstanceEffect incoming)
-    {
-        var purify = instantEffects.Find(e => e.statType == BuffStatType.Penance && !e.isMaintain);
-        if (purify != null)
-        {
-            incoming.value = Mathf.Max(0, incoming.value - purify.value);
-            Debug.Log($"[Purify Triggered] {incoming.statType} 수치 감소 -{purify.value}");
-            instantEffects.Remove(purify); // 일회성
-        }
+        instantEffects.Remove(penance);
     }
 
     public void ApplyCrimeOnTurnEnd()
     {
-        var crime = instantEffects.Find(e => e.statType == BuffStatType.Crime);
-        if (crime == null || crime.value <= 0) return;
+        var crime = instantEffects.Find(
+            e => e.statType == BuffStatType.Sin
+        );
 
-        TakeTrueDamage(crime.value);
-    }
+        if (crime == null || crime.value <= 0)
+            return;
 
-    public float ApplyScarBonus(float baseDamage)
-    {
-        var scar = instantEffects.Find(e => e.statType == BuffStatType.Scar);
-        if (scar == null || scar.value <= 0)
-            return baseDamage;
+        float damage = crime.value;
 
-        float finalDamage = baseDamage + scar.value;
-        scar.value = 0; // 발동 후 초기화
-        return finalDamage;
+        // 턴 종료 시 죄악 전부 제거
+        instantEffects.Remove(crime);
+
+        TakeTrueDamage(damage);
+
+        Debug.Log(
+            $"[Crime] 카일라 죄악 {damage} 피해 / 죄악 제거"
+        );
     }
 
     public bool TryTriggerStun()
@@ -958,28 +1047,6 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         guardRedirectPending = false;
     }
 
-    /// <summary>
-    /// 출혈 수치 적용
-    /// </summary>
-    /// <param name="baseDamage"></param>
-    /// <returns></returns>
-    public float ApplyBleedBonus(float baseDamage)
-    {
-        var bleed = instantEffects.Find(e => e.statType == BuffStatType.Scar);
-        if (bleed != null && bleed.value > 0)
-        {
-            Debug.Log($"[Bleed] {playerData.CharacterName} 추가 피해 {bleed.value}");
-            baseDamage += bleed.value;
-
-            if (!bleed.isMaintain)
-            {
-                bleed.value = 0;
-            }
-        }
-
-        return baseDamage;
-    }
-
     public bool TryTriggerGuardRedirect(out PlayerController redirectTarget)
     {
         redirectTarget = null;
@@ -1013,6 +1080,9 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
     /// </summary>
     public void NotifyCardUsed(bool isSelf)
     {
+        if (potentialChargeLockTurn > 0 && !isSelf)
+            return;
+
         stanceSystem?.OnAllyUsedCard(isSelf);
     }
 
@@ -1047,7 +1117,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
                 pc.ApplyStatusEffect(new InstanceEffect
                 {
-                    statType = BuffStatType.Defense,
+                    statType = BuffStatType.Defend,
                     value = sinAmount,
                     isMaintain = false
                 });
@@ -1138,15 +1208,214 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
         immortalCount = count;
     }
 
-    private float ConsumeActiveBonusIfExists()
+    public void TryFinalizeDeath()
     {
-        var active = instantEffects.Find(e => e.statType == BuffStatType.Activate);
-        if (active == null || active.value <= 0)
-            return 0;
 
-        float bonus = active.value;
-        active.value = 0; // 발동 후 초기화
-        return bonus;
+        if (!isDeathPending || isDead) return;
+
+        isDead = true;
+        isDeathPending = false;
+
+        GameManager.Instance.combatCameraController.CameraPunchHard();
+
+        HideStatusUI();
+
+        if (stanceToggleButton != null)
+            stanceToggleButton.gameObject.SetActive(false);
+
+        if (animator != null)
+            animator.SetBool("IsDie", true);
     }
 
+    public void SetTemporarilyAbsent(bool absent)
+    {
+        isTemporarilyAbsent = absent;
+
+        // 타겟 불가
+        IsTargetable = !absent;
+
+        // Visual 오브젝트와 Animator는 유지하고 그림만 숨김
+        if (spriteRenderer != null)
+            spriteRenderer.enabled = !absent;
+
+        if (absent)
+            HideStatusUI();
+        else
+            ShowStatusUI();
+
+        if (stanceToggleButton != null)
+            stanceToggleButton.gameObject.SetActive(!absent);
+    }
+
+    // 최소 HP 1을 보장하는 고정 피해
+    public float TakeNonLethalDamage(float damage)
+    {
+        if (!IsAlive())
+            return 0f;
+
+        float before = currentHP;
+
+        currentHP = (int)Mathf.Max(1f, currentHP - damage);
+
+        float actualDamage = before - currentHP;
+
+        return actualDamage;
+    }
+
+    public int GetActivationDiscountForCard(CardModel card)
+    {
+        if (card == null)
+            return 0;
+
+        var activate = instantEffects.Find(
+            e => e.statType == BuffStatType.Activate
+        );
+
+        if (activate == null || activate.value < 10)
+            return 0;
+
+        // 기존 temporary / persistent 할인까지 적용된 현재 비용
+        int currentCost = card.GetEffectiveCost();
+
+        if (currentCost <= 0)
+            return 0;
+
+        // 활성 10당 비용 1 감소
+        int availableDiscount =
+            Mathf.FloorToInt(activate.value / 10f);
+
+        // 실제 카드 비용 이상 소비하지 않음
+        return Mathf.Min(
+            availableDiscount,
+            currentCost
+        );
+    }
+
+    public void ConsumeActivation(int costReduction)
+    {
+        if (costReduction <= 0)
+            return;
+
+        var activate = instantEffects.Find(
+            e => e.statType == BuffStatType.Activate
+        );
+
+        if (activate == null || activate.value <= 0)
+            return;
+
+        float consumeAmount =
+            costReduction * 10f;
+
+        activate.value =
+            Mathf.Max(
+                0f,
+                activate.value - consumeAmount
+            );
+
+        if (activate.value <= 0)
+        {
+            instantEffects.Remove(activate);
+        }
+
+        statusDisplay?.PlayerUpdateUI();
+
+        Debug.Log(
+            $"[Activate] 비용 {costReduction} 감소 / " +
+            $"활성 {consumeAmount} 소비 / " +
+            $"잔여 활성 {(activate != null ? activate.value : 0)}"
+        );
+    }
+
+    public float ApplyScarAttackBonus(float baseDamage)
+    {
+        if (scarBurstActive) return baseDamage + 10f;
+
+        // 같은 턴 재발동 방지
+        if (scarTriggeredThisTurn) return baseDamage;
+
+        var scar = instantEffects.Find(e => e.statType == BuffStatType.Scar);
+
+        if (scar == null || scar.value < 50f) return baseDamage;
+
+        // 상처 50 발동
+        instantEffects.Remove(scar);
+
+        scarBurstActive = true;
+        scarTriggeredThisTurn = true;
+
+        Debug.Log($"[Scar] {playerData.CharacterName} " + $"상처 발동 / 공격 피해 +10");
+
+        // 발동시킨 공격부터 +10
+        return baseDamage + 10f;
+    }
+
+    public void ClearScarBurst()
+    {
+        scarBurstActive = false;
+        scarTriggeredThisTurn = false;
+    }
+
+    private bool TryConsumeUndying()
+    {
+        var undying = instantEffects.Find(e => e.statType == BuffStatType.Undying && e.value > 0);
+        if (undying == null) return false;
+
+        undying.value -= 1;
+
+        if (undying.value <= 0)
+            instantEffects.Remove(undying);
+
+        playerData.currentHP = 1;
+        isDeathPending = false;
+
+        statusDisplay?.PlayerUpdateUI();
+
+        Debug.Log($"[Undying] {playerData.CharacterName} 치명타 방지 / HP 1");
+
+        return true;
+    }
+
+    public float TakeDamage(float amount, float finalMultiplier, bool floorFinalDamage)
+    {
+        if (hasBlock)
+        {
+            hasBlock = false;
+            return 0;
+        }
+
+        amount = StyleManager.Instance.GetOnComingDamageModify(this, this, amount);
+
+        if (HasGuardValue())
+        {
+            amount = Mathf.Max(0, amount - GetGuardValue());
+            ConsumeGuard();
+        }
+
+        float reduced = amount - ModifyStat(BuffStatType.Defend, 0f);
+        reduced = Mathf.Max(reduced, 1f);
+
+        if (playerData.currentStance == StancType.Defense)
+            reduced *= 0.5f;
+        else if (playerData.currentStance == StancType.Rush)
+            reduced *= 2f;
+
+        reduced = Mathf.Round(reduced);
+
+        if (finalMultiplier != 1f)
+        {
+            reduced *= finalMultiplier;
+            reduced = floorFinalDamage ? Mathf.Floor(reduced) : Mathf.Round(reduced);
+            reduced = Mathf.Max(reduced, 1f);
+        }
+
+        playerData.currentHP = (int)Mathf.Max(0, playerData.currentHP - reduced);
+
+        if (!IsAlive())
+        {
+            if (!TryConsumeUndying()) 
+                isDeathPending = true;
+        }
+
+        return reduced;
+    }
 }

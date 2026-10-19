@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static PlayerData;
 
-[CreateAssetMenu(menuName = "CardEffects/TriggerOppositeStanceEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/TriggerOppositeStanceEffect")]
 public class TriggerOppositeStanceEffect : CardEffectBase
 {
     public int value = 1;

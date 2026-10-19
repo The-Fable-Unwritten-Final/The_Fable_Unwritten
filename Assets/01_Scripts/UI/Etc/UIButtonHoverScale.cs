@@ -7,13 +7,24 @@ using UnityEngine.EventSystems;
 public class UIButtonHoverScale : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public float targetScale = 1.0f;
+    public GameObject UIImage;
+    public bool UIImageDefualtDisable = true;
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         transform.DOScale(targetScale, 0.15f).SetEase(Ease.OutBack);
+        if (UIImage != null && !UIImageDefualtDisable)
+        {
+            UIImage.SetActive(true);
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         transform.DOScale(1f, 0.15f).SetEase(Ease.OutBack);
+        if (UIImage != null)
+        {
+            UIImage.SetActive(false);
+        }
     }
 }

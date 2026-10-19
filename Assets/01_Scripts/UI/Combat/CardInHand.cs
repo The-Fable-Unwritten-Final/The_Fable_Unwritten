@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -24,6 +25,8 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     [SerializeField] Image cardCostImage; // 카드 코스트 이미지
     [SerializeField] Image cardTypeImage; // 카드 타입 이미지
     [SerializeField] Image cardCharImage; // 카드 캐릭터 이미지
+    [SerializeField] Image shade1;
+    [SerializeField] Image shade2; 
     [SerializeField] TextMeshProUGUI cardCost; // 카드 코스트
     [SerializeField] TextMeshProUGUI cardName; // 카드 이름
     [SerializeField] TextMeshProUGUI cardDescription; // 카드 설명
@@ -116,58 +119,101 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if(!cardDisplay.deckInitComplete) return; // 덱 이닛이 완료되지 않았을 경우 상호작용 불가능
-        isPointerOver = true; // 마우스 포인터가 카드 위에 있는 상태로 설정
-        
-        if(GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 상호작용 불가능
-        if(cardState == CardState.None) return; // 상태가 None인 경우 상호작용 불가능
+        // cardDisplay가 없으면 (정비 UI 등) 상호작용 불가능
+        if (cardDisplay == null) return;
 
-        cardDisplay.currentCard = this;// 현재 카드 설정.
+        if(!cardDisplay.deckInitComplete) return; // 덱 이닛이 완료되지 않았을 경우 상호작용 불가능
+        
+        // 드래그 중인 다른 카드가 있으면 이 카드 상호작용 불가능
+        if (cardDisplay.isOnDrag && cardDisplay.currentCard != this) return;
+        
+        // 상호작용 가능 여부 체크
+        if (GameManager.Instance == null || GameManager.Instance.turnController == null) return;
+        if (GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 상호작용 불가능
+        if(cardState == CardState.None) 
+        {
+            isPointerOver = false; // CardArrange 중일 때도 포인터 상태는 업데이트
+            return;
+        }
+        
+        isPointerOver = true; // 마우스 포인터가 카드 위에 있는 상태로 설정
+
+        // 드래그 중이 아닐 때만 currentCard 업데이트
+        if (!cardDisplay.isOnDrag)
+        {
+            cardDisplay.currentCard = this;// 현재 카드 설정.
+        }
+
         transform.SetAsLastSibling();// 카드가 가장 위에 오도록 설정
 
         rect.DOAnchorPos(targetPos, 0.4f).SetEase(Ease.OutSine);
 
-
+        // SFX 출력
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 104);
+        
         // 카드의 사용 가능 타겟 표시
         cardDisplay.TargetArrowDisplay();
+        
         // 연계 가능한 카드들을 canchain으로
         cardDisplay.CheckCanChain();
 
-        if (effectVisualizer.currentState == CardVisualState.Chain)// 카드의 상태가 Chain인 경우 이펙트 변경 취소 (빨간색 유지)
+        if (effectVisualizer != null)
         {
-            effectVisualizer.ApplyVisualState(CardVisualState.ReadyOnChain); // 카드의 상태를 ReadyOnChain으로 변경 (노란색 테두리 + 연계 가능 상태 >> ReadyOnChain상태)
-            return;
+            if (effectVisualizer.currentState == CardVisualState.Chain)// 카드의 상태가 Chain인 경우 이펙트 변경 취소 (빨간색 유지)
+            {
+                effectVisualizer.ApplyVisualState(CardVisualState.ReadyOnChain); // 카드의 상태를 ReadyOnChain으로 변경 (노란색 테두리 + 연계 가능 상태 >> ReadyOnChain상태)
+                return;
+            }
+            effectVisualizer.ApplyVisualState(CardVisualState.Ready); // 카드의 상태를 Ready로 변경 (노란색 테두리)
         }
-        effectVisualizer.ApplyVisualState(CardVisualState.Ready); // 카드의 상태를 Ready로 변경 (노란색 테두리)
     }
     public void OnPointerExit(PointerEventData eventData)
     {
         isPointerOver = false; // 마우스 포인터가 카드 위에 있지 않은 상태로 설정
 
-        // 카드의 시각적 효과 (이펙트 제외)
-        if(!cardDisplay.isOnDrag) cardDisplay.TargetArrowReset(); // 카드 드래그 중이 아닐 때 타겟 화살표 초기화
-        if (GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 상호작용 불가능
-        if (cardState == CardState.OnDrag) return; // 카드 상태가 OnDrag인 경우에는 원래 위치로 돌아가지 않음.
-        cardDisplay.currentCard = null;// 현재 카드 설정 해제.
-        ResetSiblingIndex();// List의 순서에 맞게 원래 위치로 돌아가기.
+        // cardDisplay가 없으면 (정비 UI 등) 상호작용 불가능
+        if (cardDisplay == null) return;
 
+        // 드래그 중인 경우 처리하지 않음 (드래그 중 포인터가 나갔을 때는 계속 드래그 유지)
+        if (cardState == CardState.OnDrag) 
+        {
+            if (!cardDisplay.isOnDrag) cardDisplay.TargetArrowReset();
+            return;
+        }
+
+        // 카드의 시각적 효과 (이펙트 제외)
+        if (!cardDisplay.isOnDrag) cardDisplay.TargetArrowReset(); // 카드 드래그 중이 아닐 때 타겟 화살표 초기화
+        if (GameManager.Instance == null || GameManager.Instance.turnController == null) return;
+        if (GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 상호작용 불가능
+
+        // currentCard가 이 카드가 맞을 때만 해제 (다른 카드가 currentCard일 수 있음)
+        if (cardDisplay.currentCard == this)
+        {
+            cardDisplay.currentCard = null;// 현재 카드 설정 해제.
+        }
+        
+        ResetSiblingIndex();// List의 순서에 맞게 원래 위치로 돌아가기.
         rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine);
 
         // 예외처리 + 이펙트 초기화
-        effectVisualizer.SetStateToNone(); // 카드의 상태를 None으로 변경
+        if (effectVisualizer != null)
+        {
+            effectVisualizer.SetStateToNone(); // 카드의 상태를 None으로 변경
+        }
 
         // canchain 상태의 카드들을 원상태로(enhanced에 따라서 다르게 설정)
         cardDisplay.ResetCanChain();
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if(GameManager.Instance.turnController.turnState == TurnController.TurnState.EnemyTurn) return; // 적 턴일 경우 드래그 불가능
-        if(GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 드래그 불가능
-        if (cardState != CardState.CanDrag) return; // 카드 상태가 CanDrag가 아닌 경우 드래그 불가능
+        // 공통 상호작용 검증
+        if (!cardDisplay.CanInteractCard()) return;
+        
+        // 카드 상태 검증
+        if (cardState != CardState.CanDrag) return;
 
-        cardDisplay.isOnDrag = true; // 드래그 시작 시 카드 드래그 상태를 true로 설정
-
-        cardDisplay.currentCard = this; // 현재 드래그 중인 카드 설정
+        // 드래그 상태 설정 (이제 currentCard도 함께 설정)
+        cardDisplay.SetCurrentCard(this);
         transform.SetAsLastSibling();// 카드가 가장 위에 오도록 설정
 
         cardDisplay.lineRenderer.gameObject.SetActive(true); // 드래그 중일 때 라인 렌더러 활성화
@@ -176,51 +222,117 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     }
     public void OnDrag(PointerEventData eventData)
     {
-        if(cancelDrag || CardState.CanMouseOver == cardState) return; // 드래그 취소 상태 시 드래그 불가능
-        if(GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 드래그 불가능
-        //this.transform.position = eventData.position;
-        if(this.rect.anchoredPosition == originalPos)
-            rect.DOAnchorPos(targetPos, 0.4f).SetEase(Ease.OutSine);// 드래그 할때 카드가 위로 안올라올 경우의 후처리.
+        // 드래그 취소 상태이거나 현재 카드가 이 카드가 아닌 경우 드래그하지 않음
+        if (cardDisplay.currentCard != this) return;
+        if (cancelDrag || cardState != CardState.OnDrag) return;
+        
+        if (GameManager.Instance != null && GameManager.Instance.turnController != null)
+        {
+            if (GameManager.Instance.turnController.onAction) return;
+        }
+
+        // 드래그 할때 카드가 위로 안올라올 경우의 후처리
+        if (this.rect.anchoredPosition == originalPos)
+            rect.DOAnchorPos(targetPos, 0.4f).SetEase(Ease.OutSine);
     }
     public void OnEndDrag(PointerEventData eventData)
     {
-        // 카드의 시작적 효과 (이펙트 제외)
-        if(GameManager.Instance.turnController.onAction) return; // 행동 중일 경우 드래그 불가능
-        if(!cardDisplay.isOnDrag) return; // 카드 드래그 상태가 false인 경우 드래그 종료 처리하지 않음 (드래그 중이 아닐 때 드래그 종료 이벤트가 발생할 수 있음
+        // 게임 상태 검증 (행동 중이면 처리하지 않음)
+        if (GameManager.Instance != null && GameManager.Instance.turnController != null)
+        {
+            if (GameManager.Instance.turnController.onAction) return;
+        }
+
+        // 드래그 상태가 아니면 처리하지 않음
+        if (!cardDisplay.isOnDrag) return;
+        
+        // 현재 카드가 이 카드가 아니면 처리하지 않음 (다른 카드가 드래그 중)
+        if (cardDisplay.currentCard != this) return;
+
+        // 카드 상태가 OnDrag가 아니면 처리하지 않음
+        if (cardState != CardState.OnDrag) return;
+
         cardDisplay.TargetArrowReset(); // 드래그 종료 시 타겟 화살표 초기화
         cardDisplay.ResetCanChain(); // 드래그 종료시, 체인 가능 이펙트 리셋
 
-        if (cardState != CardState.OnDrag)
-        {
-            // 드래그 관련 잘못된 상호 작용 예외처리.
-            if (this.rect.anchoredPosition == targetPos)
-                rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine);
+        // 드래그 UI 비활성화
+        cardDisplay.lineRenderer.gameObject.SetActive(false);
+        cardDisplay.arrowImage.gameObject.SetActive(false);
 
-            return; // 카드 상태가 OnDrag가 아닌 경우 해당 메서드 실행하지 않음
+        // 드래그 위치 종료의 정보를 통해 사용 성공시 상태 OnUse로 변경
+        cardDisplay.OnMousepoint(eventData);
+
+        // 카드 사용 성공 (FXOnUse에서 카드 제거)
+        if (cardState == CardState.OnUse)
+        {
+            cardDisplay.ClearCurrentCard(); // 드래그 상태 해제
+            return;
         }
 
-        cardDisplay.isOnDrag = false;
+        // 카드 사용 실패 - 원래 위치로 돌아가기
+        cardState = CardState.None; // 임시로 None 상태로 설정
+        isPointerOver = false; // [방법 1] 포인터 상태 강제 리셋
+        rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine);
 
-        cardState = CardState.None; // 카드 상태를 None으로 초기화
-        cardDisplay.lineRenderer.gameObject.SetActive(false); // 드래그 종료 시 라인 렌더러 비활성화
-        cardDisplay.arrowImage.gameObject.SetActive(false); // 드래그 종료 시 화살표 이미지 비활성화
-        // 드래그 위치 종료의 정보을 통해 사용 성공시 상태 OnUse로 변경
-        cardDisplay.OnMousepoint(eventData); // 드래그 종료 시의 해당 위치를 확인해 상호작용 여부 확인
+        // 이펙트 초기화
+        if (effectVisualizer != null)
+        {
+            effectVisualizer.SetStateToNone();
+        }
 
-        if(cardState == CardState.OnUse) return; // 카드 사용에 성공한 경우 해당 메서드 종료
+        // 최종적으로 드래그 상태 해제 및 상태 정규화
+        // OnDrag 종료 후 0.4초 애니메이션 동안 상태 유지, 이후 상태 업데이트
+        DOVirtual.DelayedCall(0.4f, () =>
+        {
+            // 다시 한번 검증 (카드가 삭제되었을 수도 있음)
+            if (this == null || cardDisplay == null) return;
 
-        rect.DOAnchorPos(originalPos, 0.4f).SetEase(Ease.OutSine); // 원래 위치로 돌아가기.
+            // [방법 2] 포인터가 카드 위에 있는지 재확인
+            bool pointerOverCard = RectTransformUtility.RectangleContainsScreenPoint(
+                rect, Input.mousePosition, null);
+            
+            // 포인터가 없으면 강제 리셋
+            if (!pointerOverCard)
+            {
+                isPointerOver = false;
+                if (cardDisplay.currentCard == this)
+                {
+                    cardDisplay.currentCard = null;
+                }
+                ResetSiblingIndex();
+                // 이미 원래 위치로 돌아가는 애니메이션이 진행 중이므로 추가 호출 불필요
+            }
+            else
+            {
+                // 포인터가 카드 위에 있으면 현재 카드 설정
+                if (!cardDisplay.isOnDrag)
+                {
+                    cardDisplay.currentCard = this;
+                }
+            }
 
-        // 예외처리 + 이펙트 초기화
-        effectVisualizer.SetStateToNone(); // 카드의 상태를 None으로 변경
+            // 마나 상태에 따라 상태 업데이트
+            if (cardData.IsUsable(GameManager.Instance.turnController.battleFlow.currentMana))
+            {
+                cardState = CardState.CanDrag;
+            }
+            else
+            {
+                cardState = CardState.CanMouseOver;
+            }
+        });
     }
 
     public void FXOnUse()
     {
+        // 핵심: FXOnUse 진행 중 OnPointerEnter() 호출 방지
+        cardState = CardState.None;
+        isPointerOver = false;
+        
         DG.Tweening.Sequence seq = DOTween.Sequence();
 
         // 첫 단계: frameCover, illustCover 반투명하게
-        seq.Append(frameCover.DOFade(0.5f, 0.3f).SetEase(Ease.OutSine));
+        //seq.Append(frameCover.DOFade(0.5f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(illustCover.DOFade(0.5f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(cardCostImage.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
 
@@ -234,13 +346,15 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             effectVisualizer.ApplyVisualState(CardVisualState.Use);
         });
 
-        seq.Append(frameCover.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        //seq.Append(frameCover.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(illustCover.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(cardCostImage.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(cardFrame.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(cardImage.DOFade(0f, 0.4f).SetEase(Ease.OutSine));
         seq.Join(cardTypeImage.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(cardCharImage.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(shade1.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
+        seq.Join(shade2.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(cardName.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(cardCost.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
         seq.Join(cardDescription.DOFade(0f, 0.3f).SetEase(Ease.OutSine));
@@ -251,6 +365,9 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         // 마지막 단계: 오브젝트 제거 및 정렬
         seq.OnComplete(() =>
         {
+            // [방법 1] 카드 제거 전 포인터 상태 강제 리셋
+            isPointerOver = false;
+
             // UIParticle 정리 (재생 종료 후)
             if (effectVisualizer != null)
             {
@@ -258,7 +375,6 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
                 {
                     effectVisualizer.useCardFXParticle.Clear();
                     effectVisualizer.useCardFXParticle.Stop();
-                    Debug.Log($"[CardInHand] 카드 사용 효과 파티클 정리 완료. 카드 이름: {cardData.cardName}");
                 }
 
                 if (effectVisualizer.useEnhancedCardFXParticle != null)
@@ -268,9 +384,18 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
                 }
             }
 
+            // 카드 제거 전에 드래그 상태 정리
+            if (cardDisplay != null && cardDisplay.currentCard == this)
+            {
+                cardDisplay.ClearCurrentCard();
+            }
+
             Destroy(this.gameObject);
-            cardDisplay.isOnDrag = false; // 드래그 상태 해제
-            cardDisplay.CardArrange();
+            
+            if (cardDisplay != null)
+            {
+                cardDisplay.CardArrange();
+            }
         });
     }
     public void SetCardData(CardModel card)// 카드 데이터 설정
@@ -279,29 +404,54 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         UpdateCardImage();// 카드 이미지 업데이트
         UpdatCardInfo();// 카드 정보 업데이트
     }
-    public void UpdateCardImage()//카드의 일러스트,사용캐릭터,카드타입
+    public void UpdateCardImage()
     {
-        if(cardData.illustration == null)
-            Debug.LogError($"[CardInHand] 카드 일러스트가 설정되지 않았습니다. 카드 이름: {cardData.cardName}");// 카드 데이터 SO쪽에서 resources 파일을 통해 이미지 업데이트를 하지 못했을때.
+        if (cardData.illustration == null)
+        {
+            cardImage.sprite = null;
+            cardImage.gameObject.SetActive(false);
 
-        cardImage.sprite = cardData.illustration; // 카드 이미지 설정
-        illustCover.sprite = cardData.illustration; // 카드 일러스트 설정
-        cardTypeImage.sprite = cardData.cardType; // 카드 타입 이미지 설정
-        cardCharImage.sprite = cardData.chClass; // 카드 캐릭터 이미지 설정
+            illustCover.sprite = null;
+            illustCover.gameObject.SetActive(false);
+        }
+        else
+        {
+            cardImage.gameObject.SetActive(true);
+            illustCover.gameObject.SetActive(true);
+
+            cardImage.sprite = cardData.illustration;
+            illustCover.sprite = cardData.illustration;
+        }
+
+        cardTypeImage.sprite = cardData.cardType;
+        cardCharImage.sprite = cardData.chClass;
     }
+
     /// <summary>
-    /// 카드(본인의) description, cost, name 설명 업데이트.
+    /// 카드 description, cost, name 설명 업데이트.
     /// </summary>
     public void UpdatCardInfo()// 외부에서 해당 메서드 for문 으로 묶어서 action에 구독하여 사용하기에, 기능 분리.
     {
         cardName.text = cardData.cardName; // 카드 이름 설정
         cardCost.text = cardData.GetEffectiveCost().ToString(); // 카드 코스트 설정
 
-
-        var battleFlow = GameManager.Instance.turnController.battleFlow;
-        IStatusReceiver caster = battleFlow.playerParty.Find(p => p.ChClass == cardData.characterClass);
-
+        IStatusReceiver caster = GameManager.Instance.turnController.battleFlow.playerParty.Find(p => p.ChClass == cardData.characterClass);
         cardDescription.text = cardData.GetFormattedCardText(caster);// 카드 설명 설정
+    }
+
+    /// <summary>
+    /// UI 전용 카드 정보 업데이트 (캠프 씬에서 사용)
+    /// </summary>
+    public void UpdateCardInfoOnlyUI()
+    {
+        cardName.text = cardData.cardName; // 카드 이름 설정
+        cardCost.text = cardData.GetEffectiveCost().ToString(); // 카드 코스트 설정
+        
+        // ---캠프 씬에서는 caster 정보가 없으므로 플레이스홀더 {숫자}를 ?로 치환---
+        // null을 대입 시 기본값 출력으로 변경됨
+        string description = cardData.cardText;
+        //description = Regex.Replace(description, @"\{\d+\}", "?");
+        cardDescription.text = cardData.GetFormattedCardText(null);
     }
     public void SetOriginalPos()// 덱 최초 세팅 시점, 카드 추가 혹은 감소시 위치 초기화.
     {
@@ -341,6 +491,10 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     {
         return cardState; // 카드 상태 가져오기
     }
+    public GameObject GetCoverIllust()
+    {
+        return illustCover.gameObject; // 카드 일러스트 커버 오브젝트 가져오기
+    }
     public void UpdateStateMoveEnd()
     {
         if (cardData.IsUsable(GameManager.Instance.turnController.battleFlow.currentMana))
@@ -357,7 +511,9 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public void OnPointerDown(PointerEventData eventData)
     {
         SoundManager.Instance.PlaySFX(SoundCategory.UI, 4);
+        //SoundManager.Instance.PlaySFX(SoundCategory.SFX, 104);
     }
+
 }
 
 

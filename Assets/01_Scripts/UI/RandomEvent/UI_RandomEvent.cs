@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -9,10 +11,11 @@ using UnityEngine.UI;
 public class UI_RandomEvent : MonoBehaviour
 {
     [Header("ConnetObject")]
-    [SerializeField] Image backGround;
+    //[SerializeField] Image backGround;
     [SerializeField] Image illustration_Img;
     [SerializeField] TextMeshProUGUI titleTxt; 
     [SerializeField] TextMeshProUGUI descriptionTxt;
+    [SerializeField] TextMeshProUGUI pageIndicatorText;
     [SerializeField] Button optionButton_a;
     [SerializeField] Button optionButton_b;
     [SerializeField] TextMeshProUGUI optionTxt_a;
@@ -20,14 +23,28 @@ public class UI_RandomEvent : MonoBehaviour
 
     [Header("Value")]
     [SerializeField] float typingSpeed;
+    [SerializeField] float minFontSize = 20f;
+    [SerializeField] float maxFontSize = 30f;
+    [SerializeField] int maxLinesPerPage = 18;
+    [SerializeField] int lineThresholdForPagination = 25;
 
     private RandomEventData currentData;
     private List<int> results;
     private bool isSelectOption = false;
 
+    // 페이지 관리
+    private List<string> descriptionPages = new List<string>();
+    private int currentDescriptionPage = 0;
+    private TextMeshProUGUI nextPageIndicatorText;
+    private bool isLoadingPage = false;
+    private Coroutine pageIndicatorAnimationCoroutine;
+    private Coroutine currentTypingCoroutine; // 현재 타이핑 코루틴 추적
+    private bool skipTyping = false; // 타이핑 즉시 완료 플래그
+    private string currentResultText = ""; // 결과 페이지의 결과 텍스트 저장
+    private bool isResultPage = false; // 결과 페이지 여부
     private void Start()
     {
-        backGround.sprite = DataManager.Instance.GetBackground(ProgressDataManager.Instance.StageIndex);
+        //backGround.sprite = DataManager.Instance.GetBackground(ProgressDataManager.Instance.StageIndex);
         ProgressDataManager.Instance.IsNewStage = false;
 
         if (ProgressDataManager.Instance.SavedRandomEvent <= 0) // 저장 된 현재 랜덤이밴트 없을 경우
@@ -45,7 +62,6 @@ public class UI_RandomEvent : MonoBehaviour
         {
             InitUI(currentData);
         }
-
     }
     private void GetSavedEvent()
     {
@@ -65,6 +81,80 @@ public class UI_RandomEvent : MonoBehaviour
         ProgressDataManager.Instance.SavedRandomEvent = currentData.index;
 
         if (currentData == null) return;        
+    }
+
+    /// <summary>
+    /// 텍스트를 페이지 단위로 분할 (25줄 이상이면 18줄+a로 자르기)
+    /// 실제 렌더링되는 줄 수를 기준으로 분할
+    /// </summary>
+    private List<string> SplitTextIntoPages(string fullText)
+    {
+        List<string> pages = new List<string>();
+
+        // 전체 텍스트를 임시로 설정해서 실제 렌더링 줄 수 확인
+        descriptionTxt.text = fullText;
+        Canvas.ForceUpdateCanvases();
+        int totalVisualLines = descriptionTxt.textInfo.lineCount;
+
+        // 25줄 이하이면 그대로 반환
+        if (totalVisualLines <= lineThresholdForPagination)
+        {
+            pages.Add(fullText);
+            return pages;
+        }
+
+        // 줄 단위로 텍스트 분할 (\n 기준)
+        string[] lines = fullText.Split('\n');
+        int currentLineCount = 0;
+        string currentPage = "";
+
+        foreach (var line in lines)
+        {
+            currentPage += line + "\n";
+            currentLineCount++;
+
+            // maxLinesPerPage(18줄)에 도달했는지 확인
+            descriptionTxt.text = currentPage;
+            Canvas.ForceUpdateCanvases();
+            int currentVisualLines = descriptionTxt.textInfo.lineCount;
+
+            if (currentVisualLines >= maxLinesPerPage)
+            {
+                pages.Add(currentPage.TrimEnd());
+                currentPage = "";
+            }
+        }
+
+        // 마지막 페이지 추가
+        if (!string.IsNullOrEmpty(currentPage))
+        {
+            pages.Add(currentPage.TrimEnd());
+        }
+
+        return pages;
+    }
+
+    /// <summary>
+    /// 텍스트가 완전히 표시되었을 때 AutoSize가 계산할 폰트 크기를 미리 구하기
+    /// </summary>
+    private float GetAutoSizeFontSize(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+            return maxFontSize;
+
+        // 임시로 텍스트 설정
+        descriptionTxt.text = text;
+        descriptionTxt.enableAutoSizing = true;
+        Canvas.ForceUpdateCanvases();
+
+        // AutoSize가 계산한 최종 폰트 크기 저장
+        float finalSize = descriptionTxt.fontSize;
+
+        // AutoSizing 비활성화
+        descriptionTxt.enableAutoSizing = false;
+        descriptionTxt.text = "";
+
+        return finalSize;
     }
 
     private void InitUI(RandomEventData data)
@@ -87,13 +177,55 @@ public class UI_RandomEvent : MonoBehaviour
         optionTxt_a.text = "";
         optionTxt_b.text = "";
 
+        // 페이지 상태 초기화
+        currentDescriptionPage = 0;
+        descriptionPages.Clear();
+        isLoadingPage = false;
+        isResultPage = false;
+        currentResultText = "";
+
+        // 페이지 표시기 텍스트 초기화
+        if (pageIndicatorText != null)
+        {
+            pageIndicatorText.text = "";
+        }
+
+        // 기존 애니메이션 중지
+        if (pageIndicatorAnimationCoroutine != null)
+        {
+            StopCoroutine(pageIndicatorAnimationCoroutine);
+            pageIndicatorAnimationCoroutine = null;
+        }
+
+        // descriptionTxt의 버튼 컴포넌트 설정
+        Button descriptionButton = descriptionTxt.GetComponent<Button>();
+        if (descriptionButton != null)
+        {
+            descriptionButton.onClick.RemoveAllListeners();
+            descriptionButton.onClick.AddListener(OnDescriptionButtonClicked);
+        }
+
         StartCoroutine(StartTyping());
     }
 
 
    private IEnumerator StartTyping()
     {
-        yield return StartCoroutine(TypeText(descriptionTxt, LocaleDataManager.GetLocalizedRandomEvent(currentData.description)));
+        var customEffect = descriptionTxt.GetComponent<TMPCustomEffect>();
+        if (customEffect != null)
+        {
+            customEffect.Reset();
+        }
+        
+        string fullText = LocaleDataManager.GetLocalizedRandomEvent(currentData.description);
+        
+        // 텍스트를 페이지로 분할
+        descriptionPages = SplitTextIntoPages(fullText);
+        currentDescriptionPage = 0;
+
+        // 첫 번째 페이지 표시
+        yield return StartCoroutine(DisplayDescriptionPage(0));
+
         yield return new WaitForSeconds(0.5f);
         Coroutine op_0 = StartCoroutine(TypeText(optionTxt_a, LocaleDataManager.GetLocalizedRandomEvent(currentData.option_a)));
         Coroutine op_1 = StartCoroutine(TypeText(optionTxt_b, LocaleDataManager.GetLocalizedRandomEvent(currentData.option_b)));
@@ -105,13 +237,263 @@ public class UI_RandomEvent : MonoBehaviour
         optionButton_b.interactable = true;
     }
 
+    /// <summary>
+    /// 지정된 페이지의 설명을 표시
+    /// </summary>
+    private IEnumerator DisplayDescriptionPage(int pageIndex)
+    {
+        isLoadingPage = true;
+
+        if (pageIndex < 0 || pageIndex >= descriptionPages.Count)
+        {
+            isLoadingPage = false;
+            yield break;
+        }
+
+        currentDescriptionPage = pageIndex;
+        string pageText = descriptionPages[pageIndex];
+
+        // 이 페이지 텍스트가 완전히 표시되었을 때 AutoSize가 계산할 폰트 크기를 미리 구하기
+        float autoSizeFontSize = GetAutoSizeFontSize(pageText);
+        descriptionTxt.fontSize = autoSizeFontSize;
+        descriptionTxt.enableAutoSizing = false; // 타이핑 중 자동 재계산 방지
+
+        var customEffect = descriptionTxt.GetComponent<TMPCustomEffect>();
+        if (customEffect != null)
+        {
+            customEffect.Reset();
+        }
+
+        // 타이핑 이펙트와 함께 텍스트 표시
+        yield return StartCoroutine(TypeTextWithEffect(descriptionTxt, pageText));
+
+        // 다음 페이지가 있으면 페이지 표시기 활성화
+        if (pageIndex < descriptionPages.Count - 1)
+        {
+            ShowPageIndicator();
+        }
+        else
+        {
+            HidePageIndicator();
+        }
+
+        isLoadingPage = false;
+    }
+
+    /// <summary>
+    /// 페이지 표시기 활성화 (강조 애니메이션)
+    /// </summary>
+    private void ShowPageIndicator()
+    {
+        if (pageIndicatorText == null)
+            return;
+
+        // 기존 애니메이션 중지
+        if (pageIndicatorAnimationCoroutine != null)
+        {
+            StopCoroutine(pageIndicatorAnimationCoroutine);
+        }
+
+        pageIndicatorText.text = "N e x t  >>";
+        pageIndicatorAnimationCoroutine = StartCoroutine(PageIndicatorPulseAnimation());
+    }
+
+    /// <summary>
+    /// 페이지 표시기 비활성화
+    /// </summary>
+    private void HidePageIndicator()
+    {
+        if (pageIndicatorText == null)
+            return;
+
+        // 기존 애니메이션 중지
+        if (pageIndicatorAnimationCoroutine != null)
+        {
+            StopCoroutine(pageIndicatorAnimationCoroutine);
+            pageIndicatorAnimationCoroutine = null;
+        }
+
+        pageIndicatorText.text = "";
+    }
+
+    /// <summary>
+    /// 페이지 표시기 스케일 애니메이션 (1.0 ~ 1.1배)
+    /// </summary>
+    private IEnumerator PageIndicatorPulseAnimation()
+    {
+        if (pageIndicatorText == null)
+            yield break;
+
+        float duration = 0.5f; // 한 사이클에 0.5초 (커졌다 작아졌다)
+        float elapsedTime = 0f;
+
+        while (true)
+        {
+            elapsedTime = (elapsedTime + Time.deltaTime) % (duration * 2);
+
+            float t;
+            if (elapsedTime < duration)
+            {
+                // 1.0 → 1.1 (커지는 구간)
+                t = elapsedTime / duration;
+                t = Mathf.Lerp(1f, 1.1f, Mathf.Sin(t * Mathf.PI / 2)); // easeOut
+            }
+            else
+            {
+                // 1.1 → 1.0 (작아지는 구간)
+                t = (elapsedTime - duration) / duration;
+                t = Mathf.Lerp(1.1f, 1f, Mathf.Sin(t * Mathf.PI / 2)); // easeIn
+            }
+
+            pageIndicatorText.transform.localScale = new Vector3(t, t, 1f);
+
+            yield return null;
+        }
+    }
+
+    /// <summary>
+    /// descriptionTxt 클릭 이벤트 (타이핑 중이면 즉시 완료, 완료 후면 다음 페이지로 이동)
+    /// </summary>
+    private void OnDescriptionButtonClicked()
+    {
+        // 타이핑 중이면 즉시 완료 (현재 페이지의 모든 텍스트 표시)
+        if (isLoadingPage)
+        {
+            skipTyping = true;
+            return; // 다음 페이지로 이동하지 않음
+        }
+
+        // 타이핑이 완료된 후 클릭 시 다음 페이지로 이동
+        if (currentDescriptionPage < descriptionPages.Count - 1)
+        {
+            if (isResultPage)
+            {
+                // 결과 페이지로 이동
+                StartCoroutine(DisplayDescriptionPageForResult(currentDescriptionPage + 1, currentResultText));
+            }
+            else
+            {
+                // 일반 페이지로 이동
+                StartCoroutine(DisplayDescriptionPage(currentDescriptionPage + 1));
+            }
+        }
+    }
+
+    /// <summary>
+    /// 결과 페이지 표시 (resultText 포함)
+    /// </summary>
+    private IEnumerator DisplayDescriptionPageForResult(int pageIndex, string resultText)
+    {
+        isLoadingPage = true;
+
+        if (pageIndex < 0 || pageIndex >= descriptionPages.Count)
+        {
+            isLoadingPage = false;
+            yield break;
+        }
+
+        currentDescriptionPage = pageIndex;
+        string pageText = descriptionPages[pageIndex];
+
+        // 이 페이지 텍스트가 완전히 표시되었을 때 AutoSize가 계산할 폰트 크기를 미리 구하기
+        float autoSizeFontSize = GetAutoSizeFontSize(pageText);
+        descriptionTxt.fontSize = autoSizeFontSize;
+        descriptionTxt.enableAutoSizing = false; // 타이핑 중 자동 재계산 방지
+
+        var customEffect = descriptionTxt.GetComponent<TMPCustomEffect>();
+        if (customEffect != null)
+        {
+            customEffect.Reset();
+        }
+
+        // 타이핑 이펙트와 함께 텍스트 표시
+        yield return StartCoroutine(TypeTextWithEffect(descriptionTxt, pageText));
+        yield return new WaitForSeconds(0.5f);
+
+        // 마지막 페이지에서만 결과 텍스트 표시
+        if (pageIndex == descriptionPages.Count - 1)
+        {
+            yield return StartCoroutine(TypeText(optionTxt_b, resultText));
+        }
+
+        // 다음 페이지가 있으면 페이지 표시기 활성화
+        if (pageIndex < descriptionPages.Count - 1)
+        {
+            ShowPageIndicator();
+        }
+        else
+        {
+            HidePageIndicator();
+        }
+
+        isLoadingPage = false;
+    }
+
 
     private IEnumerator TypeText(TextMeshProUGUI textUI, string fullText)
     {
         textUI.text = "";
+        
+        if (skipTyping)
+        {
+            textUI.text = fullText;
+            skipTyping = false;
+            yield break;
+        }
+        
         foreach (var c in fullText)
         {
+            if (skipTyping)
+            {
+                textUI.text = fullText;
+                skipTyping = false;
+                yield break;
+            }
             textUI.text += c;
+            yield return new WaitForSeconds(typingSpeed);
+        }
+    }
+
+    private IEnumerator TypeTextWithEffect(TextMeshProUGUI textUI, string rawText)
+    {
+        var customEffect = textUI.GetComponent<TMPCustomEffect>();
+        string parsedText = GradientTextParser.Parse(rawText, out var _);
+        
+        textUI.text = "";
+        int charCount = parsedText.Length;
+        
+        if (skipTyping)
+        {
+            textUI.text = parsedText;
+            if (customEffect != null)
+            {
+                customEffect.SetGradientText(rawText);
+            }
+            skipTyping = false;
+            yield break;
+        }
+        
+        for (int i = 0; i < charCount; i++)
+        {
+            if (skipTyping)
+            {
+                textUI.text = parsedText;
+                if (customEffect != null)
+                {
+                    customEffect.SetGradientText(rawText);
+                }
+                skipTyping = false;
+                yield break;
+            }
+            
+            textUI.text += parsedText[i];
+            
+            // 매 글자마다 부분적으로 이펙트 적용 (타이핑 진행 상황 유지)
+            if (customEffect != null)
+            {
+                customEffect.SetGradientTextPartial(rawText);
+            }
+            
             yield return new WaitForSeconds(typingSpeed);
         }
     }
@@ -142,9 +524,28 @@ public class UI_RandomEvent : MonoBehaviour
         optionButton_a.interactable = false;
         optionButton_b.interactable = false;
 
+        // 페이지 상태 초기화
+        currentDescriptionPage = 0;
+        descriptionPages.Clear();
+        isLoadingPage = false;
+        isResultPage = true;
+
+        // 페이지 표시기 텍스트 초기화
+        if (pageIndicatorText != null)
+        {
+            pageIndicatorText.text = "";
+        }
+
+        // 기존 애니메이션 중지
+        if (pageIndicatorAnimationCoroutine != null)
+        {
+            StopCoroutine(pageIndicatorAnimationCoroutine);
+            pageIndicatorAnimationCoroutine = null;
+        }
+
         yield return new WaitForSeconds(0.5f);
 
-        float randomValue = Random.value; // 0 ~ 1 사이
+        float randomValue = UnityEngine.Random.value; // 0 ~ 1 사이
         string resultDescription = "";
         results = null;
 
@@ -205,7 +606,8 @@ public class UI_RandomEvent : MonoBehaviour
 
         // 적용되는 효과를 텍스트로 나열 및 출력 해주는 효과 (이때 카드 해금은 텍스트 출력하지 않음 => 별도의 팝업 UI로 처리)
         string resultText = string.Join("\n", results
-            .Where(i => {
+            .Where(i =>
+            {
                 var effect = EventEffectManager.Instance.eventEffectDict[i];
                 if (effect != null && effect.eventType == 1)
                 {
@@ -215,12 +617,24 @@ public class UI_RandomEvent : MonoBehaviour
                 }
                 return true;
             })
-            .Select(i => LocaleDataManager.GetLocalizedRandomEventEffect("Event_"+i)));
+            .Select(i => LocaleDataManager.GetLocalizedRandomEventEffect("Event_" + i)));
 
-        yield return StartCoroutine(TypeText(descriptionTxt, resultDescription));
-        yield return new WaitForSeconds(0.5f);
+        // 결과 텍스트 저장
+        currentResultText = resultText;
 
-        yield return StartCoroutine(TypeText(optionTxt_b, resultText));
+        // 결과 설명을 페이지로 분할
+        descriptionPages = SplitTextIntoPages(resultDescription);
+        currentDescriptionPage = 0;
+
+        var customEffect = descriptionTxt.GetComponent<TMPCustomEffect>();
+        if (customEffect != null)
+        {
+            customEffect.Reset();
+        }
+        
+        // 첫 번째 페이지 표시 (결과 설명)
+        yield return StartCoroutine(DisplayDescriptionPageForResult(0, resultText));
+
         // 만약 카드 해금이 포함되어 있으면, 해금 팝업 UI 출력
         foreach (int resultIndex in results)
         {
@@ -251,6 +665,9 @@ public class UI_RandomEvent : MonoBehaviour
     /// 
     private void ApplyEffectsAndGoToStage()
     {
+        // 이전 스테이지 상태를 복원하도록 설정
+        ProgressDataManager.Instance.RetryFromStart = false;
+        
         ProgressDataManager.Instance.SavedRandomEvent = -1;
         foreach (int resultIndex in results)
         {

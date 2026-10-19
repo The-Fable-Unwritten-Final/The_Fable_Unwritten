@@ -4,15 +4,15 @@ Desc_Starting,Every tale begins with its very first choice.,모든 이야기는 
 Plus_Starting,Cost of the first card use after battle begins ##,전투 시작 후 처음 사용하는 카드의 비용 ##,戦闘開始後、最初のカードのコスト ##
 Minus_Starting,Enemy HP increases by ##,적 체력 ##,敵のHP ## 
 Name_Lyrical,Lyrical Style,서정적 문체,抒情的な文体
-Desc_Lyrical,"A gentle melody heals allies, yet leaves room for danger.","잔잔한 선율은 아군을 치유하지만, 방심을 허락한다.",穏やかな調べは仲間を癒すが、隙も生む。
+Desc_Lyrical,"A gentle melody heals allies,\nyet leaves room for danger.","잔잔한 선율은 아군을 치유하지만,\n방심을 허락한다.",穏やかな調べは仲間を癒すが、\n隙も生む。
 Plus_Lyrical,"When using a healing card, recover +1 additional HP",회복카드 사용 시 +1 만큼 추가 회복,回復カードを使う時、追加で +1 回復
 Minus_Lyrical,Damage receive from enemies +1,적으로 부터 받는 피해 +1,敵から受けるダメージ +1
 Name_Narrative,Narrative Style,서사적 문체,叙事的な文体
-Desc_Narrative,"As the story deepens, blessings and curses grow stronger.","전개가 깊어질수록, 축복과 저주는 더욱 강해진다.",物語が深まるほど、恩恵も呪いも強まる。
+Desc_Narrative,"As the story deepens,\nblessings and curses grow stronger.","전개가 깊어질수록,\n축복과 저주는 더욱 강해진다.",物語が深まるほど、\n恩恵も呪いも強まる。
 Plus_Narrative,Buff value to allies increase by ##,아군 대상 버프 효과 적용 시 수치 ##,味方へのバフ効果の数値が ## 増加
 Minus_Narrative,Debuff value to allies increase by ##,아군 대상 디버프 효과 적용 시 수치 ##,味方へのデバフ効果の数値が ## 増加
 Name_Catastrophic,Catastrophic Style,파멸적 문체,破滅の文体
-Desc_Catastrophic,"Which will fall first—the enemy, or the one who wields destruction?","먼저 쓰러지는 건 적일까, 아니면 자신일까.",先に倒れるのは敵か、破滅を振るう者か。
+Desc_Catastrophic,"Which will fall first—the enemy,\nor the one who wields destruction?","먼저 쓰러지는 건 적일까,\n아니면 자신일까.",先に倒れるのは敵か、\n破滅を振るう者か。
 Plus_Catastrophic,Damage on enemies ##,적에게 입히는 피해 ##,敵に与えるダメージ ##
 Minus_Catastrophic,Damage receive from enemies ##,적으로 부터 받는 피해 ##,敵から受けるダメージ ##
 Name_Dreamlike,Dreamlike Style,몽환적 문체,夢幻の文体
@@ -20,7 +20,7 @@ Desc_Dreamlike,A battle that trembles like a dream.,꿈처럼 흔들리는 전�
 Plus_Dreamlike,All allies attack adds random damage modifier (##),아군의 모든 공격 랜덤한 보정 값 \n(##) 적용,味方のすべての攻撃にランダム補正値 (##) を適用
 Minus_Dreamlike,"At the start of each turn, apply 1 random debuff to a random ally",매턴 시작 시 랜덤한 디버프 '1 만큼' 랜덤한 아군에게 부여,毎ターン開始時、ランダムな味方にランダムなデバフを1付与
 Name_Hopeful,Hopeful Style,희망적 문체,希望の文体
-Desc_Hopeful,"Hope guides each step, even as danger grows.","점점 위험해져도, 희망은 걸음을 이끈다.",危険が増しても、希望は歩みを導く。
+Desc_Hopeful,"Hope guides each step,\neven as danger grows.","점점 위험해져도,\n희망은 걸음을 이끈다.",危険が増しても、\n希望は歩みを導く。
 Plus_Hopeful,"At the start of each turn, gain +1 cost",매 턴 시작 코스트 +1,毎ターン開始時、コスト +1
 Minus_Hopeful,Damage receive from enemies ##,적으로 부터 받는 피해 ##,敵から受けるダメージ ##
 Name_Tragic,Tragic Style,비극적 문체,悲劇の文体
@@ -28,10 +28,10 @@ Desc_Tragic,Growth becomes most vivid within tragedy.,비극 속에서 성장은
 Plus_Tragic,Damage on enemies ##,적에게 입히는 피해 ##,敵に与えるダメージ ##
 Minus_Tragic,All healing receive is reduced by ##,모든 치유량 감소 ##,すべての回復量が ## 減少
 Name_Despairing,Despairing Style,절망적 문체,絶望的な文体
-Desc_Despairing,"When the preparation is most needed, you begin at your weakest.","가장 대비가 필요할 때, 가장 취약하게 시작한다.",最も備えが必要な時に、最も脆く始まる。
+Desc_Despairing,"When the preparation is most needed,\nyou begin at your weakest.","가장 대비가 필요할 때,\n가장 취약하게 시작한다.",最も備えが必要な時に、\n最も脆く始まる。
 Plus_Despairing,The first card of each turn costs 0,매 턴 첫 카드의 코스트 소모 없음,毎ターン最初に使うカードはコストを消費しない
-Minus_Despairing,"At the start of battle, all allies begin in the “Stun” state",전투 입장 시 아군 전체 '기절' 상태로 시작,戦闘開始時、味方全体が「気絶」状態で始まる
+Minus_Despairing,"At the start of battle, all allies begin in the “Stun” state",전투 입장 시 아군 전체 '기절' 상태로 시작,戦闘開始時、味方全員が「気絶」状態で始まる
 Name_Chaotic,Chaotic Style,혼돈적 문체,混沌の文体
-Desc_Chaotic,Chaos stitches together what should never meet.,"혼돈은, 마주쳐선 안 될 것들을 억지로 이어 붙인다.",混沌は、本来交わらないはずのものを縫い合わせる。
+Desc_Chaotic,Chaos stitches together\nwhat should never meet.,"혼돈은, 마주쳐선 안 될 것들을\n억지로 이어 붙인다.",混沌は、本来交わらないはずのものを\n縫い合わせる。
 Plus_Chaotic,Chaotic Style,혼돈적 문체,混沌の文体
 Minus_Chaotic,Chaotic Style,혼돈적 문체,混沌の文体

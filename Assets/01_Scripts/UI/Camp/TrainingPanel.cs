@@ -38,7 +38,5 @@ public class TrainingPanel : BaseCampPanel
         }
 
         UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
-        // 애널리틱스
-        GameManager.Instance.analyticsLogger.LogCampActInfo((int)characterClass + 1);
     }
 }

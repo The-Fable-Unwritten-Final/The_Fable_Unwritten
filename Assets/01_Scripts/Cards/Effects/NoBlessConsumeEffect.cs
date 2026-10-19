@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CardEffects/NoBlessConsumeEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/NoBlessConsumeEffect")]
 public class NoBlessConsumeEffect : CardEffectBase
 {
     public int value = 1;

@@ -159,6 +159,9 @@ public static class LineDrawer
             }
         }
 
+        // 최소 2개의 포인트 보장 (너무 가까울 경우 점이 하나도 안 찍히는 경우 방지)
+        validPointCount = Mathf.Max(validPointCount, 2);
+
         if (validPointCount < dotCount)
         {
             System.Array.Resize(ref points, validPointCount);

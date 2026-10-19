@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
-using System.Linq;
 
 public enum TurnState { PlayerTurn, EnemyTurn } //적 턴인지 아군 턴인지 판별자
 
@@ -22,13 +22,15 @@ public class BattleFlowController : MonoBehaviour
 
     [Header("UI")]
     public TextMeshProUGUI Mana;
+    [SerializeField] private OnUseSkillBlack skillFocusEffect; // 스킬 포커스 효과
 
-
+    [Header("Debug")]
+    [SerializeField] private bool autoStartBattle = true;
     public List<IStatusReceiver> playerParty { get; private set; } = new();
 
     public List<IStatusReceiver> enemyParty = new List<IStatusReceiver> { null, null, null };
 
-    public int startMana = 4; //시작 마나
+    public int startMana = 5; //시작 마나
     public int currentMana;   //현재 마나
 
     public Dictionary<CharacterClass, DeckModel> decksByCharacter = new();     //캐릭터 마다의 사용, 미사용, 핸드 덱
@@ -47,6 +49,9 @@ public class BattleFlowController : MonoBehaviour
     //임시 inspector 확인용
     private void Start()
     {
+        if (!autoStartBattle)
+            return;
+
         totalExp = 0;
         isWin = 0;
         SetupPredefinedPlayerSlots();
@@ -123,6 +128,14 @@ public class BattleFlowController : MonoBehaviour
             }
         }
 
+        IdealRealizationManager.Instance?.ResetBattleState();
+
+        // 전투 입장 시점의 상태 백업 (타이틀에서 돌아올 때 이 상태로 복원됨)
+        ProgressDataManager.Instance.BackupBattleEntryState();
+
+        // 저장된 플레이어 효과 복원 (전투 복귀 시)
+        ProgressDataManager.Instance.ApplyRestoredEffectsToPlayers();
+
         foreach (var enemy in enemyParty)
         {
             if (enemy is Enemy e)
@@ -137,21 +150,21 @@ public class BattleFlowController : MonoBehaviour
                 switch(pc.playerData.IDNum)
                 {
                     case 0:
-                        if (pc.playerData.currentStance == StancType.None)
+                        if (!(pc.playerData.currentStance == StancType.Insight))
                         {
-                            pc.playerData.currentStance = StancType.Seek;
+                            pc.ChangeStance(StancType.Seek);
                         }
                         break;
                     case 1:
-                        if (pc.playerData.currentStance == StancType.None)
+                        if (!(pc.playerData.currentStance == StancType.Discipline))
                         {
-                            pc.playerData.currentStance = StancType.Mercy;
+                            pc.ChangeStance(StancType.Mercy);
                         }
                         break;
                     case 2:
-                        if (pc.playerData.currentStance == StancType.None)
+                        if (!(pc.playerData.currentStance == StancType.Defense))
                         {
-                            pc.playerData.currentStance = StancType.Rush;
+                            pc.ChangeStance(StancType.Rush);
                         }
                         break;
                     default:
@@ -178,6 +191,12 @@ public class BattleFlowController : MonoBehaviour
 
         // 문체 효과 적용 => 턴 시작시 마나 보유량 변환
         currentMana = StyleManager.Instance.ModifySupplyManaAtStartOfTurn(currentMana);
+
+        foreach (var enemy in enemyParty)
+        {
+            if (enemy is Enemy e && e.IsAlive())
+                e.Mechanic?.OnPlayerTurnStart();
+        }
 
         foreach (var player in playerParty)
         {
@@ -213,17 +232,39 @@ public class BattleFlowController : MonoBehaviour
     /// <param name="target">타겟</param>
     public void UseCard(CardModel card, IStatusReceiver caster, List<IStatusReceiver> targets)
     {
-        if (!card.IsUsable(currentMana) || !caster.IsAlive())      //사용 가능하지 않거나 적 또는 사용자가 죽어 있다면 생략하기
-        {
+        if (card == null || caster == null || !caster.IsAlive())
             return;
+
+        if (caster is PlayerController pcCaster)
+        {
+            if (pcCaster.IsTemporarilyAbsent)
+                return;
+
+            if (!pcCaster.CanActThisTurn())
+                return;
         }
 
-        if (caster is PlayerController pcCaster && !pcCaster.CanActThisTurn())
+        PlayerController sophia = playerParty.OfType<PlayerController>().FirstOrDefault(p => p.IsAlive() && p.ChClass == CharacterClass.Sophia);
+
+        int baseEffectiveCost = card.GetEffectiveCost();
+        int activationDiscount = 0;
+
+        if (sophia != null)
+            activationDiscount = sophia.GetActivationDiscountForCard(card);
+
+        int actualCost = Mathf.Max(0,baseEffectiveCost - activationDiscount);
+
+
+        if (currentMana < actualCost)
             return;
 
+        if (sophia != null && activationDiscount > 0)
+        {
+            sophia.ConsumeActivation(activationDiscount);
+        }
 
-        int actualCost = card.GetEffectiveCost();
-        currentMana -= actualCost; // 할인된 코스트 차감
+        currentMana -= actualCost;
+
         // 문체 효과 적용 //
         var styleManager = StyleManager.Instance;
         if (styleManager.isFirstTurnCard)
@@ -244,8 +285,11 @@ public class BattleFlowController : MonoBehaviour
         if (targets == null || targets.Count == 0)
         {
             int count = Mathf.Max(1, card.targetCount);
-            targets = AutoChooseTargets(card.targetType, card.characterClass, count, targets[0]);
+            targets = AutoChooseTargets(card.targetType, card.characterClass, count, null);
         }
+
+        if (targets == null || targets.Count == 0)
+            return;
 
         //Debug.Log($"{caster.ChClass} 가 {card.cardName} 사용 → {string.Join(", ", targets.ConvertAll(t => t.ChClass.ToString()))}, cost : {actualCost}");
 
@@ -257,10 +301,27 @@ public class BattleFlowController : MonoBehaviour
             }
         }
 
+        // 스킬 포커스 효과 표시
+        if (skillFocusEffect != null)
+        {
+            skillFocusEffect.ShowSkillFocus(caster, targets);
+        }
+
         //todo : 이후 카드에 따라 attack type 다르게 만들기
-        int attackType = (int)card.type%3;
-        card.Play(caster, targets, attackType); // 카드 효과 실행
-                                                // 포텐셜 게이지 연동
+        card.Play(caster, targets, card.index); // 카드 효과 실행
+
+        if (caster is PlayerController playerCaster)
+        {
+            foreach (var enemy in enemyParty)
+            {
+                if (enemy is Enemy e && e.IsAlive())
+                {
+                    e.Mechanic?.OnCardUsed(playerCaster, card, targets, activationDiscount);
+                }
+            }
+        }
+
+        // 포텐셜 게이지 연동
         NotifyAllPlayersCardUsed(caster);
         // 임시 카메라 줌 인 아웃 효과 추가 (이후 캐릭터의 모션이 추가되면, 해당 모션의 시작과 끝에 맞춰 줌 인 아웃 재설정)
 
@@ -279,6 +340,24 @@ public class BattleFlowController : MonoBehaviour
 
 
         GameManager.Instance.analyticsLogger.LogUseCardInfo(card.index); // 카드 사용 정보 기록
+
+        // 스킬 포커스 효과 숨김 (약간의 지연 후)
+        if (skillFocusEffect != null)
+        {
+            StartCoroutine(HideSkillFocusAfterDelay(skillFocusEffect, 1.5f));
+        }
+    }
+
+    /// <summary>
+    /// 일정 시간 후 스킬 포커스 효과를 숨김
+    /// </summary>
+    private IEnumerator HideSkillFocusAfterDelay(OnUseSkillBlack skillBlack, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (skillBlack != null)
+        {
+            skillBlack.HideSkillFocus();
+        }
     }
 
 
@@ -288,27 +367,17 @@ public class BattleFlowController : MonoBehaviour
     /// </summary>
     public void EndPlayerTurn()
     {
-        foreach (var player in playerParty)
+        foreach (var enemy in enemyParty)
         {
-            /*player.Deck.DiscardHand();  // 손패 전체 버리기
+            if (enemy == null || !enemy.IsAlive())
+                continue;
 
-            GameManager.Instance.combatUIController.CardStatusUpdate?.Invoke();*/
-            if (player.IsAlive())
-            {
+            enemy.ClearScarBurst();
 
-                var hand = player.Deck.Hand;
-                if (hand.Count > DeckModel.startSize)
-                {
-                    Debug.LogWarning($"{player.ChClass} 카드가 3장을 초과합니다. 버릴 카드 선택이 필요합니다.");
-
-                    // todo: 외부에서 선택한 카드 전달 필요 Todisacrd
-                    // 여기선 임시로 가장 뒤의 카드부터 자동으로 버린다고 가정
-                    List<CardModel> toDiscard = new(hand);
-                    toDiscard.Reverse();
-                    player.Deck.DiscardHandToThree(toDiscard);
-                }
-            }
+            if (enemy is Enemy e)
+                e.Mechanic?.OnPlayerTurnEnd();
         }
+
         currentTurn = TurnState.EnemyTurn;          //적 턴으로 이행
     }
 
@@ -317,7 +386,12 @@ public class BattleFlowController : MonoBehaviour
     /// </summary>
     public void ExecuteEnemyTurn(Action onEnemyTurnComplete)
     {
-        if (isBattleEnded) return;
+        if (isBattleEnded)
+        {
+            onEnemyTurnComplete?.Invoke();
+            return;
+        }
+
         StartCoroutine(EnemyTurnCoroutine(() =>
         {
             onEnemyTurnComplete?.Invoke();
@@ -325,18 +399,24 @@ public class BattleFlowController : MonoBehaviour
         }));
     }
 
-
     private void AfterEnemyTurn()
     {
         foreach (var player in playerParty)
         {
+            if (!player.IsAlive())
+                continue;
+
+            player.ClearScarBurst();
+        
+            player.Deck.DiscardUnmaintainedCardsAtTurnEnd();
+
             if (player is PlayerController pc && pc.IsAlive())
                 pc.OnTurnEnd();
-
-            player.Deck.DiscardUnmaintainedCardsAtTurnEnd();
         }
 
-        foreach (var enemy in enemyParty)
+        var currentEnemies = new List<IStatusReceiver>(enemyParty);
+
+        foreach (var enemy in currentEnemies)
         {
             if (enemy is Enemy e && e.IsAlive())
                 e.OnTurnEnd();
@@ -412,6 +492,11 @@ public class BattleFlowController : MonoBehaviour
 
     public void CheckBattleEnd()
     {
+        bool hasPendingEnemyDeath = enemyParty.OfType<Enemy>().Any(e => e != null && e.IsDeathPending);
+
+        if (hasPendingEnemyDeath)
+            return;
+
         bool allPlayersDead = playerParty.TrueForAll(p => !p.IsAlive());
         bool allEnemiesDead = enemyParty.TrueForAll(p => !p?.IsAlive() ?? true);
 
@@ -532,7 +617,26 @@ public class BattleFlowController : MonoBehaviour
 
         if (characterMap.TryGetValue(caster, out var casterController))
         {
-            List<IStatusReceiver> targets = AutoChooseTargets(card.targetType, card.characterClass, card.targetCount, target);
+            // 그롤리에게 삼켜진 캐릭터
+            if (casterController is PlayerController pc && pc.IsTemporarilyAbsent)
+            {
+                Debug.Log($"[BattleFlow] {pc.ChClass} 실종 상태 → 카드 사용 불가");
+                return;
+            }
+
+            TargetType targetType = card.targetType;
+
+            if (CanUseAgapeReverseTarget(card) && target != null)
+            {
+                bool targetEnemy = target.ChClass == CharacterClass.Enemy;
+
+                if ((card.type == CardType.Pray || card.type == CardType.baptism) && targetEnemy)
+                    targetType = TargetType.Enemy;
+                else if (card.type == CardType.Taboo && !targetEnemy)
+                    targetType = TargetType.Ally;
+            }
+
+            List<IStatusReceiver> targets = AutoChooseTargets(targetType, card.characterClass, card.targetCount, target);
 
             if (targets.Count > 0)
             {
@@ -556,14 +660,36 @@ public class BattleFlowController : MonoBehaviour
         characterMap.TryGetValue(character, out var characterObj);
         return characterObj;
     }
+    private bool IsAgapeReverseTargetValid(CardModel card, IStatusReceiver target)
+    {
+        if (card == null || target == null)
+            return false;
+
+        bool targetEnemy = target.ChClass == CharacterClass.Enemy;
+
+        if (card.type == CardType.Pray || card.type == CardType.baptism)
+            return targetEnemy;
+
+        if (card.type == CardType.Taboo)
+            return !targetEnemy;
+
+        return false;
+    }
 
     public bool CanUseCard(CardModel card, IStatusReceiver caster, IStatusReceiver target, int currentMana)
     {
         if (caster == null || target == null || card == null) return false;
         if (!card.IsUsable(currentMana)) return false;
         if (!card.CanBeUsedBy(caster.ChClass)) return false;
-        if (!card.IsTargetValid(caster, target)) return false;
-        if (caster.IsStunned()) return false; // 스턴 상태면 사용 불가
+        bool validTarget = card.IsTargetValid(caster, target);
+
+        if (!validTarget && CanUseAgapeReverseTarget(card))
+            validTarget = IsAgapeReverseTargetValid(card, target);
+
+        if (!validTarget) return false;
+
+        if (caster is PlayerController pc && !pc.CanActThisTurn())
+            return false;
 
         foreach (var effect in card.effects)        //버릴 카드 부족하면 사용 불가
         {
@@ -604,6 +730,30 @@ public class BattleFlowController : MonoBehaviour
         return null;
     }
 
+    public bool HasLucielAgape()
+    {
+        foreach (var enemy in enemyParty)
+        {
+            if (enemy is Enemy e && e.IsAlive() && e.Mechanic is LucielMechanic)
+                return true;
+        }
+
+        return false;
+    }
+    private bool CanUseAgapeReverseTarget(CardModel card)
+    {
+        if (card == null || card.characterClass != CharacterClass.Kayla)
+            return false;
+
+        if (!HasLucielAgape() || card.targetType == TargetType.None)
+            return false;
+
+        return card.type == CardType.Pray ||
+               card.type == CardType.baptism ||
+               card.type == CardType.Taboo;
+    }
+
+
 
     /// <summary>
     /// 자동 타겟 설정
@@ -638,7 +788,8 @@ public class BattleFlowController : MonoBehaviour
                         result = candidates;
                         break;
                     default:
-                        result.Add(originTarget);
+                        if (originTarget != null)
+                            result.Add(originTarget);
                         break;
 
                 }
@@ -678,9 +829,10 @@ public class BattleFlowController : MonoBehaviour
         }
         else
         {
-            List<IStatusReceiver> candidates = pool.FindAll(p => p != null && p.IsAlive()&& p != originTarget);
+            List<IStatusReceiver> candidates = pool.FindAll(p => p != null && p.IsAlive() && p != originTarget);
 
-            result.Add(originTarget);
+            if (originTarget != null && originTarget.IsAlive())
+                result.Add(originTarget);
 
             while (result.Count < targetNum && candidates.Count > 0)
             {
@@ -749,4 +901,81 @@ public class BattleFlowController : MonoBehaviour
                 card.isEnhanced = false;
         }
     }
+    public void TryAutoCastPotentialCards(PlayerController caster)
+    {
+        if (caster == null || !caster.IsAlive())
+            return;
+
+        var cards = caster.Deck.Hand.ToList();
+
+        foreach (var card in cards)
+        {
+            if (card == null) continue;
+
+            foreach (var effect in card.effects)
+            {
+                if (effect is not ConditionalEffect conditional)
+                    continue;
+
+                if (conditional.condition is not PotentialTriggeredCondition)
+                    continue;
+
+                if (conditional.effectIfTrue is not AutoCastEffect autoCast)
+                    continue;
+
+                for (int i = 0; i < autoCast.count; i++)
+                    AutoUseCard(card, caster);
+
+                break;
+            }
+        }
+    }
+
+    private void AutoUseCard(CardModel card, IStatusReceiver caster)
+    {
+        if (card == null || caster == null || !caster.IsAlive())
+            return;
+
+        var targets = AutoChooseTargets(
+            card.targetType,
+            card.characterClass,
+            card.targetCount,
+            null
+        );
+
+        if (targets == null || targets.Count == 0)
+            return;
+
+        BattleLogManager.Instance.card = card;
+
+        card.Play(caster, targets, card.index);
+
+        BattleLogManager.Instance.RegisterCardUse(caster, card);
+
+        RefreshAllDeckEnhanced();
+    }
+
+
+    ////디버그용
+    public void InitializeDebugPlayers()
+    {
+        playerParty.Clear();
+
+        SetupDebugPlayer(frontSlot);
+        SetupDebugPlayer(middleSlot);
+        SetupDebugPlayer(backSlot);
+
+        Initialize();
+    }
+
+    private void SetupDebugPlayer(PlayerController player)
+    {
+        if (player == null || player.playerData == null)
+            return;
+
+        player.Setup(player.playerData);
+        playerParty.Add(player);
+    }
+
+    ///디버그용
 }

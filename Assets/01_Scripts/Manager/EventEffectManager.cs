@@ -116,6 +116,29 @@ public class EventEffectManager : MonoSingleton<EventEffectManager>
                     };
                     eventEffectList.Add(buffStatEffect);
                     break;
+
+                case 4: // 노드 텔레포트 효과
+                    var nodeTeleportEffect = new NodeTeleportEventEffect
+                    {
+                        index = data.index,
+                        text = data.text,
+                        eventType = data.eventType,
+                        duration = data.duration
+                    };
+                    eventEffectList.Add(nodeTeleportEffect);
+                    break;
+
+                case 5: // 잉크 +- 효과
+                    var inkEffect = new InkEventEffect
+                    {
+                        index = data.index,
+                        text = data.text,
+                        eventType = data.eventType,
+                        duration = data.duration,
+                        inkAmount = data.inkAmount
+                    };
+                    eventEffectList.Add(inkEffect);
+                    break;
             }
         }
 

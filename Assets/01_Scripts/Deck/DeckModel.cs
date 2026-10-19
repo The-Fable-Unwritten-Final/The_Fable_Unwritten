@@ -10,7 +10,7 @@ public class DeckModel
     public List<CardModel> hand = new();                //들고 있는 카드
 
     public IReadOnlyList<CardModel> Hand => hand;
-    public const int maxSize = 10;
+    public const int maxSize = 200;
     public const int startSize = 3;
 
     //덱 삽입하기
@@ -29,6 +29,7 @@ public class DeckModel
         }
     }
 
+    private Dictionary<int, int> evolvedCardIds = new();
 
     /// <summary>
     /// 카드 드로우 시 행동
@@ -61,12 +62,12 @@ public class DeckModel
         {
             if (card.isOneUse)
             {
-                GameObject.Destroy(card); // 파괴
+                GameObject.Destroy(card);
                 Debug.Log($"[Deck] 일회용 카드 {card.cardName} 파괴됨");
             }
             else
             {
-                usedDeck.Add(card); // 일반적인 카드만 사용 덱에 추가
+                usedDeck.Add(ResolveEvolvedCard(card));
             }
         }
     }
@@ -87,7 +88,7 @@ public class DeckModel
             if (hand.Contains(card))
             {
                 hand.Remove(card);
-                usedDeck.Add(card);
+                usedDeck.Add(ResolveEvolvedCard(card));
                 discarded++;
 
                 if (discarded >= discardCountNeeded)
@@ -102,8 +103,10 @@ public class DeckModel
     /// </summary>
     public void DiscardHand()
     {
-        usedDeck.AddRange(hand);                //들고 있는 카드 전부 사용 덱으로
-        hand.Clear();                           //핸드를 비움
+        foreach (var card in hand)
+            usedDeck.Add(ResolveEvolvedCard(card));
+
+        hand.Clear();
     }
 
     /// <summary>
@@ -199,8 +202,11 @@ public class DeckModel
     /// </summary>
     public void ResetDeckState()
     {
-        unusedDeck.AddRange(hand);
-        unusedDeck.AddRange(usedDeck);
+        foreach (var card in hand)
+            unusedDeck.Add(ResolveEvolvedCard(card));
+
+        foreach (var card in usedDeck)
+            unusedDeck.Add(ResolveEvolvedCard(card));
 
         hand.Clear();
         usedDeck.Clear();
@@ -211,67 +217,76 @@ public class DeckModel
     }
 
 
+    /// <summary>
+    /// 카드가 지속적 할인을 받을 자격이 있는지 판단
+    /// (특정 키워드를 가진 카드는 제외)
+    /// </summary>
+    private bool ShouldApplyPersistentDiscount(CardModel card)
+    {
+        // 'copy' 키워드를 가진 카드는 할인 적용 안함
+        return !card.HasKeyword("copy");
+    }
+
+    /// <summary>
+    /// '모든 카드' 대상 amount 만큼 할인 적용
+    /// </summary>
     public void ApplyPersistentDiscountToAllCards(int amount)
     {
-        foreach (var card in hand)
-            card.ApplyPersistentDiscount(amount);
-        foreach (var card in unusedDeck)
-            card.ApplyPersistentDiscount(amount);
-        foreach (var card in usedDeck)
-            card.ApplyPersistentDiscount(amount);
+        // 세 리스트의 모든 카드를 순회
+        var allCards = new List<CardModel>();
+        allCards.AddRange(hand);
+        allCards.AddRange(unusedDeck);
+        allCards.AddRange(usedDeck);
+        
+        foreach (var card in allCards)
+        {
+            // 각 카드는 독립적인 복사본이므로 모두에 할인 적용
+            if (ShouldApplyPersistentDiscount(card))
+            {
+                card.ApplyPersistentDiscount(amount);
+            }
+        }
     }
     /// <summary>
     ///  '특정 타입'의 카드 대상 할인 적용
     /// </summary>
     public void ApplyPersistentDiscountByCardType(CardType targetType, int amount)
     {
-        foreach (var card in hand)
-            if (card.type == targetType)
-                card.ApplyPersistentDiscount(amount);
+        // 세 리스트의 모든 카드를 순회
+        var allCards = new List<CardModel>();
+        allCards.AddRange(hand);
+        allCards.AddRange(unusedDeck);
+        allCards.AddRange(usedDeck);
         
-        foreach (var card in unusedDeck)
-            if (card.type == targetType)
+        foreach (var card in allCards)
+        {
+            // 해당 타입이고, 각 카드는 독립적인 복사본이므로 모두에 할인 적용
+            if (card.type == targetType && 
+                ShouldApplyPersistentDiscount(card))
+            {
                 card.ApplyPersistentDiscount(amount);
-        
-        foreach (var card in usedDeck)
-            if (card.type == targetType)
-                card.ApplyPersistentDiscount(amount);
+            }
+        }
     }
 
     public void DiscardUnmaintainedCardsAtTurnEnd()
     {
-        List<CardModel> toRemove = new();
+        List<CardModel> toDiscard = new();
 
         // 핸드 검사
         foreach (var card in hand)
         {
             if (!card.isMaintain)
             {
-                toRemove.Add(card);
+                toDiscard.Add(card);
             }
         }
 
-        foreach (var card in toRemove)
+        foreach (var card in toDiscard)
         {
             GameManager.Instance.combatUIController.ThrowCard(card);
-            Debug.Log($"[Deck] 유지되지 않는 카드 {card.cardName} 핸드에서 제거");
+            Discard(card);
         }
-
-        // 사용 덱 검사
-        toRemove.Clear();
-        foreach (var card in usedDeck)
-        {
-            if (!card.isMaintain)
-                toRemove.Add(card);
-        }
-
-        foreach (var card in toRemove)
-        {
-            usedDeck.Remove(card);
-            GameObject.Destroy(card);
-            Debug.Log($"[Deck] 유지되지 않는 카드 {card.cardName} 사용 덱에서 제거");
-        }
-
     }
 
     public bool AddToHandRightmost(CardModel card, bool updateUI = true)
@@ -309,6 +324,7 @@ public class DeckModel
 
             var card = unusedDeck[0];
             unusedDeck.RemoveAt(0);
+
             hand.Add(card);
             drawn.Add(card);
 
@@ -370,4 +386,53 @@ public class DeckModel
         }
     }
 
+
+
+    public void EvolveAllCards(int cardIndex, int evolveTarget)
+    {
+        var evolvedBase = DataManager.Instance.AllCards.Find(c => c.index == evolveTarget);
+
+        if (evolvedBase == null)
+        {
+            Debug.LogWarning($"[CardEvolve] 진화 대상 없음: {cardIndex} -> {evolveTarget}");
+            return;
+        }
+
+        evolvedCardIds[cardIndex] = evolveTarget;
+
+        ReplaceEvolvedCards(unusedDeck, cardIndex, evolvedBase);
+        ReplaceEvolvedCards(usedDeck, cardIndex, evolvedBase);
+
+        Debug.Log($"[CardEvolve] {cardIndex} -> {evolveTarget} 진화 완료");
+    }
+
+    private void ReplaceEvolvedCards(List<CardModel> deck, int cardIndex, CardModel evolvedBase)
+    {
+        for (int i = 0; i < deck.Count; i++)
+        {
+            if (deck[i] == null || deck[i].index != cardIndex)
+                continue;
+
+            deck[i] = evolvedBase.Clone();
+        }
+    }
+
+    private CardModel ResolveEvolvedCard(CardModel card)
+    {
+        if (card == null)
+            return null;
+
+        if (!evolvedCardIds.TryGetValue(card.index, out int evolveTarget))
+            return card;
+
+        var evolvedBase = DataManager.Instance.AllCards.Find(c => c.index == evolveTarget);
+
+        if (evolvedBase == null)
+        {
+            Debug.LogWarning($"[CardEvolve] 진화 대상 없음: {card.index} -> {evolveTarget}");
+            return card;
+        }
+
+        return evolvedBase.Clone();
+    }
 }

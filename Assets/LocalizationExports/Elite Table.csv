@@ -1,0 +1,272 @@
+﻿Key,en,ja,ko
+Type_Name_23_01,Runic Carapace,ルーンの甲殻,룬 갑각
+Type_Name_24_01,Scroll,巻物,두루마리
+Type_Name_34_01,Predation,捕食,포식
+Type_Name_34_02,Swallowed,飲み込まれる,삼켜짐
+Type_Name_33_01,Soprano,ソプラノ,소프라노
+Type_Name_33_02,Mezzo-Soprano,メゾソプラノ,메조소프라노
+Type_Name_33_03,Alto,アルト,알토
+Type_Name_43_01,Face-Off,対峙,대면
+Type_Name_43_02,Clash,打ち合い,합
+Type_Name_43_03,Clash,打ち合い,합합
+Type_Name_44_01,Challenger,挑戦者,도전자
+Type_Name_44_02,Encirclement,包囲,포위
+Type_Name_44_03,Exhaustion,脱力,탈진
+Type_Name_42_01,Formation,隊列,대열
+Type_Name_42_02,Marching Orders,進軍命令,진군 명령
+Type_Name_42_03,Formation Break,陣形崩壊,진영 붕괴
+Type_Name_42_04,Rally,再集結,재집결
+Type_Name_50_01,Doubt,疑念,의심
+Type_Name_50_02,Intimidated,萎縮,위축
+Type_Name_50_03,Encouragement,激励,격려
+Type_Name_33_04,Trio,トリオ,트리오
+Type_Name_33_05,Duet,デュエット,듀엣
+Type_Name_33_06,Solo,ソロ,솔로
+Type_Name_25_01,Unidentified Rune,未解読のルーン,미해독 룬
+Type_Name_25_02,Current Rune,現在のルーン,현재 룬
+Type_Name_25_03,Rune Storm Warning,ルーンストーム予告,룬 폭풍 예고
+Type_Name_25_04,Trace of Deciphering,解読痕跡,판독 흔적
+Type_Name_35_01,Agape,アガペー,아가페
+Type_Name_35_02,Divine Veil,神聖ヴェール,신성 장막
+Type_Name_35_03,Devotion,献身,헌신
+Type_Name_35_04,Obsession,執着,집착
+Type_Name_35_05,Balance,均衡,균형
+Type_Name_45_01,Preparation {0},備え {0},대비 {0}
+Type_Name_45_02,Mastery,熟練,숙련
+Type_Name_45_03,Opening {0},隙 {0},빈틈 {0}
+Type_Name_51_01,Phantom Veil,幻影ヴェール,허상 장막
+Type_Name_51_02,Doubt,疑念,의심
+Type_Name_51_03,Misjudgment,誤判,오판
+Type_Name_51_04,Trust,信頼,신뢰
+Type_Name_51_05,Authority,権威,권위
+Type_Text_23_01,"Defense +{0}
+Decreases by 1 on attack damage taken
+When it reaches 0, gain {1} Attack at the start of next enemy turn and use Tidal Wave","防御力 +{0}
+攻撃ダメージを受けるたびに1減少する。
+0になると、次の敵ターン開始時に攻撃力 +{1},
+「海流波動」を使用する。","방어력 +{0}
+공격 피해를 받을 때마다 1 감소
+0이 되면 다음 적 턴에 공격력 +{1}, 해류 파동 사용"
+Type_Text_24_01,"If any Flip survives at the end of the enemy turn, +1
+At {0}, remove all Flip at the start of enemy turn
+Deal {1} damage to all allies and reset the stack
+If below {0} at the end of enemy turn,
+summon a Flip","敵ターン終了時、生存しているフリップがいる場合+1
+{0}になると、次の敵ターン開始時にフリップを解除
+味方全体に{1}ダメージを与え、スタックを初期化
+敵ターン終了時、{0}未満ならフリップを召喚","적 턴 종료 시 생존한 플립이 있으면 +1
+{0}일 때 다음 적 턴 시작 시 플립을 제거하고
+아군 전체에게 피해 {1} 및 스택 초기화
+적 턴 종료 시 {0} 미만이면 플립 소환"
+Type_Text_34_01,"Decreases by the attack damage taken
+When it reaches 0, spit out the swallowed target
+If any stacks remain at the end of the player's turn
+Deal {0} damage to the target, recover {1} HP,
+then spit out the target","受けた攻撃ダメージ分減少
+0になると、飲み込んだ対象を吐き出す
+プレイヤーターン終了時、スタックが残っている場合
+対象に{0}ダメージを与え、HP {1}回復した後、対象を吐き出す","받은 공격 피해만큼 감소
+0이 되면 삼킨 대상을 뱉어냄
+플레이어 턴 종료 시 스택이 존재할 경우
+대상에게 피해 {0}, 체력 {1} 회복 후 뱉어냄"
+Type_Text_34_02,"Can't use cards
+Removed immediately when spat out or when Grolly is dead
+Can't be reduced to 0 HP by damage taken when swallowed or spat out","カード使用できない
+吐き出されるか、グロリーが倒されると即座に解除
+飲み込まれる時や吐き出される時に受けるダメージではHPが0にならない","카드를 사용할 수 없음
+뱉어지거나 그롤리가 처치되면 즉시 해제
+삼키거나 뱉을 때 받는 피해로 체력이 0이 되지 않음"
+Type_Text_33_01,"{0}
+{1}","{0}
+{1}","{0}
+{1}"
+Type_Text_33_02,"{0}
+{1}","{0}
+{1}","{0}
+{1}"
+Type_Text_33_03,"{0}
+{1}","{0}
+{1}","{0}
+{1}"
+Type_Text_43_01,"When attacking the Nameless Swordsman,
+Attacker and Nameless Swordsman: Clash +1
+Attack damage to Nameless Swordsman +{0} per Clash
+Remove Clash when this is removed","無名剣士を攻撃時、自身と無名剣士の「打ち合い」 +1
+無名剣士に与える攻撃ダメージが「打ち合い」1につき +{0}
+解除の時、「打ち合い」をすべて解除","무명검객을 공격 시 자신과 무명검객의 '합' +1
+무명검객에게 주는 공격 피해가 '합' 1당 +{0}
+해제 시 '합' 전부 제거"
+Type_Text_43_02,Maximum {0},最大 {0},최대 {0}
+Type_Text_43_03,"Max {0}
+-{1} when attacked by non Face-Off (max {2} per turn)
+This strengthens Issen","最大{0}
+「対峙」状態ではない攻撃を受けると-{1}（1ターン最大{2}）
+数値が高いほど「一閃」強化","최대 {0}
+'대면' 상태가 아닌 공격을 받으면 -{1} (턴당 최대 {2})
+수치가 높을수록 일섬 강화"
+Type_Text_44_01,Next Sweep Target,次の薙ぎ払い対象,다음 휩쓸기의 대상
+Type_Text_44_02,"Number of allies that attacked this player turn
+At 3 or more, use Whirlwind on next enemy turn","このプレイヤーターンに攻撃した味方の人数
+3 以上で次の敵ターンに「大回転」を使用","이번 플레이어 턴에 공격한 아군의 수
+3 이상일 경우 다음 적 턴에 대회전 사용"
+Type_Text_44_03,"Accumulated Damage {0}, Damage Taken +{1}%
+Removed at the end of the player turn
+When removed, recover {2}% of lost HP (Max {3})
+When accumulated damage is {4} or more: Attack +{5},
+{6} or more: Defense +{7}","累積ダメージ {0}、被ダメージ +{1}%
+プレイヤーターン終了時に解除
+解除時、失ったHPの {2}%回復（最大{3}）
+累積ダメージ {4}以上で攻撃力 +{5}、
+{6}以上で防御力 +{7}","누적 피해 {0}, 받는 추가 피해 +{1}%
+플레이어 턴 종료 시 해제
+해제 시 잃은 체력의 {2}% 회복(최대 {3})
+누적 피해가 {4} 이상이면 공격력 +{5},
+{6} 이상이면 방어력 +{7}"
+Type_Text_42_01,"Max {0}
+-1 when taking attack damage
+Knight Commander takes {1}% reduced attack damage per Formation (Max {2}%)","最大 {0}
+攻撃ダメージを受けるたび -1
+隊列1につき騎士団長が受ける攻撃ダメージ-{1}%（最大{2}%）","최대 {0}
+공격 피해를 받을 때마다 -1
+대열 1당 기사단장이 받는 공격 피해 -{1}%(최대 {2}%)"
+Type_Text_42_02,"At turn end, all Wraith Soldiers: Formation +{0}
+Target the ally that played the most cards this turn","ターン終了時、すべての兵士霊の「隊列」 +{0}
+このターン最も多くカードを使用した味方を標的にする","턴 종료 시 모든 검은 병사령의 대열 +{0}
+이번 턴에 카드를 가장 많이 사용한 아군을 지목"
+Type_Text_42_03,"Skip next turn
+Attack Damage Taken +{0}% until end of next player turn","次のターン行動しない
+次のプレイヤーターン終了まで受ける攻撃ダメージ +{0}%","다음 턴에 행동하지 않음
+다음 플레이어 턴 종료 전까지 받는 공격 피해 +{0}%"
+Type_Text_42_04,"Attack +{1} until end of next enemy turn
+Ignore the first Formation reduction next player turn","次の敵ターン終了まで攻撃力+{1}
+次のプレイヤーターンの最初の「隊列」減少を無効化","다음 적 턴 종료까지 공격력 +{1}
+다음 플레이어 턴에 처음 발생하는 대열 감소 무시"
+Type_Text_50_01,"Max {0}
+Card Effects -{1}%
+Become Intimidated at {2} or more","最大{0}
+カード効果 -{1}%
+{2}以上で「萎縮」付与","최대 {0}
+카드 효과 -{1}%
+{2} 이상일 때 '위축' 부여"
+Type_Text_50_02,"Card Effects -{0}%
+Removed when Doubt is below {1}","カード効果 -{0}%
+「疑念」が {1}未満で解除","카드 효과 -{0}%
+'의심'이 {1} 미만일 때 제거"
+Type_Text_50_03,Doubt Resolved: {0},「疑念」を解消した回数 {0}回,의심을 해소한 횟수 {0}회
+Type_Text_33_04,Deal {0} damage to all allies,味方全体にダメージ {0},아군 전체에게 피해 {0}
+Type_Text_33_05,Deal {0} damage to all allies,味方全体にダメージ {0},플레이어 전체에게 피해 {0}
+Type_Text_33_06,Deal {0} damage to all allies,味方全体にダメージ {0},플레이어 전체에게 피해 {0}
+Type_Text_33_07,"All Elua Attack +{0}, Defense +{1}",すべてのエルアの攻撃力 +{0}、防御力 +{1},"모든 엘루아의 공격력 +{0}, 방어력 +{1}"
+Type_Text_33_08,All Elua Defense +{0},すべてのエルアの防御力 +{0},모든 엘루아의 방어력 +{0}
+Type_Text_33_09,"Attack +{0}, Defense +{1}",攻撃力 +{0}、防御力 +{1},"공격력 +{0}, 방어력 +{1}"
+Type_Text_33_10,Restore {0} HP to all Elua,すべてのエルアのHP {0}回復,모든 엘루아의 체력 {0} 회복
+Type_Text_33_11,Restore {0} HP to the Elua with the lowest HP,HPが最も低いエルアのHP {0}回復,체력이 가장 낮은 엘루아의 체력 {0} 회복
+Type_Text_33_12,Restore {0} HP and Defense +{1},HP {0}回復、防御力 +{1},체력 {0} 회복하고 방어력 +{1}
+Type_Text_25_01,"when Decipher succeeds -{0}
+Further reduced by Activation cost reduction (Max {1})
+ Enemy turn start: Decreases by 1 per {2} Burn damage (Max {3})","解読成功時 -{0}
+活性で減少したコスト分さらに減少（最大{1}）
+敵ターン開始時、火傷ダメージ {2}ごとに -1（最大{3}）","판독 성공 시 -{0}
+활성으로 감소한 비용만큼 감소(카드당 최대 {1})
+적 턴 시작 시 화상 피해 {2}당 -1(최대 {3})"
+Type_Text_25_02,"On successful Decipher, changes to a new Rune",解読成功時、新たなルーンに変化,판독 성공 시 새로운 룬으로 변경
+Type_Text_25_03,"At 0, use Rune Storm
+On enemy turn end -1 (excluding the turn Rune Storm is used)","0になるとルーン嵐を使用
+敵ターン終了時 -1（ルーン嵐を使用したターンを除く）","0이 되면 룬 폭풍 사용
+적 턴 종료 시 -1(룬 폭풍을 사용한 턴 제외)"
+Type_Text_25_04,"After Deciphering {0} or more,weaken the next Rune Storm with the most deciphered type
+Fire: Damage -{1}, Ice: Remove {2} Debuffs
+Nature: Next turn Sophia Activation +{3},
+Draw {4} additional cards","解読 {0}回以上で
+最も多く解読したタイプで次のルーン嵐を弱化
+火炎：ダメージ-{1}、氷：デバフを{2}個解除
+自然：次のターン、ソフィアの活性+{3}、
+カードを{4}枚追加ドロー","{0}회 이상 판독 시 가장 많은 타입으로 다음 룬 폭풍 약화
+화염: 피해 -{1}, 얼음: 상태이상 {2}개 제거
+자연: 다음 턴 소피아의 활성 {3} 증가,
+카드 {4}장 추가 드로우"
+Type_Text_35_01,"Using Prayer/Baptism on enemies: Devotion +1
+Using Taboo on allies: Obsession +1","祈り/洗礼を敵に適用：献身 +1
+禁忌を味方に適用：執着 +1","기도/세례를 적에게 사용: 헌신 +1
+금기를 아군에게 사용: 집착 +1"
+Type_Text_35_02,"Attack Damage Taken -{0}%
+Reduced by Balance and Obsession,
+increased by Devotion","受ける攻撃ダメージ -{0}%
+均衡/執着で減少
+献身で増加","받는 공격 피해 -{0}%
+균형/집착으로 감소,
+헌신으로 증가"
+Type_Text_35_03,"When higher than Obsession at player turn end
+Weakens the next skill at enemy turn start
+Restore Luciel's HP and Divine Veil","プレイヤーターン終了時、執着を上回る場合発動
+敵ターン開始時、次のスキルを弱化
+ルシエルのHPと神聖ヴェールを回復","플레이어 턴 종료 시 집착보다 높은 경우
+적 턴 시작 시 다음 스킬 약화
+루시엘의 체력과 신성 장막 회복"
+Type_Text_35_04,"When higher than Devotion at player turn end
+Strengthens the next skill and reduces Divine Veil at enemy turn start
+If the strengthened skill is a healing/buff skill,
+Deal damage equal to the value to all players","プレイヤーターン終了時、献身を上回る場合発動
+敵ターン開始時、次のスキルを強化し神聖ヴェール減少
+強化されたスキルが回復/バフスキルの場合、
+プレイヤー全体に数値分のダメージ","플레이어 턴 종료 시 헌신보다 높은 경우
+적 턴 시작 시 다음 스킬 강화, 신성 장막 감소
+강화 스킬이 회복/버프 스킬이면,
+플레이어 전체에게 수치만큼 피해"
+Type_Text_35_05,"Reduces Divine Veil at enemy turn start
+At {0} or more, weaken the next skill, then remove","敵ターン開始時、神聖ヴェール減少
+{0}以上で次のスキルを弱化し、解除","적 턴 시작 시 신성 장막 감소
+{0} 이상일 때 다음 스킬 약화 후 제거"
+Type_Text_45_01,"Increases by the card's Cost when same type is used (Max 2)
+Counter an enemy attack of the same type
+For different types, spend 2 Preparation to counter
+Remove at enemy turn end","同じタイプのカード使用時、コスト分増加（最大2）
+同じタイプの敵の攻撃に対処
+異なるタイプの場合、備えを2消費して対処
+敵ターン終了時に解除","같은 타입의 카드 사용 시 코스트만큼 증가(최대 2)
+동일한 타입의 적 공격에 대응
+동일하지 않은 타입일 때 대비를 2 소모하여 대응
+적 턴 종료 시 제거"
+Type_Text_45_02,"Min 0, Max {0}
+Below {0}: Counter failure >> Use skill, then +1
+At {0}: Counter failure >> Strengthen skill, then change to {1}
+Phase 1 counter success
+Phase 2 Opening recovery success >> -1","最小0、最大{0}
+{0}未満：対処失敗時、スキル使用後+1
+{0}の場合：対処失敗時、スキル強化後{1}に変化
+1フェーズ対処成功 / 2フェーズ隙の回収成功時-1","최소 0, 최대 {0}
+{0} 미만: 대응 실패 시 스킬 사용 후 +1
+{0}이면 대응 실패 시 스킬 강화 후 {1}로 변경
+1페이즈 대응 성공 / 2페이즈 빈틈 회수 성공 시 -1"
+Type_Text_45_03,"Until the end of the next player turn,
+remove on attacked by the same type
+On success, Mastery -{0}
+On failure, Mastery +{1}
+","次のプレイヤーターン終了まで
+同じタイプのスキルで攻撃すると解除
+成功時、熟練-{0}
+失敗時、熟練+{1}","다음 플레이어 턴 종료 전까지,
+같은 타입의 스킬로 공격 시 제거
+성공 시 숙련 -{0}
+실패 시 숙련 +{1}"
+Type_Text_51_01,Attack Damage Taken -{0}%,受ける攻撃ダメージ -{0}%,받는 공격 피해 -{0}%
+Type_Text_51_02,"On card use, -1
+Effect of that card -{0}%","カード使用時 -1
+カードの効果 -{0}%","카드를 사용 시 -1,
+카드의 효과 -{0}%"
+Type_Text_51_03,"If Doubt remains at player turn end
+Great Oz gains Authority","プレイヤーターン終了時、疑念が残っている場合
+偉大なるオズが権威を獲得","플레이어 턴 종료 시 의심이 남아 있을 경우
+위대한 오즈의 권위 증가"
+Type_Text_51_04,"Doubt Resolved
+Weakens Phantom Veil and reduces Authority at the start of Phase 2","疑念解消済み
+幻影ヴェールを弱化し、
+2フェーズ開始時に権威を減少","의심을 해소한 상태
+허상 장막을 약화하고 2페이즈 시작 시 권위를 감소시킴"
+Type_Text_51_05,"Phase 1: Strengthen next skill, then remove
+Phase 2: +1 at enemy turn start,
+strengthen attack skills, then -1","1フェーズ：次のスキルを強化後、解除
+2フェーズ：敵ターン開始時に +1、
+攻撃スキルを強化後、-1","1페이즈: 최대 {0}, 다음 스킬을 강화한 후 제거
+2페이즈: 최대 {1}, 적 턴 시작 시 1 증가,
+공격 스킬을 강화 후 1 감소"

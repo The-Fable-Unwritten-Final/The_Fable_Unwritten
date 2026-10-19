@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CardEffects/Conditions/JustAfterStanceCondition")]
+[CreateAssetMenu(menuName = "Cards/Conditions/JustAfterStanceCondition")]
 public class JustAfterStanceCondition : TriggerCondition
 {
     public override bool IsConditionMet(IStatusReceiver caster, List<IStatusReceiver> target)

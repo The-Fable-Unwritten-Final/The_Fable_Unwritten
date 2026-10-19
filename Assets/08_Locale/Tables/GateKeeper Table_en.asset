@@ -1,0 +1,101 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: GateKeeper Table_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: a6f4b4b14475f8a489a2c3c4109009c9, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 18818281472
+    m_Localized: Encouragement
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22756732928
+    m_Localized: Calm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25210400768
+    m_Localized: Refresh
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27311747072
+    m_Localized: Blessing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30176456704
+    m_Localized: Advice
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33963913216
+    m_Localized: Comfort
+    m_Metadata:
+      m_Items: []
+  - m_Id: 131200462848
+    m_Localized: Resolve
+    m_Metadata:
+      m_Items: []
+  - m_Id: 138494357504
+    m_Localized: Awakening
+    m_Metadata:
+      m_Items: []
+  - m_Id: 146706804736
+    m_Localized: Protection
+    m_Metadata:
+      m_Items: []
+  - m_Id: 188754702336
+    m_Localized: 'Doubt -{0}, reduce the cost of the target character''s next card
+      by 1
+
+      If the cost has already been reduced this turn,
+
+      reduce Doubt
+      by an additional 1 instead'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 182282891264
+    m_Localized: Doubt -{0}, give {0} Freeze to the Gatekeeper
+    m_Metadata:
+      m_Items: []
+  - m_Id: 168093560832
+    m_Localized: Doubt -{0}, give {0} Burn to the Gatekeeper
+    m_Metadata:
+      m_Items: []
+  - m_Id: 205653553152
+    m_Localized: Doubt -{0}, grant the target character 1 Blessing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 211827568640
+    m_Localized: Doubt -{0}, gain 2 Sin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 225190621184
+    m_Localized: Doubt -{0}, restore {1} HP to the target character
+    m_Metadata:
+      m_Items: []
+  - m_Id: 233428234240
+    m_Localized: Doubt -{0}, apply {1} Scar to the Gatekeeper
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247009390592
+    m_Localized: Doubt -{0}, grant the target character {1} Defense
+    m_Metadata:
+      m_Items: []
+  - m_Id: 240399167488
+    m_Localized: Doubt -{0}, apply {1} Stun to the Gatekeeper
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

@@ -13,6 +13,8 @@ public class StanceSystem
 
     public StancType CurrentStance => playerData.currentStance;
     public PotentialGauge Gauge => potentialGauge;
+    public bool PotentialTriggeredThisTurn { get; private set; }
+
 
     public StanceSystem(PlayerController owner, PlayerData playerData)
     {
@@ -49,12 +51,19 @@ public class StanceSystem
 
     private void OnGaugeFull()
     {
+        PotentialTriggeredThisTurn = true;
         OnStanceEffectTriggered?.Invoke();
         potentialGauge.ConsumeForEffect();
     }
 
+    public void OnTurnEnd()
+    {
+        PotentialTriggeredThisTurn = false;
+    }
+
     public void OnBattleEnd()
     {
+        PotentialTriggeredThisTurn = false;
         potentialGauge.Reset();
         owner?.stanceEffectData?.Reset();
     }

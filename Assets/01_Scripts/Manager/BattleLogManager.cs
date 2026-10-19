@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class BattleLogManager : MonoSingleton<BattleLogManager>
 {
+    private Dictionary<int, int> cardEvolveUseCounts = new();
 
     public static readonly Dictionary<CardType, List<CardType>> comboTable = new()   //연계 Dictionary
     {
         { CardType.Ice,      new List<CardType>{CardType.Strike } }, // 빙결 → 타격
-        { CardType.Nature,   new List < CardType > { CardType.Holy } },  // 자연 → 성력
+        { CardType.Nature,   new List < CardType > { CardType.Taboo } },  // 자연 → 성력
         { CardType.baptism,     new List < CardType > { CardType.Defense } }, // 세례 → 방어
         { CardType.Pray,    new List < CardType > { CardType.Nature} },    // 기도 → 자연
         { CardType.Slash,   new List < CardType > { CardType.Fire } },   // 참격 → 화염
@@ -71,8 +72,35 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
         UsedCardsForStage.AddLast(log);
         UsedCardsForBattle.AddLast(log);
         UsedCardsForCurrent.AddLast(log);
-    }
 
+        RegisterCardEvolveUse(user, card);
+    }
+    private void RegisterCardEvolveUse(IStatusReceiver user, CardModel card)
+    {
+        if (card.evolveCount <= 0 || card.evolveTarget <= 0)
+            return;
+
+        if (!cardEvolveUseCounts.ContainsKey(card.index))
+            cardEvolveUseCounts[card.index] = 0;
+
+        cardEvolveUseCounts[card.index]++;
+
+        Debug.Log(
+            $"[CardEvolve] {card.cardName} " +
+            $"{cardEvolveUseCounts[card.index]}/{card.evolveCount}"
+        );
+
+        if (cardEvolveUseCounts[card.index] < card.evolveCount)
+            return;
+
+        cardEvolveUseCounts.Remove(card.index);
+
+        if (user is PlayerController pc)
+        {
+            pc.Deck.EvolveAllCards(card.index, card.evolveTarget);
+            pc.playerData.EvolveCardIndexes(card.index, card.evolveTarget);
+        }
+    }
 
 
     /// <summary>
@@ -188,6 +216,7 @@ public class BattleLogManager : MonoSingleton<BattleLogManager>
     public void ResetForRun()
     {
         KaylaDamage = 0f;
+        cardEvolveUseCounts.Clear();
         ResetForBattle();
     }
 

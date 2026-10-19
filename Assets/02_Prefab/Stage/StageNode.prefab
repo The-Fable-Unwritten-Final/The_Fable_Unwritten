@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 6458214164449784344}
   - component: {fileID: 7104334890019791776}
   - component: {fileID: -534573039632865352}
+  - component: {fileID: -7026241237044161282}
   m_Layer: 5
   m_Name: StageNode
   m_TagString: Untagged
@@ -175,12 +176,12 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_NormalColor: {r: 1, g: 0.85490197, b: 0.85490197, a: 1}
+    m_HighlightedColor: {r: 0.8117647, g: 0.5058824, b: 0.24705882, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 5
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 0.6}
+    m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
@@ -225,3 +226,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stanceButton: {fileID: 0}
+--- !u!114 &-7026241237044161282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5334812594238698168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 369be2b26ee4e7f49b30585b81b1e343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundCat: 10
+  key: 203
+  clickCooldown: 0.3
+  playOnce: 1

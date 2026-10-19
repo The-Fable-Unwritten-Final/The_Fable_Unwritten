@@ -36,7 +36,6 @@ public class PopupUI_Setting : BasePopupUI
     
     private void OnEnable()
     {
-        OnClickButtonSound();
         // 사운드 셋팅
         BGMvolumSlider.value = SoundManager.Instance.bgmVolume;
         BGMvolumSlider.onValueChanged.AddListener(OnBGMVolumChange);
@@ -117,12 +116,6 @@ public class PopupUI_Setting : BasePopupUI
         }
     }
 
-    public void OnClickButtonSound()
-    {
-        SoundManager.Instance.PlaySFX(SoundCategory.Button, 0); // 기본 버튼 사운드
-    }
-
-
 
 
     // 언어 변경 드롭다운 설정
@@ -151,7 +144,11 @@ public class PopupUI_Setting : BasePopupUI
         localeDropdown.AddOptions(options);
         localeDropdown.value = currentLocaleIndex;
         localeDropdown.RefreshShownValue();
-        localeDropdown.onValueChanged.AddListener(ChangeLocale);
+        localeDropdown.onValueChanged.AddListener((int index) => 
+        {
+            SoundManager.Instance.PlaySFX(SoundCategory.SFX, 101);
+            ChangeLocale(index);
+        });
     }
     private void ChangeLocale(int index)
     {

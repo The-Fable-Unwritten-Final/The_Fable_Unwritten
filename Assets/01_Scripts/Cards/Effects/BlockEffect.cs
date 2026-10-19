@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(menuName = "CardEffect/BlockEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/BlockEffect")]
 public class BlockEffect : CardEffectBase
 {
     ///추후 특정 캐릭터 대상 지정 block이 나오면 이 변수를 이용하자

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+[CreateAssetMenu(menuName = "Cards/Conditions/NotCurrentCardTypeCondition")]
 
 /// <summary>
 /// 이번 턴에 특정 타입 카드가 사용되지 않았을 경우 조건 만족

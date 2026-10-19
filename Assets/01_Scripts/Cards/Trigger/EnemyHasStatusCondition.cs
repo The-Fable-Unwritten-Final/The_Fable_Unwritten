@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CardEffects/Conditions/EnemyHasStatusCondition")]
+[CreateAssetMenu(menuName = "Cards/Conditions/EnemyHasStatusCondition")]
 public class EnemyHasStatusCondition : TriggerCondition
 {
     public BuffStatType statusType;

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CardEffect/BlindEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/BlindEffect")]
 public class BlindEffect : CardEffectBase
 {
     public StancType blockedStance;

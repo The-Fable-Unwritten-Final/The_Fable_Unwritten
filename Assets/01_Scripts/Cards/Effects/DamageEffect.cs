@@ -7,7 +7,7 @@ using static UnityEngine.GraphicsBuffer;
 /// <summary>
 /// 데미지 코드
 /// </summary>
-[CreateAssetMenu(menuName = "CardEffect/DamageEffect")]
+[CreateAssetMenu(menuName = "Cards/Effects/DamageEffect")]
 public class DamageEffect : CardEffectBase
 {
     public float amount;    //기본 데미지
@@ -19,33 +19,61 @@ public class DamageEffect : CardEffectBase
     /// <param name="target">타겟</param>
     public override void Apply(IStatusReceiver caster, List<IStatusReceiver> targets, bool? isEnhanced = null)
     {
+        ApplyWithMultiplier(caster, targets, 1f, isEnhanced);
+    }
+
+    public void ApplyWithMultiplier(IStatusReceiver caster, List<IStatusReceiver> targets, float multiplier, bool? isEnhanced = null, bool reversedTaboo = false)
+    {
         if (targets == null || targets.Count == 0) return;
 
-        // 공격자는 자신의 공격력만 고려
         float attackerAtk = caster.ModifyStat(BuffStatType.Attack, amount);
         var card = BattleLogManager.Instance.card;
         bool stanceBoosted = false;
         bool stanceWeakened = false;
 
-
-        attackerAtk = (isEnhanced == true) ? attackerAtk * 1.5f : attackerAtk;
-        if (caster is PlayerController pc)
-        {
-            (attackerAtk, stanceBoosted, stanceWeakened) = StanceHelper.ApplyStanceToDamage(pc, attackerAtk, card.type);
-        }
+        attackerAtk = isEnhanced == true ? attackerAtk * 1.5f : attackerAtk;
+        attackerAtk *= multiplier;
 
         attackerAtk = Mathf.Round(attackerAtk);
-        // 문체 효과 적용
         attackerAtk = StyleManager.Instance.GetDamageGiveModify(caster, null, card, attackerAtk);
 
-        // target은 받은 amount에서 방어력을 적용해서 처리
         foreach (var target in targets)
         {
             if (target == null || !target.IsAlive()) continue;
 
-            float result = target.TakeDamage(attackerAtk);
+            float finalAttackDamage = attackerAtk;
+            finalAttackDamage = target.ApplyScarAttackBonus(finalAttackDamage);
 
-            var dmgData =  new DmgTextData
+            if (target is Enemy targetEnemy && targetEnemy.Mechanic != null)
+                finalAttackDamage = targetEnemy.Mechanic.ModifyIncomingAttackDamage(finalAttackDamage);
+
+            float result;
+
+            if (reversedTaboo && target is PlayerController player)
+                result = player.TakeDamage(finalAttackDamage, 0.5f, true);
+            else if (target is Enemy e)
+                result = e.TakeDamage(finalAttackDamage, true);
+            else
+                result = target.TakeDamage(finalAttackDamage);
+
+            if (target is Enemy enemy)
+            {
+                var context = new DamageContext
+                {
+                    Attacker = caster,
+                    Target = target,
+                    SourceCard = card,
+                    RawDamage = finalAttackDamage,
+                    FinalDamage = result,
+                    IsAttackDamage = true,
+                    IsTrueDamage = false,
+                    HitIndex = 0
+                };
+
+                enemy.Mechanic?.OnDamaged(context);
+            }
+
+            var dmgData = new DmgTextData
             {
                 Text = $"{Mathf.RoundToInt(result)}",
                 type = DmgTextType.Normal,
@@ -54,9 +82,7 @@ public class DamageEffect : CardEffectBase
                 isWeakened = stanceWeakened
             };
 
-            target.dmgTextQueue.Enqueue(dmgData);
-
-            //Debug.Log($"[피해 처리] {caster.ChClass} -> {target.ChClass} : {attackerAtk} 공격력으로 타격");
+            target.dmgTextQueue.InitPrint(dmgData);
         }
     }
 

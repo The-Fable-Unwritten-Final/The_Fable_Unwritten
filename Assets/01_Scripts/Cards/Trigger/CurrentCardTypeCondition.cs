@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "Cards/Conditions/CurrentCardTypeCondition")]
+
 /// <summary>
 /// 현재 턴 카드 사용 조건 
 /// </summary>

@@ -20,7 +20,10 @@ public class TurnController : MonoBehaviour
     public TurnState turnState = TurnState.GameStart; // 현재 턴 상태
     [SerializeField] CardDisplay cardDisplay; // 카드 디스플레이
     public BattleFlowController battleFlow;
-    [SerializeField] TurnEndButtonControl TurnButton; 
+    [SerializeField] TurnEndButtonControl TurnButton;
+
+    [Header("Debug")]
+    [SerializeField] private bool autoStartBattle = true;
 
     // 턴의 각 상태 진입시 호출되는 이벤트
     /// <summary>
@@ -52,8 +55,12 @@ public class TurnController : MonoBehaviour
     }
     private void Start()
     {
+        if (!autoStartBattle)
+            return;
+
         OnStartPlayerTurn += battleFlow.ExecutePlayerTurn;
         //OnStartPlayerTurn += cardDisplay.CardArrange; // 카드 배치 초기화
+        OnEndPlayerTurn += battleFlow.EndPlayerTurn;
 
         StartCoroutine(AtStartGame()); // 게임 시작 후 1초 후에 플레이어 턴으로
     }
@@ -121,6 +128,10 @@ public class TurnController : MonoBehaviour
         yield return new WaitUntil(() => isDone);
 
         yield return new WaitForSeconds(0.5f); // 텀 살짝 주고
+
+        if (turnState == TurnState.GameEnd)
+            yield break;
+
         SetTurnState(TurnState.StartPlayerTurn); // 다음 턴
     }
 
@@ -130,16 +141,19 @@ public class TurnController : MonoBehaviour
     }
     IEnumerator AtStartGame()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
+        battleFlow.StartBattle();
+
+        yield return new WaitForSeconds(0.3f);
         // 데이터 처리
+        ProgressDataManager.Instance.turnCount = 0; // 전투 시작 시 턴 수 초기화
         cardDisplay.CardArrange(); // 카드 배치 초기화
         EventEffectManager.Instance.PlayNextCombat();
         EventEffectManager.Instance.PlayNextStage();
         EventEffectManager.Instance.PlayEndAdventure();
+        
         yield return new WaitForSeconds(0.2f);
-
         cardDisplay.deckInitComplete = true; // 덱 이닛 완료
-        battleFlow.StartBattle();
         StyleManager.Instance.isFirstTurnCard = true; // 전투 시작 후 첫 턴 플래그 설정
         // 전투 시작 직후 관련 문체 효과 호출 //
         var randomAlly = battleFlow.GetRandomAliveParty();
@@ -151,7 +165,9 @@ public class TurnController : MonoBehaviour
     IEnumerator AtStartPlayerTurn() // 턴 시작시 제일 먼저 호출
     {
         yield return new WaitForSeconds(0.4f);
+        ProgressDataManager.Instance.turnCount++; // 턴 수 증가
         SetTurnState(TurnState.PlayerTurn); // 플레이어 턴으로
+        GameManager.Instance.combatUIController.ShowPlayerTurnUI(); // 플레이어 턴 UI 표시
         StyleManager.Instance.isStartOfTurnCard = true; // 턴 시작후 첫 행동 플래그 설정
         // 매 턴 시작 시 호출될 문체 효과들
         StyleManager.Instance.ApplyStunToAllAllies(battleFlow.playerParty);
@@ -165,10 +181,14 @@ public class TurnController : MonoBehaviour
     {
         //playerturn일 떄만 다음 턴 진행 가능
         if (turnState != TurnState.PlayerTurn) return;
-        SoundManager.Instance.PlaySFX(SoundCategory.Button, 0); // 기본 버튼 사운드
+        if (onAction) return;
+
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 101); // 기본 버튼 사운드
+
         // 카드 초과 체크하고 초과시 카드 버리기 요청.
         if (!GameManager.Instance.cardDiscardController.CheckCountOk()) return; // 만약 카드수량이 초과시 return.
         SetTurnState(TurnState.EndPlayerTurn); // 플레이어 턴 종료
+        GameManager.Instance.combatUIController.ShowEnemyTurnUI(); // 적 턴 UI 표시
         // 턴 종료 버튼 비활성화
         if (TurnButton != null)
             TurnButton.OnTurnEnd(); // 버튼 UI 업데이트 (텍스트 숨기고 인터렉션 끄기)
@@ -184,21 +204,46 @@ public class TurnController : MonoBehaviour
     }
     public void ToGameEnd(bool isWin)// 아군, 적군 중 한쪽의 체력이 전부 0 이되면 호출. (플레이어 or 몬스터가 행동을 할때마다 전투 종료 체크, 해당 메서드 호출)
     {
+        ProgressDataManager.Instance.battleCount++;
+        ProgressDataManager pdm = ProgressDataManager.Instance;
+        // 턴 종료 버튼 비활성화
+        if (TurnButton != null)
+            TurnButton.OnBattleEnd(); // 버튼 UI 업데이트 (텍스트 숨기고 인터렉션 끄기)
         // 결과창 팝업을 띄우기 (승패 결과는 battleflowCon 에서 가져올 수 있음 win <<)
-        UIManager.Instance.PopupRewardUI();
+        StartCoroutine(WaitAndPopupReward());
         // 데이터 처리
         if (isWin) // 승리 시 처리
         {
             StyleManager.Instance.GetInk(2);
+            GameManager.Instance.analyticsLogger.LogRunEndInfo(0, pdm.StageIndex, pdm.battleCount);
+            GameManager.Instance.analyticsLogger.LogBattleEndInfo(pdm.SavedEnemySetIndex, 0, pdm.turnCount, BattleLogManager.Instance.UsedCardsForGame.Count);
         }
         else       // 패배 시 처리
         {
-            Debug.Log("패-배");
+            // 캐릭터 maxHP 정보 수집 및 분석 기록
+            int sophiaMaxHP = 0; int kylaMaxHP = 0; int leonMaxHP = 0;
+            foreach (var player in ProgressDataManager.Instance.PlayerDatas)
+            {
+                if (player.IDNum == 0) sophiaMaxHP = (int)player.MaxHP;      // 소피아
+                else if (player.IDNum == 1) kylaMaxHP = (int)player.MaxHP;  // 카일라
+                else if (player.IDNum == 2) leonMaxHP = (int)player.MaxHP;   // 레온
+            }
+
+            GameManager.Instance.analyticsLogger.LogCharMaxHPInfo(sophiaMaxHP, kylaMaxHP, leonMaxHP);
+            GameManager.Instance.analyticsLogger.LogRunEndInfo(1, pdm.StageIndex, pdm.battleCount);
+            GameManager.Instance.analyticsLogger.LogBattleEndInfo(pdm.SavedEnemySetIndex, 1, pdm.turnCount, BattleLogManager.Instance.UsedCardsForGame.Count);
         }
         EventEffectManager.Instance.EndNextCombat();
         SetTurnState(TurnState.GameEnd); // 전투 종료
     }
 
+    private IEnumerator WaitAndPopupReward()
+    {
+        yield return new WaitForSeconds(2f);
+        UIManager.Instance.PopupRewardUI();
+    }
+
     public void Onaction() { if (!onAction) onAction = true; }
     public void OffAction() { if (onAction) onAction = false; }
 }
+

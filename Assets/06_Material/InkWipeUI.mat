@@ -115,6 +115,8 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _LampBrightness: 0.9
+    - _LampFalloff: 0.23
     - _Metallic: 0
     - _NoiseStrength: 0.2
     - _OcclusionStrength: 1
@@ -122,6 +124,7 @@ Material:
     - _Progress: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
+    - _ShadowIntensity: 0.806
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _Softness: 0.05
@@ -133,7 +136,9 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 0.7137255, g: 0.5882353, b: 0.44705883, a: 0}
+    - _Color: {r: 0.69803923, g: 0.44705883, b: 0.23921569, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _LampColor: {r: 1, g: 0.6039216, b: 0.11764706, a: 1}
+    - _LampPosition: {r: 0.9, g: 0.9, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []

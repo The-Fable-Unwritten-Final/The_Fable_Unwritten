@@ -14,16 +14,9 @@ public class IdleActivateInfo : MonoBehaviour
     [SerializeField] TextMeshProUGUI nameText;
     [SerializeField] TextMeshProUGUI descriptionText;
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            ShowIdle();
-        }
-    }
-    
     /// <summary>
     /// 이상 실현 활성화시 관련 정보 호출 + UI 등장
+    /// CombatUIController의SidePopupUI에 연결되어 있음. >> GameManager.Instance.combatUIController.CallIdleInfo(idleKey)로 호출 가능.
     /// </summary>
     /// <param name="idleKey"></param>
     public void CallIdleInfo(string idleKey)
@@ -36,7 +29,25 @@ public class IdleActivateInfo : MonoBehaviour
 
         ShowIdle();
     }
+    public void CallUnlockInfo(string title)
+    {
+        nameText.text = title;
+        switch (LocaleDataManager.CurrentLocale)
+        {
+            case LocaleDataManager.SystemLocale.Korean:
+                descriptionText.text = "의 잠금이 해제되었습니다.";
+                break;
+            case LocaleDataManager.SystemLocale.Japanese:
+                descriptionText.text = "が解放されました。";
+                break;
+            case LocaleDataManager.SystemLocale.English:
+            default:
+                descriptionText.text = "has been unlocked.";
+                break;
+        }
 
+        ShowIdle();
+    }
     // UI의 좌우 등장 모션
     void ShowIdle()
     {
