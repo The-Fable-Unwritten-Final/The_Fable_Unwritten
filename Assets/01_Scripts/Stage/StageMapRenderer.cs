@@ -83,7 +83,7 @@ public class StageMapRenderer : MonoBehaviour
                 if(node.type == NodeType.Boss)
                 {
                     rt.anchoredPosition = new Vector2(BossNodeXPos, rt.anchoredPosition.y); // 보스 노드 위치 조정
-                    go.GetComponent<Button>().image.color = new Color(42f/255f, 23f/255f, 7f/255f); // 2A1707 색상
+                    go.GetComponent<Button>().image.color = new Color(204f/255f, 143f/255f, 92f/255f); // CC8F5C 색상
                 }
             }
         }
@@ -331,11 +331,21 @@ public class StageMapRenderer : MonoBehaviour
             {
                 btn.enabled = true;
                 btn.interactable = true;
-                // 보스 노드는 색상 변경 안 함 (Render에서 설정한 2A1707 유지)
+                // 보스 노드는 색상 변경 안 함 (Render에서 설정한 CC8F5C 유지)
                 if (node.type != NodeType.Boss)
                 {
-                    btn.image.color = new Color(255f/255f, 187f/255f, 129f/255f);
+                    btn.image.color = new Color(0.36f, 0.28f, 0.20f); // 지나온 노드와 색상 통일
+                    //btn.image.color = new Color(255f/255f, 187f/255f, 129f/255f);
                 }
+                
+                // UIButtonHoverScale 컴포넌트 추가 및 설정
+                UIButtonHoverScale hoverScale = btn.gameObject.GetComponent<UIButtonHoverScale>();
+                if (hoverScale == null)
+                {
+                    hoverScale = btn.gameObject.AddComponent<UIButtonHoverScale>();
+                }
+                hoverScale.targetScale = 1.15f;
+                
                 stageNode.HideClearCircle();
                 stageNode.PlayPulse();
             }
@@ -345,10 +355,14 @@ public class StageMapRenderer : MonoBehaviour
                 btn.enabled = true;
                 btn.interactable = false;
                 //btn.image.color = new Color(1, 1, 1, 0.6f); 버튼 노드 불투명도 제거 요청
-                // 보스 노드는 색상 변경 안 함 (Render에서 설정한 2A1707 유지)
+                // 보스 노드는 색상 변경 안 함 (Render에서 설정한 CC8F5C 유지)
                 if (node.type != NodeType.Boss)
                 {
-                    btn.image.color = new Color(255f/255f, 187f/255f, 129f/255f);
+                    btn.image.color = new Color(255f / 255f, 187f / 255f, 129f / 255f);
+                }
+                else
+                {
+                    btn.image.color = new Color(204f / 255f, 143f / 255f, 92f / 255f); // CC8F5C
                 }
                 stageNode.HideClearCircle();
                 stageNode.StopPulse();

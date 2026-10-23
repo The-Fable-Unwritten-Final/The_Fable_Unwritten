@@ -144,7 +144,7 @@ TextureImporter:
         width: 447
         height: 141
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -165,7 +165,7 @@ TextureImporter:
         width: 807
         height: 136
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -181,12 +181,12 @@ TextureImporter:
       name: ui_2_2
       rect:
         serializedVersion: 2
-        x: 25
-        y: 732
-        width: 82
-        height: 81
+        x: 1522
+        y: 566
+        width: 390
+        height: 365
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -202,12 +202,12 @@ TextureImporter:
       name: ui_2_3
       rect:
         serializedVersion: 2
-        x: 143
-        y: 741
-        width: 55
-        height: 60
+        x: 25
+        y: 732
+        width: 82
+        height: 81
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -223,12 +223,12 @@ TextureImporter:
       name: ui_2_4
       rect:
         serializedVersion: 2
-        x: 251
-        y: 735
-        width: 80
-        height: 67
+        x: 143
+        y: 741
+        width: 55
+        height: 60
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -244,12 +244,12 @@ TextureImporter:
       name: ui_2_5
       rect:
         serializedVersion: 2
-        x: 565
-        y: 726
-        width: 807
-        height: 136
+        x: 251
+        y: 735
+        width: 80
+        height: 67
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -265,12 +265,12 @@ TextureImporter:
       name: ui_2_6
       rect:
         serializedVersion: 2
-        x: 43
-        y: 629
-        width: 74
-        height: 73
+        x: 565
+        y: 726
+        width: 807
+        height: 136
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -286,12 +286,12 @@ TextureImporter:
       name: ui_2_8
       rect:
         serializedVersion: 2
-        x: 208
-        y: 640
-        width: 60
-        height: 58
+        x: 182
+        y: 643
+        width: 22
+        height: 30
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -307,12 +307,12 @@ TextureImporter:
       name: ui_2_9
       rect:
         serializedVersion: 2
-        x: 348
-        y: 598
-        width: 185
-        height: 135
+        x: 208
+        y: 640
+        width: 60
+        height: 58
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -328,12 +328,12 @@ TextureImporter:
       name: ui_2_10
       rect:
         serializedVersion: 2
-        x: 566
-        y: 574
-        width: 807
-        height: 136
+        x: 348
+        y: 598
+        width: 185
+        height: 135
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -349,12 +349,12 @@ TextureImporter:
       name: ui_2_11
       rect:
         serializedVersion: 2
-        x: 565
-        y: 424
+        x: 566
+        y: 574
         width: 807
         height: 136
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -370,12 +370,12 @@ TextureImporter:
       name: ui_2_12
       rect:
         serializedVersion: 2
-        x: 565
-        y: 275
-        width: 807
-        height: 135
+        x: 57
+        y: 420
+        width: 154
+        height: 120
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -391,12 +391,12 @@ TextureImporter:
       name: ui_2_7
       rect:
         serializedVersion: 2
-        x: 182
-        y: 643
-        width: 22
-        height: 30
+        x: 43
+        y: 629
+        width: 74
+        height: 73
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -409,7 +409,28 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ui_2_13
+      name: ui_2_14
+      rect:
+        serializedVersion: 2
+        x: 1572
+        y: 161
+        width: 327
+        height: 304
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97764cb308602f941a5097952fd91aa9
+      internalID: 386447410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_2_16
       rect:
         serializedVersion: 2
         x: 563
@@ -417,14 +438,14 @@ TextureImporter:
         width: 809
         height: 122
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7360e0e4d98274d4aab7f1f38ae252c1
-      internalID: 20467276
+      spriteID: 3b7cd35fa90ac5b4f84f59ae48325934
+      internalID: -1856900374
       vertices: []
       indices: 
       edges: []
@@ -446,6 +467,9 @@ TextureImporter:
       ui_2_11: -823501048
       ui_2_12: 196068331
       ui_2_13: 20467276
+      ui_2_14: 386447410
+      ui_2_15: 2100101387
+      ui_2_16: -1856900374
       ui_2_2: 1763295851
       ui_2_3: -240280331
       ui_2_4: -458269301
