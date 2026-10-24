@@ -24,14 +24,12 @@ public class StyleDisplay : MonoBehaviour // 旮办〈 韺濎梾 氚╈嫕(basepopup 靸侅
     //[SerializeField] TextMeshProUGUI curEff1;
     //[SerializeField] TextMeshProUGUI curEff2;
     [SerializeField] TextMeshProUGUI upgrEff1;
-    [SerializeField] GameObject ClickToUp1;
     [SerializeField] GameObject FullToUp1;
     [SerializeField] Image upgrSprite1;
     [SerializeField] GameObject Eff1InkImage;
     [SerializeField] TextMeshProUGUI Eff1Ink;
 
     [SerializeField] TextMeshProUGUI upgrEff2;
-    [SerializeField] GameObject ClickToUp2;
     [SerializeField] GameObject FullToUp2;
     [SerializeField] Image upgrSprite2;
     [SerializeField] GameObject Eff2InkImage;
@@ -532,7 +530,6 @@ public class StyleDisplay : MonoBehaviour // 旮办〈 韺濎梾 氚╈嫕(basepopup 靸侅
             upgrSprite1.sprite = FullUpgradeButtomImage;
             upgrSprite1.GetComponent<Button>().interactable = false;
             upgrSprite1.GetComponent<UIButtonHoverScale>().targetScale = 1.0f;
-            ClickToUp1.SetActive(false);
             FullToUp1.SetActive(true);
             Eff1InkImage.SetActive(false);
         }
@@ -541,7 +538,6 @@ public class StyleDisplay : MonoBehaviour // 旮办〈 韺濎梾 氚╈嫕(basepopup 靸侅
             upgrSprite1.sprite = nonFullUpgradeButtonImage;
             upgrSprite1.GetComponent<Button>().interactable = true;
             upgrSprite1.GetComponent<UIButtonHoverScale>().targetScale = 1.03f;
-            ClickToUp1.SetActive(true);
             FullToUp1.SetActive(false);
             Eff1InkImage.SetActive(true);
         }
@@ -557,7 +553,6 @@ public class StyleDisplay : MonoBehaviour // 旮办〈 韺濎梾 氚╈嫕(basepopup 靸侅
             upgrSprite2.sprite = FullUpgradeButtomImage;
             upgrSprite2.GetComponent<Button>().interactable = false;
             upgrSprite2.GetComponent<UIButtonHoverScale>().targetScale = 1.0f;
-            ClickToUp2.SetActive(false);
             FullToUp2.SetActive(true);
             Eff2InkImage.SetActive(false);
         }
@@ -566,7 +561,6 @@ public class StyleDisplay : MonoBehaviour // 旮办〈 韺濎梾 氚╈嫕(basepopup 靸侅
             upgrSprite2.sprite = nonFullUpgradeButtonImage;
             upgrSprite2.GetComponent<Button>().interactable = true;
             upgrSprite2.GetComponent<UIButtonHoverScale>().targetScale = 1.03f;
-            ClickToUp2.SetActive(true);
             FullToUp2.SetActive(false);
             Eff2InkImage.SetActive(true);
         }
