@@ -65,9 +65,23 @@ public class DmgBarDisplay : MonoBehaviour
 
         // 위치 설정
         RectTransform rect = dmgInstance.GetComponent<RectTransform>();
-        rect.anchoredPosition = Vector2.zero;
-        dmgInstance.transform.position += Vector3.up * offsetY;
-        
+
+        Vector3 spawnPosition = target.position;
+
+        // 대상 캐릭터의 앵커 확인
+        CharacterAnchorController anchor = target.GetComponentInParent<CharacterAnchorController>();
+
+        if (anchor != null && anchor.OverheadPoint != null)
+        {
+            spawnPosition = new Vector3(anchor.transform.position.x, anchor.OverheadPoint.position.y, dmgInstance.transform.position.z);
+        }
+
+        // OverheadPoint 기준에서도 추가 높이 적용
+        spawnPosition += Vector3.up * offsetY;
+
+        // 실제 출력 위치
+        dmgInstance.transform.position = spawnPosition;
+
 
         // 아이콘 설정
         Sprite typeIcon = SelectTypeIcon(data);
@@ -77,9 +91,19 @@ public class DmgBarDisplay : MonoBehaviour
         // 텍스트 및 스타일 설정
         tmpText.text = NumberSpriteShift(data);
         tmpText.fontSize = (data.isStanceEnhanced || data.isCardEnhanced) ? 0.8f : 0.5f;
-        // 아이콘 강화 별 위치 및 크기 조정 
-        icon.GetComponent<RectTransform>().anchoredPosition = (data.isStanceEnhanced || data.isCardEnhanced) ? new Vector2(-1.2f, 0.5f) : new Vector2(-1f, 0.3f);
-        icon.GetComponent<RectTransform>().sizeDelta = (data.isStanceEnhanced || data.isCardEnhanced) ? new Vector2(1.5f, 1.5f) : new Vector2(1f, 1f);
+        
+        // 숫자 중심 정렬
+        tmpText.rectTransform.anchoredPosition = Vector2.zero;
+        tmpText.alignment = TextAlignmentOptions.Center;
+
+        bool enhanced = data.isStanceEnhanced || data.isCardEnhanced;
+
+
+        // 아이콘 위치와 크기
+        RectTransform iconRect = icon.rectTransform;
+        iconRect.anchoredPosition = enhanced ? new Vector2(-0.85f, 0.1f) : new Vector2(-0.65f, 0f);
+        iconRect.sizeDelta = enhanced ? new Vector2(1.2f, 1.2f) : new Vector2(0.8f, 0.8f);
+
 
         // 스케일 설정 (시작: 1.6배 크기)
         dmgInstance.transform.localScale = Vector3.one * 1.6f;
@@ -148,29 +172,14 @@ public class DmgBarDisplay : MonoBehaviour
         {
             if (char.IsDigit(c))
             {
-                int digitValue = int.Parse(c.ToString());
+                int digitValue = c - '0';
                 int spriteIndex = baseIndex + digitValue;
+
                 sb.Append($"<sprite name=\"DMGPrint_{spriteIndex}\">");
             }
-            else
+            else if (c != '+' && c != '-' && c != '%')
             {
-                // +, -, % 을 포함한 문자는 그대로 출력
-                switch (c)
-                {
-                    case '+':
-                        sb.Append($"<sprite name=\"DMGPrint_{baseIndex + 10}\">");
-                        break;
-                    case '-':
-                        sb.Append($"<sprite name=\"DMGPrint_{baseIndex + 11}\">");
-                        break;
-                    case '%':
-                        sb.Append($"<sprite name=\"DMGPrint_{baseIndex + 12}\">");
-                        break;
-                    default:
-                        // 기타 문자 (공백 등)
-                        sb.Append(c);
-                        break;
-                }
+                sb.Append(c);
             }
         }
 

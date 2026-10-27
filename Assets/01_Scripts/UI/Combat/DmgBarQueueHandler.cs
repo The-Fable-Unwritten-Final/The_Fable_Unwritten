@@ -9,7 +9,7 @@ public class DmgBarQueueHandler : MonoBehaviour
     private bool isPlaying = false;
 
     [SerializeField] private float queueDelay = 0.4f;   // 연속 출력 텀
-    [SerializeField] private float verticalOffset = 1.0f;
+    [SerializeField] private float verticalOffset = 0.5f;
 
     private float lastPlayTime = -999f;  // 마지막 출력 시간
 
