@@ -698,4 +698,64 @@ public class CardModel : ScriptableObject
 
         return targets.Any(x => x != null && x.ChClass != CharacterClass.Enemy);
     }
+
+    public bool TryGetStatusTooltipValue(
+    string keyword,
+    out string value)
+    {
+        value = null;
+
+        if (effects == null)
+            return false;
+
+        BuffStatType type;
+
+        switch (keyword)
+        {
+            case "AttackUp":
+            case "AttackDown":
+                type = BuffStatType.Attack;
+                break;
+
+            case "DefendUp":
+            case "DefendDown":
+                type = BuffStatType.Defend;
+                break;
+
+            default:
+                if (!System.Enum.TryParse(keyword, true, out type) ||
+                    type == BuffStatType.None)
+                    return false;
+                break;
+        }
+
+        List<CardEffectBase> displayEffects = new();
+
+        foreach (var effect in effects)
+            CollectDisplayEffects(effect, displayEffects);
+
+        foreach (var effect in displayEffects)
+        {
+            if (effect is not ApplyStatusEffect statusEffect ||
+                statusEffect.statType != type)
+                continue;
+
+            if (keyword == "AttackUp" && statusEffect.value <= 0)
+                continue;
+
+            if (keyword == "AttackDown" && statusEffect.value >= 0)
+                continue;
+
+            if (keyword == "DefendUp" && statusEffect.value <= 0)
+                continue;
+
+            if (keyword == "DefendDown" && statusEffect.value >= 0)
+                continue;
+
+            value = GetEffectDisplayValue(statusEffect, null);
+            return true;
+        }
+
+        return false;
+    }
 }

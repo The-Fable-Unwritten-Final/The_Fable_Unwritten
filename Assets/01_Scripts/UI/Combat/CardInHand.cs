@@ -30,6 +30,8 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     [SerializeField] TextMeshProUGUI cardCost; // 카드 코스트
     [SerializeField] TextMeshProUGUI cardName; // 카드 이름
     [SerializeField] TextMeshProUGUI cardDescription; // 카드 설명
+    [SerializeField] private CardTooltipLinkHandler tooltipLinkHandler;
+
     [Header("UI For FX")]
     [SerializeField] Image frameCover;
     [SerializeField] Image illustCover;
@@ -401,6 +403,15 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public void SetCardData(CardModel card)// 카드 데이터 설정
     {
         cardData = card;
+
+        if (tooltipLinkHandler == null)
+            tooltipLinkHandler = cardDescription.GetComponent<CardTooltipLinkHandler>();
+
+        if (tooltipLinkHandler != null)
+            tooltipLinkHandler.SetCard(cardData);
+        else
+            Debug.LogWarning("[CardInHand] CardTooltipLinkHandler가 없습니다.", this);
+
         UpdateCardImage();// 카드 이미지 업데이트
         UpdatCardInfo();// 카드 정보 업데이트
     }

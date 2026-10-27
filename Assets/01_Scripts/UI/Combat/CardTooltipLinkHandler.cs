@@ -5,12 +5,20 @@ public class CardTooltipLinkHandler : MonoBehaviour
 {
     [SerializeField] private TMP_Text text;
 
+    private CardModel cardModel;
     private int currentLinkIndex = -1;
 
     private void Awake()
     {
         if (text == null)
             text = GetComponent<TMP_Text>();
+    }
+
+    // 카드 UI에서 카드 데이터 설정 시 호출
+    public void SetCard(CardModel card)
+    {
+        HideTooltip();
+        cardModel = card;
     }
 
     private void Update()
@@ -26,13 +34,6 @@ public class CardTooltipLinkHandler : MonoBehaviour
             null
         );
 
-        // 링크 위가 아님
-        if (linkIndex == -1)
-        {
-            HideTooltip();
-            return;
-        }
-
         if (linkIndex < 0 || linkIndex >= text.textInfo.linkCount)
         {
             HideTooltip();
@@ -47,16 +48,26 @@ public class CardTooltipLinkHandler : MonoBehaviour
             HideTooltip();
             return;
         }
-
-        // 새 링크에 들어왔을 때만 Show
         if (currentLinkIndex != linkIndex)
         {
             currentLinkIndex = linkIndex;
 
-            StatusTooltipUI.Instance.Show(
-                keywordType,
-                mousePosition
-            );
+            if (cardModel != null &&
+                cardModel.TryGetStatusTooltipValue(keywordType, out string value))
+            {
+                StatusTooltipUI.Instance.Show(
+                    keywordType,
+                    mousePosition,
+                    value
+                );
+            }
+            else
+            {
+                StatusTooltipUI.Instance.Show(
+                    keywordType,
+                    mousePosition
+                );
+            }
         }
     }
 

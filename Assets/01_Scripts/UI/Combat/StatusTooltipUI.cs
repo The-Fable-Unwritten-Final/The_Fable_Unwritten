@@ -207,8 +207,8 @@ public static class TooltipKeyMapper
 
             "Burn" => "Type_Text_1",
             "Freeze" => "Type_Text_2",
-            "Activate" => "Type_Text_4",
-            "Bless" => "Type_Text_3",
+            "Activate" => "Type_Text_3",
+            "Bless" => "Type_Text_4",
             "Sin" => "Type_Text_5",
             "Penance" => "Type_Text_6",
             "Scar" => "Type_Text_7",
