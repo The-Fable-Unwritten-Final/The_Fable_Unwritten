@@ -361,9 +361,9 @@ public class UI_PlayerInfo : MonoBehaviour
         if (hpBar == null) return;
 
         float hpPercent = (hp / maxHp) * 100f;
-        Color barColor = hpPercent > 30f ? new Color(0.49f, 0.70f, 0f, 1f) : new Color(0.682f, 0f, 0f, 1f); // #7DB200 or #AE0000
-        Color barColorInner = hpPercent > 30f ? new Color(0.49f, 0.70f, 0f, 0.38f) : new Color(0.682f, 0f, 0f, 0.38f); // #7DB200 or #AE0000 with alpha 0.38
-        Color textColor = hpPercent > 30f ? new Color(0.373f, 0.518f, 0.024f, 1f) : new Color(0.682f, 0f, 0f, 1f); // #5F8406 or #AE0000
+        Color barColor = hpPercent > 30f ? new Color(0.478f, 0.733f, 0.129f, 1f) : new Color(0.682f, 0f, 0f, 1f); // #7ABB21 or #AE0000
+        Color barColorInner = hpPercent > 30f ? new Color(0.373f, 0.518f, 0.024f, 0.7f) : new Color(0.565f, 0f, 0f, 0.5f); // #5F7924 or #900400
+        Color textColor = hpPercent > 30f ? new Color(0.478f, 0.733f, 0.129f, 1f) : new Color(0.682f, 0f, 0f, 1f); // #7ABB21 or #AE0000
 
         // 배경 색상 적용
         hpBar.color = barColor;

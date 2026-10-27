@@ -21,10 +21,11 @@ public class StageNode : MonoBehaviour
     /// </summary>
     public void PlayPulse()
     {
+        return; // 임시 비활성화
         if (pulseTween != null && pulseTween.IsPlaying()) return;
 
         pulseTween = transform
-            .DOScale(1.00f, 0.5f) // 펄스 효과 임시로 미적용
+            .DOScale(1.05f, 0.5f) // 펄스 효과 임시로 미적용
             .SetLoops(-1, LoopType.Yoyo)
             .SetEase(Ease.InOutSine);
     }

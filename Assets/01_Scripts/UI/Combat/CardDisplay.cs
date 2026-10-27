@@ -38,6 +38,9 @@ public class CardDisplay : MonoBehaviour
     [SerializeField] private EventSystem eventSystem;
     public RectTransform arrowImage; // 드래그 중에 보일 화살표 이미지.
     public UILineRenderer lineRenderer;
+    
+    private CustomMouseCursor customMouseCursor; // 마우스 커서 캐시
+    
     // 드래그 중인지 여부를 추적하는 프로퍼티.
     // 이전 상태에서 true였다가 false로 변할 때 OnDragEnd가 호출됩니다.
     private bool _isOnDrag = false;
@@ -53,6 +56,21 @@ public class CardDisplay : MonoBehaviour
                 // CardInHand의 핸들러에서 처리하던 기존 방식에서, 화살표 비활성화 누락 버그 해결 및 화살표 관리 책임을 CardDisplay로 가져옴.
                 arrowImage.gameObject.SetActive(false);
                 lineRenderer.gameObject.SetActive(false);
+                
+                // 마우스 커서 이미지 다시 활성화
+                if (customMouseCursor != null)
+                {
+                    customMouseCursor.cursorImage.enabled = true;
+                }
+            }
+            // false -> true 전환을 감지하면 드래그 시작 콜백 실행
+            else if (!_isOnDrag && value)
+            {
+                // 마우스 커서 이미지 비활성화
+                if (customMouseCursor != null)
+                {
+                    customMouseCursor.cursorImage.enabled = false;
+                }
             }
             _isOnDrag = value;
         }
@@ -75,6 +93,12 @@ public class CardDisplay : MonoBehaviour
     }
     private void Start()
     {
+        // 마우스 커서 캐싱
+        if (UIManager.Instance != null)
+        {
+            customMouseCursor = UIManager.Instance.customMouseCursor;
+        }
+        
         MoveCardsWhenEnterScene();
     }
 
@@ -150,7 +174,7 @@ public class CardDisplay : MonoBehaviour
         RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, Input.mousePosition, null, out localMousePos);// 추후 카메라 분리시 null에 UI용 카메라 넣어주기
 
         // lineRenderer를 곡선의 형태로 표시.
-        Vector2 cardHeadOffset = new Vector2(0, cardRect.rect.height * (1 - cardRect.pivot.y) * cardRect.lossyScale.y);
+        Vector2 cardHeadOffset = new Vector2(0, cardRect.rect.height * 0.5f * cardRect.lossyScale.y + 45); // 추가로 45 만큼 위로
         lineRenderer.Points[0] = cardRect.anchoredPosition + cardHeadOffset;// 카드의 머리 부분
         lineRenderer.Points[1] = new Vector2(localMousePos.x * 0.33f, localMousePos.y * 0.85f);
         lineRenderer.Points[2] = new Vector3(localMousePos.x * 0.66f, localMousePos.y * 0.95f);

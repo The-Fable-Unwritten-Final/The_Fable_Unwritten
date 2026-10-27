@@ -11,6 +11,7 @@ public class CombatUIController : MonoBehaviour
 {
     [SerializeField] CardDisplay cardDisplay; // 카드 디스플레이
     [SerializeField] BattleFlowController battleFlow;
+    [SerializeField] Image turnTextBack; // 턴 UI 텍스트의 뒷 부분 UI
     [SerializeField] GameObject playerTurnUI; // 플레이어 턴 UI 텍스트
     [SerializeField] GameObject enemyTurnUI; // 적 턴 UI 텍스트
     public  IdleActivateInfo SidePopupUI; // 사이드 팝업 UI
@@ -155,12 +156,15 @@ public class CombatUIController : MonoBehaviour
         Color playerColor = playerTmpText.color;
         playerColor.a = 0f;
         playerTmpText.color = playerColor;
+        SetTurnTextBackAlpha(0f);
 
         // Sequence 생성: 0 → 1 (0.5초) → 대기 (1초) → 1 → 0 (0.5초)
         playerTurnUISequence = DOTween.Sequence();
         playerTurnUISequence.Append(playerTmpText.DOFade(1f, 0.5f).SetEase(Ease.InOutQuad));
+        if (turnTextBack != null) playerTurnUISequence.Join(turnTextBack.DOFade(1f, 0.5f).SetEase(Ease.InOutQuad));
         playerTurnUISequence.AppendInterval(1f);
         playerTurnUISequence.Append(playerTmpText.DOFade(0f, 0.5f).SetEase(Ease.InOutQuad));
+        if (turnTextBack != null) playerTurnUISequence.Join(turnTextBack.DOFade(0f, 0.5f).SetEase(Ease.InOutQuad));
         playerTurnUISequence.OnComplete(() =>
         {
             playerTurnUI.SetActive(false);
@@ -200,15 +204,26 @@ public class CombatUIController : MonoBehaviour
         Color enemyColor = enemyTmpText.color;
         enemyColor.a = 0f;
         enemyTmpText.color = enemyColor;
+        SetTurnTextBackAlpha(0f);
 
         // Sequence 생성: 0 → 1 (0.5초) → 대기 (1초) → 1 → 0 (0.5초)
         enemyTurnUISequence = DOTween.Sequence();
         enemyTurnUISequence.Append(enemyTmpText.DOFade(1f, 0.5f).SetEase(Ease.InOutQuad));
+        if (turnTextBack != null) enemyTurnUISequence.Join(turnTextBack.DOFade(1f, 0.5f).SetEase(Ease.InOutQuad));
         enemyTurnUISequence.AppendInterval(1f);
         enemyTurnUISequence.Append(enemyTmpText.DOFade(0f, 0.5f).SetEase(Ease.InOutQuad));
+        if (turnTextBack != null) enemyTurnUISequence.Join(turnTextBack.DOFade(0f, 0.5f).SetEase(Ease.InOutQuad));
         enemyTurnUISequence.OnComplete(() =>
         {
             enemyTurnUI.SetActive(false);
         });
+    }
+
+    private void SetTurnTextBackAlpha(float alpha)
+    {
+        if (turnTextBack == null) return;
+        Color c = turnTextBack.color;
+        c.a = alpha;
+        turnTextBack.color = c;
     }
 }
