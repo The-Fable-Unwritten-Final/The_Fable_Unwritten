@@ -16,6 +16,8 @@ public class EffectManager : MonoBehaviour
        float scaleFactor = 1f,
        System.Action onHitFrame = null)
     {
+        effectName = ResolveEnemyEffectName(effectName, caster);
+
         if (!TryGetEffect(effectName, out EffectAnimation animInfo))
             return;
 
@@ -82,6 +84,8 @@ public class EffectManager : MonoBehaviour
         float scaleFactor,
         System.Action onHitFrame = null)
     {
+        effectName = ResolveEnemyEffectName(effectName, caster);
+
         if (!TryGetEffect(effectName, out EffectAnimation animInfo))
             return;
 
@@ -183,6 +187,24 @@ public class EffectManager : MonoBehaviour
             AnimationType.AOE => target.BodyPoint.position,
 
             _ => target.CachedTransform.position
+        };
+    }
+
+    private string ResolveEnemyEffectName(string effectName, IStatusReceiver caster)
+    {
+        if (caster is not Enemy enemy)
+            return effectName;
+
+        // enemy.idnum은 실제 Enemy 클래스의 ID 필드명으로 변경
+        int id = enemy.enemyData.IDNum;
+
+        return id switch
+        {
+            26 or 27 => effectName.EndsWith("_B")
+                ? effectName
+                : effectName + "_B",
+
+            _ => effectName
         };
     }
 }
