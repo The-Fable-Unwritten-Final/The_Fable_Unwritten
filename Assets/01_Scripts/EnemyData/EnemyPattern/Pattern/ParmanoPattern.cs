@@ -4,6 +4,11 @@ using System.Collections.Generic;
 
 public class ParmanoMechanic : EnemyMechanicBase
 {
+
+
+    [SerializeField]
+    private RuntimeAnimatorController parmanoFlipController;
+
     private const int MaxScroll = 3;
     private const float ExecutionDamage = 8f;
 
@@ -15,6 +20,15 @@ public class ParmanoMechanic : EnemyMechanicBase
     public override void OnBattleStart()
     {
         scroll = 0;
+
+        foreach (var enemy in battleFlow.enemyParty.OfType<Enemy>())
+        {
+            if (enemy == null || enemy.enemyData == null)
+                continue;
+
+            if (enemy.enemyData.IDNum == FlipEnemyId)
+                ApplyParmanoFlipAnimator(enemy);
+        }
     }
 
     public override void OnPlayerTurnEnd()
@@ -105,7 +119,10 @@ public class ParmanoMechanic : EnemyMechanicBase
         var flip = spawner.SpawnEnemyToEmptySlot(FlipEnemyId);
 
         if (flip != null)
+        {
+            ApplyParmanoFlipAnimator(flip);
             Debug.Log("[Parmano] Flip 1마리 소환");
+        }
     }
 
     public override IReadOnlyList<EnemyMechanicDisplayData> GetDisplayStatuses()
@@ -121,5 +138,24 @@ public class ParmanoMechanic : EnemyMechanicBase
                 Mathf.RoundToInt(ExecutionDamage) // Tooltip {1}
             )
         };
+    }
+
+    private const string FlipControllerPath = "EnemyControllers/Parmano_s Flip";
+
+    private void ApplyParmanoFlipAnimator(Enemy flip)
+    {
+        if (flip == null || flip.animator == null)
+            return;
+
+        var controller = Resources.Load<RuntimeAnimatorController>(FlipControllerPath);
+
+        if (controller == null)
+        {
+            Debug.LogError("[Parmano] Flip Controller 로드 실패");
+            return;
+        }
+
+        flip.animator.runtimeAnimatorController = controller;
+        flip.animator.Play("Spawn", 0, 0f);
     }
 }
