@@ -51,8 +51,9 @@ public class StanceIconDisplay : MonoBehaviour
         icon.sprite = sprite;
 
         // Sprite 실제 크기에 맞춰 RectTransform 조절
-        ApplySpriteSize(sprite);
-
+        //ApplySpriteSize(sprite);
+        icon.sprite = sprite;
+        icon.preserveAspect = true;
         icon.enabled = true;
     }
 
