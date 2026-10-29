@@ -21,6 +21,9 @@ public class EffectManager : MonoBehaviour
         if (!TryGetEffect(effectName, out EffectAnimation animInfo))
             return;
 
+        if (effectName == "25_251_effect")
+            flipX = !flipX;
+
         switch (animInfo.animationType)
         {
             case AnimationType.Projectile:
