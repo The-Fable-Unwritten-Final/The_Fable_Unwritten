@@ -87,6 +87,7 @@ public class CardModel : ScriptableObject
     {
         bool originalEnhanced = isEnhanced; // 현재 강화 상태 백업
 
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 106);
         GameManager.Instance.StartCoroutine(PlayWithAnimation(caster, targets, originalEnhanced, attackType));
     }
 
@@ -134,12 +135,9 @@ public class CardModel : ScriptableObject
             Debug.LogError("[CardModel] Caster를 PlayerController로 변환할 수 없습니다");
             yield break;
         }
-        Debug.Log($"[CardAnim] PlayAttackAnimation 시작 / Card={index} / Type={type}");
 
         cast.PlayAttackAnimation(attackType, type,() =>
         {
-            Debug.Log($"[CardAnim] Hit Callback 도착 / Card={index}");
-
             if (hitTriggered) return;
             hitTriggered = true;
 

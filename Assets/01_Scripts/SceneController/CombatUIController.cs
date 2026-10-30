@@ -129,9 +129,10 @@ public class CombatUIController : MonoBehaviour
     public void ShowPlayerTurnUI()
     {
         if (playerTurnUI == null) return;
-
         TextMeshProUGUI playerTmpText = playerTurnUI.GetComponent<TextMeshProUGUI>();
         if (playerTmpText == null) return;
+
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 601); // 플레이어 턴 UI 효과음
 
         // 적 턴 UI가 진행 중이면 즉시 alpha 0으로 설정
         if (enemyTurnUISequence != null)
@@ -177,9 +178,10 @@ public class CombatUIController : MonoBehaviour
     public void ShowEnemyTurnUI()
     {
         if (enemyTurnUI == null) return;
-
         TextMeshProUGUI enemyTmpText = enemyTurnUI.GetComponent<TextMeshProUGUI>();
         if (enemyTmpText == null) return;
+
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 601); // 적 턴 UI 효과음
 
         // 플레이어 턴 UI가 진행 중이면 즉시 alpha 0으로 설정
         if (playerTurnUISequence != null)

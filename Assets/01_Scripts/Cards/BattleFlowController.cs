@@ -426,7 +426,12 @@ public class BattleFlowController : MonoBehaviour
         BattleLogManager.Instance.OnTurnEnd();
 
         turn++;
-        SoundManager.Instance.PlaySFX(SoundCategory.UI, 3);
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 104, 0f);
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 104, 0.05f);
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 104, 0.10f);
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 104, 0.15f);
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 104, 0.20f);
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 104, 0.25f);
         ExecutePlayerTurn();
     }
 

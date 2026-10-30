@@ -461,6 +461,7 @@ public class StyleDisplay : MonoBehaviour // 기존 팝업 방식(basepopup 상�
 
     private void _ApplyCurrentStyleChanges(StyleDefinition sty)
     {
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 303); // 문체 변경 시 효과음 재생
         // 현재 문체 아이콘 및 UI 테두리 업데이트
         curStyleIcon.sprite = sty.buttonIconSprite;
         curStyleUI.sprite = sty.currentStyleSprite;

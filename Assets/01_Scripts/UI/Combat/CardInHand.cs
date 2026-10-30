@@ -283,13 +283,13 @@ public class CardInHand : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         }
 
         // 최종적으로 드래그 상태 해제 및 상태 정규화
-        // OnDrag 종료 후 0.4초 애니메이션 동안 상태 유지, 이후 상태 업데이트
-        DOVirtual.DelayedCall(0.4f, () =>
+        // OnDrag 종료 후 0.25초 애니메이션 동안 상태 유지, 이후 상태 업데이트
+        DOVirtual.DelayedCall(0.25f, () =>
         {
             // 다시 한번 검증 (카드가 삭제되었을 수도 있음)
             if (this == null || cardDisplay == null) return;
 
-            // [방법 2] 포인터가 카드 위에 있는지 재확인
+            // 포인터가 카드 위에 있는지 재확인
             bool pointerOverCard = RectTransformUtility.RectangleContainsScreenPoint(
                 rect, Input.mousePosition, null);
             

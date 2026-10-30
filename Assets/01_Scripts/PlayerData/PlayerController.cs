@@ -1213,6 +1213,7 @@ public class PlayerController : MonoBehaviour, IStatusReceiver
 
         if (!isDeathPending || isDead) return;
 
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 603, 0.3f); // 사망 시 효과음 적용
         isDead = true;
         isDeathPending = false;
 

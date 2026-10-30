@@ -183,6 +183,8 @@ public class UI_CampController : MonoBehaviour
     {
         if (healText == null) return;
 
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 502); // 회복 효과음
+
         RectTransform healTextRect = healText.GetComponent<RectTransform>();
         RectTransform characterRect = characterTransform.GetComponent<RectTransform>();
         

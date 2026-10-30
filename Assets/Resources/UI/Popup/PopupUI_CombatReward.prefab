@@ -381,6 +381,7 @@ GameObject:
   - component: {fileID: 4727210490071580531}
   - component: {fileID: 1202616299035312430}
   - component: {fileID: 5999156501801525716}
+  - component: {fileID: 4509592417608318366}
   m_Layer: 5
   m_Name: Btn_Exit
   m_TagString: Untagged
@@ -518,6 +519,19 @@ MonoBehaviour:
   key: 103
   clickCooldown: 1
   playOnce: 0
+--- !u!114 &4509592417608318366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 834547955069849389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ed33c1ae51b244292139c5fb7c56b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stanceButton: {fileID: 0}
 --- !u!1 &863187758452773529
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,6 +15,7 @@ public class PopupUI_Upgrade : BasePopupUI
             reqInk = stm.StyleDic[state.styleId].plusTiers[state.plusTier-1].cost;
             if (stm.TryInkUse(reqInk))
             {
+                SoundManager.Instance.PlaySFX(SoundCategory.SFX, 302); // 문체 강화 시 효과음 재생
                 Close();
                 stm.UpgradePlus();
                 stm.display.UpdateCurrentStyle(stm.StyleDic[state.styleId]);
@@ -31,6 +32,7 @@ public class PopupUI_Upgrade : BasePopupUI
             reqInk = stm.StyleDic[state.styleId].minusTiers[state.minusTier-1].cost;
             if (stm.TryInkUse(reqInk))
             {
+                SoundManager.Instance.PlaySFX(SoundCategory.SFX, 302); // 문체 강화 시 효과음 재생
                 Close();
                 stm.UpgradeMinus();
                 stm.display.UpdateCurrentStyle(stm.StyleDic[state.styleId]);

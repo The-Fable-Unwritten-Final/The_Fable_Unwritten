@@ -34,7 +34,7 @@ public class PopupUI_CombatReward : BasePopupUI
     private void OnEnable()
     {
         short iswin = GameManager.Instance.turnController.battleFlow.isWin;
-        if(iswin == 1) // 전투 승리 시 출력
+        if (iswin == 1) // 전투 승리 시 출력
         {
             var setting = ProgressDataManager.Instance;
             var lasVisitde = setting.VisitedNodes.Last();
@@ -48,12 +48,12 @@ public class PopupUI_CombatReward : BasePopupUI
                 {
                     int randomIndex = Random.Range(0, unlockedCardList.Count);
                     CardModel rewardCard = DataManager.Instance.GetCardByIndex(unlockedCardList[randomIndex]);
-                    
+
                     if (rewardCard != null)
                     {
                         PlayerData targetCharacter = null;
                         int cardIndex = rewardCard.index;
-                        
+
                         // 카드 인덱스에 따라 대상 캐릭터 결정
                         if (cardIndex >= 1000 && cardIndex < 2000)
                         {
@@ -70,7 +70,7 @@ public class PopupUI_CombatReward : BasePopupUI
                             // 레온 (3000번대)
                             targetCharacter = setting.PlayerDatas.FirstOrDefault(p => p.CharacterClass == CharacterClass.Leon);
                         }
-                        
+
                         // 대상 캐릭터의 덱에 카드 추가
                         if (targetCharacter != null && targetCharacter.currentDeck != null)
                         {
@@ -102,121 +102,11 @@ public class PopupUI_CombatReward : BasePopupUI
             confirmButton.gameObject.SetActive(false);
             // 리워드 로드 + 텍스트 표시
             confirmButton.onClick.RemoveAllListeners();
-            confirmButton.onClick.AddListener(() =>
-            {               
-                // 선택된 보상 카드를 해당 캐릭터의 덱에 추가
-                if (selectedRewardCard != null)
-                {         
-                    PlayerData targetCharacter = null;
-                    int cardIndex = selectedRewardCard.index;
-                    
-                    // 카드 인덱스에 따라 대상 캐릭터 결정
-                    if (cardIndex >= 1000 && cardIndex < 2000)
-                    {
-                        // 소피아 (1000번대) - PlayerDatas[1]
-                        targetCharacter = setting.PlayerDatas.FirstOrDefault(p => p.CharacterClass == CharacterClass.Sophia);
-                    }
-                    else if (cardIndex >= 2000 && cardIndex < 3000)
-                    {
-                        // 카일라 (2000번대) - PlayerDatas[0]
-                        targetCharacter = setting.PlayerDatas.FirstOrDefault(p => p.CharacterClass == CharacterClass.Kayla);
-                    }
-                    else if (cardIndex >= 3000 && cardIndex < 4000)
-                    {
-                        // 레온 (3000번대) - PlayerDatas[2]
-                        targetCharacter = setting.PlayerDatas.FirstOrDefault(p => p.CharacterClass == CharacterClass.Leon);
-                    }                   
-                    // 대상 캐릭터의 덱에 카드 추가
-                    if (targetCharacter != null && targetCharacter.currentDeck != null)
-                    {
-                        targetCharacter.currentDeck.Add(selectedRewardCard);
-                        targetCharacter.UpdateCurrentDeckIndexes(); // 인덱스도 동기화
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"[PopupUI_CombatReward] 카드 추가 실패! 카드인덱스: {cardIndex}, 캐릭터: {targetCharacter?.CharacterName ?? "null"}, 덱: {(targetCharacter?.currentDeck != null ? "있음" : "없음")}");
-                    }
-                    
-                    // 해금 카드 목록에도 추가 (이미 해금되었지만 명시적으로)
-                    setting.unlockedCards.Add(selectedRewardCard.index);
-                    
-                    // 체력 증가 적용
-                    int hpIncrease = CalculateHPIncrease(selectedRewardCard);
-                    if (targetCharacter != null)
-                    {
-                        CharHPAdd(targetCharacter, hpIncrease);
-                    }
-
-                    // 카드 보상 선택 애널리틱스 기록
-                    int cardCount = targetCharacter.currentDeck.Count(c => c.index == selectedRewardCard.index);
-                    GameManager.Instance.analyticsLogger.LogSelectCardInfo(selectedRewardCard.index,cardCount);
-
-                }
-                
-                setting.RetryFromStart = false;
-                setting.StageCleared = true;
-
-                // 1 스테이지 클리어 후, 실패 시 2스테이지부터 시작하게 설정
-                if (setting.StageIndex == 1)
-                {
-                    var lasColum = setting.SavedStageData.columns[^1];
-
-                    if (lasColum.Contains(lasVisitde))
-                    {
-                        setting.MinStageIndex = 2;
-                    }
-                }
-
-                if (setting.CurrentNode.type == NodeType.Boss || 
-                    (setting.StageIndex == 1 && setting.CurrentNode.columnIndex == 3))
-                {
-                    setting.IsNewStage = true;
-                }
-                else
-                {
-                    setting.IsNewStage = false;
-                }
-
-                if (setting.CurrentNode.type == NodeType.EliteBattle)
-                {
-                    setting.EliteClear(setting.CurrentTheme);
-                }
-                ProgressDataManager.Instance.SavedEnemySetIndex = -1; // 랜덤 에너미 셋 초기화
-
-                // 카드 보상 데이터 저장
-                ProgressDataManager.Instance.SaveProgress(true);
-
-                gameObject.SetActive(false);
-                
-                // 엔딩일시 표시(테스트 버전용 - 스테이지 4 클리어시 얼리 액세스 기준 엔드)
-                if (setting.CurrentNode.type == NodeType.Boss
-                    && setting.StageIndex == 4)
-                {
-                    ProgressDataManager.Instance.IsEndingClear = true;
-                    ProgressDataManager.Instance.UnlockRandomStyle(); // 앤딩 클리어시 랜덤 문체 해금
-
-                    // 앤딩 처음인경우
-                    if (!ProgressDataManager.Instance.ProgressTutorial.Contains(7))
-                    {
-                        GameManager.Instance.tutorialController.ShowTutorial(7);
-                        ProgressDataManager.Instance.ResetProgress();
-                        return;
-                    }
-                    // 앤딩 두번째 이후
-                    else
-                    {
-                        UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.SubTitleScene);
-                        return;
-                    }
-                }
-
-                UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
-
-                // StageMoveTest.cs 를 임시로 가져만 왔음. 추후 전투 승리/패배시 기능 재 구현
-            });
+            confirmButton.onClick.AddListener(OnWinConfirmButtonClicked);
         }
         else // 전투 패배 시 출력
         {
+            SoundManager.Instance.PlaySFX(SoundCategory.SFX, 605); // 패배 시 효과음 적용
             var setting = ProgressDataManager.Instance;
             var lasVisitde = setting.VisitedNodes.Last();
             // 애널리틱스
@@ -226,24 +116,10 @@ public class PopupUI_CombatReward : BasePopupUI
             loseText.SetActive(true);
             // 리워드 로드 + 텍스트 표시
             confirmButton.onClick.RemoveAllListeners();
-            confirmButton.onClick.AddListener(() =>
-            {
-                ProgressDataManager.Instance.RetryFromStart = true;
-                ProgressDataManager.Instance.ClearStageState();
-
-                // 최소 시작 스테이지부터 재시작 (1 또는 2)
-                ProgressDataManager.Instance.StageIndex = ProgressDataManager.Instance.MinStageIndex;
-                ProgressDataManager.Instance.GameStartType = GameStartType.New;
-                ProgressDataManager.Instance.ResetProgress();
-
-                UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.SubTitleScene);
-                gameObject.SetActive(false);
-
-                // StageMoveTest.cs 를 임시로 가져만 왔음. 추후 전투 승리/패배시 기능 재 구현
-            });
+            confirmButton.onClick.AddListener(OnLoseConfirmButtonClicked);
         }
     }
-    
+
 
     private void GenerateRewardCards()
     {
@@ -262,7 +138,7 @@ public class PopupUI_CombatReward : BasePopupUI
             .Where(card => card.isUnlocked)
             .Select(card => card.index)
             .ToList());
-        
+
         if (unlockedCardList.Count < 3)
         {
             Debug.LogWarning("[PopupUI_CombatReward] 해금된 카드가 3개 미만입니다.");
@@ -301,7 +177,7 @@ public class PopupUI_CombatReward : BasePopupUI
             cardObj.transform.SetParent(rewardCardSlots[i], false);
             instantiatedCardObjects.Add(cardObj); // ← 생성된 카드 기록
             RectTransform cardRect = cardObj.GetComponent<RectTransform>();
-            
+
             // 스케일과 위치 설정
             cardRect.localScale = new Vector3(3.0f, 3.0f, 3.0f);
             cardRect.localPosition = new Vector3(0, 0, cardRect.localPosition.z);
@@ -350,7 +226,7 @@ public class PopupUI_CombatReward : BasePopupUI
             // 캐릭터 아이콘 설정 및 크기 조정
             int cardIndex = selectedCard.index;
             int characterIconIndex = -1;
-            
+
             if (cardIndex >= 1000 && cardIndex < 2000)
             {
                 // 소피아 (1000번대)
@@ -366,13 +242,13 @@ public class PopupUI_CombatReward : BasePopupUI
                 // 레온 (3000번대)
                 characterIconIndex = 2;
             }
-            
-            if (characterIconIndex >= 0 && characterIconIndex < characterIcons.Length && 
+
+            if (characterIconIndex >= 0 && characterIconIndex < characterIcons.Length &&
                 i < rewardCardImages.Length && rewardCardImages[i] != null)
             {
                 Sprite charIcon = characterIcons[characterIconIndex];
                 rewardCardImages[i].sprite = charIcon;
-                
+
                 // Sprite의 이미지 크기에 맞게 RectTransform 크기 조정
                 if (charIcon != null && charIcon.rect.width > 0 && charIcon.rect.height > 0)
                 {
@@ -401,6 +277,7 @@ public class PopupUI_CombatReward : BasePopupUI
             return;
 
         selectedRewardCard = card;
+        SoundManager.Instance.PlaySFX(SoundCategory.SFX, 103);
 
         // 모든 카드의 애니메이션 상태 업데이트
         for (int i = 0; i < rewardCardRectTransforms.Count; i++)
@@ -514,7 +391,7 @@ public class PopupUI_CombatReward : BasePopupUI
                 cardRect.localRotation = Quaternion.identity;
             }
         }
-        
+
         // 생성된 카드 프리팹 정리
         foreach (var cardObj in instantiatedCardObjects)
         {
@@ -544,6 +421,145 @@ public class PopupUI_CombatReward : BasePopupUI
             return 2;
         else
             return 3;
+    }
+
+    /// <summary>
+    /// 승리 시 확인 버튼 클릭 처리
+    /// </summary>
+    private void OnWinConfirmButtonClicked()
+    {
+        if (selectedRewardCard != null)
+        {
+            // 카드 획득 순간
+            AddRewardCardToDeck(selectedRewardCard);
+        }
+
+        var setting = ProgressDataManager.Instance;
+        setting.RetryFromStart = false;
+        setting.StageCleared = true;
+
+        UpdateStageProgressionState(setting);
+        UpdateGameStateAfterWin(setting);
+
+        ProgressDataManager.Instance.SaveProgress(true);
+        gameObject.SetActive(false);
+
+        HandleEndingOrTransition(setting);
+    }
+
+    /// <summary>
+    /// 패배 시 확인 버튼 클릭 처리
+    /// </summary>
+    private void OnLoseConfirmButtonClicked()
+    {
+        ProgressDataManager.Instance.RetryFromStart = true;
+        ProgressDataManager.Instance.ClearStageState();
+
+        ProgressDataManager.Instance.StageIndex = ProgressDataManager.Instance.MinStageIndex;
+        ProgressDataManager.Instance.GameStartType = GameStartType.New;
+        ProgressDataManager.Instance.ResetProgress();
+
+        UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.SubTitleScene);
+        gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// 보상 카드를 덱에 추가 및 체력 증가 처리
+    /// </summary>
+    private void AddRewardCardToDeck(CardModel card)
+    {
+        PlayerData targetCharacter = GetCharacterFromCard(card);
+        int cardIndex = card.index;
+
+        if (targetCharacter != null && targetCharacter.currentDeck != null)
+        {
+            targetCharacter.currentDeck.Add(card);
+            targetCharacter.UpdateCurrentDeckIndexes();
+        }
+        else
+        {
+            Debug.LogWarning($"[PopupUI_CombatReward] 카드 추가 실패! 카드인덱스: {cardIndex}, 캐릭터: {targetCharacter?.CharacterName ?? "null"}, 덱: {(targetCharacter?.currentDeck != null ? "있음" : "없음")}");
+            return;
+        }
+
+        ProgressDataManager.Instance.unlockedCards.Add(card.index);
+
+        int hpIncrease = CalculateHPIncrease(card);
+        if (targetCharacter != null)
+        {
+            CharHPAdd(targetCharacter, hpIncrease);
+        }
+
+        int cardCount = targetCharacter.currentDeck.Count(c => c.index == card.index);
+        GameManager.Instance.analyticsLogger.LogSelectCardInfo(card.index, cardCount);
+    }
+
+    /// <summary>
+    /// 1 스테이지 클리어 후 최소 시작 스테이지 업데이트
+    /// </summary>
+    private void UpdateStageProgressionState(ProgressDataManager setting)
+    {
+        if (setting.StageIndex == 1)
+        {
+            var lastColumn = setting.SavedStageData.columns[^1];
+            var lastVisited = setting.VisitedNodes.Last();
+
+            if (lastColumn.Contains(lastVisited))
+            {
+                setting.MinStageIndex = 2;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 승리 후 게임 상태 업데이트 (엘리트 배틀, 새 스테이지 등)
+    /// </summary>
+    private void UpdateGameStateAfterWin(ProgressDataManager setting)
+    {
+        if (setting.CurrentNode.type == NodeType.Boss ||
+            (setting.StageIndex == 1 && setting.CurrentNode.columnIndex == 3))
+        {
+            // 새로운 스테이지 진입 시 처리
+            setting.IsNewStage = true;
+            SoundManager.Instance.PlaySFX(SoundCategory.SFX, 106, 0.8f); // 새로운 스테이지 진입 시 효과음 재생
+        }
+        else
+        {
+            setting.IsNewStage = false;
+        }
+
+        if (setting.CurrentNode.type == NodeType.EliteBattle)
+        {
+            setting.EliteClear(setting.CurrentTheme);
+        }
+
+        ProgressDataManager.Instance.SavedEnemySetIndex = -1;
+    }
+
+    /// <summary>
+    /// 엔딩 처리 및 다음 씬 전환
+    /// </summary>
+    private void HandleEndingOrTransition(ProgressDataManager setting)
+    {
+        if (setting.CurrentNode.type == NodeType.Boss && setting.StageIndex == 4)
+        {
+            ProgressDataManager.Instance.IsEndingClear = true;
+            ProgressDataManager.Instance.UnlockRandomStyle();
+
+            if (!ProgressDataManager.Instance.ProgressTutorial.Contains(7))
+            {
+                GameManager.Instance.tutorialController.ShowTutorial(7);
+                ProgressDataManager.Instance.ResetProgress();
+                return;
+            }
+            else
+            {
+                UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.SubTitleScene);
+                return;
+            }
+        }
+
+        UIManager.Instance.nextSceneFade.StartSceneTransition(SceneNameData.StageScene);
     }
 
     /// <summary>
